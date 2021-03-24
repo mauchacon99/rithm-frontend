@@ -1,0 +1,62 @@
+name: Dev Checks
+
+on:
+  pull_request:
+    paths-ignore: [.vscode/**, .github/**]
+    branches: [ dev ]
+
+jobs:
+
+  # Checks that the Angular app conforms to standards
+  lint-app:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Linting Angular app
+      run: npm run lint
+
+  # Checks that all stylesheets conform to standards
+  lint-stylesheets:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Linting all stylesheets
+      run: npm run lint  
+
+  # Checks that the Angular app successfully builds using ahead-of-time compilation
+  build:
+    runs-on: ubuntu-latest
+    needs: lint-app
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Building Angular web project
+      run: npm run build-web
+
+  # Checks that the compiled Angular app conforms to W3 standards
+  w3-conformance:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Installing dependencies
+      run: npm ci
+
+    # TODO: Add additional steps for W3 conformance
+
