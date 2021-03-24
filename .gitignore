@@ -33,6 +33,7 @@ speed-measure-plugin*.json
 
 # Documentation
 documentation
+sassdoc
 
 # misc
 /.sass-cache
