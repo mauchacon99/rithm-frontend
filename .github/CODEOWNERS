@@ -1,0 +1,13 @@
+*.scss @belugasanity
+*.css @belugasanity
+
+*.ts @HendricksonTyler
+*.js @HendricksonTyler
+*.json @HendricksonTyler
+
+*.spec.ts @HendricksonTyler
+
+*.html @HendricksonTyler @belugasanity
+
+rithm/src/assets/**/* @belugasanity
+
