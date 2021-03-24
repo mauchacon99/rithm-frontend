@@ -7,6 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "lint-style": "npx stylelint \"**/*.scss\"",
     "e2e": "ng e2e",
     "compile-docs": "npx compodoc -p tsconfig.app.json src",
     "compile-style-docs": "sassdoc src/"
@@ -53,6 +54,8 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "sassdoc": "^2.7.3",
+    "stylelint": "^13.12.0",
+    "stylelint-config-standard": "^21.0.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.1.5"
   },

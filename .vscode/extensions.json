@@ -6,7 +6,8 @@
     "editorconfig.editorconfig",
     "atlassian.atlascode",
     "dbaeumer.vscode-eslint",
-    "sibiraj-s.vscode-scss-formatter"
+    "sibiraj-s.vscode-scss-formatter",
+    "stylelint.vscode-stylelint"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-typescript-tslint-plugin",
