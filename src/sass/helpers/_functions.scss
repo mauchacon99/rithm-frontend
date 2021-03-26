@@ -1,1 +1,5 @@
-/// List of Rithm functions
+/// Calculate the font-size and return rem size
+/// @param {number} $target-size the target size of the font in px
+@function font-calc($target-size) {
+  @return calc($target-size / 16)rem;
+}

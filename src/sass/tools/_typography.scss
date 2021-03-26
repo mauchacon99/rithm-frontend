@@ -1,5 +1,7 @@
 /// Set global styles across the application
 
+@import '../helpers/functions';
+
 /// Montserrat Thin 100
 @font-face {
   font-family: Montserrat;
@@ -128,14 +130,58 @@
   font-style: italic;
 }
 
+/// Set font family for everything
 html {
   font-family: Montserrat, sans-serif;
 }
 
-h1{
-
+/// Heading 1 font styles
+h1 {
+  font-size: font-calc(48);
+  font-weight: 300;
+  font-family: Montserrat, sans-serif;
 }
 
-h2{
+/// Heading 2 font styles
+h2 {
+  font-size: font-calc(34);
+  font-weight: 300;
+  font-family: Montserrat, sans-serif;
+}
 
+/// Heading 3 font styles
+h3 {
+  font-size: font-calc(24);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 4 font styles
+h4 {
+  font-size: font-calc(20);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 5 font styles
+h5 {
+  font-size: font-calc(18);
+  font-weight: 600;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 6 font styles
+h6 {
+  font-size: font-calc(16);
+  font-weight: 600;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Paragraph, span and div font styles
+p,
+span,
+div {
+  font-size: font-calc(16);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
 }

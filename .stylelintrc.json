@@ -1,6 +1,12 @@
 {
   "extends": "stylelint-config-standard",
+  "plugins": [
+    "stylelint-scss"
+  ],
   "rules": {
+    "at-rule-allowed-list": ["function", "return", "import", "font-face"],
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
     "font-family-name-quotes": "always-where-recommended",
     "function-url-quotes": "always",
     "selector-attribute-quotes": "never",
