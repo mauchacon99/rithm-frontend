@@ -45,7 +45,7 @@ jobs:
       run: npm ci
 
     - name: Building Angular web project
-      run: npm run build-web
+      run: npm run build
 
   # Checks that the compiled Angular app conforms to W3 standards
   w3-conformance:
