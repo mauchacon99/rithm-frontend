@@ -48,15 +48,15 @@ jobs:
       run: npm run build
 
   # Checks that the compiled Angular app conforms to W3 standards
-  w3-conformance:
-    runs-on: ubuntu-latest
-    needs: build
+  # w3-conformance:
+  #   runs-on: ubuntu-latest
+  #   needs: build
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
     # TODO: Add additional steps for W3 conformance
 
