@@ -1,0 +1,187 @@
+/// Set global styles across the application
+
+@import '../helpers/functions';
+
+/// Montserrat Thin 100
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Thin.ttf');
+  font-weight: 100;
+  font-style: normal;
+}
+
+/// Montserrat Thin 100 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-ThinItalic.ttf');
+  font-weight: 100;
+  font-style: italic;
+}
+
+/// Montserrat Extra Light 200
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-ExtraLight.ttf');
+  font-weight: 200;
+  font-style: normal;
+}
+
+/// Montserrat Extra Light 200 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-ExtraLightItalic.ttf');
+  font-weight: 200;
+  font-style: italic;
+}
+
+/// Montserrat Light 300
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/// Montserrat Light 300 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-LightItalic.ttf');
+  font-weight: 300;
+  font-style: italic;
+}
+
+/// Montserrat Regular 400
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/// Montserrat Regular 400 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
+/// Montserrat Semi-Bold 600
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/// Montserrat Semi-Bold 600 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-SemiBoldItalic.ttf');
+  font-weight: 600;
+  font-style: italic;
+}
+
+/// Montserrat Bold 700
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/// Montserrat Bold 700 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-BoldItalic.ttf');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/// Montserrat Extra Bold 800
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-ExtraBold.ttf');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/// Montserrat Extra Bold 800 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf');
+  font-weight: 800;
+  font-style: italic;
+}
+
+/// Montserrat Black 900
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-Black.ttf');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/// Montserrat Black 900 Italic
+@font-face {
+  font-family: Montserrat;
+  src: url('../../assets/Fonts/Montserrat/Montserrat-BlackItalic.ttf');
+  font-weight: 900;
+  font-style: italic;
+}
+
+/// Set font family for everything
+html {
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 1 font styles
+h1 {
+  font-size: font-calc(48);
+  font-weight: 300;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 2 font styles
+h2 {
+  font-size: font-calc(34);
+  font-weight: 300;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 3 font styles
+h3 {
+  font-size: font-calc(24);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 4 font styles
+h4 {
+  font-size: font-calc(20);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 5 font styles
+h5 {
+  font-size: font-calc(18);
+  font-weight: 600;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 6 font styles
+h6 {
+  font-size: font-calc(16);
+  font-weight: 600;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Paragraph, span and div font styles
+p,
+span,
+div {
+  font-size: font-calc(16);
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+}

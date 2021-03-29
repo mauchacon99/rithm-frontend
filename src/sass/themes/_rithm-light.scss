@@ -1,0 +1,115 @@
+// @import '../helpers/variables';
+// Rithm Light Theme
+
+/// Primary Color Palette
+$primary-palette: (
+  50: #e6e8ea,
+  100: #bfc5cc,
+  200: #959eaa,
+  300: #6b7787,
+  400: #4b596e,
+  500: #2b3c54,
+  600: #26364d,
+  700: #202e43,
+  800: #1a273a,
+  900: #101a29,
+  A100: #699eff,
+  A200: #367dff,
+  A400: #035bff,
+  A700: #0052e9,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #fff,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+/// Accent Color Palette
+$accent-palette: (
+  50: #e4eaf2,
+  100: #bbcade,
+  200: #8ea6c8,
+  300: #6182b2,
+  400: #3f68a2,
+  500: #1d4d91,
+  600: #1a4689,
+  700: #153d7e,
+  800: #113474,
+  900: #0a2562,
+  A100: #95b0ff,
+  A200: #628aff,
+  A400: #2f63ff,
+  A700: #1550ff,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+/// Errors Color Palette
+$error-palette: (
+  50: #f2e7e6,
+  100: #dec3c0,
+  200: #c89b96,
+  300: #b2736b,
+  400: #a2554c,
+  500: #91372c,
+  600: #893127,
+  700: #7e2a21,
+  800: #74231b,
+  900: #621610,
+  A100: #ff9e98,
+  A200: #ff6d65,
+  A400: #ff3d32,
+  A700: #ff2519,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+
+// define 3 theme color
+// mat-palette accepts $palette-name, main, lighter and darker variants
+/// Apply primary color palette to theme
+$rithm-light-primary: mat-palette($primary-palette, 500, 100, 700);
+/// Apply accent color palette to theme
+$rithm-light-accent: mat-palette($accent-palette);
+/// Apply error color palette to theme
+$rithm-light-warn: mat-palette($error-palette);
+
+// create theme (use mat-dark-theme for themes with dark backgrounds)
+/// Rithm Light Theme creation
+$rithm-light: mat-light-theme($rithm-light-primary, $rithm-light-accent, $rithm-light-warn);
