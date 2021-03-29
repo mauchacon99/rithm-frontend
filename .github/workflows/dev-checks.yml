@@ -14,9 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: npm
+      run: echo "//npm.pkg.github.com/:_authToken=${TYLER_GITHUB_PACKAGES_TOKEN}" > .npmrc
+
+
     - name: Installing dependencies
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.TYLER_GITHUB_PACKAGES_TOKEN }}
       run: npm ci
 
     - name: Linting Angular app
