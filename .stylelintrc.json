@@ -4,7 +4,7 @@
     "stylelint-scss"
   ],
   "rules": {
-    "at-rule-allowed-list": ["function", "return", "import", "font-face"],
+    "at-rule-allowed-list": ["function", "return", "import", "font-face", "mixin", "include"],
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
     "font-family-name-quotes": "always-where-recommended",

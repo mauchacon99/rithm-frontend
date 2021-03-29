@@ -1,7 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
-/// Import all helpers
+// Import all helpers
 @import './sass/helpers/functions';
 @import './sass/helpers/mixins';
 @import './sass/helpers/variables';
 /// Import Tools from tools file
+/// Contains global styles for buttons, forms and typography
 @import './sass/tools/tools';
+// Material themeing
+@import '~@angular/material/theming';
+// Material Core
+@include mat-core();
+
+// Rithm light Theme
+@import './sass/themes/rithm-light';
+// Apply Rithm light theme
+@include angular-material-theme($rithm-light);
+
+// Global Styles
+body {
+  @include gradient($primary-gray, $primary-blue);
+}
