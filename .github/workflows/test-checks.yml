@@ -16,6 +16,8 @@ jobs:
 
     - name: Installing dependencies
       run: npm ci
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.TYLER_GITHUB_PACKAGES_TOKEN }}
 
     - name: Running all e2e tests
       run: npm run e2e -- --no-watch --no-progress --browsers=ChromeHeadlessCI
