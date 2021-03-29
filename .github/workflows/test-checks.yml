@@ -7,19 +7,6 @@ on:
 
 jobs:
 
-  # Checks that the Angular app passes all defined unit tests
-  unit-test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Installing dependencies
-      run: npm ci
-
-    - name: Running all unit tests
-      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-
   # Checks that the Angular app passes all defined end-to-end
   e2e-test:
     runs-on: ubuntu-latest
