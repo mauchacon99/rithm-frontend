@@ -7,8 +7,6 @@ import { Component } from '@angular/core';
 })
 export class SignInComponent {
 
-  constructor() { }
-
   signIn(): void {
     // Sign the user in
   }
