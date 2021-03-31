@@ -15,7 +15,7 @@
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
 
-// Global Styles
+// Global Styles Below
 body {
   @include gradient($primary-gray, $primary-blue);
 }
