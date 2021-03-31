@@ -1,17 +1,17 @@
 // Import all helpers
-@import './sass/helpers/functions';
-@import './sass/helpers/mixins';
-@import './sass/helpers/variables';
+@import './scss/helpers/functions';
+@import './scss/helpers/mixins';
+@import './scss/helpers/variables';
 /// Import Tools from tools file
 /// Contains global styles for buttons, forms and typography
-@import './sass/tools/tools';
+@import './scss/tools/tools';
 // Material themeing
 @import '~@angular/material/theming';
 // Material Core
 @include mat-core();
 
 // Rithm light Theme
-@import './sass/themes/rithm-light';
+@import './scss/themes/rithm-light';
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
 
