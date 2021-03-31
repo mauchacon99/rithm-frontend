@@ -40,7 +40,7 @@
     "@angular/compiler-cli": "~11.2.7",
     "@compodoc/compodoc": "^1.1.11",
     "@strut-software/eslint-config": "^1.0.0",
-    "@strut-software/stylelint-config": "0.0.2",
+    "@strut-software/stylelint-config": "^1.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.16.1",
