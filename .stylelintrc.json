@@ -1,6 +1,4 @@
 {
   "extends": "@strut-software/stylelint-config/scss",
-  "rules": {
-    "block-no-empty": true
-  }
+  "rules": {}
 }
