@@ -17,5 +17,5 @@
 
 // Global Styles Below
 body {
-  @include gradient($primary-gray, $primary-blue);
+  @include gradient($secondary-gray, $secondary-blue);
 }
