@@ -4,11 +4,15 @@ import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.compon
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 
 
 
 @NgModule({
-  declarations: [AlertDialogComponent],
+  declarations: [
+    AlertDialogComponent,
+    ConfirmDialogComponent
+  ],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -16,7 +20,8 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule
   ],
   exports: [
-    AlertDialogComponent
+    AlertDialogComponent,
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }
