@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogData } from 'src/models';
 
 /**
  * Reusable component used for displaying an alert dialog.
@@ -20,7 +21,7 @@ export class AlertDialogComponent {
   /** The text to be displayed for the okay button. */
   okButtonText: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.message;
     this.okButtonText = data.okButtonText;
