@@ -36,9 +36,9 @@ export class DialogService {
    * @param okButtonText The text to display for the okay button (defaults to "OK").
    * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
    */
-  confirm(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel'): void {
-    // TODO
-  }
+  // confirm(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel'): void {
+  //   // TODO
+  // }
 
   /**
    * Displays a prompt popup to the user.
@@ -49,7 +49,7 @@ export class DialogService {
    * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
    * @param defaultText The default text to to have entered in the prompt (optional).
    */
-  prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): void {
-    // TODO
-  }
+  // prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): void {
+  //   // TODO
+  // }
 }
