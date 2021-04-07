@@ -1,1 +1,14 @@
-<p>alert-dialog works!</p>
+<!-- Title -->
+<h1 mat-dialog-title>{{title}}</h1>
+
+<!-- Message -->
+<div mat-dialog-content>
+  <p>{{message}}</p>
+</div>
+
+<!-- Buttons -->
+<div mat-dialog-actions>
+  <div class="btn-container">
+    <button mat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
+  </div>
+</div>

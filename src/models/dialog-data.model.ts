@@ -10,9 +10,9 @@ export interface DialogData {
   message: string;
 
   /** The text to display for the okay/confirm/dismiss button. */
-  okButtonText?: string;
+  okButtonText: string;
 
   /** The text to display for the cancel button. */
-  cancelButtonText?: string;
+  cancelButtonText: string;
 
 }
