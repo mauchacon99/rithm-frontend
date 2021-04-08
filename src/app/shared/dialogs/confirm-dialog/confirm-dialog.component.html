@@ -1,13 +1,15 @@
 <!-- Title -->
 <h1 mat-dialog-title>{{title}}</h1>
 
-<!-- Message -->
-<div mat-dialog-content>
+<div mat-dialog-content class="row">
+
+  <!-- Message -->
   <p>{{message}}</p>
+
 </div>
 
 <!-- Buttons -->
-<div mat-dialog-actions class="dialog-actions">
+<div mat-dialog-actions class="dialog-actions row justify-content-end">
   <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button>
   <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">{{okButtonText}}</button>
 </div>

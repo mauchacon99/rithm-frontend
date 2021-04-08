@@ -1,19 +1,21 @@
 <!-- Title -->
 <h1 mat-dialog-title>{{title}}</h1>
 
-<!-- Message -->
-<div mat-dialog-content>
+<div mat-dialog-content class="row">
+
+  <!-- Message -->
   <p>{{message}}</p>
+
+  <!-- Input -->
+  <mat-form-field class="col-12 p-0" appearance="outline">
+    <mat-label *ngIf="promptLabel">{{promptLabel}}</mat-label>
+    <input matInput cdkFocusInitial [(ngModel)]="promptInput">
+  </mat-form-field>
+
 </div>
 
-<!-- Input -->
-<mat-form-field appearance="outline">
-  <mat-label *ngIf="promptLabel">{{promptLabel}}</mat-label>
-  <input matInput cdkFocusInitial [(ngModel)]="promptInput">
-</mat-form-field>
-
 <!-- Buttons -->
-<div mat-dialog-actions class="dialog-actions">
+<div mat-dialog-actions class="dialog-actions row justify-content-end">
   <button id="cancel" mat-button [mat-dialog-close]="undefined">{{cancelButtonText}}</button>
   <button id="confirm" mat-button color="accent" [mat-dialog-close]="promptInput">{{okButtonText}}</button>
 </div>
