@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -17,6 +18,7 @@ import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.com
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatDialogModule,
     MatButtonModule,
     MatInputModule
