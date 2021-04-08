@@ -1,1 +1,19 @@
-<p>prompt-dialog works!</p>
+<!-- Title -->
+<h1 mat-dialog-title>{{title}}</h1>
+
+<!-- Message -->
+<div mat-dialog-content>
+  <p>{{message}}</p>
+</div>
+
+<!-- Input -->
+<mat-form-field>
+  <mat-label>Device Name</mat-label>
+  <input matInput cdkFocusInitial [(ngModel)]="enteredText">
+</mat-form-field>
+
+<!-- Buttons -->
+<div mat-dialog-actions class="dialog-actions">
+  <button id="cancel" mat-button [mat-dialog-close]="null">{{cancelButtonText}}</button>
+  <button id="confirm" mat-button color="accent" [mat-dialog-close]="enteredText">{{okButtonText}}</button>
+</div>
