@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { gsap } from 'gsap/all';
 
 import { FullScreenLoaderComponent } from './full-screen-loader.component';
 
@@ -22,4 +23,9 @@ describe('FullScreenLoaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have an svg', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('svg'));
+  })
 });

@@ -14,7 +14,10 @@ export class FullScreenLoaderComponent implements OnInit {
   constructor() {
     // constructor items.
   }
-  /** Runs on component load. */
+  /**
+   * Runs on component load.
+   * Animates the logo.
+   */
   ngOnInit(): void {
     const tl1 = gsap.timeline({repeat: -1, repeatDelay: 0});
     const tl2 = gsap.timeline({repeat: -1, repeatDelay: 0});
