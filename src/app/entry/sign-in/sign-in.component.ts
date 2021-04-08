@@ -12,7 +12,7 @@ import { DialogService } from 'src/app/core/dialog.service';
 export class SignInComponent {
 
   constructor(private dialogService: DialogService) {
-    this.dialogService.alert({
+    this.dialogService.confirm({
       title: 'Alert',
       message: 'You are not allowed to view this page.',
       okButtonText: 'That is fine',

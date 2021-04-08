@@ -32,16 +32,13 @@ export class DialogService {
   /**
    * Displays a confirmation popup to the user.
    *
-   * @param title The confirmation title to display on the popup.
-   * @param message The confirmation message to display to the user.
-   * @param okButtonText The text to display for the okay button (defaults to "OK").
-   * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
+   * @param dialogData The dialog information to display.
    * @returns True if the user confirmed, false otherwise.
    */
-  async confirm(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel'): Promise<boolean> {
+  async confirm(dialogData: DialogData): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: DIALOG_WIDTH,
-      data: { title, message, okButtonText, cancelButtonText }
+      data: dialogData
     });
 
     return await dialogRef.afterClosed().toPromise();
