@@ -5,13 +5,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
+import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 
 
 
 @NgModule({
   declarations: [
     AlertDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PromptDialogComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
   ],
   exports: [
     AlertDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PromptDialogComponent
   ]
 })
 export class SharedModule { }
