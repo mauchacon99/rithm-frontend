@@ -8,6 +8,9 @@ import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-load
   declarations: [FullScreenLoaderComponent],
   imports: [
     CommonModule
+  ],
+  exports: [
+    FullScreenLoaderComponent
   ]
 })
 export class SharedModule { }
