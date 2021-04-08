@@ -12,12 +12,16 @@ import { DialogData } from 'src/models';
 })
 export class ConfirmDialogComponent {
 
+  /** The title to be displayed on the dialog. */
   title: string;
 
+  /** The confirmation message to be displayed in the dialog. */
   message: string;
 
+  /** The text to be displayed for the okay button. */
   okButtonText: string;
 
+  /** The text to be displayed for the cancel button. */
   cancelButtonText: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
