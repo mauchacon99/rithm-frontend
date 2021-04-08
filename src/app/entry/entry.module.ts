@@ -5,6 +5,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { AccountCreateComponent } from './account-create/account-create.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { EntryRoutingModule } from './entry-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -12,7 +13,8 @@ import { EntryRoutingModule } from './entry-routing.module';
   declarations: [SignInComponent, ForgotPasswordComponent, AccountCreateComponent, PasswordResetComponent],
   imports: [
     CommonModule,
-    EntryRoutingModule
+    EntryRoutingModule,
+    SharedModule
   ]
 })
 export class EntryModule { }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogData } from 'src/models';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
@@ -51,17 +52,13 @@ export class DialogService {
   /**
    * Displays a prompt popup to the user.
    *
-   * @param title The prompt title to display on the popup.
-   * @param message The message prompt to display to the user.
-   * @param okButtonText The text to display for the okay button (defaults to "OK").
-   * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
-   * @param defaultText The default text to to have entered in the prompt (optional).
+   * @param dialogData The dialog information to display.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  async prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): Promise<string> {
+  async prompt(dialogData: DialogData): Promise<string> {
     const dialogRef = this.dialog.open(PromptDialogComponent, {
       width: DIALOG_WIDTH,
-      data: { title, message, okButtonText, cancelButtonText, defaultText }
+      data: dialogData
     });
 
     return await dialogRef.afterClosed().toPromise();

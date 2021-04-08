@@ -10,9 +10,15 @@ export interface DialogData {
   message: string;
 
   /** The text to display for the okay/confirm/dismiss button. */
-  okButtonText: string;
+  okButtonText?: string;
 
   /** The text to display for the cancel button. */
-  cancelButtonText: string;
+  cancelButtonText?: string;
+
+  /** The label to display for the input of the prompt dialog. */
+  promptLabel?: string;
+
+  /** The text to display in the input for the prompt dialog. */
+  promptInput?: string;
 
 }

@@ -18,17 +18,17 @@ export class ConfirmDialogComponent {
   /** The confirmation message to be displayed in the dialog. */
   message: string;
 
-  /** The text to be displayed for the okay button. */
-  okButtonText: string;
+  // /** The text to be displayed for the okay button. */
+  // okButtonText: string;
 
-  /** The text to be displayed for the cancel button. */
-  cancelButtonText: string;
+  // /** The text to be displayed for the cancel button. */
+  // cancelButtonText: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.message;
-    this.okButtonText = data.okButtonText;
-    this.cancelButtonText = data.cancelButtonText;
+    // this.okButtonText = data.okButtonText;
+    // this.cancelButtonText = data.cancelButtonText;
   }
 
 }

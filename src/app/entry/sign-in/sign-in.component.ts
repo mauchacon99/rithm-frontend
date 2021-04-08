@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DialogService } from 'src/app/core/dialog.service';
 
 /**
  * Component for signing into the system.
@@ -9,6 +10,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent {
+
+  constructor(private dialogService: DialogService) {
+    this.dialogService.prompt({
+      title: 'Alert',
+      message: 'You are not allowed to view this page.',
+      okButtonText: 'That is fine',
+      cancelButtonText: 'Abort',
+      promptInput: 'Kore wa pen desu.',
+      promptLabel: 'Nihongo'
+    });
+  }
 
 
   /**

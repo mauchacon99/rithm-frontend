@@ -12,22 +12,30 @@ import { DialogData } from 'src/models';
 })
 export class PromptDialogComponent {
 
-  enteredText = '';
-
+  /** The title to display for the prompt dialog. */
   title: string;
 
+  /** The message to display for the prompt message. */
   message: string;
 
+  /** The label to display on the input for the prompt. */
+  promptLabel: string | undefined;
+
+  /** The entered value of the prompt input. */
+  promptInput: string;
+
+  /** The text to display for the okay button. */
   okButtonText: string;
 
+  /** The text to display for the cancel button. */
   cancelButtonText: string;
-
-  inputLabel = 'Input';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.message;
-    this.okButtonText = data.okButtonText;
-    this.cancelButtonText = data.cancelButtonText;
+    this.promptLabel = data.promptLabel;
+    this.promptInput = data.promptInput ? data.promptInput : '';
+    this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
+    this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
   }
 }
