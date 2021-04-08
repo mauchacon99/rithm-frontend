@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
 
 const DIALOG_WIDTH = '500px';
 
@@ -55,8 +56,14 @@ export class DialogService {
    * @param okButtonText The text to display for the okay button (defaults to "OK").
    * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
    * @param defaultText The default text to to have entered in the prompt (optional).
+   * @returns `null` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  // prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): void {
-  //   // TODO
-  // }
+  async prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): Promise<string> {
+    const dialogRef = this.dialog.open(PromptDialogComponent, {
+      width: DIALOG_WIDTH,
+      data: { title, message, okButtonText, cancelButtonText, defaultText }
+    });
+
+    return await dialogRef.afterClosed().toPromise();
+  }
 }
