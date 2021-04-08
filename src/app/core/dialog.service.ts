@@ -56,7 +56,7 @@ export class DialogService {
    * @param okButtonText The text to display for the okay button (defaults to "OK").
    * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
    * @param defaultText The default text to to have entered in the prompt (optional).
-   * @returns `null` if the dialog was closed. Otherwise, the entered string will be returned.
+   * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
   async prompt(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel', defaultText?: string): Promise<string> {
     const dialogRef = this.dialog.open(PromptDialogComponent, {
