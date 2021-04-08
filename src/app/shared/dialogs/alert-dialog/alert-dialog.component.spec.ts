@@ -67,7 +67,7 @@ describe('AlertDialogComponent', () => {
     const okButtonText = component.okButtonText;
     const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
     expect(await buttonElement.getText()).toEqual(okButtonText);
-    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText);
+    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
   });
 
   // it('should close when button is clicked', async () => {

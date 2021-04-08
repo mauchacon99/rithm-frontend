@@ -66,13 +66,13 @@ describe('ConfirmDialogComponent', () => {
     const okButtonText = component.okButtonText;
     const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#confirm'}));
     expect(await buttonElement.getText()).toEqual(okButtonText);
-    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText);
+    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
   });
 
   it('should have cancel button text', async () => {
     const cancelButtonText = component.cancelButtonText;
     const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#cancel'}));
     expect(await buttonElement.getText()).toEqual(cancelButtonText);
-    expect(cancelButtonText).toEqual(DIALOG_TEST_DATA.cancelButtonText);
+    expect(cancelButtonText).toEqual(DIALOG_TEST_DATA.cancelButtonText as string);
   });
 });
