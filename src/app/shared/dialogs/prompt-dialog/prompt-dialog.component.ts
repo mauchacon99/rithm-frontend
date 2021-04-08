@@ -22,6 +22,8 @@ export class PromptDialogComponent {
 
   cancelButtonText: string;
 
+  inputLabel = 'Input';
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.message;
