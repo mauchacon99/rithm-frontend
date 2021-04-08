@@ -2,6 +2,12 @@
 
 @import '../helpers/functions';
 
+$custom-typography: mat-typography-config(
+  $font-family: 'Montserrat, Open Sans, Helvetica',
+  $headline: mat-typography-level(48px, 72px, 300),
+  $body-1: mat-typography-level(16px, 24px, 400)
+);
+
 /// Montserrat Thin 100
 @font-face {
   font-family: Montserrat;

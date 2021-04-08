@@ -8,12 +8,15 @@
 // Material themeing
 @import '~@angular/material/theming';
 // Material Core
-@include mat-core();
+@include mat-core($custom-typography);
 
 // Rithm light Theme
 @import './scss/themes/rithm-light';
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
+
+// Set base typography settings
+@include mat-base-typography($custom-typography);
 
 // Global Styles Below
 body {
