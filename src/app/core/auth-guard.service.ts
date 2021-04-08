@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { DialogService } from './dialog.service';
 import { UserService } from './user.service';
 
@@ -15,7 +15,12 @@ export class AuthGuardService implements CanActivate {
               private userService: UserService,
               private dialogService: DialogService) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  /**
+   * Determines if the user is signed in and can perform the attempted routing action.
+   *
+   * @returns True if the user is signed in and allowed to route, false otherwise.
+   */
+  canActivate(): boolean {
     // If logged in, return true
     if (this.userService.isSignedIn()) {
       return true;
