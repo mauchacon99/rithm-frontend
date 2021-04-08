@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
+import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 const DIALOG_WIDTH = '500px';
 
@@ -35,10 +36,16 @@ export class DialogService {
    * @param message The confirmation message to display to the user.
    * @param okButtonText The text to display for the okay button (defaults to "OK").
    * @param cancelButtonText The text to display for the cancel button (defaults to "Cancel").
+   * @returns True if the user confirmed, false otherwise.
    */
-  // confirm(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel'): void {
-  //   // TODO
-  // }
+  async confirm(title: string, message: string, okButtonText = 'OK', cancelButtonText = 'Cancel'): Promise<boolean> {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: DIALOG_WIDTH,
+      data: { title, message, okButtonText, cancelButtonText }
+    });
+
+    return await dialogRef.afterClosed().toPromise();
+  }
 
   /**
    * Displays a prompt popup to the user.
