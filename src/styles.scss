@@ -21,4 +21,6 @@
 // Global Styles Below
 body {
   @include gradient($secondary-gray, $secondary-blue);
+
+  margin: 0;
 }

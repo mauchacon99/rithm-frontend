@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
 
 
 
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     AlertDialogComponent,
     ConfirmDialogComponent,
-    PromptDialogComponent
+    PromptDialogComponent,
+    FullScreenLoaderComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import { FormsModule } from '@angular/forms';
   exports: [
     AlertDialogComponent,
     ConfirmDialogComponent,
-    PromptDialogComponent
+    PromptDialogComponent,
+    FullScreenLoaderComponent
   ]
 })
 export class SharedModule { }
