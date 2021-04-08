@@ -20,14 +20,12 @@ export class DialogService {
   /**
    * Displays an alert message to the user.
    *
-   * @param title The alert title to display on the popup.
-   * @param message The message to display to the user.
-   * @param okButtonText The text to display for the okay button (defaults to "OK").
+   * @param dialogData The dialog information to display.
    */
-  alert(title: string, message: string, okButtonText = 'OK'): void {
+  alert(dialogData: DialogData): void {
     this.dialog.open(AlertDialogComponent, {
       width: DIALOG_WIDTH,
-      data: { title, message, okButtonText }
+      data: dialogData
     });
   }
 
