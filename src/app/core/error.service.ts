@@ -8,4 +8,12 @@ import { Injectable } from '@angular/core';
 })
 export class ErrorService {
 
+  logError(): void {
+
+  }
+
+  displayError(): void {
+
+  }
+
 }
