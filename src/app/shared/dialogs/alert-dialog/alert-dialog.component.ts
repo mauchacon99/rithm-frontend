@@ -27,4 +27,13 @@ export class AlertDialogComponent {
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
   }
 
+  /**
+   * The material color to display for the alert.
+   *
+   * @returns The material color.
+   */
+  get materialColor(): 'accent' | 'error' {
+    return this.title === 'Error' ? 'error' : 'accent';
+  }
+
 }
