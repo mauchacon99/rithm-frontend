@@ -48,28 +48,6 @@ describe('AlertDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // message
-  describe('message', () => {
-    let messageElement: HTMLParagraphElement;
-
-    beforeEach(() => {
-      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
-    });
-
-    it('should exist', () => {
-      expect(messageElement).toBeTruthy();
-    });
-
-    it('should have custom text', () => {
-      const messageText = component.message;
-      expect(messageElement).toBeTruthy();
-      expect(messageElement.innerText).toEqual(messageText);
-      expect(messageText).toEqual(DIALOG_TEST_DATA.message);
-    });
-  });
-
-
   // title
   describe('title', () => {
     let titleElement: HTMLHeadingElement;
@@ -95,6 +73,27 @@ describe('AlertDialogComponent', () => {
       component.title = 'Error';
       fixture.detectChanges();
       expect(window.getComputedStyle(titleElement).color).toEqual('rgb(145, 55, 44)'); // TODO: pull this from SCSS variable instead?
+    });
+  });
+
+  // message
+  describe('message', () => {
+    let messageElement: HTMLParagraphElement;
+
+    beforeEach(() => {
+      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
+      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
+    });
+
+    it('should exist', () => {
+      expect(messageElement).toBeTruthy();
+    });
+
+    it('should have custom text', () => {
+      const messageText = component.message;
+      expect(messageElement).toBeTruthy();
+      expect(messageElement.innerText).toEqual(messageText);
+      expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });
 
