@@ -13,4 +13,15 @@ describe('ErrorService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should log errors to the console', () => {
+    // write test
+  });
+
+  it('should display errors to the user', () => {
+    // write test
+  });
+
+  // TODO: Add error log reporting test
+  // it('should report errors to SOME_THIRD_PARTY_SERVICE', () => {});
 });
