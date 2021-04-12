@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DialogService } from './dialog.service';
 
 /**
  * Service for all behavior in handling, logging, and showing errors.
@@ -7,6 +8,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ErrorService {
+
+  constructor(private dialogService: DialogService) {}
 
   /**
    * Logs an error to the console.
@@ -29,7 +32,14 @@ export class ErrorService {
   displayError(displayMessage: string, error: Error, important = false): void {
     this.logError(error);
 
-    // TODO: Display error
+    if (important) {
+      this.dialogService.alert({
+        title: 'Error',
+        message: displayMessage
+      });
+    } else {
+
+    }
   }
 
 }
