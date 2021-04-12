@@ -60,9 +60,6 @@ describe('AlertDialogComponent', () => {
       expect(titleElement).toBeTruthy();
     });
 
-    // TODO: Test for default title text
-    // it('should have default text', async () => {});
-
     it('should have custom text', () => {
       const titleText = component.title;
       expect(titleElement.innerText).toEqual(titleText);
