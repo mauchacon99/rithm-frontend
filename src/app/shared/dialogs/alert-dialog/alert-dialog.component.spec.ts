@@ -91,7 +91,6 @@ describe('AlertDialogComponent', () => {
 
     it('should have custom text', () => {
       const messageText = component.message;
-      expect(messageElement).toBeTruthy();
       expect(messageElement.innerText).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
