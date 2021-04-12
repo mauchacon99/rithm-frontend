@@ -18,8 +18,16 @@ export class ErrorService {
     // TODO: Add error log reporting using some third-party service
   }
 
-  displayError(error: string): void {
+  /**
+   * Logs an error and displays a separate message to the user.
+   *
+   * @param displayMessage The error message to display to the user.
+   * @param error The error message that was encountered.
+   */
+  displayError(displayMessage: string, error: string): void {
+    this.logError(error);
 
+    // TODO: Display error
   }
 
 }
