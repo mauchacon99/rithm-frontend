@@ -16,6 +16,7 @@ const DIALOG_TEST_DATA: DialogData = {
   cancelButtonText: 'Nope'
 };
 
+// component
 describe('ConfirmDialogComponent', () => {
   let component: ConfirmDialogComponent;
   let fixture: ComponentFixture<ConfirmDialogComponent>;
@@ -46,33 +47,86 @@ describe('ConfirmDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have title', () => {
-    const titleText = component.title;
-    const titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
-    expect(titleElement.innerText).toEqual(titleText);
-    expect(titleText).toEqual(DIALOG_TEST_DATA.title);
+  // title
+  describe('title', () => {
+    let titleElement: HTMLHeadingElement;
+
+    beforeEach(() => {
+      titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
+    });
+
+    it('should exist', () => {
+      expect(titleElement).toBeTruthy();
+    });
+
+    it('should have custom text', () => {
+      const titleText = component.title;
+      expect(titleElement.innerText).toEqual(titleText);
+      expect(titleText).toEqual(DIALOG_TEST_DATA.title);
+    });
   });
 
-  it('should have message', () => {
-    const messageText = component.message;
-    const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-    const messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
-    expect(messageElement.innerText).toEqual(messageText);
-    expect(messageText).toEqual(DIALOG_TEST_DATA.message);
+  // message
+  describe('message', () => {
+    let messageElement: HTMLParagraphElement;
 
+    beforeEach(() => {
+      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
+      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
+    });
+
+    it('should exist', () => {
+      expect(messageElement).toBeTruthy();
+    });
+
+    it('should have custom text', () => {
+      const messageText = component.message;
+      expect(messageElement.innerText).toEqual(messageText);
+      expect(messageText).toEqual(DIALOG_TEST_DATA.message);
+    });
   });
 
-  it('should have okay button text', async () => {
-    const okButtonText = component.okButtonText;
-    const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#confirm'}));
-    expect(await buttonElement.getText()).toEqual(okButtonText);
-    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
+  // okay button
+  describe('okay button', () => {
+    let buttonHarness: MatButtonHarness;
+
+    beforeEach(async () => {
+      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#confirm'}));
+    });
+
+    it('should exist', async () => {
+      expect(buttonHarness).toBeTruthy();
+    });
+
+    // TODO: Test for default button text
+    // it('should have default text', async () => {});
+
+    it('should have custom text', async () => {
+      const okButtonText = component.okButtonText;
+      expect(await buttonHarness.getText()).toEqual(okButtonText);
+      expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
+    });
   });
 
-  it('should have cancel button text', async () => {
-    const cancelButtonText = component.cancelButtonText;
-    const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#cancel'}));
-    expect(await buttonElement.getText()).toEqual(cancelButtonText);
-    expect(cancelButtonText).toEqual(DIALOG_TEST_DATA.cancelButtonText as string);
+  // cancel button
+  describe('okay button', () => {
+    let buttonHarness: MatButtonHarness;
+
+    beforeEach(async () => {
+      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#cancel'}));
+    });
+
+    it('should exist', async () => {
+      expect(buttonHarness).toBeTruthy();
+    });
+
+    // TODO: Test for default button text
+    // it('should have default text', async () => {});
+
+    it('should have custom text', async () => {
+      const cancelButtonText = component.cancelButtonText;
+      expect(await buttonHarness.getText()).toEqual(cancelButtonText);
+      expect(cancelButtonText).toEqual(DIALOG_TEST_DATA.cancelButtonText as string);
+    });
   });
 });
