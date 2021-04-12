@@ -70,6 +70,17 @@ describe('AlertDialogComponent', () => {
     expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
   });
 
+  it('should have error color for title if error alert', () => {
+    component.title = 'Error';
+    const titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
+    expect(titleElement.style.color).toEqual('#91372c');
+  });
+
+  it('should have error color for button if error alert', () => {
+    component.title = 'Error';
+
+  });
+
   // it('should close when button is clicked', async () => {
   //   const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
   //   await okButton.click();
