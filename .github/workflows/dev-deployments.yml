@@ -13,22 +13,14 @@ on:
 jobs:
 
   # Deploys the Instanbul test coverage site
-  test-coverage:
-    runs-on: ubuntu-latest
+  # test-coverage:
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - run: npm ci
-    - run: npm run test-ci
-
-    # Coverage badges will be updated on any branch except protected
-    # branches 'develop' and 'master' and on a pull requests
-    - name: Test angular action
-      uses:  demyanets/angular-coverage-badges-action@v1
-      with:
-        coverage-summary-path: coverage/stslib/coverage-summary.json
-        protected-branches: '["master",  "develop"]'
+  #   - run: npm ci
+  #   - run: npm run test-ci
 
     # - name: Installing dependencies
     #   run: npm --v && npm ci
@@ -37,17 +29,20 @@ jobs:
     #   run: npm run lint
 
   # Deploys the Compodoc documentation site
-  # compodoc:
-  #   runs-on: ubuntu-latest
+  compodoc:
+    runs-on: [self-hosted, Windows]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Linting all stylesheets
-  #     run: npm run lint-style
+    - name: Compiling documentation
+      run: npm run compile-docs
+
+    # - name: Deploying documentation site
+    #   run: npm run lint-style
 
   # Deploys the SassDoc documentation site
   # sassdoc:
