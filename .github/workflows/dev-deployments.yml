@@ -1,0 +1,52 @@
+name: Dev Deployments
+
+on:
+  # push:
+  #   branches:
+  #     - "dev"
+
+  # TODO: remove
+  pull_request:
+    paths-ignore: [.vscode/**, .github/**]
+    branches: [ dev ]
+
+jobs:
+
+  # Deploys the Instanbul test coverage site
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # - name: Installing dependencies
+    #   run: npm --v && npm ci
+
+    # - name: Linting Angular app
+    #   run: npm run lint
+
+  # Deploys the Compodoc documentation site
+  # compodoc:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Installing dependencies
+  #     run: npm ci
+
+  #   - name: Linting all stylesheets
+  #     run: npm run lint-style
+
+  # Deploys the SassDoc documentation site
+  # sassdoc:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Installing dependencies
+  #     run: npm ci
+
+  #   - name: Building Angular web project
+  #     run: npm run build
