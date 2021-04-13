@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogContent, MatDialogModule, MatDialogTitle, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HarnessLoader } from '@angular/cdk/testing';
+import { HarnessLoader, TestElement } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 
 
@@ -17,6 +17,7 @@ const DIALOG_TEST_DATA: DialogData = {
   cancelButtonText: 'Cancel'
 };
 
+// component
 describe('AlertDialogComponent', () => {
   let component: AlertDialogComponent;
   let fixture: ComponentFixture<AlertDialogComponent>;
@@ -24,16 +25,16 @@ describe('AlertDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AlertDialogComponent ],
+      declarations: [AlertDialogComponent],
       imports: [
         MatDialogModule,
         MatButtonModule
       ],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }
+        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -47,32 +48,87 @@ describe('AlertDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have title', () => {
-    const titleText = component.title;
-    const titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
-    expect(titleElement.innerText).toEqual(titleText);
-    expect(titleText).toEqual(DIALOG_TEST_DATA.title);
+  // title
+  describe('title', () => {
+    let titleElement: HTMLHeadingElement;
+
+    beforeEach(() => {
+      titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
+    });
+
+    it('should exist', () => {
+      expect(titleElement).toBeTruthy();
+    });
+
+    it('should have custom text', () => {
+      const titleText = component.title;
+      expect(titleElement.innerText).toEqual(titleText);
+      expect(titleText).toEqual(DIALOG_TEST_DATA.title);
+    });
+
+    it('should have error color when error', () => {
+      component.title = 'Error';
+      fixture.detectChanges();
+      expect(window.getComputedStyle(titleElement).color).toEqual('rgb(145, 55, 44)'); // TODO: pull this from SCSS variable instead?
+    });
   });
 
-  it('should have message', () => {
-    const messageText = component.message;
-    const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-    const messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
-    expect(messageElement.innerText).toEqual(messageText);
-    expect(messageText).toEqual(DIALOG_TEST_DATA.message);
+  // message
+  describe('message', () => {
+    let messageElement: HTMLParagraphElement;
 
+    beforeEach(() => {
+      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
+      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
+    });
+
+    it('should exist', () => {
+      expect(messageElement).toBeTruthy();
+    });
+
+    it('should have custom text', () => {
+      const messageText = component.message;
+      expect(messageElement.innerText).toEqual(messageText);
+      expect(messageText).toEqual(DIALOG_TEST_DATA.message);
+    });
   });
 
-  it('should have okay button text', async () => {
-    const okButtonText = component.okButtonText;
-    const buttonElement = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
-    expect(await buttonElement.getText()).toEqual(okButtonText);
-    expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
+  // okay button
+  describe('okay button', () => {
+    let buttonHarness: MatButtonHarness;
+
+    beforeEach(async () => {
+      buttonHarness = await loader.getHarness(MatButtonHarness);
+    });
+
+    it('should exist', async () => {
+      expect(buttonHarness).toBeTruthy();
+    });
+
+    // TODO: Test for default button text
+    // it('should have default text', async () => {});
+
+    it('should have custom text', async () => {
+      const okButtonText = component.okButtonText;
+      expect(await buttonHarness.getText()).toEqual(okButtonText);
+      expect(okButtonText).toEqual(DIALOG_TEST_DATA.okButtonText as string);
+    });
+
+    it('should have error color when error', async () => {
+      component.title = 'Error';
+      fixture.detectChanges();
+      const buttonElement: TestElement = await buttonHarness.host();
+      expect(await (buttonElement.hasClass('mat-error'))).toBeTruthy();
+    });
+
+    // TODO: Test for closing of modal on button click
+    // it('should close modal when clicked', async () => {
+    //   const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
+    //   await okButton.click();
+    //   fixture.detectChanges();
+    //   tick();
+    //   expect(DIALOG_MOCK.close()).toHaveBeenCalled();
+    // });
   });
 
-  // it('should close when button is clicked', async () => {
-  //   const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
-  //   await okButton.click();
-  //   expect(component).toBeFalsy();
-  // });
 });

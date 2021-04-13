@@ -24,3 +24,19 @@ body {
 
   margin: 0;
 }
+
+/// Overrides the default accent color for the snackbar action
+.snackbar {
+  .mat-simple-snackbar-action {
+    color: #fff;
+  }
+}
+
+.snackbar-error {
+  color: $warning-red;
+  background-color: map-get($error-palette, 50);
+
+  .mat-simple-snackbar-action {
+    color: $warning-red;
+  }
+}

@@ -1,1 +1,5 @@
-// Future styles go here
+@import '../../../../scss/helpers/helpers';
+
+.error-title {
+  color: $warning-red;
+}

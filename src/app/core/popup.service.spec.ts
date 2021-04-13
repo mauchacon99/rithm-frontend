@@ -1,18 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { DialogService } from './dialog.service';
+import { PopupService } from './popup.service';
 
-describe('DialogService', () => {
-  let service: DialogService;
+describe('PopupService', () => {
+  let service: PopupService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatDialogModule
+        MatDialogModule,
+        MatSnackBarModule
       ]
     });
-    service = TestBed.inject(DialogService);
+    service = TestBed.inject(PopupService);
   });
 
   it('should be created', () => {

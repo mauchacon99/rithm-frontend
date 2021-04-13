@@ -1,5 +1,5 @@
 <!-- Title -->
-<h1 mat-dialog-title>{{title}}</h1>
+<h1 mat-dialog-title [ngClass]="{'error-title': title === 'Error'}">{{title}}</h1>
 
 <div mat-dialog-content class="row">
 
@@ -10,5 +10,5 @@
 
 <!-- Buttons -->
 <div mat-dialog-actions class="row justify-content-end">
-  <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
+  <button mat-button [color]="materialColor" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
 </div>
