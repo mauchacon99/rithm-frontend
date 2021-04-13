@@ -5,9 +5,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ErrorService } from './error.service';
+import { PopupService } from './popup.service';
 
 describe('ErrorService', () => {
   let service: ErrorService;
+  let popupService: PopupService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,8 +21,11 @@ describe('ErrorService', () => {
       ]
     });
     service = TestBed.inject(ErrorService);
+    popupService = TestBed.inject(PopupService);
 
     spyOn(window.console, 'error');
+    spyOn(popupService, 'alert');
+    spyOn(popupService, 'notify');
   });
 
   it('should be created', () => {
@@ -33,12 +38,13 @@ describe('ErrorService', () => {
   });
 
   it('should display important errors to user', () => {
-    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
+    service.displayError('Ruh roh, Raggy', new Error('Zoinks'), true);
+    expect(popupService.alert).toHaveBeenCalled();
   });
 
   it('should display minor errors to user', () => {
     service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
-
+    expect(popupService.notify).toHaveBeenCalled();
   });
 
   // TODO: Add error log reporting test
