@@ -10,7 +10,6 @@ import { Component } from '@angular/core';
 })
 export class SignInComponent {
 
-
   /**
    * Attempts to sign the user in using the provided credentials.
    */

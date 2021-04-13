@@ -1,0 +1,14 @@
+<!-- Title -->
+<h1 mat-dialog-title [ngClass]="{'error-title': title === 'Error'}">{{title}}</h1>
+
+<div mat-dialog-content class="row">
+
+  <!-- Message -->
+  <p>{{message}}</p>
+
+</div>
+
+<!-- Buttons -->
+<div mat-dialog-actions class="row justify-content-end">
+  <button mat-button [color]="materialColor" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
+</div>

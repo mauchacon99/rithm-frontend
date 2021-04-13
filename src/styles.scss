@@ -8,14 +8,35 @@
 // Material themeing
 @import '~@angular/material/theming';
 // Material Core
-@include mat-core();
+@include mat-core($custom-typography);
 
 // Rithm light Theme
 @import './scss/themes/rithm-light';
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
 
+// Set base typography settings
+@include mat-base-typography($custom-typography);
+
 // Global Styles Below
 body {
   @include gradient($secondary-gray, $secondary-blue);
+
+  margin: 0;
+}
+
+/// Overrides the default accent color for the snackbar action
+.snackbar {
+  .mat-simple-snackbar-action {
+    color: #fff;
+  }
+}
+
+.snackbar-error {
+  color: $warning-red;
+  background-color: map-get($error-palette, 50);
+
+  .mat-simple-snackbar-action {
+    color: $warning-red;
+  }
 }
