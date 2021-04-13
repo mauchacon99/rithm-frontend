@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ErrorService } from './error.service';
 
@@ -11,7 +12,8 @@ describe('ErrorService', () => {
     TestBed.configureTestingModule({
       imports: [
         MatDialogModule,
-        MatButtonModule
+        MatButtonModule,
+        MatSnackBarModule
       ]
     });
     service = TestBed.inject(ErrorService);
