@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { ErrorService } from './error.service';
 
@@ -6,8 +8,15 @@ describe('ErrorService', () => {
   let service: ErrorService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        MatDialogModule,
+        MatButtonModule
+      ]
+    });
     service = TestBed.inject(ErrorService);
+
+    spyOn(window.console, 'error');
   });
 
   it('should be created', () => {
@@ -15,11 +24,17 @@ describe('ErrorService', () => {
   });
 
   it('should log errors to the console', () => {
-    // write test
+    service.logError(new Error('This is an example of some error'));
+    expect(window.console.error).toHaveBeenCalled();
   });
 
-  it('should display errors to the user', () => {
-    // write test
+  it('should display important errors to user', () => {
+    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
+  });
+
+  it('should display minor errors to user', () => {
+    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
+
   });
 
   // TODO: Add error log reporting test
