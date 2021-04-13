@@ -14,19 +14,19 @@ jobs:
 
   # Deploys the Instanbul test coverage site
   # test-coverage:
-  #   runs-on: ubuntu-latest
+  #   runs-on: [self-hosted, Windows]
 
   #   steps:
   #   - uses: actions/checkout@v2
 
-  #   - run: npm ci
-  #   - run: npm run test-ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    # - name: Installing dependencies
-    #   run: npm --v && npm ci
+  #   - name: Generating test coverage
+  #     run: npm run test-ci
 
-    # - name: Linting Angular app
-    #   run: npm run lint
+  #   - name: Deploying documentation site
+  #     run:
 
   # Deploys the Compodoc documentation site
   compodoc:
@@ -42,11 +42,11 @@ jobs:
       run: npm run compile-docs
 
     # - name: Deploying documentation site
-    #   run: npm run lint-style
+    #   run:
 
   # Deploys the SassDoc documentation site
   # sassdoc:
-  #   runs-on: ubuntu-latest
+  #   runs-on: [self-hosted, Windows]
 
   #   steps:
   #   - uses: actions/checkout@v2
@@ -54,5 +54,8 @@ jobs:
   #   - name: Installing dependencies
   #     run: npm ci
 
-  #   - name: Building Angular web project
-  #     run: npm run build
+  #   - name: Compiling documentation
+  #     run: npm run compile-style-docs
+
+  #   - name: Deploying documentation site
+  #     run:
