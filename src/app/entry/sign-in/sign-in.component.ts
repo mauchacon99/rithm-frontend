@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Component for signing into the system.
@@ -9,6 +10,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent {
+
+  constructor(private errorService: ErrorService) {
+    this.errorService.displayError('Something happened. Try refreshing the page.', new Error('wowowowowowowo'));
+  }
 
   /**
    * Attempts to sign the user in using the provided credentials.

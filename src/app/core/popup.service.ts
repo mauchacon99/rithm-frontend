@@ -8,17 +8,17 @@ import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-di
 const DIALOG_WIDTH = '500px';
 
 /**
- * Allows the user to display simple modals/popups to the user.
+ * Allows the user to display simple popups to the user.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class DialogService {
+export class PopupService {
 
   constructor(private dialog: MatDialog) { }
 
   /**
-   * Displays an alert message to the user.
+   * Displays an alert dialog to the user.
    *
    * @param dialogData The dialog information to display.
    */
@@ -30,7 +30,7 @@ export class DialogService {
   }
 
   /**
-   * Displays a confirmation popup to the user.
+   * Displays a confirmation dialog to the user.
    *
    * @param dialogData The dialog information to display.
    * @returns True if the user confirmed, false otherwise.
@@ -45,7 +45,7 @@ export class DialogService {
   }
 
   /**
-   * Displays a prompt popup to the user.
+   * Displays a prompt dialog to the user.
    *
    * @param dialogData The dialog information to display.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
