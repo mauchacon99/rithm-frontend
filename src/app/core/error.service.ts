@@ -38,7 +38,7 @@ export class ErrorService {
         message: displayMessage
       });
     } else {
-      // this.snackBar.open('Test')
+      this.popupService.notify(displayMessage, true);
     }
   }
 

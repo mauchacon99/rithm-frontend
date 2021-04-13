@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogData } from 'src/models';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
@@ -15,7 +16,10 @@ const DIALOG_WIDTH = '500px';
 })
 export class PopupService {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) { }
 
   /**
    * Displays an alert dialog to the user.
@@ -57,5 +61,18 @@ export class PopupService {
     });
 
     return await dialogRef.afterClosed().toPromise();
+  }
+
+  /**
+   * Displays a snackbar popup at the bottom of the window.
+   *
+   * @param message The message to display to the user.
+   * @param error Whether the snackbar is for an error message. Optional; defaults to `false`, non-error.
+   */
+  notify(message: string, error = false): void {
+    this.snackBar.open(message, 'OK', {
+      duration: 3500,
+      panelClass: error ? 'snackbar-error' : ''
+    });
   }
 }

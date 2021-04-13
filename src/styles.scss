@@ -24,3 +24,12 @@ body {
 
   margin: 0;
 }
+
+.snackbar-error {
+  color: $warning-red;
+  background-color: map-get($error-palette, 50);
+
+  .mat-simple-snackbar-action {
+    color: $warning-red;
+  }
+}
