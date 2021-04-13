@@ -72,7 +72,7 @@ export class PopupService {
   notify(message: string, error = false): void {
     this.snackBar.open(message, 'OK', {
       duration: 3500,
-      panelClass: error ? 'snackbar-error' : ''
+      panelClass: error ? 'snackbar-error' : 'snackbar' // see in styles.scss
     });
   }
 }
