@@ -47,7 +47,7 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./documentation D:/www/rithmui/compodoc -Recurse -Force
+        Copy-Item ./documentation/* D:/www/rithmui/compodoc -Recurse -Force
         iisreset /start
 
   # Deploys the SassDoc documentation site
@@ -66,5 +66,5 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./sassdoc D:/www/rithmui/sassdoc -Recurse -Force
+        Copy-Item ./sassdoc/* D:/www/rithmui/sassdoc -Recurse -Force
         iisreset /start
