@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "lint-style": "npx stylelint \"**/*.scss\"",
     "e2e": "ng e2e",
-    "compile-docs": "npx compodoc -p tsconfig.app.json src",
+    "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/"
   },
   "private": true,
