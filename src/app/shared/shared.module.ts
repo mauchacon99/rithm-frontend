@@ -8,6 +8,7 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
+import { NotificationCardComponent } from './notification-card/notification-card.component';
 
 
 
@@ -16,7 +17,8 @@ import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-load
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent
+    FullScreenLoaderComponent,
+    NotificationCardComponent
   ],
   imports: [
     CommonModule,
