@@ -31,7 +31,8 @@ import { NotificationCardComponent } from './notification-card/notification-card
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent
+    FullScreenLoaderComponent,
+    NotificationCardComponent
   ]
 })
 export class SharedModule { }
