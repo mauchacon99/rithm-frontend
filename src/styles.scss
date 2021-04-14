@@ -9,7 +9,7 @@
 @include mat-core($custom-typography);
 
 // Rithm light Theme
-@import './scss/themes/rithm-light';
+@import './scss/themes/index';
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
 
