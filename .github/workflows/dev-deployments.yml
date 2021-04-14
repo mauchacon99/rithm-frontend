@@ -44,8 +44,11 @@ jobs:
     - name: Compiling documentation
       run: npm run compile-docs
 
-    # - name: Deploying documentation site
-    #   run:
+    - name: Deploying documentation site
+      run: |
+        iisreset /stop
+        Copy-Item ./documentation D:/www/rithmui/compodoc -Recurse -Force
+        iisreset /start
 
   # Deploys the SassDoc documentation site
   # sassdoc:
