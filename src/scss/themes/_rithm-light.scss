@@ -1,7 +1,7 @@
 // Rithm Light Theme
 
 /// import light theme color palette
-@import './rithm-light-palettes';
+@import '../helpers/rithm-light-palettes';
 // mat-palette accepts $palette-name, main, lighter and darker variants
 /// Apply primary color palette to theme
 $rithm-light-primary: mat-palette($primary-palette, 500, 400, 700);
