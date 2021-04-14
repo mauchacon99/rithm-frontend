@@ -1,7 +1,5 @@
 // Import all helpers
-@import './scss/helpers/functions';
-@import './scss/helpers/mixins';
-@import './scss/helpers/variables';
+@import './scss/helpers/index';
 /// Import Tools from tools file
 /// Contains global styles for buttons, forms and typography
 @import './scss/tools/tools';
