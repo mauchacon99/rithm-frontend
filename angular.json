@@ -103,7 +103,13 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/helpers",
+                "src/scss/tools"
+              ]
+            }
           }
         },
         "lint": {
