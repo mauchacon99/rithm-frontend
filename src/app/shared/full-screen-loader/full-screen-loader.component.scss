@@ -1,5 +1,8 @@
-/// Full height row and white background
-.row {
+/// set background color to white
+.page {
   background-color: #fff;
-  height: 100vh;
+}
+/// make same height as parent for vertical alignment
+.row {
+  height: 100%;
 }

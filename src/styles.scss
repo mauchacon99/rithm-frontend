@@ -17,11 +17,11 @@
 @include mat-base-typography($custom-typography);
 
 // Global Styles Below
+/// Global page Styles
 * {
   margin: 0;
   padding: 0;
 }
-/// Global page Styles
 /// Set the height of the page
 /// Apply page specific styles within the component
 .page {
