@@ -1,6 +1,5 @@
 # Rithm
 
-[![checks](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-checks.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-checks.yml)
 [![doc deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
