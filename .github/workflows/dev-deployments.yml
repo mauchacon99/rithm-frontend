@@ -12,7 +12,7 @@ on:
 
 jobs:
 
-  # Deploys the Instanbul test coverage site
+  # Deploys the Karma test coverage site
   test-coverage:
     runs-on: [self-hosted, Windows]
 
