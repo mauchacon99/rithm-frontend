@@ -1,19 +1,33 @@
 name: Dev Deployments
 
 on:
-  # push:
-  #   branches:
-  #     - "dev"
-
-  # TODO: remove
-  pull_request:
-    paths-ignore: [.vscode/**, .github/**]
-    branches: [ dev ]
+  push:
+    branches:
+      - "dev"
 
 jobs:
 
   # Deploys the Karma test coverage site
-  test-coverage:
+  # test-coverage:
+  #   runs-on: [self-hosted, Windows]
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Installing dependencies
+  #     run: npm ci
+
+  #   - name: Generating test coverage
+  #     run: npm run test-ci
+
+  #   - name: Deploying documentation site
+  #     run: |
+  #       iisreset /stop
+  #       Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
+  #       iisreset /start
+
+  # Deploys the Compodoc documentation site
+  compodoc:
     runs-on: [self-hosted, Windows]
 
     steps:
@@ -22,49 +36,30 @@ jobs:
     - name: Installing dependencies
       run: npm ci
 
-    - name: Generating test coverage
-      run: npm run test-ci
+    - name: Compiling documentation
+      run: npm run compile-docs
 
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
+        Copy-Item ./documentation/* D:/www/rithmui/compodoc -Recurse -Force
         iisreset /start
 
-  # Deploys the Compodoc documentation site
-  # compodoc:
-  #   runs-on: [self-hosted, Windows]
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Installing dependencies
-  #     run: npm ci
-
-  #   - name: Compiling documentation
-  #     run: npm run compile-docs
-
-  #   - name: Deploying documentation site
-  #     run: |
-  #       iisreset /stop
-  #       Copy-Item ./documentation/* D:/www/rithmui/compodoc -Recurse -Force
-  #       iisreset /start
-
   # Deploys the SassDoc documentation site
-  # sassdoc:
-  #   runs-on: [self-hosted, Windows]
+  sassdoc:
+    runs-on: [self-hosted, Windows]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Compiling documentation
-  #     run: npm run compile-style-docs
+    - name: Compiling documentation
+      run: npm run compile-style-docs
 
-  #   - name: Deploying documentation site
-  #     run: |
-  #       iisreset /stop
-  #       Copy-Item ./sassdoc/* D:/www/rithmui/sassdoc -Recurse -Force
-  #       iisreset /start
+    - name: Deploying documentation site
+      run: |
+        iisreset /stop
+        Copy-Item ./sassdoc/* D:/www/rithmui/sassdoc -Recurse -Force
+        iisreset /start
