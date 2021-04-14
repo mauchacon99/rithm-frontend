@@ -13,20 +13,23 @@ on:
 jobs:
 
   # Deploys the Instanbul test coverage site
-  # test-coverage:
-  #   runs-on: [self-hosted, Windows]
+  test-coverage:
+    runs-on: [self-hosted, Windows]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Generating test coverage
-  #     run: npm run test-ci
+    - name: Generating test coverage
+      run: npm run test-ci
 
-  #   - name: Deploying documentation site
-  #     run:
+    - name: Deploying documentation site
+      run: |
+        iisreset /stop
+        Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
+        iisreset /start
 
   # Deploys the Compodoc documentation site
   compodoc:
@@ -34,9 +37,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - run: node -v
-    - run: npm -v
 
     - name: Installing dependencies
       run: npm ci
