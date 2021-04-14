@@ -35,8 +35,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - run: node -v
+    - run: npm -v
+
     - name: Installing dependencies
-      run: node -v -and npm -v -and npm ci
+      run: npm ci
 
     - name: Compiling documentation
       run: npm run compile-docs
