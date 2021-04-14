@@ -17,10 +17,15 @@
 @include mat-base-typography($custom-typography);
 
 // Global Styles Below
-body {
-  @include gradient($secondary-gray, $secondary-blue);
-
+* {
   margin: 0;
+  padding: 0;
+}
+/// Global page Styles
+/// Set the height of the page
+/// Apply page specific styles within the component
+.page {
+  height: 100vh;
 }
 
 /// Overrides the default accent color for the snackbar action
