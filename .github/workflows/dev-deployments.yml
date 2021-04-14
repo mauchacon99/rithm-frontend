@@ -19,6 +19,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: setup-chromedriver
+      uses: nanasess/setup-chromedriver@v1.0.1
+
     - name: Installing dependencies
       run: npm ci
 
