@@ -51,17 +51,20 @@ jobs:
         iisreset /start
 
   # Deploys the SassDoc documentation site
-  # sassdoc:
-  #   runs-on: [self-hosted, Windows]
+  sassdoc:
+    runs-on: [self-hosted, Windows]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Compiling documentation
-  #     run: npm run compile-style-docs
+    - name: Compiling documentation
+      run: npm run compile-style-docs
 
-  #   - name: Deploying documentation site
-  #     run:
+    - name: Deploying documentation site
+      run: |
+        iisreset /stop
+        Copy-Item ./sassdoc D:/www/rithmui/sassdoc -Recurse -Force
+        iisreset /start
