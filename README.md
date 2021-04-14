@@ -1,29 +1,47 @@
-[![Dev Checks](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-checks.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-checks.yml)
-
 # Rithm
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
+[![doc deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml)
 
-## Development server
+## Getting Started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Clone the repo and perform an `npm i` in the base directory to install all of the dependencies for the project.
 
-## Code scaffolding
+Ensure that you are running the latest LTS version of Node.js (v14.15.1 or greater) by running the command `node --version`. The latest version is required for ESLint support.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+You can run the web app by using the command `npm start` and opening Google Chrome to the specified localhost address (usually [http://localhost:4200/](http://localhost:4200/)).
 
-## Build
+## Scripts
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+`npm start`\
+Runs the web app locally on your system.
 
-## Running unit tests
+`npm run build`\
+Builds the app to the `/dist` folder without running the project.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+`npm run test`\
+Serves the test summary page and runs all of the defined tests in the project.
 
-## Running end-to-end tests
+`npm run test-ci`\
+Runs all of the defined tests in the project without serving up a webpage.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+`npm run lint`\
+Checks all of the TypeScript/JavaScript code for lint errors.
 
-## Further help
+`npm run lint-style`\
+Checks all of the SCSS/CSS code for lint errors.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+`npm run e2e`\
+Runs all of the defined end-to-end tests in the project.
+
+`npm run compile-docs`\
+Compiles all of the JSDoc and Angular documentation using Compodoc.
+
+`npm run compile-style-docs`\
+Compiles all of the styling documentation using SassDoc.
+
+## Documentation
+
+Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://api.rithm.tech). You will need to sign in with the following credentials:
+
+Username: `docuser` \
+Password: `R1thmD0c5`

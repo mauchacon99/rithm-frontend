@@ -24,7 +24,7 @@ describe('FullScreenLoaderComponent', () => {
   });
 
   it('should have an svg', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('svg'));
+    const compiled = fixture.debugElement.nativeElement as HTMLDivElement;
+    expect(compiled.querySelector('svg')).toBeTruthy();
   });
 });

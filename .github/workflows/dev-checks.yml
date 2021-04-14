@@ -13,10 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
 
     - name: Installing dependencies
-      run: npm --v && npm ci
+      run: npm ci
 
     - name: Linting Angular app
       run: npm run lint
@@ -60,7 +59,7 @@ jobs:
       run: npm ci
 
     - name: Running all unit and integration tests
-      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      run: npm run test-ci
 
   # Checks that the compiled Angular app conforms to W3 standards
   # w3-conformance:

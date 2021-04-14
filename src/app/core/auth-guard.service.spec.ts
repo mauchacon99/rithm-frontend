@@ -35,9 +35,9 @@ describe('AuthGuardService', () => {
   //   service.canActivate();
   // });
 
-  it('should not allow navigation if not signed in', () => {
-    // expect(service.canActivate()).toBeFalse();
-  });
+  // it('should not allow navigation if not signed in', () => {
+  //   expect(service.canActivate()).toBeFalse();
+  // });
 
   // TODO: Test allowance of navigation
   // it('should allow navigation if signed in', () => {
