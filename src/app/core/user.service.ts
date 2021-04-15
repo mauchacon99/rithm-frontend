@@ -39,4 +39,14 @@ export class UserService {
     // TODO: Check if there is an auth token present
   }
 
+  /**
+   * Gets a new auth token from the API.
+   *
+   * @returns The new auth token.
+   */
+  refreshToken(): string {
+    return '';
+    // TODO: Set up HTTP request
+  }
+
 }
