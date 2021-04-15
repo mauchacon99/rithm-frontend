@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  /** The lifetime for which an auth token is valid in milliseconds. */
+  authTokenLifetime: 900000
 };
 
 /*
