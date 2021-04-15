@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 
 /**
@@ -8,6 +11,8 @@ import { AccessToken } from 'src/helpers';
   providedIn: 'root'
 })
 export class UserService {
+
+  constructor(private http: HttpClient) {}
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -45,9 +50,8 @@ export class UserService {
    *
    * @returns The new access token.
    */
-  refreshToken(): AccessToken {
-    return new AccessToken('temp');
-    // TODO: Set up HTTP request
+  refreshToken(): Observable<AccessToken> {
+    return this.http.post<AccessToken>(`${environment.baseApiUrl}/api/user/refreshtoken`, {});
   }
 
 }
