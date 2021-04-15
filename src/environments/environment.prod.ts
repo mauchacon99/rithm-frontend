@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
 
-  /** The lifetime for which an auth token is valid in milliseconds. */
-  authTokenLifetime: 900000
+  /** The lifetime for which an access token is valid in milliseconds. */
+  accessTokenLifetime: 900000
 };

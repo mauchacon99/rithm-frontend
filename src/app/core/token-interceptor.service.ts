@@ -5,7 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 /**
- * Service for intercepting HTTP requests to provide the auth token.
+ * Service for intercepting HTTP requests to provide the access token.
  */
 @Injectable({
   providedIn: 'root'
@@ -15,25 +15,25 @@ export class TokenInterceptorService implements HttpInterceptor {
   constructor(private userService: UserService) { }
 
   /**
-   * Intercepts HTTP requests and provides the auth token in the header.
+   * Intercepts HTTP requests and provides the access token in the header.
    *
    * @param request The intercepted HTTP request.
    * @param next The HTTP request to hand to the next interceptor.
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let authToken = this.userService.authToken;
+    let accessToken = this.userService.accessToken;
 
-    if (authToken) {
+    if (accessToken) {
 
-      if (authToken.isExpired()) {
-        authToken = this.userService.refreshToken();
+      if (accessToken.isExpired()) {
+        accessToken = this.userService.refreshToken();
       }
 
       // Add token to request
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${accessToken}`
         }
       });
     }

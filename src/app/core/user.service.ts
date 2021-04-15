@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthToken } from 'src/helpers';
+import { AccessToken } from 'src/helpers';
 
 /**
  * Service for all interactions involving a user.
@@ -9,8 +9,8 @@ import { AuthToken } from 'src/helpers';
 })
 export class UserService {
 
-  /** The auth token to be used to authenticate for every request. */
-  authToken: AuthToken | undefined;
+  /** The access token to be used to authenticate for every request. */
+  accessToken: AccessToken | undefined;
 
   /**
    * Signs the user in to the system.
@@ -37,16 +37,16 @@ export class UserService {
    */
   isSignedIn(): boolean {
     return false;
-    // TODO: Check if there is an auth token present
+    // TODO: Check if there is an access token present
   }
 
   /**
-   * Gets a new auth token from the API.
+   * Gets a new access token from the API.
    *
-   * @returns The new auth token.
+   * @returns The new access token.
    */
-  refreshToken(): AuthToken {
-    return new AuthToken('temp');
+  refreshToken(): AccessToken {
+    return new AccessToken('temp');
     // TODO: Set up HTTP request
   }
 
