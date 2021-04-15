@@ -1,8 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { UserService } from './user.service';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AccessToken } from 'src/helpers';
+
+/** API routes that don't require an access token. */
+const NO_AUTH_ROUTES = [
+  '/Register',
+  '/Login',
+  '/ForgotPassword', // TODO: Update with actual path
+  '/ResetPassword' // TODO: Update with actual path
+];
 
 /**
  * Service for intercepting HTTP requests to provide the access token.
@@ -11,6 +20,12 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TokenInterceptorService implements HttpInterceptor {
+
+  /** Whether an access token refresh is currently in progress. */
+  private refreshInProgress = false;
+
+  /** Subject for the updated access token. */
+  private authToken$ = new BehaviorSubject(null);
 
   constructor(private userService: UserService) { }
 
@@ -22,23 +37,21 @@ export class TokenInterceptorService implements HttpInterceptor {
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let accessToken = this.userService.accessToken;
 
-    if (accessToken) {
+    // If an auth-required route
+    if (NO_AUTH_ROUTES.every((route) => !request.url.includes(route))) {
 
+      // Get token
+      let accessToken = this.userService.accessToken;
+
+      // If token missing or expired, refresh token
       if (accessToken.isExpired()) {
         accessToken = this.userService.refreshToken();
       }
 
       // Add token to request
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
     }
-
-    return next.handle(request).pipe(
+    return next.handle(this.addToken(accessToken, request)).pipe(
       catchError((error) => {
 
         // If unauthorized, sign the user out
@@ -49,5 +62,20 @@ export class TokenInterceptorService implements HttpInterceptor {
         return throwError(errorDetail);
       })
     );
+  }
+
+  /**
+   * Adds the access token to the provided request.
+   *
+   * @param accessToken The access token to add.
+   * @param request The request to add the access token.
+   * @returns A new request with the access token.
+   */
+  private addToken(accessToken: AccessToken, request: HttpRequest<unknown>): HttpRequest<unknown> {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
   }
 }
