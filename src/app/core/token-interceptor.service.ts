@@ -22,10 +22,15 @@ export class TokenInterceptorService implements HttpInterceptor {
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const authToken = this.userService.authToken;
+    let authToken = this.userService.authToken;
 
-    // Add the auth token, if it exists
     if (authToken) {
+
+      if (authToken.isExpired()) {
+        authToken = this.userService.refreshToken();
+      }
+
+      // Add token to request
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${authToken}`

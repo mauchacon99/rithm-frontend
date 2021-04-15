@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthToken } from 'src/helpers';
 
 /**
  * Service for all interactions involving a user.
@@ -9,7 +10,7 @@ import { Injectable } from '@angular/core';
 export class UserService {
 
   /** The auth token to be used to authenticate for every request. */
-  authToken = '';
+  authToken: AuthToken | undefined;
 
   /**
    * Signs the user in to the system.
@@ -44,8 +45,8 @@ export class UserService {
    *
    * @returns The new auth token.
    */
-  refreshToken(): string {
-    return '';
+  refreshToken(): AuthToken {
+    return new AuthToken('temp');
     // TODO: Set up HTTP request
   }
 
