@@ -8,6 +8,9 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
 
+  /** The auth token to be used to authenticate for every request. */
+  authToken = '';
+
   /**
    * Signs the user in to the system.
    *
@@ -17,6 +20,13 @@ export class UserService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   signIn(email: string, password: string): void {
     // RIT-144
+  }
+
+  /**
+   * Signs the user out of the system and clears stored data.
+   */
+  signOut(): void {
+    // TODO: clear storage
   }
 
   /**
