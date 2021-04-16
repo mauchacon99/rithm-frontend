@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { browser } from 'protractor';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -12,7 +14,9 @@ import { AccessToken } from 'src/helpers';
 })
 export class UserService {
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService) {}
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -32,7 +36,9 @@ export class UserService {
    * Signs the user out of the system and clears stored data.
    */
   signOut(): void {
-    // TODO: clear storage
+    this.cookieService.deleteAll();
+    localStorage.clear();
+    sessionStorage.clear();
   }
 
   /**
