@@ -7,10 +7,11 @@ import { AccessToken } from 'src/helpers';
 
 /** API routes that don't require an access token. */
 const NO_AUTH_ROUTES = [
-  '/Register',
-  '/Login',
-  '/ForgotPassword', // TODO: Update with actual path
-  '/ResetPassword' // TODO: Update with actual path
+  '/register',
+  '/login',
+  '/refreshtoken',
+  '/forgotPassword', // TODO: Update with actual path
+  '/resetPassword' // TODO: Update with actual path
 ];
 
 /**
@@ -37,6 +38,7 @@ export class TokenInterceptorService implements HttpInterceptor {
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    let newRequest = request.clone();
 
     // If an auth-required route
     if (NO_AUTH_ROUTES.every((route) => !request.url.includes(route))) {
@@ -45,13 +47,21 @@ export class TokenInterceptorService implements HttpInterceptor {
       let accessToken = this.userService.accessToken;
 
       // If token missing or expired, refresh token
-      if (accessToken.isExpired()) {
-        accessToken = this.userService.refreshToken();
+      if (!accessToken || accessToken.isExpired()) {
+        this.userService.refreshToken();
+        accessToken = this.userService.accessToken;
       }
 
       // Add token to request
+      if (accessToken) {
+        newRequest = this.addToken(accessToken, newRequest);
+      } else {
+        // If token still missing, sign out
+        this.userService.signOut();
+      }
     }
-    return next.handle(this.addToken(accessToken, request)).pipe(
+
+    return next.handle(newRequest).pipe(
       catchError((error) => {
 
         // If unauthorized, sign the user out
