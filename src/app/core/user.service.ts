@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -15,7 +16,8 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService) {}
+    private cookieService: CookieService,
+    private router: Router) {}
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -38,6 +40,7 @@ export class UserService {
     this.cookieService.deleteAll();
     localStorage.clear();
     sessionStorage.clear();
+    this.router.navigate(['']);
   }
 
   /**
