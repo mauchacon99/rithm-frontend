@@ -5,9 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserService } from './user.service';
 
-const routerSpy =  jasmine.createSpyObj('Router', ['navigateByUrl']);
-
-
 describe('UserService', () => {
   let service: UserService;
   let router: Router;
@@ -27,9 +24,9 @@ describe('UserService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should allow sign in', () => {
-    expect(service).toBeTruthy();
-  });
+  // it('should allow sign in', () => {
+  //   expect(service).toBeTruthy();
+  // });
 
   it('should clear local storage on sign out', () => {
     localStorage.setItem('test', 'test');
@@ -56,11 +53,11 @@ describe('UserService', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith(['']);
   });
 
-  it('should report sign in status', () => {
-    expect(service).toBeTruthy();
-  });
+  // it('should report sign in status', () => {
+  //   expect(service).toBeTruthy();
+  // });
 
-  it('should refresh expired access tokens', () => {
-    expect(service).toBeTruthy();
-  });
+  // it('should refresh expired access tokens', () => {
+  //   expect(service).toBeTruthy();
+  // });
 });
