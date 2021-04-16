@@ -5,23 +5,22 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserService } from './user.service';
 
-// const routerSpy =  jasmine.createSpyObj('Router', ['navigateByUrl']);
+const routerSpy =  jasmine.createSpyObj('Router', ['navigateByUrl']);
 
 
 describe('UserService', () => {
   let service: UserService;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
         RouterTestingModule
-      ],
-      providers: [
-        // { provide: Router, useClass: routerSpy }
       ]
     });
     service = TestBed.inject(UserService);
+    router = TestBed.inject(Router);
   });
 
   it('should be created', () => {
@@ -52,13 +51,9 @@ describe('UserService', () => {
   });
 
   it('should return to sign in page on sign out', () => {
-    // service.signOut();
-
-    // const spy = routerSpy.navigateByUrl as jasmine.Spy;
-    // const navArgs = spy.calls.first().args[0];
-
-
-    // expect(navArgs).toBe(['']);
+    const routerSpy = spyOn(router, 'navigate');
+    service.signOut();
+    expect(routerSpy).toHaveBeenCalledOnceWith(['']);
   });
 
   it('should report sign in status', () => {
