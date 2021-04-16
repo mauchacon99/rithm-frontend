@@ -49,8 +49,7 @@ export class UserService {
    * @returns True if currently authenticated, false otherwise.
    */
   isSignedIn(): boolean {
-    return false;
-    // TODO: Check if there is an access token present
+    return this.accessToken ? true : false;
   }
 
   /**
