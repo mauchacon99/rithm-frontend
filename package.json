@@ -27,6 +27,7 @@
     "autoprefixer": "^10.2.5",
     "bourbon": "^7.0.0",
     "gsap": "^3.6.1",
+    "ngx-cookie-service": "^11.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
@@ -41,7 +42,7 @@
     "@angular/cli": "~11.2.6",
     "@angular/compiler-cli": "~11.2.7",
     "@compodoc/compodoc": "^1.1.11",
-    "@strut-software/eslint-config": "^1.0.3",
+    "@strut-software/eslint-config": "^1.0.4",
     "@strut-software/stylelint-config": "^1.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
