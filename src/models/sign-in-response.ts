@@ -3,7 +3,7 @@ import { User } from './user';
 /**
  * Represents all info returned from a successful login request.
  */
-export interface LoginResponse {
+export interface SignInResponse {
 
   /** The access token for future requests. */
   accessToken: string;
