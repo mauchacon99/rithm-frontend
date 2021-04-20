@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
@@ -21,7 +22,8 @@ export class SignInComponent {
 
   constructor(
     private userService: UserService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private router: Router
   ) {}
 
   /**
@@ -31,7 +33,8 @@ export class SignInComponent {
     // Sign the user in
     this.userService.signIn(this.email, this.password)
     .pipe(first())
-    .subscribe((signInResponse) => {
+    .subscribe(() => {
+      this.router.navigateByUrl('dashboard');
 
     }, (error) => {
       this.errorService.displayError(
