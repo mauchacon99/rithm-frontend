@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse } from 'src/models';
 
+const MICROSERVICE_PATH = '/userservice';
+
 /**
  * Service for all interactions involving a user.
  */
@@ -31,7 +33,7 @@ export class UserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>(`${environment.baseApiUrl}/api/user/login`, {
+    return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
       email,
       password
     });
