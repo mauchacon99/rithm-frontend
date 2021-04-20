@@ -1,4 +1,5 @@
 import { GlobalPermission } from './global-permission';
+import { Group } from './group';
 import { ObjectPermission } from './object-permission';
 
 /**
@@ -22,7 +23,7 @@ export interface User {
   globalPermission: GlobalPermission;
 
   /** The groups that the user is a member of. */
-  groups: [];
+  groups: Group[];
 
   /** The date that this user was created. */
   createdDate: string;
