@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
+import { SignInResponse } from 'src/models';
 
 /**
  * Service for all interactions involving a user.
@@ -27,10 +28,13 @@ export class UserService {
    *
    * @param email The email address for the user.
    * @param password The entered password for the user.
+   * @returns The user and access/refresh tokens.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  signIn(email: string, password: string): void {
-    // RIT-144
+  signIn(email: string, password: string): Observable<SignInResponse> {
+    return this.http.post<SignInResponse>(`${environment.baseApiUrl}/api/user/login`, {
+      email,
+      password
+    });
   }
 
   /**
