@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 /**
  * Component for signing into the system.
@@ -14,11 +14,12 @@ export class SignInComponent {
 
   /**
    * Initialize the form group
+   * @param fb Form Builder
    */
-  constructor( ) {
-    this.signInForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required)
+  constructor(public fb: FormBuilder) {
+    this.signInForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
