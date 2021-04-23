@@ -10,11 +10,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent {
+  /** Sign in form. */
   signInForm: FormGroup;
 
   /**
-   * Initialize the form group
-   * @param fb Form Builder
+   * Initialize the form group.
+   *
+   * @param fb Form Builder.
    */
   constructor(public fb: FormBuilder) {
     this.signInForm = this.fb.group({
