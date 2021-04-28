@@ -41,6 +41,10 @@ describe('SignInComponent', () => {
     // TODO: add unit test
   });
 
+  it('should display error popup if request fails', () => {
+    // TODO: add unit test
+  });
+
   // sign in form
   describe('sign in form', () => {
     it('should exist', () => {
@@ -48,6 +52,10 @@ describe('SignInComponent', () => {
     });
 
     it('should display invalid credentials message', () => {
+      // TODO: add unit test
+    });
+
+    it('should navigate to dashboard upon successful sign in', () => {
       // TODO: add unit test
     });
 
