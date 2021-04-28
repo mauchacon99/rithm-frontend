@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { PopupService } from './popup.service';
 import { UserService } from './user.service';
 
@@ -11,8 +11,7 @@ import { UserService } from './user.service';
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private router: Router,
-              private userService: UserService,
+  constructor(private userService: UserService,
               private popupService: PopupService) {}
 
   /**
@@ -20,12 +19,12 @@ export class AuthGuardService implements CanActivate {
    *
    * @returns True if the user is signed in and allowed to route, false otherwise.
    */
-  canActivate(): boolean {
+  async canActivate(): Promise<boolean> {
     // If logged in, return true
-    if (this.userService.isSignedIn()) {
+    if (await this.userService.isSignedIn()) {
       return true;
     } else {
-      this.router.navigateByUrl('');
+      this.userService.signOut();
       this.popupService.alert({
         title: 'Action Not Permitted',
         message: 'You need to sign in before you can view that page.'
