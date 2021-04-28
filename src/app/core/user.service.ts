@@ -89,7 +89,7 @@ export class UserService {
    * @returns The new access token.
    */
   refreshToken(): Observable<SignInResponse> {
-    return this.http.get<SignInResponse>(`${environment.baseApiUrl}/api/user/refreshtoken`)
+    return this.http.get<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`)
     .pipe(
       map((signInResponse) => {
         this.accessToken = new AccessToken(signInResponse.accessToken);
