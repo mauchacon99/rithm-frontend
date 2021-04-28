@@ -22,12 +22,6 @@ const NO_AUTH_ROUTES = [
 })
 export class TokenInterceptorService implements HttpInterceptor {
 
-  /** Whether an access token refresh is currently in progress. */
-  private refreshInProgress = false;
-
-  /** Subject for the updated access token. */
-  private authToken$ = new BehaviorSubject(null);
-
   constructor(private userService: UserService) { }
 
   /**
