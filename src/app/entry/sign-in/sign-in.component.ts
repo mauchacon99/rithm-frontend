@@ -15,10 +15,10 @@ import { UserService } from 'src/app/core/user.service';
 export class SignInComponent {
 
   /** The email address that was entered. */
-  email = 'test@test.com';
+  email = 'jeff.stockett@inpivota.com';
 
   /** The password that was entered. */
-  password = 'asdfasdf';
+  password = 'R1thm?24601';
 
   constructor(
     private userService: UserService,

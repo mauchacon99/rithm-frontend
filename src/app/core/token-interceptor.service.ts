@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { UserService } from './user.service';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, Observable, throwError } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
 
 /** API routes that don't require an access token. */
@@ -38,30 +38,41 @@ export class TokenInterceptorService implements HttpInterceptor {
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let newRequest = request.clone();
 
     // If an auth-required route
     if (NO_AUTH_ROUTES.every((route) => !request.url.includes(route))) {
 
-      // Get token
-      let accessToken = this.userService.accessToken;
+      // Check if the user is signed in
+      return this.checkSignIn().pipe(
+        mergeMap((signedIn) => {
 
-      // If token missing or expired, refresh token
-      if (!accessToken || accessToken.isExpired()) {
-        this.userService.refreshToken();
-        accessToken = this.userService.accessToken;
-      }
+          if (!signedIn) {
+            this.userService.signOut();
+            return EMPTY;
+          } else {
 
-      // Add token to request
-      if (accessToken) {
-        newRequest = this.addToken(accessToken, newRequest);
-      } else {
-        // If token still missing, sign out
-        this.userService.signOut();
-      }
+            // Add token to request
+            const accessToken = this.userService.accessToken as AccessToken;
+            const newRequest = this.addToken(accessToken, request.clone());
+
+            return next.handle(newRequest).pipe(
+              catchError((error) => {
+
+                // If unauthorized, sign the user out
+                if (error.status === 401) {
+                  this.userService.signOut();
+                }
+                const errorDetail = error.error.message || error.statusText;
+                return throwError(errorDetail);
+              })
+            );
+          }
+        })
+      );
+
     }
 
-    return next.handle(newRequest).pipe(
+    return next.handle(request).pipe(
       catchError((error) => {
 
         // If unauthorized, sign the user out
@@ -87,5 +98,9 @@ export class TokenInterceptorService implements HttpInterceptor {
         Authorization: `Bearer ${accessToken}`
       }
     });
+  }
+
+  private checkSignIn(): Observable<boolean> {
+    return from(this.userService.isSignedIn());
   }
 }

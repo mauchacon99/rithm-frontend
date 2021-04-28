@@ -62,9 +62,9 @@ export class UserService {
   }
 
   /**
-   * Checks if the user is currently signed in and attempts to get a new refresh token.
+   * Checks if the user is signed in and attempts to get a new refresh token.
    *
-   * @returns True if currently authenticated, false otherwise.
+   * @returns True if authenticated, false otherwise.
    */
   async isSignedIn(): Promise<boolean> {
     if (this.accessToken && !this.accessToken.isExpired()) {
@@ -89,7 +89,7 @@ export class UserService {
    * @returns The new access token.
    */
   refreshToken(): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>(`${environment.baseApiUrl}/api/user/refreshtoken`, {})
+    return this.http.get<SignInResponse>(`${environment.baseApiUrl}/api/user/refreshtoken`)
     .pipe(
       map((signInResponse) => {
         this.accessToken = new AccessToken(signInResponse.accessToken);

@@ -12,5 +12,5 @@ export interface SignInResponse {
   // refreshToken: string;
 
   /** The object for the newly-signed in user. */
-  user: User;
+  user?: User;
 }
