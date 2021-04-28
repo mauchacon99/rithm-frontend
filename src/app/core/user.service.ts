@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, User } from 'src/models';
+import { SignInResponse, TokenResponse, User } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice';
 
@@ -37,6 +37,8 @@ export class UserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
+    // TODO: Update typing once API response is changed (227)
+    // eslint-disable-next-line
     return this.http.post<{data: SignInResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
       email,
       password
@@ -88,12 +90,14 @@ export class UserService {
    *
    * @returns The new access token.
    */
-  refreshToken(): Observable<SignInResponse> {
-    return this.http.get<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`)
+  refreshToken(): Observable<TokenResponse> {
+    // TODO: Update typing once API response is changed (227)
+    // eslint-disable-next-line
+    return this.http.get<{data: TokenResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`)
     .pipe(
-      map((signInResponse) => {
-        this.accessToken = new AccessToken(signInResponse.accessToken);
-        return signInResponse;
+      map((tokenResponse) => {
+        this.accessToken = new AccessToken(tokenResponse.data.accessToken);
+        return tokenResponse.data;
       })
     );
   }
