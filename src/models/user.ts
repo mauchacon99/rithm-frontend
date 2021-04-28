@@ -17,7 +17,7 @@ export interface User {
   lastName: string;
 
   /** The email address registered to the user. */
-  email;
+  email: string;
 
   /** The list of flow-level permissions that the user has. */
   objectPermissions: ObjectPermission[];
