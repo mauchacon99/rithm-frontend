@@ -54,7 +54,7 @@ export class UserService {
   /**
    * Signs the user out of the system and clears stored data.
    */
-  signOut() {
+  signOut(): void {
     this.accessToken = undefined;
     this.user = undefined;
     this.cookieService.deleteAll();
