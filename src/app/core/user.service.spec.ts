@@ -48,9 +48,9 @@ describe('UserService', () => {
   });
 
   it('should return to sign in page on sign out', () => {
-    const routerSpy = spyOn(router, 'navigate');
+    const routerSpy = spyOn(router, 'navigateByUrl');
     service.signOut();
-    expect(routerSpy).toHaveBeenCalledOnceWith(['']);
+    expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
   // it('should report sign in status', () => {
