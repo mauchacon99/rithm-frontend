@@ -36,7 +36,7 @@ export class UserService {
    * @param password The entered password for the user.
    * @returns The user and access/refresh tokens.
    */
-  signIn(email: string, password: string): Observable<SignInResponse> {
+  signIn(email: string, password: string) {
     // TODO: Update typing once API response is changed (227)
     // eslint-disable-next-line
     return this.http.post<{data: SignInResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
