@@ -9,7 +9,7 @@ export interface SignInResponse {
   accessToken: string;
 
   /** The refresh token used for getting future access tokens. */
-  refreshToken: string;
+  // refreshToken: string;
 
   /** The object for the newly-signed in user. */
   user: User;

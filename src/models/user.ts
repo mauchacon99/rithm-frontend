@@ -7,6 +7,9 @@ import { ObjectPermission } from './object-permission';
  */
 export interface User {
 
+  /** The global Rithm ID for this user. */
+  rithmId: string;
+
   /** The user's first name. */
   firstName: string;
 
