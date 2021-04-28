@@ -100,6 +100,11 @@ export class TokenInterceptorService implements HttpInterceptor {
     });
   }
 
+  /**
+   * Checks that the user is signed in.
+   *
+   * @returns Whether the user is signed in (returned as observable).
+   */
   private checkSignIn(): Observable<boolean> {
     return from(this.userService.isSignedIn());
   }
