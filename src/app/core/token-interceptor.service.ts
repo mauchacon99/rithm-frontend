@@ -55,34 +55,14 @@ export class TokenInterceptorService implements HttpInterceptor {
             const accessToken = this.userService.accessToken as AccessToken;
             const newRequest = this.addToken(accessToken, request.clone());
 
-            return next.handle(newRequest).pipe(
-              catchError((error) => {
-
-                // If unauthorized, sign the user out
-                if (error.status === 401) {
-                  this.userService.signOut();
-                }
-                const errorDetail = error.error.message || error.statusText;
-                return throwError(errorDetail);
-              })
-            );
+            return this.passRequest(newRequest, next);
           }
         })
       );
 
     }
 
-    return next.handle(request).pipe(
-      catchError((error) => {
-
-        // If unauthorized, sign the user out
-        if (error.status === 401) {
-          this.userService.signOut();
-        }
-        const errorDetail = error.error.message || error.statusText;
-        return throwError(errorDetail);
-      })
-    );
+    return this.passRequest(request, next);
   }
 
   /**
@@ -107,5 +87,26 @@ export class TokenInterceptorService implements HttpInterceptor {
    */
   private checkSignIn(): Observable<boolean> {
     return from(this.userService.isSignedIn());
+  }
+
+  /**
+   * Passes the request on to the next potential interceptor.
+   *
+   * @param request The new request to be passed on or processed.
+   * @param next The HTTP request to hand to the next interceptor.
+   * @returns An HTTP event.
+   */
+  private passRequest(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    return next.handle(request).pipe(
+      catchError((error) => {
+
+        // If unauthorized, sign the user out
+        if (error.status === 401) {
+          this.userService.signOut();
+        }
+        const errorDetail = error.error.message || error.statusText;
+        return throwError(errorDetail);
+      })
+    );
   }
 }
