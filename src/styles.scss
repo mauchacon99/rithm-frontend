@@ -1,17 +1,15 @@
 // Import all helpers
-@import './scss/helpers/functions';
-@import './scss/helpers/mixins';
-@import './scss/helpers/variables';
+@import './scss/helpers/index';
 /// Import Tools from tools file
 /// Contains global styles for buttons, forms and typography
-@import './scss/tools/tools';
+@import './scss/tools/index';
 // Material themeing
 @import '~@angular/material/theming';
 // Material Core
 @include mat-core($custom-typography);
 
 // Rithm light Theme
-@import './scss/themes/rithm-light';
+@import './scss/themes/index';
 // Apply Rithm light theme
 @include angular-material-theme($rithm-light);
 
@@ -19,10 +17,15 @@
 @include mat-base-typography($custom-typography);
 
 // Global Styles Below
-body {
-  @include gradient($secondary-gray, $secondary-blue);
-
+/// Global page Styles
+* {
   margin: 0;
+  padding: 0;
+}
+/// Set the height of the page
+/// Apply page specific styles within the component
+.page {
+  height: 100vh;
 }
 
 /// Overrides the default accent color for the snackbar action

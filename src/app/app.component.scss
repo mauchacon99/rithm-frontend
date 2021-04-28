@@ -1,1 +1,7 @@
+@import 'variables';
+@import 'mixins';
 // Add styles
+.page {
+  @include gradient($secondary-gray, $secondary-blue);
+  // background: url('../assets/images/patterns/dust_scratches.png');
+}

@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  /** The base URL for the Rithm API. */
+  baseApiUrl: 'https://api.rithm.tech',
+
+  /** The lifetime for which an access token is valid in milliseconds. */
+  accessTokenLifetime: 900000
 };
 
 /*
