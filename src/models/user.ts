@@ -23,7 +23,7 @@ export interface User {
   objectPermissions: ObjectPermission[];
 
   /** The global permissions that the user has. */
-  globalPermission: GlobalPermission;
+  globalPermission?: GlobalPermission;
 
   /** The groups that the user is a member of. */
   groups: Group[];
