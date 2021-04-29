@@ -8,7 +8,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
-import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -24,8 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     MatDialogModule,
     MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule
+    MatInputModule
   ],
   exports: [
     AlertDialogComponent,
