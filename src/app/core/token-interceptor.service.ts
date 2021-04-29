@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { UserService } from './user.service';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { EMPTY, from, Observable, throwError } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
 
 /** API routes that don't require an access token. */
@@ -22,12 +22,6 @@ const NO_AUTH_ROUTES = [
 })
 export class TokenInterceptorService implements HttpInterceptor {
 
-  /** Whether an access token refresh is currently in progress. */
-  private refreshInProgress = false;
-
-  /** Subject for the updated access token. */
-  private authToken$ = new BehaviorSubject(null);
-
   constructor(private userService: UserService) { }
 
   /**
@@ -38,40 +32,31 @@ export class TokenInterceptorService implements HttpInterceptor {
    * @returns An HTTP event.
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let newRequest = request.clone();
 
     // If an auth-required route
     if (NO_AUTH_ROUTES.every((route) => !request.url.includes(route))) {
 
-      // Get token
-      let accessToken = this.userService.accessToken;
+      // Check if the user is signed in
+      return this.checkSignIn().pipe(
+        mergeMap((signedIn) => {
 
-      // If token missing or expired, refresh token
-      if (!accessToken || accessToken.isExpired()) {
-        this.userService.refreshToken();
-        accessToken = this.userService.accessToken;
-      }
+          if (!signedIn) {
+            this.userService.signOut();
+            return EMPTY;
+          } else {
 
-      // Add token to request
-      if (accessToken) {
-        newRequest = this.addToken(accessToken, newRequest);
-      } else {
-        // If token still missing, sign out
-        this.userService.signOut();
-      }
+            // Add token to request
+            const accessToken = this.userService.accessToken as AccessToken;
+            const newRequest = this.addToken(accessToken, request.clone());
+
+            return this.passRequest(newRequest, next);
+          }
+        })
+      );
+
     }
 
-    return next.handle(newRequest).pipe(
-      catchError((error) => {
-
-        // If unauthorized, sign the user out
-        if (error.status === 401) {
-          this.userService.signOut();
-        }
-        const errorDetail = error.error.message || error.statusText;
-        return throwError(errorDetail);
-      })
-    );
+    return this.passRequest(request, next);
   }
 
   /**
@@ -87,5 +72,35 @@ export class TokenInterceptorService implements HttpInterceptor {
         Authorization: `Bearer ${accessToken}`
       }
     });
+  }
+
+  /**
+   * Checks that the user is signed in.
+   *
+   * @returns Whether the user is signed in (returned as observable).
+   */
+  private checkSignIn(): Observable<boolean> {
+    return from(this.userService.isSignedIn());
+  }
+
+  /**
+   * Passes the request on to the next potential interceptor.
+   *
+   * @param request The new request to be passed on or processed.
+   * @param next The HTTP request to hand to the next interceptor.
+   * @returns An HTTP event.
+   */
+  private passRequest(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    return next.handle(request).pipe(
+      catchError((error) => {
+
+        // If unauthorized, sign the user out
+        if (error.status === 401) {
+          this.userService.signOut();
+        }
+        const errorDetail = error.error.message || error.statusText;
+        return throwError(errorDetail);
+      })
+    );
   }
 }

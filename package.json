@@ -10,7 +10,8 @@
     "lint-style": "npx stylelint \"**/*.scss\"",
     "e2e": "ng e2e",
     "compile-docs": "compodoc -p tsconfig.json",
-    "compile-style-docs": "sassdoc src/"
+    "compile-style-docs": "sassdoc src/",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -52,7 +53,7 @@
     "eslint-plugin-jsdoc": "^32.3.0",
     "eslint-plugin-rxjs": "^3.1.3",
     "eslint-plugin-rxjs-angular": "^1.0.6",
-    "husky": "^5.2.0",
+    "husky": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.1.0",
@@ -60,18 +61,13 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "protractor": "~7.0.0",
     "postcss-cli": "^8.3.1",
+    "protractor": "~7.0.0",
     "sassdoc": "^2.7.3",
     "stylelint": "^13.12.0",
     "stylelint-config-standard": "^21.0.0",
     "stylelint-scss": "^3.19.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.1.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run lint && npm run lint-styles"
-    }
   }
 }

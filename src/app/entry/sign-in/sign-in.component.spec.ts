@@ -1,5 +1,9 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CoreModule } from 'src/app/core/core.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { SignInComponent } from './sign-in.component';
 
@@ -11,10 +15,14 @@ describe('SignInComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SignInComponent ],
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule,
+        RouterTestingModule,
+        CoreModule,
+        SharedModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -49,4 +57,66 @@ describe('SignInComponent', () => {
     password.setValue('');
     expect(password.hasError('required')).toBeTruthy();
   });
+
+  it('should navigate to forgot password on text click', () => {
+    // TODO: add unit test
+  });
+
+  it('should navigate to account create on text click', () => {
+    // TODO: add unit test
+  });
+
+  it('should display error popup if request fails', () => {
+    // TODO: add unit test
+  });
+
+  // sign in form
+  describe('sign in form', () => {
+    it('should exist', () => {
+      // TODO: add unit test
+    });
+
+    it('should display invalid credentials message', () => {
+      // TODO: add unit test
+    });
+
+    it('should navigate to dashboard upon successful sign in', () => {
+      // TODO: add unit test
+    });
+
+    // email field
+    describe('email field', () => {
+      it('should exist', () => {
+        // TODO: add unit test
+      });
+
+      it('should show errors on invalid email', () => {
+        // TODO: add unit test
+      });
+    });
+
+    // password field
+    describe('password field', () => {
+      it('should exist', () => {
+        // TODO: add unit test
+      });
+    });
+
+    // sign in button
+    describe('sign in button', () => {
+      it('should exist', () => {
+        // TODO: add unit test
+      });
+
+      it('should be disabled without input', () => {
+        // TODO: add unit test
+      });
+
+      it('should be enabled when form is filled out', () => {
+        // TODO: add unit test
+      });
+    });
+
+  });
+
 });
