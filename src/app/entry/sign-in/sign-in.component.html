@@ -34,7 +34,7 @@
                     </mat-form-field>
                   <!-- Sign in button -->
                   <div class="col-12">
-                    <button mat-raised-button color="accent">Sign In</button>
+                    <button type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
                   </div>
                 </form>
               <!-- Forgot password -->
