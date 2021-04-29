@@ -45,6 +45,10 @@ export class SignInComponent {
     });
   }
 
+  /**
+   * Navigate to the given component.
+   * @param route Where to navigate to.
+   */
   goTo(route: string): void {
     this.router.navigateByUrl(route);
   }
