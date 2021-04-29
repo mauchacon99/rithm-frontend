@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -15,6 +16,7 @@ describe('AuthGuardService', () => {
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
+        HttpClientModule,
         MatSnackBarModule,
         MatDialogModule,
         MatButtonModule
