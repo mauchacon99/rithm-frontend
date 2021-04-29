@@ -7,14 +7,19 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { EntryRoutingModule } from './entry-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [SignInComponent, ForgotPasswordComponent, AccountCreateComponent, PasswordResetComponent],
+  declarations: [
+    SignInComponent,
+    ForgotPasswordComponent,
+    AccountCreateComponent,
+    PasswordResetComponent
+  ],
   imports: [
     CommonModule,
     EntryRoutingModule,
