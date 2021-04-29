@@ -21,20 +21,20 @@
             </mat-card-header>
             <mat-card-content>
               <!-- Default form login -->
-                <form class="row">
+                <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
                   <!-- Email -->
                     <mat-form-field class="col-12" appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input type="email" matInput placeholder="Email">
+                      <input type="email" matInput placeholder="Email" formControlName="email">
                     </mat-form-field>
                   <!-- Password -->
                     <mat-form-field class="col-12" appearance="outline">
                       <mat-label>Password</mat-label>
-                      <input type="password" matInput placeholder="Password">
+                      <input type="password" matInput placeholder="Password" formControlName="password">
                     </mat-form-field>
                   <!-- Sign in button -->
                   <div class="col-12">
-                    <button mat-raised-button color="accent">Sign In</button>
+                    <button type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
                   </div>
                 </form>
               <!-- Forgot password -->

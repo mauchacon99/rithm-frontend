@@ -1,5 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -12,12 +17,17 @@ describe('SignInComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignInComponent],
+      declarations: [ SignInComponent ],
       imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
         HttpClientModule,
         RouterTestingModule,
         CoreModule,
-        SharedModule
+        SharedModule,
+        MatCardModule,
+        MatInputModule,
+        MatButtonModule
       ]
     })
       .compileComponents();
@@ -31,6 +41,29 @@ describe('SignInComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('form invalid when empty', () => {
+    expect(component.signInForm.valid).toBeFalsy();
+  });
+
+  it('should check the validation of the email field', () => {
+    const email = component.signInForm.controls['email'];
+    expect(email.valid).toBeFalsy();
+
+    email.setValue('');
+    expect(email.hasError('required')).toBeTruthy();
+
+    email.setValue('test.com');
+    expect(email.hasError('email')).toBeTruthy();
+  });
+
+  it('should check the validation of the password field', () => {
+    const password = component.signInForm.controls['password'];
+    expect(password.valid).toBeFalsy();
+
+    password.setValue('');
+    expect(password.hasError('required')).toBeTruthy();
   });
 
   it('should navigate to forgot password on text click', () => {
