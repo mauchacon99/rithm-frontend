@@ -23,7 +23,7 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./sassdoc/* D:/www/rithmui/sassdoc -Recurse -Force
+        Copy-Item ./dist/rithm/* D:/www/rithmui/sassdoc -Recurse -Force
         iisreset /start
 
   # Checks that the Angular app conforms to standards
