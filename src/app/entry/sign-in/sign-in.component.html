@@ -1,55 +1,57 @@
 <div class="page">
   <div class="container">
-    <div class="row">
-
-      <mat-card class="col-md-6 left-container">
-        <div class="mb-2" style="width: 100%;">
-          <img src="../../../assets/logo/white-icon-white-text.svg" style="width: 30%;">
-        </div>
-        <div class="mb-2 d-none d-lg-block" style="width: 100%;">
-          <p>Seamlessly connecting people and processes</p>
-        </div>
-        <!-- <div
-          class="mb-2 d-none d-lg-block"
-          style="border-style: dotted; width: 80%; height: 80%;"></div>-->
-        <div class="mb-2 d-none d-lg-block" style="width: 100%;">
-          <p>We make business easy.</p>
-        </div>
-      </mat-card>
-
-      <mat-card class="col-md-6 right-container">
-        <mat-card-header>
-          <mat-card-title>Sign in</mat-card-title>
-          <mat-card-subtitle>Welcome to Rithm.</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <!-- Default form login -->
-          <form class="text-center form-colum mt-5 mb-2">
-            <!-- Email -->
-            <mat-form-field class="form-control input-login mb-3">
-              <mat-label>Email</mat-label>
-              <input type="email" matInput placeholder="Email">
-            </mat-form-field>
-            <!-- Password -->
-            <mat-form-field class="form-control input-login mb-3">
-              <mat-label>Password</mat-label>
-              <input type="password" matInput placeholder="Email">
-            </mat-form-field>
-            <!-- Sign in button -->
-            <button mat-raised-button color="primary" class="btn-login">Sign In</button>
-          </form>
-          <!-- Forgot password -->
-          <div class="d-flex mb-5">
-            <a href="#">Forgot password?</a>
+    <div class="row justify-content-center">
+      <mat-card class="col-md-10 col-sm-12 p-0">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 left-entry">
+            <div>
+              <img src="../../assets/logo/white-icon-white-text.svg">
+            </div>
+            <div class="mb-2 d-none d-md-block">
+              <p>Seamlessly connecting people and processes</p>
+            </div>
+            <div class="mb-2 d-none d-md-block">
+              <p>We make business easy.</p>
+            </div>
           </div>
-        </mat-card-content>
-
-        <!-- Register -->
-        <mat-card-footer class="d-flex fixed-bottom mt-5" style="justify-content: center">
-          <p>New here?
-            <a href="">Create an account</a>
-          </p>
-        </mat-card-footer>
+          <div class="col-md-6 col-sm-12 right-entry">
+            <mat-card-header>
+              <mat-card-title>Sign in</mat-card-title>
+              <mat-card-subtitle>Welcome to Rithm.</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <!-- Default form login -->
+                <form class="row">
+                  <!-- Email -->
+                    <mat-form-field class="col-12" appearance="outline">
+                      <mat-label>Email</mat-label>
+                      <input type="email" matInput placeholder="Email">
+                    </mat-form-field>
+                  <!-- Password -->
+                    <mat-form-field class="col-12" appearance="outline">
+                      <mat-label>Password</mat-label>
+                      <input type="password" matInput placeholder="Password">
+                    </mat-form-field>
+                  <!-- Sign in button -->
+                  <div class="col-12">
+                    <button mat-raised-button color="accent">Sign In</button>
+                  </div>
+                </form>
+              <!-- Forgot password -->
+              <div class="row">
+                <a href="#" class="col">Forgot password?</a>
+              </div>
+            </mat-card-content>
+            <!-- Register -->
+            <mat-card-footer class="row">
+              <div class="col center-text">
+                <p class="text-center">New here?
+                  <a href="">Create an account</a>
+                </p>
+              </div>
+            </mat-card-footer>
+          </div>
+        </div>
       </mat-card>
     </div>
   </div>

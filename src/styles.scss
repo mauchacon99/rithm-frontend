@@ -20,13 +20,15 @@ $rithm-warn: mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$rithm-theme: mat-light-theme((
-  color: (
-    primary: $rithm-primary,
-    accent: $rithm-accent,
-    warn: $rithm-warn,
+$rithm-theme: mat-light-theme(
+  (
+    color: (
+      primary: $rithm-primary,
+      accent: $rithm-accent,
+      warn: $rithm-warn,
+    )
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -38,8 +40,6 @@ $rithm-theme: mat-light-theme((
 /// Import Tools from tools file
 /// Contains global styles for buttons, forms and typography
 @import './scss/tools/index';
-// Material themeing
-@import '~@angular/material/theming';
 // Material Core
 @include mat-core($custom-typography);
 
@@ -57,10 +57,17 @@ $rithm-theme: mat-light-theme((
   margin: 0;
   padding: 0;
 }
+
+body {
+  background: $primary-blue;
+}
 /// Set the height of the page
 /// Apply page specific styles within the component
 .page {
   height: 100vh;
+  width: 100vw;
+  position: fixed;
+  overflow: auto;
 }
 
 /// Overrides the default accent color for the snackbar action
@@ -79,5 +86,7 @@ $rithm-theme: mat-light-theme((
   }
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/// Add utility class for aligning text to center
+.text-center {
+  text-align: center !important;
+}
