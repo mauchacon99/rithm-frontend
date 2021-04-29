@@ -1,25 +1,6 @@
-@import 'variables';
-@import 'mixins';
-@import 'functions';
+@import '../entry.scss';
 // Add styles
-.page {
-  @include gradient($secondary-gray, $secondary-blue);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .left-entry {
-  padding: 15px;
-  color: #fff;
-  background-color: $primary-blue;
-  border-radius: 4px 0 0 4px;
-
-  div img {
-    width: 122px;
-  }
-
   div:nth-child(3) {
     position: absolute;
     bottom: 20px;
@@ -27,29 +8,16 @@
 }
 
 .right-entry {
-  padding: 15px;
-  border-radius: 0 4px 4px 0;
-  color: #000;
-  background: #fff;
-
   /* stylelint-disable */
-  mat-card-header {
-    margin-top: 40px;
-  }
-
-  mat-card-subtitle {
-    color: #000;
-    font-weight: 300;
-  }
-
   mat-card-footer {
+  /* stylelint-enable */
     margin-top: 100px;
+    margin-bottom: 15px;
 
     div p {
       font-size: font-calc(14);
     }
   }
-  /* stylelint-enable */
 
   form.row {
     margin-top: 80px;
@@ -59,52 +27,16 @@
     }
   }
 
-  a {
-    color: $accent-blue;
-    text-decoration: none;
-  }
-
   div.row a {
     margin-top: 15px;
-    font-size: font-calc(14);
   }
 }
 /* stylelint-disable */
 @media (max-width: 767px) {
-  /* stylelint-enable */
-  .container {
-    // max-width: 100%;
-    position: absolute;
-    top: 0;
-    /* stylelint-disable */
-    div mat-card div.right-entry {
-      /* stylelint-enable */
-      min-height: calc(100vh - 87.61px);
-    }
-  }
-
-  .left-entry div img {
-    margin-left: 15px;
-  }
-
+/* stylelint-disable */
   .right-entry {
     form.row {
       margin-top: 10px;
     }
-    /* stylelint-disable */
-    mat-card-footer {
-      /* stylelint-enable */
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-    }
-  }
-
-  .mat-card-content {
-    margin: 0 15px;
-  }
-
-  .mat-card {
-    box-shadow: none;
   }
 }
