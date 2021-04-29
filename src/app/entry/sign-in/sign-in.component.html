@@ -21,7 +21,7 @@
             </mat-card-header>
             <mat-card-content>
               <!-- Default form login -->
-                <form [formGroup]="signInForm" class="row">
+                <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
                   <!-- Email -->
                     <mat-form-field class="col-12" appearance="outline">
                       <mat-label>Email</mat-label>

@@ -17,12 +17,6 @@ export class SignInComponent {
   /** Sign in form. */
   signInForm: FormGroup;
 
-  /** The email address that was entered. */
-  email = 'jeff.stockett@inpivota.com';
-
-  /** The password that was entered. */
-  password = 'R1thm?24601';
-
   constructor(
     public fb: FormBuilder,
     private userService: UserService,
@@ -39,12 +33,12 @@ export class SignInComponent {
    * Attempts to sign the user in using the provided credentials.
    */
   signIn(): void {
-    // Sign the user in
-    this.userService.signIn(this.email, this.password)
+    const formValues = this.signInForm.value;
+
+    this.userService.signIn(formValues.email, formValues.password)
     .pipe(first())
     .subscribe(() => {
       this.router.navigateByUrl('dashboard');
-
     }, (error) => {
       this.errorService.displayError(
         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
