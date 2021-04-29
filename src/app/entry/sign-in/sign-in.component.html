@@ -19,26 +19,27 @@
               <mat-card-title>Sign in</mat-card-title>
               <mat-card-subtitle>Welcome to Rithm.</mat-card-subtitle>
             </mat-card-header>
+            <p *ngIf="invalidCredentials" class="mat-error invalid-message">Invalid email or password</p>
 
             <mat-card-content>
-              <p *ngIf="invalidCredentials" class="mat-error">Invalid email or password</p>
+
               <!-- Default form login -->
-                <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
-                  <!-- Email -->
-                    <mat-form-field class="col-12" appearance="outline">
-                      <mat-label>Email</mat-label>
-                      <input type="email" matInput placeholder="Email" formControlName="email">
-                    </mat-form-field>
-                  <!-- Password -->
-                    <mat-form-field class="col-12" appearance="outline">
-                      <mat-label>Password</mat-label>
-                      <input type="password" matInput placeholder="Password" formControlName="password">
-                    </mat-form-field>
-                  <!-- Sign in button -->
-                  <div class="col-12">
-                    <button type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
-                  </div>
-                </form>
+              <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
+                <!-- Email -->
+                <mat-form-field class="col-12" appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput placeholder="Email" formControlName="email">
+                </mat-form-field>
+                <!-- Password -->
+                <mat-form-field class="col-12" appearance="outline">
+                  <mat-label>Password</mat-label>
+                  <input type="password" matInput placeholder="Password" formControlName="password">
+                </mat-form-field>
+                <!-- Sign in button -->
+                <div class="col-12">
+                  <button type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
+                </div>
+              </form>
               <!-- Forgot password -->
               <div class="row">
                 <a href="#" class="col">Forgot password?</a>
@@ -57,4 +58,4 @@
       </mat-card>
     </div>
   </div>
-  </div>
+</div>
