@@ -8,7 +8,7 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -23,7 +23,8 @@ import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-load
     FormsModule,
     MatDialogModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     AlertDialogComponent,
