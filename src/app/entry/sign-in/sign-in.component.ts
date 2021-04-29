@@ -45,4 +45,8 @@ export class SignInComponent {
     });
   }
 
+  goTo(route: string): void {
+    this.router.navigateByUrl(route);
+  }
+
 }
