@@ -18,7 +18,7 @@ jobs:
       run: npm ci
 
     - name: Compiling documentation
-      run: ng build --prod
+      run: npm run build-prod
 
     - name: Deploying documentation site
       run: |
