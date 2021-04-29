@@ -7,25 +7,6 @@ on:
 
 jobs:
 
-     # Deploys the SassDoc documentation site
-  test-deploy:
-    runs-on: [self-hosted, Windows]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Installing dependencies
-      run: npm ci
-
-    - name: Compiling documentation
-      run: npm run build-prod
-
-    - name: Deploying documentation site
-      run: |
-        iisreset /stop
-        Copy-Item ./dist/rithm/* D:/www/rithmui/sassdoc -Recurse -Force
-        iisreset /start
-
   # Checks that the Angular app conforms to standards
   lint-app:
     runs-on: ubuntu-latest
