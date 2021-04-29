@@ -1,1 +1,25 @@
+@import '../../../scss/helpers/variables';
+@import '../../../scss//helpers/functions';
+
 // Add styles
+.notification-card {
+  height: 100px;
+  width: 280px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  box-shadow: 0 6px 10px #000;
+}
+
+.title {
+  font-size: font-calc(14) !important;
+  font-weight: 500;
+}
+
+.profile-photo {
+  background-image: url('../../../assets/images/example-profile.jpg');
+  background-size: cover;
+  border: solid 1px $secondary-gray;
+  height: 30px;
+  width: 30px;
+}

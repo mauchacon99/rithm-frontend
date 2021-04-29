@@ -1,1 +1,17 @@
-<p>notification-card works!</p>
+<mat-card class="notification-card">
+
+  <!-- Header -->
+  <mat-card-header class="h-50">
+    <div mat-card-avatar class="profile-photo"></div>
+    <mat-card-title class="title">{{title}}</mat-card-title>
+    <button mat-icon-button>
+      <i class="fa fas-times"></i>
+    </button>
+  </mat-card-header>
+
+  <!-- Text -->
+  <mat-card-content>
+    <p>{{message}}</p>
+  </mat-card-content>
+
+</mat-card>

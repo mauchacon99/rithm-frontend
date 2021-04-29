@@ -10,4 +10,8 @@ import { Component } from '@angular/core';
 })
 export class NotificationCardComponent {
 
+  title = 'Steven Rogers tagged you in a comment';
+
+  message = '@Tony Stark please double check the SKU on this new product';
+
 }
