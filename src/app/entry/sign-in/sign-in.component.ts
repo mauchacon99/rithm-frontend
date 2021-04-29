@@ -17,6 +17,8 @@ export class SignInComponent {
   /** Sign in form. */
   signInForm: FormGroup;
 
+  isLoading = true;
+
   constructor(
     public fb: FormBuilder,
     private userService: UserService,
@@ -33,6 +35,7 @@ export class SignInComponent {
    * Attempts to sign the user in using the provided credentials.
    */
   signIn(): void {
+    this.isLoading = true;
     const formValues = this.signInForm.value;
 
     this.userService.signIn(formValues.email, formValues.password)
@@ -40,6 +43,7 @@ export class SignInComponent {
     .subscribe(() => {
       this.router.navigateByUrl('dashboard');
     }, (error) => {
+      this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
         error,

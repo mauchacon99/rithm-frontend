@@ -30,7 +30,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent
+    FullScreenLoaderComponent,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule { }
