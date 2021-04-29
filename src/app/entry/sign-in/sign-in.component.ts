@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +15,9 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent {
+  /** Whether the user entered invalid credentials. */
+  invalidCredentials = false;
+
   /** Sign in form. */
   signInForm: FormGroup;
 
@@ -34,17 +38,24 @@ export class SignInComponent {
    */
   signIn(): void {
     const formValues = this.signInForm.value;
+    this.invalidCredentials = false;
 
     this.userService.signIn(formValues.email, formValues.password)
     .pipe(first())
     .subscribe(() => {
       this.router.navigateByUrl('dashboard');
-    }, (error) => {
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error,
-        true
-      );
+    }, (error: HttpErrorResponse) => {
+
+      if ((error.error.error as string).includes('Invalid')) {
+        this.invalidCredentials = true;
+      } else {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      }
+
     });
   }
 
