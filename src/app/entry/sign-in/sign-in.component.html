@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <mat-card class="col-md-10 col-sm-12 p-0">
-        <div class="row">
+        <div class="row m-0">
           <div class="col-md-6 col-sm-12 left-entry">
             <div>
               <img src="../../assets/logo/white-icon-white-text.svg">
@@ -16,12 +16,15 @@
           </div>
           <div class="col-md-6 col-sm-12 right-entry">
             <span [ngClass]="{'transparent': isLoading}">
-              <mat-card-header>
-                <mat-card-title>Sign in</mat-card-title>
-                <mat-card-subtitle>Welcome to Rithm.</mat-card-subtitle>
-              </mat-card-header>
-              <p [ngClass]="{'transparent': !invalidCredentials}" class="mat-error invalid-message">Invalid email or password</p>
-              <mat-card-content>
+              <div class="row mt-4">
+                <div class="col-12">
+                  <h4>Sign in</h4>
+                </div>
+                <div class="col-12">
+                  <p>Welcome to Rithm.</p>
+                </div>
+              </div>
+              <p [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
                 <!-- Default form login -->
                   <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
                     <!-- Email -->
@@ -43,7 +46,6 @@
                 <div class="row">
                   <a routerLink="forgot-password" class="col">Forgot password?</a>
                 </div>
-              </mat-card-content>
               <!-- Register -->
               <mat-card-footer class="row">
                 <div class="col center-text">
