@@ -22,6 +22,9 @@ export class SignInComponent {
   /** Sign in form. */
   signInForm: FormGroup;
 
+  /** Is it loading. */
+  isLoading = false;
+
   constructor(
     public fb: FormBuilder,
     private popupService: PopupService,
@@ -39,6 +42,7 @@ export class SignInComponent {
    * Attempts to sign the user in using the provided credentials.
    */
   signIn(): void {
+    this.isLoading = true;
     const formValues = this.signInForm.value;
     this.invalidCredentials = false;
 
@@ -47,6 +51,7 @@ export class SignInComponent {
       .subscribe(() => {
         this.router.navigateByUrl('dashboard');
       }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
         const errorMessage: string = error.error.error;
 
         if (errorMessage.includes('Invalid')) {
