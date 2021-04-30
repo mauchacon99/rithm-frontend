@@ -17,7 +17,7 @@ export class SignInComponent {
   /** Sign in form. */
   signInForm: FormGroup;
 
-  isLoading = true;
+  isLoading = false;
 
   constructor(
     public fb: FormBuilder,
