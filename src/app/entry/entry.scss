@@ -54,6 +54,10 @@
     text-decoration: none;
     font-size: font-calc(14);
     cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 /* stylelint-disable */
@@ -66,7 +70,7 @@
     /* stylelint-disable */
     div mat-card div.right-entry {
       /* stylelint-enable */
-      min-height: calc(100vh - 87.61px);
+      min-height: calc(100vh - 84.61px);
     }
   }
 
