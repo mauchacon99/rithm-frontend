@@ -1,7 +1,9 @@
 @import '../entry.scss';
 
 .right-entry {
-  a {
-
+  form.row {
+    div button {
+      width: 100%;
+    }
   }
 }
