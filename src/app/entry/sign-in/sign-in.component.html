@@ -20,6 +20,7 @@
                 <mat-card-title>Sign in</mat-card-title>
                 <mat-card-subtitle>Welcome to Rithm.</mat-card-subtitle>
               </mat-card-header>
+              <p *ngIf="invalidCredentials" class="mat-error invalid-message">Invalid email or password</p>
               <mat-card-content>
                 <!-- Default form login -->
                   <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
@@ -64,4 +65,4 @@
       </mat-card>
     </div>
   </div>
-  </div>
+</div>
