@@ -36,6 +36,6 @@ export class MockUserService {
       }).pipe(delay(1000));
     }
 
-    return throwError(response).pipe(delay(0));
+    return throwError(response).pipe(delay(1000));
   }
 }
