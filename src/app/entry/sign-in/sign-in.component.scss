@@ -1,1 +1,54 @@
-// Styles here
+@import '../entry.scss';
+// Add styles
+.left-entry {
+  div:nth-child(3) {
+    position: absolute;
+    bottom: 20px;
+  }
+}
+
+.right-entry {
+  /* stylelint-disable */
+  mat-card-footer {
+  /* stylelint-enable */
+    margin-top: 100px;
+    margin-bottom: 15px;
+
+    div p {
+      font-size: font-calc(14);
+    }
+  }
+
+  form.row {
+    margin-top: 80px;
+
+    div button {
+      width: 100%;
+    }
+  }
+
+  div.row a {
+    margin-top: 15px;
+  }
+}
+/* stylelint-disable */
+@media screen and (max-width: 767px) {
+/* stylelint-enable */
+  .right-entry {
+    form.row {
+      margin-top: 10px;
+    }
+  }
+}
+
+/* stylelint-disable */
+@media screen and (max-height: 575px) {
+/* stylelint-enable */
+  .right-entry {
+    /* stylelint-disable */
+    mat-card-footer {
+    /* stylelint-enable */
+      margin-bottom: -5px;
+    }
+  }
+}

@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -28,13 +30,17 @@ import { NotificationCardComponent } from './notification-card/notification-card
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
+    MatProgressSpinnerModule,
+    MatCheckboxModule
   ],
   exports: [
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
     FullScreenLoaderComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    MatProgressSpinnerModule,
+    MatCheckboxModule
   ]
 })
 export class SharedModule { }

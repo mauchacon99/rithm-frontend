@@ -98,8 +98,8 @@ export class TokenInterceptorService implements HttpInterceptor {
         if (error.status === 401) {
           this.userService.signOut();
         }
-        const errorDetail = error.error.message || error.statusText;
-        return throwError(errorDetail);
+        // const errorDetail = error.error.message || error.statusText;
+        return throwError(error);
       })
     );
   }
