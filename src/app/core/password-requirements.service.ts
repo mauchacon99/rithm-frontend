@@ -66,7 +66,11 @@ export class PasswordRequirementsService {
     return this.at_least_one_special_char.test(password);
   }
 
-  checkPasswordMeetsRequirements(password: string): boolean[] {
+  private passwordsMatch(password: string, confirmPassword: string): boolean {
+    return password === confirmPassword;
+  }
+
+  checkPasswordMeetsRequirements(password: string, confirmPassword: string): boolean[] {
     const requirements: Array<boolean> = [];
 
     requirements.push(
@@ -74,7 +78,8 @@ export class PasswordRequirementsService {
       this.hasOneLowerCaseChar(password),
       this.hasOneUpperCaseChar(password),
       this.hasOneDigitChar(password),
-      this.hasOneSpecialChar(password)
+      this.hasOneSpecialChar(password),
+      this.passwordsMatch(password, confirmPassword)
     );
 
     return requirements;
