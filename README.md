@@ -10,6 +10,22 @@ Ensure that you are running the latest LTS version of Node.js (v14.15.1 or great
 
 You can run the web app by using the command `npm start` and opening Google Chrome to the specified localhost address (usually [http://localhost:4200/](http://localhost:4200/)).
 
+### Sign In
+
+You can use the following accounts for testing:
+
+|Email|Password | Note|
+--- | --- | ---
+|jeff.stockett@inpivota.com|R1thm?24601|
+|tyler.hendrickson@inpivota.com|R1thm?24601|User has not validated their email|
+
+## Documentation
+
+Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://api.rithm.tech). You will need to sign in with the following credentials:
+
+Username: `docuser` \
+Password: `R1thmD0c5`
+
 ## Scripts
 
 `npm start`\
@@ -38,10 +54,3 @@ Compiles all of the JSDoc and Angular documentation using Compodoc.
 
 `npm run compile-style-docs`\
 Compiles all of the styling documentation using SassDoc.
-
-## Documentation
-
-Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://api.rithm.tech). You will need to sign in with the following credentials:
-
-Username: `docuser` \
-Password: `R1thmD0c5`
