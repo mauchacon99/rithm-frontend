@@ -51,7 +51,7 @@
                   <mat-label>Password</mat-label>
                   <input type="password" matInput placeholder="Password" formControlName="password">
                 </mat-form-field>
-                <app-password-requirements></app-password-requirements>
+                <app-password-requirements [password]="signUpForm.get('password')?.value" [confirmPassword]="signUpForm.get('confirmPassword')?.value" [requirements]="signUpForm.controls"></app-password-requirements>
                 <!-- Confirm Password -->
                 <mat-form-field class="col-12" appearance="outline">
                   <mat-label>Confirm Password</mat-label>
