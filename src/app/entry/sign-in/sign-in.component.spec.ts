@@ -9,7 +9,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
-import {  } from '@angular/material/dialog/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -96,8 +95,8 @@ describe('SignInComponent', () => {
   //   component.signInForm.controls['email'].setValue('someone@email.com');
   //   component.signInForm.controls['password'].setValue('password1234');
   //   component.signIn();
-  //   // jasmine.clock().tick(1001);
-  //   // fixture.detectChanges();
+  //   jasmine.clock().tick(1001);
+  //   fixture.detectChanges();
   //   expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   // });
 
