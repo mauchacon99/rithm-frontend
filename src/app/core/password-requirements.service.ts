@@ -65,11 +65,23 @@ export class PasswordRequirementsService {
   private hasOneSpecialChar(password: string): boolean {
     return this.at_least_one_special_char.test(password);
   }
-
+  /**
+   * Check to see if password and confirm password match.
+   *
+   * @param password String to check.
+   * @param confirmPassword String to check against.
+   * @returns Boolean.
+   */
   private passwordsMatch(password: string, confirmPassword: string): boolean {
     return password === confirmPassword;
   }
-
+  /**
+   * Check the password meets all the requirements.
+   *
+   * @param password String to check.
+   * @param confirmPassword String to check.
+   * @returns Array of booleans.
+   */
   checkPasswordMeetsRequirements(password: string, confirmPassword: string): boolean[] {
     const requirements: Array<boolean> = [];
 
