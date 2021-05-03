@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of, throwError } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { CoreModule } from 'src/app/core/core.module';
 import { UserService } from 'src/app/core/user.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -60,23 +61,28 @@ describe('SignInComponent', () => {
   });
 
   it('should display loading indicator during request', () => {
-    // TODO: add unit test
+    component.signInForm.controls['email'].setValue('incorrect@email.com');
+    component.signInForm.controls['password'].setValue('password1234');
   });
 
   it('should display invalid credentials message', () => {
     const message = fixture.debugElement.query(By.css('.invalid-message'));
-    expect(message.classes['transparent']).toBeFalsy();
+    expect(component.invalidCredentials).toBeFalse();
+    expect(message.classes['transparent']).toBeTrue();
 
     component.signInForm.controls['email'].setValue('incorrect@email.com');
     component.signInForm.controls['password'].setValue('password1234');
     component.signIn();
-    expect(component.invalidCredentials).toBeTrue;
-
-    expect(message).toBeTruthy();
+    expect(component.invalidCredentials).toBeTrue();
+    expect(message.classes['transparent']).toBeFalse();
   });
 
-  it('should display message to verify email if not validated', () => {
-    // TODO: add unit test
+  it('should display message to verify email if not validated', async () => {
+
+
+    // component.signInForm.controls['email'].setValue('unverified@email.com');
+    // component.signInForm.controls['password'].setValue('password1234');
+    // component.signIn();
   });
 
   it('should display error popup if request fails', () => {
@@ -222,10 +228,9 @@ class MockUserService {
       return of({
         accessToken: 'wowowowo',
         user: undefined
-      });
+      }).pipe(delay(1000));
     }
 
-    return throwError(response);
-
+    return throwError(response).pipe(delay(1000));
   }
 }
