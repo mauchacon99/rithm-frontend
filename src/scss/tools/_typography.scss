@@ -192,3 +192,15 @@ div {
   font-weight: 400;
   font-family: Montserrat, sans-serif;
 }
+
+/// Add utility class for aligning text to center
+.text-center {
+  text-align: center !important;
+}
+
+.overline {
+  font-size: font-calc(10) !important;
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+  text-transform: uppercase;
+}
