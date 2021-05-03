@@ -66,5 +66,19 @@ export class PasswordRequirementsService {
     return this.at_least_one_special_char.test(password);
   }
 
+  checkPasswordMeetsRequirements(password: string): boolean[] {
+    const requirements: Array<boolean> = [];
+
+    requirements.push(
+      this.isGreaterThanEightChars(password),
+      this.hasOneLowerCaseChar(password),
+      this.hasOneUpperCaseChar(password),
+      this.hasOneDigitChar(password),
+      this.hasOneSpecialChar(password)
+    );
+
+    return requirements;
+  }
+
 
 }
