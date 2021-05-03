@@ -88,7 +88,18 @@ body {
   }
 }
 
-/// Add utility class for aligning text to center
-.text-center {
-  text-align: center !important;
+/// Hide content
+.transparent {
+  visibility: hidden;
+}
+/// Styling of links globally
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  font-size: font-calc(14);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
