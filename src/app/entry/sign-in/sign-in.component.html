@@ -24,7 +24,7 @@
                   <p>Welcome to Rithm.</p>
                 </div>
               </div>
-              <p [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
+              <p id="invalid" [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
                 <!-- Default form login -->
                   <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
                     <!-- Email -->

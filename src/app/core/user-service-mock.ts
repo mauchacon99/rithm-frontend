@@ -24,6 +24,11 @@ export class MockUserService {
           error: 'Invalid username or password.'
         }
       });
+    } else if (email.includes('error')) {
+      response = new HttpErrorResponse({
+        status: 500,
+        error: ''
+      });
     } else {
       return of({
         accessToken: 'wowowowo',
@@ -31,6 +36,6 @@ export class MockUserService {
       }).pipe(delay(1000));
     }
 
-    return throwError(response).pipe(delay(1000));
+    return throwError(response).pipe(delay(0));
   }
 }
