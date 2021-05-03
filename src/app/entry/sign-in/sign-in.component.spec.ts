@@ -1,6 +1,6 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,16 +8,15 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { CoreModule } from 'src/app/core/core.module';
+import { MockUserService } from 'src/app/core/user-service-mock';
 import { UserService } from 'src/app/core/user.service';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { SignInResponse } from 'src/models';
 
 import { SignInComponent } from './sign-in.component';
 
@@ -61,8 +60,10 @@ describe('SignInComponent', () => {
   });
 
   it('should display loading indicator during request', () => {
+    const spinnerHarness = loader.getHarness(MatProgressSpinnerHarness);
     component.signInForm.controls['email'].setValue('incorrect@email.com');
     component.signInForm.controls['password'].setValue('password1234');
+    expect(spinnerHarness).toBeTruthy();
   });
 
   it('should display invalid credentials message', () => {
@@ -89,7 +90,7 @@ describe('SignInComponent', () => {
     // TODO: add unit test
   });
 
-  it('should navigate to dashboard upon successful sign in', () => {
+  it('should navigate to dashboard upon successful sign in', async () => {
     const routerSpy = spyOn(router, 'navigateByUrl');
     component.signInForm.controls['email'].setValue('someone@email.com');
     component.signInForm.controls['password'].setValue('password1234');
@@ -204,33 +205,3 @@ describe('SignInComponent', () => {
   });
 
 });
-
-// eslint-disable-next-line
-class MockUserService {
-
-  // eslint-disable-next-line
-  signIn(email: string, password: string): Observable<SignInResponse> {
-    let response;
-
-    if (email.includes('unverified')) {
-      response = new HttpErrorResponse({
-        error: {
-          error: 'Unable to login before email has been verified.'
-        }
-      });
-    } else if (email.includes('incorrect')) {
-      response = new HttpErrorResponse({
-        error: {
-          error: 'Invalid username or password.'
-        }
-      });
-    } else {
-      return of({
-        accessToken: 'wowowowo',
-        user: undefined
-      }).pipe(delay(1000));
-    }
-
-    return throwError(response).pipe(delay(1000));
-  }
-}
