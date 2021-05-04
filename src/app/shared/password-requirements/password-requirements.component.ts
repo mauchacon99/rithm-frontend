@@ -10,8 +10,8 @@ export class PasswordRequirementsComponent implements OnInit {
   @Input()
   passReq: any;
 
-  // @Input()
-  // cPassReq: any;
+  @Input()
+  match: any;
 
   constructor() {
     // constructor

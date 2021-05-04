@@ -13,6 +13,7 @@ import { PasswordRequirementsService } from 'src/app/core/password-requirements.
 export class AccountCreateComponent {
   signUpForm: FormGroup;
   passReqVisible = false;
+  showMatch = false;
   errorsToGet = '';
 
   constructor(
@@ -32,8 +33,7 @@ export class AccountCreateComponent {
           this.passwordReqService.hasOneLowerCaseChar(),
           this.passwordReqService.hasOneUpperCaseChar(),
           this.passwordReqService.hasOneDigitChar(),
-          this.passwordReqService.hasOneSpecialChar(),
-          this.passwordReqService.passwordsMatch()
+          this.passwordReqService.hasOneSpecialChar()
         ]
       ],
       confirmPassword: [
@@ -55,6 +55,12 @@ export class AccountCreateComponent {
   togglePassReq(errorsFieldToCheck: string): void {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
+    if (errorsFieldToCheck === 'confirmPassword') {
+      this.showMatch = true;
+    }
+    if (errorsFieldToCheck === '') {
+      this.showMatch = false;
+    }
   }
 
 }
