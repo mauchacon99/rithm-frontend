@@ -28,7 +28,7 @@ export class PasswordRequirementsService {
   isGreaterThanEightChars(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       const _value = control.value;
-      return this.at_least_eight_chars.test(_value) ? null : {passLength: {value: _value}};
+      return this.at_least_eight_chars.test(_value) ? null : {missingPassLength: true};
     }
   }
   /**
@@ -38,7 +38,7 @@ export class PasswordRequirementsService {
   hasOneLowerCaseChar(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       const _value = control.value;
-      return this.at_least_one_lower_case_char.test(_value) ? null : {hasLowerChar: {value: _value}};
+      return this.at_least_one_lower_case_char.test(_value) ? null : {missingLowerChar: true};
     }
   }
   /**
@@ -48,7 +48,7 @@ export class PasswordRequirementsService {
   hasOneUpperCaseChar(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       const _value = control.value;
-      return this.at_least_one_upper_case_char.test(_value) ? null : {hasUpperChar: {value: _value}};
+      return this.at_least_one_upper_case_char.test(_value) ? null : {missingUpperChar: true};
     }
   }
   /**
@@ -68,7 +68,7 @@ export class PasswordRequirementsService {
   hasOneSpecialChar(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       const _value = control.value;
-      return this.at_least_one_special_char.test(_value) ? null : {hasSpecialChar: {value: _value}};
+      return this.at_least_one_special_char.test(_value) ? null : {missingSpecialChar: true};
     }
   }
   /**
@@ -79,30 +79,8 @@ export class PasswordRequirementsService {
     return (control: AbstractControl) : ValidationErrors | null => {
       const password = control.get('password')?.value;
       const confirmPass = control.get('confirmPassword')?.value;
-      return (password !== confirmPass) ? {matchingPasswords: {value: false}} : null;
+      return (password !== confirmPass) ? {mismatchingPasswords: true} : null;
     }
   }
-  /**
-   * Check the password meets all the requirements.
-   *
-   * @param password String to check.
-   * @param confirmPassword String to check.
-   * @returns Array of booleans.
-   */
-  // checkPasswordMeetsRequirements(password: string, confirmPassword: string): boolean[] {
-  //   const requirements: Array<boolean> = [];
-
-  //   requirements.push(
-  //     this.isGreaterThanEightChars(password),
-  //     this.hasOneLowerCaseChar(password),
-  //     this.hasOneUpperCaseChar(password),
-  //     this.hasOneDigitChar(password),
-  //     this.hasOneSpecialChar(password),
-  //     this.passwordsMatch(password, confirmPassword)
-  //   );
-
-  //   return requirements;
-  // }
-
 
 }
