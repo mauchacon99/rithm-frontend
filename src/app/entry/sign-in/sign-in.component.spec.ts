@@ -3,14 +3,15 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CoreModule } from 'src/app/core/core.module';
 import { MockUserService } from 'src/app/core/user-service-mock';
 import { UserService } from 'src/app/core/user.service';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 import { SignInComponent } from './sign-in.component';
 
@@ -23,10 +24,11 @@ describe('SignInComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SignInComponent],
       imports: [
-        CoreModule,
-        SharedModule,
         RouterTestingModule,
         ReactiveFormsModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatProgressSpinnerModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService }
