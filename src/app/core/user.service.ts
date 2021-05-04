@@ -102,6 +102,15 @@ export class UserService {
     );
   }
 
+  /**
+   * Registers a new user in the system.
+   *
+   * @param firstName The new user's first name.
+   * @param lastName The new user's last name.
+   * @param email The new user's email address.
+   * @param password The password set for the new user.
+   * @returns An empty observable.
+   */
   register(firstName: string, lastName: string, email: string, password: string): Observable<void> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/register`, {
       firstName,
