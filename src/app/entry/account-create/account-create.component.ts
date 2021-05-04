@@ -18,6 +18,9 @@ export class AccountCreateComponent {
     private errorService: ErrorService
   ) {}
 
+  /**
+   * Attempts to create a new account with the provided form information.
+   */
   createAccount(): void {
     this.userService.register('first', 'last', 'email@test.com', 'Qwer5234')
       .pipe(first())
