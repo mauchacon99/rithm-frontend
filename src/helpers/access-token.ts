@@ -27,6 +27,6 @@ export class AccessToken {
    * @returns True if the token is expired, false otherwise.
    */
   isExpired(): boolean {
-    return Date.now() > this.expiration;
+    return Date.now() >= this.expiration;
   }
 }
