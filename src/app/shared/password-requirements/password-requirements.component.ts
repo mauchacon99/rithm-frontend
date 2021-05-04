@@ -1,23 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-
+import { Component, Input } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
+/**
+ * Password requirements component.
+ */
 @Component({
   selector: 'app-password-requirements',
   templateUrl: './password-requirements.component.html',
   styleUrls: ['./password-requirements.component.scss']
 })
-export class PasswordRequirementsComponent implements OnInit {
-
+export class PasswordRequirementsComponent {
+  /** Password requirements errors. */
   @Input()
-  passReq: any;
-
+  passReq: ValidationErrors | null | undefined;
+  /** Show matching passwords requirement. */
   @Input()
-  match: any;
+  match = false;
 
   constructor() {
     // constructor
-  }
-
-  ngOnInit(): void {
   }
 
 }
