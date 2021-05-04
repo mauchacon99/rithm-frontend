@@ -15,12 +15,10 @@ const NO_AUTH_ROUTES = [
 ];
 
 /**
- * Service for intercepting HTTP requests to provide the access token.
+ * Intercepts HTTP requests to provide the access token.
  */
-@Injectable({
-  providedIn: 'root'
-})
-export class TokenInterceptorService implements HttpInterceptor {
+@Injectable()
+export class TokenInterceptor implements HttpInterceptor {
 
   constructor(private userService: UserService) { }
 

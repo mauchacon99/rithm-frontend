@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptorService } from './token-interceptor.service';
+import { TokenInterceptor } from './token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
 
 
@@ -19,7 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorService,
+      useClass: TokenInterceptor,
       multi: true
     }
   ]

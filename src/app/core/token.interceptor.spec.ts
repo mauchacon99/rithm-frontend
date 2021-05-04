@@ -3,11 +3,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TokenInterceptorService } from './token-interceptor.service';
+import { TokenInterceptor } from './token.interceptor';
 import { MockUserService } from './user-service-mock';
 import { UserService } from './user.service';
 
-describe('TokenInterceptorService', () => {
+describe('TokenInterceptor', () => {
   let http: HttpClient;
   let httpTesting: HttpTestingController;
 
@@ -20,7 +20,7 @@ describe('TokenInterceptorService', () => {
       providers: [
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: TokenInterceptorService,
+          useClass: TokenInterceptor,
           multi: true
         },
         {
