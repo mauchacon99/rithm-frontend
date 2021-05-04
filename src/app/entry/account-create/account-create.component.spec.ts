@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CoreModule } from 'src/app/core/core.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { AccountCreateComponent } from './account-create.component';
 
@@ -8,7 +11,12 @@ describe('AccountCreateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountCreateComponent ]
+      declarations: [ AccountCreateComponent ],
+      imports: [
+        CoreModule,
+        SharedModule,
+        RouterTestingModule
+      ]
     })
     .compileComponents();
   });
