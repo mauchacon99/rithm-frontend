@@ -12,6 +12,8 @@ import { PasswordRequirementsService } from 'src/app/core/password-requirements.
 })
 export class AccountCreateComponent {
   signUpForm: FormGroup;
+  passReqVisible = false;
+  errorsToGet = '';
 
   constructor(
     public fb: FormBuilder,
@@ -48,6 +50,11 @@ export class AccountCreateComponent {
       ],
       agreeToTerms: ['', [Validators.required]]
     })
+  }
+
+  togglePassReq(errorsFieldToCheck: string): void {
+    this.errorsToGet = errorsFieldToCheck;
+    this.passReqVisible = !this.passReqVisible;
   }
 
 }

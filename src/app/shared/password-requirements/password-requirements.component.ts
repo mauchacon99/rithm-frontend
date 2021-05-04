@@ -8,7 +8,10 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PasswordRequirementsComponent implements OnInit {
 
   @Input()
-  requirements: any;
+  passReq: any;
+
+  // @Input()
+  // cPassReq: any;
 
   constructor() {
     // constructor
