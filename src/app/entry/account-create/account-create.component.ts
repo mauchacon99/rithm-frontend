@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasswordRequirementsService } from 'src/app/core/password-requirements.service';
+import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
  * Component used for creating an account.
@@ -19,6 +19,7 @@ export class AccountCreateComponent {
   showMatch = false;
   /** What errors to get from validator. */
   errorsToGet = '';
+  private passwordReqService: PasswordRequirements;
   /**
    * Init the signup form.
    *
@@ -26,10 +27,10 @@ export class AccountCreateComponent {
    * @param passwordReqService Password Requirements and validator service.
    */
   constructor(
-    public fb: FormBuilder,
-    private passwordReqService: PasswordRequirementsService
-
+    public fb: FormBuilder
   ) {
+    this.passwordReqService = new PasswordRequirements();
+
     this.signUpForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],

@@ -1,12 +1,8 @@
-import { Injectable } from '@angular/core';
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 /**
- * Service for displaying and validating passwords.
+ * Use for displaying and validating passwords.
  */
-@Injectable({
-  providedIn: 'root'
-})
-export class PasswordRequirementsService {
+export class PasswordRequirements {
   /** Regex to check for 8 chars. */
   private at_least_eight_chars = new RegExp(/^.{8,63}$/);
   /** Regex to check for lowercase char. */
