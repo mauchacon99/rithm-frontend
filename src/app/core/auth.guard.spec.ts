@@ -6,10 +6,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { AuthGuardService } from './auth-guard.service';
+import { AuthGuard } from './auth.guard';
 
-describe('AuthGuardService', () => {
-  let service: AuthGuardService;
+describe('AuthGuard', () => {
+  let guard: AuthGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,27 +22,27 @@ describe('AuthGuardService', () => {
         MatButtonModule
       ]
     });
-    service = TestBed.inject(AuthGuardService);
+    guard = TestBed.inject(AuthGuard);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(guard).toBeTruthy();
   });
 
-  // it('should navigate back to login if not signed in', () => {
+  it('should navigate back to login if not signed in', () => {
+    // test here
+  });
 
-  // });
-
-  // it('should display an alert if not signed in', () => {
+  it('should display an alert if not signed in', () => {
   //   service.canActivate();
-  // });
+  });
 
-  // it('should not allow navigation if not signed in', () => {
+  it('should not allow navigation if not signed in', () => {
   //   expect(service.canActivate()).toBeFalse();
-  // });
+  });
 
   // TODO: Test allowance of navigation
-  // it('should allow navigation if signed in', () => {
+  it('should allow navigation if signed in', () => {
   //   expect(service.canActivate()).toBeFalse();
-  // });
+  });
 });
