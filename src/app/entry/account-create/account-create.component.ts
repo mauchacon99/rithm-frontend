@@ -19,12 +19,12 @@ export class AccountCreateComponent {
   showMatch = false;
   /** What errors to get from validator. */
   errorsToGet = '';
+  /** Init Password Requirements helper. */
   private passwordReqService: PasswordRequirements;
   /**
    * Init the signup form.
    *
    * @param fb Form Builder.
-   * @param passwordReqService Password Requirements and validator service.
    */
   constructor(
     public fb: FormBuilder
