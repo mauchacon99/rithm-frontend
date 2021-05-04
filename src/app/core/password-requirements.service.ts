@@ -58,7 +58,7 @@ export class PasswordRequirementsService {
   hasOneDigitChar(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       const _value = control.value;
-      return this.at_least_one_digit_char.test(_value) ? null : {hasDigitChar: {value: _value}};
+      return this.at_least_one_digit_char.test(_value) ? null : {missingDigitChar: true};
     }
   }
   /**

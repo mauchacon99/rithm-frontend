@@ -6,14 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./password-requirements.component.scss']
 })
 export class PasswordRequirementsComponent implements OnInit {
-  @Input()
-  password = '';
 
   @Input()
-  confirmPassword = '';
-
-  @Input()
-  requirements = [];
+  requirements: any;
 
   constructor() {
     // constructor
