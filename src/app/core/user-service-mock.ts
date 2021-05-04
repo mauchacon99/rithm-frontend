@@ -2,12 +2,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { SignInResponse } from 'src/models';
+import { AccessToken } from 'src/helpers';
+import { SignInResponse, TokenResponse } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
  */
 export class MockUserService {
+
+  /** The access token to be used to authenticate for every request. */
+  accessToken = new AccessToken('tokentokentokentokentoken');
 
   signIn(email: string, password: string): Observable<SignInResponse> {
     let response;
@@ -38,6 +42,15 @@ export class MockUserService {
 
     return throwError(response).pipe(delay(1000));
   }
+
+  /**
+   * Gets a new access token from the API.
+   *
+   * @returns The new access token.
+   */
+   refreshToken(): Observable<TokenResponse> {
+    return of({accessToken: 'asdfasdfasdfasdf'}).pipe(delay(1000));
+   }
 
   /**
    * Registers a new user in the system.

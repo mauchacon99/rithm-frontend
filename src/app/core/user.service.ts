@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -103,7 +103,7 @@ export class UserService {
   }
 
   /**
-   * Registers a new user in the system.
+   * Registers a new user in the system (pending email verification).
    *
    * @param firstName The new user's first name.
    * @param lastName The new user's last name.
