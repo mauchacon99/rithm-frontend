@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 /**
  * Service for displaying and validating passwords.
  */
@@ -77,8 +77,8 @@ export class PasswordRequirementsService {
    */
   passwordsMatch(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
-      const password = control.get('password')?.value;
-      const confirmPass = control.get('confirmPassword')?.value;
+      const password = control.parent?.get('password')?.value;
+      const confirmPass = control.parent?.get('confirmPassword')?.value;
       return (password !== confirmPass) ? {mismatchingPasswords: true} : null;
     }
   }
