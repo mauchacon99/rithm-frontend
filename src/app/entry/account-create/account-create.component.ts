@@ -11,11 +11,20 @@ import { PasswordRequirementsService } from 'src/app/core/password-requirements.
   styleUrls: ['./account-create.component.scss']
 })
 export class AccountCreateComponent {
+  /** Sign up form. */
   signUpForm: FormGroup;
+  /** Are password requirements visible. */
   passReqVisible = false;
+  /** Show passwords match validation in child component. */
   showMatch = false;
+  /** What errors to get from validator. */
   errorsToGet = '';
-
+  /**
+   * Init the signup form.
+   *
+   * @param fb Form Builder.
+   * @param passwordReqService Password Requirements and validator service.
+   */
   constructor(
     public fb: FormBuilder,
     private passwordReqService: PasswordRequirementsService
@@ -49,9 +58,13 @@ export class AccountCreateComponent {
         ]
       ],
       agreeToTerms: ['', [Validators.required]]
-    })
+    });
   }
-
+  /**
+   * Toggle visibility of password requirements.
+   *
+   * @param errorsFieldToCheck What field to get errors for child component.
+   */
   togglePassReq(errorsFieldToCheck: string): void {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
