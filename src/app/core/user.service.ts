@@ -102,4 +102,13 @@ export class UserService {
     );
   }
 
+  register(firstName: string, lastName: string, email: string, password: string): Observable<void> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/register`, {
+      firstName,
+      lastName,
+      email,
+      password
+    });
+  }
+
 }
