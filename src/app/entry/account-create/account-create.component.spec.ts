@@ -103,5 +103,5 @@ describe('AccountCreateComponent', () => {
     confirmPassword.setValue('Password!3');
 
     expect(confirmPassword.hasError('mismatchedPasswords')).toBeTruthy();
-  })
+  });
 });
