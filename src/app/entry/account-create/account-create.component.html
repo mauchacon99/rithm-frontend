@@ -63,7 +63,7 @@
                 </mat-checkbox>
                 <!-- Create account button -->
                 <div class="col-12 mt-3">
-                  <button type="submit" mat-raised-button color="accent">Create Account</button>
+                  <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">Create Account</button>
                 </div>
               </form>
             </span>
