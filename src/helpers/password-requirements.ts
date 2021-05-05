@@ -4,14 +4,19 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
  * Helper for displaying and validating passwords.
  */
 export class PasswordRequirements {
+
   /** Regex to check for 8 chars. */
   private at_least_eight_chars = new RegExp(/^.{8,63}$/);
+
   /** Regex to check for lowercase char. */
   private at_least_one_lower_case_char = new RegExp(/^(?=.*?[a-z])/);
+
   /** Regex to check for uppercase char. */
   private at_least_one_upper_case_char = new RegExp(/^(?=.*?[A-Z])/);
+
   /** Regex to check for one digit 0-9 char. */
   private at_least_one_digit_char = new RegExp(/^(?=.*?[0-9])/);
+
   /** Regex to check for one special char (!#$%& etc). */
   private at_least_one_special_char = new RegExp(/^(?=.*?[" !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"])/);
 
@@ -23,6 +28,7 @@ export class PasswordRequirements {
   isGreaterThanEightChars(): ValidatorFn {
     return this.testRegExp(this.at_least_eight_chars, 'missingPassLength');
   }
+
   /**
    * Check password to see if it has a lowercase char.
    *
@@ -31,6 +37,7 @@ export class PasswordRequirements {
   hasOneLowerCaseChar(): ValidatorFn {
     return this.testRegExp(this.at_least_one_lower_case_char, 'missingLowerChar');
   }
+
   /**
    * Check password to see if it has an uppercase char.
    *
@@ -39,6 +46,7 @@ export class PasswordRequirements {
   hasOneUpperCaseChar(): ValidatorFn {
     return this.testRegExp(this.at_least_one_upper_case_char, 'missingUpperChar');
   }
+
   /**
    * Check password to see if it has a number.
    *
@@ -47,6 +55,7 @@ export class PasswordRequirements {
   hasOneDigitChar(): ValidatorFn {
     return this.testRegExp(this.at_least_one_digit_char, 'missingDigitChar');
   }
+
   /**
    * Check password to see if it has a special char.
    *
@@ -55,6 +64,7 @@ export class PasswordRequirements {
   hasOneSpecialChar(): ValidatorFn {
     return this.testRegExp(this.at_least_one_special_char, 'missingSpecialChar');
   }
+
   /**
    * Check to see if password and confirm password match.
    *
@@ -81,5 +91,4 @@ export class PasswordRequirements {
       return regExp.test(_value) ? null : { [errorName]: true };
     };
   }
-
 }
