@@ -51,6 +51,7 @@ describe('UserService', () => {
     service.signIn('johndoe@email.com', 'password1234')
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
+        expect(service.accessToken).toBeTruthy();
         expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
         expect(service.user).toEqual(expectedResponse.user);
       });
