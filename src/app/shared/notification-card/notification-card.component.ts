@@ -22,6 +22,9 @@ export class NotificationCardComponent {
   /** Does the user have a profile photo */
   hasPhoto = false;
 
+  /** Type of notification. */
+  type = 'comment';
+
   /**
    * Dismisses this specific notification.
    */
