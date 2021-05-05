@@ -123,4 +123,24 @@ describe('UserService', () => {
     req.flush({ data: expectedResponse }); // TODO: Update typing once API response is changed (227)
     httpTestingController.verify();
   });
+
+  it('should register a user successfully', () => {
+    const firstName = 'Luigi';
+    const lastName = 'Mario';
+    const email = 'lilbro@mariobros.com';
+    const password = 'mamamia';
+
+    service.register(firstName, lastName, email, password)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/register`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ firstName, lastName, email, password });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
 });
