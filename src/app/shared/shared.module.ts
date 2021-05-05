@@ -13,6 +13,7 @@ import { NotificationCardComponent } from './notification-card/notification-card
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { PasswordRequirementsComponent } from './password-requirements/password-requirements.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ConfirmDialogComponent,
     PromptDialogComponent,
     FullScreenLoaderComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    PasswordRequirementsComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FullScreenLoaderComponent,
     NotificationCardComponent,
     MatProgressSpinnerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    PasswordRequirementsComponent
   ]
 })
 export class SharedModule { }
