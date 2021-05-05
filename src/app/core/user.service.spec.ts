@@ -4,9 +4,20 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
+import { AccessToken } from 'src/helpers';
 import { SignInResponse } from 'src/models';
 
 import { UserService } from './user.service';
+
+const testUser = {
+  firstName: 'Samus',
+  lastName: 'Aran',
+  email: 'ycantmetroidcrawl@metroid.com',
+  createdDate: new Date().toISOString(),
+  groups: [],
+  rithmId: 'kj34k3jkj',
+  objectPermissions: []
+};
 
 describe('UserService', () => {
   let service: UserService;
@@ -34,15 +45,7 @@ describe('UserService', () => {
     const password = 'password1234';
     const expectedResponse: SignInResponse = {
       accessToken: 'kj343kh2o3ih23ih423',
-      user: {
-        firstName: 'Samus',
-        lastName: 'Aran',
-        email: 'ycantmetroidcrawl@metroid.com',
-        createdDate: new Date().toISOString(),
-        groups: [],
-        rithmId: 'kj34k3jkj',
-        objectPermissions: []
-      }
+      user: testUser
     };
 
     service.signIn('johndoe@email.com', 'password1234')
@@ -59,6 +62,14 @@ describe('UserService', () => {
 
     req.flush({ data: expectedResponse });
     httpTestingController.verify();
+  });
+
+  it('should clear memory on sign out', () => {
+    service.accessToken = new AccessToken('jdkfjslkdjflks');
+    service.user = testUser;
+    service.signOut();
+    expect(service.accessToken).toBeUndefined();
+    expect(service.user).toBeUndefined();
   });
 
   it('should clear local storage on sign out', () => {
