@@ -1,58 +1,64 @@
-import { HttpClientModule } from '@angular/common/http';
+/* eslint-disable rxjs/no-ignored-error */
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { environment } from 'src/environments/environment';
+import { SignInResponse } from 'src/models';
 
 import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
   let router: Router;
-  // let httpMock: HttpTestingController;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule
       ]
     });
     service = TestBed.inject(UserService);
     router = TestBed.inject(Router);
-    // httpMock = TestBed.inject(HttpTestingController);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  xit('should successfully sign in', () => {
-    // TODO: write test for sign in
+  it('should successfully sign in', () => {
+    const email = 'johndoe@email.com';
+    const password = 'password1234';
+    const expectedResponse: SignInResponse = {
+      accessToken: 'kj343kh2o3ih23ih423',
+      user: {
+        firstName: 'Samus',
+        lastName: 'Aran',
+        email: 'ycantmetroidcrawl@metroid.com',
+        createdDate: new Date().toISOString(),
+        groups: [],
+        rithmId: 'kj34k3jkj',
+        objectPermissions: []
+      }
+    };
 
-    // const mockSignInResponse: SignInResponse = {
-    //   user: {
-    //     rithmId: '5f5ef6ag6er5gs',
-    //     firstName: 'John',
-    //     lastName: 'Doe',
-    //     email: 'johndoe@email.com',
-    //     objectPermissions: [],
-    //     groups: [],
-    //     createdDate: '2021-04-28T19:52:13.530Z'
+    service.signIn('johndoe@email.com', 'password1234')
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+        expect(service.user).toEqual(expectedResponse.user);
+      });
 
-    //   },
-    //   accessToken: 'wowthisisareallylongtokenthattotallyworks'
-    // };
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ email, password });
 
-    // service.signIn('johndoe@email.com', 'password1234')
-    //   .pipe(first())
-    //   .subscribe((response) => {
-    //     expect(response).toEqual(mockSignInResponse);
-    //   });
-
-    // const req = httpMock.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
-    // expect(req.request.method).toEqual('POST');
-
-    // req.flush(mockSignInResponse);
+    req.flush({ data: expectedResponse });
+    httpTestingController.verify();
   });
 
   it('should clear local storage on sign out', () => {
