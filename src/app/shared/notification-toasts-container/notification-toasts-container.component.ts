@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./notification-toasts-container.component.scss']
 })
 export class NotificationToastsContainerComponent {
-  /** Array of Notifications */
+  /** Array of Notifications. */
   notifications = [
     {
       title: 'Steve Rogers tagged you in a comment',

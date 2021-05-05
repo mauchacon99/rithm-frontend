@@ -16,10 +16,10 @@ export class NotificationCardComponent {
   /** The notification message. */
   @Input() message = '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
 
-  /** Users initials for profile photo/icon */
+  /** Users initials for profile photo/icon. */
   initials = 'SR';
 
-  /** Does the user have a profile photo */
+  /** Does the user have a profile photo. */
   hasPhoto = false;
 
   /** Type of notification. */
