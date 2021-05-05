@@ -15,7 +15,8 @@ import { CookieService } from 'ngx-cookie-service';
     HttpClientModule,
     MatDialogModule,
     MatSnackBarModule
-  ], providers: [
+  ],
+  providers: [
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,
