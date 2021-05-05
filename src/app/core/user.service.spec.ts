@@ -98,8 +98,16 @@ describe('UserService', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
-  xit('should report sign in status', () => {
-    // TODO: write test for sign in status
+  it('should user as signed in', async () => {
+    service.accessToken = new AccessToken('token');
+    expect(await service.isSignedIn()).toBeTrue();
+  });
+
+  xit('should report user as signed out if refresh token fails', () => {
+    expect(service).toBeTruthy();
+  });
+
+  xit('should report user as signed out if token is expired after refresh', () => {
     expect(service).toBeTruthy();
   });
 
