@@ -1,0 +1,19 @@
+.toasts {
+  height: 100%;
+  width: 300px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+
+  .toast {
+    display: block;
+    position: relative;
+    float: left;
+    margin-top: 25px;
+
+    &:first-child {
+      margin-top: 115px;
+    }
+  }
+}
