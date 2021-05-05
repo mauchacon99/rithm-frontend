@@ -13,21 +13,21 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
 export class AccountCreateComponent {
   /** Sign up form. */
   signUpForm: FormGroup;
+
   /** Are password requirements visible. */
   passReqVisible = false;
+
   /** Show passwords match validation in child component. */
   showMatch = false;
+
   /** What errors to get from validator. */
   errorsToGet = '';
+
   /** Init Password Requirements helper. */
   private passwordReqService: PasswordRequirements;
-  /**
-   * Init the signup form.
-   *
-   * @param fb Form Builder.
-   */
+
   constructor(
-    public fb: FormBuilder
+    private fb: FormBuilder
   ) {
     this.passwordReqService = new PasswordRequirements();
 
@@ -61,6 +61,7 @@ export class AccountCreateComponent {
       agreeToTerms: [false, [Validators.required]]
     });
   }
+
   /**
    * Toggle visibility of password requirements.
    *
