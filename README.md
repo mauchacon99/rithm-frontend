@@ -8,7 +8,13 @@ Clone the repo and perform an `npm i` in the base directory to install all of th
 
 Ensure that you are running the latest LTS version of Node.js (v14.15.1 or greater) by running the command `node --version`. The latest version is required for ESLint support.
 
-You can run the web app by using the command `npm start` and opening Google Chrome to the specified localhost address (usually [http://localhost:4200/](http://localhost:4200/)).
+You can run the web app by using the command `npm start` and opening Google Chrome to the specified localhost address (usually [https://localhost:4200/](https://localhost:4200/)).
+
+NOTE: You may see a message that says:
+
+> Your connection is not private
+
+This is because we use a self-signed certificate to use HTTPS locally during development, so you shouldn't worry about this. If you select `Advanced` or `Show Details`, you should be able to proceed to the page, which should make this certificate trusted on your system.
 
 ### Sign In
 
