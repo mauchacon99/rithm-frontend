@@ -19,12 +19,29 @@
   width: 30px;
 }
 
+.badge {
+  width: 15px;
+  height: 15px;
+  background-color: $accent-blue;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  font-size: font-calc(8);
+  color: #fff;
+  padding: 2.4px 0 0 2.7px;
+}
+
 .subtitle-medium {
   color: $primary-blue;
 }
 
 button {
   color: $primary-blue;
+
+  &:hover {
+    color: $warning-red;
+  }
 
   i {
     font-size: font-calc(24);
