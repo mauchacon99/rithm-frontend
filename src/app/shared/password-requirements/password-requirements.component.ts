@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
+
 /**
- * Password requirements component.
+ * Component for displaying satisfied and needed password requirements to the user.
  */
 @Component({
   selector: 'app-password-requirements',
@@ -10,14 +11,9 @@ import { ValidationErrors } from '@angular/forms';
 })
 export class PasswordRequirementsComponent {
   /** Password requirements errors. */
-  @Input()
-  passReq: ValidationErrors | null | undefined;
-  /** Show matching passwords requirement. */
-  @Input()
-  match = false;
+  @Input() passReq: ValidationErrors | null | undefined;
 
-  constructor() {
-    // constructor
-  }
+  /** Show matching passwords requirement. */
+  @Input() match = false;
 
 }
