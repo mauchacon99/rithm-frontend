@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { PasswordRequirementsComponent } from './password-requirements/password-requirements.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent
+    FullScreenLoaderComponent,
+    PasswordRequirementsComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     PromptDialogComponent,
     FullScreenLoaderComponent,
     MatProgressSpinnerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    PasswordRequirementsComponent
   ]
 })
 export class SharedModule { }
