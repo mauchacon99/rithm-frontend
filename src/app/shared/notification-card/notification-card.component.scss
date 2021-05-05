@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'functions';
+@import 'rithm-light-palettes';
 
 // Add styles
 .notification-card {
@@ -36,7 +37,7 @@ button {
   color: $primary-blue;
 
   &:hover {
-    color: $warning-red;
+    color: map-get($primary-palette, 300);
   }
 
   i {
