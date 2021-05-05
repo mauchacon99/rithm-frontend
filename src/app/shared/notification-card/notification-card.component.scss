@@ -9,11 +9,25 @@
 }
 
 .profile-photo {
-  background-image: url('../../../assets/images/example-profile.jpg');
-  background-size: cover;
+  background-color: $secondary-gray;
   border: solid 1px $secondary-gray;
   height: 30px;
   width: 30px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 30px;
+    height: 30px;
+  }
+
+  p {
+    color: #fff;
+    text-align: center;
+    margin: 5px 0;
+    font-size: font-calc(14);
+    font-weight: 600;
+  }
 }
 
 .badge {

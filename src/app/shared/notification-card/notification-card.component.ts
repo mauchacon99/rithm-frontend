@@ -16,6 +16,12 @@ export class NotificationCardComponent {
   /** The notification message. */
   message = '@Tony Stark please double check the SKU on this new product.';
 
+  /** Users initials for profile photo/icon */
+  initials = 'SR';
+
+  /** Does the user have a profile photo */
+  hasPhoto = false;
+
   /**
    * Dismisses this specific notification.
    */
