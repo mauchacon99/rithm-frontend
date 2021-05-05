@@ -67,7 +67,7 @@ describe('UserService', () => {
     expect(localStorage.getItem('test')).toBeNull();
   });
 
-  it('should clear local storage on sign out', () => {
+  it('should clear session storage on sign out', () => {
     sessionStorage.setItem('test', 'test');
     service.signOut();
     expect(sessionStorage.getItem('test')).toBeNull();
