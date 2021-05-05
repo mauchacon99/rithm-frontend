@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse } from 'src/models';
+import { SignInResponse, TokenResponse } from 'src/models';
 
 import { UserService } from './user.service';
 
@@ -102,8 +102,24 @@ describe('UserService', () => {
     expect(service).toBeTruthy();
   });
 
-  xit('should refresh expired access tokens', () => {
-    // TODO: write test for refresh expired token
-    expect(service).toBeTruthy();
+  it('should refresh expired access tokens', () => {
+    const expectedResponse: TokenResponse = {
+      accessToken: 'kj343kh2o3ih23ih423'
+    };
+
+    service.refreshToken()
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+        expect(service.accessToken).toBeTruthy();
+        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/refreshtoken`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush({ data: expectedResponse }); // TODO: Update typing once API response is changed (227)
+    httpTestingController.verify();
   });
 });
