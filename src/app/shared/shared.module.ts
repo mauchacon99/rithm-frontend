@@ -14,6 +14,7 @@ import { NotificationCardComponent } from './notification-card/notification-card
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PasswordRequirementsComponent } from './password-requirements/password-requirements.component';
+import { NotificationToastsContainerComponent } from './notification-toasts-container/notification-toasts-container.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { PasswordRequirementsComponent } from './password-requirements/password-
     PromptDialogComponent,
     FullScreenLoaderComponent,
     NotificationCardComponent,
-    PasswordRequirementsComponent
+    PasswordRequirementsComponent,
+    NotificationToastsContainerComponent
   ],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { PasswordRequirementsComponent } from './password-requirements/password-
     PromptDialogComponent,
     FullScreenLoaderComponent,
     NotificationCardComponent,
+    NotificationToastsContainerComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     PasswordRequirementsComponent
