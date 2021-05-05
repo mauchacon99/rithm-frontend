@@ -69,12 +69,7 @@ export class AccountCreateComponent {
   togglePassReq(errorsFieldToCheck: string): void {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
-    if (errorsFieldToCheck === 'confirmPassword') {
-      this.showMatch = true;
-    }
-    if (errorsFieldToCheck === '') {
-      this.showMatch = false;
-    }
+    this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 
 }
