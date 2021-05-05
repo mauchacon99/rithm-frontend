@@ -197,14 +197,16 @@ div {
 .text-center {
   text-align: center !important;
 }
-
+/// Overline font styling.
+/// All caps 10px regular Montserrat.
 .overline {
   font-size: font-calc(10) !important;
   font-weight: 400;
   font-family: Montserrat, sans-serif;
   text-transform: uppercase;
 }
-
+/// Subtitle Medium
+/// 14px Medium Montserrat
 .subtitle-medium {
   font-size: font-calc(14);
   font-weight: 600;
