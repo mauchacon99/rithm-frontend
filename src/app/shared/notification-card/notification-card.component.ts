@@ -14,7 +14,7 @@ export class NotificationCardComponent {
   title = 'Steven Rogers tagged you in a comment';
 
   /** The notification message. */
-  message = '@Tony Stark please double check the SKU on this new product';
+  message = '@Tony Stark please double check the SKU on this new product. it is very long and needs all of your attention as soon as possible';
 
   /**
    * Dismisses this specific notification.

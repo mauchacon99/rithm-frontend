@@ -1,14 +1,17 @@
 <mat-card class="notification-card">
 
   <!-- Header -->
-  <mat-card-header class="h-50">
-    <div mat-card-avatar class="profile-photo"></div>
-    <mat-card-title class="title">{{title}}</mat-card-title>
-    <button mat-icon-button>
-      <!-- TODO: add font awesome icon -->
-      x
+  <div class="row no-gutters">
+    <div class="col-2">
+      <div mat-card-avatar class="profile-photo"></div>
+    </div>
+    <div class="col-8">
+      <div class="subtitle-medium">{{title}}</div>
+    </div>
+    <button class="col-2" mat-icon-button>
+      <i class="fas fa-times"></i>
     </button>
-  </mat-card-header>
+  </div>
 
   <!-- Text -->
   <mat-card-content>
