@@ -1,8 +1,5 @@
 <div class="toasts">
-  <div class="toast">
-    <app-notification-card></app-notification-card>
-  </div>
-  <div class="toast">
-    <app-notification-card></app-notification-card>
+  <div *ngFor="let notification of notifications" class="toast">
+    <app-notification-card [message]="notification.message" [title]="notification.title"></app-notification-card>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Reusable component for notification cards.
@@ -11,10 +11,10 @@ import { Component } from '@angular/core';
 export class NotificationCardComponent {
 
   /** The title for the notification. */
-  title = 'Steven Rogers tagged you in a comment';
+  @Input() title = 'Steven Rogers tagged you in a comment';
 
   /** The notification message. */
-  message = '@Tony Stark please double check the SKU on this new product.';
+  @Input() message = '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
 
   /** Users initials for profile photo/icon */
   initials = 'SR';
@@ -23,7 +23,7 @@ export class NotificationCardComponent {
   hasPhoto = false;
 
   /** Type of notification. */
-  type = 'comment';
+  @Input() type = 'comment';
 
   /**
    * Dismisses this specific notification.

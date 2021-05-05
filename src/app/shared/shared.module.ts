@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
-import { MatCardModule } from '@angular/material/card';
+import { MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -35,7 +35,9 @@ import { NotificationToastsContainerComponent } from './notification-toasts-cont
     MatButtonModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatCardModule,
+    MatCardContent
   ],
   exports: [
     AlertDialogComponent,
