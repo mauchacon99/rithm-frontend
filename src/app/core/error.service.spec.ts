@@ -47,6 +47,4 @@ describe('ErrorService', () => {
     expect(popupService.notify).toHaveBeenCalled();
   });
 
-  // TODO: Add error log reporting test
-  // it('should report errors to SOME_THIRD_PARTY_SERVICE', () => {});
 });

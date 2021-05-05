@@ -104,12 +104,12 @@ describe('PromptDialogComponent', () => {
       inputElement = await loader.getHarness(MatInputHarness);
     });
 
-    // TODO: Add unit test to check for the placeholder/label
-    // it('should have placeholder text', async () => {
-    //   const promptLabel = component.promptLabel;
-    //   expect(await inputElement.getName()).toEqual(promptLabel as string);
-    //   expect(promptLabel).toEqual(DIALOG_TEST_DATA.promptInput as string);
-    // });
+    xit('should have placeholder text', async () => {
+      // TODO: Add unit test to check for the placeholder/label
+      const promptLabel = component.promptLabel;
+      expect(await inputElement.getName()).toEqual(promptLabel as string);
+      expect(promptLabel).toEqual(DIALOG_TEST_DATA.promptInput as string);
+    });
 
     it('should have text pre-populated', async () => {
       const promptInput = component.promptInput;
@@ -130,9 +130,6 @@ describe('PromptDialogComponent', () => {
       expect(buttonHarness).toBeTruthy();
     });
 
-    // TODO: Test for default button text
-    // it('should have default text', async () => {});
-
     it('should have custom text', async () => {
       const okButtonText = component.okButtonText;
       expect(await buttonHarness.getText()).toEqual(okButtonText);
@@ -151,9 +148,6 @@ describe('PromptDialogComponent', () => {
     it('should exist', async () => {
       expect(buttonHarness).toBeTruthy();
     });
-
-    // TODO: Test for default button text
-    // it('should have default text', async () => {});
 
     it('should have custom text', async () => {
       const cancelButtonText = component.cancelButtonText;

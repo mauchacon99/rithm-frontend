@@ -22,40 +22,38 @@ describe('UserService', () => {
     // httpMock = TestBed.inject(HttpTestingController);
   });
 
-  // afterEach(() => {
-  //   httpMock.verify();
-  // });
-
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  // it('should successfully sign in', () => {
-  //   const mockSignInResponse: SignInResponse = {
-  //     user: {
-  //       rithmId: '5f5ef6ag6er5gs',
-  //       firstName: 'John',
-  //       lastName: 'Doe',
-  //       email: 'johndoe@email.com',
-  //       objectPermissions: [],
-  //       groups: [],
-  //       createdDate: '2021-04-28T19:52:13.530Z'
+  xit('should successfully sign in', () => {
+    // TODO: write test for sign in
 
-  //     },
-  //     accessToken: 'wowthisisareallylongtokenthattotallyworks'
-  //   };
+    // const mockSignInResponse: SignInResponse = {
+    //   user: {
+    //     rithmId: '5f5ef6ag6er5gs',
+    //     firstName: 'John',
+    //     lastName: 'Doe',
+    //     email: 'johndoe@email.com',
+    //     objectPermissions: [],
+    //     groups: [],
+    //     createdDate: '2021-04-28T19:52:13.530Z'
 
-  //   service.signIn('johndoe@email.com', 'password1234')
-  //     .pipe(first())
-  //     .subscribe((response) => {
-  //       expect(response).toEqual(mockSignInResponse);
-  //     });
+    //   },
+    //   accessToken: 'wowthisisareallylongtokenthattotallyworks'
+    // };
 
-  //   const req = httpMock.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
-  //   expect(req.request.method).toEqual('POST');
+    // service.signIn('johndoe@email.com', 'password1234')
+    //   .pipe(first())
+    //   .subscribe((response) => {
+    //     expect(response).toEqual(mockSignInResponse);
+    //   });
 
-  //   req.flush(mockSignInResponse);
-  // });
+    // const req = httpMock.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
+    // expect(req.request.method).toEqual('POST');
+
+    // req.flush(mockSignInResponse);
+  });
 
   it('should clear local storage on sign out', () => {
     localStorage.setItem('test', 'test');
@@ -82,11 +80,13 @@ describe('UserService', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
-  // it('should report sign in status', () => {
-  //   expect(service).toBeTruthy();
-  // });
+  xit('should report sign in status', () => {
+    // TODO: write test for sign in status
+    expect(service).toBeTruthy();
+  });
 
-  // it('should refresh expired access tokens', () => {
-  //   expect(service).toBeTruthy();
-  // });
+  xit('should refresh expired access tokens', () => {
+    // TODO: write test for refresh expired token
+    expect(service).toBeTruthy();
+  });
 });

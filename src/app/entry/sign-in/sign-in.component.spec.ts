@@ -74,23 +74,23 @@ describe('SignInComponent', () => {
     expect(message.classes['transparent']).toBeFalsy();
   });
 
-  // it('should display message to verify email if not validated', async () => {
+  xit('should display message to verify email if not validated', async () => {
+    // TODO: Add test for verify email message
+  });
 
-  // });
+  xit('should display error popup if request fails', async () => {
+    // TODO: Add test for verify email message
+  });
 
-  // it('should display error popup if request fails', async () => {
-
-  // });
-
-  // it('should navigate to dashboard upon successful sign in', () => {
-  //   const routerSpy = spyOn(router, 'navigateByUrl');
-  //   component.signInForm.controls['email'].setValue('someone@email.com');
-  //   component.signInForm.controls['password'].setValue('password1234');
-  //   component.signIn();
-  //   jasmine.clock().tick(1001);
-  //   fixture.detectChanges();
-  //   expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
-  // });
+  xit('should navigate to dashboard upon successful sign in', () => {
+    // const routerSpy = spyOn(router, 'navigateByUrl');
+    component.signInForm.controls['email'].setValue('someone@email.com');
+    component.signInForm.controls['password'].setValue('password1234');
+    component.signIn();
+    jasmine.clock().tick(1001);
+    fixture.detectChanges();
+    // expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
+  });
 
   // sign in form
   describe('sign in form', () => {
