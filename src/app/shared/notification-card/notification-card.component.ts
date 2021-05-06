@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { trigger,state,style,animate,transition } from '@angular/animations';
+import { trigger,style,animate,transition } from '@angular/animations';
 
 /**
  * Reusable component for notification cards.
