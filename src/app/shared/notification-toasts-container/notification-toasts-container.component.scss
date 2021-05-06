@@ -1,8 +1,8 @@
 .toasts {
-  height: 100%;
+  height: calc(100% - 115px);
   width: 300px;
   position: absolute;
-  top: 0;
+  top: 115px;
   right: 0;
   z-index: 9999;
 
@@ -12,8 +12,8 @@
     float: left;
     margin-top: 25px;
 
-    &:first-child {
-      margin-top: 115px;
-    }
+    // &:first-child {
+    //   margin-top: 115px;
+    // }
   }
 }
