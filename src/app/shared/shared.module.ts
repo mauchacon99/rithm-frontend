@@ -36,8 +36,7 @@ import { NotificationToastsContainerComponent } from './notification-toasts-cont
     MatInputModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatCardModule,
-    MatCardContent
+    MatCardModule
   ],
   exports: [
     AlertDialogComponent,
@@ -48,6 +47,7 @@ import { NotificationToastsContainerComponent } from './notification-toasts-cont
     NotificationToastsContainerComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatCardModule,
     PasswordRequirementsComponent
   ]
 })

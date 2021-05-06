@@ -30,4 +30,8 @@ export class NotificationToastsContainerComponent {
     }
   ];
 
+  removeNotification(index: number) {
+    this.notifications.splice(index, 1);
+}
+
 }

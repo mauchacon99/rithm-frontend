@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * Reusable component for notification cards.
@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./notification-card.component.scss']
 })
 export class NotificationCardComponent {
+  @Output() public onDelete: EventEmitter<any> = new EventEmitter();
 
   /** The title for the notification. */
   @Input() title = 'Steven Rogers tagged you in a comment';
@@ -30,6 +31,7 @@ export class NotificationCardComponent {
    */
   dismiss(): void {
     // TODO: dismiss this notification
+    this.onDelete.emit();
   }
 
   /**
