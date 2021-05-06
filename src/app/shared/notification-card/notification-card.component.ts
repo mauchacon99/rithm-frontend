@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { trigger,state,style,animate,transition } from '@angular/animations';
 
 /**
  * Reusable component for notification cards.
@@ -6,7 +7,32 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-notification-card',
   templateUrl: './notification-card.component.html',
-  styleUrls: ['./notification-card.component.scss']
+  styleUrls: ['./notification-card.component.scss'],
+  animations: [
+    trigger('notificationTrigger', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateX(100%)'
+        }),
+        animate('600ms',
+          style({
+            opacity: 1,
+            transform: 'translateX(0)'
+          })
+        ),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('500ms',
+          style({
+            opacity: 0,
+            transform: 'translateX(100%)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class NotificationCardComponent {
 
@@ -28,10 +54,17 @@ export class NotificationCardComponent {
   /** Type of notification. */
   @Input() type = 'comment';
 
+  /** Used to trigger the animations when entering. */
+  @Input() animationTrigger = false;
+
+  /** Used to trigger the animate out. */
+  isVisible = false;
+
   /**
    * Dismisses this specific notification.
    */
   dismiss(): void {
+    this.isVisible = true;
     this.dismissEvent.emit();
   }
 
