@@ -9,7 +9,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./notification-card.component.scss']
 })
 export class NotificationCardComponent {
-  @Output() public onDelete: EventEmitter<any> = new EventEmitter();
+
+  /** Trigger the event to dismiss a notification. */
+  @Output() public dismissEvent: EventEmitter<any> = new EventEmitter();
 
   /** The title for the notification. */
   @Input() title = 'Steven Rogers tagged you in a comment';
@@ -30,8 +32,7 @@ export class NotificationCardComponent {
    * Dismisses this specific notification.
    */
   dismiss(): void {
-    // TODO: dismiss this notification
-    this.onDelete.emit();
+    this.dismissEvent.emit();
   }
 
   /**

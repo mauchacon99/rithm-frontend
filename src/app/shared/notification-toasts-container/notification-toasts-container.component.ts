@@ -30,7 +30,12 @@ export class NotificationToastsContainerComponent {
     }
   ];
 
-  removeNotification(index: number) {
+  /**
+   * Remove a notification from the array.
+   *
+   * @param index The notification to remove.
+   */
+  removeNotification(index: number): void {
     this.notifications.splice(index, 1);
 }
 
