@@ -34,9 +34,6 @@ export class NotificationToastsContainerComponent implements OnInit {
     message: 'My comment.'
   };
 
-  /** Trigger used for the animations. */
-  trigger = true;
-
   /**
    * Delay adding two additional notifications.
    */
