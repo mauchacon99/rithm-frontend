@@ -1,0 +1,79 @@
+@import 'variables';
+@import 'functions';
+@import 'rithm-light-palettes';
+
+// Add styles
+.notification-card {
+  min-height: 100px;
+  width: 280px;
+}
+
+.profile-photo {
+  background-color: $secondary-gray;
+  border: solid 1px $secondary-gray;
+  height: 30px;
+  width: 30px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 30px;
+    height: 30px;
+  }
+
+  p {
+    color: #fff;
+    text-align: center;
+    margin: 5px 0;
+    font-size: font-calc(14);
+    font-weight: 600;
+  }
+}
+
+.badge {
+  width: 15px;
+  height: 15px;
+  background-color: $accent-blue;
+  border-radius: 50%;
+  position: absolute;
+  top: 18px;
+  right: 7px;
+  font-size: font-calc(8);
+  color: #fff;
+  padding: 2.4px 0 0 2.7px;
+}
+
+.subtitle-medium {
+  color: $primary-blue;
+}
+
+button {
+  color: $primary-blue;
+
+  &:hover {
+    color: map-get($primary-palette, 300);
+  }
+
+  i {
+    font-size: font-calc(24);
+  }
+}
+
+/* stylelint-disable */
+mat-card-content {
+/* stylelint-enable */
+  width: 100%;
+  min-height: 36px;
+  overflow: hidden;
+/* stylelint-disable */
+  p {
+  /* stylelint-enable */
+    width: 100%;
+    font-size: font-calc(14) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
