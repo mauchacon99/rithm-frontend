@@ -42,7 +42,10 @@ export class UserService {
     return this.http.post<{data: SignInResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
       email,
       password
-    }).pipe(
+    }, { withCredentials: true, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+    } }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.data.accessToken);
         this.user = response.data.user;
