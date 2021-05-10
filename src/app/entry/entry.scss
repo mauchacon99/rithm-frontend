@@ -9,12 +9,14 @@
   align-items: center;
   justify-content: center;
 }
+
 /// Left half of entry card
 .left-entry {
   padding: 15px;
   color: #fff;
   background-color: $primary-blue;
   border-radius: 4px 0 0 4px;
+  min-height: 576px;
   /// Logo
   div img {
     width: 122px;
@@ -37,6 +39,7 @@
   border-radius: 0 4px 4px 0;
   color: #000;
   background: #fff;
+  min-height: 576px;
 
   /* stylelint-disable */
   mat-card-subtitle {
@@ -61,6 +64,7 @@
 
   .left-entry {
     border-radius: 0;
+    min-height: auto;
 
     div img {
       margin-left: 15px;
@@ -75,6 +79,7 @@
       position: absolute;
       bottom: 20px;
       width: 100%;
+      min-height: auto;
     }
   }
 
