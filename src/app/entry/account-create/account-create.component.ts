@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { PopupService } from 'src/app/core/popup.service';
-import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -33,7 +31,6 @@ export class AccountCreateComponent {
 
   constructor(
     private fb: FormBuilder,
-    public dialog: MatDialog,
     private popupService: PopupService
   ) {
     this.passwordReqService = new PasswordRequirements();
@@ -91,12 +88,6 @@ export class AccountCreateComponent {
     };
 
     this.popupService.confirm(data);
-    // this.dialog.open(ConfirmDialogComponent);
-    // const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
   }
 
 }
