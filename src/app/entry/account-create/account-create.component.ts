@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -27,7 +29,8 @@ export class AccountCreateComponent {
   private passwordReqService: PasswordRequirements;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public dialog: MatDialog
   ) {
     this.passwordReqService = new PasswordRequirements();
 
@@ -71,6 +74,18 @@ export class AccountCreateComponent {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
+  }
+
+  /**
+   * Open the terms and conditions modal.
+   */
+  openTerms(): void {
+    this.dialog.open(ConfirmDialogComponent);
+    // const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
 
 }
