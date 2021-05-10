@@ -84,7 +84,8 @@ export class AccountCreateComponent {
     const data = {
       title: 'Terms and Conditions',
       message: this.modalMessage,
-      okButtonText: 'Agree'
+      okButtonText: 'Agree',
+      width: '90%'
     };
 
     this.popupService.confirm(data);

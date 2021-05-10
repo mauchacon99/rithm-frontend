@@ -7,6 +7,8 @@ import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm
 import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
 
 const DIALOG_WIDTH = '500px';
+const width = '90%';
+const max_width = '1200px';
 
 /**
  * Allows the user to display simple popups to the user.
@@ -41,7 +43,8 @@ export class PopupService {
    */
   async confirm(dialogData: DialogData): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      minWidth: DIALOG_WIDTH,
+      maxWidth: max_width,
+      width: dialogData.width ? dialogData.width : '500px',
       data: dialogData
     });
 
