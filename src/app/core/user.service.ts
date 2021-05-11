@@ -102,4 +102,14 @@ export class UserService {
     );
   }
 
+  validateEmail(guid: string, email: string): Observable<void> {
+    // TODO: Update typing once API response is changed (227)
+    // eslint-disable-next-line
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/validateemail`,
+    {
+      guid,
+      email
+    });
+  }
+
 }
