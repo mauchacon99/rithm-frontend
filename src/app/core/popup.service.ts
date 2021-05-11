@@ -7,7 +7,7 @@ import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm
 import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
 
 const DIALOG_WIDTH = '500px';
-const max_width = '1200px';
+const MAX_WIDTH = '1200px';
 
 /**
  * Allows the user to display simple popups to the user.
