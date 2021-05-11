@@ -28,7 +28,7 @@ export class AccountCreateComponent {
   private passwordReqService: PasswordRequirements;
 
   /** Temp message for terms modal. */
-  modalMessage = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur non ipsum a porta.
+  readonly modalMessage = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur non ipsum a porta.
   Aenean condimentum sem id lobortis ornare.Fusce venenatis efficitur pulvinar. Vivamus dignissim erat odio,
   ac interdum mi viverra nec. Nunc rutrum dolor a augue convallis, ac iaculis mauris dapibus.\n\nFusce non est libero. Fusce porttitor
   ex id convallis facilisis. Pellentesque sit amet eleifend quam, eget pharetra ipsum. Proin id mattis sem. In vitae sem massa.\n\nIn hac
