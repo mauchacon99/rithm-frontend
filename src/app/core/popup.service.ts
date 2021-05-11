@@ -43,7 +43,7 @@ export class PopupService {
   async confirm(dialogData: DialogData): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: max_width,
-      width: dialogData.width ? dialogData.width : '500px',
+      width: dialogData.width ? dialogData.width : DIALOG_WIDTH,
       data: dialogData
     });
 
