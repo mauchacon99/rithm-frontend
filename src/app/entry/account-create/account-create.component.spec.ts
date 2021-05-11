@@ -17,13 +17,9 @@ describe('AccountCreateComponent', () => {
       imports: [
         ReactiveFormsModule,
         MatCheckboxModule,
-        OverlayModule,
         MatDialogModule,
         MatSnackBarModule
       ],
-      providers: [
-        MatDialog
-      ]
     })
     .compileComponents();
   });
