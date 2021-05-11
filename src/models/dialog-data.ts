@@ -21,4 +21,7 @@ export interface DialogData {
   /** The text to display in the input for the prompt dialog. */
   promptInput?: string;
 
+  /** The width of dialog. */
+  width?: string;
+
 }
