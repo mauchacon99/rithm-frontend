@@ -112,7 +112,9 @@ export class AccountCreateComponent {
       width: '90%'
     };
 
-    this.popupService.confirm(data);
+    this.popupService.confirm(data).then((result) => {
+      this.signUpForm.get('agreeToTerms')?.setValue(result);
+    });
   }
 
 }
