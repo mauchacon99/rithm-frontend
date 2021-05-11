@@ -7,7 +7,6 @@ import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm
 import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
 
 const DIALOG_WIDTH = '500px';
-const width = '90%';
 const max_width = '1200px';
 
 /**
