@@ -1,6 +1,9 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AccountCreateComponent } from './account-create.component';
 
@@ -13,7 +16,13 @@ describe('AccountCreateComponent', () => {
       declarations: [ AccountCreateComponent ],
       imports: [
         ReactiveFormsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        OverlayModule,
+        MatDialogModule,
+        MatSnackBarModule
+      ],
+      providers: [
+        MatDialog
       ]
     })
     .compileComponents();
