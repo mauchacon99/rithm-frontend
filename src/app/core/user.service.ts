@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse, User } from 'src/models';
 
-const MICROSERVICE_PATH = '';
+const MICROSERVICE_PATH = '/userservice';
 
 /**
  * Service for all interactions involving a user.
