@@ -7,4 +7,7 @@ export interface EmailLinkParams {
 
   /** The unique identifier used to validate this request (through the user's email.). */
   guid: string;
+
+  /** The email address of the user. */
+  email: string;
 }
