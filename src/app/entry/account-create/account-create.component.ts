@@ -86,7 +86,7 @@ export class AccountCreateComponent {
           this.passwordReqService.passwordsMatch()
         ]
       ],
-      agreeToTerms: [false, [Validators.required]]
+      agreeToTerms: [false, [Validators.requiredTrue]]
     });
   }
 
