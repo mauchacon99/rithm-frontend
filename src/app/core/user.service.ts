@@ -21,7 +21,7 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router) {}
+    private router: Router) { }
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -39,13 +39,10 @@ export class UserService {
   signIn(email: string, password: string): Observable<SignInResponse> {
     // TODO: Update typing once API response is changed (227)
     // eslint-disable-next-line
-    return this.http.post<{data: SignInResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
+    return this.http.post<{ data: SignInResponse }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
       email,
       password
-    }, { withCredentials: true, headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-    } }).pipe(
+    }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.data.accessToken);
         this.user = response.data.user;
@@ -96,13 +93,13 @@ export class UserService {
   refreshToken(): Observable<TokenResponse> {
     // TODO: Update typing once API response is changed (227)
     // eslint-disable-next-line
-    return this.http.get<{data: TokenResponse}>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`)
-    .pipe(
-      map((tokenResponse) => {
-        this.accessToken = new AccessToken(tokenResponse.data.accessToken);
-        return tokenResponse.data;
-      })
-    );
+    return this.http.get<{ data: TokenResponse }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
+      { withCredentials: true }).pipe(
+        map((tokenResponse) => {
+          this.accessToken = new AccessToken(tokenResponse.data.accessToken);
+          return tokenResponse.data;
+        })
+      );
   }
 
 }
