@@ -110,7 +110,8 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
    * Attempts to create a new account with the provided form information.
    */
   createAccount(): void {
-    this.userService.register('first', 'last', 'email@test.com', 'Qwer5234')
+    const formValues = this.signUpForm.value;
+    this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
       .subscribe((test) => {
         // RIT-174
