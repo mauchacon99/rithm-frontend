@@ -1,4 +1,5 @@
 export * from './dialog-data';
+export * from './email-link-params';
 export * from './global-permission';
 export * from './group';
 export * from './object-permission';
