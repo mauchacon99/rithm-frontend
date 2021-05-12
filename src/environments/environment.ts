@@ -6,7 +6,7 @@ export const environment = {
   production: false,
 
   /** The base URL for the Rithm API. */
-  baseApiUrl: 'https://10.211.55.3:44328',
+  baseApiUrl: 'https://api.rithm.tech',
 
   /** The lifetime for which an access token is valid in milliseconds. */
   accessTokenLifetime: 900000
