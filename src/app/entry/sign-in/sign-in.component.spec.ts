@@ -1,21 +1,17 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CoreModule } from 'src/app/core/core.module';
 import { MockUserService } from 'src/app/core/user-service-mock';
 import { UserService } from 'src/app/core/user.service';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 import { SignInComponent } from './sign-in.component';
 
@@ -28,15 +24,11 @@ describe('SignInComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SignInComponent],
       imports: [
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
         RouterTestingModule,
-        CoreModule,
-        SharedModule,
-        MatCardModule,
-        MatInputModule,
-        MatButtonModule
+        ReactiveFormsModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatProgressSpinnerModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService }
@@ -82,23 +74,23 @@ describe('SignInComponent', () => {
     expect(message.classes['transparent']).toBeFalsy();
   });
 
-  // it('should display message to verify email if not validated', async () => {
+  xit('should display message to verify email if not validated', async () => {
+    // TODO: Add test for verify email message
+  });
 
-  // });
+  xit('should display error popup if request fails', async () => {
+    // TODO: Add test for verify email message
+  });
 
-  // it('should display error popup if request fails', async () => {
-
-  // });
-
-  // it('should navigate to dashboard upon successful sign in', () => {
-  //   const routerSpy = spyOn(router, 'navigateByUrl');
-  //   component.signInForm.controls['email'].setValue('someone@email.com');
-  //   component.signInForm.controls['password'].setValue('password1234');
-  //   component.signIn();
-  //   jasmine.clock().tick(1001);
-  //   fixture.detectChanges();
-  //   expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
-  // });
+  xit('should navigate to dashboard upon successful sign in', () => {
+    // const routerSpy = spyOn(router, 'navigateByUrl');
+    component.signInForm.controls['email'].setValue('someone@email.com');
+    component.signInForm.controls['password'].setValue('password1234');
+    component.signIn();
+    jasmine.clock().tick(1001);
+    fixture.detectChanges();
+    // expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
+  });
 
   // sign in form
   describe('sign in form', () => {

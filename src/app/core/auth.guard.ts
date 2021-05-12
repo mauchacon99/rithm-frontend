@@ -4,15 +4,17 @@ import { PopupService } from './popup.service';
 import { UserService } from './user.service';
 
 /**
- * Service for preventing a user from accessing pages if not authenticated.
+ * Guard for preventing a user from accessing pages if not authenticated.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService implements CanActivate {
+export class AuthGuard implements CanActivate {
 
-  constructor(private userService: UserService,
-              private popupService: PopupService) {}
+  constructor(
+    private userService: UserService,
+    private popupService: PopupService
+  ) { }
 
   /**
    * Determines if the user is signed in and can perform the attempted routing action.

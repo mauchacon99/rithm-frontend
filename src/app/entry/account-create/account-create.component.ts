@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
@@ -54,6 +57,8 @@ lorem augue, dignissim eget malesuada vitae, dictum sollicitudin augue. Curabitu
 Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam id mauris id quam faucibus facilisis.`;
 
   constructor(
+    private userService: UserService,
+    private errorService: ErrorService,
     private fb: FormBuilder,
     private popupService: PopupService
   ) {
@@ -99,6 +104,25 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
+  }
+
+  /**
+   * Attempts to create a new account with the provided form information.
+   */
+  createAccount(): void {
+    const formValues = this.signUpForm.value;
+    this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
+      .pipe(first())
+      .subscribe((test) => {
+        // RIT-174
+        console.log(test);
+      }, (error) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
   }
 
   /**

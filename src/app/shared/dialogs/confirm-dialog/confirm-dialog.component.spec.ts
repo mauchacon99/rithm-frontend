@@ -98,9 +98,6 @@ describe('ConfirmDialogComponent', () => {
       expect(buttonHarness).toBeTruthy();
     });
 
-    // TODO: Test for default button text
-    // it('should have default text', async () => {});
-
     it('should have custom text', async () => {
       const okButtonText = component.okButtonText;
       expect(await buttonHarness.getText()).toEqual(okButtonText);
@@ -119,9 +116,6 @@ describe('ConfirmDialogComponent', () => {
     it('should exist', async () => {
       expect(buttonHarness).toBeTruthy();
     });
-
-    // TODO: Test for default button text
-    // it('should have default text', async () => {});
 
     it('should have custom text', async () => {
       const cancelButtonText = component.cancelButtonText;

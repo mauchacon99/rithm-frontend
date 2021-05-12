@@ -105,9 +105,6 @@ describe('AlertDialogComponent', () => {
       expect(buttonHarness).toBeTruthy();
     });
 
-    // TODO: Test for default button text
-    // it('should have default text', async () => {});
-
     it('should have custom text', async () => {
       const okButtonText = component.okButtonText;
       expect(await buttonHarness.getText()).toEqual(okButtonText);
@@ -121,14 +118,14 @@ describe('AlertDialogComponent', () => {
       expect(await (buttonElement.hasClass('mat-error'))).toBeTruthy();
     });
 
-    // TODO: Test for closing of modal on button click
-    // it('should close modal when clicked', async () => {
-    //   const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
-    //   await okButton.click();
-    //   fixture.detectChanges();
-    //   tick();
-    //   expect(DIALOG_MOCK.close()).toHaveBeenCalled();
-    // });
+    xit('should close modal when clicked', async () => {
+      // TODO: Test for closing of modal on button click
+      const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
+      await okButton.click();
+      fixture.detectChanges();
+      // tick();
+      // expect(DIALOG_MOCK.close()).toHaveBeenCalled();
+    });
   });
 
 });

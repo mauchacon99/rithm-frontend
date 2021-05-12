@@ -1,61 +1,77 @@
-import { HttpClientModule } from '@angular/common/http';
+/* eslint-disable rxjs/no-ignored-error */
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { environment } from 'src/environments/environment';
+import { AccessToken } from 'src/helpers';
+import { SignInResponse, TokenResponse } from 'src/models';
 
 import { UserService } from './user.service';
+
+const testUser = {
+  firstName: 'Samus',
+  lastName: 'Aran',
+  email: 'ycantmetroidcrawl@metroid.com',
+  createdDate: new Date().toISOString(),
+  groups: [],
+  rithmId: 'kj34k3jkj',
+  objectPermissions: []
+};
 
 describe('UserService', () => {
   let service: UserService;
   let router: Router;
-  // let httpMock: HttpTestingController;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule
       ]
     });
     service = TestBed.inject(UserService);
     router = TestBed.inject(Router);
-    // httpMock = TestBed.inject(HttpTestingController);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
-
-  // afterEach(() => {
-  //   httpMock.verify();
-  // });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  // it('should successfully sign in', () => {
-  //   const mockSignInResponse: SignInResponse = {
-  //     user: {
-  //       rithmId: '5f5ef6ag6er5gs',
-  //       firstName: 'John',
-  //       lastName: 'Doe',
-  //       email: 'johndoe@email.com',
-  //       objectPermissions: [],
-  //       groups: [],
-  //       createdDate: '2021-04-28T19:52:13.530Z'
+  it('should successfully sign in', () => {
+    const email = 'johndoe@email.com';
+    const password = 'password1234';
+    const expectedResponse: SignInResponse = {
+      accessToken: 'kj343kh2o3ih23ih423',
+      user: testUser
+    };
 
-  //     },
-  //     accessToken: 'wowthisisareallylongtokenthattotallyworks'
-  //   };
+    service.signIn('johndoe@email.com', 'password1234')
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+        expect(service.accessToken).toBeTruthy();
+        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+        expect(service.user).toEqual(expectedResponse.user);
+      });
 
-  //   service.signIn('johndoe@email.com', 'password1234')
-  //     .pipe(first())
-  //     .subscribe((response) => {
-  //       expect(response).toEqual(mockSignInResponse);
-  //     });
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ email, password });
 
-  //   const req = httpMock.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
-  //   expect(req.request.method).toEqual('POST');
+    req.flush({ data: expectedResponse });
+    httpTestingController.verify();
+  });
 
-  //   req.flush(mockSignInResponse);
-  // });
+  it('should clear memory on sign out', () => {
+    service.accessToken = new AccessToken('jdkfjslkdjflks');
+    service.user = testUser;
+    service.signOut();
+    expect(service.accessToken).toBeUndefined();
+    expect(service.user).toBeUndefined();
+  });
 
   it('should clear local storage on sign out', () => {
     localStorage.setItem('test', 'test');
@@ -63,7 +79,7 @@ describe('UserService', () => {
     expect(localStorage.getItem('test')).toBeNull();
   });
 
-  it('should clear local storage on sign out', () => {
+  it('should clear session storage on sign out', () => {
     sessionStorage.setItem('test', 'test');
     service.signOut();
     expect(sessionStorage.getItem('test')).toBeNull();
@@ -82,11 +98,57 @@ describe('UserService', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
-  // it('should report sign in status', () => {
-  //   expect(service).toBeTruthy();
-  // });
+  it('should user as signed in', async () => {
+    service.accessToken = new AccessToken('token');
+    expect(await service.isSignedIn()).toBeTrue();
+  });
 
-  // it('should refresh expired access tokens', () => {
-  //   expect(service).toBeTruthy();
-  // });
+  xit('should report user as signed out if refresh token fails', () => {
+    expect(service).toBeTruthy();
+  });
+
+  xit('should report user as signed out if token is expired after refresh', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should refresh expired access tokens', () => {
+    const expectedResponse: TokenResponse = {
+      accessToken: 'kj343kh2o3ih23ih423'
+    };
+
+    service.refreshToken()
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+        expect(service.accessToken).toBeTruthy();
+        expect(service.accessToken?.token).toEqual(expectedResponse.accessToken);
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/refreshtoken`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush({ data: expectedResponse }); // TODO: Update typing once API response is changed (227)
+    httpTestingController.verify();
+  });
+
+  it('should register a user successfully', () => {
+    const firstName = 'Luigi';
+    const lastName = 'Mario';
+    const email = 'lilbro@mariobros.com';
+    const password = 'mamamia';
+
+    service.register(firstName, lastName, email, password)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/register`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ firstName, lastName, email, password });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
 });

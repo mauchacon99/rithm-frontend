@@ -30,7 +30,7 @@
                   <p>Enter your info to create your account.</p>
                 </div>
               </div>
-              <form [formGroup]="signUpForm" class="row mt-3">
+              <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
                 <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible" [passReq]="signUpForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
                 <!-- First name -->
                 <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
