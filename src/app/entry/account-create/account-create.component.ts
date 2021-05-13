@@ -115,7 +115,6 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
       .pipe(first())
       .subscribe((test) => {
         // RIT-174
-        console.log(test);
       }, (error) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
