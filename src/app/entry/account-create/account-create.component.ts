@@ -5,6 +5,7 @@ import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
+import { Router } from '@angular/router';
 
 /**
  * Component used for creating an account.
@@ -63,7 +64,8 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     private userService: UserService,
     private errorService: ErrorService,
     private fb: FormBuilder,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.passwordReqService = new PasswordRequirements();
 
@@ -119,8 +121,9 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;
-        // RIT-174
+        this.openValidateEmailModal();
       }, (error) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
@@ -142,6 +145,21 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
 
     this.popupService.confirm(data).then((result) => {
       this.signUpForm.get('agreeToTerms')?.setValue(result);
+    });
+  }
+
+  /**
+   * Open the alert to validate their email address.
+   */
+  openValidateEmailModal(): void {
+    const data = {
+      title: 'Validate your email address',
+      message: 'Please check your email and validate your Rithm account.',
+      okButtonText: 'Okay'
+    };
+
+    this.popupService.alert(data).then(() => {
+      this.router.navigate(['']);
     });
   }
 
