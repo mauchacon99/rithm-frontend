@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogData } from 'src/models';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
@@ -26,12 +26,15 @@ export class PopupService {
    * Displays an alert dialog to the user.
    *
    * @param dialogData The dialog information to display.
+   * @returns True if user confirmed, false otherwise.
    */
-  alert(dialogData: DialogData): void {
-    this.dialog.open(AlertDialogComponent, {
+  async alert(dialogData: DialogData): Promise<boolean> {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
       width: DIALOG_WIDTH,
       data: dialogData
     });
+
+    return await dialogRef.afterClosed().toPromise();
   }
 
   /**
