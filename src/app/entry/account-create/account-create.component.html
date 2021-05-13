@@ -11,11 +11,11 @@
               <p>Get started with a <b>free</b> Rithm account.</p>
             </div>
             <div class="mb-2 d-none d-md-block">
-              <p>Create workflows. Manage permissions. manage processes and people with enterprise-level-security.</p>
+              <p>Create workflows. Manage permissions. Manage processes and people with enterprise-level-security.</p>
             </div>
           </div>
           <div class="col-md-6 col-sm-12 right-entry">
-            <span>
+            <span [ngClass]="{'transparent': isLoading}">
               <div class="row mt-1">
                 <div class="col-12">
                   <!-- TODO: RIT-234 -->
@@ -70,8 +70,13 @@
                 </div>
               </form>
             </span>
-            <span><!-- Add spinner class-->
-              <!-- TODO: Loading indicator here. RIT-171 -->
+            <!-- Loading Indicator -->
+            <span *ngIf="isLoading" class="spinner">
+              <div class="row">
+                <div class="col text-center">
+                  <mat-spinner class="m-auto"></mat-spinner>
+                </div>
+              </div>
             </span>
           </div>
         </div>
