@@ -27,6 +27,6 @@ export class EmailLinkParams {
    * @returns True if params are valid, false otherwise.
    */
   get valid(): boolean {
-    return !(this.type && (!this.guid || !this.email));
+    return this.type ? !!(this.guid && this.email) : true;
   }
 }
