@@ -120,4 +120,19 @@ export class UserService {
     });
   }
 
+  /**
+   * Attempts to validate an email address with the API.
+   *
+   * @param guid The identifier used to validate the email address.
+   * @param email The email address to verify.
+   * @returns An empty observable.
+   */
+  validateEmail(guid: string, email: string): Observable<void> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/validateemail`,
+    {
+      guid,
+      email
+    });
+  }
+
 }

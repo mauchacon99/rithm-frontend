@@ -53,13 +53,14 @@ export class SignInComponent implements OnInit {
 
         if (!emailLinkParams.valid) {
           this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
+        } else {
+          if (emailLinkParams.type === EmailLinkType.register) {
+            this.validateEmail(emailLinkParams.guid as string, emailLinkParams.email as string);
+          } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
+            // TODO: make forgot password service call
+          }
         }
 
-        if (emailLinkParams.type === EmailLinkType.register) {
-          // TODO: RIT-176
-        } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
-          // TODO: make forgot password service call
-        }
 
       }, (error) => {
         this.showInvalidLinkMessage(error);
@@ -109,6 +110,27 @@ export class SignInComponent implements OnInit {
             true
           );
         }
+      });
+  }
+
+  /**
+   * Attempts to validate the user's email address using a GUID.
+   *
+   * @param guid The identifier used to validate the email address.
+   * @param email The email address for the user.
+   */
+  private validateEmail(guid: string, email: string): void {
+    this.userService.validateEmail(guid, email)
+      .pipe(first())
+      .subscribe(() => {
+        this.popupService.notify('Email successfully verified');
+      }, (error) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we were unable to validate your email address. ' +
+          'We\'ve made note of this. Please try again in a little while.',
+          error,
+          true
+        );
       });
   }
 
