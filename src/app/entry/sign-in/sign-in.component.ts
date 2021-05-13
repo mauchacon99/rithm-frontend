@@ -6,6 +6,8 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
+import { EmailLinkParams } from 'src/helpers';
+import { EmailLinkType } from 'src/models';
 
 /**
  * Component for signing into the system.
@@ -47,18 +49,15 @@ export class SignInComponent implements OnInit {
     this.route.queryParamMap
       .pipe(first())
       .subscribe((params) => {
-        const type = params.get('type');
-        const guid = params.get('guid');
-        const email = params.get('email');
+        const emailLinkParams = new EmailLinkParams(params);
 
-        // If type is there, but is missing data
-        if (type && (!guid || !email)) {
+        if (!emailLinkParams.valid) {
           this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
         }
 
-        if (type === 'register') {
+        if (emailLinkParams.type === EmailLinkType.register) {
           // TODO: RIT-176
-        } else if (type === 'forgot password') {
+        } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
           // TODO: make forgot password service call
         }
 
