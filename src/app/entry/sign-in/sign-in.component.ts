@@ -40,6 +40,9 @@ export class SignInComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks for query params and makes necessary request if present.
+   */
   ngOnInit(): void {
 
     this.route.queryParamMap
