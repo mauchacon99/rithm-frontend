@@ -113,7 +113,7 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     const formValues = this.signUpForm.value;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
-      .subscribe((test) => {
+      .subscribe(() => {
         // RIT-174
       }, (error) => {
         this.errorService.displayError(
