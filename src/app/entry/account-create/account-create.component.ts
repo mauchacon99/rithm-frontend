@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component used for creating an account.
@@ -122,13 +123,22 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
       .subscribe(() => {
         this.isLoading = false;
         this.openValidateEmailModal();
-      }, (error) => {
+      }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
+        const errorMessage: string = error.error.error;
+
+        if (errorMessage === 'This username has already been used.') {
+          this.popupService.alert({
+            title: 'Account Already Exists',
+            message: 'An account has already been created for this email address. Try signing into this account instead.'
+          });
+        } else {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error,
+            true
+          );
+        }
       });
   }
 
