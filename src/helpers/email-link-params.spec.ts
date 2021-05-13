@@ -1,7 +1,49 @@
+import { convertToParamMap, Params } from '@angular/router';
 import { EmailLinkParams } from './email-link-params';
+
+const params: Params = {
+  type: 'register',
+  email: 'test@email.com',
+  guid: 'fe7d733b-521a-4f68-91fc-0d59ac7bbf31'
+};
 
 describe('EmailLinkParams', () => {
   it('should create an instance', () => {
-    expect(new EmailLinkParams()).toBeTruthy();
+    const paramMap = convertToParamMap(params);
+    expect(new EmailLinkParams(paramMap)).toBeTruthy();
+  });
+
+  it('should report invalid params when email is missing', () => {
+    delete params.email;
+    const paramMap = convertToParamMap(params);
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeFalse();
+  });
+
+  it('should report invalid params when GUID is missing', () => {
+    delete params.guid;
+    const paramMap = convertToParamMap(params);
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeFalse();
+  });
+
+  it('should report invalid params when email and GUID missing', () => {
+    delete params.email;
+    delete params.guid;
+    const paramMap = convertToParamMap(params);
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeFalse();
+  });
+
+  it('should report valid params when all params are present', () => {
+    const paramMap = convertToParamMap(params);
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeTrue();
+  });
+
+  it('should report valid params when no params are present', () => {
+    const paramMap = convertToParamMap({});
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeTrue();
   });
 });
