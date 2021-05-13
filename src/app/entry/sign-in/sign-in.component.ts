@@ -6,7 +6,6 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { EmailLinkParams } from 'src/models';
 
 /**
  * Component for signing into the system.
