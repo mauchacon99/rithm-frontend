@@ -1,13 +1,17 @@
 import { convertToParamMap, Params } from '@angular/router';
 import { EmailLinkParams } from './email-link-params';
 
-const params: Params = {
-  type: 'register',
-  email: 'test@email.com',
-  guid: 'fe7d733b-521a-4f68-91fc-0d59ac7bbf31'
-};
-
 describe('EmailLinkParams', () => {
+  let params: Params;
+
+  beforeEach(() => {
+    params = {
+      type: 'register',
+      email: 'test@email.com',
+      guid: 'fe7d733b-521a-4f68-91fc-0d59ac7bbf31'
+    };
+  });
+
   it('should create an instance', () => {
     const paramMap = convertToParamMap(params);
     expect(new EmailLinkParams(paramMap)).toBeTruthy();
