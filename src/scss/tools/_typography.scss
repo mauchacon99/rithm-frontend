@@ -2,6 +2,7 @@
 
 @import '../helpers/functions';
 
+/* stylelint-disable-next-line */
 @use '~@angular/material' as mat;
 
 $custom-typography: mat.define-typography-config(
