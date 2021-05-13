@@ -30,6 +30,9 @@ export class AccountCreateComponent {
   /** Init Password Requirements helper. */
   private passwordReqService: PasswordRequirements;
 
+  /** Show loading indicator while request is being made. */
+  isLoading = false;
+
   /** Temp message for terms modal. */
   readonly modalMessage = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur non ipsum a porta.
 Aenean condimentum sem id lobortis ornare.Fusce venenatis efficitur pulvinar. Vivamus dignissim erat odio,
@@ -110,10 +113,12 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
    * Attempts to create a new account with the provided form information.
    */
   createAccount(): void {
+    this.isLoading = true;
     const formValues = this.signUpForm.value;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
       .subscribe(() => {
+        this.isLoading = false;
         // RIT-174
       }, (error) => {
         this.errorService.displayError(
