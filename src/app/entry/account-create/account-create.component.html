@@ -35,27 +35,27 @@
                 <!-- First name -->
                 <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
                   <mat-label>First name</mat-label>
-                  <input type="text" matInput placeholder="First name" formControlName="firstName">
+                  <input type="text" matInput placeholder="First name" formControlName="firstName" autocomplete="given-name">
                 </mat-form-field>
                 <!-- Last name -->
                 <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
                   <mat-label>Last name</mat-label>
-                  <input type="text" matInput placeholder="Last name" formControlName="lastName">
+                  <input type="text" matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
                 </mat-form-field>
                 <!-- Email -->
                 <mat-form-field class="col-12" appearance="outline">
                   <mat-label>Email</mat-label>
-                  <input type="email" matInput placeholder="Email" formControlName="email">
+                  <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
                 </mat-form-field>
                 <!-- Password -->
                 <mat-form-field class="col-12" appearance="outline">
                   <mat-label>Password</mat-label>
-                  <input type="password" matInput placeholder="Password" formControlName="password" (focus)="togglePassReq('password')" (focusout)="togglePassReq('')">
+                  <input type="password" matInput placeholder="Password" formControlName="password" (focus)="togglePassReq('password')" (focusout)="togglePassReq('')" autocomplete="new-password">
                 </mat-form-field>
                 <!-- Confirm Password -->
                 <mat-form-field class="col-12" appearance="outline">
                   <mat-label>Confirm Password</mat-label>
-                  <input type="password" matInput placeholder="Confirm Password" formControlName="confirmPassword" (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')">
+                  <input type="password" matInput placeholder="Confirm Password" formControlName="confirmPassword" (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')" autocomplete="new-password">
                 </mat-form-field>
                 <!-- Terms and conditions -->
                 <div class="col-12">
