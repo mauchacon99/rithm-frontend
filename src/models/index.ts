@@ -1,3 +1,4 @@
+export * from './enums';
 export * from './dialog-data';
 export * from './global-permission';
 export * from './group';
