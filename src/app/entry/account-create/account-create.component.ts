@@ -119,7 +119,7 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
       .pipe(first())
       .subscribe((test) => {
         this.isLoading = false;
-        // RIT-174
+        this.openValidateEmailModal();
         console.log(test);
       }, (error) => {
         this.errorService.displayError(
@@ -144,6 +144,19 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     this.popupService.confirm(data).then((result) => {
       this.signUpForm.get('agreeToTerms')?.setValue(result);
     });
+  }
+
+  /**
+   * Open the terms and conditions modal.
+   */
+  openValidateEmailModal(): void {
+    const data = {
+      title: 'Validate your email address',
+      message: 'Please check your email and validate your Rithm account.',
+      okButtonText: 'Okay'
+    };
+
+    this.popupService.alert(data);
   }
 
 }
