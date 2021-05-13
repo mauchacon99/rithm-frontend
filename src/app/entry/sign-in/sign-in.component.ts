@@ -1,11 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
+import { EmailLinkParams } from 'src/helpers';
+import { EmailLinkType } from 'src/models';
 
 /**
  * Component for signing into the system.
@@ -15,7 +17,7 @@ import { UserService } from 'src/app/core/user.service';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
   /** Whether the user entered invalid credentials. */
   invalidCredentials = false;
 
@@ -30,12 +32,51 @@ export class SignInComponent {
     private popupService: PopupService,
     private userService: UserService,
     private errorService: ErrorService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+  }
+
+  /**
+   * Checks for query params and makes necessary request if present.
+   */
+  ngOnInit(): void {
+
+    this.route.queryParamMap
+      .pipe(first())
+      .subscribe((params) => {
+        const emailLinkParams = new EmailLinkParams(params);
+
+        if (!emailLinkParams.valid) {
+          this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
+        }
+
+        if (emailLinkParams.type === EmailLinkType.register) {
+          // TODO: RIT-176
+        } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
+          // TODO: make forgot password service call
+        }
+
+      }, (error) => {
+        this.showInvalidLinkMessage(error);
+      });
+  }
+
+  /**
+   * Displays a message to the user that the link was invalid.
+   *
+   * @param error The error that was encountered (this is not displayed to the user).
+   */
+  private showInvalidLinkMessage(error: Error): void {
+    this.errorService.displayError(
+      'The link you followed was invalid. Please double check the link in your email and try again.',
+      error,
+      true
+    );
   }
 
   /**

@@ -117,10 +117,9 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     const formValues = this.signUpForm.value;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
-      .subscribe((test) => {
+      .subscribe(() => {
         this.isLoading = false;
         // RIT-174
-        console.log(test);
       }, (error) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
