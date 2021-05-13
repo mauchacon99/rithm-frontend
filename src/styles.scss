@@ -3,7 +3,6 @@
 // Plus imports for other components in your app.
 
 // Import all helpers
-@use '~@angular/material' as mat;
 @import './scss/helpers/index';
 
 /// Import Tools from tools file
@@ -12,6 +11,8 @@
 
 // Rithm light Theme
 @import './scss/themes/index';
+
+@use '~@angular/material' as mat;
 
 // Material Core
 @include mat.core($custom-typography);

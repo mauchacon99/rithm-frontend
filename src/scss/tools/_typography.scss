@@ -1,7 +1,8 @@
 /// Set global styles across the application
 
-@use '~@angular/material' as mat;
 @import '../helpers/functions';
+
+@use '~@angular/material' as mat;
 
 $custom-typography: mat.define-typography-config(
   $font-family: 'Montserrat, Open Sans, Helvetica',
