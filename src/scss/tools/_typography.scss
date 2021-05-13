@@ -1,12 +1,12 @@
 /// Set global styles across the application
 
+@use '~@angular/material' as mat;
 @import '../helpers/functions';
-@import '~@angular/material/theming';
 
-$custom-typography: mat-typography-config(
+$custom-typography: mat.define-typography-config(
   $font-family: 'Montserrat, Open Sans, Helvetica',
-  $headline: mat-typography-level(24px, 36px, 300),
-  $body-1: mat-typography-level(16px, 24px, 400)
+  $headline: mat.define-typography-level(24px, 36px, 300),
+  $body-1: mat.define-typography-level(16px, 24px, 400)
 );
 
 /// Montserrat Thin 100
