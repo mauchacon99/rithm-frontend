@@ -6,13 +6,16 @@
 @use '~@angular/material' as mat;
 
 // Import all helpers
+/* stylelint-disable-next-line */
 @import './scss/helpers/index';
 
 /// Import Tools from tools file
 /// Contains global styles for buttons, forms and typography
+/* stylelint-disable-next-line */
 @import './scss/tools/index';
 
 // Rithm light Theme
+/* stylelint-disable-next-line */
 @import './scss/themes/index';
 
 // Material Core
