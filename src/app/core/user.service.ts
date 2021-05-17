@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -129,6 +129,23 @@ export class UserService {
       guid,
       email
     });
+  }
+
+  /**
+   * Attempts to send an email to the user to allow them to reset their password.
+   *
+   * @param email The email address associated with the user account.
+   * @returns An empty observable.
+   */
+   sendPasswordResetEmail(email: string): Observable<void> {
+    if (email.includes('error')) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      }));
+    }
+    return of();
   }
 
 }
