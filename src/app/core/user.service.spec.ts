@@ -186,4 +186,23 @@ describe('UserService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  xit('should reset password successfully', () => {
+    const guid = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    const email = 'test@email.com';
+    const password = 'mamamia';
+
+    service.resetPassword(guid, email, password)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/resetpassword`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ guid, email, password });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
 });
