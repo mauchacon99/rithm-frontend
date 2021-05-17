@@ -61,7 +61,7 @@ describe('UserService', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email, password });
 
-    req.flush({ data: expectedResponse });
+    req.flush(expectedResponse);
     httpTestingController.verify();
   });
 
@@ -128,7 +128,7 @@ describe('UserService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
 
-    req.flush({ data: expectedResponse }); // TODO: Update typing once API response is changed (227)
+    req.flush(expectedResponse);
     httpTestingController.verify();
   });
 
