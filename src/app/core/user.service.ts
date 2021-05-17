@@ -89,13 +89,11 @@ export class UserService {
    * @returns The new access token.
    */
   refreshToken(): Observable<TokenResponse> {
-    // TODO: Update typing once API response is changed (227)
-    // eslint-disable-next-line
-    return this.http.get<{ data: TokenResponse }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
+    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
       { withCredentials: true }).pipe(
         map((tokenResponse) => {
-          this.accessToken = new AccessToken(tokenResponse.data.accessToken);
-          return tokenResponse.data;
+          this.accessToken = new AccessToken(tokenResponse.accessToken);
+          return tokenResponse;
         })
       );
   }
