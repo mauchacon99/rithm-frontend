@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogData } from 'src/models';
 import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
