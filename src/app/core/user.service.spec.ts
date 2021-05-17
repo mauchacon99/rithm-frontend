@@ -151,4 +151,39 @@ describe('UserService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should validate an email successfully', () => {
+    const guid = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    const email = 'test@email.com';
+
+    service.validateEmail(guid, email)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/validateemail`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ guid, email });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  xit('should make request to send password reset email successfully', () => {
+    const email = 'test@email.com';
+
+    service.sendPasswordResetEmail(email)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/forgotpassword`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ email });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
 });
