@@ -60,23 +60,3 @@ jobs:
 
     - name: Running all unit and integration tests
       run: npm run test-ci
-
-  # Checks that the compiled Angular app conforms to W3 standards
-  test-coverage:
-    runs-on: [self-hosted, Windows]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Installing dependencies
-      run: npm ci
-
-    - name: Generating test coverage
-      run: npm run test-ci
-
-    - name: Deploying documentation site
-      run: |
-        iisreset /stop
-        Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
-        iisreset /start
-
