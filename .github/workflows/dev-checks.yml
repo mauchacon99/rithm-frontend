@@ -62,15 +62,21 @@ jobs:
       run: npm run test-ci
 
   # Checks that the compiled Angular app conforms to W3 standards
-  # w3-conformance:
-  #   runs-on: ubuntu-latest
-  #   needs: build
+  test-coverage:
+    runs-on: [self-hosted, Windows]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-    # TODO: Add additional steps for W3 conformance
+    - name: Generating test coverage
+      run: npm run test-ci
+
+    - name: Deploying documentation site
+      run: |
+        iisreset /stop
+        Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
+        iisreset /start
 
