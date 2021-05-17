@@ -41,9 +41,7 @@
   background: #fff;
   min-height: 576px;
 
-  /* stylelint-disable */
   mat-card-subtitle {
-  /* stylelint-enable */
     color: #000;
     font-weight: 300;
   }
@@ -84,9 +82,8 @@
     max-width: 100%;
     position: absolute;
     top: 0;
-    /* stylelint-disable */
+
     div mat-card div.right-entry {
-      /* stylelint-enable */
       min-height: calc(100vh - 84.61px);
     }
   }
@@ -102,9 +99,8 @@
 
   .right-entry {
     border-radius: 0;
-    /* stylelint-disable */
+
     mat-card-footer {
-      /* stylelint-enable */
       position: absolute;
       bottom: 20px;
       width: 100%;
