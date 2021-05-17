@@ -37,7 +37,7 @@ import { trigger,style,animate,transition } from '@angular/animations';
 export class NotificationCardComponent {
 
   /** Trigger the event to dismiss a notification. */
-  @Output() public dismissEvent: EventEmitter<any> = new EventEmitter();
+  @Output() public dismissEvent: EventEmitter<unknown> = new EventEmitter();
 
   /** The title for the notification. */
   @Input() title = 'Steven Rogers tagged you in a comment';
