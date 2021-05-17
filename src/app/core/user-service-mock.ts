@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -13,6 +13,13 @@ export class MockUserService {
   /** The access token to be used to authenticate for every request. */
   accessToken = new AccessToken('tokentokentokentokentoken');
 
+  /**
+   * Signs the user in to the system.
+   *
+   * @param email The email address for the user.
+   * @param password The entered password for the user.
+   * @returns The user and access/refresh tokens.
+   */
   signIn(email: string, password: string): Observable<SignInResponse> {
     let response;
 
