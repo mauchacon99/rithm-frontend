@@ -16,8 +16,7 @@ const MICROSERVICE_PATH = '/userservice';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService { // test change
-
+export class UserService {
 
   constructor(
     private http: HttpClient,
