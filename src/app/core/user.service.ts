@@ -156,6 +156,7 @@ export class UserService {
    * @param newPassword The new password to be set.
    * @returns An empty observable.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resetPassword(guid: string, email: string, newPassword: string): Observable<void> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
