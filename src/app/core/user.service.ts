@@ -37,16 +37,14 @@ export class UserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    // TODO: Update typing once API response is changed (227)
-    // eslint-disable-next-line
-    return this.http.post<{ data: SignInResponse }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
+    return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
       email,
       password
     }, { withCredentials: true }).pipe(
       map((response) => {
-        this.accessToken = new AccessToken(response.data.accessToken);
-        this.user = response.data.user;
-        return response.data;
+        this.accessToken = new AccessToken(response.accessToken);
+        this.user = response.user;
+        return response;
       })
     );
   }
@@ -91,13 +89,11 @@ export class UserService {
    * @returns The new access token.
    */
   refreshToken(): Observable<TokenResponse> {
-    // TODO: Update typing once API response is changed (227)
-    // eslint-disable-next-line
-    return this.http.get<{ data: TokenResponse }>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
+    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
       { withCredentials: true }).pipe(
         map((tokenResponse) => {
-          this.accessToken = new AccessToken(tokenResponse.data.accessToken);
-          return tokenResponse.data;
+          this.accessToken = new AccessToken(tokenResponse.accessToken);
+          return tokenResponse;
         })
       );
   }

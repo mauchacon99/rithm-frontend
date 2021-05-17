@@ -120,11 +120,14 @@ export class SignInComponent implements OnInit {
    * @param email The email address for the user.
    */
   private validateEmail(guid: string, email: string): void {
+    this.isLoading = true;
     this.userService.validateEmail(guid, email)
       .pipe(first())
       .subscribe(() => {
+        this.isLoading = false;
         this.popupService.notify('Email successfully verified');
       }, (error) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we were unable to validate your email address. ' +
           'We\'ve made note of this. Please try again in a little while.',
