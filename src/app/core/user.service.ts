@@ -148,4 +148,14 @@ export class UserService {
     return of();
   }
 
+  resetPassword(guid: string, email: string, newPassword: string): Observable<void> {
+    if (email.includes('error')) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      }));
+    }
+    return of();
+  }
 }
