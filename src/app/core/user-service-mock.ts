@@ -114,6 +114,14 @@ export class MockUserService {
     return of();
   }
 
+  /**
+   * Attempts to reset the user's password.
+   *
+   * @param guid The identifier used to validate the password reset.
+   * @param email The email address associated with the user.
+   * @param newPassword The new password to be set.
+   * @returns An empty observable.
+   */
   resetPassword(guid: string, email: string, newPassword: string): Observable<void> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
