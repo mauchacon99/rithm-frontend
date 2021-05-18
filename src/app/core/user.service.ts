@@ -150,7 +150,6 @@ export class UserService {
    * @param password The new password to be set.
    * @returns An empty observable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resetPassword(guid: string, email: string, password: string): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/resetpassword`,
       {
