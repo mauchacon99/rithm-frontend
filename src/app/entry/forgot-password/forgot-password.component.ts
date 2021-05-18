@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 
 /**
@@ -22,7 +24,9 @@ export class ForgotPasswordComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.forgotPassForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -39,6 +43,7 @@ export class ForgotPasswordComponent {
       .subscribe(() => {
         this.isLoading = false;
         // TODO: RIT-283
+        this.openAlert();
       }, (error) => {
         this.isLoading = false;
         this.errorService.displayError(
@@ -47,6 +52,21 @@ export class ForgotPasswordComponent {
           true
         );
       });
+  }
+
+  /**
+   * Open the alert that tells user to check email.
+   */
+  openAlert(): void {
+    const data = {
+      title: 'Check your email',
+      message: `Please check your email for instructions on how to reset your password.
+      If you don't receive an email within 10 minutes please try again.`
+    };
+
+    this.popupService.alert(data).then(() => {
+      this.router.navigate(['']);
+    });
   }
 
 }
