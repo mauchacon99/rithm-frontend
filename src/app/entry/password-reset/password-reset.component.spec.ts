@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockUserService } from 'src/app/core/user-service-mock';
+import { UserService } from 'src/app/core/user.service';
 
 import { PasswordResetComponent } from './password-reset.component';
 
@@ -11,7 +16,13 @@ describe('PasswordResetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ PasswordResetComponent ],
       imports: [
-        ReactiveFormsModule
+        RouterTestingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+      ],
+      providers: [
+        { provide: UserService, useClass: MockUserService }
       ]
     })
     .compileComponents();

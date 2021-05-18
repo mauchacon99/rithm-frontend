@@ -12,7 +12,7 @@ const NO_AUTH_ROUTES = [
   '/refreshtoken',
   '/validateemail',
   '/forgotpassword',
-  '/resetPassword' // TODO: Update with actual path
+  '/resetpassword'
 ];
 
 /**
