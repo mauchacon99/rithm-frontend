@@ -138,14 +138,8 @@ export class UserService {
    * @returns An empty observable.
    */
    sendPasswordResetEmail(email: string): Observable<unknown> {
-    if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
-    }
-    return of().pipe(delay(1000));
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/forgotpassword`,
+    { email });
   }
 
   /**

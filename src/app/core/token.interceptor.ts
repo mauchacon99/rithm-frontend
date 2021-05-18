@@ -11,7 +11,7 @@ const NO_AUTH_ROUTES = [
   '/login',
   '/refreshtoken',
   '/validateemail',
-  '/forgotPassword', // TODO: Update with actual path
+  '/forgotpassword',
   '/resetPassword' // TODO: Update with actual path
 ];
 
