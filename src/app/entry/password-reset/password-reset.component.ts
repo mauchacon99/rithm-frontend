@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -27,7 +30,9 @@ export class PasswordResetComponent {
   errorsToGet = '';
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService,
+    private errorService: ErrorService
   ) {
     this.passwordReq = new PasswordRequirements();
     this.passResetForm = this.fb.group({
@@ -66,5 +71,22 @@ export class PasswordResetComponent {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
+  }
+
+  /**
+   * Attempts to reset the password for the user.
+   */
+  resetPassword(): void {
+    this.userService.resetPassword('kjdf', 'kjdkf', this.passResetForm.value.password)
+    .pipe(first())
+    .subscribe(() => {
+      // TODO: RIT-279
+    }, (error) => {
+      this.errorService.displayError(
+        'Something went wrong and we were unable to reset your password. Please try again in a little while.',
+        error,
+        true
+      );
+    });
   }
 }
