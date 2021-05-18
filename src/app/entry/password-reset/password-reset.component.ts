@@ -36,6 +36,9 @@ export class PasswordResetComponent implements OnInit {
   /** What errors to get from validator. */
   errorsToGet = '';
 
+  /** Show loading indicator while request is being made. */
+  isLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -74,12 +77,15 @@ export class PasswordResetComponent implements OnInit {
    * Checks for necessary query params.
    */
   ngOnInit(): void {
+    this.isLoading = true;
     this.route.queryParamMap
       .pipe(first())
       .subscribe((params) => {
+        this.isLoading = false;
         this.email = params.get('email') as string;
         this.guid = params.get('guid') as string;
       }, (error) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'The link you followed was invalid. Please double check the link in your email and try again.',
           error,
@@ -103,11 +109,14 @@ export class PasswordResetComponent implements OnInit {
    * Attempts to reset the password for the user.
    */
   resetPassword(): void {
+    this.isLoading = true;
     this.userService.resetPassword(this.guid, this.email, this.passResetForm.value.password)
     .pipe(first())
     .subscribe(() => {
+      this.isLoading = false;
       // TODO: RIT-279
     }, (error) => {
+      this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong and we were unable to reset your password. Please try again in a little while.',
         error,
