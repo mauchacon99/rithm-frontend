@@ -59,7 +59,7 @@ export class ForgotPasswordComponent {
    */
   openAlert(): void {
     const data = {
-      title: 'Check your email',
+      title: 'Request Sent',
       message: `Please check your email for instructions on how to reset your password.
       If you don't receive an email within 10 minutes please try again.`
     };
