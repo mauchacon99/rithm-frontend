@@ -17,6 +17,15 @@ export class PasswordResetComponent {
   /** Password reset form. */
   passResetForm: FormGroup;
 
+  /** Are password requirements visible. */
+  passReqVisible = false;
+
+  /** Show passwords match validation in child component. */
+  showMatch = false;
+
+  /** What errors to get from validator. */
+  errorsToGet = '';
+
   constructor(
     private fb: FormBuilder
   ) {
@@ -41,9 +50,21 @@ export class PasswordResetComponent {
           this.passwordReq.hasOneLowerCaseChar(),
           this.passwordReq.hasOneUpperCaseChar(),
           this.passwordReq.hasOneDigitChar(),
-          this.passwordReq.hasOneSpecialChar()
+          this.passwordReq.hasOneSpecialChar(),
+          this.passwordReq.passwordsMatch()
         ]
       ]
     });
+  }
+
+  /**
+   * Toggle visibility of password requirements.
+   *
+   * @param errorsFieldToCheck What field to get errors for child component.
+   */
+  togglePassReq(errorsFieldToCheck: string): void {
+    this.errorsToGet = errorsFieldToCheck;
+    this.passReqVisible = !this.passReqVisible;
+    this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 }
