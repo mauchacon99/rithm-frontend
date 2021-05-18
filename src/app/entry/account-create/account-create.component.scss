@@ -35,8 +35,10 @@
 /* stylelint-enable */
   white-space: normal !important;
 }
-/* stylelint-disable */
-:host::ng-deep.mat-checkbox-inner-container {
-/* stylelint-enable */
-  margin-top: 4px;
+
+/* stylelint-disable-next-line */
+@media screen and (max-width: 1201px) {
+  #terms {
+    line-height: 30px;
+  }
 }
