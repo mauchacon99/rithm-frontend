@@ -30,7 +30,7 @@ export class ForgotPasswordComponent {
    * Send email to the address entered by user.
    */
   sendEmail(): void {
-    this.userService.sendPasswordResetEmail('someemail@email.com')
+    this.userService.sendPasswordResetEmail(this.forgotPassForm.value.email)
       .pipe(first())
       .subscribe(() => {
         // TODO: RIT-283

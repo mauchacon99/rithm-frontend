@@ -170,7 +170,7 @@ describe('UserService', () => {
     httpTestingController.verify();
   });
 
-  xit('should make request to send password reset email successfully', () => {
+  it('should make request to send password reset email successfully', () => {
     const email = 'test@email.com';
 
     service.sendPasswordResetEmail(email)
