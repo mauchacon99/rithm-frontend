@@ -125,10 +125,10 @@ export class UserService {
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/validateemail`,
-    {
-      guid,
-      email
-    });
+      {
+        guid,
+        email
+      });
   }
 
   /**
@@ -137,9 +137,9 @@ export class UserService {
    * @param email The email address associated with the user account.
    * @returns An empty observable.
    */
-   sendPasswordResetEmail(email: string): Observable<unknown> {
+  sendPasswordResetEmail(email: string): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/forgotpassword`,
-    { email });
+      { email });
   }
 
   /**
@@ -147,18 +147,15 @@ export class UserService {
    *
    * @param guid The identifier used to validate the password reset.
    * @param email The email address associated with the user.
-   * @param newPassword The new password to be set.
+   * @param password The new password to be set.
    * @returns An empty observable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resetPassword(guid: string, email: string, newPassword: string): Observable<unknown> {
-    if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
-    }
-    return of().pipe(delay(1000));
+  resetPassword(guid: string, email: string, password: string): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/resetpassword`,
+      {
+        guid,
+        email,
+        password
+      });
   }
 }
