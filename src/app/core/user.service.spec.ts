@@ -187,7 +187,7 @@ describe('UserService', () => {
     httpTestingController.verify();
   });
 
-  xit('should reset password successfully', () => {
+  it('should reset password successfully', () => {
     const guid = 'kdjfkd-kjdkfjd-jkjdfkdjk';
     const email = 'test@email.com';
     const password = 'mamamia';
