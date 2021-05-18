@@ -59,6 +59,7 @@ export class SignInComponent implements OnInit {
           } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
             this.router.navigate(['password-reset'], {
               queryParams: {
+                type: emailLinkParams.type,
                 guid: emailLinkParams.guid,
                 email: emailLinkParams.email
               }
