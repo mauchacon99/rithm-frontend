@@ -1,5 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockUserService } from 'src/app/core/user-service-mock';
+import { UserService } from 'src/app/core/user.service';
 
 import { ForgotPasswordComponent } from './forgot-password.component';
 
@@ -11,7 +17,14 @@ describe('ForgotPasswordComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ForgotPasswordComponent ],
       imports: [
-        ReactiveFormsModule
+        RouterTestingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule
+      ],
+      providers: [
+        { provide: UserService, useClass: MockUserService }
       ]
     })
     .compileComponents();
