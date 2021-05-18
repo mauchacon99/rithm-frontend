@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, of, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse, User } from 'src/models';
@@ -107,7 +107,7 @@ export class UserService {
    * @param password The password set for the new user.
    * @returns An empty observable.
    */
-  register(firstName: string, lastName: string, email: string, password: string): Observable<void> {
+  register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/register`, {
       firstName,
       lastName,
@@ -123,7 +123,7 @@ export class UserService {
    * @param email The email address to verify.
    * @returns An empty observable.
    */
-  validateEmail(guid: string, email: string): Observable<void> {
+  validateEmail(guid: string, email: string): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/validateemail`,
     {
       guid,
@@ -137,15 +137,15 @@ export class UserService {
    * @param email The email address associated with the user account.
    * @returns An empty observable.
    */
-   sendPasswordResetEmail(email: string): Observable<void> {
+   sendPasswordResetEmail(email: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
-      }));
+      })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 
   /**
@@ -157,14 +157,14 @@ export class UserService {
    * @returns An empty observable.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resetPassword(guid: string, email: string, newPassword: string): Observable<void> {
+  resetPassword(guid: string, email: string, newPassword: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
-      }));
+      })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 }

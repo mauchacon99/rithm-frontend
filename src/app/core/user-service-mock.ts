@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse } from 'src/models';
 
@@ -68,7 +68,7 @@ export class MockUserService {
    * @param password The password set for the new user.
    * @returns An empty observable.
    */
-  register(firstName: string, lastName: string, email: string, password: string): Observable<void> {
+  register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -76,7 +76,7 @@ export class MockUserService {
         }
       })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 
   /**
@@ -86,15 +86,15 @@ export class MockUserService {
    * @param email The email address to verify.
    * @returns An empty observable.
    */
-  validateEmail(guid: string, email: string): Observable<void> {
+  validateEmail(guid: string, email: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
-      }));
+      })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 
   /**
@@ -103,15 +103,15 @@ export class MockUserService {
    * @param email The email address associated with the user account.
    * @returns An empty observable.
    */
-  sendPasswordResetEmail(email: string): Observable<void> {
+  sendPasswordResetEmail(email: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
-      }));
+      })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 
   /**
@@ -122,14 +122,14 @@ export class MockUserService {
    * @param newPassword The new password to be set.
    * @returns An empty observable.
    */
-  resetPassword(guid: string, email: string, newPassword: string): Observable<void> {
+  resetPassword(guid: string, email: string, newPassword: string): Observable<unknown> {
     if (email.includes('error')) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
-      }));
+      })).pipe(delay(1000));
     }
-    return of();
+    return of().pipe(delay(1000));
   }
 }
