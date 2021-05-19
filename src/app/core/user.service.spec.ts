@@ -45,6 +45,7 @@ describe('UserService', () => {
     const password = 'password1234';
     const expectedResponse: SignInResponse = {
       accessToken: 'kj343kh2o3ih23ih423',
+      refreshTokenGuid: 'ab5d4-ae56g',
       user: testUser
     };
 
