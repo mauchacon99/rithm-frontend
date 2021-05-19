@@ -17,6 +17,13 @@ describe('EmailLinkParams', () => {
     expect(new EmailLinkParams(paramMap)).toBeTruthy();
   });
 
+  it('should report invalid params when type is missing', () => {
+    delete params.type;
+    const paramMap = convertToParamMap(params);
+    const emailLinkParams = new EmailLinkParams(paramMap);
+    expect(emailLinkParams.valid).toBeFalse();
+  });
+
   it('should report invalid params when email is missing', () => {
     delete params.email;
     const paramMap = convertToParamMap(params);
@@ -41,12 +48,6 @@ describe('EmailLinkParams', () => {
 
   it('should report valid params when all params are present', () => {
     const paramMap = convertToParamMap(params);
-    const emailLinkParams = new EmailLinkParams(paramMap);
-    expect(emailLinkParams.valid).toBeTrue();
-  });
-
-  it('should report valid params when no params are present', () => {
-    const paramMap = convertToParamMap({});
     const emailLinkParams = new EmailLinkParams(paramMap);
     expect(emailLinkParams.valid).toBeTrue();
   });

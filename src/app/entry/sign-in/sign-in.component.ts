@@ -51,7 +51,7 @@ export class SignInComponent implements OnInit {
       .subscribe((params) => {
         const emailLinkParams = new EmailLinkParams(params);
 
-        if (!emailLinkParams.valid) {
+        if (emailLinkParams.type && !emailLinkParams.valid) {
           this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
         } else {
           if (emailLinkParams.type === EmailLinkType.register) {
@@ -59,6 +59,7 @@ export class SignInComponent implements OnInit {
           } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
             this.router.navigate(['password-reset'], {
               queryParams: {
+                type: emailLinkParams.type,
                 guid: emailLinkParams.guid,
                 email: emailLinkParams.email
               }

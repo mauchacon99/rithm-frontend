@@ -29,20 +29,21 @@ describe('AuthGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should navigate back to login if not signed in', () => {
-    // test here
+  xit('should navigate back to login if not signed in', () => {
+    // TODO: Test navigation
   });
 
-  it('should display an alert if not signed in', () => {
-  //   service.canActivate();
+  xit('should display an alert if not signed in', () => {
+    // TODO: Test display of alert
   });
 
-  it('should not allow navigation if not signed in', () => {
-  //   expect(service.canActivate()).toBeFalse();
+  xit('should not allow navigation if not signed in', () => {
+    // TODO: Test allowance of navigation
+    //   expect(service.canActivate()).toBeFalse();
   });
 
-  // TODO: Test allowance of navigation
-  it('should allow navigation if signed in', () => {
-  //   expect(service.canActivate()).toBeFalse();
+  xit('should allow navigation if signed in', () => {
+    // TODO: Test allowance of navigation
+    //   expect(service.canActivate()).toBeFalse();
   });
 });
