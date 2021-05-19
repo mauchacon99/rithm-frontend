@@ -1,6 +1,8 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TokenInterceptor } from './token.interceptor';
@@ -15,7 +17,9 @@ describe('TokenInterceptor', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        MatDialogModule,
+        MatSnackBarModule
       ],
       providers: [
         TokenInterceptor,
