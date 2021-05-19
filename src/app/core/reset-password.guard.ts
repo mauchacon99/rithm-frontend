@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { EmailLinkParams } from 'src/helpers';
 import { EmailLinkType } from 'src/models';
 
@@ -11,6 +11,10 @@ import { EmailLinkType } from 'src/models';
 })
 export class ResetPasswordGuard implements CanActivate {
 
+  constructor(
+    private router: Router
+  ) { }
+
   /**
    * Determines if the path has valid query params and can perform the attempted routing action.
    *
@@ -21,7 +25,13 @@ export class ResetPasswordGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
   ): boolean {
     const linkParams = new EmailLinkParams(route.queryParamMap);
-    return linkParams.valid && linkParams.type === EmailLinkType.register;
+    const allowNavigation = linkParams.valid && linkParams.type === EmailLinkType.register;
+
+    if (!allowNavigation) {
+      this.router.navigateByUrl('');
+    }
+
+    return allowNavigation;
   }
 
 }
