@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -44,6 +44,7 @@ export class UserService {
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
         this.user = response.user;
+        localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
         return response;
       })
     );
@@ -89,8 +90,17 @@ export class UserService {
    * @returns The new access token.
    */
   refreshToken(): Observable<TokenResponse> {
+    const refreshTokenGuid = localStorage.getItem('refreshTokenGuid');
+
+    if (!refreshTokenGuid) {
+      this.signOut();
+      return throwError('Unable to refresh token without GUID');
+    }
+
+    const params = new HttpParams().set('refreshTokenGuid', refreshTokenGuid);
+
     return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
-      { withCredentials: true }).pipe(
+      { withCredentials: true, params }).pipe(
         map((tokenResponse) => {
           this.accessToken = new AccessToken(tokenResponse.accessToken);
           return tokenResponse;
