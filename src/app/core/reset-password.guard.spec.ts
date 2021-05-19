@@ -18,4 +18,16 @@ describe('ResetPasswordGuard', () => {
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
+
+  xit('should navigate back to sign in if params are invalid', () => {
+    expect(guard).toBeTruthy();
+  });
+
+  xit('should navigate back to sign in if params are valid, but type is not register', () => {
+    expect(guard).toBeTruthy();
+  });
+
+  xit('should allow navigation if params are valid and type is register', () => {
+    expect(guard).toBeTruthy();
+  });
 });
