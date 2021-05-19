@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { EmailLinkParams } from 'src/helpers';
+import { EmailLinkType } from 'src/models';
 
 /**
  * Guard for preventing a user from accessing password reset if query params are not valid.
@@ -20,7 +21,7 @@ export class ResetPasswordGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
   ): boolean {
     const linkParams = new EmailLinkParams(route.queryParamMap);
-    return linkParams.valid;
+    return linkParams.valid && linkParams.type === EmailLinkType.register;
   }
 
 }
