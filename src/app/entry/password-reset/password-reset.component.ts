@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
@@ -43,7 +44,9 @@ export class PasswordResetComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private errorService: ErrorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.passwordReq = new PasswordRequirements();
     this.passResetForm = this.fb.group({
@@ -114,7 +117,7 @@ export class PasswordResetComponent implements OnInit {
     .pipe(first())
     .subscribe(() => {
       this.isLoading = false;
-      // TODO: RIT-279
+      this.openAlert();
     }, (error) => {
       this.isLoading = false;
       this.errorService.displayError(
@@ -122,6 +125,21 @@ export class PasswordResetComponent implements OnInit {
         error,
         true
       );
+    });
+  }
+
+  /**
+   * Open the alert that tells user to check email.
+   */
+   openAlert(): void {
+    const data = {
+      title: 'Success',
+      message: `Your password has been reset. Please sign in with your new password.`,
+      okButtonText: 'Sign In'
+    };
+
+    this.popupService.alert(data).then(() => {
+      this.router.navigate(['']);
     });
   }
 }
