@@ -28,8 +28,8 @@ export class AuthGuard implements CanActivate {
     } else {
       this.userService.signOut();
       this.popupService.alert({
-        title: 'Action Not Permitted',
-        message: 'You need to sign in before you can view that page.'
+        title: 'Session Expired',
+        message: 'You\'ll need to sign in again before you can view that page.'
       });
       return false;
     }
