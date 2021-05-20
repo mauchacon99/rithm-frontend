@@ -134,8 +134,7 @@ export class PasswordResetComponent implements OnInit {
    openAlert(): void {
     const data = {
       title: 'Success',
-      message: `Your password has been reset. Please sign in with your new password.`,
-      okButtonText: 'Sign In'
+      message: `Your password has been reset. Please sign in with your new password.`
     };
 
     this.popupService.alert(data).then(() => {
