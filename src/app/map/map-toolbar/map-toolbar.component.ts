@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
+/**
+ * Component for managing the toolbar on the map.
+ */
 @Component({
   selector: 'app-map-toolbar',
   templateUrl: './map-toolbar.component.html',
   styleUrls: ['./map-toolbar.component.scss']
 })
-export class MapToolbarComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class MapToolbarComponent {
 
 }
