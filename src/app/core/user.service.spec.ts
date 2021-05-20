@@ -45,6 +45,7 @@ describe('UserService', () => {
     const password = 'password1234';
     const expectedResponse: SignInResponse = {
       accessToken: 'kj343kh2o3ih23ih423',
+      refreshTokenGuid: 'ab5d4-ae56g',
       user: testUser
     };
 
@@ -116,6 +117,8 @@ describe('UserService', () => {
       accessToken: 'kj343kh2o3ih23ih423'
     };
 
+    localStorage.setItem('refreshTokenGuid', 'thisisaguid');
+
     service.refreshToken()
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
@@ -124,9 +127,10 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/refreshtoken`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/refreshtoken?refreshTokenGuid=thisisaguid`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
+    expect(req.request.params).toBeTruthy();
 
     req.flush(expectedResponse);
     httpTestingController.verify();

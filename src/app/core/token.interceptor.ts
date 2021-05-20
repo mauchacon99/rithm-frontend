@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
+import { PopupService } from './popup.service';
 
 /** API routes that don't require an access token. */
 const NO_AUTH_ROUTES = [
@@ -21,7 +22,10 @@ const NO_AUTH_ROUTES = [
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private popupService: PopupService
+  ) { }
 
   /**
    * Intercepts HTTP requests and provides the access token in the header.
@@ -41,6 +45,10 @@ export class TokenInterceptor implements HttpInterceptor {
 
           if (!signedIn) {
             this.userService.signOut();
+            this.popupService.alert({
+              title: 'Session Expired',
+              message: 'Your session has expired. Please sign in again to complete that action.'
+            });
             return EMPTY;
           } else {
 

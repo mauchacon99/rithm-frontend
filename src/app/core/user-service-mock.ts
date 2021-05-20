@@ -43,6 +43,7 @@ export class MockUserService {
     } else {
       return of({
         accessToken: 'wowowowo',
+        refreshTokenGuid: 'ab5d4-ae56g',
         user: undefined
       }).pipe(delay(1000));
     }

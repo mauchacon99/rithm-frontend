@@ -6,8 +6,8 @@ import { User } from './user';
  */
 export interface SignInResponse extends TokenResponse {
 
-  /** The refresh token used for getting future access tokens. */
-  // refreshToken: string;
+  /** The GUID refresh token used for getting future access tokens (in addition to the cookie refresh token). */
+  refreshTokenGuid: string;
 
   /** The object for the newly-signed in user. */
   user?: User;
