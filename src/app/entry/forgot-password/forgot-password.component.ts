@@ -61,7 +61,8 @@ export class ForgotPasswordComponent {
     const data = {
       title: 'Request Sent',
       message: `Please check your email for instructions on how to reset your password.
-      If you don't receive an email within 10 minutes please try again.`
+      If you don't receive an email within 10 minutes, please double check that your entered
+      email is correct and try again.`
     };
 
     this.popupService.alert(data).then(() => {
