@@ -25,7 +25,7 @@ export class ResetPasswordGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
   ): boolean {
     const linkParams = new EmailLinkParams(route.queryParamMap);
-    const allowNavigation = linkParams.valid && linkParams.type === EmailLinkType.register;
+    const allowNavigation = linkParams.valid && linkParams.type === EmailLinkType.forgotPassword;
 
     if (!allowNavigation) {
       this.router.navigateByUrl('');
