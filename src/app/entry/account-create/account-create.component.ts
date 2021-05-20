@@ -165,8 +165,7 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
   openValidateEmailModal(): void {
     const data: DialogData = {
       title: 'Validate your email address',
-      message: 'Please check your email and validate your Rithm account.',
-      okButtonText: 'Okay'
+      message: 'Please check your email and validate your Rithm account.'
     };
 
     this.popupService.alert(data).then(() => {
