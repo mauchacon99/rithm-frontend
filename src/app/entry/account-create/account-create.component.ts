@@ -7,6 +7,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DialogData } from 'src/models';
 
 /**
  * Component used for creating an account.
@@ -162,7 +163,7 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
    * Open the alert to validate their email address.
    */
   openValidateEmailModal(): void {
-    const data = {
+    const data: DialogData = {
       title: 'Validate your email address',
       message: 'Please check your email and validate your Rithm account.',
       okButtonText: 'Okay'
