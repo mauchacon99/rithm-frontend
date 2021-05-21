@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PasswordRequirementsComponent } from './password-requirements/password-requirements.component';
 import { NotificationToastsContainerComponent } from './notification-toasts-container/notification-toasts-container.component';
 import { TopNavComponent } from './top-nav/top-nav.component';
+import { RosterComponent } from './roster/roster.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { TopNavComponent } from './top-nav/top-nav.component';
     NotificationCardComponent,
     PasswordRequirementsComponent,
     NotificationToastsContainerComponent,
-    TopNavComponent
+    TopNavComponent,
+    RosterComponent
   ],
   imports: [
     CommonModule,
