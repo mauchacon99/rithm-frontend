@@ -1,1 +1,11 @@
-<p>top-nav works!</p>
+<nav>
+  <div class="logo">
+    <img src="../../../assets/logo/white-icon-white-text.svg" alt="Rithm">
+  </div>
+  <ul>
+    <!-- TODO: add class 'active' if current page === navigation item -->
+    <li *ngFor="let navItem of navItems">
+      {{navItem}}
+    </li>
+  </ul>
+</nav>

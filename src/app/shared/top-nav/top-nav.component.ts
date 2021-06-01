@@ -10,4 +10,6 @@ import { Component } from '@angular/core';
 })
 export class TopNavComponent {
 
+  navItems = ['Dashboard', 'Map'];
+
 }
