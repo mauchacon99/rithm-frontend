@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { EntryModule } from './entry/entry.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MapModule } from './map/map.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MapModule } from './map/map.module';
     CoreModule,
     DashboardModule,
     EntryModule,
-    MapModule
+    MapModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
