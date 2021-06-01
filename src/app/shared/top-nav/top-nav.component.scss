@@ -14,6 +14,11 @@ nav {
 
   .logo {
     padding: 0 30px;
+    /* stylelint-disable-next-line */
+    @media screen and (max-width: 767px) {
+      flex: 1;
+      text-align: center;
+    }
 
     &:hover {
       cursor: pointer;
@@ -56,6 +61,10 @@ nav {
   button {
     width: 40px;
     text-align: center;
+    /* stylelint-disable-next-line */
+    @media screen and (max-width: 767px) {
+      margin: 0 10px;
+    }
 
     i {
       color: #fff;
