@@ -5,3 +5,8 @@
   @include gradient($secondary-gray, $secondary-blue);
   // background: url('../assets/images/patterns/dust_scratches.png');
 }
+
+mat-drawer-container {
+  margin-top: 65px;
+  height: calc(100vh - 65px);
+}

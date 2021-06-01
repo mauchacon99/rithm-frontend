@@ -1,2 +1,7 @@
-<app-top-nav></app-top-nav>
-<router-outlet></router-outlet>
+<app-top-nav [mobileNav]="mobileNav"></app-top-nav>
+<mat-drawer-container class="example-container" hasBackdrop="true">
+  <mat-drawer #mobileNav mode="over">I'm a drawer</mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
