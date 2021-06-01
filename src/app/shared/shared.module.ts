@@ -52,7 +52,8 @@ import { RosterComponent } from './roster/roster.component';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
-    PasswordRequirementsComponent
+    PasswordRequirementsComponent,
+    TopNavComponent
   ]
 })
 export class SharedModule { }

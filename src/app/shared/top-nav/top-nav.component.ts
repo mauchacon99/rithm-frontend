@@ -9,5 +9,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./top-nav.component.scss']
 })
 export class TopNavComponent {
+  /** List of navigation items. */
+  navItems = ['Dashboard', 'Map'];
+
+  /** Monogram for user profile icon. */
+  monogram = 'AB';
 
 }
