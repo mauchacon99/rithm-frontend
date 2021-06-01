@@ -9,6 +9,7 @@ import { EntryModule } from './entry/entry.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MapModule } from './map/map.module';
 import { SharedModule } from './shared/shared.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SharedModule } from './shared/shared.module';
     DashboardModule,
     EntryModule,
     MapModule,
-    SharedModule
+    SharedModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]
