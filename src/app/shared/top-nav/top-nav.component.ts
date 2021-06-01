@@ -12,4 +12,6 @@ export class TopNavComponent {
 
   navItems = ['Dashboard', 'Map'];
 
+  monogram = 'AB';
+
 }
