@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { SidenavService } from 'src/app/core/sidenav.service';
 
@@ -22,6 +22,9 @@ export class TopNavComponent {
   /** Monogram for user profile icon. */
   monogram = 'AB';
 
+  /** Init the browser width. */
+  innerWidth = 0;
+
   constructor(private sidenavService: SidenavService) {
     // Setup...
   }
@@ -31,6 +34,18 @@ export class TopNavComponent {
    */
   toggle(): void {
     this.sidenavService.toggle();
+  }
+
+  /**
+   * Check if screen size changes to hide mobile nav.
+   */
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.innerWidth = window.innerWidth;
+
+    if(this.innerWidth >= 768) {
+      this.sidenavService.close();
+    }
   }
 
 }
