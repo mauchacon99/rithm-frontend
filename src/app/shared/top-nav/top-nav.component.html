@@ -14,7 +14,7 @@
   <button mat-icon-button>
     <i class="fas fa-bell"></i>
   </button>
-  <div class="profile d-none d-md-block">
+  <div (click)="toggleUserOptions()" class="profile d-none d-md-block">
     {{monogram}}
   </div>
 </nav>

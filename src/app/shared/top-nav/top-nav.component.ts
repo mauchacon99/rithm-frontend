@@ -47,4 +47,11 @@ export class TopNavComponent {
     }
   }
 
+  /**
+   * Toggle the user icon menu.
+   */
+  toggleUserOptions(): void {
+    // do stuff
+  }
+
 }
