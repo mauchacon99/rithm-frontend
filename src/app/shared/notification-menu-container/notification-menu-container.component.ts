@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Notifications } from 'src/models/notifications';
 /** Notification container component. */
 @Component({
   selector: 'app-notification-menu-container',
   templateUrl: './notification-menu-container.component.html',
   styleUrls: ['./notification-menu-container.component.scss']
 })
-export class NotificationMenuContainerComponent {
+export class NotificationMenuContainerComponent implements OnInit{
 
   /** Temp array of notifications. */
   notifications = [
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: false,
@@ -17,6 +19,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: false,
@@ -24,6 +27,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: true,
@@ -31,6 +35,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: true,
@@ -38,6 +43,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: false,
@@ -45,6 +51,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: false,
@@ -52,6 +59,7 @@ export class NotificationMenuContainerComponent {
       initials: 'SL'
     },
     {
+      rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
       type: 'comment',
       read: true,
@@ -60,8 +68,25 @@ export class NotificationMenuContainerComponent {
     }
   ];
 
+  /** Unread Notifications. */
+  unread: Notifications[] = [];
+
+  /** Read notifications. */
+  read: Notifications[] = [];
+
   constructor() {
     // setup...
+  }
+
+  /** Sort notifications by read value. */
+  ngOnInit(): void {
+    this.notifications.forEach(notification => {
+      if(notification.read === true) {
+        this.read.push(notification);
+      } else {
+        this.unread.push(notification);
+      }
+    });
   }
 
 

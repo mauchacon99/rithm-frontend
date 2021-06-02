@@ -1,6 +1,17 @@
 <mat-card>
+  <h6>Unread</h6>
   <app-notification-card
-  *ngFor="let notification of notifications"
+  *ngFor="let notification of unread"
+  [fromMenu]="true"
+  [type]="notification.type"
+  [time]="notification.time"
+  [read]="notification.read"
+  [title]="notification.title"
+  [initials]="notification.initials">
+</app-notification-card>
+<h6>Read</h6>
+<app-notification-card
+  *ngFor="let notification of read"
   [fromMenu]="true"
   [type]="notification.type"
   [time]="notification.time"
