@@ -18,6 +18,7 @@ import { NotificationToastsContainerComponent } from './notification-toasts-cont
 import { TopNavComponent } from './top-nav/top-nav.component';
 import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { MatMenuModule } from '@angular/material/menu';
     PasswordRequirementsComponent,
     NotificationToastsContainerComponent,
     TopNavComponent,
-    RosterComponent
+    RosterComponent,
+    NotificationMenuContainerComponent
   ],
   imports: [
     CommonModule,
