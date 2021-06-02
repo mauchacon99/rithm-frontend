@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { SidenavService } from 'src/app/core/sidenav.service';
 
 /**
@@ -10,6 +11,9 @@ import { SidenavService } from 'src/app/core/sidenav.service';
   styleUrls: ['./top-nav.component.scss']
 })
 export class TopNavComponent {
+  /** Trigger for user menu. */
+  @ViewChild(MatMenuTrigger) userMenuTrigger!: MatMenuTrigger;
+
   /** List of navigation items. */
   navItems = ['Dashboard', 'Map'];
 
@@ -32,6 +36,7 @@ export class TopNavComponent {
 
   /**
    * Check if screen size changes to hide mobile nav.
+   * Close user menu if screen size changes.
    */
   @HostListener('window:resize', ['$event'])
   onResize(): void {
@@ -39,6 +44,9 @@ export class TopNavComponent {
 
     if(this.innerWidth >= 768) {
       this.sidenavService.close();
+    }
+    if(this.innerWidth <= 768) {
+      this.userMenuTrigger.closeMenu();
     }
   }
 
