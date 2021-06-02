@@ -1,27 +1,55 @@
-<mat-card [@notificationTrigger]="animationTrigger" *ngIf="!isVisible" class="notification-card mat-elevation-z16">
+<ng-template *ngIf="!fromMenu; else elseBlock">
+  <mat-card [@notificationTrigger]="animationTrigger" *ngIf="!isVisible" class="notification-card mat-elevation-z16">
 
-  <!-- Header -->
-  <div class="row no-gutters">
-    <div class="col-2">
-      <div mat-card-avatar class="profile-photo">
-        <img *ngIf="hasPhoto" src="../../../assets/images/example-profile.jpg" alt="Steve Rogers">
-        <p *ngIf="!hasPhoto">{{initials}}</p>
+    <!-- Header -->
+    <div class="row no-gutters">
+      <div class="col-2">
+        <div mat-card-avatar class="profile-photo">
+          <img *ngIf="hasPhoto" src="../../../assets/images/example-profile.jpg" alt="Steve Rogers">
+          <p *ngIf="!hasPhoto">{{initials}}</p>
+        </div>
+        <div class="badge mat-elevation-z4">
+          <i *ngIf="type === 'comment'" class="far fa-comment-alt"></i>
+        </div>
       </div>
-      <div class="badge mat-elevation-z4">
-        <i *ngIf="type === 'comment'" class="far fa-comment-alt"></i>
+      <div class="col-8">
+        <div class="subtitle-medium">{{title}}</div>
+      </div>
+      <button class="col-2" mat-icon-button (click)="dismiss()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Text -->
+    <mat-card-content>
+      <p>{{message}}</p>
+    </mat-card-content>
+
+  </mat-card>
+</ng-template>
+<ng-template #elseBlock>
+  <mat-card class="menu-notification mat-elevation-z0">
+    <div class="row no-gutters">
+      <div class="col-2">
+        <div mat-card-avatar class="profile-photo">
+          <img *ngIf="hasPhoto" src="../../../assets/images/example-profile.jpg" alt="Steve Rogers">
+          <p *ngIf="!hasPhoto">{{initials}}</p>
+        </div>
+        <div class="badge mat-elevation-z4">
+          <i *ngIf="type === 'comment'" class="far fa-comment-alt"></i>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="subtitle">{{title}}</div>
+      </div>
+      <div class="col-1">
+        <div class="read"></div>
       </div>
     </div>
-    <div class="col-8">
-      <div class="subtitle-medium">{{title}}</div>
+    <div class="row no-gutters">
+      <div class="col-10 offset-2 overline">
+        {{time}}
+      </div>
     </div>
-    <button class="col-2" mat-icon-button (click)="dismiss()">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-
-  <!-- Text -->
-  <mat-card-content>
-    <p>{{message}}</p>
-  </mat-card-content>
-
-</mat-card>
+  </mat-card>
+</ng-template>

@@ -1,1 +1,11 @@
-<p>notification-menu-container works!</p>
+<mat-card>
+  <app-notification-card
+  *ngFor="let notification of notifications"
+  [fromMenu]="true"
+  [type]="notification.type"
+  [time]="notification.time"
+  [read]="notification.read"
+  [title]="notification.title"
+  [initials]="notification.initials">
+</app-notification-card>
+</mat-card>

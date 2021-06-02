@@ -45,8 +45,17 @@ export class NotificationCardComponent {
   /** The notification message. */
   @Input() message = '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
 
+  /** Has the notification been read. */
+  @Input() read = false;
+
+  /** When was the notification sent. */
+  @Input() time = '10 minutes ago';
+
+  /** Is the notification from the menu. */
+  @Input() fromMenu = false;
+
   /** Users initials for profile photo/icon. */
-  initials = 'SR';
+  @Input() initials = 'SR';
 
   /** Does the user have a profile photo. */
   hasPhoto = false;

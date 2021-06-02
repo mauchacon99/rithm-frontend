@@ -7,6 +7,59 @@ import { Component } from '@angular/core';
 })
 export class NotificationMenuContainerComponent {
 
+  /** Temp array of notifications. */
+  notifications = [
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: false,
+      time: '10 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: false,
+      time: '20 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: true,
+      time: '48 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: true,
+      time: '7 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: false,
+      time: '19 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: false,
+      time: '51 minutes ago',
+      initials: 'SL'
+    },
+    {
+      title: 'Scott Lang tagged you in a comment.',
+      type: 'comment',
+      read: true,
+      time: '1 hour ago',
+      initials: 'SL'
+    }
+  ];
+
   constructor() {
     // setup...
   }
