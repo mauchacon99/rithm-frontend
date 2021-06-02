@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<app-top-nav></app-top-nav>
+<mat-drawer-container class="example-container" hasBackdrop="true">
+  <mat-drawer #mobileNav mode="over">
+    <a *ngFor="let link of mobileLinks">
+      <div class="row no-gutters">
+        <div class="col">
+          <i class="fas {{link.icon}}"></i>
+          {{link.name}}
+        </div>
+      </div>
+    </a>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

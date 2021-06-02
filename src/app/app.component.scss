@@ -1,7 +1,32 @@
-@import 'variables';
+@import 'variables', 'functions';
 @import 'mixins';
 // Add styles
 .page {
   @include gradient($secondary-gray, $secondary-blue);
   // background: url('../assets/images/patterns/dust_scratches.png');
+}
+
+mat-drawer-container {
+  margin-top: 65px;
+  height: calc(100vh - 65px);
+
+  mat-drawer {
+    padding-top: 15px;
+    width: 230px;
+
+    a {
+      font-size: font-calc(16);
+
+      .row {
+        padding: 20px 0 20px 15px;
+        width: 100%;
+      }
+
+      &:nth-child(3) {
+        .row {
+          border-top: 1px solid $accent-blue;
+        }
+      }
+    }
+  }
 }
