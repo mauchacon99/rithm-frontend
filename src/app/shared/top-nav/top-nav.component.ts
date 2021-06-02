@@ -1,5 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component, HostListener } from '@angular/core';
 import { SidenavService } from 'src/app/core/sidenav.service';
 
 /**
