@@ -14,6 +14,26 @@ export class AppComponent implements AfterViewInit{
   /** Get the sidenav component. */
   @ViewChild('mobileNav') mobileSideNav!: MatSidenav;
 
+  /** Mobile links. */
+  mobileLinks = [
+    {
+      name: 'Dashboard',
+      icon: 'fa-th-large'
+    },
+    {
+      name: 'Map',
+      icon: 'fa-project-diagram'
+    },
+    {
+      name: 'Settings',
+      icon: 'fa-cog'
+    },
+    {
+      name: 'Sign Out',
+      icon: 'fa-sign-out-alt'
+    }
+  ];
+
 
   constructor(private sidenavService: SidenavService) {
     // Setup...
