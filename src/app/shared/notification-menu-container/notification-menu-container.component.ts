@@ -19,52 +19,52 @@ export class NotificationMenuContainerComponent implements OnInit{
       initials: 'SL'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '2',
+      title: 'Monica Rambeau tagged you in a comment.',
       type: 'comment',
       read: false,
       time: '20 minutes ago',
-      initials: 'SL'
+      initials: 'MR'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '3',
+      title: 'Simon Williams tagged you in a comment.',
       type: 'comment',
       read: true,
       time: '48 minutes ago',
-      initials: 'SL'
+      initials: 'SW'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '4',
+      title: 'Victor Shade tagged you in a comment.',
       type: 'comment',
       read: true,
       time: '7 minutes ago',
-      initials: 'SL'
+      initials: 'VS'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '5',
+      title: 'Steve Rogers tagged you in a comment.',
       type: 'comment',
       read: false,
       time: '19 minutes ago',
-      initials: 'SL'
+      initials: 'SR'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '6',
+      title: 'Clinton Barton tagged you in a comment.',
       type: 'comment',
       read: false,
       time: '51 minutes ago',
-      initials: 'SL'
+      initials: 'CB'
     },
     {
-      rithmId: '1',
-      title: 'Scott Lang tagged you in a comment.',
+      rithmId: '7',
+      title: 'Natasha Romanov tagged you in a comment.',
       type: 'comment',
       read: true,
       time: '1 hour ago',
-      initials: 'SL'
+      initials: 'NR'
     }
   ];
 

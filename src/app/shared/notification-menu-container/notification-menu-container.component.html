@@ -1,5 +1,5 @@
 <mat-card>
-  <h6>Unread</h6>
+  <h5 class="mat-h5">Unread</h5>
   <app-notification-card
   *ngFor="let notification of unread"
   [fromMenu]="true"
@@ -9,7 +9,7 @@
   [title]="notification.title"
   [initials]="notification.initials">
 </app-notification-card>
-<h6>Read</h6>
+<h5 class="mat-h5">Read</h5>
 <app-notification-card
   *ngFor="let notification of read"
   [fromMenu]="true"
