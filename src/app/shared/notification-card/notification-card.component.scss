@@ -24,8 +24,8 @@
   p {
     color: #fff;
     text-align: center;
-    margin: 5px 0;
-    font-size: font-calc(14);
+    line-height: 28px;
+    font-size: font-calc(13);
     font-weight: 600;
   }
 }
@@ -40,7 +40,8 @@
   right: 7px;
   font-size: font-calc(8);
   color: #fff;
-  padding: 2.4px 0 0 2.7px;
+  text-align: center;
+  line-height: 15px;
 }
 
 .subtitle-medium {
@@ -78,6 +79,10 @@ mat-card-content {
 
 .menu-notification {
   padding: 8px;
+
+  .title {
+    font-size: font-calc(14);
+  }
 
   .read {
     height: 10px;
