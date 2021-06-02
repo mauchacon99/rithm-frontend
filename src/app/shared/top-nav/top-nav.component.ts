@@ -19,9 +19,6 @@ export class TopNavComponent {
   /** Init the browser width. */
   innerWidth = 0;
 
-  /** Boolean for displaying menu. */
-  userMenuOpen = false;
-
   constructor(private sidenavService: SidenavService) {
     // Setup...
   }
@@ -43,13 +40,6 @@ export class TopNavComponent {
     if(this.innerWidth >= 768) {
       this.sidenavService.close();
     }
-  }
-
-  /**
-   * Toggle the user icon menu.
-   */
-  toggleUserOptions(): void {
-    this.userMenuOpen = !this.userMenuOpen;
   }
 
 }

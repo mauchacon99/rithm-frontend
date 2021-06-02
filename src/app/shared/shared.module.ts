@@ -17,6 +17,7 @@ import { PasswordRequirementsComponent } from './password-requirements/password-
 import { NotificationToastsContainerComponent } from './notification-toasts-container/notification-toasts-container.component';
 import { TopNavComponent } from './top-nav/top-nav.component';
 import { RosterComponent } from './roster/roster.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { RosterComponent } from './roster/roster.component';
     MatInputModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule
   ],
   exports: [
     AlertDialogComponent,

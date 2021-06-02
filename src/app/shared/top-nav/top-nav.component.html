@@ -14,7 +14,15 @@
   <button mat-icon-button>
     <i class="fas fa-bell"></i>
   </button>
-  <div (click)="toggleUserOptions()" class="profile d-none d-md-block">
+  <div [matMenuTriggerFor]="userMenu" class="profile d-none d-md-block">
     {{monogram}}
   </div>
 </nav>
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item>
+    My Account
+  </button>
+  <button mat-menu-item>
+    Sign Out
+  </button>
+</mat-menu>
