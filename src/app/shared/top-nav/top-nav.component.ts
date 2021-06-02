@@ -10,11 +10,6 @@ import { SidenavService } from 'src/app/core/sidenav.service';
   styleUrls: ['./top-nav.component.scss']
 })
 export class TopNavComponent {
-  /** The sidenav for mobile. */
-  // @Input() mobileNav!: MatSidenav;
-
-  // private sideNav: MatSidenav;
-
   /** List of navigation items. */
   navItems = ['Dashboard', 'Map'];
 
