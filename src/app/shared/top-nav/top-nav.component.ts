@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { SidenavService } from 'src/app/core/sidenav.service';
 
 /**
  * Component for the top site navigation.
@@ -10,7 +11,10 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./top-nav.component.scss']
 })
 export class TopNavComponent {
-  @Input() mobileNav: any;
+  /** The sidenav for mobile. */
+  // @Input() mobileNav!: MatSidenav;
+
+  // private sideNav: MatSidenav;
 
   /** List of navigation items. */
   navItems = ['Dashboard', 'Map'];
@@ -18,8 +22,15 @@ export class TopNavComponent {
   /** Monogram for user profile icon. */
   monogram = 'AB';
 
+  constructor(private sidenavService: SidenavService) {
+    // Setup...
+  }
+
+  /**
+   * Toggle opening and closing of the mobile navigation.
+   */
   toggle(): void {
-    this.mobileNav.toggle();
+    this.sidenavService.toggle();
   }
 
 }
