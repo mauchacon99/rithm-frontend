@@ -1,6 +1,40 @@
 <app-top-nav></app-top-nav>
 <mat-drawer-container class="example-container" hasBackdrop="true">
-  <mat-drawer #mobileNav mode="over">I'm a drawer</mat-drawer>
+  <mat-drawer #mobileNav mode="over">
+    <!-- I'm a drawer -->
+    <a>
+      <div class="row no-gutters">
+        <div class="col">
+          <i class="fas fa-th-large"></i>
+          Dashboard
+        </div>
+      </div>
+    </a>
+    <a>
+      <div class="row no-gutters">
+        <div class="col">
+          <i class="fas fa-project-diagram"></i>
+          Map
+        </div>
+      </div>
+    </a>
+    <a>
+    <div class="row no-gutters">
+      <div class="col">
+          <i class="fas fa-cog"></i>
+          Settings
+        </div>
+      </div>
+    </a>
+    <a>
+      <div class="row no-gutters">
+        <div class="col">
+          <i class="fas fa-sign-out-alt"></i>
+          Sign Out
+        </div>
+      </div>
+    </a>
+  </mat-drawer>
   <mat-drawer-content>
     <router-outlet></router-outlet>
   </mat-drawer-content>
