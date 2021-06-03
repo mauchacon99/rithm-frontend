@@ -13,8 +13,10 @@ export class DashboardComponent {
   /** A temp user. */
   user: User;
 
+  /** Number of previously started docs. */
   numPrev = 9;
 
+  /** Number of stations user is a member of. */
   numStations = 12;
 
   constructor() {
