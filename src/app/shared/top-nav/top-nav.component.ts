@@ -23,6 +23,9 @@ export class TopNavComponent {
   /** Init the browser width. */
   innerWidth = 0;
 
+  /** Use to toggle visibility of notifications. */
+  notificationsVisible = false;
+
   constructor(private sidenavService: SidenavService) {
     // Setup...
   }
@@ -47,6 +50,24 @@ export class TopNavComponent {
     }
     if(this.innerWidth <= 768) {
       this.userMenuTrigger.closeMenu();
+    }
+  }
+
+  /**
+   * Toggle opening and closing of notifications.
+   */
+  toggleNotifications(): void {
+    this.notificationsVisible = !this.notificationsVisible;
+  }
+
+  /**
+   * Check if notifications are open before closing them.
+   *
+   * @param e Event.
+   */
+  clickedOutside(e: Event): void {
+    if(this.notificationsVisible) {
+      this.notificationsVisible = false;
     }
   }
 

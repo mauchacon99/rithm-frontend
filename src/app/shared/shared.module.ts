@@ -19,6 +19,7 @@ import { TopNavComponent } from './top-nav/top-nav.component';
 import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { NotificationMenuContainerComponent } from './notification-menu-containe
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    ClickOutsideModule
   ],
   exports: [
     AlertDialogComponent,

@@ -11,7 +11,7 @@
       <a>{{navItem}}</a>
     </li>
   </ul>
-  <button mat-icon-button>
+  <button (click)="toggleNotifications()" (clickOutside)="clickedOutside($event)" mat-icon-button>
     <i class="fas fa-bell"></i>
   </button>
   <div [matMenuTriggerFor]="userMenu" class="profile d-none d-md-block">
@@ -26,4 +26,4 @@
     Sign Out
   </button>
 </mat-menu>
-<app-notification-menu-container></app-notification-menu-container>
+<app-notification-menu-container *ngIf="notificationsVisible"></app-notification-menu-container>

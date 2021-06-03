@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { NavigationEnd, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 import { SidenavService } from './core/sidenav.service';
 
 /**
@@ -10,9 +12,12 @@ import { SidenavService } from './core/sidenav.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit{
+export class AppComponent implements AfterViewInit, OnInit{
   /** Get the sidenav component. */
   @ViewChild('mobileNav') mobileSideNav!: MatSidenav;
+
+  /** Is signed in. */
+  isSignedIn = false;
 
   /** Mobile links. */
   mobileLinks = [
@@ -35,8 +40,11 @@ export class AppComponent implements AfterViewInit{
   ];
 
 
-  constructor(private sidenavService: SidenavService) {
-    // Setup...
+  constructor(
+    private sidenavService: SidenavService,
+    public router: Router
+    ) {
+
   }
 
   /**
@@ -44,6 +52,31 @@ export class AppComponent implements AfterViewInit{
    */
   ngAfterViewInit(): void {
     this.sidenavService.setSidenav(this.mobileSideNav);
+  }
+
+  /**
+   * Check the url path and show/hide the navigation.
+   */
+  ngOnInit(): void {
+    /* eslint-disable-next-line */
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationEnd) {
+        const path = e.url;
+        if(
+            path == '' ||
+            path == '/' ||
+            path == '/forgot-password' ||
+            path == '/account-create' ||
+            path == '/password-reset'
+            ) {
+            this.isSignedIn = false;
+          } else {
+            this.isSignedIn = true;
+          }
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
 }
