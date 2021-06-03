@@ -62,10 +62,8 @@ export class TopNavComponent {
 
   /**
    * Check if notifications are open before closing them.
-   *
-   * @param e Event.
    */
-  clickedOutside(e: Event): void {
+  clickedOutside(): void {
     if(this.notificationsVisible) {
       this.notificationsVisible = false;
     }

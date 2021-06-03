@@ -11,7 +11,7 @@
       <a>{{navItem}}</a>
     </li>
   </ul>
-  <button (click)="toggleNotifications()" (clickOutside)="clickedOutside($event)" mat-icon-button>
+  <button (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button>
     <i class="fas fa-bell"></i>
   </button>
   <div [matMenuTriggerFor]="userMenu" class="profile d-none d-md-block">
