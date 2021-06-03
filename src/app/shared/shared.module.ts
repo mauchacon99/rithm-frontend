@@ -54,6 +54,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
+    MatButtonModule,
     PasswordRequirementsComponent,
     TopNavComponent
   ]

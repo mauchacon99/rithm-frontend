@@ -1,4 +1,37 @@
-// Add styles here
+@import 'functions';
+
 .page {
   background-image: url('../../../assets/images/patterns/dust_scratches.png');
+
+  .container {
+    .row {
+      margin-top: 30px;
+
+      .welcome-status {
+        strong {
+          font-weight: 600;
+        }
+      }
+
+      .welcome-buttons {
+        text-align: right;
+        /* stylelint-disable-next-line */
+        @media screen and (max-width: 991px) {
+          text-align: left;
+        }
+
+        button {
+          margin: 5px 0;
+
+          &:last-child {
+            margin-left: 15px;
+          }
+
+          span {
+            font-size: font-calc(14) !important;
+          }
+        }
+      }
+    }
+  }
 }

@@ -2,12 +2,20 @@
   <div class="container">
     <div class="row">
       <mat-card class="col-12">
-        <h4>
-          Welcome, {{user.firstName}} {{user.lastName}}
-        </h4>
-        <p>
-          You currently have <strong>{{numPrev}} previously started documents</strong> and you're a member of <strong>{{numStations}} stations.</strong>
-        </p>
+        <div class="row no-gutters m-0">
+          <div class="col-lg-8 col-md-12">
+            <h4>
+              Welcome, {{user.firstName}} {{user.lastName}}
+            </h4>
+            <p class="welcome-status">
+              You currently have <strong>{{numPrev}} previously started documents</strong> and you're a member of <strong>{{numStations}} stations.</strong>
+            </p>
+          </div>
+          <div class="col-lg-4 col-md-12 welcome-buttons">
+            <button mat-stroked-button color="accent">New Document</button>
+            <button mat-raised-button color="accent">Start Working</button>
+          </div>
+        </div>
       </mat-card>
     </div>
   </div>
