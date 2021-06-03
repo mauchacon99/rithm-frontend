@@ -13,6 +13,10 @@ export class DashboardComponent {
   /** A temp user. */
   user: User;
 
+  numPrev = 9;
+
+  numStations = 12;
+
   constructor() {
     this.user = {
       rithmId: '1',
