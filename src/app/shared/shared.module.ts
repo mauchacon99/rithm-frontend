@@ -58,6 +58,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
+    MatButtonModule,
     PasswordRequirementsComponent,
     TopNavComponent
   ]
