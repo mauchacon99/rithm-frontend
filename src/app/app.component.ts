@@ -20,8 +20,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
   /** Get the sidenav component. */
   @ViewChild('mobileNav') mobileSideNav!: MatSidenav;
 
-  /** Is signed in. */
-  isSignedIn = false;
+  /** Used to show top nav. */
+  showTopNav = false;
 
   /** Mobile links. */
   mobileLinks = [
@@ -66,20 +66,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
     ).subscribe((e) => {
       if (e instanceof NavigationEnd) {
         const path = e.url;
-        if(
-            path == '' ||
-            path == '/' ||
-            path == '/forgot-password' ||
-            path == '/account-create' ||
-            path == '/password-reset'
-            ) {
-            this.isSignedIn = false;
-          } else {
-            this.isSignedIn = true;
-          }
+        this.showTopNav =
+          path !== '' &&
+          path !== '/' &&
+          path !== '/forgot-password' &&
+          path !== '/account-create' &&
+          path !== '/password-reset';
       }
     }, err => {
-      console.log(err);
+      console.error(err);
     });
   }
 

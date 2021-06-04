@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Notifications } from 'src/models/notifications';
+import { Notification } from 'src/models/notification';
 /** Notification container component. */
 @Component({
   selector: 'app-notification-menu-container',
@@ -9,7 +9,7 @@ import { Notifications } from 'src/models/notifications';
 export class NotificationMenuContainerComponent implements OnInit{
 
   /** Temp array of notifications. */
-  notifications = [
+  notifications: Notification[] = [
     {
       rithmId: '1',
       title: 'Scott Lang tagged you in a comment.',
@@ -69,19 +69,15 @@ export class NotificationMenuContainerComponent implements OnInit{
   ];
 
   /** Unread Notifications. */
-  unread: Notifications[] = [];
+  unread: Notification[] = [];
 
   /** Read notifications. */
-  read: Notifications[] = [];
-
-  constructor() {
-    // setup...
-  }
+  read: Notification[] = [];
 
   /** Sort notifications by read value. */
   ngOnInit(): void {
     this.notifications.forEach(notification => {
-      if(notification.read === true) {
+      if(notification.read) {
         this.read.push(notification);
       } else {
         this.unread.push(notification);
