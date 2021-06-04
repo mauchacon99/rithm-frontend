@@ -29,6 +29,7 @@
     "autoprefixer": "^10.2.6",
     "bourbon": "^7.0.0",
     "gsap": "^3.6.1",
+    "ng-click-outside": "^8.0.0",
     "ngx-cookie-service": "^12.0.0",
     "rxjs": "^6.6.7",
     "tslib": "^2.2.0",

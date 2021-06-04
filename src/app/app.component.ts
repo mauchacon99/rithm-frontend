@@ -1,5 +1,8 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { NavigationEnd, Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SidenavService } from './core/sidenav.service';
 
 /**
@@ -10,9 +13,15 @@ import { SidenavService } from './core/sidenav.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit{
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
+  /** Destroyed. */
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   /** Get the sidenav component. */
   @ViewChild('mobileNav') mobileSideNav!: MatSidenav;
+
+  /** Used to show top nav. */
+  showTopNav = false;
 
   /** Mobile links. */
   mobileLinks = [
@@ -34,9 +43,11 @@ export class AppComponent implements AfterViewInit{
     }
   ];
 
+  constructor(
+    private sidenavService: SidenavService,
+    public router: Router
+    ) {
 
-  constructor(private sidenavService: SidenavService) {
-    // Setup...
   }
 
   /**
@@ -44,6 +55,35 @@ export class AppComponent implements AfterViewInit{
    */
   ngAfterViewInit(): void {
     this.sidenavService.setSidenav(this.mobileSideNav);
+  }
+
+  /**
+   * Check the url path and show/hide the navigation.
+   */
+  ngOnInit(): void {
+    this.router.events.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((e) => {
+      if (e instanceof NavigationEnd) {
+        const path = e.url;
+        this.showTopNav =
+          path !== '' &&
+          path !== '/' &&
+          path !== '/forgot-password' &&
+          path !== '/account-create' &&
+          path !== '/password-reset';
+      }
+    }, err => {
+      console.error(err);
+    });
+  }
+
+  /**
+   * Cleanup method.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

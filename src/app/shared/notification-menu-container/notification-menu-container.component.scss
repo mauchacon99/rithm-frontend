@@ -1,0 +1,16 @@
+// styles go here
+mat-card {
+  z-index: 3;
+  position: absolute;
+  width: 280px;
+  right: 80px;
+  top: 60px;
+  padding: 20px 8px;
+  max-height: calc(100vh - 75px);
+  overflow-y: scroll;
+
+  /* stylelint-disable-next-line */
+  @media screen and (max-width: 767px) {
+    right: 20px;
+  }
+}
