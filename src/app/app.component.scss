@@ -29,4 +29,9 @@ mat-drawer-container {
       }
     }
   }
+
+  &.sign-in {
+    margin-top: 0;
+    height: 100vh;
+  }
 }
