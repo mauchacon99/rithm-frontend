@@ -69,6 +69,11 @@ body {
   overflow: auto;
 }
 
+.textured-bg {
+  background-image: url('./assets/images/patterns/dust_scratches.png');
+  background-repeat: repeat;
+}
+
 /// Overrides the default accent color for the snackbar action
 .snackbar {
   .mat-simple-snackbar-action {
