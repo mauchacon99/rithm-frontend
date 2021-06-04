@@ -46,9 +46,9 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
-    max-width: 1140px;
+    max-width: 1440px;
   }
 }
 
@@ -932,7 +932,7 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .col-xl {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -1268,7 +1268,7 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .d-xl-none {
     display: none !important;
   }
@@ -1919,7 +1919,7 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .flex-xl-row {
     -ms-flex-direction: row !important;
     flex-direction: row !important;
@@ -3525,7 +3525,7 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .m-xl-0 {
     margin: 0 !important;
   }
