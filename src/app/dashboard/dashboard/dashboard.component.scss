@@ -20,6 +20,10 @@
 
         button {
           margin: 5px 0;
+          /* stylelint-disable-next-line */
+          @media screen and (min-width: 991px) and (max-width: 1499px) {
+            margin: 15px 0;
+          }
 
           &:last-child {
             margin-left: 15px;
