@@ -1,1 +1,44 @@
-// Styles here
+@import 'variables', 'functions';
+
+mat-card {
+  padding: 8px;
+  margin-top: 10px;
+  height: 102px;
+
+  h6 {
+    font-weight: 500;
+    color: $accent-blue;
+  }
+
+  .docs {
+    margin-left: 15px;
+  }
+
+  .roster,
+  .docs {
+    float: left;
+    margin-top: 10px;
+
+    span.circles {
+      div.avatar,
+      div.doc-count {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid $secondary-gray;
+        background: $secondary-gray;
+        line-height: 28px;
+        text-align: center;
+        color: #fff;
+        font-weight: 600;
+        font-size: font-calc(12);
+        margin: 5px 2px;
+        float: left;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
