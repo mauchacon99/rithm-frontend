@@ -9,10 +9,13 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./station-card.component.scss']
 })
 export class StationCardComponent implements OnInit{
+  /** The name of the station. */
   @Input() stationName = 'Station name';
 
+  /** Total number of documents in the station. */
   @Input() totalDocs = 5;
 
+  /** Members initials of the station worker roster. */
   @Input() roster = [
     {
       initials: 'AB'
@@ -22,18 +25,21 @@ export class StationCardComponent implements OnInit{
     },
     {
       initials: 'TS'
+    },
+    {
+      initials: 'TS'
     }
   ];
 
-  showAll = false;
+  /** Set the number of roster members to show when more than 3 members.  */
+  slices = 2;
 
-  constructor() {
-    console.log(this.roster);
-  }
-
+  /**
+   * Set the number of roster members to show when less than 3.
+   */
   ngOnInit(): void {
     if(this.roster.length <= 3) {
-      this.showAll = true;
+      this.slices = this.roster.length;
     }
   }
 

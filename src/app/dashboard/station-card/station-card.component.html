@@ -2,24 +2,11 @@
   <h6>{{stationName}}</h6>
   <div class="roster">
     <p class="overline">worker roster</p>
-    <span class="circles" *ngIf="showAll; else avatarElse">
-      <!-- <ng-template"> -->
-        <!-- <div *ngFor="let worker of roster; else avatarElse" class="avatar">
-          {{worker.initials}}
-        </div> -->
-      <!-- </ng-template> -->
-      <!-- <ng-template *ngIf="showAll; else avatarElse;"> -->
-        <div *ngFor="let worker of roster" class="avatar">
-          {{worker.initials}}
-        </div>
-        </span>
-      <!-- </ng-template> -->
-      <span class="circles" #avatarElse>
-        <div *ngFor="let worker of roster | slice:0:2" class="avatar">
-          {{worker.initials}}
-        </div>
-        <div class="avatar">+{{roster.length}}</div>
-      <!-- </ng-template> -->
+    <span class="circles">
+      <div *ngFor="let worker of roster | slice:0:slices" class="avatar">
+        {{worker.initials}}
+      </div>
+      <div *ngIf="roster.length > 3" class="avatar">+{{roster.length - 2}}</div>
     </span>
   </div>
   <div class="docs">
