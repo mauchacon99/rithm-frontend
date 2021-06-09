@@ -1,23 +1,6 @@
 <div class="page textured-bg">
   <div class="container">
-    <div class="row">
-      <mat-card class="col-12">
-        <div class="row no-gutters m-0">
-          <div class="col-lg-8 col-md-12">
-            <h4>
-              Welcome, {{user.firstName}} {{user.lastName}}
-            </h4>
-            <p class="welcome-status">
-              You currently have <strong>{{numPrev}} previously started documents</strong> and you're a member of <strong>{{numStations}} stations.</strong>
-            </p>
-          </div>
-          <div class="col-lg-4 col-md-12 welcome-buttons">
-            <button mat-stroked-button color="accent" class="align-middle">New Document</button>
-            <button mat-raised-button color="accent" class="align-middle">Start Working</button>
-          </div>
-        </div>
-      </mat-card>
-    </div>
+    <app-header></app-header>
     <section class="row">
       <h4 class="col-12 p-0">My Stations</h4>
       <app-my-stations class="col-12 p-0"></app-my-stations>
