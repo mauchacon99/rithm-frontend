@@ -1,14 +1,10 @@
-import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Station, User } from 'src/models';
 
 /**
- * Service for all business logic involving the dashboard.
+ * Mocks methods of the `DashboardService`.
  */
-@Injectable({
-  providedIn: 'root'
-})
-export class DashboardService {
+export class MockDashboardService {
 
   /**
    * Gets a list of stations where the signed-in user is on the work roster.
