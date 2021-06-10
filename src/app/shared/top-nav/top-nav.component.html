@@ -7,8 +7,10 @@
   </div>
   <ul class="d-none d-md-block">
     <!-- TODO: add class 'active' if current page === navigation item -->
-    <li *ngFor="let navItem of navItems">
-      <a>{{navItem}}</a>
+    <li *ngFor="let navItem of navItems" [routerLinkActive]="['active']">
+      <a routerLink="{{navItem}}">
+        <span style="text-transform: capitalize;">{{navItem}}</span>
+      </a>
     </li>
   </ul>
   <button (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button>
