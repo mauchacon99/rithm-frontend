@@ -24,6 +24,9 @@ export class HeaderComponent implements OnInit {
   /** Number of stations user is a member of. */
   numStations = 0;
 
+  /** Is any content loading. */
+  isLoading = false;
+
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService) {
     this.user = {
@@ -49,11 +52,14 @@ export class HeaderComponent implements OnInit {
     this.dashboardService.getDashboardHeader()
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
+        this.isLoading = true;
         if (res) {
           this.numPrev = res.startedDocuments;
           this.numStations = res.rosterStations;
+          this.isLoading = false;
         }
       }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
