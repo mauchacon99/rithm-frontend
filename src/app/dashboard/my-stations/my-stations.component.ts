@@ -217,4 +217,7 @@ export class MyStationsComponent {
     },
   ];
 
+  /** Are the stations being loaded. */
+  isLoading = true;
+
 }
