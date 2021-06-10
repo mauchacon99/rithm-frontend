@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DocumentCardComponent } from './document-card.component';
+import { PriorityQueueComponent } from './priority-queue.component';
 
-describe('DocumentCardComponent', () => {
-  let component: DocumentCardComponent;
-  let fixture: ComponentFixture<DocumentCardComponent>;
+describe('PriorityQueueComponent', () => {
+  let component: PriorityQueueComponent;
+  let fixture: ComponentFixture<PriorityQueueComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DocumentCardComponent ]
+      declarations: [ PriorityQueueComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DocumentCardComponent);
+    fixture = TestBed.createComponent(PriorityQueueComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
