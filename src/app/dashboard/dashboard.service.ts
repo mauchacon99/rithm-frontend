@@ -21,11 +21,11 @@ export class DashboardService {
   accessToken: AccessToken | undefined;
 
 
-  /**
-  *Getting Dashboard header info.
-  *
-  * @returns Dashboard header observable.
-  */
+   /**
+    *Getting Dashboard header info.
+    *
+    * @returns Dashboard header observable.
+    */
   getDashboardHeader(): Observable<DashboardHeaderResponse> {
     return this.http.get<DashboardHeaderResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Header`);
   }
