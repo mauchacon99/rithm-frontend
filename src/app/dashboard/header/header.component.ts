@@ -4,6 +4,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { DashboardHeaderResponse } from 'src/models';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Component for the dashboard overview header.
@@ -23,7 +24,8 @@ export class HeaderComponent implements OnInit {
   /** Number of stations user is a member of. */
   numStations = 0;
 
-  constructor(private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService,
+    private errorService: ErrorService) {
     this.user = {
       rithmId: '1',
       firstName: 'Steve',
@@ -35,14 +37,14 @@ export class HeaderComponent implements OnInit {
     };
   }
 
-/**
- * Checks for query params and makes necessary request if present.
- */
+  /**
+   * Checks for query params and makes necessary request if present.
+   */
   ngOnInit(): void {
 
-  /**
-   * Get dashboard header display data.
-   */
+    /**
+     * Get dashboard header display data.
+     */
 
     this.dashboardService.getDashboardHeader()
       .pipe(first())
@@ -52,7 +54,11 @@ export class HeaderComponent implements OnInit {
           this.numStations = res.rosterStations;
         }
       }, (error: HttpErrorResponse) => {
-        const errorMessage: string = error.error.error;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
       });
   }
 
