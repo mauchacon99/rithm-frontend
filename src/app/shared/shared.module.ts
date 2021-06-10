@@ -22,6 +22,7 @@ import { NotificationMenuContainerComponent } from './notification-menu-containe
 import { ClickOutsideModule } from 'ng-click-outside';
 import { PaginationComponent } from './pagination/pagination.component';
 import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
+import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-
     RosterComponent,
     NotificationMenuContainerComponent,
     PaginationComponent,
-    WorkerRosterModalComponent
+    WorkerRosterModalComponent,
+    StationDocumentsModalComponent
   ],
   imports: [
     CommonModule,
