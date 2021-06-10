@@ -20,6 +20,7 @@ import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { PaginationComponent } from './pagination/pagination.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
     NotificationToastsContainerComponent,
     TopNavComponent,
     RosterComponent,
-    NotificationMenuContainerComponent
+    NotificationMenuContainerComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
