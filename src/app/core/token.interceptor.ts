@@ -76,7 +76,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private addToken(accessToken: AccessToken, request: HttpRequest<unknown>): HttpRequest<unknown> {
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken.token}`
       }
     });
   }
