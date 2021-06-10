@@ -12,7 +12,7 @@ export interface DashboardHeaderResponse {
   /** Number of stations user is a member of. */
   rosterStations: number;
 
-  /** dashboard header id */
+  /** Dashboard header id. */
   id: number;
 
 }

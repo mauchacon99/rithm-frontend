@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/models';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DashboardHeaderResponse } from 'src/models';
+import { first } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Component for the dashboard overview header.
@@ -34,17 +35,25 @@ export class HeaderComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    /**
-    * Get dashboard header display data
+/**
+ * Checks for query params and makes necessary request if present.
+ */
+  ngOnInit(): void {
+
+  /**
+   * Get dashboard header display data.
    */
+
     this.dashboardService.getDashboardHeader()
+      .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
         if (res) {
           this.numPrev = res.startedDocuments;
           this.numStations = res.rosterStations;
         }
-      }, (error: HttpErrorResponse) => { });
+      }, (error: HttpErrorResponse) => {
+        const errorMessage: string = error.error.error;
+      });
   }
 
 }
