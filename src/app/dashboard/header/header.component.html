@@ -1,6 +1,6 @@
 <div class="row">
   <mat-card class="col-12">
-    <div class="row no-gutters m-0">
+    <div *ngIf="!isLoading" class="row no-gutters m-0">
       <div class="col-lg-8 col-md-12">
         <h4>
           Welcome, {{user.firstName}} {{user.lastName}}
@@ -14,5 +14,11 @@
         <button mat-raised-button color="accent" class="align-middle">Start Working</button>
       </div>
     </div>
+    <div *ngIf="isLoading" class="row justify-content-center m-0 no-gutters">
+      <div class="col-12 text-center">
+        <mat-spinner [diameter]="46" class="m-auto" color="accent"></mat-spinner>
+      </div>
+    </div>
   </mat-card>
 </div>
+
