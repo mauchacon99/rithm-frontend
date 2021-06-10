@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Component for the dashboard screens.
+ * Main component for the dashboard screens.
  */
 @Component({
   selector: 'app-dashboard',

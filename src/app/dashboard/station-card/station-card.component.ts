@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 /**
- * Component for displaying a card with station information.
+ * Component for displaying a card with station information on the dashboard.
  */
 @Component({
   selector: 'app-station-card',
