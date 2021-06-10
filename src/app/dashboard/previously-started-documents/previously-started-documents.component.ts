@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+/**
+ * Component for previously started documents section on the dashboard.
+ */
 @Component({
   selector: 'app-previously-started-documents',
   templateUrl: './previously-started-documents.component.html',
