@@ -7,3 +7,4 @@ export * from './permission';
 export * from './sign-in-response';
 export * from './token-response';
 export * from './user';
+export * from './dashboard-header-data';
