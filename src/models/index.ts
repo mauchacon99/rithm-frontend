@@ -8,3 +8,4 @@ export * from './sign-in-response';
 export * from './station';
 export * from './token-response';
 export * from './user';
+export * from './dashboard-header-data';
