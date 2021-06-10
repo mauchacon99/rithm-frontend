@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { Station, User } from 'src/models';
+import { Station, User, DashboardHeaderResponse } from 'src/models';
 
 /**
  * Mocks methods of the `DashboardService`.
@@ -37,4 +37,21 @@ export class MockDashboardService {
     ];
     return of(mockStations);
   }
+
+  /**
+   * Gets a dashboard header data of a user.
+   *
+   * @returns Dashboard header data.
+   */
+  getDashboardHeader(): Observable<DashboardHeaderResponse> {
+    const dashboardHeaderData: DashboardHeaderResponse = {
+      userRithmId: '1234',
+      id: 1,
+      startedDocuments: 5,
+      rosterStations: 4
+    };
+
+    return of(dashboardHeaderData);
+  }
+
 }
