@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * Component for previously started documents section on the dashboard.
@@ -8,11 +8,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './previously-started-documents.component.html',
   styleUrls: ['./previously-started-documents.component.scss']
 })
-export class PreviouslyStartedDocumentsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class PreviouslyStartedDocumentsComponent {
 
 }

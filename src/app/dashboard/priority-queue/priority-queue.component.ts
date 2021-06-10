@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * Component for priority queue section on the dashboard.
@@ -8,11 +8,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './priority-queue.component.html',
   styleUrls: ['./priority-queue.component.scss']
 })
-export class PriorityQueueComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class PriorityQueueComponent {
 
 }
