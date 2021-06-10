@@ -6,11 +6,8 @@
     <img src="../../../assets/logo/white-icon-white-text.svg" alt="Rithm">
   </div>
   <ul class="d-none d-md-block">
-    <!-- TODO: add class 'active' if current page === navigation item -->
     <li *ngFor="let navItem of navItems" [routerLinkActive]="['active']">
-      <a routerLink="{{navItem}}">
-        <span style="text-transform: capitalize;">{{navItem}}</span>
-      </a>
+      <a routerLink="{{navItem}}">{{navItem}}</a>
     </li>
   </ul>
   <button (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button>
