@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DashboardHeaderResponse, Station, User } from 'src/models';
 
-const MICROSERVICE_PATH = '/dashboardservice';
+const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
 /**
  * Service for all business logic involving the dashboard.
@@ -18,12 +18,12 @@ export class DashboardService {
     private http: HttpClient) { }
 
   /**
-   *Getting Dashboard header info.
+   * Getting Dashboard header info.
    *
    * @returns Dashboard header observable.
    */
   getDashboardHeader(): Observable<DashboardHeaderResponse> {
-    return this.http.get<DashboardHeaderResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Header`);
+    return this.http.get<DashboardHeaderResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
   }
 
   /**
