@@ -26,4 +26,20 @@ describe('TopNavComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  xit('should display logo', () => {
+    expect(component).toBeTruthy();
+  });
+
+  xit('should display notifications', () => {
+    expect(component).toBeTruthy();
+  });
+
+  xit('should display a tab for every nav item', () => {
+    expect(component).toBeTruthy();
+  });
+
+  xit('should display user profile', () => {
+    expect(component).toBeTruthy();
+  });
 });
