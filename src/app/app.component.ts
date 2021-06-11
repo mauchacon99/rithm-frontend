@@ -26,11 +26,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
   /** Mobile links. */
   mobileLinks = [
     {
-      name: 'Dashboard',
+      name: 'dashboard',
       icon: 'fa-th-large'
     },
     {
-      name: 'Map',
+      name: 'map',
       icon: 'fa-project-diagram'
     },
     {

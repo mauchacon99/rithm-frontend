@@ -15,7 +15,7 @@ export class TopNavComponent {
   @ViewChild(MatMenuTrigger) userMenuTrigger!: MatMenuTrigger;
 
   /** List of navigation items. */
-  navItems = ['Dashboard', 'Map'];
+  navItems = ['dashboard', 'map'];
 
   /** Monogram for user profile icon. */
   monogram = 'AB';

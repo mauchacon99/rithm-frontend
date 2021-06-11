@@ -1,7 +1,7 @@
 <app-top-nav *ngIf="showTopNav"></app-top-nav>
 <mat-drawer-container [ngClass]="{'sign-in': !showTopNav}" hasBackdrop="true">
   <mat-drawer #mobileNav mode="over">
-    <a *ngFor="let link of mobileLinks">
+    <a *ngFor="let link of mobileLinks" routerLink="{{link.name}}" (click)="mobileNav.toggle()">
       <div class="row no-gutters">
         <div class="col">
           <i class="fas {{link.icon}}"></i>
