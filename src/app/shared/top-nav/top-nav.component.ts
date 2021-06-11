@@ -1,6 +1,7 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SidenavService } from 'src/app/core/sidenav.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the top site navigation.
@@ -26,7 +27,10 @@ export class TopNavComponent {
   /** Use to toggle visibility of notifications. */
   notificationsVisible = false;
 
-  constructor(private sidenavService: SidenavService) {
+  constructor(
+    private sidenavService: SidenavService,
+    private userService: UserService
+    ) {
     // Setup...
   }
 
@@ -67,6 +71,10 @@ export class TopNavComponent {
     if(this.notificationsVisible) {
       this.notificationsVisible = false;
     }
+  }
+
+  signOut(): void {
+    this.userService.signOut();
   }
 
 }
