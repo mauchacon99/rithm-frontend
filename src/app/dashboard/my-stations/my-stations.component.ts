@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Component for managing the list of a worker's stations.
+ * Component for housing the list of a worker's stations.
  */
 @Component({
   selector: 'app-my-stations',

@@ -10,6 +10,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { MapModule } from './map/map.module';
 import { SharedModule } from './shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { DocumentModule } from './document/document.module';
+import { StationModule } from './station/station.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     DashboardModule,
     EntryModule,
     MapModule,
+    DocumentModule,
+    StationModule,
     SharedModule,
     MatSidenavModule
   ],
