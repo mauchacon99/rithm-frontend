@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { TopNavComponent } from './top-nav.component';
 
@@ -13,7 +14,8 @@ describe('TopNavComponent', () => {
       declarations: [ TopNavComponent ],
       imports: [
         MatMenuModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();
