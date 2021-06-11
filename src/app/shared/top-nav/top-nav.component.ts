@@ -73,6 +73,9 @@ export class TopNavComponent {
     }
   }
 
+  /**
+   * Signs the user out of the app.
+   */
   signOut(): void {
     this.userService.signOut();
   }
