@@ -52,9 +52,6 @@ Checks all of the TypeScript/JavaScript code for lint errors.
 `npm run lint-style`\
 Checks all of the SCSS/CSS code for lint errors.
 
-`npm run e2e`\
-Runs all of the defined end-to-end tests in the project.
-
 `npm run compile-docs`\
 Compiles all of the JSDoc and Angular documentation using Compodoc.
 
