@@ -15,10 +15,11 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
 export class DashboardService {
   constructor(
-    private http: HttpClient) { }
+    private http: HttpClient
+  ) { }
 
   /**
-   * Getting Dashboard header info.
+   * Returns info needed for dashboard header.
    *
    * @returns Dashboard header observable.
    */
