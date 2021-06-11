@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
