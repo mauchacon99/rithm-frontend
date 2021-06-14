@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavService } from './core/sidenav.service';
+import { UserService } from './core/user.service';
 
 /**
  * The main component loaded for the app.
@@ -13,12 +14,14 @@ import { SidenavService } from './core/sidenav.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
-  /** Destroyed. */
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   /** Get the sidenav component. */
-  @ViewChild('mobileNav') mobileSideNav!: MatSidenav;
+  @ViewChild('mobileNav')
+  private mobileSideNav!: MatSidenav;
+
+  /** Destroyed. */
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /** Used to show top nav. */
   showTopNav = false;
@@ -27,15 +30,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
   mobileLinks = [
     {
       name: 'dashboard',
-      icon: 'fa-th-large'
+      icon: 'fa-th-large',
+      link: 'dashboard'
     },
     {
       name: 'map',
-      icon: 'fa-project-diagram'
+      icon: 'fa-project-diagram',
+      link: 'map'
     },
     {
-      name: 'Settings',
-      icon: 'fa-cog'
+      name: 'My Account',
+      icon: 'fa-cog',
+      link: 'settings/account'
     },
     {
       name: 'Sign Out',
@@ -45,10 +51,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
 
   constructor(
     private sidenavService: SidenavService,
+    private userService: UserService,
     public router: Router
-    ) {
-
-  }
+  ) { }
 
   /**
    * Set the current sidenav in the service.
@@ -84,6 +89,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * Toggles the side nav and determines if the user wants to sign out.
+   *
+   * @param item The tapped side nav item.
+   */
+  selectNavItem(item: string): void {
+    if (item === 'Sign Out') {
+      this.userService.signOut();
+    }
+
+    this.mobileSideNav.toggle();
   }
 
 }
