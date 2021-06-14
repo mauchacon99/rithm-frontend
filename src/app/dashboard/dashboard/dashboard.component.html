@@ -1,18 +1,14 @@
 <div class="page textured-bg">
   <div class="container">
     <app-header></app-header>
+    <div class="row">
+        <app-previously-started-documents class="col-md-6 col-sm-12 pl-0"></app-previously-started-documents>
+        <app-priority-queue class="col-md-6 col-sm-12 pr-0"></app-priority-queue>
+    </div>
     <section class="row">
       <h4 class="col-12 p-0">My Stations</h4>
       <app-my-stations class="col-12 p-0"></app-my-stations>
     </section>
-    <div class="row">
-      <section class="col-md-6 col-sm-12">
-        <app-previously-started-documents></app-previously-started-documents>
-      </section>
-      <section class="col-md-6 col-sm-12">
-        <app-priority-queue></app-priority-queue>
-      </section>
-    </div>
   </div>
 
 </div>
