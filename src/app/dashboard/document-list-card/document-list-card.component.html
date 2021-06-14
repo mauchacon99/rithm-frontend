@@ -1,3 +1,22 @@
   <mat-card>
-    <p>Shared list works!</p>
+    <div *ngFor="let doc of docList" class="row no-gutters">
+      <div [ngClass]="doc.assigned ? 'col-4 col-sm-8' : 'col-4 col-sm-4 col-md-5 col-lg-6 col-xl-4'" class="d-inline-block">
+        <div class="priority">
+          {{ doc.priority }}
+        </div>
+        {{ doc.docName }}
+      </div>
+      <!-- <div [ngClass]="{'col-3': !doc.assigned, 'col-4': doc.assigned}" class="col-3 d-inline-block"> -->
+      <div [ngClass]="doc.assigned ? 'col-3 d-sm-none d-md-block' : 'col-4 col-lg-6 col-xl-4'" class="d-inline-block">
+        {{ doc.stationName }}
+      </div>
+      <div [ngClass]="doc.assigned ? 'col-3 d-sm-none d-md-block' : ''" class="col-3 d-block d-lg-none d-xl-block">
+        {{ doc.timeInStation }} in station
+      </div>
+      <div *ngIf="doc.assigned" class="col-2 col-sm-3 col-md-2 d-block">
+        <button mat-stroked-button color="accent">
+          Continue
+        </button>
+      </div>
+    </div>
   </mat-card>
