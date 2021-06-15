@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   /** Number of stations user is a member of. */
   numStations = 0;
 
-  /** Is any content loading. */
+  /** Is any content loading. Hello.*/
   isLoading = false;
 
   constructor(private dashboardService: DashboardService,
