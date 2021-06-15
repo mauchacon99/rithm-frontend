@@ -28,6 +28,11 @@ import { AuthGuard } from './core/auth.guard';
       path: 'document',
       loadChildren: () => import('./document/document.module').then(m => m.DocumentModule),
       canActivate: [AuthGuard]
+    },
+    {
+      path: 'settings',
+      loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+      canActivate: [AuthGuard]
     }
   ])],
   exports: [RouterModule]

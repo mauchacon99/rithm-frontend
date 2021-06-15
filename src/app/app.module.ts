@@ -12,6 +12,7 @@ import { SharedModule } from './shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DocumentModule } from './document/document.module';
 import { StationModule } from './station/station.module';
+import { SettingsModule } from './settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { StationModule } from './station/station.module';
     MapModule,
     DocumentModule,
     StationModule,
+    SettingsModule,
     SharedModule,
     MatSidenavModule
   ],
