@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./document-list-card.component.scss']
 })
 export class DocumentListCardComponent {
-  /** List of documents. */
+  /** Temp list of documents. */
   @Input() docList = [
     {
       docName: 'Really long document name',
