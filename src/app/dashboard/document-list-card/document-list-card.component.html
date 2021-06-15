@@ -1,19 +1,19 @@
   <mat-card>
     <span *ngIf="!isLoading">
       <div *ngFor="let doc of docList" class="row no-gutters">
-        <div [ngClass]="doc.assigned ? 'col-8 col-sm-9 col-md-5 col-lg-9 col-xl-4' : 'col-12 col-sm-6 col-md-5 col-lg-6 col-xl-5'" class="d-inline-block">
+        <div [ngClass]="!isPriority ? 'col-8 col-sm-9 col-md-5 col-lg-9 col-xl-4' : 'col-12 col-sm-6 col-md-5 col-lg-6 col-xl-5'" class="d-inline-block">
           <div class="priority">
             {{ doc.priority }}
           </div>
           {{ doc.docName }}
         </div>
-        <div [ngClass]="doc.assigned ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-4'" class="d-none d-md-block d-xl-block col-md-4">
+        <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-4'" class="d-none d-md-block d-xl-block col-md-4">
           {{ doc.stationName }}
         </div>
-        <div [ngClass]="doc.assigned ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
+        <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
           {{ doc.timeInStation }} in station
         </div>
-        <div *ngIf="doc.assigned" class="col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2 d-block">
+        <div *ngIf="!isPriority" class="col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2 d-block">
           <button mat-stroked-button color="accent">
             Continue
           </button>

@@ -15,21 +15,18 @@ export class PriorityQueueComponent {
       docName: 'Really long document name',
       stationName: 'really long Station name',
       timeInStation: '2 hours',
-      assigned: false,
       priority: 1
     },
     {
       docName: 'New Doc 2',
       stationName: 'Station name',
       timeInStation: '4 hours',
-      assigned: false,
       priority: 2
     },
     {
       docName: 'New Doc 3',
       stationName: 'Station name',
       timeInStation: '5 hours',
-      assigned: false,
       priority: 1
     },
   ];
