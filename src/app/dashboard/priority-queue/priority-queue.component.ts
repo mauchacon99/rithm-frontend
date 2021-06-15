@@ -32,20 +32,6 @@ export class PriorityQueueComponent {
       assigned: false,
       priority: 1
     },
-    {
-      docName: 'New Doc 4',
-      stationName: 'Station name',
-      timeInStation: '7 hours',
-      assigned: false,
-      priority: 3
-    },
-    {
-      docName: 'New Doc 5',
-      stationName: 'Station name',
-      timeInStation: '1 hour',
-      assigned: false,
-      priority: 7
-    }
   ];
 
 }
