@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -18,7 +19,8 @@ describe('MyStationsComponent', () => {
         RouterTestingModule,
         MatSnackBarModule,
         MatDialogModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        HttpClientTestingModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService }

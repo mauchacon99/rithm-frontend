@@ -3,7 +3,7 @@ import { DashboardService } from '../dashboard.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardStationResponse } from 'src/models';
+import { DashboardStationData } from 'src/models';
 
 /**
  * Component for housing the list of a worker's stations.
@@ -16,7 +16,7 @@ import { DashboardStationResponse } from 'src/models';
 export class MyStationsComponent implements OnInit {
 
   /** Total stations to show. Temp data. */
-  totalStations = Array<DashboardStationResponse>();
+  totalStations = Array<DashboardStationData>();
 
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService) { }
@@ -27,7 +27,7 @@ export class MyStationsComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardService.getDashboardStations()
       .pipe(first())
-      .subscribe((res: Array<DashboardStationResponse>) => {
+      .subscribe((res: Array<DashboardStationData>) => {
         if (res) {
           this.totalStations = res;
         }

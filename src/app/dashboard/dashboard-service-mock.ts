@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
-import { Station, User, DashboardHeaderResponse, DashboardStationResponse } from 'src/models';
+import { Station, User, DashboardHeaderResponse, DashboardStationData } from 'src/models';
+import { delay } from 'rxjs/operators';
 
 /**
  * Mocks methods of the `DashboardService`.
@@ -59,8 +60,8 @@ export class MockDashboardService {
    *
    * @returns Dashboard stations data.
    */
-  getDashboardStations(): Observable<Array<DashboardStationResponse>> {
-    const dashboardStationData: Array<DashboardStationResponse> = [
+  getDashboardStations(): Observable<Array<DashboardStationData>> {
+    const dashboardStationData: Array<DashboardStationData> = [
       {
         numberOfDocuments: 5,
         stationName: 'station-1',
@@ -79,7 +80,7 @@ export class MockDashboardService {
       }
     ];
 
-    return of(dashboardStationData);
+    return of(dashboardStationData).pipe(delay(1000));
   }
 
 }

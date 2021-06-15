@@ -1,7 +1,7 @@
 /**
  * Represents Dashboard stations data.
  */
- export interface DashboardStationResponse {
+ export interface DashboardStationData {
 
   /** Number Of Documents this user. */
   numberOfDocuments: number;
