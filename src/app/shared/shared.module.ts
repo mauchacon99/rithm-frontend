@@ -24,6 +24,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { PaginationComponent } from './pagination/pagination.component';
 import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
     NotificationMenuContainerComponent,
     PaginationComponent,
     WorkerRosterModalComponent,
-    StationDocumentsModalComponent
+    StationDocumentsModalComponent,
+    UserAvatarComponent
   ],
   imports: [
     CommonModule,
