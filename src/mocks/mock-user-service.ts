@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse } from 'src/models';
+import { SignInResponse, TokenResponse, User } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
@@ -12,6 +13,9 @@ export class MockUserService {
 
   /** The access token to be used to authenticate for every request. */
   accessToken = new AccessToken('tokentokentokentokentoken');
+
+  /** The currently signed in user. */
+  user: User | undefined;
 
   /**
    * Signs the user in to the system.
@@ -49,6 +53,20 @@ export class MockUserService {
     }
 
     return throwError(response).pipe(delay(1000));
+  }
+
+  /**
+   * Signs the user out of the system and clears stored data.
+   */
+   signOut(): void {}
+
+  /**
+   * Checks if the user is signed in and attempts to get a new refresh token.
+   *
+   * @returns True if authenticated, false otherwise.
+   */
+  async isSignedIn(): Promise<boolean> {
+    return true;
   }
 
   /**
