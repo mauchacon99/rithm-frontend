@@ -22,7 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { PaginationComponent } from './pagination/pagination.component';
-import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
+import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 
 
@@ -39,7 +39,7 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
     RosterComponent,
     NotificationMenuContainerComponent,
     PaginationComponent,
-    WorkerRosterModalComponent,
+    RosterModalComponent,
     StationDocumentsModalComponent
   ],
   imports: [
