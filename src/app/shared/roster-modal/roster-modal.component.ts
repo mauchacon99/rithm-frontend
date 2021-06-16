@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 /**
- * Reusable component for displaying the worker roster for a station.
+ * Reusable component for displaying the worker or supervisor roster for a station.
  */
 @Component({
   selector: 'app-roster-modal',
