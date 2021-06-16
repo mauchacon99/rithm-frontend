@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
+import { Component } from '@angular/core';
 
 /**
  * Main component for the dashboard screens.
@@ -10,16 +8,7 @@ import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.c
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
-  constructor(public dialog: MatDialog) {
-
-  }
-
-  ngOnInit(): void {
-    this.dialog.open(RosterModalComponent, {
-      minWidth: '325px'
-    });
-  }
 
 }
