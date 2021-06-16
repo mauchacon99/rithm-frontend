@@ -18,6 +18,9 @@ export class RosterModalComponent {
   /** Station name. */
   @Input() stationName = 'Station name';
 
+  /** Is the content being loaded. */
+  isLoading = false;
+
   /** Temp users list. */
   users = [
     {
