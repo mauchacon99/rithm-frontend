@@ -38,6 +38,10 @@ mat-card {
         &:first-child {
           margin-left: 0;
         }
+
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }

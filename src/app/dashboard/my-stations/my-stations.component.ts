@@ -18,6 +18,9 @@ export class MyStationsComponent implements OnInit {
   /** Total stations to show. Temp data. */
   totalStations = Array<DashboardStationData>();
 
+  /** Are the stations being loaded. */
+  isLoading = false;
+
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService) { }
 
@@ -25,13 +28,16 @@ export class MyStationsComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
+    this.isLoading = true;
     this.dashboardService.getDashboardStations()
       .pipe(first())
       .subscribe((res: Array<DashboardStationData>) => {
         if (res) {
           this.totalStations = res;
         }
+        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
