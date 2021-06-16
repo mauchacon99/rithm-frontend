@@ -3,8 +3,8 @@
   <div class="roster">
     <p class="overline">worker roster</p>
     <span class="circles">
-      <div *ngFor="let worker of roster | slice:0:slices" class="avatar">
-        {{worker.initials}}
+      <div *ngFor="let initial of roster | slice:0:slices" class="avatar">
+        {{initial}}
       </div>
       <div *ngIf="roster.length > 3" class="avatar">+{{roster.length - 2}}</div>
     </span>
