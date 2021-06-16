@@ -26,9 +26,9 @@ export class PopupService {
    * Displays an alert dialog to the user.
    *
    * @param dialogData The dialog information to display.
-   * @returns True if user confirmed, false otherwise.
+   * @returns A promise upon alert closing.
    */
-  async alert(dialogData: DialogData): Promise<boolean> {
+  async alert(dialogData: DialogData): Promise<void> {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       width: DIALOG_WIDTH,
       data: dialogData

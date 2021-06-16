@@ -8,29 +8,29 @@ import { CoreModule } from './core/core.module';
 import { EntryModule } from './entry/entry.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MapModule } from './map/map.module';
-import { SharedModule } from './shared/shared.module';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { DocumentModule } from './document/document.module';
 import { StationModule } from './station/station.module';
 import { SettingsModule } from './settings/settings.module';
+import { NavigationModule } from './navigation/navigation.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
     BrowserAnimationsModule,
+    NavigationModule,
     CoreModule,
-    DashboardModule,
     EntryModule,
+    DashboardModule,
     MapModule,
     DocumentModule,
     StationModule,
     SettingsModule,
-    SharedModule,
-    MatSidenavModule
+    MatSidenavModule // TODO: refactor; AppModule should only bootstrap other app modules
   ],
   providers: [],
   bootstrap: [AppComponent]

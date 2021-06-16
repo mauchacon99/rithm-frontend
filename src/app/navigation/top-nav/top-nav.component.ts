@@ -13,7 +13,8 @@ import { UserService } from 'src/app/core/user.service';
 })
 export class TopNavComponent {
   /** Trigger for user menu. */
-  @ViewChild(MatMenuTrigger) userMenuTrigger!: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger)
+  private userMenuTrigger!: MatMenuTrigger;
 
   /** List of navigation items. */
   navItems = ['dashboard', 'map'];
@@ -30,9 +31,7 @@ export class TopNavComponent {
   constructor(
     private sidenavService: SidenavService,
     private userService: UserService
-    ) {
-    // Setup...
-  }
+  ) {}
 
   /**
    * Toggle opening and closing of the mobile navigation.
@@ -49,10 +48,10 @@ export class TopNavComponent {
   onResize(): void {
     this.innerWidth = window.innerWidth;
 
-    if(this.innerWidth >= 768) {
+    if (this.innerWidth >= 768) {
       this.sidenavService.close();
     }
-    if(this.innerWidth <= 768) {
+    if (this.innerWidth <= 768) {
       this.userMenuTrigger.closeMenu();
     }
   }
@@ -68,7 +67,7 @@ export class TopNavComponent {
    * Check if notifications are open before closing them.
    */
   clickedOutside(): void {
-    if(this.notificationsVisible) {
+    if (this.notificationsVisible) {
       this.notificationsVisible = false;
     }
   }

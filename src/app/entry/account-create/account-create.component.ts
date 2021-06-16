@@ -30,8 +30,8 @@ export class AccountCreateComponent {
   /** What errors to get from validator. */
   errorsToGet = '';
 
-  /** Init Password Requirements helper. */
-  private passwordReqService: PasswordRequirements;
+  /** Helper class for password requirements. */
+  private passwordRequirements: PasswordRequirements;
 
   /** Show loading indicator while request is being made. */
   isLoading = false;
@@ -69,7 +69,7 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
     private popupService: PopupService,
     private router: Router
   ) {
-    this.passwordReqService = new PasswordRequirements();
+    this.passwordRequirements = new PasswordRequirements();
 
     this.signUpForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -79,23 +79,23 @@ Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam
         '',
         [
           Validators.required,
-          this.passwordReqService.isGreaterThanEightChars(),
-          this.passwordReqService.hasOneLowerCaseChar(),
-          this.passwordReqService.hasOneUpperCaseChar(),
-          this.passwordReqService.hasOneDigitChar(),
-          this.passwordReqService.hasOneSpecialChar()
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar()
         ]
       ],
       confirmPassword: [
         '',
         [
           Validators.required,
-          this.passwordReqService.isGreaterThanEightChars(),
-          this.passwordReqService.hasOneLowerCaseChar(),
-          this.passwordReqService.hasOneUpperCaseChar(),
-          this.passwordReqService.hasOneDigitChar(),
-          this.passwordReqService.hasOneSpecialChar(),
-          this.passwordReqService.passwordsMatch()
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar(),
+          this.passwordRequirements.passwordsMatch()
         ]
       ],
       agreeToTerms: [false, [Validators.requiredTrue]]

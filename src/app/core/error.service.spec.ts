@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockPopupService } from 'src/mocks';
 
 import { ErrorService } from './error.service';
 import { PopupService } from './popup.service';
@@ -15,9 +14,10 @@ describe('ErrorService', () => {
     TestBed.configureTestingModule({
       imports: [
         BrowserAnimationsModule,
-        MatDialogModule,
         MatButtonModule,
-        MatSnackBarModule
+      ],
+      providers: [
+        { provide: PopupService, useClass: MockPopupService }
       ]
     });
     service = TestBed.inject(ErrorService);
