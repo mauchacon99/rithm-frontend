@@ -3,7 +3,7 @@
   <app-notification-card
   *ngFor="let notification of unread"
   [fromMenu]="true"
-  [type]="notification.type"
+  [notificationType]="notification.type"
   [time]="notification.time"
   [read]="notification.read"
   [title]="notification.title"
@@ -13,7 +13,7 @@
 <app-notification-card
   *ngFor="let notification of read"
   [fromMenu]="true"
-  [type]="notification.type"
+  [notificationType]="notification.type"
   [time]="notification.time"
   [read]="notification.read"
   [title]="notification.title"

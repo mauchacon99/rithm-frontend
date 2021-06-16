@@ -1,55 +1,60 @@
-<ng-template *ngIf="!fromMenu; else elseBlock">
-  <mat-card [@notificationTrigger]="animationTrigger" *ngIf="!isVisible" class="notification-card mat-elevation-z16">
+<ng-content *ngIf="!fromMenu then toastCard; else menuCard"></ng-content>
 
-    <!-- Header -->
-    <div class="row no-gutters">
-      <div class="col-2">
-        <div mat-card-avatar class="profile-photo">
-          <img *ngIf="hasPhoto" src="../../../assets/images/example-profile.jpg" alt="Steve Rogers">
-          <p *ngIf="!hasPhoto">{{initials}}</p>
-        </div>
-        <div class="badge mat-elevation-z4">
-          <i *ngIf="type === 'comment'" class="far fa-comment-alt"></i>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="subtitle-medium">{{title}}</div>
-      </div>
-      <button class="col-2" mat-icon-button (click)="dismiss()">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <!-- Text -->
-    <mat-card-content>
-      <p>{{message}}</p>
-    </mat-card-content>
-
+<!-- Toast card with animation -->
+<ng-template #toastCard>
+  <mat-card *ngIf="isVisible" [@notificationTrigger]="true" class="mat-elevation-z16 notification-card">
+    <ng-content *ngIf="true then notification"></ng-content>
   </mat-card>
 </ng-template>
-<ng-template #elseBlock>
-  <mat-card class="menu-notification mat-elevation-z0">
-    <div class="row no-gutters">
-      <div class="col-2">
-        <div mat-card-avatar class="profile-photo">
-          <img *ngIf="hasPhoto" src="../../../assets/images/example-profile.jpg" alt="Steve Rogers">
-          <p *ngIf="!hasPhoto">{{initials}}</p>
-        </div>
-        <div class="badge mat-elevation-z4">
-          <i *ngIf="type === 'comment'" class="far fa-comment-alt"></i>
-        </div>
-      </div>
-      <div class="col-9">
-        <div class="title">{{title}}</div>
-      </div>
-      <div class="col-1">
-        <div class="read" *ngIf="!read"></div>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-10 offset-2 overline">
-        {{time}}
-      </div>
-    </div>
+
+<!-- Menu card without animation -->
+<ng-template #menuCard>
+  <mat-card *ngIf="isVisible" class="mat-elevation-z0 menu-notification">
+    <ng-content *ngIf="true then notification"></ng-content>
   </mat-card>
+</ng-template>
+
+<!-- Shared notification structure -->
+<ng-template #notification id="notification">
+  <div class="row no-gutters">
+
+    <!-- Profile photo -->
+    <div class="col-2">
+      <div mat-card-avatar class="profile-photo">
+        <img *ngIf="photoUrl" [src]="photoUrl" alt="Steve Rogers">
+        <p *ngIf="!photoUrl">{{initials}}</p>
+      </div>
+      <div class="badge mat-elevation-z4">
+        <i *ngIf="notificationType === 'comment'" class="far fa-comment-alt"></i>
+      </div>
+    </div>
+
+    <!-- Notification title -->
+    <div [ngClass]="fromMenu ? 'col-9' : 'col-8'">
+      <div class="title">{{title}}</div>
+    </div>
+
+    <!-- Dismiss button (toast) -->
+    <button *ngIf="!fromMenu" class="col-2" mat-icon-button (click)="dismiss()">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Read badge (from menu) -->
+    <div class="col-1">
+      <div class="read" *ngIf="!read"></div>
+    </div>
+  </div>
+
+  <!-- Notification time (from menu) -->
+  <div class="row no-gutters">
+    <div class="col-10 offset-2 overline">
+      {{time}}
+    </div>
+  </div>
+
+  <!-- Text (toast) -->
+  <mat-card-content *ngIf="!fromMenu">
+    <p>{{message}}</p>
+  </mat-card-content>
+
 </ng-template>
