@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
-import { Station, User, DashboardHeaderResponse } from 'src/models';
+import { Station, User, DashboardHeaderResponse, DashboardStationData } from 'src/models';
+import { delay } from 'rxjs/operators';
 
 /**
  * Mocks methods of the `DashboardService`.
@@ -52,6 +53,34 @@ export class MockDashboardService {
     };
 
     return of(dashboardHeaderData);
+  }
+
+  /**
+   * Gets a dashboard stations data of a user.
+   *
+   * @returns Dashboard stations data.
+   */
+  getDashboardStations(): Observable<Array<DashboardStationData>> {
+    const dashboardStationData: Array<DashboardStationData> = [
+      {
+        numberOfDocuments: 5,
+        stationName: 'station-1',
+        numberOfWorkers: 3,
+        workerInitials: [
+          'AA', 'AB'
+        ]
+      },
+      {
+        numberOfDocuments: 2,
+        stationName: 'station-2',
+        numberOfWorkers: 6,
+        workerInitials: [
+          'XR', 'PD'
+        ]
+      }
+    ];
+
+    return of(dashboardStationData).pipe(delay(1000));
   }
 
 }

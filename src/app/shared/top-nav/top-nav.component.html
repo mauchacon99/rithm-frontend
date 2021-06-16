@@ -6,8 +6,7 @@
     <img src="../../../assets/logo/white-icon-white-text.svg" alt="Rithm">
   </div>
   <ul class="d-none d-md-block">
-    <!-- TODO: add class 'active' if current page === navigation item -->
-    <li *ngFor="let navItem of navItems">
+    <li *ngFor="let navItem of navItems" routerLink="{{navItem}}" [routerLinkActive]="['active']">
       <a>{{navItem}}</a>
     </li>
   </ul>
@@ -19,10 +18,10 @@
   </div>
 </nav>
 <mat-menu #userMenu="matMenu">
-  <button mat-menu-item>
+  <button mat-menu-item routerLink="settings/account">
     My Account
   </button>
-  <button mat-menu-item>
+  <button mat-menu-item (click)="signOut()">
     Sign Out
   </button>
 </mat-menu>

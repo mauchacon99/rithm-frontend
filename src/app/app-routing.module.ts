@@ -18,6 +18,21 @@ import { AuthGuard } from './core/auth.guard';
       path: 'dashboard',
       loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
       canActivate: [AuthGuard]
+    },
+    {
+      path: 'station',
+      loadChildren: () => import('./station/station.module').then(m => m.StationModule),
+      canActivate: [AuthGuard]
+    },
+    {
+      path: 'document',
+      loadChildren: () => import('./document/document.module').then(m => m.DocumentModule),
+      canActivate: [AuthGuard]
+    },
+    {
+      path: 'settings',
+      loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+      canActivate: [AuthGuard]
     }
   ])],
   exports: [RouterModule]

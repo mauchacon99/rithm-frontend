@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
 import { MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,6 +21,9 @@ import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { PaginationComponent } from './pagination/pagination.component';
+import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
+import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 
 
 @NgModule({
@@ -33,10 +37,14 @@ import { ClickOutsideModule } from 'ng-click-outside';
     NotificationToastsContainerComponent,
     TopNavComponent,
     RosterComponent,
-    NotificationMenuContainerComponent
+    NotificationMenuContainerComponent,
+    PaginationComponent,
+    WorkerRosterModalComponent,
+    StationDocumentsModalComponent
   ],
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     MatCardModule,
     MatDialogModule,
