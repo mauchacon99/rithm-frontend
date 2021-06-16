@@ -6,7 +6,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TokenInterceptor } from './token.interceptor';
-import { MockUserService } from './user-service-mock';
+import { MockUserService } from 'src/mocks';
 import { UserService } from './user.service';
 
 describe('TokenInterceptor', () => {

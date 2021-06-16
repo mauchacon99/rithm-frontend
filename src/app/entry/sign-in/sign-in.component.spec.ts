@@ -10,7 +10,7 @@ import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/te
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockUserService } from 'src/app/core/user-service-mock';
+import { MockUserService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 
 import { SignInComponent } from './sign-in.component';

@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockUserService } from 'src/app/core/user-service-mock';
+import { MockUserService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 
 import { PasswordResetComponent } from './password-reset.component';

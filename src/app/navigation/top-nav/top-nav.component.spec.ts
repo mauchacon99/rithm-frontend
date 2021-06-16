@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockUserService } from 'src/app/core/user-service-mock';
+import { MockUserService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 
 import { TopNavComponent } from './top-nav.component';
