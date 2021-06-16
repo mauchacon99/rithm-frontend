@@ -1,13 +1,12 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TokenInterceptor } from './token.interceptor';
-import { MockUserService } from 'src/mocks';
+import { MockPopupService, MockUserService } from 'src/mocks';
 import { UserService } from './user.service';
+import { PopupService } from './popup.service';
 
 describe('TokenInterceptor', () => {
   // let http: HttpClient;
@@ -17,21 +16,13 @@ describe('TokenInterceptor', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientTestingModule,
-        MatDialogModule,
-        MatSnackBarModule
+        HttpClientTestingModule
       ],
       providers: [
         TokenInterceptor,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: TokenInterceptor,
-          multi: true
-        },
-        {
-          provide: UserService,
-          useClass: MockUserService
-        }
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+        { provide: UserService, useClass: MockUserService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     });
     // http = TestBed.inject(HttpClient);

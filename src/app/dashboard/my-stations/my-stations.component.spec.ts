@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDashboardService } from 'src/mocks';
+import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -12,12 +11,10 @@ describe('MyStationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MyStationsComponent],
-      imports: [
-        MatSnackBarModule,
-        MatDialogModule
-      ],
+      imports: [],
       providers: [
-        { provide: DashboardService, useClass: MockDashboardService }
+        { provide: DashboardService, useClass: MockDashboardService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();
