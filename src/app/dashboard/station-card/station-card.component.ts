@@ -23,7 +23,7 @@ export class StationCardComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
-  constructor(public dialog: MatDialog) {
+  constructor(private dialog: MatDialog) {
 
   }
 
