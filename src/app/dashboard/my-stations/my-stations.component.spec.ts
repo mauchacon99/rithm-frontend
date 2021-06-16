@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MockDashboardService } from '../dashboard-service-mock';
+import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -8,9 +11,16 @@ describe('MyStationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MyStationsComponent ]
+      declarations: [MyStationsComponent],
+      imports: [
+        MatSnackBarModule,
+        MatDialogModule
+      ],
+      providers: [
+        { provide: DashboardService, useClass: MockDashboardService }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -22,4 +32,9 @@ describe('MyStationsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Dashboard stations data verify', () => {
+    expect(component.totalStations.length).toBeGreaterThanOrEqual(0);
+  });
+
 });

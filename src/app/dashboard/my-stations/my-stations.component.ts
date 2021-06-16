@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../dashboard.service';
+import { first } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/core/error.service';
+import { DashboardStationData } from 'src/models';
 
 /**
  * Component for housing the list of a worker's stations.
@@ -8,213 +13,37 @@ import { Component } from '@angular/core';
   templateUrl: './my-stations.component.html',
   styleUrls: ['./my-stations.component.scss']
 })
-export class MyStationsComponent {
+export class MyStationsComponent implements OnInit {
+
   /** Total stations to show. Temp data. */
-  totalStations = [
-    {
-      stationName: 'Station 1',
-      totalDocs: 3,
-      roster: [
-        {
-          initials: 'AB'
-        },
-        {
-          initials: 'CD'
-        },
-        {
-          initials: 'EF'
-        },
-        {
-          initials: 'UV'
-        },
-        {
-          initials: 'WX'
+  totalStations = Array<DashboardStationData>();
+
+  /** Are the stations being loaded. */
+  isLoading = false;
+
+  constructor(private dashboardService: DashboardService,
+    private errorService: ErrorService) { }
+
+  /**
+   * Set the number of roster members to show when less than 3.
+   */
+  ngOnInit(): void {
+    this.isLoading = true;
+    this.dashboardService.getDashboardStations()
+      .pipe(first())
+      .subscribe((res: Array<DashboardStationData>) => {
+        if (res) {
+          this.totalStations = res;
         }
-      ]
-    },
-    {
-      stationName: 'Station 2',
-      totalDocs: 99,
-      roster: [
-        {
-          initials: 'GH'
-        },
-        {
-          initials: 'IJ'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 3',
-      totalDocs: 7,
-      roster: [
-        {
-          initials: 'MN'
-        },
-        {
-          initials: 'OP'
-        },
-        {
-          initials: 'QR'
-        },
-        {
-          initials: 'ST'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 1',
-      totalDocs: 3,
-      roster: [
-        {
-          initials: 'AB'
-        },
-        {
-          initials: 'CD'
-        },
-        {
-          initials: 'EF'
-        },
-        {
-          initials: 'UV'
-        },
-        {
-          initials: 'WX'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 2',
-      totalDocs: 99,
-      roster: [
-        {
-          initials: 'GH'
-        },
-        {
-          initials: 'IJ'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 3',
-      totalDocs: 7,
-      roster: [
-        {
-          initials: 'MN'
-        },
-        {
-          initials: 'OP'
-        },
-        {
-          initials: 'QR'
-        },
-        {
-          initials: 'ST'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 1',
-      totalDocs: 3,
-      roster: [
-        {
-          initials: 'AB'
-        },
-        {
-          initials: 'CD'
-        },
-        {
-          initials: 'EF'
-        },
-        {
-          initials: 'UV'
-        },
-        {
-          initials: 'WX'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 2',
-      totalDocs: 99,
-      roster: [
-        {
-          initials: 'GH'
-        },
-        {
-          initials: 'IJ'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 3',
-      totalDocs: 7,
-      roster: [
-        {
-          initials: 'MN'
-        },
-        {
-          initials: 'OP'
-        },
-        {
-          initials: 'QR'
-        },
-        {
-          initials: 'ST'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 1',
-      totalDocs: 3,
-      roster: [
-        {
-          initials: 'AB'
-        },
-        {
-          initials: 'CD'
-        },
-        {
-          initials: 'EF'
-        },
-        {
-          initials: 'UV'
-        },
-        {
-          initials: 'WX'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 2',
-      totalDocs: 99,
-      roster: [
-        {
-          initials: 'GH'
-        },
-        {
-          initials: 'IJ'
-        }
-      ]
-    },
-    {
-      stationName: 'Station 3',
-      totalDocs: 7,
-      roster: [
-        {
-          initials: 'MN'
-        },
-        {
-          initials: 'OP'
-        },
-        {
-          initials: 'QR'
-        },
-        {
-          initials: 'ST'
-        }
-      ]
-    },
-  ];
+        this.isLoading = false;
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
 
 }
