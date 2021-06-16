@@ -1,1 +1,21 @@
-<p>worker-roster-modal works!</p>
+<section>
+  <h4 *ngIf="isWorker">Worker Roster</h4>
+  <h4 *ngIf="!isWorker">Supervisor Roster</h4>
+  <div class="users">
+    <div class="row" *ngFor="let user of users">
+      <div class="col-2">
+        <div class="avatar">{{user.initials}}</div>
+      </div>
+      <div class="col-10">
+        <p>
+          {{user.firstName}} {{user.lastName}}
+          <br>
+          <span class="overline">{{user.email}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="row justify-content-end">
+    <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">Close</button>
+  </div>
+</section>
