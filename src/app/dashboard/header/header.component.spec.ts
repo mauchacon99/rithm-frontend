@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from '../dashboard.service';
 import { HeaderComponent } from './header.component';
-import { MockDashboardService } from '../dashboard-service-mock';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MockDashboardService, MockPopupService } from 'src/mocks';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -16,12 +15,11 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       imports: [
         RouterTestingModule,
-        MatSnackBarModule,
-        MatDialogModule,
         MatProgressSpinnerModule
       ],
       providers: [
-        { provide: DashboardService, useClass: MockDashboardService }
+        { provide: DashboardService, useClass: MockDashboardService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

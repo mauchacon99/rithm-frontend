@@ -1,12 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockPopupService } from 'src/mocks';
 
 import { AuthGuard } from './auth.guard';
+import { PopupService } from './popup.service';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
@@ -17,9 +17,10 @@ describe('AuthGuard', () => {
         BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientModule,
-        MatSnackBarModule,
-        MatDialogModule,
         MatButtonModule
+      ],
+      providers: [
+        { provide: PopupService, useClass: MockPopupService }
       ]
     });
     guard = TestBed.inject(AuthGuard);

@@ -3,17 +3,16 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockUserService } from 'src/app/core/user-service-mock';
+import { MockPopupService, MockUserService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 
 import { SignInComponent } from './sign-in.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -26,12 +25,11 @@ describe('SignInComponent', () => {
       imports: [
         RouterTestingModule,
         ReactiveFormsModule,
-        MatSnackBarModule,
-        MatDialogModule,
         MatProgressSpinnerModule
       ],
       providers: [
-        { provide: UserService, useClass: MockUserService }
+        { provide: UserService, useClass: MockUserService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

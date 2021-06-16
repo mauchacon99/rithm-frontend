@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// const MICROSERVICE_PATH = '/flowservice';
+// const MICROSERVICE_PATH = '/flowservice/api/flow';
 
 /**
  * Service for all flow behavior and business logic.

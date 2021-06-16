@@ -23,7 +23,7 @@ export class PasswordResetComponent implements OnInit {
   private guid = '';
 
   /** Password requirements helper. */
-  private passwordReq: PasswordRequirements;
+  private passwordRequirements: PasswordRequirements;
 
   /** Password reset form. */
   passResetForm: FormGroup;
@@ -48,29 +48,29 @@ export class PasswordResetComponent implements OnInit {
     private popupService: PopupService,
     private router: Router
   ) {
-    this.passwordReq = new PasswordRequirements();
+    this.passwordRequirements = new PasswordRequirements();
     this.passResetForm = this.fb.group({
       password: [
         '',
         [
           Validators.required,
-          this.passwordReq.isGreaterThanEightChars(),
-          this.passwordReq.hasOneLowerCaseChar(),
-          this.passwordReq.hasOneUpperCaseChar(),
-          this.passwordReq.hasOneDigitChar(),
-          this.passwordReq.hasOneSpecialChar()
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar()
         ]
       ],
       confirmPassword: [
         '',
         [
           Validators.required,
-          this.passwordReq.isGreaterThanEightChars(),
-          this.passwordReq.hasOneLowerCaseChar(),
-          this.passwordReq.hasOneUpperCaseChar(),
-          this.passwordReq.hasOneDigitChar(),
-          this.passwordReq.hasOneSpecialChar(),
-          this.passwordReq.passwordsMatch()
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar(),
+          this.passwordRequirements.passwordsMatch()
         ]
       ]
     });
