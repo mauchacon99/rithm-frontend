@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from '../dashboard.service';
 import { HeaderComponent } from './header.component';
-import { MockDashboardService } from '../dashboard-service-mock';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MockDashboardService } from 'src/mocks';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;

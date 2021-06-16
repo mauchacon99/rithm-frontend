@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockDashboardService } from '../dashboard-service-mock';
+import { MockDashboardService } from 'src/mocks';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
