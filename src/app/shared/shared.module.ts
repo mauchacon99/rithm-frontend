@@ -17,7 +17,7 @@ import { PasswordRequirementsComponent } from './password-requirements/password-
 import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from './pagination/pagination.component';
-import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
+import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 
 
@@ -30,7 +30,7 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
     PasswordRequirementsComponent,
     RosterComponent,
     PaginationComponent,
-    WorkerRosterModalComponent,
+    RosterModalComponent,
     StationDocumentsModalComponent
   ],
   imports: [

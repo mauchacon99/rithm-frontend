@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WorkerRosterModalComponent } from './worker-roster-modal.component';
+import { RosterModalComponent } from './roster-modal.component';
 
-describe('WorkerRosterModalComponent', () => {
-  let component: WorkerRosterModalComponent;
-  let fixture: ComponentFixture<WorkerRosterModalComponent>;
+describe('RosterModalComponent', () => {
+  let component: RosterModalComponent;
+  let fixture: ComponentFixture<RosterModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WorkerRosterModalComponent ]
+      declarations: [ RosterModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WorkerRosterModalComponent);
+    fixture = TestBed.createComponent(RosterModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
