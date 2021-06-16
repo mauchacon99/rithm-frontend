@@ -1,12 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockDashboardService } from '../dashboard-service-mock';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -16,11 +13,8 @@ describe('MyStationsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [MyStationsComponent],
       imports: [
-        RouterTestingModule,
         MatSnackBarModule,
-        MatDialogModule,
-        MatProgressSpinnerModule,
-        HttpClientTestingModule
+        MatDialogModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService }
