@@ -67,7 +67,6 @@ export class SignInComponent implements OnInit {
           }
         }
 
-
       }, (error) => {
         this.showInvalidLinkMessage(error);
       });

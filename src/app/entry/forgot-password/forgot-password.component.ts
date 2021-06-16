@@ -42,7 +42,6 @@ export class ForgotPasswordComponent {
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;
-        // TODO: RIT-283
         this.openAlert();
       }, (error) => {
         this.isLoading = false;
