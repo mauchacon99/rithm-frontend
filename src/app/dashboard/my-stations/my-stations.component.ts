@@ -34,8 +34,8 @@ export class MyStationsComponent implements OnInit {
       .subscribe((res: Array<DashboardStationData>) => {
         if (res) {
           this.totalStations = res;
-          this.isLoading = false;
         }
+        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(
