@@ -13,8 +13,8 @@
   <button (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button>
     <i class="fas fa-bell"></i>
   </button>
-  <div [matMenuTriggerFor]="userMenu" class="profile d-none d-md-block">
-    {{monogram}}
+  <div [matMenuTriggerFor]="userMenu" class="d-none d-md-block">
+    <app-user-avatar [user]="user"></app-user-avatar>
   </div>
 </nav>
 <mat-menu #userMenu="matMenu">

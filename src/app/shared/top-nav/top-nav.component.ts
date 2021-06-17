@@ -2,6 +2,7 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SidenavService } from 'src/app/core/sidenav.service';
 import { UserService } from 'src/app/core/user.service';
+import { User } from 'src/models';
 
 /**
  * Component for the top site navigation.
@@ -18,8 +19,8 @@ export class TopNavComponent {
   /** List of navigation items. */
   navItems = ['dashboard', 'map'];
 
-  /** Monogram for user profile icon. */
-  monogram = 'AB';
+  /** User variable. */
+  user: User;
 
   /** Init the browser width. */
   innerWidth = 0;
@@ -32,6 +33,7 @@ export class TopNavComponent {
     private userService: UserService
     ) {
     // Setup...
+    this.user = this.userService.user as User;
   }
 
   /**

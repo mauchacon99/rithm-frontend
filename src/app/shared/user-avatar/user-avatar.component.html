@@ -1,1 +1,4 @@
-<p>user-avatar works!</p>
+<div class="profile">
+  <img *ngIf="user?.profilePic" class="picture" src={{user?.profilePic}}>
+  {{initials}}
+</div>
