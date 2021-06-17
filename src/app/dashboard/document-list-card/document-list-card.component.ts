@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Document } from 'src/models';
 
 /**
- * Component for displaying an list of documents on the dashboard.
+ * Component for displaying a list of documents on the dashboard.
  */
 @Component({
   selector: 'app-document-list-card',
