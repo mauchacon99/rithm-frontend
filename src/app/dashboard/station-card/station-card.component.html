@@ -3,16 +3,16 @@
   <div class="roster">
     <p class="overline">worker roster</p>
     <span class="circles">
-      <div *ngFor="let initial of roster | slice:0:slices" class="avatar" (click)="openRosterModal()">
+      <div *ngFor="let initial of roster | slice:0:slices" class="avatar" (click)="openModal(rosterComponent)">
         {{initial}}
       </div>
-      <div *ngIf="roster.length > 3" class="avatar" (click)="openRosterModal()">+{{roster.length - 2}}</div>
+      <div *ngIf="roster.length > 3" class="avatar" (click)="openModal(rosterComponent)">+{{roster.length - 2}}</div>
     </span>
   </div>
   <div class="docs">
     <p class="overline">documents</p>
     <span class="circles">
-      <div class="doc-count">{{totalDocs}}</div>
+      <div class="doc-count" (click)="openModal(stationDocsComponent)">{{totalDocs}}</div>
     </span>
   </div>
 </mat-card>

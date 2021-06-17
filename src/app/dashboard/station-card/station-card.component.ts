@@ -1,6 +1,8 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 /**
  * Component for displaying a card with station information on the dashboard.
@@ -23,6 +25,12 @@ export class StationCardComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
+  /** Roster modal component. */
+  rosterComponent = RosterModalComponent;
+
+  /** Station documents modal component. */
+  stationDocsComponent = StationDocumentsModalComponent;
+
   constructor(private dialog: MatDialog) {
 
   }
@@ -37,11 +45,12 @@ export class StationCardComponent implements OnInit {
   }
 
   /**
-   * Open the roster.
+   * Open a modal with roster or document information.
+   *
+   * @param componentName Name of the component to open.
    */
-  openRosterModal(): void {
-    // TODO: RIT-428 Send Station info to Roster modal component.
-    this.dialog.open(RosterModalComponent, {
+  openModal(componentName: ComponentType<unknown>): void {
+    this.dialog.open(componentName, {
       minWidth: '325px'
     });
   }
