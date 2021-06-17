@@ -38,4 +38,58 @@ export class MockDocumentService {
     }
     return of(filterData).pipe(delay(1000));
   }
+
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+   getPreviouslyStartedDocuments(): Observable<Document[]> {
+    const filterData: Document[] = [
+      {
+        docName: 'Really long document name',
+        stationName: 'really long Station name',
+        timeInStation: '2 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 2',
+        stationName: 'Station name',
+        timeInStation: '4 hours',
+        priority: 2,
+        firstName: '',
+        lastName: ''
+      }
+    ];
+    return of(filterData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of priority queue documents.
+   *
+   * @returns A list of priority queue documents.
+   */
+  getPriorityQueueDocuments(): Observable<Document[]> {
+    const filterData: Document[] = [
+      {
+        docName: 'Really long document name',
+        stationName: 'really long Station name',
+        timeInStation: '2 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 2',
+        stationName: 'Station name',
+        timeInStation: '4 hours',
+        priority: 2,
+        firstName: '',
+        lastName: ''
+      }
+    ];
+    return of(filterData).pipe(delay(1000));
+  }
 }
