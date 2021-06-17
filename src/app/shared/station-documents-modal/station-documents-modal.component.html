@@ -2,29 +2,32 @@
   <span>
     <div class="row no-gutters">
       <div class="col-9 col-md-5 col-lg-4 col-xl-5">
-        Document
+        <strong>Document</strong>
       </div>
       <div class="col-3 col-md-3 col-md-4 col-lg-3">
-        Assigned
+        <strong>Assigned</strong>
       </div>
       <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
-        Time in Station
+        <strong>Time in Station</strong>
       </div>
       <div class="col-2 d-none d-lg-block">
-        Last Updated
+        <strong>Last Updated</strong>
       </div>
     </div>
     <div *ngFor="let data of totalDocs" class="row no-gutters">
       <div class="col-9 col-md-5 col-lg-4 col-xl-5">
         <!-- Priority -->
-        <span class="priority-badge">
+        <div class="priority">
           {{ data.priority }}
-        </span>
+        </div>
         <!-- Document name -->
         {{ data.docName }}
       </div>
       <!-- Assigned -->
       <div class="col-3 col-md-3 col-md-4 col-lg-3">
+        <div class="initials">
+          {{data?.firstName | slice:0:1}}{{data?.lastName | slice:0:1}}
+        </div>
         <span class="d-none d-md-block">
           {{ data?.firstName }} {{ data?.lastName }}
         </span>
@@ -37,22 +40,6 @@
       <div class="col-2 d-none d-lg-block">
         {{ data.lastUpdated }}
       </div>
-
-      <!-- <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-inline-block">
-          {{ data.priority }}
-      </div>
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-none d-md-block d-xl-block col-md-4">
-        {{ data.docName }}
-      </div>
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-none d-md-block d-xl-block col-md-4">
-        {{ data.stationName }}
-      </div>
-      <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
-        {{ data.timeInStation }}
-      </div> -->
     </div>
   </span>
 </div>
