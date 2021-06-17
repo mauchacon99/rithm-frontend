@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DashboardHeaderResponse, DashboardStationData } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData, User } from 'src/models';
+import { UserService } from '../core/user.service';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -14,7 +15,8 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 })
 export class DashboardService {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private userService: UserService,
   ) { }
 
   /**
@@ -33,5 +35,15 @@ export class DashboardService {
    */
   getDashboardStations(): Observable<DashboardStationData[]> {
     return this.http.get<DashboardStationData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+  }
+
+  /**
+   * Gets user information.
+   *
+   * @returns User information.
+   */
+  getUserInfo(): Observable<User> {
+    const user = <User>this.userService.user;
+    return of(user);
   }
 }

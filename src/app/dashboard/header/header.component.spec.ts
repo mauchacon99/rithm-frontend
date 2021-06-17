@@ -35,9 +35,16 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('dashboard header data verify', () => {
+  it('should return dashboard header data for number of stations', () => {
     expect(component.numPrev).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should return dashboard header data for previous documents', () => {
     expect(component.numStations).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should return user info', () => {
+    expect(component.user).toBeDefined();
   });
 
 });

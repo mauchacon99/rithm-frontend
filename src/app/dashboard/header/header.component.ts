@@ -30,10 +30,10 @@ export class HeaderComponent implements OnInit {
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService) {
     this.user = {
-      rithmId: '1',
-      firstName: 'Steve',
-      lastName: 'Rogers',
-      email: 'steve@rogers.com',
+      rithmId: '',
+      firstName: '',
+      lastName: '',
+      email: '',
       objectPermissions: [],
       groups: [],
       createdDate: ''
@@ -46,9 +46,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
 
     /**
-     * Get dashboard header display data.
+     * Get dashboard header display for number previous documents and stations.
      */
-
     this.dashboardService.getDashboardHeader()
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
@@ -66,6 +65,23 @@ export class HeaderComponent implements OnInit {
           true
         );
       });
+
+    /**
+     * Get user first na last name to display in dashboard.
+     */
+    this.dashboardService.getUserInfo()
+      .pipe(first())
+      .subscribe((response: User) => {
+        this.user = response;
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+
   }
 
 }
