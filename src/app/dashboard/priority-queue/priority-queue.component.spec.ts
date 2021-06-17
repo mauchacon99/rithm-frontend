@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockDocumentService, MockPopupService } from 'src/mocks';
 
 import { PriorityQueueComponent } from './priority-queue.component';
 
@@ -8,9 +11,13 @@ describe('PriorityQueueComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PriorityQueueComponent ]
+      declarations: [PriorityQueueComponent],
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService }
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +28,9 @@ describe('PriorityQueueComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return priority queue documents', () => {
+    expect(component.docsList.length).toBeGreaterThanOrEqual(0);
   });
 });

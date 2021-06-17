@@ -28,4 +28,18 @@ describe('DocumentService', () => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
   });
+
+  it('should return a list of previously started documents', () => {
+    service.getPreviouslyStartedDocuments()
+      .subscribe((response) => {
+        expect(response.length).toBeGreaterThanOrEqual(0);
+      });
+  });
+
+  it('should return a list of priority queue documents', () => {
+    service.getPriorityQueueDocuments()
+      .subscribe((response) => {
+        expect(response.length).toBeGreaterThanOrEqual(0);
+      });
+  });
 });
