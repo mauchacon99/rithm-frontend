@@ -1,6 +1,11 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { DocumentService } from 'src/app/core/document.service';
 import { StationDocumentsModalComponent } from './station-documents-modal.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockDocumentService } from 'src/app/core/document.service-mock';
+import { MockPopupService } from 'src/mocks';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('StationDocumentsModalComponent', () => {
   let component: StationDocumentsModalComponent;
@@ -8,9 +13,17 @@ describe('StationDocumentsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationDocumentsModalComponent ]
+      declarations: [StationDocumentsModalComponent],
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +34,9 @@ describe('StationDocumentsModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return zero or more documents', () => {
+    expect(component.totalDocs.length).toBeGreaterThanOrEqual(0);
   });
 });
