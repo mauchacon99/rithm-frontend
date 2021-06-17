@@ -12,7 +12,7 @@ export class MockDashboardService {
    *
    * @returns Dashboard header data.
    */
-   getDashboardHeader(): Observable<DashboardHeaderResponse> {
+  getDashboardHeader(): Observable<DashboardHeaderResponse> {
     const dashboardHeaderData: DashboardHeaderResponse = {
       userRithmId: '1234',
       id: 1,

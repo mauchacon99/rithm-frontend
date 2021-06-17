@@ -3,7 +3,7 @@
     <div *ngIf="!isLoading" class="row no-gutters m-0">
       <div class="col-lg-8 col-md-12">
         <h4>
-          Welcome, {{user.firstName}} {{user.lastName}}
+          Welcome, {{user?.firstName}} {{user?.lastName}}
         </h4>
         <p class="welcome-status">
           You currently have <strong>{{numPrev}} previously started documents</strong> and you're a member of <strong>{{numStations}} stations.</strong>
