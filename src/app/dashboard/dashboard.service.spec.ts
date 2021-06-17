@@ -83,11 +83,4 @@ describe('DashboardService', () => {
     httpTestingController.verify();
   });
 
-  it('should return user info', () => {
-    service.getUserInfo()
-      .subscribe((response) => {
-        expect(response).not.toBeDefined();
-      });
-  });
-
 });

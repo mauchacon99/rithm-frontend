@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { DashboardHeaderResponse, DashboardStationData, User } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData } from 'src/models';
 import { delay } from 'rxjs/operators';
 
 /**
@@ -49,24 +49,6 @@ export class MockDashboardService {
     ];
 
     return of(dashboardStationData).pipe(delay(1000));
-  }
-
-  /**
-   * Gets user information.
-   *
-   * @returns User information.
-   */
-  getUserInfo(): Observable<User> {
-    const user: User = {
-      rithmId: '1',
-      firstName: 'Steve',
-      lastName: 'Rogers',
-      email: 'steve@rogers.com',
-      objectPermissions: [],
-      groups: [],
-      createdDate: ''
-    };
-    return of(user).pipe(delay(1000));
   }
 
 }

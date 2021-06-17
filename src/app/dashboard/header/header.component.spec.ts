@@ -3,8 +3,9 @@ import { DashboardService } from '../dashboard.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MockDashboardService, MockPopupService } from 'src/mocks';
+import { MockDashboardService, MockPopupService, MockUserService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -19,6 +20,7 @@ describe('HeaderComponent', () => {
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService }
       ]
     })
@@ -41,10 +43,6 @@ describe('HeaderComponent', () => {
 
   it('should return dashboard header data for previous documents', () => {
     expect(component.numStations).toBeGreaterThanOrEqual(0);
-  });
-
-  it('should return user info', () => {
-    expect(component.user).toBeDefined();
   });
 
 });

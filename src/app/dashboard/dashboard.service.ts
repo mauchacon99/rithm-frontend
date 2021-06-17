@@ -37,13 +37,4 @@ export class DashboardService {
     return this.http.get<DashboardStationData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
   }
 
-  /**
-   * Gets user information.
-   *
-   * @returns User information.
-   */
-  getUserInfo(): Observable<User> {
-    const user = <User>this.userService.user;
-    return of(user);
-  }
 }

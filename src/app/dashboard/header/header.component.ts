@@ -5,6 +5,7 @@ import { DashboardHeaderResponse } from 'src/models';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the dashboard overview header.
@@ -28,7 +29,8 @@ export class HeaderComponent implements OnInit {
   isLoading = false;
 
   constructor(private dashboardService: DashboardService,
-    private errorService: ErrorService) {
+    private errorService: ErrorService,
+    private userService: UserService) {
     this.user = {
       rithmId: '',
       firstName: '',
@@ -67,20 +69,9 @@ export class HeaderComponent implements OnInit {
       });
 
     /**
-     * Get user first na last name to display in dashboard.
+     * Get user first and last name to display in dashboard.
      */
-    this.dashboardService.getUserInfo()
-      .pipe(first())
-      .subscribe((response: User) => {
-        this.user = response;
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
+    this.user = <User>this.userService.user;
 
   }
 
