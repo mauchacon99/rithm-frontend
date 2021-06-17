@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { StationCardComponent } from './station-card.component';
 
@@ -8,7 +9,10 @@ describe('StationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationCardComponent ]
+      declarations: [ StationCardComponent ],
+      imports: [
+        MatDialogModule
+      ]
     })
     .compileComponents();
   });

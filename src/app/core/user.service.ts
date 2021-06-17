@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse, User } from 'src/models';
 
-const MICROSERVICE_PATH = '/userservice';
+const MICROSERVICE_PATH = '/userservice/api/user';
 
 /**
  * Service for all interactions involving a user.
@@ -39,7 +39,7 @@ export class UserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/login`, {
+    return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/login`, {
       email,
       password
     }, { withCredentials: true }).pipe(
@@ -102,7 +102,7 @@ export class UserService {
 
     const params = new HttpParams().set('refreshTokenGuid', refreshTokenGuid);
 
-    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/refreshtoken`,
+    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refreshtoken`,
       { withCredentials: true, params }).pipe(
         map((tokenResponse) => {
           this.accessToken = new AccessToken(tokenResponse.accessToken);
@@ -121,7 +121,7 @@ export class UserService {
    * @returns An empty observable.
    */
   register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/register`, {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/register`, {
       firstName,
       lastName,
       email,
@@ -137,7 +137,7 @@ export class UserService {
    * @returns An empty observable.
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/validateemail`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validateemail`,
       {
         guid,
         email
@@ -151,7 +151,7 @@ export class UserService {
    * @returns An empty observable.
    */
   sendPasswordResetEmail(email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/forgotpassword`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgotpassword`,
       { email });
   }
 
@@ -164,7 +164,7 @@ export class UserService {
    * @returns An empty observable.
    */
   resetPassword(guid: string, email: string, password: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/user/resetpassword`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/resetpassword`,
       {
         guid,
         email,

@@ -5,6 +5,7 @@ import { DashboardHeaderResponse } from 'src/models';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the dashboard overview header.
@@ -28,12 +29,13 @@ export class HeaderComponent implements OnInit {
   isLoading = false;
 
   constructor(private dashboardService: DashboardService,
-    private errorService: ErrorService) {
+    private errorService: ErrorService,
+    private userService: UserService) {
     this.user = {
-      rithmId: '1',
-      firstName: 'Steve',
-      lastName: 'Rogers',
-      email: 'steve@rogers.com',
+      rithmId: '',
+      firstName: '',
+      lastName: '',
+      email: '',
       objectPermissions: [],
       groups: [],
       createdDate: ''
@@ -46,9 +48,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
 
     /**
-     * Get dashboard header display data.
+     * Get dashboard header display for number previous documents and stations.
      */
-
     this.dashboardService.getDashboardHeader()
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
@@ -66,6 +67,12 @@ export class HeaderComponent implements OnInit {
           true
         );
       });
+
+    /**
+     * Get user first and last name to display in dashboard.
+     */
+    this.user = <User>this.userService.user;
+
   }
 
 }

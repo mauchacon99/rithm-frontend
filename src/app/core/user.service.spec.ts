@@ -9,6 +9,8 @@ import { SignInResponse, TokenResponse } from 'src/models';
 
 import { UserService } from './user.service';
 
+const MICROSERVICE_PATH = '/userservice/api/user';
+
 const testUser = {
   firstName: 'Samus',
   lastName: 'Aran',
@@ -58,7 +60,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/login`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/login`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email, password });
 
@@ -99,7 +101,7 @@ describe('UserService', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
-  it('should user as signed in', async () => {
+  it('should report user as signed in', async () => {
     service.accessToken = new AccessToken('token');
     expect(await service.isSignedIn()).toBeTrue();
   });
@@ -127,13 +129,20 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/refreshtoken?refreshTokenGuid=thisisaguid`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refreshtoken?refreshTokenGuid=thisisaguid`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
     expect(req.request.params).toBeTruthy();
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should sign the user out if refresh token GUID is missing', () => {
+    const signOutSpy = spyOn(service, 'signOut');
+    localStorage.clear();
+    service.refreshToken();
+    expect(signOutSpy).toHaveBeenCalledOnceWith();
   });
 
   it('should register a user successfully', () => {
@@ -148,7 +157,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/register`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/register`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ firstName, lastName, email, password });
 
@@ -166,7 +175,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/validateemail`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validateemail`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email });
 
@@ -183,7 +192,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/forgotpassword`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgotpassword`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email });
 
@@ -202,7 +211,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/user/resetpassword`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/resetpassword`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email, password });
 

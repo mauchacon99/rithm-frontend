@@ -36,8 +36,8 @@ import { trigger, style, animate, transition } from '@angular/animations';
 })
 export class NotificationCardComponent {
 
-  /** Trigger the event to dismiss a notification. */
-  @Output() public dismissEvent: EventEmitter<unknown> = new EventEmitter();
+  /** The event to dismiss a notification. */
+  @Output() dismissEvent: EventEmitter<unknown> = new EventEmitter();
 
   /** The title for the notification. */
   @Input() title = 'Steven Rogers tagged you in a comment';
@@ -45,35 +45,32 @@ export class NotificationCardComponent {
   /** The notification message. */
   @Input() message = '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text';
 
-  /** Has the notification been read. */
+  /** Whether the notification has been read. */
   @Input() read = false;
 
   /** When was the notification sent. */
-  @Input() time = '10 minutes ago';
+  @Input() time = '10 minutes ago'; // TODO: this should be passed in as an ISO string, so we should calculate the format
 
-  /** Is the notification from the menu. */
+  /** Whether the notification is from the menu. */
   @Input() fromMenu = false;
 
   /** Users initials for profile photo/icon. */
   @Input() initials = 'SR';
 
-  /** Does the user have a profile photo. */
-  hasPhoto = false;
+  /** The URL for the profile photo, if any. */
+  @Input() photoUrl = ''; // ../../../assets/images/example-profile.jpg
 
   /** Type of notification. */
-  @Input() type = 'comment';
+  @Input() notificationType = 'comment';
 
-  /** Used to trigger the animations when entering. */
-  @Input() animationTrigger = false;
-
-  /** Used to trigger the animate out. */
-  isVisible = false;
+  /** Whether the notification is visible (used to trigger the animate out). */
+  isVisible = true;
 
   /**
    * Dismisses this specific notification.
    */
   dismiss(): void {
-    this.isVisible = true;
+    this.isVisible = false;
     this.dismissEvent.emit();
   }
 

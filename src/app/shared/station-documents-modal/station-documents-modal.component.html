@@ -1,1 +1,28 @@
-<p>station-documents-modal works!</p>
+<!-- <div>
+  <span>
+    <div *ngFor="let data of totalDocs" class="row no-gutters">
+      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
+        class="d-inline-block">
+          {{ data.priority }}
+      </div>
+      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
+        class="d-none d-md-block d-xl-block col-md-4">
+        {{ data.docName }}
+      </div>
+      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
+        class="d-none d-md-block d-xl-block col-md-4">
+        {{ data.stationName }}
+      </div>
+      <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
+        {{ data.timeInStation }}
+      </div>
+    </div>
+  </span>
+</div>
+<br>
+<div *ngFor="let num of pageNumbers" style="display: inline-block;" (click)="getDocuments(num)">
+  <span class="page-num">
+    <span [ngClass]="{'active': activeNum === num}">{{ num }}
+    </span>
+  </span>
+</div> -->

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
-import { MatCardContent, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -10,19 +10,14 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
-import { NotificationCardComponent } from './notification-card/notification-card.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PasswordRequirementsComponent } from './password-requirements/password-requirements.component';
-import { NotificationToastsContainerComponent } from './notification-toasts-container/notification-toasts-container.component';
-import { TopNavComponent } from './top-nav/top-nav.component';
 import { RosterComponent } from './roster/roster.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { NotificationMenuContainerComponent } from './notification-menu-container/notification-menu-container.component';
-import { ClickOutsideModule } from 'ng-click-outside';
 import { PaginationComponent } from './pagination/pagination.component';
-import { WorkerRosterModalComponent } from './worker-roster-modal/worker-roster-modal.component';
+import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
@@ -33,14 +28,10 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     ConfirmDialogComponent,
     PromptDialogComponent,
     FullScreenLoaderComponent,
-    NotificationCardComponent,
     PasswordRequirementsComponent,
-    NotificationToastsContainerComponent,
-    TopNavComponent,
     RosterComponent,
-    NotificationMenuContainerComponent,
     PaginationComponent,
-    WorkerRosterModalComponent,
+    RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent
   ],
@@ -55,22 +46,18 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
-    MatMenuModule,
-    ClickOutsideModule
+    MatMenuModule
   ],
   exports: [
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
     FullScreenLoaderComponent,
-    NotificationCardComponent,
-    NotificationToastsContainerComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
     MatButtonModule,
     PasswordRequirementsComponent,
-    TopNavComponent,
     UserAvatarComponent
   ]
 })
