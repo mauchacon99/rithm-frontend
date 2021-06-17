@@ -1,7 +1,6 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { DocumentService } from './document.service';
 
 describe('DocumentService', () => {
@@ -10,8 +9,7 @@ describe('DocumentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
+        HttpClientTestingModule
       ]
     });
     service = TestBed.inject(DocumentService);

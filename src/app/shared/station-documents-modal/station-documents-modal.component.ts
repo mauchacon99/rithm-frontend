@@ -31,7 +31,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private errorService: ErrorService) { }
 
   /**
-   * Set the number of .
+   * Gets the first page of documents on load.
    */
   ngOnInit(): void {
     this.getDocuments(1);
