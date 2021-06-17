@@ -1,1 +1,19 @@
-// Styles here
+.doc-container {
+  width: 1000px;
+
+  @media screen and (max-width: 1499px) {
+    width: 743px;
+  }
+
+  @media screen and (max-width: 991px) {
+    width: 566px;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 389px;
+  }
+
+  @media screen and (max-width: 575px) {
+    width: 100%;
+  }
+}
