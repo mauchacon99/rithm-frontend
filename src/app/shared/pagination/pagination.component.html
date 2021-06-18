@@ -1,1 +1,13 @@
-<p>pagination works!</p>
+<button [disabled]="pagesArr[0] === activeNum" class="left" (click)="decrementPage()">
+  <i class="fas fa-chevron-left"></i>
+</button>
+<div *ngFor="let num of pagesArr | slice:startingPageNum:endingPageNum" (click)="changePage(num)" class="num-container">
+  <button [ngClass]="{'active': activeNum === num}" class="page-num">
+    <span>
+      {{ num }}
+    </span>
+  </button>
+</div>
+<button class="right" (click)="incrementPage()">
+  <i class="fas fa-chevron-right"></i>
+</button>
