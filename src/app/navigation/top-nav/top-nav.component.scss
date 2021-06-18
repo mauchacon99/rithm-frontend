@@ -75,21 +75,10 @@ nav {
     }
   }
 
-  .profile {
+  .userMenu {
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background: $secondary-gray;
-    border: 1px solid #fff;
     margin: 0 30px 0 10px;
-    line-height: 40px;
-    text-align: center;
-    color: #fff;
-    font-weight: 600;
-
-    &:hover {
-      cursor: pointer;
-      background: map-get($secondary-gray-palette, 600);
-    }
   }
 }

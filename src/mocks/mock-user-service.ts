@@ -15,7 +15,15 @@ export class MockUserService {
   accessToken = new AccessToken('tokentokentokentokentoken');
 
   /** The currently signed in user. */
-  user: User | undefined;
+  user: User | undefined = {
+    rithmId: '123',
+    firstName: 'Testy',
+    lastName: 'Test',
+    email: 'test@test.com',
+    objectPermissions: [],
+    groups: [],
+    createdDate: '1/2/34'
+  };
 
   /**
    * Signs the user in to the system.
@@ -48,7 +56,7 @@ export class MockUserService {
       return of({
         accessToken: 'wowowowo',
         refreshTokenGuid: 'ab5d4-ae56g',
-        user: undefined
+        user: this.user
       }).pipe(delay(1000));
     }
 

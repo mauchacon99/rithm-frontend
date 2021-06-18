@@ -24,7 +24,7 @@ export class DocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-   getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
+  getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
       { docName: 'This is a really long document name', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2,
       firstName: 'John', lastName: 'Doe', blocked: false, lastUpdated: '' },
@@ -116,6 +116,92 @@ export class DocumentService {
       pageNum = ((pageNum * 10) - 10);
       filterData = ELEMENT_DATA.slice(pageNum, (pageNum + 10));
     }
+    return of(filterData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+  getPreviouslyStartedDocuments(): Observable<Document[]> {
+    const filterData: Document[] = [
+      {
+        docName: 'Really long document name',
+        stationName: 'really long Station name',
+        timeInStation: '2 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 2',
+        stationName: 'Station name',
+        timeInStation: '4 hours',
+        priority: 2,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 3',
+        stationName: 'Station name',
+        timeInStation: '5 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 4',
+        stationName: 'Station name',
+        timeInStation: '7 hours',
+        priority: 3,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 5',
+        stationName: 'Station name',
+        timeInStation: '1 hour',
+        priority: 7,
+        firstName: '',
+        lastName: ''
+      }
+    ];
+    return of(filterData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of priority queue documents.
+   *
+   * @returns A list of top priority queue documents.
+   */
+  getPriorityQueueDocuments(): Observable<Document[]> {
+    const filterData: Document[] = [
+      {
+        docName: 'Really long document name',
+        stationName: 'really long Station name',
+        timeInStation: '2 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 2',
+        stationName: 'Station name',
+        timeInStation: '4 hours',
+        priority: 2,
+        firstName: '',
+        lastName: ''
+      },
+      {
+        docName: 'New Doc 3',
+        stationName: 'Station name',
+        timeInStation: '5 hours',
+        priority: 1,
+        firstName: '',
+        lastName: ''
+      },
+    ];
     return of(filterData).pipe(delay(1000));
   }
 

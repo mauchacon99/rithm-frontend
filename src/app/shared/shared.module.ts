@@ -19,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
     RosterComponent,
     PaginationComponent,
     RosterModalComponent,
-    StationDocumentsModalComponent
+    StationDocumentsModalComponent,
+    UserAvatarComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +57,8 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
     MatCheckboxModule,
     MatCardModule,
     MatButtonModule,
-    PasswordRequirementsComponent
+    PasswordRequirementsComponent,
+    UserAvatarComponent
   ]
 })
 export class SharedModule { }

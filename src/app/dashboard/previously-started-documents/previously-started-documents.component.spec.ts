@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockDocumentService, MockPopupService } from 'src/mocks';
 
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents.component';
 
@@ -8,9 +11,13 @@ describe('PreviouslyStartedDocumentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PreviouslyStartedDocumentsComponent ]
+      declarations: [PreviouslyStartedDocumentsComponent],
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService }
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -22,4 +29,9 @@ describe('PreviouslyStartedDocumentsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should return previously started documents', () => {
+    expect(component.docsList.length).toBeGreaterThanOrEqual(0);
+  });
+
 });
