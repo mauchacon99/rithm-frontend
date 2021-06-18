@@ -10,7 +10,7 @@ export interface Document {
   stationName: string;
 
   /** Time In Station. */
-  timeInStation: string;
+  timeInStation: number;
 
   /** Priority of the document. */
   priority: number;

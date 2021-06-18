@@ -15,18 +15,18 @@ export class MockDocumentService {
    */
    getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
-      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Jane', stationName: 'Helium', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Ashley', stationName: 'Lithium', timeInStation: '4 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Image', stationName: 'Beryllium', timeInStation: '1 Hours', priority: 1, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Boron', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Margaret', stationName: 'Carbon', timeInStation: '7 Hours', priority: 8, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Nitrogen', timeInStation: '1 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Joyce', stationName: 'Oxygen', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Susie', stationName: 'Fluorine', timeInStation: '3 Hours', priority: 1, firstName: '', lastName: '' },
-      { docName: 'Smith', stationName: 'Neon', timeInStation: '3 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Sodium', timeInStation: '1 Hours', priority: 9, firstName: '', lastName: '' },
-      { docName: 'Allen', stationName: 'Magnesium', timeInStation: '1 Hours', priority: 3, firstName: '', lastName: '' }
+      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: 1624029879388, priority: 2, firstName: '', lastName: '' },
+      { docName: 'Jane', stationName: 'Helium', timeInStation: 1624029879388, priority: 4, firstName: '', lastName: '' },
+      { docName: 'Ashley', stationName: 'Lithium', timeInStation: 1624029879388, priority: 2, firstName: '', lastName: '' },
+      { docName: 'Image', stationName: 'Beryllium', timeInStation: 1624029879388, priority: 1, firstName: '', lastName: '' },
+      { docName: '', stationName: 'Boron', timeInStation: 1624029879388, priority: 4, firstName: '', lastName: '' },
+      { docName: 'Margaret', stationName: 'Carbon', timeInStation: 1624029879388, priority: 8, firstName: '', lastName: '' },
+      { docName: '', stationName: 'Nitrogen', timeInStation: 1624029879388, priority: 2, firstName: '', lastName: '' },
+      { docName: 'Joyce', stationName: 'Oxygen', timeInStation: 1624029879388, priority: 4, firstName: '', lastName: '' },
+      { docName: 'Susie', stationName: 'Fluorine', timeInStation: 1624029879388, priority: 1, firstName: '', lastName: '' },
+      { docName: 'Smith', stationName: 'Neon', timeInStation: 1624029879388, priority: 4, firstName: '', lastName: '' },
+      { docName: '', stationName: 'Sodium', timeInStation: 1624029879388, priority: 9, firstName: '', lastName: '' },
+      { docName: 'Allen', stationName: 'Magnesium', timeInStation: 1624029879388, priority: 3, firstName: '', lastName: '' }
     ];
     let filterData = [];
     if (pageNum === 1) {
@@ -49,7 +49,7 @@ export class MockDocumentService {
       {
         docName: 'Really long document name',
         stationName: 'really long Station name',
-        timeInStation: '2 hours',
+        timeInStation: 1624029879388,
         priority: 1,
         firstName: '',
         lastName: ''
@@ -57,7 +57,7 @@ export class MockDocumentService {
       {
         docName: 'New Doc 2',
         stationName: 'Station name',
-        timeInStation: '4 hours',
+        timeInStation: 1624029879388,
         priority: 2,
         firstName: '',
         lastName: ''
@@ -76,7 +76,7 @@ export class MockDocumentService {
       {
         docName: 'Really long document name',
         stationName: 'really long Station name',
-        timeInStation: '2 hours',
+        timeInStation: 1624029879388,
         priority: 1,
         firstName: '',
         lastName: ''
@@ -84,7 +84,7 @@ export class MockDocumentService {
       {
         docName: 'New Doc 2',
         stationName: 'Station name',
-        timeInStation: '4 hours',
+        timeInStation: 1624029879388,
         priority: 2,
         firstName: '',
         lastName: ''
