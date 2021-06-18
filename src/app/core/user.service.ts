@@ -21,8 +21,9 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router
-  ) { }
+    private router: Router) {
+      this.user = JSON.parse(localStorage.getItem('user') as string) as User;
+     }
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -46,6 +47,7 @@ export class UserService {
         this.accessToken = new AccessToken(response.accessToken);
         this.user = response.user;
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
+        localStorage.setItem('user', JSON.stringify(this.user));
         return response;
       })
     );

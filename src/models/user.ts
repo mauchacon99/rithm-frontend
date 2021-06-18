@@ -19,6 +19,9 @@ export interface User {
   /** The email address registered to the user. */
   email: string;
 
+  /** The profile picture set by the user. */
+  profilePic?: string;
+
   /** The list of flow-level permissions that the user has. */
   objectPermissions: ObjectPermission[];
 
