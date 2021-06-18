@@ -1,4 +1,4 @@
 <div class="profile">
   <img *ngIf="user?.profilePic" src={{user?.profilePic}}>
-  {{initials}}
+  <span *ngIf="!user?.profilePic">{{initials}}</span>
 </div>
