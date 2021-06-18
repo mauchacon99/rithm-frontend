@@ -3,10 +3,10 @@
   <div class="roster">
     <p class="overline">worker roster</p>
     <span class="circles">
-      <div *ngFor="let initial of roster | slice:0:slices" class="avatar" (click)="openRosterModal()">
+      <div *ngFor="let initial of roster | slice:0:slices" class="avatar" (click)="openRosterModal(stationName)">
         {{initial}}
       </div>
-      <div *ngIf="roster.length > 3" class="avatar" (click)="openRosterModal()">+{{roster.length - 2}}</div>
+      <div *ngIf="roster.length > 3" class="avatar" (click)="openRosterModal(stationName)">+{{roster.length - 2}}</div>
     </span>
   </div>
   <div class="docs">

@@ -23,9 +23,7 @@ export class StationCardComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
-  constructor(private dialog: MatDialog) {
-
-  }
+  constructor(private dialog: MatDialog) {}
 
   /**
    * Set the number of roster members to show when less than 3.
@@ -38,11 +36,13 @@ export class StationCardComponent implements OnInit {
 
   /**
    * Open the roster.
+   *
+   * @param stationName Name of the station.
    */
-  openRosterModal(): void {
-    // TODO: RIT-428 Send Station info to Roster modal component.
+  openRosterModal(stationName: string): void {
     this.dialog.open(RosterModalComponent, {
-      minWidth: '325px'
+      minWidth: '325px',
+      data: { stationName: stationName }
     });
   }
 

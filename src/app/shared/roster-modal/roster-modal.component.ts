@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Reusable component for displaying the worker or supervisor roster for a station.
@@ -8,50 +13,53 @@ import { Component, Input } from '@angular/core';
   templateUrl: './roster-modal.component.html',
   styleUrls: ['./roster-modal.component.scss']
 })
-export class RosterModalComponent {
+export class RosterModalComponent implements OnInit {
+
   /** Roster type. */
   @Input() isWorker = true;
 
-  /** Station id. */
+  /** Id of the station. */
   @Input() stationId = 0;
 
-  /** Station name. */
-  @Input() stationName = 'Station name';
+  /** Name of station. */
+  @Input() stationName = '';
 
   /** Is the content being loaded. */
   isLoading = false;
 
-  /** Temp users list. */
-  users = [
-    {
-      firstName: 'Maggie',
-      lastName: 'Rhee',
-      email: 'maggie.rhee@email.com',
-      initials: 'MR'
-    },
-    {
-      firstName: 'Tyreese',
-      lastName: 'Williams',
-      email: 'tyreese.williams@email.com',
-      initials: 'TW'
-    },
-    {
-      firstName: 'Lizzie',
-      lastName: 'Samuels',
-      email: 'lizzie.samuels@email.com',
-      initials: 'LS'
-    },
-    {
-      firstName: 'Theodore',
-      lastName: 'Douglas',
-      email: 'theodore.douglas@email.com',
-      initials: 'TD'
-    },
-    {
-      firstName: 'Maggie',
-      lastName: 'Rhee',
-      email: 'maggie.rhee@email.com',
-      initials: 'MR'
-    }
-  ];
+  /** Worker roster list. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  users = Array<any>();
+
+  /** Station data from station card component. */
+  station: unknown;
+
+  constructor(
+    private stationService: StationService,
+    private errorService: ErrorService,
+    public dialogRef: MatDialogRef<RosterModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: unknown) {
+    this.station = data;
+  }
+
+  /**
+   * Gets the users to show in dialog.
+   */
+  ngOnInit(): void {
+    this.stationService.getWorkerRoasterByStationId()
+      .pipe(first())
+      .subscribe((response) => {
+        if (response) {
+          this.users = response;
+        }
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
 }
