@@ -24,11 +24,13 @@
     line-height: 30px;
     height: 36px;
 
+    /// References all columns
     div {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
 
+      /// Column Headers
       strong {
         font-weight: 600;
       }
@@ -45,6 +47,15 @@
         margin-right: 10px;
         padding-left: 2px;
         color: #fff;
+      }
+
+      i {
+        margin-right: 3px;
+      }
+
+      p {
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       div.initials {

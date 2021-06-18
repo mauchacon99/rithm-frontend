@@ -26,10 +26,10 @@ export class DocumentService {
    */
    getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
-      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2,
+      { docName: 'This is a really long document name', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2,
       firstName: 'John', lastName: 'Doe', blocked: false, lastUpdated: '' },
       { docName: 'Jane', stationName: 'Helium', timeInStation: '2 Hours', priority: 3,
-      firstName: 'Natasha', lastName: 'Romanov', blocked: true, lastUpdated: '' },
+      firstName: 'Natasha', lastName: 'Romanovsky', blocked: true, lastUpdated: '' },
       { docName: 'Ashley', stationName: 'Lithium', timeInStation: '4 Hours', priority: 2,
       firstName: 'Barney', lastName: 'Stinson', blocked: false, lastUpdated: '' },
       { docName: 'Image', stationName: 'Beryllium', timeInStation: '1 Hours', priority: 1,

@@ -20,17 +20,21 @@
         <div class="priority">
           {{ data.priority }}
         </div>
-        <!-- Document name -->
-        {{ data.docName }}
+        <p [ngClass]="{'warn' : data.blocked}">
+          <!-- Blocked icon -->
+          <i *ngIf="data.blocked" class="fas fa-exclamation-circle"></i>
+          <!-- Document name -->
+          {{ data.docName }}
+        </p>
       </div>
       <!-- Assigned -->
       <div class="col-3 col-md-3 col-md-4 col-lg-3">
         <div class="initials">
           {{data?.firstName | slice:0:1}}{{data?.lastName | slice:0:1}}
         </div>
-        <span class="d-none d-md-block">
+        <div class="d-none d-md-block">
           {{ data?.firstName }} {{ data?.lastName }}
-        </span>
+        </div>
       </div>
       <!-- Time in station -->
       <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
