@@ -1,48 +1,22 @@
 /**
  * Previously Started documents data.
  */
-export class Document {
-
-  constructor() {
-    //setup
-  }
-
+export interface Document {
   /** Name of the document. */
-  docName = '';
+  docName: string;
 
   /** Name of the Station. */
-  stationName = '';
+  stationName: string;
 
   /** Date at which the doc entered current station. */
-  timeEnteredStation = '';
-
-  /** Time the document has spent in current station. */
-  timeInStation? = 0;
+  timeEnteredStation: string;
 
   /** Priority of the document. */
-  priority = 0;
+  priority: number;
 
   /** The user's first name. */
-  firstName = '';
+  firstName: string;
 
   /** The user's last name. */
-  lastName = '';
-
-  /**
-   * Method converting timeEnteredStation to utc milliseconds.
-   *
-   * @returns Returns conversion.
-   */
-  convertTimeEntered(): number {
-    const timeEntered = new Date(this.timeEnteredStation);
-    return timeEntered.getTime();
-  }
-
-  /**
-   * Method that updates timeInStation with time elapsed since timeEnteredStation.
-   */
-  updateTimeInStation?(): void {
-    const timeEntered = this.convertTimeEntered();
-    this.timeInStation = Date.now() - timeEntered;
-  }
+  lastName: string;
 }

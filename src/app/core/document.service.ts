@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -89,7 +90,7 @@ export class DocumentService {
       {
         docName: 'Really long document name',
         stationName: 'really long Station name',
-        timeEnteredStation: '2021-06-16T17:26:47.3506612Z',
+        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
         priority: 1,
         firstName: '',
         lastName: ''
@@ -97,7 +98,7 @@ export class DocumentService {
       {
         docName: 'New Doc 2',
         stationName: 'Station name',
-        timeEnteredStation: '2021-06-16T17:26:47.3506612Z',
+        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
         priority: 2,
         firstName: '',
         lastName: ''
@@ -105,7 +106,7 @@ export class DocumentService {
       {
         docName: 'New Doc 3',
         stationName: 'Station name',
-        timeEnteredStation: '2021-06-16T17:26:47.3506612Z',
+        timeEnteredStation: '2021-06-18T19:46:47.3506612Z',
         priority: 1,
         firstName: '',
         lastName: ''
