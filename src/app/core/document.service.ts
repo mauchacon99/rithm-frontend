@@ -132,7 +132,9 @@ export class DocumentService {
         timeInStation: '2 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 2',
@@ -140,7 +142,9 @@ export class DocumentService {
         timeInStation: '4 hours',
         priority: 2,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 3',
@@ -148,7 +152,9 @@ export class DocumentService {
         timeInStation: '5 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 4',
@@ -156,7 +162,9 @@ export class DocumentService {
         timeInStation: '7 hours',
         priority: 3,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 5',
@@ -164,7 +172,9 @@ export class DocumentService {
         timeInStation: '1 hour',
         priority: 7,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       }
     ];
     return of(filterData).pipe(delay(1000));
@@ -183,7 +193,9 @@ export class DocumentService {
         timeInStation: '2 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 2',
@@ -191,7 +203,9 @@ export class DocumentService {
         timeInStation: '4 hours',
         priority: 2,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 3',
@@ -199,7 +213,9 @@ export class DocumentService {
         timeInStation: '5 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
     ];
     return of(filterData).pipe(delay(1000));
