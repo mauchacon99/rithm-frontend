@@ -19,7 +19,7 @@ export class RosterModalComponent implements OnInit {
   @Input() isWorker = true;
 
   /** Id of the station. */
-  @Input() stationId = 0;
+  @Input() stationId = '';
 
   /** Name of station. */
   @Input() stationName = '';
@@ -46,7 +46,7 @@ export class RosterModalComponent implements OnInit {
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.stationService.getWorkerRoasterByStationId()
+    this.stationService.getWorkerRoster(this.stationId)
       .pipe(first())
       .subscribe((response) => {
         if (response) {
