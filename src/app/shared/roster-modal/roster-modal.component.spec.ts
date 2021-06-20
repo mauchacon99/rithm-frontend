@@ -41,7 +41,7 @@ describe('RosterModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return worker roaster list', () => {
+  it('should return worker roster list', () => {
     expect(component.users).toBeGreaterThanOrEqual(0);
   });
 });

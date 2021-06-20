@@ -6,12 +6,13 @@ import { delay } from 'rxjs/operators';
 export class MockStationService {
 
   /**
-   * Gets a list of worker roaster of a station.
+   * Gets a list of worker roster of a station.
    *
-   * @returns A list of worker roaster of a station.
+   * @param stationId The id of the station for which to get the roster.
+   * @returns A list of worker roster of a station.
    */
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   getWorkerRoasterByStationId(): Observable<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   getWorkerRoster(stationId: string): Observable<unknown[]> { // TODO: update type once response object is determined
     const data = [
       {
         firstName: 'Maggie',

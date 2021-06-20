@@ -15,8 +15,8 @@ describe('StationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return a list of worker roaster of a station', () => {
-    service.getWorkerRoasterByStationId()
+  it('should return a list of worker roster of a station', () => {
+    service.getWorkerRoster('j3k43k4j')
       .subscribe((response) => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
