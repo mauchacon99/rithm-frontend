@@ -1,18 +1,18 @@
 <mat-card>
-  <h6>{{stationName}}</h6>
+  <h6>{{station.stationName}}</h6>
   <div class="roster">
     <p class="overline">worker roster</p>
     <span class="circles">
-      <div *ngFor="let initial of roster | slice:0:slices" class="avatar" (click)="openRosterModal()">
+      <div *ngFor="let initial of station.workerInitials | slice:0:slices" class="avatar" (click)="openRosterModal()">
         {{initial}}
       </div>
-      <div *ngIf="roster.length > 3" class="avatar" (click)="openRosterModal()">+{{roster.length - 2}}</div>
+      <div *ngIf="station.numberOfWorkers > 3" class="avatar" (click)="openRosterModal()">+{{station.numberOfWorkers - 2}}</div>
     </span>
   </div>
   <div class="docs">
     <p class="overline">documents</p>
     <span class="circles">
-      <div class="doc-count">{{totalDocs}}</div>
+      <div class="doc-count">{{station.numberOfDocuments}}</div>
     </span>
   </div>
 </mat-card>
