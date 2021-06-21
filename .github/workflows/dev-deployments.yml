@@ -28,7 +28,7 @@ jobs:
 
   # Deploys the Compodoc documentation site
   compodoc:
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted, wdlegacy]
 
     steps:
     - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
 
   # Deploys the SassDoc documentation site
   sassdoc:
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted, wdlegacy]
 
     steps:
     - uses: actions/checkout@v2
