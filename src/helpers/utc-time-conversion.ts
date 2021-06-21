@@ -3,59 +3,61 @@
  */
 export class UtcTimeConversion {
   /**
-   * Method converting a timestamp to utc milliseconds.
+   * Method converting a timestamp to UTC milliseconds.
    *
-   * @param entered A utc time formatted string.
-   * @returns Returns conversion.
+   * @param timeStamp A UTC time formatted string.
+   * @returns Milliseconds in Unix time.
    */
-   convertTimeEntered(entered: string): number {
-    const timeEntered = new Date(entered);
+   getMilliseconds(timeStamp: string): number {
+    const timeEntered = new Date(timeStamp);
     return timeEntered.getTime();
   }
 
   /**
    * Method to get the number of milliseconds that have passed since entered timestamp.
    *
-   * @param entered A utc time formatted string.
-   * @returns Returns elapsed time in milliseconds.
+   * @param timeStamp A UTC time formatted string.
+   * @returns Elapsed time in milliseconds.
    */
-  updateTimeInStation(entered: string): number {
-    const timeEntered = this.convertTimeEntered(entered);
+  getMillisecondsElapsed(timeStamp: string): number {
+    const timeEntered = this.getMilliseconds(timeStamp);
     return Date.now() - timeEntered;
   }
 
   /**
    * Tells how much time has elapsed in either minutes, hours, or days.
    *
-   * @param elapsed An amount of milliseconds representing elapsed time.
+   * @param elapsedTime An amount of milliseconds representing elapsed time.
    * @returns A string with the appropriate expression for how much time has passed.
    */
-  convertElapsedTime(elapsed: number): string {
-    /*for clarity we will always display millisecond time as an equation representing:
+  getElapsedTimeText(elapsedTime: number): string {
+    /* For clarity we will always display millisecond time as an equation representing:
     --milliseconds * seconds * minutes * hours * days--
     eg: an hour is broken into 60 minutes, there are 60 seconds in a minute,and 1000 ms in a second.
     this is written as 1000*60*60 */
 
+    // TODO: Simplify getElapsedTimeText logic
+
     //if elapsed time is less than an hour.
-    if (elapsed < 1000 * 60 * 60) {
-      if (elapsed < 1000 * 60 * 2) {
+    if (elapsedTime < 1000 * 60 * 60) {
+      if (elapsedTime < 1000 * 60 * 2) {
         return '1 minute';
       }
-      return `${Math.floor(elapsed / (1000 * 60))} minutes`;
+      return `${Math.floor(elapsedTime / (1000 * 60))} minutes`;
     }
 
     //if elapsed time is less than a day.
-    if (elapsed < 1000 * 60 * 60 * 24) {
-      if (elapsed < 1000 * 60 * 60 * 2) {
+    if (elapsedTime < 1000 * 60 * 60 * 24) {
+      if (elapsedTime < 1000 * 60 * 60 * 2) {
         return `1 hour`;
       }
-      return `${Math.floor(elapsed / (1000 * 60 * 60))} hours`;
+      return `${Math.floor(elapsedTime / (1000 * 60 * 60))} hours`;
     }
 
     //if elapsed time is greater than a day.
-    if (elapsed < 1000 * 60 * 60 * 24 * 2) {
+    if (elapsedTime < 1000 * 60 * 60 * 24 * 2) {
       return '1 day';
     }
-    return `${Math.floor(elapsed / (1000 * 60 * 60 * 24))} days`;
+    return `${Math.floor(elapsedTime / (1000 * 60 * 60 * 24))} days`;
   }
 }

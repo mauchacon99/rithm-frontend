@@ -28,12 +28,12 @@ export class DocumentListCardComponent {
    * Uses the helper: UtcTimeConversion.
    * Tells how long a document has been in a station for.
    *
-   * @param entered Reflects time a document entered a station.
+   * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-  handleElapsedTime(entered: string): string {
-    return this.utcTimeConversion.convertElapsedTime(
-      this.utcTimeConversion.updateTimeInStation(entered)
+  handleElapsedTime(timeEntered: string): string {
+    return this.utcTimeConversion.getElapsedTimeText(
+      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
   }
 }
