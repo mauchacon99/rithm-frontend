@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -27,6 +27,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** IsPriority element. */
   isPriority = 1;
 
+  /** Is the content being loaded. */
+  isLoading = false;
+
   constructor(private documentService: DocumentService,
     private errorService: ErrorService) { }
 
@@ -44,13 +47,16 @@ export class StationDocumentsModalComponent implements OnInit {
    */
    getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
+    this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
       .subscribe((res: Array<Document>) => {
         if (res) {
           this.totalDocs = res;
         }
+        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
