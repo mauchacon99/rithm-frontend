@@ -19,31 +19,31 @@
       <div class="col-9 col-md-5 col-lg-4 col-xl-5">
         <!-- Priority -->
         <div class="priority">
-          {{ data.priority }}
+          {{ doc.priority }}
         </div>
-        <p [ngClass]="{'warn' : data.blocked}">
+        <p [ngClass]="{'warn' : doc.blocked}">
           <!-- Blocked icon -->
-          <i *ngIf="data.blocked" class="fas fa-exclamation-circle"></i>
+          <i *ngIf="doc.blocked" class="fas fa-exclamation-circle"></i>
           <!-- Document name -->
-          {{ data?.docName }}
+          {{ doc?.docName }}
         </p>
       </div>
       <!-- Assigned -->
       <div class="col-3 col-md-3 col-md-4 col-lg-3">
         <div class="initials">
-          {{data?.firstName | slice:0:1}}{{data?.lastName | slice:0:1}}
+          {{doc?.firstName | slice:0:1}}{{doc?.lastName | slice:0:1}}
         </div>
         <div class="d-none d-md-block">
-          {{ data?.firstName }} {{ data?.lastName }}
+          {{ doc?.firstName }} {{ doc?.lastName }}
         </div>
       </div>
       <!-- Time in station -->
       <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
-        {{ data.timeInStation }}
+        {{ doc.timeInStation }}
       </div>
       <!-- Last updated -->
       <div class="col-2 d-none d-lg-block">
-        {{ data?.lastUpdated }}
+        {{ doc?.lastUpdated }}
       </div>
     </div>
   </span>
