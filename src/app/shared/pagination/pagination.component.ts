@@ -116,7 +116,7 @@ export class PaginationComponent implements OnInit {
    *
    * @param newPageNum What page number to emit.
    */
-  emitPageNum(newPageNum: number): void {
+  private emitPageNum(newPageNum: number): void {
     this.currentPageNum.emit(newPageNum);
   }
 
