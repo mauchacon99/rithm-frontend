@@ -3,13 +3,13 @@
  */
 export class UtcTimeConversion {
   /**
-   * Method converting a timestamp to utc milliseconds.
+   * Method converting a timestamp to UTC milliseconds.
    *
-   * @param entered A utc time formatted string.
-   * @returns Returns conversion.
+   * @param timeStamp A UTC time formatted string.
+   * @returns Milliseconds in Unix time.
    */
-   convertTimeEntered(entered: string): number {
-    const timeEntered = new Date(entered);
+   getMilliseconds(timeStamp: string): number {
+    const timeEntered = new Date(timeStamp);
     return timeEntered.getTime();
   }
 
