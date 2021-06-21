@@ -8,6 +8,6 @@
     </span>
   </button>
 </div>
-<button class="right" (click)="incrementPage()">
+<button [disabled]="pagesArr[pagesArr.length -1] === activeNum" class="right" (click)="incrementPage()">
   <i class="fas fa-chevron-right"></i>
 </button>

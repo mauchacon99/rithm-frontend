@@ -37,23 +37,46 @@ export class PaginationComponent {
    * @param pageNum The page to go to.
    */
   changePage(pageNum: number): void {
-    this.activeNum = pageNum;
+    if (pageNum > this.activeNum) {
+      this.incrementPage();
+    } else {
+      this.decrementPage();
+    }
+    // this.activeNum = pageNum;
   }
 
   /**
    * Go back a page.
    */
   decrementPage(): void {
-    // TODO: Check if we're on the first page.
     this.activeNum -= 1;
+    if (this.pagesArr.length > 5 && this.activeNum > 3) {
+      if (this.activeNum <= this.pagesArr.length - 2) {
+        this.startingPageNum -= 1;
+      }
+      if (this.activeNum > this.pagesArr.length - 3) {
+        this.endingPageNum = this.pagesArr.length;
+      } else {
+        this.endingPageNum -= 1;
+      }
+    }
   }
 
   /**
    * Go forward a page.
    */
   incrementPage(): void {
-    // TODO: Check if we're already on the last page.
     this.activeNum += 1;
+    if (this.pagesArr.length > 5 && this.activeNum > 3) {
+      if (this.activeNum <= this.pagesArr.length - 2) {
+        this.startingPageNum += 1;
+      }
+      if (this.activeNum > this.pagesArr.length - 3) {
+        this.endingPageNum = this.pagesArr.length;
+      } else {
+        this.endingPageNum += 1;
+      }
+    }
   }
 
 }
