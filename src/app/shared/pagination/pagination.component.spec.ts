@@ -42,7 +42,7 @@ describe('PaginationComponent', () => {
   it('should change the page number when using clickPage method', () => {
     component.clickPage(4);
     expect(component.activeNum).toEqual(4);
-    expect(component.startingPageNum).toEqual(1);
-    expect(component.endingPageNum).toEqual(6);
+    expect(component.startingPageNum).toEqual(0);
+    expect(component.endingPageNum).toEqual(5);
   });
 });
