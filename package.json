@@ -51,7 +51,7 @@
     "@types/node": "^15.12.3",
     "@typescript-eslint/eslint-plugin": "4.27.0",
     "@typescript-eslint/parser": "4.27.0",
-    "eslint": "^7.28.0",
+    "eslint": "^7.29.0",
     "eslint-plugin-angular": "^4.0.1",
     "eslint-plugin-jsdoc": "^34.8.2",
     "eslint-plugin-rxjs": "^3.3.3",
