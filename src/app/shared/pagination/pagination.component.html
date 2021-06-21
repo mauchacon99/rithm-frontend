@@ -1,3 +1,6 @@
+<p>
+  {{rangeArr[activeNum -1]}} of {{numDocs}}
+</p>
 <button [disabled]="pagesArr[0] === activeNum" class="left" (click)="changePage(-1)">
   <i class="fas fa-chevron-left"></i>
 </button>

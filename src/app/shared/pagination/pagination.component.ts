@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 /**
  * Reusable component for pagination with clickable pages.
@@ -9,13 +9,25 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent {
+  /** Total number of documents. */
+  @Input() numDocs = 107;
+
   /** Total number of pages. */
-  @Input() numPages = 5;
+  numPages = 0;
+
+  /** Range of documents shown. */
+  range = '';
 
   /** Array of page numbers. */
   pagesArr: number[];
 
+  /** Array that displays the range of documents shown on the page. */
+  rangeArr: string[];
+
   /** Set the page number. */
+  @Output() currentPageNum = new EventEmitter<number>();
+
+  /** Current active page. */
   activeNum = 1;
 
   /** Where to start the array of pages. */
@@ -25,7 +37,27 @@ export class PaginationComponent {
   endingPageNum = 5;
 
   constructor() {
+    this.emitPageNum(1);
+    this.numPages = Math.ceil(this.numDocs / 10);
     this.pagesArr = [];
+    this.rangeArr = [];
+
+    let startingNum = 1;
+    let endingNum = 10;
+    const numPerPage = 10;
+
+    for (let page = 0; page <= this.numPages - 1; page++){
+      startingNum = 1;
+      endingNum = 10;
+      startingNum += numPerPage * page;
+      endingNum += numPerPage * page;
+      if (page !== this.numPages -1){
+        this.rangeArr.push(`${startingNum}-${endingNum}`);
+      } else {
+        this.rangeArr.push(`${startingNum}-${this.numDocs}`);
+      }
+    }
+
     while(this.numPages--) {
       this.pagesArr[this.numPages] = this.numPages + 1;
     }
@@ -51,7 +83,7 @@ export class PaginationComponent {
       this.startingPageNum = this.activeNum - 3;
       this.endingPageNum = this.activeNum + 2;
     }
-
+    this.emitPageNum(this.activeNum);
   }
 
   /**
@@ -75,6 +107,16 @@ export class PaginationComponent {
         this.endingPageNum += num;
       }
     }
+    this.emitPageNum(this.activeNum);
+  }
+
+  /**
+   * Send the new page number to the parent component.
+   *
+   * @param newPageNum What page number to emit.
+   */
+  emitPageNum(newPageNum: number): void {
+    this.currentPageNum.emit(newPageNum);
   }
 
 }
