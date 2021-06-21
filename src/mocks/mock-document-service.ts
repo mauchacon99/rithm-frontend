@@ -15,30 +15,20 @@ export class MockDocumentService {
    */
    getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
-      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Jane', stationName: 'Helium', timeInStation: '2 Hours', priority: 4,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Ashley', stationName: 'Lithium', timeInStation: '4 Hours', priority: 2,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Image', stationName: 'Beryllium', timeInStation: '1 Hours', priority: 1,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: '', stationName: 'Boron', timeInStation: '2 Hours', priority: 4,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Margaret', stationName: 'Carbon', timeInStation: '7 Hours', priority: 8,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: '', stationName: 'Nitrogen', timeInStation: '1 Hours', priority: 2,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Joyce', stationName: 'Oxygen', timeInStation: '2 Hours', priority: 4,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Susie', stationName: 'Fluorine', timeInStation: '3 Hours', priority: 1,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Smith', stationName: 'Neon', timeInStation: '3 Hours', priority: 4,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: '', stationName: 'Sodium', timeInStation: '1 Hours', priority: 9,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
-      { docName: 'Allen', stationName: 'Magnesium', timeInStation: '1 Hours', priority: 3,
-      firstName: '', lastName: '', blocked: false, lastUpdated: '' }
+      /* eslint-disable max-len */
+      { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Jane', stationName: 'Helium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Ashley', stationName: 'Lithium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Image', stationName: 'Beryllium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', blocked: false, lastUpdated: ''},
+      { docName: '', stationName: 'Boron', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Margaret', stationName: 'Carbon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 8, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: '', stationName: 'Nitrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 4, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Joyce', stationName: 'Oxygen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Susie', stationName: 'Fluorine', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 5, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Smith', stationName: 'Neon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: '', stationName: 'Sodium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Allen', stationName: 'Magnesium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      /* eslint-enable max-len */
     ];
     let filterData = [];
     if (pageNum === 1) {
@@ -61,7 +51,7 @@ export class MockDocumentService {
       {
         docName: 'Really long document name',
         stationName: 'really long Station name',
-        timeInStation: '2 hours',
+        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
         priority: 1,
         firstName: '',
         lastName: '',
@@ -71,7 +61,7 @@ export class MockDocumentService {
       {
         docName: 'New Doc 2',
         stationName: 'Station name',
-        timeInStation: '4 hours',
+        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
         priority: 2,
         firstName: '',
         lastName: '',
@@ -92,7 +82,7 @@ export class MockDocumentService {
       {
         docName: 'Really long document name',
         stationName: 'really long Station name',
-        timeInStation: '2 hours',
+        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
         priority: 1,
         firstName: '',
         lastName: '',
@@ -102,7 +92,7 @@ export class MockDocumentService {
       {
         docName: 'New Doc 2',
         stationName: 'Station name',
-        timeInStation: '4 hours',
+        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
         priority: 2,
         firstName: '',
         lastName: '',
