@@ -18,30 +18,32 @@ describe('UtcTimeConversion', () => {
   });
 
   it('should calculate milliseconds elapsed since timestamp', () => {
-    expect(conversion.getMillisecondsElapsed(SAMPLE_TIME)).toBeTruthy();
+    spyOn(Date, 'now').and.returnValue(1623864707350);
+
+    expect(conversion.getMillisecondsElapsed(SAMPLE_TIME)).toEqual(300000);
   });
 
   it('should return text with minutes elapsed', () => {
-    const now: number = new Date().getTime();
-    const adjustTime: number = now - (1000 * 60 * 15);
-    const elapsed: number = Date.now() - adjustTime;
+    const now = new Date().getTime();
+    const adjustTime = now - (1000 * 60 * 15);
+    const elapsed = Date.now() - adjustTime;
 
-    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/minutes/);
+    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/15 minutes/);
   });
 
   it('should return text with hours elapsed', () => {
-    const now: number = new Date().getTime();
-    const adjustTime: number = now - (1000 * 60 * 60 * 15);
-    const elapsed: number = Date.now() - adjustTime;
+    const now = new Date().getTime();
+    const adjustTime = now - (1000 * 60 * 60 * 15);
+    const elapsed = Date.now() - adjustTime;
 
-    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/hours/);
+    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/15 hours/);
   });
 
   it('should return text with days elapsed', () => {
-    const now: number = new Date().getTime();
-    const adjustTime: number = now - (1000 * 60 * 60 * 24 * 5);
-    const elapsed: number = Date.now() - adjustTime;
+    const now = new Date().getTime();
+    const adjustTime = now - (1000 * 60 * 60 * 24 * 5);
+    const elapsed = Date.now() - adjustTime;
 
-    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/days/);
+    expect(conversion.getElapsedTimeText(elapsed)).toMatch(/5 days/);
   });
 });
