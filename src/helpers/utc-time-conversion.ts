@@ -1,11 +1,9 @@
-
-
 /**
  * Represents methods that help display the passage of utc time.
  */
 export class UtcTimeConversion {
   /**
-   * Method converting timeEnteredStation to utc milliseconds.
+   * Method converting a timestamp to utc milliseconds.
    *
    * @param entered A utc time formatted string.
    * @returns Returns conversion.
@@ -16,10 +14,10 @@ export class UtcTimeConversion {
   }
 
   /**
-   * Method meant to update the Document timeInStation parameter.
+   * Method to get the number of milliseconds that have passed since entered timestamp.
    *
    * @param entered A utc time formatted string.
-   * @returns Returns time in milliseconds.
+   * @returns Returns elapsed time in milliseconds.
    */
   updateTimeInStation(entered: string): number {
     const timeEntered = this.convertTimeEntered(entered);
@@ -60,5 +58,4 @@ export class UtcTimeConversion {
     }
     return `${Math.floor(elapsed / (1000 * 60 * 60 * 24))} days`;
   }
-
 }
