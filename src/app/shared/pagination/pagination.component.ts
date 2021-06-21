@@ -22,7 +22,7 @@ export class PaginationComponent implements OnInit {
   rangeArr!: string[];
 
   /** Set the page number. */
-  @Output() currentPageNum = new EventEmitter<number>();
+  @Output() private currentPageNum = new EventEmitter<number>();
 
   /** Current active page. */
   activeNum = 1;
