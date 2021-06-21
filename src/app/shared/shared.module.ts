@@ -58,7 +58,8 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatCardModule,
     MatButtonModule,
     PasswordRequirementsComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    PaginationComponent
   ]
 })
 export class SharedModule { }
