@@ -1,23 +1,57 @@
-<!-- <div>
-  <span>
-    <div *ngFor="let data of totalDocs" class="row no-gutters">
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-inline-block">
-          {{ data.priority }}
+<h4 class="text-center">Station name</h4>
+<div class="doc-container">
+  <span *ngIf="!isLoading">
+    <div class="row no-gutters">
+      <div class="col-9 col-md-5 col-lg-4 col-xl-5 pl-5">
+        <strong>Document</strong>
       </div>
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-none d-md-block d-xl-block col-md-4">
-        {{ data.docName }}
+      <div class="col-3 col-md-3 col-md-4 col-lg-3">
+        <strong>Assigned</strong>
       </div>
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-3'"
-        class="d-none d-md-block d-xl-block col-md-4">
-        {{ data.stationName }}
+      <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
+        <strong>Time in Station</strong>
       </div>
-      <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
-        {{ data.timeInStation }}
+      <div class="col-2 d-none d-lg-block">
+        <strong>Last Updated</strong>
+      </div>
+    </div>
+    <div *ngFor="let doc of totalDocs" class="row no-gutters">
+      <div class="col-9 col-md-5 col-lg-4 col-xl-5">
+        <!-- Priority -->
+        <div class="priority">
+          {{ doc.priority }}
+        </div>
+        <p [ngClass]="{'warn' : doc.blocked}">
+          <!-- Blocked icon -->
+          <i *ngIf="doc.blocked" class="fas fa-exclamation-circle"></i>
+          <!-- Document name -->
+          {{ doc?.docName }}
+        </p>
+      </div>
+      <!-- Assigned -->
+      <div class="col-3 col-md-3 col-md-4 col-lg-3">
+        <div class="initials">
+          {{doc?.firstName | slice:0:1}}{{doc?.lastName | slice:0:1}}
+        </div>
+        <div class="d-none d-md-block">
+          {{ doc?.firstName }} {{ doc?.lastName }}
+        </div>
+      </div>
+      <!-- Time in station -->
+      <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
+        {{ doc.timeInStation }}
+      </div>
+      <!-- Last updated -->
+      <div class="col-2 d-none d-lg-block">
+        {{ doc?.lastUpdated }}
       </div>
     </div>
   </span>
+  <div *ngIf="isLoading" class="row no-gutters loading">
+    <div class="col-12 text-center">
+      <mat-spinner [diameter]="100" class="m-auto" color="accent"></mat-spinner>
+    </div>
+  </div>
 </div>
 <br>
 <div *ngFor="let num of pageNumbers" style="display: inline-block;" (click)="getDocuments(num)">
@@ -25,5 +59,4 @@
     <span [ngClass]="{'active': activeNum === num}">{{ num }}
     </span>
   </span>
-</div> -->
-<app-pagination></app-pagination>
+</div>

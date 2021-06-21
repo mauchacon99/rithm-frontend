@@ -21,4 +21,10 @@ export interface Document {
   /** The user's last name. */
   lastName: string;
 
+  /** Status of blocked. */
+  blocked: boolean;
+
+  /** Last updated timestamp in UTC. */
+  lastUpdated: string;
+
 }

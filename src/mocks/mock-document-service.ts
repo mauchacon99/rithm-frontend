@@ -15,18 +15,30 @@ export class MockDocumentService {
    */
    getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
-      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Jane', stationName: 'Helium', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Ashley', stationName: 'Lithium', timeInStation: '4 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Image', stationName: 'Beryllium', timeInStation: '1 Hours', priority: 1, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Boron', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Margaret', stationName: 'Carbon', timeInStation: '7 Hours', priority: 8, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Nitrogen', timeInStation: '1 Hours', priority: 2, firstName: '', lastName: '' },
-      { docName: 'Joyce', stationName: 'Oxygen', timeInStation: '2 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: 'Susie', stationName: 'Fluorine', timeInStation: '3 Hours', priority: 1, firstName: '', lastName: '' },
-      { docName: 'Smith', stationName: 'Neon', timeInStation: '3 Hours', priority: 4, firstName: '', lastName: '' },
-      { docName: '', stationName: 'Sodium', timeInStation: '1 Hours', priority: 9, firstName: '', lastName: '' },
-      { docName: 'Allen', stationName: 'Magnesium', timeInStation: '1 Hours', priority: 3, firstName: '', lastName: '' }
+      { docName: 'Natasha', stationName: 'Hydrogen', timeInStation: '3 Hours', priority: 2,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Jane', stationName: 'Helium', timeInStation: '2 Hours', priority: 4,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Ashley', stationName: 'Lithium', timeInStation: '4 Hours', priority: 2,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Image', stationName: 'Beryllium', timeInStation: '1 Hours', priority: 1,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: '', stationName: 'Boron', timeInStation: '2 Hours', priority: 4,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Margaret', stationName: 'Carbon', timeInStation: '7 Hours', priority: 8,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: '', stationName: 'Nitrogen', timeInStation: '1 Hours', priority: 2,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Joyce', stationName: 'Oxygen', timeInStation: '2 Hours', priority: 4,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Susie', stationName: 'Fluorine', timeInStation: '3 Hours', priority: 1,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Smith', stationName: 'Neon', timeInStation: '3 Hours', priority: 4,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: '', stationName: 'Sodium', timeInStation: '1 Hours', priority: 9,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' },
+      { docName: 'Allen', stationName: 'Magnesium', timeInStation: '1 Hours', priority: 3,
+      firstName: '', lastName: '', blocked: false, lastUpdated: '' }
     ];
     let filterData = [];
     if (pageNum === 1) {
@@ -52,7 +64,9 @@ export class MockDocumentService {
         timeInStation: '2 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 2',
@@ -60,7 +74,9 @@ export class MockDocumentService {
         timeInStation: '4 hours',
         priority: 2,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       }
     ];
     return of(filterData).pipe(delay(1000));
@@ -79,7 +95,9 @@ export class MockDocumentService {
         timeInStation: '2 hours',
         priority: 1,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       },
       {
         docName: 'New Doc 2',
@@ -87,7 +105,9 @@ export class MockDocumentService {
         timeInStation: '4 hours',
         priority: 2,
         firstName: '',
-        lastName: ''
+        lastName: '',
+        blocked: false,
+        lastUpdated: ''
       }
     ];
     return of(filterData).pipe(delay(1000));
