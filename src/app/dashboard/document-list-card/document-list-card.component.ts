@@ -31,9 +31,9 @@ export class DocumentListCardComponent {
    * @param entered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-  handleElapsedTime(entered: string): string {
+  handleElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.convertElapsedTime(
-      this.utcTimeConversion.updateTimeInStation(entered)
+      this.utcTimeConversion.updateTimeInStation(timeEntered)
     );
   }
 }
