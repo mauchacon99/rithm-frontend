@@ -30,7 +30,7 @@ export class UtcTimeConversion {
    * @param elapsed An amount of milliseconds representing elapsed time.
    * @returns A string with the appropriate expression for how much time has passed.
    */
-  convertElapsedTime(elapsed: number): string {
+  getElapsedTimeText(elapsedTime: number): string {
     /*for clarity we will always display millisecond time as an equation representing:
     --milliseconds * seconds * minutes * hours * days--
     eg: an hour is broken into 60 minutes, there are 60 seconds in a minute,and 1000 ms in a second.
