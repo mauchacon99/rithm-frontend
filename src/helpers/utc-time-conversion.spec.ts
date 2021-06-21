@@ -11,9 +11,9 @@ describe('UtcTimeConversion', () => {
 
   it('should return a number', () => {
     expect(conversion.updateTimeInStation(SAMPLE_TIME)).toBeTruthy();
-  })
+  });
 
   it('should return a string', () => {
-    expect(conversion.convertElapsedTime(conversion.updateTimeInStation(SAMPLE_TIME))).toMatch(/days/)
-  })
+    expect(conversion.convertElapsedTime(conversion.updateTimeInStation(SAMPLE_TIME))).toMatch(/days/);
+  });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
