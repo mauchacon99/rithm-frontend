@@ -16,10 +16,10 @@ export class UtcTimeConversion {
   /**
    * Method to get the number of milliseconds that have passed since entered timestamp.
    *
-   * @param entered A utc time formatted string.
-   * @returns Returns elapsed time in milliseconds.
+   * @param timeStamp A UTC time formatted string.
+   * @returns Elapsed time in milliseconds.
    */
-  updateTimeInStation(entered: string): number {
+  getMillisecondsElapsed(timeStamp: string): number {
     const timeEntered = this.convertTimeEntered(entered);
     return Date.now() - timeEntered;
   }
