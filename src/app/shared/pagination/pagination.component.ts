@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 /**
  * Reusable component for pagination with clickable pages.
@@ -8,21 +8,18 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent {
+export class PaginationComponent implements OnInit {
   /** Total number of documents. */
-  @Input() numDocs = 107;
+  @Input() numDocs!: number;
 
   /** Total number of pages. */
   numPages = 0;
 
-  /** Range of documents shown. */
-  range = '';
-
   /** Array of page numbers. */
-  pagesArr: number[];
+  pagesArr!: number[];
 
   /** Array that displays the range of documents shown on the page. */
-  rangeArr: string[];
+  rangeArr!: string[];
 
   /** Set the page number. */
   @Output() currentPageNum = new EventEmitter<number>();
@@ -36,7 +33,11 @@ export class PaginationComponent {
   /** Where to end the array of pages. */
   endingPageNum = 5;
 
-  constructor() {
+  /**
+   * Calculate number of pages.
+   * Create list of document ranges to be displayed.
+   */
+  ngOnInit(): void {
     this.emitPageNum(1);
     this.numPages = Math.ceil(this.numDocs / 10);
     this.pagesArr = [];

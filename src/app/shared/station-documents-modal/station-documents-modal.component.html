@@ -54,9 +54,6 @@
   </div>
 </div>
 <br>
-<div *ngFor="let num of pageNumbers" style="display: inline-block;" (click)="getDocuments(num)">
-  <span class="page-num">
-    <span [ngClass]="{'active': activeNum === num}">{{ num }}
-    </span>
-  </span>
+<div *ngIf="!isLoading" class="row no-gutters justify-content-center">
+  <app-pagination (currentPageNum)="getDocuments($event)" [numDocs]="totalDocs.length"></app-pagination>
 </div>
