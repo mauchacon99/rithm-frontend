@@ -50,14 +50,14 @@ export class PaginationComponent {
    */
   decrementPage(): void {
     this.activeNum -= 1;
-    if (this.pagesArr.length > 5 && this.activeNum > 3) {
-      if (this.activeNum <= this.pagesArr.length - 2) {
+    if (this.pagesArr.length > 5 && this.activeNum >= 3) {
+      if (this.activeNum >= 3) {
         this.startingPageNum -= 1;
       }
-      if (this.activeNum > this.pagesArr.length - 3) {
-        this.endingPageNum = this.pagesArr.length;
-      } else {
+      if (this.activeNum > 3) {
         this.endingPageNum -= 1;
+      } else {
+        this.endingPageNum = 5;
       }
     }
   }
