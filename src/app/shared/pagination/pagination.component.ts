@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
 })
 export class PaginationComponent {
   /** Total number of pages. */
-  @Input() numPages = 10;
+  @Input() numPages = 5;
 
   /** Array of page numbers. */
   pagesArr: number[];
@@ -32,49 +32,47 @@ export class PaginationComponent {
   }
 
   /**
-   * Change the page.
+   * Change the page by clicking the number.
    *
    * @param pageNum The page to go to.
    */
-  changePage(pageNum: number): void {
-    if (pageNum > this.activeNum) {
-      this.incrementPage();
-    } else {
-      this.decrementPage();
+  clickPage(pageNum: number): void {
+    this.activeNum = pageNum;
+
+    if (this.activeNum >= this.pagesArr.length - 2 && this.pagesArr.length > 5) {
+      this.startingPageNum = this.pagesArr.length - 5;
+      this.endingPageNum = this.pagesArr.length;
     }
-    // this.activeNum = pageNum;
+    if (this.activeNum <= 3) {
+      this.startingPageNum = 0;
+      this.endingPageNum = 5;
+    }
+    if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > 3) {
+      this.startingPageNum = this.activeNum - 3;
+      this.endingPageNum = this.activeNum + 2;
+    }
+
   }
 
   /**
-   * Go back a page.
+   * Change page by clicking chevron icons.
+   *
+   * @param num Amount used to changed page.
    */
-  decrementPage(): void {
-    this.activeNum -= 1;
+  changePage(num: number): void {
+    this.activeNum += num;
     if (this.pagesArr.length > 5 && this.activeNum >= 3) {
-      if (this.activeNum >= 3) {
-        this.startingPageNum -= 1;
+      if (this.activeNum >= this.pagesArr.length - 2) {
+        this.startingPageNum = this.pagesArr.length - 5;
+        this.endingPageNum = this.pagesArr.length;
       }
-      if (this.activeNum > 3) {
-        this.endingPageNum -= 1;
-      } else {
+      if (this.activeNum <= 3) {
+        this.startingPageNum = 0;
         this.endingPageNum = 5;
       }
-    }
-  }
-
-  /**
-   * Go forward a page.
-   */
-  incrementPage(): void {
-    this.activeNum += 1;
-    if (this.pagesArr.length > 5 && this.activeNum > 3) {
-      if (this.activeNum <= this.pagesArr.length - 2) {
-        this.startingPageNum += 1;
-      }
-      if (this.activeNum > this.pagesArr.length - 3) {
-        this.endingPageNum = this.pagesArr.length;
-      } else {
-        this.endingPageNum += 1;
+      if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > 3) {
+        this.startingPageNum += num;
+        this.endingPageNum += num;
       }
     }
   }
