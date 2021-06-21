@@ -20,6 +20,15 @@ describe('StationCardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationCardComponent);
     component = fixture.componentInstance;
+    component.station = {
+      id: '2',
+      numberOfDocuments: 2,
+      stationName: 'station-2',
+      numberOfWorkers: 6,
+      workerInitials: [
+        'XR', 'PD'
+      ]
+    };
     fixture.detectChanges();
   });
 

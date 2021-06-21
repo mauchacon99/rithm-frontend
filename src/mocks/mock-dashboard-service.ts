@@ -31,6 +31,7 @@ export class MockDashboardService {
   getDashboardStations(): Observable<Array<DashboardStationData>> {
     const dashboardStationData: Array<DashboardStationData> = [
       {
+        id: '1',
         numberOfDocuments: 5,
         stationName: 'station-1',
         numberOfWorkers: 3,
@@ -39,6 +40,7 @@ export class MockDashboardService {
         ]
       },
       {
+        id: '2',
         numberOfDocuments: 2,
         stationName: 'station-2',
         numberOfWorkers: 6,
