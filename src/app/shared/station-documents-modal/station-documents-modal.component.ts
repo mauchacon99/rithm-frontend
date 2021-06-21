@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
 import { Document } from 'src/models';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -11,7 +12,8 @@ import { Document } from 'src/models';
 @Component({
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
-  styleUrls: ['./station-documents-modal.component.scss']
+  styleUrls: ['./station-documents-modal.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class StationDocumentsModalComponent implements OnInit {
 
@@ -31,7 +33,8 @@ export class StationDocumentsModalComponent implements OnInit {
   isLoading = false;
 
   constructor(private documentService: DocumentService,
-    private errorService: ErrorService) { }
+    private errorService: ErrorService,
+    private utcTimeConversion: UtcTimeConversion) { }
 
   /**
    * Gets the first page of documents on load.
@@ -65,4 +68,16 @@ export class StationDocumentsModalComponent implements OnInit {
       });
   }
 
+  /**
+   * Uses the helper: UtcTimeConversion.
+   * Tells how long a document has been in a station for.
+   *
+   * @param entered Reflects time a document entered a station.
+   * @returns A string reading something like "4 days" or "32 minutes".
+   */
+     handleElapsedTime(entered: string): string {
+      return this.utcTimeConversion.convertElapsedTime(
+        this.utcTimeConversion.updateTimeInStation(entered)
+      );
+    }
 }
