@@ -24,7 +24,7 @@ export interface Document {
   /** Status of blocked. */
   blocked: boolean;
 
-  /** Last updated. */
+  /** Last updated timestamp in UTC. */
   lastUpdated: string;
 
 }
