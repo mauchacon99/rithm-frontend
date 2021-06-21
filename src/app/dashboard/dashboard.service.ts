@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DashboardHeaderResponse, DashboardStationData, User } from 'src/models';
-import { UserService } from '../core/user.service';
+import { DashboardHeaderResponse, DashboardStationData } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -15,8 +14,7 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 })
 export class DashboardService {
   constructor(
-    private http: HttpClient,
-    private userService: UserService,
+    private http: HttpClient
   ) { }
 
   /**
