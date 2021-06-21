@@ -46,9 +46,11 @@ export class RosterModalComponent implements OnInit {
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
+    this.isLoading = true;
     this.stationService.getWorkerRoster(this.stationId)
       .pipe(first())
       .subscribe((response) => {
+        this.isLoading = false;
         if (response) {
           this.users = response;
         }
