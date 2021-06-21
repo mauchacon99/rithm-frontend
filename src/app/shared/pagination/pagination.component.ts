@@ -13,7 +13,7 @@ export class PaginationComponent implements OnInit {
   @Input() numDocs!: number;
 
   /** Total number of pages. */
-  numPages = 0;
+  private numPages = 0;
 
   /** Array of page numbers. */
   pagesArr!: number[];
