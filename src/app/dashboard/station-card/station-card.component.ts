@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { DashboardStationData } from 'src/models';
 
 /**
  * Component for displaying a card with station information on the dashboard.
@@ -13,14 +14,8 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
   styleUrls: ['./station-card.component.scss']
 })
 export class StationCardComponent implements OnInit {
-  /** The name of the station. */
-  @Input() stationName = '';
-
-  /** Total number of documents in the station. */
-  @Input() totalDocs = 0;
-
-  /** Members initials of the station worker roster. */
-  @Input() roster = Array<string>();
+  /** The station info to display. */
+  @Input() station!: DashboardStationData;
 
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
@@ -39,8 +34,8 @@ export class StationCardComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (this.roster.length <= 3) {
-      this.slices = this.roster.length;
+    if (this.station.numberOfWorkers <= 3) {
+      this.slices = this.station.numberOfWorkers;
     }
   }
 
@@ -51,7 +46,8 @@ export class StationCardComponent implements OnInit {
    */
   openModal(componentName: ComponentType<unknown>): void {
     this.dialog.open(componentName, {
-      minWidth: '325px'
+      minWidth: '325px',
+      data: { stationName: this.station.stationName, stationId: this.station.id }
     });
   }
 

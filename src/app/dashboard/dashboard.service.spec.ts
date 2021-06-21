@@ -53,6 +53,7 @@ describe('DashboardService', () => {
   it('should successfully fetch data for dashboard stations', () => {
     const expectedResponse: Array<DashboardStationData> = [
       {
+        id: '1',
         numberOfDocuments: 5,
         stationName: 'station-1',
         numberOfWorkers: 3,
@@ -61,6 +62,7 @@ describe('DashboardService', () => {
         ]
       },
       {
+        id: '2',
         numberOfDocuments: 2,
         stationName: 'station-2',
         numberOfWorkers: 6,
