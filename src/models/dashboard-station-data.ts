@@ -4,7 +4,7 @@
  export interface DashboardStationData {
 
   /** The global Rithm id for the station. */
-  id: string;
+  id?: string;
 
   /** Number Of Documents this user. */
   numberOfDocuments: number;
