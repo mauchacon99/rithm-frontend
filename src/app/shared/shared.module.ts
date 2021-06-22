@@ -59,13 +59,10 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatCheckboxModule,
     MatCardModule,
     MatButtonModule,
+    MatTooltipModule,
     PasswordRequirementsComponent,
     UserAvatarComponent,
-<<<<<<< HEAD
-    MatTooltipModule
-=======
     PaginationComponent
->>>>>>> origin/dev
   ]
 })
 export class SharedModule { }
