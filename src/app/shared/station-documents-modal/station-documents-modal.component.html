@@ -16,14 +16,14 @@
       </div>
     </div>
     <div *ngFor="let doc of totalDocs" class="row no-gutters">
-      <div class="col-9 col-md-5 col-lg-4 col-xl-5">
+      <div [matTooltip]="displayTooltip(doc.status)" matTooltipClass="status-tooltip" matTooltipPosition="left" [matTooltipDisabled]="doc.status === 'Good'" class="col-9 col-md-5 col-lg-4 col-xl-5">
         <!-- Priority -->
         <div class="priority">
           {{ doc.priority }}
         </div>
-        <p [ngClass]="{'warn' : doc.blocked}">
+        <p [ngClass]="{'warn' : doc.status !== 'Good'}">
           <!-- Blocked icon -->
-          <i *ngIf="doc.blocked" class="fas fa-exclamation-circle"></i>
+          <i *ngIf="doc.status !== 'Good'" class="fas fa-exclamation-circle"></i>
           <!-- Document name -->
           {{ doc?.docName }}
         </p>

@@ -83,3 +83,8 @@
     padding-top: 175px;
   }
 }
+
+/* stylelint-disable-next-line */
+::ng-deep .status-tooltip {
+  margin-right: 40px !important;
+}

@@ -20,8 +20,8 @@ export interface Document {
   /** The user's last name. */
   lastName: string;
 
-  /** Status of blocked. */
-  blocked: boolean;
+  /** Status of Document. */
+  status: 'Good' | 'Escalated' | 'Removed';
 
   /** Last updated timestamp in UTC. */
   lastUpdated: string;
