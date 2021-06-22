@@ -38,7 +38,7 @@ export class PaginationComponent implements OnInit {
    * Create list of document ranges to be displayed.
    */
   ngOnInit(): void {
-    this.emitPageNum(1);
+    // this.emitPageNum(1);
     this.numPages = Math.ceil(this.numDocs / 10);
     this.pagesArr = [];
     this.rangeArr = [];
