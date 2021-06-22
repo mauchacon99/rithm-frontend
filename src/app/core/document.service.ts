@@ -27,8 +27,8 @@ export class DocumentService {
   getStationDocuments(stationId: number, pageNum: number): Observable<Array<Document>> {
     const ELEMENT_DATA: Array<Document> = [
       /* eslint-disable max-len */
-      { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Escalated', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
-      { docName: 'Jane', stationName: 'Helium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Escalated', lastUpdated: '2021-06-22T12:26:47.3506612Z' },
+      { docName: 'Jane', stationName: 'Helium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-21T17:26:47.3506612Z' },
       { docName: 'Ashley', stationName: 'Lithium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
       { docName: 'Image', stationName: 'Beryllium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
       { docName: '', stationName: 'Boron', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
@@ -58,15 +58,15 @@ export class DocumentService {
       { docName: 'Rock', stationName: 'Erbium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 5, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
       { docName: 'James', stationName: 'Iridium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
       { docName: '', stationName: 'Gallium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 4, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
-      { docName: 'Peter', stationName: 'Einsteinium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'Robin', stationName: 'Fluorine', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: '', stationName: 'Krypton', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'Pola', stationName: 'Lutetium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 4, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: '', stationName: 'Neodymium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'Agar', stationName: 'Osmium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 5, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'Qui', stationName: 'Radon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'Logo', stationName: 'Samarium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
-      { docName: 'White', stationName: 'Silicon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 6, firstName: '', lastName: '', status: 'Good', lastUpdated: '' },
+      { docName: 'Peter', stationName: 'Einsteinium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Robin', stationName: 'Fluorine', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: '', stationName: 'Krypton', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Pola', stationName: 'Lutetium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 4, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: '', stationName: 'Neodymium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Agar', stationName: 'Osmium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 5, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Qui', stationName: 'Radon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'Logo', stationName: 'Samarium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
+      { docName: 'White', stationName: 'Silicon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 6, firstName: '', lastName: '', status: 'Good', lastUpdated: '2021-06-16T17:26:47.3506612Z' },
       /* eslint-enable max-len */
     ];
     // return this.http.get<DashboardStationResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Stations`);
@@ -96,7 +96,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 2',
@@ -106,7 +106,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 3',
@@ -116,7 +116,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 4',
@@ -126,7 +126,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 5',
@@ -136,7 +136,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       }
     ];
     return of(filterData).pipe(delay(1000));
@@ -157,7 +157,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 2',
@@ -167,7 +167,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
       {
         docName: 'New Doc 3',
@@ -177,7 +177,7 @@ export class DocumentService {
         firstName: '',
         lastName: '',
         status: 'Good',
-        lastUpdated: ''
+        lastUpdated: '2021-06-16T17:26:47.3506612Z'
       },
     ];
     return of(filterData).pipe(delay(1000));
