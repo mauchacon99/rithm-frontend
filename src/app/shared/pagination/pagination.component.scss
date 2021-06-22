@@ -1,1 +1,51 @@
-// Styles here
+@import 'variables', 'rithm-light-palettes', 'functions';
+
+p {
+  display: inline-block;
+  min-width: 125px;
+  text-align: center;
+}
+
+.left,
+.right {
+  display: inline-block;
+  border: none;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: transparent;
+  border-radius: 50%;
+
+  &:hover {
+    cursor: pointer;
+    background: map-get($secondary-gray-palette, 100);
+  }
+}
+
+.num-container {
+  display: inline-block;
+
+  .page-num {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+
+    &.active {
+      background: map-get($secondary-gray-palette, 100);
+
+      &:hover {
+        background: map-get($secondary-gray-palette, 200);
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: map-get($secondary-gray-palette, 50);
+    }
+  }
+}
