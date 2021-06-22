@@ -20,6 +20,12 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Total stations to show. */
   totalDocs = Array<Document>();
 
+  /** Total number of documents. */
+  numberOfDocs = 0;
+
+  /** Roster type. */
+  isWorker = true;
+
   /** PageNumbers to show. */
   pageNumbers = [1, 2, 3, 4];
 
@@ -48,14 +54,17 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param pageNum The desired page of document results.
    */
-   getDocuments(pageNum: number): void {
+  getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
-      .subscribe((res: Array<Document>) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((res: any) => {
         if (res) {
-          this.totalDocs = res;
+          this.totalDocs = <Array<Document>>res.data;
+          this.numberOfDocs = res.totalDocs;
+          this.isWorker = res.isWorker;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -75,7 +84,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-   handleElapsedTime(timeEntered: string): string {
+  handleElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
