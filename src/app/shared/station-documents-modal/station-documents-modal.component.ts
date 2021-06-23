@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocument } from 'src/models';
+import { Document, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -59,7 +59,7 @@ export class StationDocumentsModalComponent implements OnInit {
     this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
-      .subscribe((res: StationDocument) => {
+      .subscribe((res: StationDocumentsResponse) => {
         if (res) {
           this.totalDocs = res.documentList;
           this.numberOfDocs = res.numberOfDocument;

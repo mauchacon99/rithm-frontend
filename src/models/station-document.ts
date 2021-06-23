@@ -2,7 +2,7 @@ import { Document } from './document';
 /**
  * Station documents data.
  */
- export interface StationDocument {
+ export interface StationDocumentsResponse {
   /** List of the documents. */
   documentList: Array<Document>;
 

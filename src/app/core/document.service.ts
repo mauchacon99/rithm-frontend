@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
-import { Document, StationDocument } from 'src/models';
+import { Document, StationDocumentsResponse } from 'src/models';
 
 // const MICROSERVICE_PATH = '/documentservice';
 
@@ -24,8 +24,8 @@ export class DocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: number, pageNum: number): Observable<StationDocument> {
-    const ELEMENT_DATA: StationDocument = {
+  getStationDocuments(stationId: number, pageNum: number): Observable<StationDocumentsResponse> {
+    const ELEMENT_DATA: StationDocumentsResponse = {
       documentList: [
         /* eslint-disable max-len */
         { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
