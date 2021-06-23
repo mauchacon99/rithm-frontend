@@ -54,15 +54,21 @@ describe('StationDocumentsModalComponent', () => {
     await tooltipHarness.show();
 
     expect((await tooltipHarness.getTooltipText())).toEqual('This document has been escalated.');
-
-
-    // const divEl: HTMLElement = divDe.nativeElement;
-    // const div = divEl.querySelector('div');
-
-    // const divato = document.querySelector(
-    //   '#' + div.getAttribute('aria-describedby')
-    // );
-
-    // expect(divato.textContent).toEqual();
   });
+
+  // it('should not have any empty tooltips', async () => {
+  //   await fixture.whenStable();
+  //   const elt: HTMLElement = fixture.nativeElement;
+  //   const hoverDivs: NodeListOf<HTMLDivElement> = elt.querySelectorAll('div[ng-reflect-ngb-tooltip]');
+  //   hoverDivs.forEach(helper => {
+  //     helper.dispatchEvent(new MouseEvent('mouseenter'));
+  //     const window = elt.querySelector('ngb-tooltip-window div.tooltip-inner');
+  //     expect(window).toBeTruthy();
+  //     if (window) {
+  //       console.log(window.textContent);
+  //       expect((window.textContent as string).length).toBeGreaterThan(0);
+  //     }
+  //     helper.dispatchEvent(new MouseEvent('mouseleave'));
+  //   });
+  // });
 });
