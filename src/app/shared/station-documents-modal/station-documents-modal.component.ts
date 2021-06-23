@@ -69,25 +69,6 @@ export class StationDocumentsModalComponent implements OnInit {
   }
 
   /**
-   * Returns a string based on the value of Document.status.
-   *
-   * @param status Should always use Document.status.
-   * @returns A string based on the value of status.
-   */
-  displayTooltip(status: string): string {
-    switch(status) {
-      case 'Good':
-        return `Error: ${status} status should not display a tooltip.`;
-      case 'Escalated':
-        return 'This document has been escalated.';
-      case 'Removed':
-        return 'This document has been removed.';
-      default:
-        return `Error: ${status} is not a valid status.`;
-    }
-  }
-
-  /**
    * Uses the helper: UtcTimeConversion.
    * Tells how long a document has been in a station for.
    *
