@@ -4,7 +4,7 @@ import { DocumentComponent } from './document/document.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: '/document/$docName',
     component: DocumentComponent,
     pathMatch: 'full'
   },
