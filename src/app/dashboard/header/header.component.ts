@@ -5,6 +5,8 @@ import { DashboardHeaderResponse } from 'src/models';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
+import { Document } from 'src/models';
+import { DocumentService } from '../../core/document.service';
 import { UserService } from 'src/app/core/user.service';
 
 /**
@@ -28,8 +30,12 @@ export class HeaderComponent implements OnInit {
   /** Is any content loading.*/
   isLoading = false;
 
+  /** Temp list of documents. */
+  docsList = Array<Document>();
+
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService,
+    private documentService: DocumentService,
     private userService: UserService) {
     this.user = {
       rithmId: '',
@@ -61,6 +67,23 @@ export class HeaderComponent implements OnInit {
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+
+    /**
+     * Get documents in priority queue.
+     */
+    this.documentService.getPriorityQueueDocuments()
+      .pipe(first())
+      .subscribe((res: Document[]) => {
+        if (res) {
+          this.docsList = res;
+        }
+      }, (error: HttpErrorResponse) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
