@@ -79,7 +79,7 @@ export class StationDocumentsModalComponent implements OnInit {
       case 'Good':
         return `Error: ${status} status should not display a tooltip.`;
       case 'Escalated':
-        return 'This document has been escalated to your supervisor.';
+        return 'This document has been escalated.';
       case 'Removed':
         return 'This document has been removed.';
       default:

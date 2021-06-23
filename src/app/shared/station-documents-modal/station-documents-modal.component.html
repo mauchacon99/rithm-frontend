@@ -16,7 +16,7 @@
       </div>
     </div>
     <div *ngFor="let doc of totalDocs" class="row no-gutters">
-      <div [matTooltip]="displayTooltip(doc.status)" matTooltipClass="status-tooltip" matTooltipPosition="left" [matTooltipDisabled]="doc.status === 'Good'" class="col-9 col-md-5 col-lg-4 col-xl-5">
+      <div [matTooltip]="displayTooltip(doc.status)" matTooltipClass="status-tooltip" matTooltipPosition="above" [matTooltipDisabled]="doc.status === 'Good'" class="col-9 col-md-5 col-lg-4 col-xl-5">
         <!-- Priority -->
         <div class="priority">
           {{ doc.priority }}
