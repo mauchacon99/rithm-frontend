@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -40,7 +41,8 @@ export class StationDocumentsModalComponent implements OnInit {
 
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion) { }
+    private utcTimeConversion: UtcTimeConversion,
+    private dialogRef: MatDialogRef<StationDocumentsModalComponent>) { }
 
   /**
    * Gets the first page of documents on load.
@@ -87,5 +89,12 @@ export class StationDocumentsModalComponent implements OnInit {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
+  }
+
+  /**
+   * Close modal after clicking a link.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
   }
 }
