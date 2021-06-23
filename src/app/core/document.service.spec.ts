@@ -26,8 +26,8 @@ describe('DocumentService', () => {
     const pageNum = 1;
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response: any) => {
-        expect(response.data.length).toBeGreaterThanOrEqual(0);
-        expect(response.totalDocs).toBeGreaterThanOrEqual(0);
+        expect(response.documentList.length).toBeGreaterThanOrEqual(0);
+        expect(response.numberOfDocument).toBeGreaterThanOrEqual(0);
         expect(response.isWorker).toBe(true || false);
       });
   });

@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document } from 'src/models';
+import { Document, StationDocument } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -59,11 +59,10 @@ export class StationDocumentsModalComponent implements OnInit {
     this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .subscribe((res: any) => {
+      .subscribe((res: StationDocument) => {
         if (res) {
-          this.totalDocs = <Array<Document>>res.data;
-          this.numberOfDocs = res.totalDocs;
+          this.totalDocs = res.documentList;
+          this.numberOfDocs = res.numberOfDocument;
           this.isWorker = res.isWorker;
         }
         this.isLoading = false;

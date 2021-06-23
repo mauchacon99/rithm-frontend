@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Document } from 'src/models';
+import { Document, StationDocument } from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
  */
@@ -13,9 +13,9 @@ export class MockDocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: number, pageNum: number): Observable<unknown> {
-    const ELEMENT_DATA = {
-      data: [
+  getStationDocuments(stationId: number, pageNum: number): Observable<StationDocument> {
+    const ELEMENT_DATA: StationDocument = {
+      documentList: [
         /* eslint-disable max-len */
         { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
         { docName: 'Jane', stationName: 'Helium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
@@ -30,14 +30,14 @@ export class MockDocumentService {
         { docName: '', stationName: 'Sodium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
         { docName: 'Allen', stationName: 'Magnesium', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 1, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
         /* eslint-enable max-len */
-      ], totalDocs: 30, isWorker: true
+      ], numberOfDocument: 30, isWorker: true
     };
     if (pageNum === 1) {
       pageNum = 0;
-      ELEMENT_DATA.data = ELEMENT_DATA.data.slice(pageNum, 10);
+      ELEMENT_DATA.documentList = ELEMENT_DATA.documentList.slice(pageNum, 10);
     } else {
       pageNum = ((pageNum * 10) - 10);
-      ELEMENT_DATA.data = ELEMENT_DATA.data.slice(pageNum, (pageNum + 10));
+      ELEMENT_DATA.documentList = ELEMENT_DATA.documentList.slice(pageNum, (pageNum + 10));
     }
     return of(ELEMENT_DATA).pipe(delay(1000));
   }
