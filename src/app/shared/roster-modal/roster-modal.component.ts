@@ -3,7 +3,8 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { StationService } from 'src/app/core/station.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { RosterModalData, WorkerRosterResponse } from 'src/models';
 
 /**
  * Reusable component for displaying the worker or supervisor roster for a station.
@@ -19,7 +20,7 @@ export class RosterModalComponent implements OnInit {
   @Input() isWorker = true;
 
   /** Id of the station. */
-  @Input() stationId = '';
+  @Input() stationRithmId = '';
 
   /** Name of station. */
   @Input() stationName = '';
@@ -28,18 +29,17 @@ export class RosterModalComponent implements OnInit {
   isLoading = false;
 
   /** Worker roster list. */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  users = Array<any>();
+  users = Array<WorkerRosterResponse>();
 
   /** Station data from station card component. */
   station: unknown;
 
   constructor(
-    private stationService: StationService,
+    private dashboardService: DashboardService,
     private errorService: ErrorService,
     public dialogRef: MatDialogRef<RosterModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: unknown) {
-    this.station = data;
+    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
+    this.stationRithmId = data.rithmId;
   }
 
   /**
@@ -47,9 +47,9 @@ export class RosterModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.isLoading = true;
-    this.stationService.getWorkerRoster(this.stationId)
+    this.dashboardService.getWorkerRoster(this.stationRithmId)
       .pipe(first())
-      .subscribe((response) => {
+      .subscribe((response: Array<WorkerRosterResponse>) => {
         this.isLoading = false;
         if (response) {
           this.users = response;

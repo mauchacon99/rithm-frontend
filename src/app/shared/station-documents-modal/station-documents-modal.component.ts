@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocumentsResponse } from 'src/models';
+import { Document } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -21,12 +20,6 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Total stations to show. */
   totalDocs = Array<Document>();
 
-  /** Total number of documents. */
-  numberOfDocs = 0;
-
-  /** Roster type. */
-  isWorker = true;
-
   /** PageNumbers to show. */
   pageNumbers = [1, 2, 3, 4];
 
@@ -41,8 +34,7 @@ export class StationDocumentsModalComponent implements OnInit {
 
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion,
-    private dialogRef: MatDialogRef<StationDocumentsModalComponent>) { }
+    private utcTimeConversion: UtcTimeConversion) { }
 
   /**
    * Gets the first page of documents on load.
@@ -56,16 +48,14 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param pageNum The desired page of document results.
    */
-  getDocuments(pageNum: number): void {
+   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
-      .subscribe((res: StationDocumentsResponse) => {
+      .subscribe((res: Array<Document>) => {
         if (res) {
-          this.totalDocs = res.documentList;
-          this.numberOfDocs = res.numberOfDocument;
-          this.isWorker = res.isWorker;
+          this.totalDocs = res;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -85,16 +75,9 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-  handleElapsedTime(timeEntered: string): string {
+   handleElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
-  }
-
-  /**
-   * Close modal after clicking a link.
-   */
-  closeModal(): void {
-    this.dialogRef.close();
   }
 }
