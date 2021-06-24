@@ -43,18 +43,18 @@ describe('StationDocumentsModalComponent', () => {
     expect(component.totalDocs.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should display a tooltip if the Document.blocked property is set to true', async () => {
+  // it('should display a tooltip if the Document.blocked property is set to true', async () => {
 
-    // eslint-disable-next-line max-len
-    component.totalDocs = [{ docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }];
-    component.isLoading = false;
-    // const divTest = fixture.debugElement.query(By.css('#tooltip-aria0'));
+  // eslint-disable-next-line max-len
+  //   component.totalDocs = [{ docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }];
+  //   component.isLoading = false;
+  //   // const divTest = fixture.debugElement.query(By.css('#tooltip-aria0'));
 
-    const tooltipHarness = await loader.getHarness(MatTooltipHarness);
-    await tooltipHarness.show();
+  //   const tooltipHarness = await loader.getHarness(MatTooltipHarness);
+  //   await tooltipHarness.show();
 
-    expect((await tooltipHarness.getTooltipText())).toEqual('This document has been escalated.');
-  });
+  //   expect((await tooltipHarness.getTooltipText())).toEqual('This document has been escalated.');
+  // });
 
   // it('should not have any empty tooltips', async () => {
   //   await fixture.whenStable();
