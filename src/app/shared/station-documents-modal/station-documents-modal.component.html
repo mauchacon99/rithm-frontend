@@ -16,12 +16,12 @@
       </div>
     </div>
     <div *ngFor="let doc of totalDocs" class="row no-gutters">
-      <div class="col-9 col-md-5 col-lg-4 col-xl-5">
+      <div matTooltip="This document has been escalated." matTooltipPosition="above" [matTooltipDisabled]="!doc.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
         <!-- Priority -->
         <div class="priority">
           {{ doc.priority }}
         </div>
-        <p [ngClass]="{'warn' : doc.blocked}">
+        <p [ngClass]="{'warn' : doc.blocked }">
           <!-- Blocked icon -->
           <i *ngIf="doc.blocked" class="fas fa-exclamation-circle"></i>
           <!-- Document name -->
@@ -39,11 +39,11 @@
       </div>
       <!-- Time in station -->
       <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
-        {{ doc.timeInStation }}
+        {{ handleElapsedTime(doc.timeEnteredStation) }}
       </div>
       <!-- Last updated -->
       <div class="col-2 d-none d-lg-block">
-        {{ doc?.lastUpdated }}
+        {{ handleElapsedTime(doc.lastUpdated) }}
       </div>
     </div>
   </span>
@@ -54,9 +54,6 @@
   </div>
 </div>
 <br>
-<div *ngFor="let num of pageNumbers" style="display: inline-block;" (click)="getDocuments(num)">
-  <span class="page-num">
-    <span [ngClass]="{'active': activeNum === num}">{{ num }}
-    </span>
-  </span>
+<div *ngIf="!isLoading" class="row no-gutters justify-content-center">
+  <app-pagination (currentPageNum)="getDocuments($event)" [numDocs]="totalDocs.length"></app-pagination>
 </div>

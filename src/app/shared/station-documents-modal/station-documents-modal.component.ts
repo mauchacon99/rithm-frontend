@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
 import { Document } from 'src/models';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -12,7 +13,8 @@ import { Document } from 'src/models';
 @Component({
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
-  styleUrls: ['./station-documents-modal.component.scss']
+  styleUrls: ['./station-documents-modal.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class StationDocumentsModalComponent implements OnInit {
 
@@ -34,7 +36,8 @@ export class StationDocumentsModalComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
-    @Inject(MAT_DIALOG_DATA) public data: Document,
+    private utcTimeConversion: UtcTimeConversion,
+    @Inject(MAT_DIALOG_DATA) public data: Document
   ) { }
 
   /**
@@ -54,9 +57,9 @@ export class StationDocumentsModalComponent implements OnInit {
     this.isLoading = true;
     this.documentService.getStationDocuments(1, pageNum)
       .pipe(first())
-      .subscribe((res: Array<Document>) => {
+      .subscribe((res) => {
         if (res) {
-          this.totalDocs = res;
+          this.totalDocs = res.documentList;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -69,4 +72,16 @@ export class StationDocumentsModalComponent implements OnInit {
       });
   }
 
+  /**
+   * Uses the helper: UtcTimeConversion.
+   * Tells how long a document has been in a station for.
+   *
+   * @param timeEntered Reflects time a document entered a station.
+   * @returns A string reading something like "4 days" or "32 minutes".
+   */
+   handleElapsedTime(timeEntered: string): string {
+    return this.utcTimeConversion.getElapsedTimeText(
+      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+    );
+  }
 }

@@ -47,7 +47,7 @@ export class StationCardComponent implements OnInit {
   openModal(stationDocsComponent: ComponentType<unknown>): void {
     this.dialog.open(stationDocsComponent, {
       minWidth: '325px',
-      data: { stationName: this.station.stationName, stationId: this.station.id }
+      data: { stationName: this.station.stationName, rithmId: this.station.rithmId }
     });
   }
 
