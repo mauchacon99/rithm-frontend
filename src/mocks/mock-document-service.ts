@@ -13,7 +13,7 @@ export class MockDocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: number, pageNum: number): Observable<StationDocumentsResponse> {
+  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocumentsResponse> {
     const ELEMENT_DATA: StationDocumentsResponse = {
       documentList: [
         /* eslint-disable max-len */

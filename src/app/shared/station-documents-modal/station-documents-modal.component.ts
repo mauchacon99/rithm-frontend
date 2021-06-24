@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocumentsResponse } from 'src/models';
+import { Document, RoasterModalData, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -38,9 +39,16 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is the content being loaded. */
   isLoading = false;
 
+  /** The station rithmId. */
+  stationRithmId = '';
+
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion) { }
+    private utcTimeConversion: UtcTimeConversion,
+    public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: RoasterModalData) {
+    this.stationRithmId = data.rithmId;
+  }
 
   /**
    * Gets the first page of documents on load.
@@ -57,15 +65,15 @@ export class StationDocumentsModalComponent implements OnInit {
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    this.documentService.getStationDocuments(1, pageNum)
+    this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
       .subscribe((res: StationDocumentsResponse) => {
+        this.isLoading = false;
         if (res) {
           this.totalDocs = res.documentList;
           this.numberOfDocs = res.numberOfDocument;
           this.isWorker = res.isWorker;
         }
-        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(

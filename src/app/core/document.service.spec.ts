@@ -22,7 +22,7 @@ describe('DocumentService', () => {
   });
 
   it('should return a list of documents for a station', () => {
-    const stationId = 1;
+    const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response: StationDocumentsResponse) => {
