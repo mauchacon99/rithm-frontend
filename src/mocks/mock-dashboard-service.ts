@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { DashboardHeaderResponse, DashboardStationData } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData, WorkerRoasterResponse } from 'src/models';
 import { delay } from 'rxjs/operators';
 
 /**
@@ -31,7 +31,7 @@ export class MockDashboardService {
   getDashboardStations(): Observable<Array<DashboardStationData>> {
     const dashboardStationData: Array<DashboardStationData> = [
       {
-        id: '1',
+        rithmId: '1',
         numberOfDocuments: 5,
         stationName: 'station-1',
         numberOfWorkers: 3,
@@ -40,7 +40,7 @@ export class MockDashboardService {
         ]
       },
       {
-        id: '2',
+        rithmId: '2',
         numberOfDocuments: 2,
         stationName: 'station-2',
         numberOfWorkers: 6,
@@ -51,6 +51,31 @@ export class MockDashboardService {
     ];
 
     return of(dashboardStationData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of worker roster of a station.
+   *
+   * @param stationId The id of the station for which to get the roster.
+   * @returns A list of worker roster of a station.
+   */
+  getWorkerRoster(stationId: string): Observable<WorkerRoasterResponse[]> {
+    const expectedResponse: Array<WorkerRoasterResponse> = [
+      {
+        firstName: 'Adarsh',
+        lastName: 'Achar',
+        email: 'adarsh.achar@inpivota.com',
+        initials: ''
+      }
+      ,
+      {
+        firstName: 'Tyler',
+        lastName: 'Hendrickson',
+        email: 'hendricksontyler@icloud.com',
+        initials: ''
+      }
+    ];
+    return of(expectedResponse).pipe(delay(1000));
   }
 
 }

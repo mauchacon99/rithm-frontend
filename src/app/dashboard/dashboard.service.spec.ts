@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { DashboardHeaderResponse } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
-import { DashboardStationData } from 'src/models';
+import { DashboardStationData, WorkerRoasterResponse } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -53,7 +53,7 @@ describe('DashboardService', () => {
   it('should successfully fetch data for dashboard stations', () => {
     const expectedResponse: Array<DashboardStationData> = [
       {
-        id: '1',
+        rithmId: '1',
         numberOfDocuments: 5,
         stationName: 'station-1',
         numberOfWorkers: 3,
@@ -62,7 +62,7 @@ describe('DashboardService', () => {
         ]
       },
       {
-        id: '2',
+        rithmId: '2',
         numberOfDocuments: 2,
         stationName: 'station-2',
         numberOfWorkers: 6,
@@ -79,6 +79,37 @@ describe('DashboardService', () => {
 
     // outgoing request
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should successfully fetch data for dashboard worker roster', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const expectedResponse: Array<WorkerRoasterResponse> = [
+      {
+        firstName: 'Adarsh',
+        lastName: 'Achar',
+        email: 'adarsh.achar@inpivota.com',
+        initials: ''
+      }
+      ,
+      {
+        firstName: 'Tyler',
+        lastName: 'Hendrickson',
+        email: 'hendricksontyler@icloud.com',
+        initials: ''
+      }
+    ];
+
+    service.getWorkerRoster(rithmId)
+      .subscribe((response) => {
+        expect(response.length).toBeGreaterThanOrEqual(0);
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${rithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
