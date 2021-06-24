@@ -17,6 +17,12 @@ p {
   background: transparent;
   border-radius: 50%;
 
+  @media screen and (max-width: 575px) {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+
   &:hover {
     cursor: pointer;
     background: map-get($secondary-gray-palette, 100);

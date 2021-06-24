@@ -25,7 +25,7 @@ export class PaginationComponent implements OnInit {
   @Output() private currentPageNum = new EventEmitter<number>();
 
   /** Current active page. */
-  activeNum = 1;
+  @Input() activeNum = 1;
 
   /** Where to start the array of pages. */
   startingPageNum = 0;
@@ -38,7 +38,6 @@ export class PaginationComponent implements OnInit {
    * Create list of document ranges to be displayed.
    */
   ngOnInit(): void {
-    // this.emitPageNum(1);
     this.numPages = Math.ceil(this.numDocs / 10);
     this.pagesArr = [];
     this.rangeArr = [];

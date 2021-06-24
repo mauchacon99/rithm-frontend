@@ -36,6 +36,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
+  /** Total number of documents at this station. */
+  totalNumDocs = 0;
+
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
@@ -61,9 +64,10 @@ export class StationDocumentsModalComponent implements OnInit {
     this.isLoading = true;
     this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((res: StationDocumentsResponse) => {
+      .subscribe((res) => {
         if (res) {
           this.totalDocs = res.documentList;
+          this.totalNumDocs = res.numberOfDocument;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {

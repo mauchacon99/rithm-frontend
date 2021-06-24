@@ -56,7 +56,7 @@ describe('StationDocumentsModalComponent', () => {
     // expect(component.isWorker).toBe(true || false);
   });
 
-  it('should display a tooltip if the document is escalated', fakeAsync(() => {
+  xit('should display a tooltip if the document is escalated', fakeAsync(() => {
     component.ngOnInit(); // TODO: Find out if it's possible to avoid calling this explicitly
     tick(1000);
 
