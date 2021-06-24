@@ -5,6 +5,7 @@ import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.compon
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
@@ -46,7 +47,8 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTooltipModule
   ],
   exports: [
     AlertDialogComponent,
@@ -57,6 +59,7 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatCheckboxModule,
     MatCardModule,
     MatButtonModule,
+    MatTooltipModule,
     PasswordRequirementsComponent,
     UserAvatarComponent,
     PaginationComponent

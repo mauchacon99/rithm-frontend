@@ -9,6 +9,10 @@ export class UtcTimeConversion {
    * @returns Milliseconds in Unix time.
    */
    getMilliseconds(timeStamp: string): number {
+    //Check if there's been a timestamp entered.
+    if (timeStamp === '') {
+      return 0;
+    }
     const timeEntered = new Date(timeStamp);
     return timeEntered.getTime();
   }
@@ -21,6 +25,10 @@ export class UtcTimeConversion {
    */
   getMillisecondsElapsed(timeStamp: string): number {
     const timeEntered = this.getMilliseconds(timeStamp);
+    //Check if there's been a timestamp entered.
+    if (timeEntered === 0) {
+      return 0;
+    }
     return Date.now() - timeEntered;
   }
 
@@ -37,6 +45,12 @@ export class UtcTimeConversion {
     this is written as 1000*60*60 */
 
     // TODO: Simplify getElapsedTimeText logic
+
+    //If elapsedTime is set to 0 its because no string was input in a related method.
+    //This prevents us from returning NaN.
+    if (elapsedTime === 0) {
+      return '';
+    }
 
     //if elapsed time is less than an hour.
     if (elapsedTime < 1000 * 60 * 60) {

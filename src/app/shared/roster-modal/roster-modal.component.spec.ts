@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PopupService } from 'src/app/core/popup.service';
-import { StationService } from 'src/app/core/station.service';
-import { MockPopupService, MockStationService } from 'src/mocks';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { DialogData } from 'src/models';
 import { RosterModalComponent } from './roster-modal.component';
 
@@ -24,7 +24,7 @@ describe('RosterModalComponent', () => {
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
-        { provide: StationService, useClass: MockStationService },
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService }
       ]
     })
