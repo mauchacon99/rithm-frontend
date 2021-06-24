@@ -25,7 +25,7 @@ export class PaginationComponent implements OnInit {
   @Output() private currentPageNum = new EventEmitter<number>();
 
   /** Current active page. */
-  activeNum = 1;
+  @Input() activeNum = 1;
 
   /** Where to start the array of pages. */
   startingPageNum = 0;
