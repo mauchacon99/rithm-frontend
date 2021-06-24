@@ -33,6 +33,9 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is the content being loaded. */
   isLoading = false;
 
+  /** Total number of documents at this station. */
+  totalNumDocs = 0;
+
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
@@ -53,11 +56,12 @@ export class StationDocumentsModalComponent implements OnInit {
    getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    this.documentService.getStationDocuments(1, pageNum)
+    this.documentService.getStationDocuments('jfkdfjek4rjk', pageNum)
       .pipe(first())
-      .subscribe((res: Array<Document>) => {
+      .subscribe((res) => {
         if (res) {
-          this.totalDocs = res;
+          this.totalDocs = res.documentList;
+          this.totalNumDocs = res.numberOfDocument;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
