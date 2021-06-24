@@ -21,11 +21,11 @@ describe('DocumentService', () => {
   });
 
   it('should return a list of documents for a station', () => {
-    const stationId = 1;
+    const stationId = 'j3k5h3k45hl';
     const pageNum = 1;
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
+        expect(response.documentList.length).toBeGreaterThanOrEqual(0);
       });
   });
 
