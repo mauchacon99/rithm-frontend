@@ -11,7 +11,4 @@ export interface WorkerRoasterResponse {
 
   /** The email address to the user. */
   email: string;
-
-  /** The initials of the user. */
-  initials: string;
 }

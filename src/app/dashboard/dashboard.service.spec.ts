@@ -91,15 +91,13 @@ describe('DashboardService', () => {
       {
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com',
-        initials: ''
+        email: 'adarsh.achar@inpivota.com'
       }
       ,
       {
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com',
-        initials: ''
+        email: 'hendricksontyler@icloud.com'
       }
     ];
 
