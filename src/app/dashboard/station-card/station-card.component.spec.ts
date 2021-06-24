@@ -21,7 +21,7 @@ describe('StationCardComponent', () => {
     fixture = TestBed.createComponent(StationCardComponent);
     component = fixture.componentInstance;
     component.station = {
-      id: '2',
+      rithmId: '2',
       numberOfDocuments: 2,
       stationName: 'station-2',
       numberOfWorkers: 6,
