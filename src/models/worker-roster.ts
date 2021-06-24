@@ -1,7 +1,7 @@
 /**
  * Represents all information about worker roster.
  */
-export interface WorkerRoasterResponse {
+export interface WorkerRosterResponse {
 
   /** The user's first name. */
   firstName: string;

@@ -1,7 +1,7 @@
 /**
  * Represents all information about roster modal.
  */
- export interface RoasterModalData {
+ export interface RosterModalData {
 
   /** The name of the station. */
   stationName: string;

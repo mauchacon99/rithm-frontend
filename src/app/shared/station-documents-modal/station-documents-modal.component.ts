@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, RoasterModalData, StationDocumentsResponse } from 'src/models';
+import { Document, RosterModalData, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -20,12 +20,6 @@ export class StationDocumentsModalComponent implements OnInit {
 
   /** Total stations to show. */
   totalDocs = Array<Document>();
-
-  /** Total number of documents. */
-  numberOfDocs = 0;
-
-  /** Roster type. */
-  isWorker = true;
 
   /** PageNumbers to show. */
   pageNumbers = [1, 2, 3, 4];
@@ -46,7 +40,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RoasterModalData) {
+    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
     this.stationRithmId = data.rithmId;
   }
 
@@ -62,18 +56,16 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param pageNum The desired page of document results.
    */
-  getDocuments(pageNum: number): void {
+   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
     this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
       .subscribe((res: StationDocumentsResponse) => {
-        this.isLoading = false;
         if (res) {
           this.totalDocs = res.documentList;
-          this.numberOfDocs = res.numberOfDocument;
-          this.isWorker = res.isWorker;
         }
+        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(
@@ -91,7 +83,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-  handleElapsedTime(timeEntered: string): string {
+   handleElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );

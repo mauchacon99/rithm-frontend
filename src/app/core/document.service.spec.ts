@@ -1,7 +1,6 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { StationDocumentsResponse } from 'src/models';
 import { DocumentService } from './document.service';
 
 describe('DocumentService', () => {
@@ -25,10 +24,8 @@ describe('DocumentService', () => {
     const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
     service.getStationDocuments(stationId, pageNum)
-      .subscribe((response: StationDocumentsResponse) => {
-        expect(response.documentList.length).toBeGreaterThanOrEqual(0);
-        expect(response.numberOfDocument).toBeGreaterThanOrEqual(0);
-        expect(response.isWorker).toBe(true || false);
+      .subscribe((response) => {
+        expect(response.length).toBeGreaterThanOrEqual(0);
       });
   });
 

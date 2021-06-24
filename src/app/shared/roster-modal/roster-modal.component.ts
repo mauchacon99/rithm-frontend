@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { RoasterModalData, WorkerRoasterResponse } from 'src/models';
+import { RosterModalData, WorkerRosterResponse } from 'src/models';
 
 /**
  * Reusable component for displaying the worker or supervisor roster for a station.
@@ -29,7 +29,7 @@ export class RosterModalComponent implements OnInit {
   isLoading = false;
 
   /** Worker roster list. */
-  users = Array<WorkerRoasterResponse>();
+  users = Array<WorkerRosterResponse>();
 
   /** Station data from station card component. */
   station: unknown;
@@ -38,7 +38,7 @@ export class RosterModalComponent implements OnInit {
     private dashboardService: DashboardService,
     private errorService: ErrorService,
     public dialogRef: MatDialogRef<RosterModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RoasterModalData) {
+    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
     this.stationRithmId = data.rithmId;
   }
 
@@ -49,7 +49,7 @@ export class RosterModalComponent implements OnInit {
     this.isLoading = true;
     this.dashboardService.getWorkerRoster(this.stationRithmId)
       .pipe(first())
-      .subscribe((response: Array<WorkerRoasterResponse>) => {
+      .subscribe((response: Array<WorkerRosterResponse>) => {
         this.isLoading = false;
         if (response) {
           this.users = response;
