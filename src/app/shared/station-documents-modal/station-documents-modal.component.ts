@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -30,8 +31,11 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is the content being loaded. */
   isLoading = false;
 
-  constructor(private documentService: DocumentService,
-    private errorService: ErrorService) { }
+  constructor(
+    private documentService: DocumentService,
+    private errorService: ErrorService,
+    @Inject(MAT_DIALOG_DATA) public data: Document,
+  ) { }
 
   /**
    * Gets the first page of documents on load.

@@ -42,10 +42,10 @@ export class StationCardComponent implements OnInit {
   /**
    * Open a modal with roster or document information.
    *
-   * @param componentName Name of the component to open.
+   * @param stationDocsComponent Name of the component to open.
    */
-  openModal(componentName: ComponentType<unknown>): void {
-    this.dialog.open(componentName, {
+  openModal(stationDocsComponent: ComponentType<unknown>): void {
+    this.dialog.open(stationDocsComponent, {
       minWidth: '325px',
       data: { stationName: this.station.stationName, stationId: this.station.id }
     });
