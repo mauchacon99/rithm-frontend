@@ -54,7 +54,7 @@ export class StationDocumentsModalComponent implements OnInit {
    getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    this.documentService.getStationDocuments(1, pageNum)
+    this.documentService.getStationDocuments('jfkdfjek4rjk', pageNum)
       .pipe(first())
       .subscribe((res) => {
         if (res) {
