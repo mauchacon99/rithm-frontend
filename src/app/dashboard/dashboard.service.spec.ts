@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { DashboardHeaderResponse } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
-import { DashboardStationData, WorkerRoasterResponse } from 'src/models';
+import { DashboardStationData, WorkerRosterResponse } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -87,7 +87,7 @@ describe('DashboardService', () => {
 
   it('should successfully fetch data for dashboard worker roster', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const expectedResponse: Array<WorkerRoasterResponse> = [
+    const expectedResponse: Array<WorkerRosterResponse> = [
       {
         firstName: 'Adarsh',
         lastName: 'Achar',

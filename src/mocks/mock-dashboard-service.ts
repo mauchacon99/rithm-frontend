@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { DashboardHeaderResponse, DashboardStationData, WorkerRoasterResponse } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse } from 'src/models';
 import { delay } from 'rxjs/operators';
 
 /**
@@ -59,8 +59,8 @@ export class MockDashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
-  getWorkerRoster(stationId: string): Observable<WorkerRoasterResponse[]> {
-    const expectedResponse: Array<WorkerRoasterResponse> = [
+  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+    const expectedResponse: Array<WorkerRosterResponse> = [
       {
         firstName: 'Adarsh',
         lastName: 'Achar',

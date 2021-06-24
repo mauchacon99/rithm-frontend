@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DashboardHeaderResponse, DashboardStationData, WorkerRoasterResponse } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -41,9 +41,9 @@ export class DashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
-  getWorkerRoster(stationId: string): Observable<WorkerRoasterResponse[]> {
+  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<WorkerRoasterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
   }
 
 }
