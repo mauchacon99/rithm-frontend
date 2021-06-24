@@ -59,6 +59,10 @@
       p {
         text-overflow: ellipsis;
         overflow: hidden;
+
+        &:hover {
+          cursor: default;
+        }
       }
 
       div.initials {
@@ -82,9 +86,4 @@
   .loading {
     padding-top: 175px;
   }
-}
-
-/* stylelint-disable-next-line */
-::ng-deep .status-tooltip {
-  margin-right: 40px !important;
 }
