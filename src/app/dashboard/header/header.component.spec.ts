@@ -4,9 +4,10 @@ import { DocumentService } from 'src/app/core/document.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MockDashboardService, MockPopupService, MockUserService, MockDocumentService } from 'src/mocks';
-import { PopupService } from 'src/app/core/popup.service';
+import { MockDashboardService, MockUserService, MockDocumentService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -17,13 +18,14 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       imports: [
         RouterTestingModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatSnackBarModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService },
       ]
     })
       .compileComponents();
@@ -32,6 +34,10 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    component.docsList = [
+      // eslint-disable-next-line max-len
+      { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }
+    ];
     fixture.detectChanges();
   });
 
@@ -47,8 +53,8 @@ describe('HeaderComponent', () => {
     expect(component.numStations).toBeGreaterThanOrEqual(0);
   });
 
-  it('should link to a document page when you press "Start Working"', () => {
-    expect;
-  });
+  // it('should link to a document page when you press "Start Working"', () => {
+  //   expect;
+  // });
 
 });

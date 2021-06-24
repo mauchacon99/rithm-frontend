@@ -9,6 +9,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 describe('StationDocumentsModalComponent', () => {
   let component: StationDocumentsModalComponent;
@@ -18,8 +19,9 @@ describe('StationDocumentsModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationDocumentsModalComponent],
-      imports: [MatTooltipModule, NoopAnimationsModule],
+      imports: [MatTooltipModule, NoopAnimationsModule, MatDialogModule],
       providers: [
+        { provide: MatDialogRef, useValue: {} },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: PopupService, useClass: MockPopupService }
       ]
