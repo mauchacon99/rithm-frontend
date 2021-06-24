@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document } from 'src/models';
+import { Document, RosterModalData, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -33,13 +33,19 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Is the content being loaded. */
   isLoading = false;
 
+  /** The station rithmId. */
+  stationRithmId = '';
+
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
-    private dialogRef: MatDialogRef<StationDocumentsModalComponent>) { }
+    public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
+    this.stationRithmId = data.rithmId;
+  }
 
   /**
    * Gets the first page of documents on load.
@@ -56,7 +62,7 @@ export class StationDocumentsModalComponent implements OnInit {
    getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    this.documentService.getStationDocuments('jfkdfjek4rjk', pageNum)
+    this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
       .subscribe((res) => {
         if (res) {

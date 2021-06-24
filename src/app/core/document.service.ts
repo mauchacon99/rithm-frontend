@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
-import { Document } from 'src/models';
-import { StationDocumentsResponse } from 'src/models/station-document';
+import { Document, StationDocumentsResponse } from 'src/models';
 
 // const MICROSERVICE_PATH = '/documentservice';
 
