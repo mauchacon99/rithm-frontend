@@ -70,7 +70,7 @@ export class DocumentService {
         { docName: 'White', stationName: 'Silicon', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 6, firstName: '', lastName: '', blocked: false, lastUpdated: '' },
         /* eslint-enable max-len */
       ],
-      numberOfDocument: 50, isWorker: true
+      numberOfDocument: 40, isWorker: true
     };
     // return this.http.get<DashboardStationResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Stations`);
     if (pageNum === 1) {
