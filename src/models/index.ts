@@ -11,4 +11,3 @@ export * from './user';
 export * from './dashboard-header-data';
 export * from './dashboard-station-data';
 export * from './document';
-export * from './station-document';
