@@ -25,7 +25,7 @@ describe('DocumentService', () => {
     const pageNum = 1;
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
+        expect(response.documentList.length).toBeGreaterThanOrEqual(0);
       });
   });
 
