@@ -1,15 +1,15 @@
 // Styles here
-.center {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
-
 mat-card {
   padding: 8px;
   margin-top: 10px;
   height: 102px;
+
+  .center {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
 }
