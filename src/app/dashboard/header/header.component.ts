@@ -16,16 +16,16 @@ import { UserService } from 'src/app/core/user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  /** A temp user. */
+  /** The user that is currently signed in. */
   user: User | undefined;
 
-  /** Number of previously started docs. */
+  /** The number of previously started documents. */
   numPrevDocs = 0;
 
-  /** Number of stations user is a member of. */
+  /** The number of stations that the user is a member of. */
   numStations = 0;
 
-  /** Is any content loading.*/
+  /** Whether the header data is loading. */
   isLoading = true;
 
   constructor(
@@ -37,13 +37,9 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Checks for query params and makes necessary request if present.
+   * Get dashboard header display for number previous documents and stations.
    */
   ngOnInit(): void {
-
-    /**
-     * Get dashboard header display for number previous documents and stations.
-     */
     this.dashboardService.getDashboardHeader()
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
