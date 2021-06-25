@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
   numStations = 0;
 
   /** Is any content loading.*/
-  isLoading = false;
+  isLoading = true;
 
   constructor(private dashboardService: DashboardService,
     private errorService: ErrorService,
@@ -53,7 +53,6 @@ export class HeaderComponent implements OnInit {
     this.dashboardService.getDashboardHeader()
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
-        this.isLoading = true;
         if (res) {
           this.numPrev = res.startedDocuments;
           this.numStations = res.rosterStations;
