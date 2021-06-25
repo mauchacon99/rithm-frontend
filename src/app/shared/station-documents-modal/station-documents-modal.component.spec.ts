@@ -20,12 +20,6 @@ const DIALOG_TEST_DATA: DialogData = {
   cancelButtonText: 'Cancel',
 };
 
-// mock object with close method
-const dialogMock = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  close: () => { }
-};
-
 describe('StationDocumentsModalComponent', () => {
   let component: StationDocumentsModalComponent;
   let fixture: ComponentFixture<StationDocumentsModalComponent>;

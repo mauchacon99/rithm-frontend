@@ -18,7 +18,7 @@
       </div>
       <div *ngFor="let doc of totalDocs" class="row no-gutters">
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!doc.blocked" class= "col-9 col-md-5 col-lg-4 col-xl-5">
+          [matTooltipDisabled]="!doc.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
           <!-- Priority -->
           <div class="priority">
             {{ doc.priority }}
