@@ -16,38 +16,38 @@
           <strong>Last Updated</strong>
         </div>
       </div>
-      <div *ngFor="let doc of totalDocs" class="row no-gutters">
+      <div *ngFor="let document of documents" class="row no-gutters">
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!doc.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
+          [matTooltipDisabled]="!document.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
           <!-- Priority -->
           <div class="priority">
-            {{ doc.priority }}
+            {{ document.priority }}
           </div>
-          <p [ngClass]="{'warn' : doc.blocked }">
+          <p [ngClass]="{'warn' : document.blocked }">
             <!-- Blocked icon -->
-            <i *ngIf="doc.blocked" class="fas fa-exclamation-circle"></i>
+            <i *ngIf="document.blocked" class="fas fa-exclamation-circle"></i>
             <!-- Document name -->
-            {{ doc?.docName }}
+            {{ document?.docName }}
           </p>
         </div>
         <!-- Assigned -->
         <div class="col-3 col-md-3 col-md-4 col-lg-3">
-          <span *ngIf="doc?.firstName && doc?.lastName">
+          <span *ngIf="document?.firstName && document?.lastName">
             <div class="initials">
-              {{doc?.firstName | slice:0:1}}{{doc?.lastName | slice:0:1}}
+              {{document?.firstName | slice:0:1}}{{document?.lastName | slice:0:1}}
             </div>
             <div class="d-none d-md-block">
-              {{ doc?.firstName }} {{ doc?.lastName }}
+              {{ document?.firstName }} {{ document?.lastName }}
             </div>
           </span>
         </div>
         <!-- Time in station -->
         <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
-          {{ handleElapsedTime(doc.timeEnteredStation) }}
+          {{ getElapsedTime(document.timeEnteredStation) }}
         </div>
         <!-- Last updated -->
         <div class="col-2 d-none d-lg-block">
-          {{ handleElapsedTime(doc.lastUpdated) }}
+          {{ getElapsedTime(document.lastUpdated) }}
         </div>
       </div>
     </span>

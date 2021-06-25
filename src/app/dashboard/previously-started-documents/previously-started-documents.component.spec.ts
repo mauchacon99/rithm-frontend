@@ -31,7 +31,7 @@ describe('PreviouslyStartedDocumentsComponent', () => {
   });
 
   it('should return previously started documents', () => {
-    expect(component.docsList.length).toBeGreaterThanOrEqual(0);
+    expect(component.previouslyStartedDocuments.length).toBeGreaterThanOrEqual(0);
   });
 
 });

@@ -26,9 +26,7 @@ export class StationCardComponent implements OnInit {
   /** Station documents modal component. */
   stationDocsComponent = StationDocumentsModalComponent;
 
-  constructor(private dialog: MatDialog) {
-
-  }
+  constructor(private dialog: MatDialog) {}
 
   /**
    * Set the number of roster members to show when less than 3.
@@ -40,12 +38,12 @@ export class StationCardComponent implements OnInit {
   }
 
   /**
-   * Open a modal with roster or document information.
+   * Opens a modal with roster or document information.
    *
-   * @param componentName Name of the component to open.
+   * @param component The component to open.
    */
-  openModal(componentName: ComponentType<unknown>): void {
-    this.dialog.open(componentName, {
+  openModal(component: ComponentType<unknown>): void {
+    this.dialog.open(component, {
       minWidth: '325px',
       data: { stationName: this.station.stationName, rithmId: this.station.rithmId }
     });
