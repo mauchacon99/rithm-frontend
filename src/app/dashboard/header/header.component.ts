@@ -17,10 +17,10 @@ import { UserService } from 'src/app/core/user.service';
 })
 export class HeaderComponent implements OnInit {
   /** A temp user. */
-  user: User;
+  user: User | undefined;
 
   /** Number of previously started docs. */
-  numPrev = 0;
+  numPrevDocs = 0;
 
   /** Number of stations user is a member of. */
   numStations = 0;
@@ -28,18 +28,12 @@ export class HeaderComponent implements OnInit {
   /** Is any content loading.*/
   isLoading = true;
 
-  constructor(private dashboardService: DashboardService,
+  constructor(
+    private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private userService: UserService) {
-    this.user = {
-      rithmId: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      objectPermissions: [],
-      groups: [],
-      createdDate: ''
-    };
+    private userService: UserService
+  ) {
+    this.user = this.userService.user;
   }
 
   /**
@@ -54,7 +48,7 @@ export class HeaderComponent implements OnInit {
       .pipe(first())
       .subscribe((res: DashboardHeaderResponse) => {
         if (res) {
-          this.numPrev = res.startedDocuments;
+          this.numPrevDocs = res.startedDocuments;
           this.numStations = res.rosterStations;
           this.isLoading = false;
         }
@@ -66,12 +60,6 @@ export class HeaderComponent implements OnInit {
           true
         );
       });
-
-    /**
-     * Get user first and last name to display in dashboard.
-     */
-    this.user = <User>this.userService.user;
-
   }
 
 }
