@@ -31,6 +31,6 @@ describe('PriorityQueueComponent', () => {
   });
 
   it('should return priority queue documents', () => {
-    expect(component.docsList.length).toBeGreaterThanOrEqual(0);
+    expect(component.priorityQueueDocuments.length).toBeGreaterThanOrEqual(0);
   });
 });
