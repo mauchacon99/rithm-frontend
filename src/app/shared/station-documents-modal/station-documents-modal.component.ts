@@ -35,7 +35,7 @@ export class StationDocumentsModalComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
-    @Inject(MAT_DIALOG_DATA) private modalData: StationDocumentsModalData,
+    @Inject(MAT_DIALOG_DATA) public modalData: StationDocumentsModalData,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>
