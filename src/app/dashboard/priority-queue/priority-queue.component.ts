@@ -14,26 +14,27 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./priority-queue.component.scss']
 })
 export class PriorityQueueComponent implements OnInit {
-  /** Temp list of documents. */
-  docsList = Array<Document>();
+  /** The list of documents in the priority queue. */
+  priorityQueueDocuments: Document[] = [];
 
-  /** Are the documents being loaded. */
-  isLoading = false;
+  /** Whether the documents are being loaded. */
+  isLoading = true;
 
-  constructor(private documentService: DocumentService,
-    private errorService: ErrorService) { }
+  constructor(
+    private documentService: DocumentService,
+    private errorService: ErrorService
+  ) { }
 
   /**
    * Gets a list of priority queue documents on load.
    */
   ngOnInit(): void {
-    this.isLoading = true;
     this.documentService.getPriorityQueueDocuments()
       .pipe(first())
-      .subscribe((res: Document[]) => {
+      .subscribe((documents) => {
         this.isLoading = false;
-        if (res) {
-          this.docsList = res;
+        if (documents) {
+          this.priorityQueueDocuments = documents;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

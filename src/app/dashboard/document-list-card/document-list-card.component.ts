@@ -13,13 +13,13 @@ import { UtcTimeConversion } from 'src/helpers';
 })
 export class DocumentListCardComponent {
 
-  /** Temp list of documents. */
-  @Input() docList = Array<Document>();
+  /** The list of documents to display in the card. */
+  @Input() documents = Array<Document>();
 
-  /** Is the data being loaded. */
+  /** Whether the data is being loaded. */
   @Input() isLoading = false;
 
-  /** Use to show or hide continue button. */
+  /** Whether the card is for the priority queue. */
   @Input() isPriority = false;
 
   constructor(private utcTimeConversion: UtcTimeConversion) { }
@@ -31,7 +31,7 @@ export class DocumentListCardComponent {
    * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-  handleElapsedTime(timeEntered: string): string {
+  getElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );

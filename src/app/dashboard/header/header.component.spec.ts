@@ -23,8 +23,7 @@ describe('HeaderComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -38,7 +37,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should return dashboard header data for number of stations', () => {
-    expect(component.numPrev).toBeGreaterThanOrEqual(0);
+    expect(component.numPrevDocs).toBeGreaterThanOrEqual(0);
   });
 
   it('should return dashboard header data for previous documents', () => {
