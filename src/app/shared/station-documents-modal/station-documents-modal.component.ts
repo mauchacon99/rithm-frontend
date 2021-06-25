@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, RosterModalData } from 'src/models';
+import { Document, StationDocumentsModalData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -35,12 +35,12 @@ export class StationDocumentsModalComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
-    @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
+    @Inject(MAT_DIALOG_DATA) private modalData: StationDocumentsModalData,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>
   ) {
-    this.stationRithmId = this.data.rithmId;
+    this.stationRithmId = this.modalData.stationId;
   }
 
   /**
