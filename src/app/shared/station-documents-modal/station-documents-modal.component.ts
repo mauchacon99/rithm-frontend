@@ -6,6 +6,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { Document, RosterModalData, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AuthGuard } from 'src/app/core/auth.guard';
+import { Router } from '@angular/router';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -14,7 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
   styleUrls: ['./station-documents-modal.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion, AuthGuard]
 })
 export class StationDocumentsModalComponent implements OnInit {
 
@@ -39,11 +41,15 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
+  /** Shows if user is on worker roster. */
+  isOnRoster = false;
+
   constructor(private documentService: DocumentService,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
+    @Inject(MAT_DIALOG_DATA) public data: RosterModalData,
+    private router: Router) {
     this.stationRithmId = data.rithmId;
   }
 
@@ -68,6 +74,7 @@ export class StationDocumentsModalComponent implements OnInit {
         if (res) {
           this.totalDocs = res.documentList;
           this.totalNumDocs = res.numberOfDocument;
+          this.isOnRoster = res.isWorker;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -78,6 +85,18 @@ export class StationDocumentsModalComponent implements OnInit {
           true
         );
       });
+  }
+
+  /**
+   * Determines if User has permission to proceed to a link.
+   *
+   * @param rithmId The specific link.
+   */
+  checkLinkPermission(rithmId: string): void {
+    if (this.isOnRoster) {
+      this.router.navigateByUrl(`/document/${rithmId}`);
+      this.closeModal();
+    }
   }
 
   /**
