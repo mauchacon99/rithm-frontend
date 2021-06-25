@@ -1,12 +1,8 @@
 <!-- Title -->
-<h1 mat-dialog-title [ngClass]="{'error-title': title === 'Error'}">{{title}}</h1>
+<h4 class="text-center" [ngClass]="{'error-title': title === 'Error'}">{{title}}</h4>
 
-<div mat-dialog-content class="row">
-
-  <!-- Message -->
-  <p>{{message}}</p>
-
-</div>
+<!-- Message -->
+<p>{{message}}</p>
 
 <!-- Buttons -->
 <div mat-dialog-actions class="row justify-content-end">
