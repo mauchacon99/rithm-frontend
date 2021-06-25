@@ -14,26 +14,27 @@ import { Document } from 'src/models';
   styleUrls: ['./previously-started-documents.component.scss']
 })
 export class PreviouslyStartedDocumentsComponent implements OnInit {
-  /** List of documents. */
-  docsList = Array<Document>();
+  /** The list of documents that have been previously started. */
+  previouslyStartedDocuments: Document[] = [];
 
-  /** Are the documents being loaded. */
-  isLoading = false;
+  /** Whether the documents are being loaded. */
+  isLoading = true;
 
-  constructor(private documentService: DocumentService,
-    private errorService: ErrorService) { }
+  constructor(
+    private documentService: DocumentService,
+    private errorService: ErrorService
+  ) { }
 
   /**
    * Gets top 5 previously started documents on load.
    */
   ngOnInit(): void {
-    this.isLoading = true;
     this.documentService.getPreviouslyStartedDocuments()
       .pipe(first())
-      .subscribe((res: Document[]) => {
+      .subscribe((documents) => {
         this.isLoading = false;
-        if (res) {
-          this.docsList = res;
+        if (documents) {
+          this.previouslyStartedDocuments = documents;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
