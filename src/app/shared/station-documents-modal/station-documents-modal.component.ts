@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, RosterModalData, StationDocumentsResponse } from 'src/models';
+import { Document, RosterModalData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -18,33 +18,29 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class StationDocumentsModalComponent implements OnInit {
 
-  /** Total stations to show. */
-  totalDocs = Array<Document>();
-
-  /** PageNumbers to show. */
-  pageNumbers = [1, 2, 3, 4];
+  /** The documents to show in the modal. */
+  documents: Document[] = [];
 
   /** The current page number. */
   activeNum = 1;
 
-  /** IsPriority element. */
-  isPriority = 1;
-
   /** Is the content being loaded. */
-  isLoading = false;
+  isLoading = true;
 
   /** The station rithmId. */
-  stationRithmId = '';
+  private stationRithmId = '';
 
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
-  constructor(private documentService: DocumentService,
+  constructor(
+    private documentService: DocumentService,
+    @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
-    public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
-    this.stationRithmId = data.rithmId;
+    private dialogRef: MatDialogRef<StationDocumentsModalComponent>
+  ) {
+    this.stationRithmId = this.data.rithmId;
   }
 
   /**
@@ -59,15 +55,15 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param pageNum The desired page of document results.
    */
-   getDocuments(pageNum: number): void {
+  getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
     this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((res) => {
-        if (res) {
-          this.totalDocs = res.documentList;
-          this.totalNumDocs = res.numberOfDocument;
+      .subscribe((documentsResponse) => {
+        if (documentsResponse) {
+          this.documents = documentsResponse.documentList;
+          this.totalNumDocs = documentsResponse.numberOfDocument;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -87,7 +83,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param timeEntered Reflects time a document entered a station.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-   handleElapsedTime(timeEntered: string): string {
+  getElapsedTime(timeEntered: string): string {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
