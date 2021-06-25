@@ -43,4 +43,13 @@ mat-card {
       margin-top: 30px;
     }
   }
+
+  .center {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
 }

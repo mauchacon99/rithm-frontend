@@ -57,8 +57,8 @@ describe('StationDocumentsModalComponent', () => {
   });
 
   it('should return zero or more documents', () => {
-    expect(component.totalDocs.length).toBeGreaterThanOrEqual(0);
-    expect(component.totalDocs).toBeGreaterThanOrEqual(0);
+    expect(component.documents.length).toBeGreaterThanOrEqual(0);
+    expect(component.documents).toBeGreaterThanOrEqual(0);
     // expect(component.isWorker).toBe(true || false);
   });
 

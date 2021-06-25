@@ -15,25 +15,26 @@ import { DashboardStationData } from 'src/models';
 })
 export class MyStationsComponent implements OnInit {
 
-  /** Total stations to show. Temp data. */
-  totalStations = Array<DashboardStationData>();
+  /** The stations where the user is part of the work roster. */
+  stations: DashboardStationData[] = [];
 
-  /** Are the stations being loaded. */
-  isLoading = false;
+  /** Whether the stations are being loaded. */
+  isLoading = true;
 
-  constructor(private dashboardService: DashboardService,
-    private errorService: ErrorService) { }
+  constructor(
+    private dashboardService: DashboardService,
+    private errorService: ErrorService
+  ) { }
 
   /**
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    this.isLoading = true;
     this.dashboardService.getDashboardStations()
       .pipe(first())
-      .subscribe((res: Array<DashboardStationData>) => {
-        if (res) {
-          this.totalStations = res;
+      .subscribe((stations) => {
+        if (stations) {
+          this.stations = stations;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {

@@ -34,8 +34,8 @@ export class PaginationComponent implements OnInit {
   endingPageNum = 5;
 
   /**
-   * Calculate number of pages.
-   * Create list of document ranges to be displayed.
+   * Calculates number of pages.
+   * Creates list of document ranges to be displayed.
    */
   ngOnInit(): void {
     this.numPages = Math.ceil(this.numDocs / 10);

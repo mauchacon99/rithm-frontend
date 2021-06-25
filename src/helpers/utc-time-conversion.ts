@@ -49,7 +49,7 @@ export class UtcTimeConversion {
     //If elapsedTime is set to 0 its because no string was input in a related method.
     //This prevents us from returning NaN.
     if (elapsedTime === 0) {
-      return '';
+      return 'Unknown';
     }
 
     //if elapsed time is less than an hour.
