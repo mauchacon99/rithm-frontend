@@ -11,12 +11,19 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RouterTestingModule } from '@angular/router/testing';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
   message: 'This is an example alert used for testing.',
   okButtonText: 'Understood',
-  cancelButtonText: 'Cancel'
+  cancelButtonText: 'Cancel',
+};
+
+// mock object with close method
+const dialogMock = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  close: () => { }
 };
 
 describe('StationDocumentsModalComponent', () => {
@@ -24,13 +31,18 @@ describe('StationDocumentsModalComponent', () => {
   let fixture: ComponentFixture<StationDocumentsModalComponent>;
   let loader: HarnessLoader;
 
+  const dialogMock = {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    close: () => { }
+    };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationDocumentsModalComponent],
-      imports: [MatTooltipModule, NoopAnimationsModule, MatDialogModule],
+      imports: [MatTooltipModule, NoopAnimationsModule, MatDialogModule, RouterTestingModule],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialogRef, useValue: dialogMock },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: PopupService, useClass: MockPopupService }
@@ -55,6 +67,14 @@ describe('StationDocumentsModalComponent', () => {
     expect(component.totalDocs).toBeGreaterThanOrEqual(0);
     // expect(component.isWorker).toBe(true || false);
   });
+
+  // TODO: This test not currently working.
+  // it('should link to a document if clicked with proper permissions', () => {
+  //   component.isOnRoster = true;
+  //   expect(component.checkDocPermission('1')).toBeTruthy();
+  //   component.isOnRoster = false;
+  //   expect(component.checkDocPermission('1')).toBeFalsy();
+  // });
 
   xit('should display a tooltip if the document is escalated', fakeAsync(() => {
     component.ngOnInit(); // TODO: Find out if it's possible to avoid calling this explicitly

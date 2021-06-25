@@ -6,8 +6,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { Document, RosterModalData, StationDocumentsResponse } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthGuard } from 'src/app/core/auth.guard';
 import { Router } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
   styleUrls: ['./station-documents-modal.component.scss'],
-  providers: [UtcTimeConversion, AuthGuard]
+  providers: [UtcTimeConversion, MatTooltip]
 })
 export class StationDocumentsModalComponent implements OnInit {
 
@@ -49,7 +49,8 @@ export class StationDocumentsModalComponent implements OnInit {
     private utcTimeConversion: UtcTimeConversion,
     public dialogRef: MatDialogRef<StationDocumentsModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RosterModalData,
-    private router: Router) {
+    private router: Router,
+    private tooltip: MatTooltip) {
     this.stationRithmId = data.rithmId;
   }
 
@@ -74,6 +75,7 @@ export class StationDocumentsModalComponent implements OnInit {
         if (res) {
           this.totalDocs = res.documentList;
           this.totalNumDocs = res.numberOfDocument;
+          //to test the else statement in this.CheckDocPermission(), comment out the below line.
           this.isOnRoster = res.isWorker;
         }
         this.isLoading = false;
@@ -88,14 +90,21 @@ export class StationDocumentsModalComponent implements OnInit {
   }
 
   /**
-   * Determines if User has permission to proceed to a link.
+   * Determines if User has permission to proceed to a linked document.
    *
-   * @param rithmId The specific link.
+   * @param rithmId The rithmId property of the document we will link to.
    */
-  checkLinkPermission(rithmId: string): void {
+  checkDocPermission(rithmId: string): void {
     if (this.isOnRoster) {
       this.router.navigateByUrl(`/document/${rithmId}`);
-      this.closeModal();
+      this.dialogRef.close();
+    } else {
+      //TODO: see if its possible to prevent clicks from hiding a tooltip.
+      this.tooltip.message = 'You do not have permission to view this document.';
+      this.tooltip.show();
+      setTimeout(() => {
+        this.tooltip.hide();
+      }, 3000);
     }
   }
 
@@ -112,10 +121,4 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
-  /**
-   * Close modal after clicking a link.
-   */
-   closeModal(): void {
-    this.dialogRef.close();
-  }
 }

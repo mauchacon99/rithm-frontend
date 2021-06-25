@@ -36,7 +36,7 @@ describe('HeaderComponent', () => {
     component = fixture.componentInstance;
     component.docsList = [
       // eslint-disable-next-line max-len
-      { docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }
+      { rithmId:'1', docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }
     ];
     fixture.detectChanges();
   });
@@ -52,9 +52,5 @@ describe('HeaderComponent', () => {
   it('should return dashboard header data for previous documents', () => {
     expect(component.numStations).toBeGreaterThanOrEqual(0);
   });
-
-  // it('should link to a document page when you press "Start Working"', () => {
-  //   expect;
-  // });
 
 });

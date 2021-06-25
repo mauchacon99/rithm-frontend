@@ -75,23 +75,6 @@ export class HeaderComponent implements OnInit {
       });
 
     /**
-     * Get documents in priority queue.
-     */
-    this.documentService.getPriorityQueueDocuments()
-      .pipe(first())
-      .subscribe((res: Document[]) => {
-        if (res) {
-          this.docsList = res;
-        }
-      }, (error: HttpErrorResponse) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
-
-    /**
      * Get user first and last name to display in dashboard.
      */
     this.user = <User>this.userService.user;
