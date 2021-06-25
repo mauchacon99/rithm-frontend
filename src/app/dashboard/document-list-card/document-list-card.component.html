@@ -19,6 +19,11 @@
           </button>
         </div>
       </div>
+      <span class="center" *ngIf="!docList || docList.length === 0">
+        <div>
+          No documents
+        </div>
+      </span>
     </span>
     <div *ngIf="isLoading" class="row no-gutters loading">
       <div class="col-12 text-center">
