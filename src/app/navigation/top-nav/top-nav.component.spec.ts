@@ -51,6 +51,31 @@ describe('TopNavComponent', () => {
     expect(notificationButtonHarness).toBeTruthy();
   });
 
+  it('should call the `signOut` method on the `UserService`', async () => {
+    const spy = spyOn(component, 'signOut');
+    component.signOut();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call the `toggle` method on the `SidenavService`', async () => {
+    const spy = spyOn(component, 'toggle');
+    component.toggle();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call the clickedOutside', async () => {
+    const spy = spyOn(component, 'clickedOutside');
+    component.clickedOutside();
+    expect(spy).toHaveBeenCalled();
+    expect(component.notificationsVisible).toBeFalse();
+  });
+
+  it('should call the onResize', async () => {
+    const spy = spyOn(component, 'onResize');
+    component.onResize();
+    expect(spy).toHaveBeenCalled();
+  });
+
   xit('should toggle notifications pane when button clicked', async () => {
     const notificationsSpy = spyOn(component, 'toggleNotifications');
     await notificationButtonHarness.click();

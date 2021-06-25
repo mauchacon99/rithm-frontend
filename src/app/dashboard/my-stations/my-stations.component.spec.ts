@@ -30,8 +30,8 @@ describe('MyStationsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Dashboard stations data verify', () => {
-    expect(component.totalStations.length).toBeGreaterThanOrEqual(0);
+  it('should have stations', () => {
+    expect(component.stations.length).toBeGreaterThanOrEqual(0);
   });
 
 });
