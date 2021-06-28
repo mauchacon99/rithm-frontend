@@ -19,13 +19,12 @@ describe('HeaderComponent', () => {
       imports: [
         RouterTestingModule,
         MatProgressSpinnerModule,
-        MatDialogModule,
-        MatSnackBarModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     }).compileComponents();
   });
