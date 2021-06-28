@@ -4,7 +4,7 @@ import { NotificationCardComponent } from '../notification-card/notification-car
 
 import { NotificationToastsContainerComponent } from './notification-toasts-container.component';
 
-fdescribe('NotificationToastsContainerComponent', () => {
+describe('NotificationToastsContainerComponent', () => {
   let component: NotificationToastsContainerComponent;
   let fixture: ComponentFixture<NotificationToastsContainerComponent>;
 
