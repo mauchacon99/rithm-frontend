@@ -12,6 +12,7 @@
     width: 1000px;
     height: 535px;
     overflow-y: scroll;
+    cursor: default;
 
     @media screen and (max-width: 1499px) {
       width: 743px;
@@ -31,10 +32,27 @@
       margin-bottom: 15px;
     }
 
+    .doc-link {
+      transition: background-color 0.25s;
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+      height: 30px;
+      margin-bottom: 16px;
+
+      &:hover {
+        background-color: map-get($secondary-gray-palette, 50);
+      }
+    }
+
+    .link-permission {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
     .row {
       margin-top: 10px;
       line-height: 30px;
-      height: 36px;
 
       /// References all columns
       div {
@@ -45,12 +63,6 @@
         /// Column Headers
         strong {
           font-weight: 600;
-        }
-
-        .doc-link {
-          &:hover {
-            cursor: pointer;
-          }
         }
 
         div.priority {

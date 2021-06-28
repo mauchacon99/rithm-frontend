@@ -71,7 +71,7 @@ export class StationDocumentsModalComponent implements OnInit {
         if (documentsResponse) {
           this.documents = documentsResponse.documentList;
           this.totalNumDocs = documentsResponse.numberOfDocument;
-          //to test the else statement in this.CheckDocPermission(), comment out the below line.
+          //to test this.CheckDocPermission(), comment out the below line.
           this.isOnRoster = documentsResponse.isWorker;
         }
         this.isLoading = false;
@@ -94,13 +94,6 @@ export class StationDocumentsModalComponent implements OnInit {
     if (this.isOnRoster) {
       this.router.navigateByUrl(`/document/${rithmId}`);
       this.dialogRef.close();
-    } else {
-      //TODO: see if its possible to prevent clicks from hiding a tooltip.
-      this.tooltip.message = 'You do not have permission to view this document.';
-      this.tooltip.show();
-      setTimeout(() => {
-        this.tooltip.hide();
-      }, 3000);
     }
   }
 
