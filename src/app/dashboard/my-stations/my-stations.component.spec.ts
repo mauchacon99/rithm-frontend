@@ -3,6 +3,7 @@ import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -11,7 +12,9 @@ describe('MyStationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MyStationsComponent],
-      imports: [],
+      imports: [
+        MatProgressSpinnerModule
+      ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService }

@@ -9,6 +9,8 @@ import { By } from '@angular/platform-browser';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 
 describe('TopNavComponent', () => {
   let component: TopNavComponent;
@@ -18,7 +20,10 @@ describe('TopNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TopNavComponent],
+      declarations: [
+        TopNavComponent,
+        MockComponent(UserAvatarComponent)
+      ],
       imports: [
         MatMenuModule,
         RouterTestingModule

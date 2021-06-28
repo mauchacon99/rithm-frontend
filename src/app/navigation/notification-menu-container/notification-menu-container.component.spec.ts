@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
+import { MockComponent } from 'ng-mocks';
+import { NotificationCardComponent } from '../notification-card/notification-card.component';
 
 import { NotificationMenuContainerComponent } from './notification-menu-container.component';
 
@@ -8,7 +11,13 @@ describe('NotificationMenuContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NotificationMenuContainerComponent ]
+      declarations: [
+        NotificationMenuContainerComponent,
+        MockComponent(NotificationCardComponent)
+      ],
+      imports: [
+        MatCardModule
+      ]
     })
     .compileComponents();
   });

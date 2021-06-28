@@ -5,12 +5,13 @@ import { MockDocumentService } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DialogData } from 'src/models';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
@@ -27,7 +28,12 @@ describe('StationDocumentsModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationDocumentsModalComponent],
-      imports: [MatTooltipModule, NoopAnimationsModule],
+      imports: [
+        NoopAnimationsModule,
+        MatTooltipModule,
+        MatProgressSpinnerModule,
+        MatDialogModule
+      ],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: {} },
