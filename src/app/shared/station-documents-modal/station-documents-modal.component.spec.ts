@@ -62,13 +62,13 @@ describe('StationDocumentsModalComponent', () => {
     // expect(component.isWorker).toBe(true || false);
   });
 
-  // TODO: This test not currently working.
-  // it('should link to a document if clicked with proper permissions', () => {
-  //   component.isOnRoster = true;
-  //   expect(component.checkDocPermission('1')).toBeTruthy();
-  //   component.isOnRoster = false;
-  //   expect(component.checkDocPermission('1')).toBeFalsy();
-  // });
+  xit('should link to a document if clicked with proper permissions', () => {
+    // TODO: This test not currently working.
+    component.isOnRoster = true;
+    expect(component.checkDocPermission('1')).toBeTruthy();
+    component.isOnRoster = false;
+    expect(component.checkDocPermission('1')).toBeFalsy();
+  });
 
   xit('should display a tooltip if the document is escalated', fakeAsync(() => {
     component.ngOnInit(); // TODO: Find out if it's possible to avoid calling this explicitly
