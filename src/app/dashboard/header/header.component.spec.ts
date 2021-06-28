@@ -4,10 +4,10 @@ import { DocumentService } from 'src/app/core/document.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MockDashboardService, MockUserService, MockDocumentService } from 'src/mocks';
+import { MockDashboardService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -19,6 +19,7 @@ describe('HeaderComponent', () => {
       imports: [
         RouterTestingModule,
         MatProgressSpinnerModule,
+        MatCardModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
