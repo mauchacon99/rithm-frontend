@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogContent, MatDialogModule, MatDialogTitle, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader, TestElement } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
@@ -50,10 +50,10 @@ describe('AlertDialogComponent', () => {
 
   // title
   describe('title', () => {
-    let titleElement: HTMLHeadingElement;
+    let titleElement: HTMLElement;
 
     beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
+      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
     });
 
     it('should exist', () => {
@@ -62,14 +62,14 @@ describe('AlertDialogComponent', () => {
 
     it('should have custom text', () => {
       const titleText = component.title;
-      expect(titleElement.innerText).toEqual(titleText);
+      expect(titleElement.textContent).toEqual(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA.title);
     });
 
     it('should have error color when error', () => {
       component.title = 'Error';
       fixture.detectChanges();
-      expect(window.getComputedStyle(titleElement).color).toEqual('rgb(145, 55, 44)'); // TODO: pull this from SCSS variable instead?
+      expect(titleElement).toHaveClass('error-title');
     });
   });
 
@@ -78,8 +78,7 @@ describe('AlertDialogComponent', () => {
     let messageElement: HTMLParagraphElement;
 
     beforeEach(() => {
-      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
+      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
     });
 
     it('should exist', () => {
@@ -88,7 +87,7 @@ describe('AlertDialogComponent', () => {
 
     it('should have custom text', () => {
       const messageText = component.message;
-      expect(messageElement.innerText).toEqual(messageText);
+      expect(messageElement.textContent).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });
