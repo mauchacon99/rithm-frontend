@@ -107,7 +107,10 @@
     }
 
     .loading {
-      padding-top: 175px;
+      height: calc(100% - 10px);
+      align-items: center;
+      display: flex;
+      justify-content: center;
     }
   }
 }
