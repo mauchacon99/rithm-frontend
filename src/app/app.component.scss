@@ -1,9 +1,7 @@
-@import 'variables', 'functions';
-@import 'mixins';
-// Add styles
+@import 'variables', 'functions', 'mixins';
+
 .page {
   @include gradient($secondary-gray, $secondary-blue);
-  // background: url('../assets/images/patterns/dust_scratches.png');
 }
 
 mat-drawer-container {

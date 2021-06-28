@@ -1,4 +1,11 @@
-// Styles here
+section {
+  @media screen and (max-width: 575px) {
+    h4 {
+      margin-left: 10px;
+    }
+  }
+}
+
 mat-card {
   padding: 8px;
   margin-top: 10px;

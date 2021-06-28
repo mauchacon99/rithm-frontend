@@ -3,9 +3,8 @@
     .row {
       margin-top: 30px;
 
-      /* stylelint-disable-next-line */
-      app-previously-started-documents, app-priority-queue {
-        /* stylelint-disable-next-line */
+      app-previously-started-documents,
+      app-priority-queue {
         @media screen and (max-width: 991px) {
           padding-left: 0;
           padding-right: 0;
