@@ -59,39 +59,36 @@ describe('PromptDialogComponent', () => {
 
   // title
   describe('title', () => {
-    let titleElement: HTMLHeadingElement;
-
-    beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
-    });
 
     it('should exist', () => {
-      expect(titleElement).toBeTruthy();
+      const titleElement: HTMLElement = fixture.nativeElement;
+      const h4 = titleElement.querySelector('h4');
+      expect(h4).toBeTruthy();
     });
 
     it('should have custom text', () => {
+      const titleElement: HTMLElement = fixture.nativeElement;
+      const h4 = titleElement.querySelector('h4');
       const titleText = component.title;
-      expect(titleElement.innerText).toEqual(titleText);
+      expect(h4?.textContent).toEqual(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA.title);
     });
   });
 
   // message
   describe('message', () => {
-    let messageElement: HTMLParagraphElement;
-
-    beforeEach(() => {
-      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
-    });
 
     it('should exist', () => {
-      expect(messageElement).toBeTruthy();
+      const messageElement: HTMLElement = fixture.nativeElement;
+      const p = messageElement.querySelector('p');
+      expect(p).toBeTruthy();
     });
 
     it('should have custom text', () => {
+      const messageElement: HTMLElement = fixture.nativeElement;
+      const p = messageElement.querySelector('p');
       const messageText = component.message;
-      expect(messageElement.innerText).toEqual(messageText);
+      expect(p?.textContent).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });

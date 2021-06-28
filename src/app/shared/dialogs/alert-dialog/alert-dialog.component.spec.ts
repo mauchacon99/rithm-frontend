@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogContent, MatDialogModule, MatDialogTitle, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader, TestElement } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
@@ -8,7 +8,6 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 
 import { DialogData } from 'src/models';
 import { AlertDialogComponent } from './alert-dialog.component';
-import { By } from '@angular/platform-browser';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Alert',
@@ -50,45 +49,44 @@ describe('AlertDialogComponent', () => {
 
   // title
   describe('title', () => {
-    let titleElement: HTMLHeadingElement;
-
-    beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.directive(MatDialogTitle)).nativeElement as HTMLHeadingElement;
-    });
 
     it('should exist', () => {
-      expect(titleElement).toBeTruthy();
+      const titleElement: HTMLElement = fixture.nativeElement;
+      const h4 = titleElement.querySelector('h4');
+      expect(h4).toBeTruthy();
     });
 
     it('should have custom text', () => {
+      const titleElement: HTMLElement = fixture.nativeElement;
+      const h4 = titleElement.querySelector('h4');
       const titleText = component.title;
-      expect(titleElement.innerText).toEqual(titleText);
+      expect(h4?.textContent).toEqual(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA.title);
     });
 
     it('should have error color when error', () => {
+      const titleElement: HTMLElement = fixture.nativeElement;
+      const h4 = titleElement.querySelector('h4');
       component.title = 'Error';
       fixture.detectChanges();
-      expect(window.getComputedStyle(titleElement).color).toEqual('rgb(145, 55, 44)'); // TODO: pull this from SCSS variable instead?
+      expect(h4).toHaveClass('error-title');
     });
   });
 
   // message
   describe('message', () => {
-    let messageElement: HTMLParagraphElement;
-
-    beforeEach(() => {
-      const contentDiv = fixture.debugElement.query(By.directive(MatDialogContent));
-      messageElement = contentDiv.children[0].nativeElement as HTMLParagraphElement;
-    });
 
     it('should exist', () => {
-      expect(messageElement).toBeTruthy();
+      const messageElement: HTMLElement = fixture.nativeElement;
+      const p = messageElement.querySelector('p');
+      expect(p).toBeTruthy();
     });
 
     it('should have custom text', () => {
+      const messageElement: HTMLElement = fixture.nativeElement;
+      const p = messageElement.querySelector('p');
       const messageText = component.message;
-      expect(messageElement.innerText).toEqual(messageText);
+      expect(p?.textContent).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });
