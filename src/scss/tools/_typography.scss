@@ -6,14 +6,6 @@
 
 $custom-font-family: 'Montserrat, Open Sans, Helvetica';
 
-/// Typography from Angular Material < v12
-/// @deprecated
-$custom-typography-old: mat.define-typography-config(
-  $font-family: 'Montserrat, Open Sans, Helvetica',
-  $headline: mat.define-typography-level(24px, 36px, 300),
-  $body-1: mat.define-typography-level(16px, 24px, 400)
-);
-
 /// Rithm Typography Level: Display 4
 $rithm-display-4: mat.define-typography-level(
   $font-family: $custom-font-family,
@@ -340,6 +332,7 @@ button {
 .text-center {
   text-align: center !important;
 }
+
 /// Overline font styling.
 /// All caps 10px regular Montserrat.
 .overline {
@@ -348,6 +341,7 @@ button {
   font-family: Montserrat, sans-serif;
   text-transform: uppercase;
 }
+
 /// Subtitle Medium
 /// 14px Medium Montserrat
 .subtitle-medium {

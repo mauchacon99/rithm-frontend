@@ -1,8 +1,5 @@
-@import 'variables';
-@import 'functions';
-@import 'rithm-light-palettes';
+@import 'variables', 'functions', 'rithm-light-palettes';
 
-// Add styles
 .notification-card {
   min-height: 100px;
   width: 280px;

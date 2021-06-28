@@ -40,8 +40,8 @@ export class AccountCreateComponent {
   readonly modalMessage = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur non ipsum a porta.
 Aenean condimentum sem id lobortis ornare.Fusce venenatis efficitur pulvinar. Vivamus dignissim erat odio,
 ac interdum mi viverra nec. Nunc rutrum dolor a augue convallis, ac iaculis mauris dapibus.\n\nFusce non est libero. Fusce porttitor
-ex id convallis facilisis. Pellentesque sit amet eleifend quam, eget pharetra ipsum. Proin id mattis sem. In vitae sem massa.\n\nIn hac
-habitasse platea dictumst. Nunc ut dui leo. Phasellus semper est vel ultricies tempus.  Proin ac lectus risus. Duis vestibulum
+ex id convallis facilisis. Pellentesque sit amet eleifend quam, eget pharetra ipsum. Proin id mattis sem. In vitae sem massa.\n\n
+In hac habitasse platea dictumst. Nunc ut dui leo. Phasellus semper est vel ultricies tempus.  Proin ac lectus risus. Duis vestibulum
 libero velit, ac consequat urna feugiat sit amet. Vestibulum et purus elit. Donec eu nunc lobortis, consectetur ipsum et, mollis
 dui. Mauris tempus, est at posuere mollis, nunc turpis vestibulum velit, sit amet rutrum tortor velit a augue.\n\nSed dignissim,
 turpis ac maximus facilisis, purus risus posuere metus, ut eleifend tellus nisi pretium est. Fusce ut diam hendrerit, pretium

@@ -60,6 +60,7 @@ $rithm-theme: mat.define-light-theme(
 body {
   background: $primary-blue;
 }
+
 /// Set the height of the page
 /// Apply page specific styles within the component
 .page {
@@ -95,6 +96,7 @@ body {
 .transparent {
   visibility: hidden;
 }
+
 /// Styling of links globally
 a {
   color: $accent-blue;

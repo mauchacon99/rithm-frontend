@@ -10,9 +10,7 @@
 
 .right-entry {
   form.row {
-    /* stylelint-disable */
     app-password-requirements {
-    /* stylelint-enable */
       position: absolute;
       width: 100%;
       z-index: 999;
@@ -36,7 +34,6 @@
   white-space: normal !important;
 }
 
-/* stylelint-disable-next-line */
 @media screen and (max-width: 1201px) {
   #terms {
     line-height: 30px;
