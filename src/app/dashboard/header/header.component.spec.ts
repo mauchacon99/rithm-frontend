@@ -33,10 +33,6 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    component.docsList = [
-      // eslint-disable-next-line max-len
-      { rithmId:'1', docName: 'Natasha', stationName: 'Hydrogen', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '' }
-    ];
     fixture.detectChanges();
   });
 
