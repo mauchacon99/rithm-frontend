@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Document, StationDocumentsResponse } from 'src/models';
+import { ConnectedStationInfo, Document, ForwardPreviousStationsDocument, StationDocumentsResponse } from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
  */
@@ -133,4 +133,20 @@ export class MockDocumentService {
     ];
     return of(filterData).pipe(delay(1000));
   }
+
+  /**
+   * Gets a list of forward and previous stations for a specific document.
+   *
+   * @param documentId The Specific id of document.
+   * @param stationId The Specific id of station.
+   * @returns A list of forward and previous stations for a specific document.
+   */
+  getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
+    const data: ForwardPreviousStationsDocument = {
+      previousStations: Array<ConnectedStationInfo>(),
+      followingStations: Array<ConnectedStationInfo>()
+    };
+    return of(data).pipe(delay(1000));
+  }
+
 }
