@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -16,40 +16,36 @@ import { RosterModalData, WorkerRosterResponse } from 'src/models';
 })
 export class RosterModalComponent implements OnInit {
 
-  /** Roster type. */
+  /** Whether the modal is being used for the work roster. */
   @Input() isWorker = true;
 
-  /** Id of the station. */
+  /** The id of the station. */
   @Input() stationRithmId = '';
 
-  /** Name of station. */
+  /** The name of station. */
   @Input() stationName = '';
 
-  /** Is the content being loaded. */
-  isLoading = false;
+  /** Whether the content is being loaded. */
+  isLoading = true;
 
   /** Worker roster list. */
   users = Array<WorkerRosterResponse>();
 
-  /** Station data from station card component. */
-  station: unknown;
-
   constructor(
+    @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
     private dashboardService: DashboardService,
-    private errorService: ErrorService,
-    public dialogRef: MatDialogRef<RosterModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RosterModalData) {
-    this.stationRithmId = data.rithmId;
+    private errorService: ErrorService
+  ) {
+    this.stationRithmId = this.data.rithmId;
   }
 
   /**
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.isLoading = true;
     this.dashboardService.getWorkerRoster(this.stationRithmId)
       .pipe(first())
-      .subscribe((response: Array<WorkerRosterResponse>) => {
+      .subscribe((response) => {
         this.isLoading = false;
         if (response) {
           this.users = response;
