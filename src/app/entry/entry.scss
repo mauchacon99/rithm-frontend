@@ -1,7 +1,5 @@
-@import 'variables';
-@import 'mixins';
-@import 'functions';
-// styles
+@import 'variables', 'mixins', 'functions';
+
 .page {
   @include gradient($secondary-gray, $secondary-blue);
 
@@ -47,9 +45,7 @@
   }
 }
 
-/* stylelint-disable */
 @media screen and (max-width: 1200px) {
-/* stylelint-enable */
   .container {
     .left-entry {
       min-height: 585px;
@@ -61,9 +57,7 @@
   }
 }
 
-/* stylelint-disable */
 @media screen and (max-width: 992px) {
-/* stylelint-enable */
   .container {
     .left-entry {
       min-height: 604px;
@@ -75,9 +69,7 @@
   }
 }
 
-/* stylelint-disable */
 @media screen and (max-width: 767px) {
-  /* stylelint-enable */
   .container {
     max-width: 100%;
     position: absolute;
@@ -116,9 +108,8 @@
     box-shadow: none;
   }
 }
-/* stylelint-disable */
+
 @media screen and (orientation: landscape) and (max-height: 575px) {
-/* stylelint-enable */
   .container {
     position: absolute;
     top: 0;

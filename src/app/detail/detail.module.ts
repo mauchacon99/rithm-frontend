@@ -6,6 +6,7 @@ import { ConnectedStationPaneComponent } from './connected-station-pane/connecte
 import { HistoryComponent } from './history/history.component';
 import { CommentComponent } from './comment/comment.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
+import { SubHeaderComponent } from './sub-header/sub-header.component';
 
 
 
@@ -16,7 +17,8 @@ import { DocumentTemplateComponent } from './document-template/document-template
     ConnectedStationPaneComponent,
     HistoryComponent,
     CommentComponent,
-    DocumentTemplateComponent
+    DocumentTemplateComponent,
+    SubHeaderComponent
   ],
   imports: [
     CommonModule
