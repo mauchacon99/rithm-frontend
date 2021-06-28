@@ -1,14 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { NotificationCardComponent } from '../notification-card/notification-card.component';
 
 import { NotificationToastsContainerComponent } from './notification-toasts-container.component';
 
-describe('NotificationToastsContainerComponent', () => {
+fdescribe('NotificationToastsContainerComponent', () => {
   let component: NotificationToastsContainerComponent;
   let fixture: ComponentFixture<NotificationToastsContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NotificationToastsContainerComponent ]
+      declarations: [
+        NotificationToastsContainerComponent,
+        MockComponent(NotificationCardComponent)
+      ]
     })
     .compileComponents();
   });

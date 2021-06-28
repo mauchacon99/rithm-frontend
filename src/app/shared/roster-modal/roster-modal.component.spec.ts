@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService, MockPopupService } from 'src/mocks';
@@ -20,7 +21,10 @@ describe('RosterModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ RosterModalComponent ],
-      imports: [],
+      imports: [
+        MatProgressSpinnerModule,
+        MatDialogModule
+      ],
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
