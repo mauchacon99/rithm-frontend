@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { By } from '@angular/platform-browser';
 import { DialogData } from 'src/models';
 
 import { ConfirmDialogComponent } from './confirm-dialog.component';
@@ -48,34 +49,38 @@ describe('ConfirmDialogComponent', () => {
 
   // title
   describe('title', () => {
+    let titleElement: HTMLElement;
+
+    beforeEach(() => {
+      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
+    });
+
     it('should exist', () => {
-      const titleElement: HTMLElement = fixture.nativeElement;
-      const h4 = titleElement.querySelector('h4');
       expect(titleElement).toBeTruthy();
     });
 
     it('should have custom text', () => {
-      const titleElement: HTMLElement = fixture.nativeElement;
-      const h4 = titleElement.querySelector('h4');
       const titleText = component.title;
-      expect(h4?.textContent).toEqual(titleText);
+      expect(titleElement.textContent).toEqual(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA.title);
     });
   });
 
   // message
   describe('message', () => {
+    let messageElement: HTMLParagraphElement;
+
+    beforeEach(() => {
+      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
+    });
+
     it('should exist', () => {
-      const messageElement: HTMLElement = fixture.nativeElement;
-      const p = messageElement.querySelector('p');
-      expect(p).toBeTruthy();
+      expect(messageElement).toBeTruthy();
     });
 
     it('should have custom text', () => {
       const messageText = component.message;
-      const messageElement: HTMLElement = fixture.nativeElement;
-      const p = messageElement.querySelector('p');
-      expect(p?.textContent).toEqual(messageText);
+      expect(messageElement.textContent).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });

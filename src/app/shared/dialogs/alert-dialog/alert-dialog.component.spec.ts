@@ -8,6 +8,7 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 
 import { DialogData } from 'src/models';
 import { AlertDialogComponent } from './alert-dialog.component';
+import { By } from '@angular/platform-browser';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Alert',
@@ -49,44 +50,44 @@ describe('AlertDialogComponent', () => {
 
   // title
   describe('title', () => {
+    let titleElement: HTMLElement;
+
+    beforeEach(() => {
+      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
+    });
 
     it('should exist', () => {
-      const titleElement: HTMLElement = fixture.nativeElement;
-      const h4 = titleElement.querySelector('h4');
-      expect(h4).toBeTruthy();
+      expect(titleElement).toBeTruthy();
     });
 
     it('should have custom text', () => {
-      const titleElement: HTMLElement = fixture.nativeElement;
-      const h4 = titleElement.querySelector('h4');
       const titleText = component.title;
-      expect(h4?.textContent).toEqual(titleText);
+      expect(titleElement.textContent).toEqual(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA.title);
     });
 
     it('should have error color when error', () => {
-      const titleElement: HTMLElement = fixture.nativeElement;
-      const h4 = titleElement.querySelector('h4');
       component.title = 'Error';
       fixture.detectChanges();
-      expect(h4).toHaveClass('error-title');
+      expect(titleElement).toHaveClass('error-title');
     });
   });
 
   // message
   describe('message', () => {
+    let messageElement: HTMLParagraphElement;
+
+    beforeEach(() => {
+      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
+    });
 
     it('should exist', () => {
-      const messageElement: HTMLElement = fixture.nativeElement;
-      const p = messageElement.querySelector('p');
-      expect(p).toBeTruthy();
+      expect(messageElement).toBeTruthy();
     });
 
     it('should have custom text', () => {
-      const messageElement: HTMLElement = fixture.nativeElement;
-      const p = messageElement.querySelector('p');
       const messageText = component.message;
-      expect(p?.textContent).toEqual(messageText);
+      expect(messageElement.textContent).toEqual(messageText);
       expect(messageText).toEqual(DIALOG_TEST_DATA.message);
     });
   });
