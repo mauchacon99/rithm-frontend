@@ -10,7 +10,32 @@ on:
 jobs:
 
   # Deploys the web app
-  web-app:
+  # web-app:
+  #   runs-on: [self-hosted, dev]
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
+
+  #   - name: Installing dependencies
+  #     run: npm ci
+
+  #   - name: Compiling app
+  #     run: npm run build
+
+  #   - name: Stopping IIS Pool
+  #     run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+  #   - name: Deploying app
+  #     run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
+
+  #   - name: Starting IIS Pool
+  #     run: c:\batch\elevate Start-WebAppPool -Name devapp
+
+  # Deploys the Karma test coverage site
+  test-coverage:
     runs-on: [self-hosted, dev]
 
     steps:
@@ -22,36 +47,18 @@ jobs:
     - name: Installing dependencies
       run: npm ci
 
-    - name: Compiling app
-      run: npm run build
+    - name: Generating test coverage
+      run: npm run test-ci
 
     - name: Stopping IIS Pool
       run: c:\batch\elevate Stop-WebAppPool -Name devapp
 
-    - name: Deploying app
-      run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
+    - name: Deploying documentation site
+      run: |
+        Copy-Item ./coverage/rithm/* C:/inetpub/devapp.rithm.tech/karmacoverage -Recurse -Force
 
     - name: Starting IIS Pool
       run: c:\batch\elevate Start-WebAppPool -Name devapp
-
-  # Deploys the Karma test coverage site
-  # test-coverage:
-  #   runs-on: [self-hosted, dev]
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Installing dependencies
-  #     run: npm ci
-
-  #   - name: Generating test coverage
-  #     run: npm run test-ci
-
-  #   - name: Deploying documentation site
-  #     run: |
-  #       iisreset /stop
-  #       Copy-Item ./coverage/rithm/* C:/inetpub/karmacoverage -Recurse -Force
-  #       iisreset /start
 
   # Deploys the Compodoc documentation site
   # compodoc:
@@ -69,7 +76,7 @@ jobs:
   #   - name: Deploying documentation site
   #     run: |
   #       iisreset /stop
-  #       Copy-Item ./documentation/* C:/inetpub/compodoc -Recurse -Force
+  #       Copy-Item ./documentation/* C:/inetpub/devapp.rithm.tech/compodoc -Recurse -Force
   #       iisreset /start
 
   # Deploys the SassDoc documentation site
@@ -88,5 +95,5 @@ jobs:
   #   - name: Deploying documentation site
   #     run: |
   #       iisreset /stop
-  #       Copy-Item ./sassdoc/* C:/inetpub/sassdoc -Recurse -Force
+  #       Copy-Item ./sassdoc/* C:/inetpub/devapp.rithm.tech/sassdoc -Recurse -Force
   #       iisreset /start
