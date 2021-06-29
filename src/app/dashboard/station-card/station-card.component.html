@@ -1,6 +1,9 @@
 <mat-card>
   <h6>{{station?.stationName}}</h6>
-  <app-roster [station]="station"></app-roster>
+  <div class="roster">
+    <p class="overline">worker roster</p>
+    <app-roster [station]="station"></app-roster>
+  </div>
   <div class="docs">
     <p class="overline">documents</p>
     <span class="circles">
