@@ -6,6 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MockDashboardService, MockPopupService, MockUserService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
+import { MatCardModule } from '@angular/material/card';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -16,7 +17,8 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       imports: [
         RouterTestingModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatCardModule
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
