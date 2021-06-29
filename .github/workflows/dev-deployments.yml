@@ -23,7 +23,7 @@ jobs:
     - name: Deploying app
       run: |
         iisreset /stop
-        Copy-Item ./dist/rithm/* C:/web/devapp -Recurse -Force
+        Copy-Item ./dist/rithm/* C:/inetpub/devapp -Recurse -Force
         iisreset /start
 
   # Deploys the Karma test coverage site
@@ -42,7 +42,7 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./coverage/rithm/* C:/www/rithmui/karmacoverage -Recurse -Force
+        Copy-Item ./coverage/rithm/* C:/inetpub/karmacoverage -Recurse -Force
         iisreset /start
 
   # Deploys the Compodoc documentation site
@@ -61,7 +61,7 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./documentation/* C:/www/rithmui/compodoc -Recurse -Force
+        Copy-Item ./documentation/* C:/inetpub/compodoc -Recurse -Force
         iisreset /start
 
   # Deploys the SassDoc documentation site
@@ -80,5 +80,5 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./sassdoc/* C:/www/rithmui/sassdoc -Recurse -Force
+        Copy-Item ./sassdoc/* C:/inetpub/sassdoc -Recurse -Force
         iisreset /start
