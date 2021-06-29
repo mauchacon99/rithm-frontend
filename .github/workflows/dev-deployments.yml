@@ -2,6 +2,8 @@ name: Dev Deployments
 
 on:
   push:
+    paths:
+      - "src/**"
     branches:
       - "dev"
 
