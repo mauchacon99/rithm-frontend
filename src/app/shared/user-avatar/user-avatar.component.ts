@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from 'src/app/core/user.service';
+// import { UserService } from 'src/app/core/user.service';
 import { User } from 'src/models';
 
 
@@ -16,7 +16,7 @@ export class UserAvatarComponent implements OnInit {
   @Input() user?: User;
 
   /** Initials from  DashboardStationData.*/
-  @Input() workerInitials?: '';
+  @Input() workerInitials?: string;
 
   /** User initials. Set with this.setInitials(). */
   initials = '';
@@ -24,9 +24,9 @@ export class UserAvatarComponent implements OnInit {
   /** Determine whether this avatar is for a profile or work roster. */
   profile = false;
 
-  constructor(
-    private userService: UserService
-  ) { }
+  // constructor(
+  //   // private userService: UserService
+  // ) { }
 
   /**
    * Ensures that the initials property is set with user's initials.
