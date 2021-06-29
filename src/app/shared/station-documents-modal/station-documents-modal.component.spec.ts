@@ -5,21 +5,13 @@ import { MockDocumentService } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DialogData } from 'src/models';
-<<<<<<< HEAD
-=======
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
->>>>>>> origin/dev
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-<<<<<<< HEAD
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RouterTestingModule } from '@angular/router/testing';
-=======
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
->>>>>>> origin/dev
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
@@ -41,16 +33,12 @@ describe('StationDocumentsModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationDocumentsModalComponent],
-<<<<<<< HEAD
-      imports: [MatTooltipModule, NoopAnimationsModule, MatDialogModule, RouterTestingModule],
-=======
       imports: [
         NoopAnimationsModule,
         MatTooltipModule,
         MatProgressSpinnerModule,
         MatDialogModule
       ],
->>>>>>> origin/dev
       providers: [
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: dialogMock },
