@@ -22,11 +22,14 @@ jobs:
     - name: Compiling app
       run: npm run build
 
+    - name: Stopping IIS Pool
+      run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
     - name: Deploying app
-      run: |
-        iisreset /stop
-        Copy-Item ./dist/rithm/* C:/inetpub/devapp -Recurse -Force
-        iisreset /start
+      run: Copy-Item ./dist/rithm/* C:/inetpub/devapp -Recurse -Force
+
+    - name: Starting IIS Pool
+      run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the Karma test coverage site
   test-coverage:
