@@ -22,8 +22,8 @@ export class UserService {
     private http: HttpClient,
     private cookieService: CookieService,
     private router: Router) {
-      this.user = JSON.parse(localStorage.getItem('user') as string) as User;
-     }
+    this.user = JSON.parse(localStorage.getItem('user') as string) as User;
+  }
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
@@ -171,4 +171,14 @@ export class UserService {
         password
       });
   }
+
+  /**
+   * Gets terms and conditions.
+   *
+   * @returns A terms and conditions observable.
+   */
+  getTermsConditions(): Observable<string> {
+    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getTermsConditions`);
+  }
+
 }

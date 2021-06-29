@@ -66,7 +66,7 @@ export class MockUserService {
   /**
    * Signs the user out of the system and clears stored data.
    */
-   signOut(): void {}
+  signOut(): void { }
 
   /**
    * Checks if the user is signed in and attempts to get a new refresh token.
@@ -159,4 +159,15 @@ export class MockUserService {
     }
     return of().pipe(delay(1000));
   }
+
+  /**
+   * Gets terms and conditions.
+   *
+   * @returns An terms and conditions observable.
+   */
+  getTermsConditions(): Observable<string> {
+    const data = `returns terms and conditions`;
+    return of(data).pipe(delay(1000));
+  }
+
 }
