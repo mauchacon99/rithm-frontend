@@ -25,13 +25,13 @@ jobs:
   #   - name: Compiling app
   #     run: npm run build
 
-  #   - name: Stopping IIS Pool
+  #   - name: Stopping IIS pool
   #     run: c:\batch\elevate Stop-WebAppPool -Name devapp
 
   #   - name: Deploying app
   #     run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
 
-  #   - name: Starting IIS Pool
+  #   - name: Starting IIS pool
   #     run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the Karma test coverage site
@@ -50,14 +50,14 @@ jobs:
     - name: Generating test coverage
       run: npm run test-ci
 
-    - name: Stopping IIS Pool
+    - name: Stopping IIS pool
       run: c:\batch\elevate Stop-WebAppPool -Name devapp
 
     - name: Deploying documentation site
       run: |
         Copy-Item ./coverage/rithm/* C:/inetpub/devapp.rithm.tech/karmacoverage -Recurse -Force
 
-    - name: Starting IIS Pool
+    - name: Starting IIS pool
       run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the Compodoc documentation site
