@@ -126,9 +126,9 @@ export class AccountCreateComponent {
   openTerms(): void {
     this.userService.getTermsConditions()
       .pipe(first())
-      .subscribe((res: string) => {
-        if (res) {
-          this.modalMessage = res;
+      .subscribe((termsConditions) => {
+        if (termsConditions) {
+          this.modalMessage = termsConditions;
           this.isLoading = false;
 
           const data = {
