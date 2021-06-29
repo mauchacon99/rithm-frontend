@@ -17,4 +17,3 @@ export * from './worker-roster-response';
 export * from './roster-modal-data';
 export * from './connected-station-info';
 export * from './forward-previous-stations-document';
-export * from './connected-station-info';
