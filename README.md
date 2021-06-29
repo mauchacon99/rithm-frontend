@@ -35,6 +35,13 @@ Documentation for front-end code, front-end test coverage, and the back-end API 
 Username: `docuser` \
 Password: `R1thmD0c5`
 
+## Deployments
+
+You can find the deployed web app at the following locations. Each is using a different environment, so use the one best suited for your needs.
+
+[Development](https://devapp.rithm.tech) \
+[Testing](https://testapp.rithm.tech)
+
 ## Scripts
 
 `npm start`\
