@@ -1,7 +1,7 @@
 name: Dev Deployments
 
 on:
-  push:
+  pull_request:
     paths:
       - "src/**"
     branches:
@@ -32,58 +32,58 @@ jobs:
       run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the Karma test coverage site
-  test-coverage:
-    runs-on: [self-hosted, dev]
+  # test-coverage:
+  #   runs-on: [self-hosted, dev]
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Generating test coverage
-      run: npm run test-ci
+  #   - name: Generating test coverage
+  #     run: npm run test-ci
 
-    - name: Deploying documentation site
-      run: |
-        iisreset /stop
-        Copy-Item ./coverage/rithm/* C:/inetpub/karmacoverage -Recurse -Force
-        iisreset /start
+  #   - name: Deploying documentation site
+  #     run: |
+  #       iisreset /stop
+  #       Copy-Item ./coverage/rithm/* C:/inetpub/karmacoverage -Recurse -Force
+  #       iisreset /start
 
   # Deploys the Compodoc documentation site
-  compodoc:
-    runs-on: [self-hosted, dev]
+  # compodoc:
+  #   runs-on: [self-hosted, dev]
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Compiling documentation
-      run: npm run compile-docs
+  #   - name: Compiling documentation
+  #     run: npm run compile-docs
 
-    - name: Deploying documentation site
-      run: |
-        iisreset /stop
-        Copy-Item ./documentation/* C:/inetpub/compodoc -Recurse -Force
-        iisreset /start
+  #   - name: Deploying documentation site
+  #     run: |
+  #       iisreset /stop
+  #       Copy-Item ./documentation/* C:/inetpub/compodoc -Recurse -Force
+  #       iisreset /start
 
   # Deploys the SassDoc documentation site
-  sassdoc:
-    runs-on: [self-hosted, dev]
+  # sassdoc:
+  #   runs-on: [self-hosted, dev]
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Compiling documentation
-      run: npm run compile-style-docs
+  #   - name: Compiling documentation
+  #     run: npm run compile-style-docs
 
-    - name: Deploying documentation site
-      run: |
-        iisreset /stop
-        Copy-Item ./sassdoc/* C:/inetpub/sassdoc -Recurse -Force
-        iisreset /start
+  #   - name: Deploying documentation site
+  #     run: |
+  #       iisreset /stop
+  #       Copy-Item ./sassdoc/* C:/inetpub/sassdoc -Recurse -Force
+  #       iisreset /start
