@@ -39,11 +39,9 @@ export class ConnectedStationPaneComponent implements OnInit {
   ngOnInit(): void {
     this.documentService.getConnectedStationInfo(this.documentId, this.stationId)
       .pipe(first())
-      .subscribe((res: ForwardPreviousStationsDocument) => {
-        if (res) {
-          this.forwardStations = res.followingStations;
-          this.previousStations = res.previousStations;
-        }
+      .subscribe((connectedStations) => {
+        this.forwardStations = connectedStations.followingStations;
+        this.previousStations = connectedStations.previousStations;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(
