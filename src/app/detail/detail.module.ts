@@ -22,6 +22,11 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    SubHeaderComponent,
+    DocumentTemplateComponent,
+    ConnectedStationPaneComponent
   ]
 })
 export class DetailModule { }
