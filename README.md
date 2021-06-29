@@ -30,7 +30,7 @@ You can use any of the following pre-existing credentials for signing in:
 
 ## Documentation
 
-Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://dev.rithm.tech). You will need to sign in with the following credentials:
+Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://devapi.rithm.tech). You will need to sign in with the following credentials:
 
 Username: `docuser` \
 Password: `R1thmD0c5`
