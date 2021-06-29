@@ -3,12 +3,11 @@
 
   mat-card {
     min-height: 140.6px;
-    /* stylelint-disable-next-line */
+
     @media screen and (min-width: 991px) {
       min-height: 98.2px;
     }
 
-    /* stylelint-disable-next-line */
     @media screen and (min-width: 1499px) {
       min-height: 78.2px;
     }
