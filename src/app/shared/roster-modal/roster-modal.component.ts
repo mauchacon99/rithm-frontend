@@ -36,7 +36,7 @@ export class RosterModalComponent implements OnInit {
     private dashboardService: DashboardService,
     private errorService: ErrorService
   ) {
-    this.stationRithmId = this.data.rithmId;
+    this.stationRithmId = this.data.stationId;
   }
 
   /**

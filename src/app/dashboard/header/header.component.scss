@@ -1,6 +1,18 @@
 .row {
   margin-top: 30px;
 
+  mat-card {
+    min-height: 140.6px;
+
+    @media screen and (min-width: 991px) {
+      min-height: 98.2px;
+    }
+
+    @media screen and (min-width: 1499px) {
+      min-height: 78.2px;
+    }
+  }
+
   .welcome-status {
     strong {
       font-weight: 600;
@@ -9,14 +21,14 @@
 
   .welcome-buttons {
     text-align: right;
-    /* stylelint-disable-next-line */
+
     @media screen and (max-width: 991px) {
       text-align: left;
     }
 
     button {
       margin: 5px 0;
-      /* stylelint-disable-next-line */
+
       @media screen and (min-width: 991px) and (max-width: 1499px) {
         margin: 15px 0;
       }

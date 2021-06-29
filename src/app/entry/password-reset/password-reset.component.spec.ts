@@ -6,6 +6,9 @@ import { UserService } from 'src/app/core/user.service';
 
 import { PasswordResetComponent } from './password-reset.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -15,8 +18,11 @@ describe('PasswordResetComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ PasswordResetComponent ],
       imports: [
+        BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
+        MatCardModule,
+        MatInputModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

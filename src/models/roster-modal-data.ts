@@ -6,6 +6,6 @@
   /** The name of the station. */
   stationName: string;
 
-  /** The user's rithmId. */
-  rithmId: string;
+  /** The stationId. */
+  stationId: string;
 }

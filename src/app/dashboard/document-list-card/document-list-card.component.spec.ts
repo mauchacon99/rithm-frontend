@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
 
 import { DocumentListCardComponent } from './document-list-card.component';
 
@@ -8,7 +9,10 @@ describe('DocumentListCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DocumentListCardComponent ]
+      declarations: [ DocumentListCardComponent ],
+      imports: [
+        MatCardModule
+      ]
     })
     .compileComponents();
   });
