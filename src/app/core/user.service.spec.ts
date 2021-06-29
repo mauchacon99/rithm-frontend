@@ -218,4 +218,12 @@ describe('UserService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should return terms and conditions', () => {
+    service.getTermsConditions()
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+  });
+
 });
