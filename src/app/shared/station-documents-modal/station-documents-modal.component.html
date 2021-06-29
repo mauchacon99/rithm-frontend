@@ -2,6 +2,7 @@
   <h4 class="text-center">{{ modalData.stationName }}</h4>
   <div class="doc-container">
     <span *ngIf="!isLoading">
+      <p class="warn" *ngIf="!this.isOnRoster">You are not a part of this station.</p>
       <div class="row no-gutters">
         <div class="col-9 col-md-5 col-lg-4 col-xl-5 pl-5">
           <strong>Document</strong>
@@ -16,7 +17,7 @@
           <strong>Last Updated</strong>
         </div>
       </div>
-      <div *ngFor="let document of documents" class="row no-gutters">
+      <div *ngFor="let document of documents" (click)="checkDocPermission(document.rithmId)" [ngClass]="{'link-permission' : this.isOnRoster}" class="doc-link row no-gutters">
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
           [matTooltipDisabled]="!document.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
           <!-- Priority -->

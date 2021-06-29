@@ -2,6 +2,9 @@
  * Previously Started documents data.
  */
 export interface Document {
+  /** Id of the document. */
+  rithmId: string;
+
   /** Name of the document. */
   docName: string;
 
