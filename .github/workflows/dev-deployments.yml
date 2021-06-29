@@ -54,7 +54,7 @@ jobs:
   #     run: c:\batch\elevate Stop-WebAppPool -Name devapp
 
   #   - name: Deploying documentation site
-  #     run: Copy-Item ./coverage/rithm/* C:/inetpub/devapp.rithm.tech/karmacoverage -Recurse -Force
+  #     run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
 
   #   - name: Starting IIS pool
   #     run: c:\batch\elevate Start-WebAppPool -Name devapp
@@ -79,7 +79,7 @@ jobs:
       run: c:\batch\elevate Stop-WebAppPool -Name devapp
 
     - name: Deploying documentation site
-      run: Copy-Item ./documentation/* C:/inetpub/devapp.rithm.tech/compodoc -Recurse -Force
+      run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
 
     - name: Starting IIS pool
       run: c:\batch\elevate Start-WebAppPool -Name devapp
@@ -100,5 +100,5 @@ jobs:
   #   - name: Deploying documentation site
   #     run: |
   #       iisreset /stop
-  #       Copy-Item ./sassdoc/* C:/inetpub/devapp.rithm.tech/sassdoc -Recurse -Force
+  #       Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
   #       iisreset /start
