@@ -7,9 +7,28 @@ on:
 
 jobs:
 
+  # Deploys the web app
+  web-app:
+    runs-on: [self-hosted, dev]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling app
+      run: npm run build
+
+    - name: Deploying app
+      run: |
+        iisreset /stop
+        Copy-Item ./dist/rithm/* C:/web/devapp -Recurse -Force
+        iisreset /start
+
   # Deploys the Karma test coverage site
   test-coverage:
-    runs-on: [self-hosted, wdlegacy]
+    runs-on: [self-hosted, dev]
 
     steps:
     - uses: actions/checkout@v2
@@ -23,12 +42,12 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./coverage/rithm/* D:/www/rithmui/karmacoverage -Recurse -Force
+        Copy-Item ./coverage/rithm/* C:/www/rithmui/karmacoverage -Recurse -Force
         iisreset /start
 
   # Deploys the Compodoc documentation site
   compodoc:
-    runs-on: [self-hosted, wdlegacy]
+    runs-on: [self-hosted, dev]
 
     steps:
     - uses: actions/checkout@v2
@@ -42,12 +61,12 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./documentation/* D:/www/rithmui/compodoc -Recurse -Force
+        Copy-Item ./documentation/* C:/www/rithmui/compodoc -Recurse -Force
         iisreset /start
 
   # Deploys the SassDoc documentation site
   sassdoc:
-    runs-on: [self-hosted, wdlegacy]
+    runs-on: [self-hosted, dev]
 
     steps:
     - uses: actions/checkout@v2
@@ -61,5 +80,5 @@ jobs:
     - name: Deploying documentation site
       run: |
         iisreset /stop
-        Copy-Item ./sassdoc/* D:/www/rithmui/sassdoc -Recurse -Force
+        Copy-Item ./sassdoc/* C:/www/rithmui/sassdoc -Recurse -Force
         iisreset /start
