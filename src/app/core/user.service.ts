@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse, User } from 'src/models';
@@ -178,7 +178,8 @@ export class UserService {
    * @returns A terms and conditions observable.
    */
   getTermsConditions(): Observable<string> {
-    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getTermsConditions`);
+    const data = `Returns terms and conditions`;
+    return of(data).pipe(delay(1000));
   }
 
 }
