@@ -10,6 +10,9 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -20,9 +23,12 @@ describe('AccountCreateComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AccountCreateComponent],
       imports: [
+        BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatInputModule,
+        MatCardModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
