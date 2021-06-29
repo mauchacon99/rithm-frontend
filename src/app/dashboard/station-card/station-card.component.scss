@@ -1,4 +1,4 @@
-@import 'variables', 'functions';
+@import 'rithm-light-palettes', 'variables', 'functions';
 
 mat-card {
   padding: 8px;
@@ -10,9 +10,12 @@ mat-card {
     color: $accent-blue;
   }
 
-  .roster,
   .docs {
     margin-left: 15px;
+  }
+
+  .roster,
+  .docs {
     float: left;
     margin-top: 10px;
 
@@ -37,6 +40,7 @@ mat-card {
 
         &:hover {
           cursor: pointer;
+          background: map-get($secondary-gray-palette, 600);
         }
       }
     }

@@ -1,9 +1,11 @@
 <span>
   <div *ngFor="let initial of station.workerInitials | slice:0:slices"
     (click)="openModal(rosterComponent)">
-    <app-user-avatar [workerInitials]="initial"></app-user-avatar>
+    <div class="circle">
+      <app-user-avatar [workerInitials]="initial"></app-user-avatar>
+    </div>
   </div>
-  <div *ngIf="station.numberOfWorkers > 3" class="circle" (click)="openModal(rosterComponent)">
+  <div *ngIf="station.numberOfWorkers > 3" class="circle user-avatar-like" (click)="openModal(rosterComponent)">
     +{{station.numberOfWorkers - 2}}</div>
 </span>
 

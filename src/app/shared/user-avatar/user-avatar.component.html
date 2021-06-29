@@ -1,4 +1,4 @@
-<div [ngClass]="{'profile' : profile===true, 'worker' : profile===false}">
+<div class="avatar" [ngClass]="{'profile' : profile===true, 'worker' : profile===false}">
   <img *ngIf="user?.profilePic" src={{user?.profilePic}}>
   <span *ngIf="!user?.profilePic">{{initials}}</span>
 </div>
