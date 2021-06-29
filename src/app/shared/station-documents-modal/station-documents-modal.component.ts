@@ -7,7 +7,6 @@ import { Document, StationDocumentsModalData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { MatTooltip } from '@angular/material/tooltip';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -16,7 +15,7 @@ import { MatTooltip } from '@angular/material/tooltip';
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
   styleUrls: ['./station-documents-modal.component.scss'],
-  providers: [UtcTimeConversion, MatTooltip]
+  providers: [UtcTimeConversion]
 })
 export class StationDocumentsModalComponent implements OnInit {
 
@@ -44,8 +43,7 @@ export class StationDocumentsModalComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
-    private router: Router,
-    private tooltip: MatTooltip
+    private router: Router
   ) {
     this.stationRithmId = this.modalData.stationId;
   }
