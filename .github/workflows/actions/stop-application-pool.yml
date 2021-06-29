@@ -1,0 +1,15 @@
+name: 'Stop Application Pool'
+description: 'Stops an IIS application pool'
+inputs:
+  pool-name:
+    description: 'Name of the IIS pool'
+    required: true
+    default: 'devapp'
+# outputs:
+#   random-number:
+#     description: "Random number"
+#     value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  steps:
+    - run: |
+          c:\batch\elevate Stop-WebAppPool -Name ${{env.WEB_POOL_NAME}}
