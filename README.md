@@ -18,16 +18,19 @@ This is because we use a self-signed certificate to use HTTPS locally during dev
 
 ### Sign In
 
-You can use the following accounts for testing:
+You can use any of the following pre-existing credentials for signing in:
 
 |Email|Password | Note|
 --- | --- | ---
-|jeff.stockett@inpivota.com|R1thm?24601|
-|tyler.hendrickson@inpivota.com|R1thm?24601|User has not validated their email|
+|workeruser@inpivota.com|R1thm?24601|
+|rithmuser@inpivota.com|R1thm?24601|
+|supervisoruser@inpivota.com|R1thm?24601|
+|harrypotter@inpivota.com|R1thm?24601|
+|marrypoppins@inpivota.com|R1thm?24601|User has no stations
 
 ## Documentation
 
-Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://api.rithm.tech). You will need to sign in with the following credentials:
+Documentation for front-end code, front-end test coverage, and the back-end API can be found [on our documentation site](https://dev.rithm.tech). You will need to sign in with the following credentials:
 
 Username: `docuser` \
 Password: `R1thmD0c5`

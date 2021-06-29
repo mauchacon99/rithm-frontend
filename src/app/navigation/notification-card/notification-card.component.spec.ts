@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NotificationCardComponent } from './notification-card.component';
@@ -10,7 +11,10 @@ describe('NotificationCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ NotificationCardComponent ],
-      imports: [BrowserAnimationsModule]
+      imports: [
+        BrowserAnimationsModule,
+        MatCardModule
+      ]
     })
     .compileComponents();
   });

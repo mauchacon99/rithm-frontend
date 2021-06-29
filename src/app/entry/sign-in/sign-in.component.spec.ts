@@ -13,6 +13,9 @@ import { UserService } from 'src/app/core/user.service';
 
 import { SignInComponent } from './sign-in.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -23,9 +26,12 @@ describe('SignInComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SignInComponent],
       imports: [
+        BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatInputModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
