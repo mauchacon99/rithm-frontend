@@ -42,4 +42,15 @@ describe('DocumentService', () => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
   });
+
+  it('should return forward and previous stations for a specific document', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const documentId = 'E204F369-386F-4E41';
+    service.getConnectedStationInfo(stationId, documentId)
+      .subscribe((response) => {
+        expect(response.followingStations.length).toBeGreaterThanOrEqual(0);
+        expect(response.previousStations.length).toBeGreaterThanOrEqual(0);
+      });
+  });
+
 });

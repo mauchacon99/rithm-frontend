@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
-import { Document, StationDocumentsResponse } from 'src/models';
+import { Document, StationDocumentsResponse, ForwardPreviousStationsDocument, ConnectedStationInfo } from 'src/models';
 
 // const MICROSERVICE_PATH = '/documentservice';
 
@@ -182,6 +182,43 @@ export class DocumentService {
       },
     ];
     return of(filterData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of forward and previous stations for a specific document.
+   *
+   * @param documentId The Specific id of document.
+   * @param stationId The Specific id of station.
+   * @returns A list of forward and previous stations for a specific document.
+   */
+  getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
+    const previousStations: Array<ConnectedStationInfo> = [{
+      stationName: 'Development',
+      totalDocuments: 5,
+      isGenerator: true
+    }, {
+      stationName: 'Requirement',
+      totalDocuments: 8,
+      isGenerator: false
+    }];
+    const followingStations: Array<ConnectedStationInfo> = [{
+      stationName: 'Station-1',
+      totalDocuments: 2,
+      isGenerator: true
+    }, {
+      stationName: 'Station-2',
+      totalDocuments: 0,
+      isGenerator: false
+    }, {
+      stationName: 'Station-3',
+      totalDocuments: 3,
+      isGenerator: true
+    }];
+    const data: ForwardPreviousStationsDocument = {
+      previousStations: previousStations,
+      followingStations: followingStations
+    };
+    return of(data).pipe(delay(1000));
   }
 
 }
