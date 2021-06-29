@@ -56,10 +56,9 @@ export class MockDashboardService {
   /**
    * Gets a list of worker roster of a station.
    *
-   * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
-  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+  getWorkerRoster(): Observable<WorkerRosterResponse[]> {
     const expectedResponse: Array<WorkerRosterResponse> = [
       {
         firstName: 'Adarsh',
