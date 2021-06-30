@@ -21,42 +21,42 @@ jobs:
       run: npm run lint
 
   # Checks that all stylesheets conform to standards
-  # lint-stylesheets:
-  #   runs-on: ubuntu-latest
+  lint-stylesheets:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Linting all stylesheets
-  #     run: npm run lint-style
+    - name: Linting all stylesheets
+      run: npm run lint-style
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs: [lint-app, lint-stylesheets]
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint-app, lint-stylesheets]
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Building Angular web project
-  #     run: npm run build
+    - name: Building Angular web project
+      run: npm run build
 
   # Checks that the Angular app passes all defined unit and integration tests
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: build
+  test:
+    runs-on: ubuntu-latest
+    needs: build
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci
+    - name: Installing dependencies
+      run: npm ci
 
-  #   - name: Running all unit and integration tests
-  #     run: npm run test-ci
+    - name: Running all unit and integration tests
+      run: npm run test-ci
