@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -50,7 +50,8 @@ import { UserFormComponent } from './user-form/user-form.component';
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ReactiveFormsModule
   ],
   exports: [
     AlertDialogComponent,
@@ -64,7 +65,8 @@ import { UserFormComponent } from './user-form/user-form.component';
     MatTooltipModule,
     PasswordRequirementsComponent,
     UserAvatarComponent,
-    PaginationComponent
+    PaginationComponent,
+    UserFormComponent
   ]
 })
 export class SharedModule { }
