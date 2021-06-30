@@ -14,8 +14,7 @@
 }
 
 /// The styling needed to display an element as a circle.
-/// @param {string} $height Use 30px or 40px
-/// @param {string} $width Should match $height
+/// @param {string} $size Use 30px or 40px.
 /// @param {string} $font-size Use font-calc(#) here
 /// @param {string} $line-height Set based on size of circle.
 /// @param {string} $background-hover Defaults to map-get($secondary-gray-palette, 600)
@@ -23,8 +22,7 @@
 /// @param {string} $background-color Defaults to $secondary-gray, can use a palette here
 /// @param {string} $cursor Defaults to pointer
 @mixin circle (
-  $height,
-  $width,
+  $size,
   $font-size,
   $line-height,
   $background-hover: map-get($secondary-gray-palette, 600),
@@ -32,8 +30,8 @@
   $background-color: $secondary-gray,
   $cursor: pointer
 ) {
-  height: $height;
-  width: $width;
+  height: $size;
+  width: $size;
   border: 1px solid $border-color;
   border-radius: 50%;
   background: $background-color;
@@ -50,8 +48,8 @@
   }
 
   img {
-    height: $height;
-    width: $width;
+    height: $size;
+    width: $size;
     border-radius: 50%;
     object-fit: cover;
 
