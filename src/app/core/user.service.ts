@@ -173,6 +173,23 @@ export class UserService {
   }
 
   /**
+   * Attempts to update user account settings.
+   *
+   * @param firstName The first name associated with the user.
+   * @param lastName The last name associated with the user.
+   * @param newPassword The new password associated with the user.
+   * @returns An empty observable.
+   */
+  updateUserAccount(firstName: string, lastName: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateUserAccount`,
+      {
+        firstName,
+        lastName,
+        newPassword
+      });
+  }
+
+  /**
    * Gets terms and conditions.
    *
    * @returns A terms and conditions observable.

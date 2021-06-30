@@ -161,6 +161,25 @@ export class MockUserService {
   }
 
   /**
+   * Attempts to update user account settings.
+   *
+   * @param firstName The first name associated with the user.
+   * @param lastName The last name associated with the user.
+   * @param newPassword The new password associated with the user.
+   * @returns An empty observable.
+   */
+  updateUserAccount(firstName: string, lastName: string, newPassword: string): Observable<unknown> {
+    if (firstName.includes('error')) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    }
+    return of().pipe(delay(1000));
+  }
+
+  /**
    * Gets terms and conditions.
    *
    * @returns An terms and conditions observable.

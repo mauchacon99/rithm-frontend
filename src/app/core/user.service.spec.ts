@@ -226,4 +226,15 @@ describe('UserService', () => {
       });
   });
 
+  it('should update user account settings', () => {
+    const firstName = 'James';
+    const lastName = 'Anderson';
+    const newPassword = 'mamamia';
+
+    service.updateUserAccount(firstName, lastName, newPassword)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
 });
