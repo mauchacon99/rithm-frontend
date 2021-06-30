@@ -5,7 +5,7 @@
 //global styling for circle elements.
 
 //Used on Worker Roster, Documents, the Documents modal, and Notifications
-.circle-30-default {
+.circle-30-secondary {
   @include circle(30px, 30px, font-calc(12), 28px);
 }
 
