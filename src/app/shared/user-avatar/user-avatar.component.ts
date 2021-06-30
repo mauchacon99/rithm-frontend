@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 // import { UserService } from 'src/app/core/user.service';
-import { User } from 'src/models';
+import { User, WorkerRosterResponse } from 'src/models';
 
 
 /**
@@ -13,7 +13,7 @@ import { User } from 'src/models';
 })
 export class UserAvatarComponent implements OnInit {
   /** User property. */
-  @Input() user?: User;
+  @Input() user?: User | WorkerRosterResponse;
 
   /** Initials from  DashboardStationData.*/
   @Input() workerInitials?: string;
@@ -23,10 +23,6 @@ export class UserAvatarComponent implements OnInit {
 
   /** Determine whether this avatar is for a profile or work roster. */
   profile = false;
-
-  // constructor(
-  //   // private userService: UserService
-  // ) { }
 
   /**
    * Ensures that the initials property is set with user's initials.
@@ -56,7 +52,7 @@ export class UserAvatarComponent implements OnInit {
   // Set (click)="setTempProfilePic()" on parent div in the template.
   setTempProfilePic(): void {
     if (this.user) {
-      this.user.profilePic = '../../../assets/images/example-profile.jpg';
+      (<User>this.user).profilePic = '../../../assets/images/example-profile.jpg';
     }
   }
 }

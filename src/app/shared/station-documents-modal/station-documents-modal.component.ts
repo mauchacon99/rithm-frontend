@@ -108,4 +108,14 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
+  /**
+   * Get the initials needed for a user avatar.
+   *
+   * @param document A given document object.
+   * @returns A string of initials.
+   */
+  getDocInitials(document: Document): string {
+    return document?.firstName.charAt(0) + document?.lastName.charAt(0);
+  }
+
 }

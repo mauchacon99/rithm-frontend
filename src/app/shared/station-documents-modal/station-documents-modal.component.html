@@ -35,7 +35,7 @@
         <div class="col-3 col-md-3 col-md-4 col-lg-3">
           <span *ngIf="document?.firstName && document?.lastName">
             <div class="initials">
-              {{document?.firstName | slice:0:1}}{{document?.lastName | slice:0:1}}
+              <app-user-avatar [workerInitials]="getDocInitials(document)"></app-user-avatar>
             </div>
             <div class="d-none d-md-block">
               {{ document?.firstName }} {{ document?.lastName }}
