@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { Component, Input } from '@angular/core';
 import { DashboardStationData } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,18 +15,13 @@ export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
 
-  /** Station documents modal component. */
-  stationDocsComponent = StationDocumentsModalComponent;
-
   constructor(private dialog: MatDialog) {}
 
   /**
-   * Opens a modal with document information.
-   *
-   * @param component The component to open.
+   * Opens Station Docs Modal with document information.
    */
-  openModal(component: ComponentType<unknown>): void {
-    this.dialog.open(component, {
+  openDocsModal(): void {
+    this.dialog.open(StationDocumentsModalComponent, {
       minWidth: '325px',
       data: { stationName: this.station.stationName, stationId: this.station.rithmId }
     });

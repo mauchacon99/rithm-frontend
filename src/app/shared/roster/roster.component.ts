@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { Component, Input, OnInit } from '@angular/core';
 import { DashboardStationData } from 'src/models';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
@@ -19,9 +18,6 @@ export class RosterComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
-  /** Roster modal component. */
-  rosterComponent = RosterModalComponent;
-
   constructor(private dialog: MatDialog) {}
 
 
@@ -36,11 +32,9 @@ export class RosterComponent implements OnInit {
 
   /**
    * Opens a modal with roster information.
-   *
-   * @param component The component to open.
    */
-  openModal(component: ComponentType<unknown>): void {
-    this.dialog.open(component, {
+  openRosterModal(): void {
+    this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
       data: { stationName: this.station.stationName, stationId: this.station.rithmId }
     });
