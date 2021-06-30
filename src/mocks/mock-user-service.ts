@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
@@ -163,13 +163,11 @@ export class MockUserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param firstName The first name associated with the user.
-   * @param lastName The last name associated with the user.
-   * @param newPassword The new password associated with the user.
+   * @param changedAccountInfo The user account settings object.
    * @returns An empty observable.
    */
-  updateUserAccount(firstName: string, lastName: string, newPassword: string): Observable<unknown> {
-    if (firstName.includes('error')) {
+  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
+    if (!changedAccountInfo) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'

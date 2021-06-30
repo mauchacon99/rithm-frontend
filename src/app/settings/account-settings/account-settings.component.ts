@@ -17,7 +17,7 @@ import { UserService } from '../../core/user.service';
 export class AccountSettingsComponent {
 
   /** Whether the account settings is loading. */
-  isLoading = true;
+  isLoading = false;
 
   /** User Account Info modal. */
   userAccountInfo: UserAccountInfo;
@@ -36,8 +36,7 @@ export class AccountSettingsComponent {
    * Update user account settings data.
    */
   updateUserAccount(): void {
-    this.userService.updateUserAccount(<string>this.userAccountInfo.firstName,
-      <string>this.userAccountInfo.lastName, <string>this.userAccountInfo.newPassword)
+    this.userService.updateUserAccount(this.userAccountInfo)
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;

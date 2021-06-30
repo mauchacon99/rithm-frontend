@@ -6,7 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -175,18 +175,12 @@ export class UserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param firstName The first name associated with the user.
-   * @param lastName The last name associated with the user.
-   * @param newPassword The new password associated with the user.
+   * @param changedAccountInfo The user account settings object.
    * @returns An empty observable.
    */
-  updateUserAccount(firstName: string, lastName: string, newPassword: string): Observable<void> {
+  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateUserAccount`,
-      {
-        firstName,
-        lastName,
-        newPassword
-      });
+      changedAccountInfo);
   }
 
   /**
