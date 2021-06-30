@@ -6,7 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -214,6 +214,17 @@ export class UserService {
     lorem augue, dignissim eget malesuada vitae, dictum sollicitudin augue. Curabitur cursus scelerisque pellentesque.
     Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam id mauris id quam faucibus facilisis.`;
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Attempts to reset notification settings.
+   *
+   * @param notificationSettings The user notification settings object.
+   * @returns An empty observable.
+   */
+  updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateNotificationSettings`,
+      notificationSettings);
   }
 
 }
