@@ -145,6 +145,7 @@ export class MockDocumentService {
    * @param stationId The Specific id of station.
    * @returns A list of forward and previous stations for a specific document.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
     const previousStations: Array<ConnectedStationInfo> = [{
       stationName: 'Development',

@@ -20,10 +20,7 @@
 
     <!-- Profile photo -->
     <div class="col-2">
-      <div mat-card-avatar class="profile-photo">
-        <img *ngIf="photoUrl" [src]="photoUrl" alt="Steve Rogers">
-        <p *ngIf="!photoUrl">{{initials}}</p>
-      </div>
+      <app-user-avatar [workerInitials]="initials"></app-user-avatar>
       <div class="badge mat-elevation-z4">
         <i *ngIf="notificationType === 'comment'" class="far fa-comment-alt"></i>
       </div>
