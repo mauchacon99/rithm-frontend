@@ -21,7 +21,7 @@
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
           [matTooltipDisabled]="!document.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
           <!-- Priority -->
-          <div class="priority circle-30-blue">
+          <div class="priority circle-30-accent">
             {{ document.priority }}
           </div>
           <p [ngClass]="{'warn' : document.blocked }">
