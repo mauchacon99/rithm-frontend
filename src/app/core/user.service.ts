@@ -6,7 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -170,6 +170,17 @@ export class UserService {
         email,
         password
       });
+  }
+
+  /**
+   * Attempts to update user account settings.
+   *
+   * @param changedAccountInfo The user account settings object.
+   * @returns An empty observable.
+   */
+  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateUserAccount`,
+      changedAccountInfo);
   }
 
   /**
