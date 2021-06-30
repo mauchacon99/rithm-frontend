@@ -42,7 +42,7 @@ describe('UserAvatarComponent', () => {
   });
 
   it('should display avatar', () => {
-    const avatar = fixture.debugElement.query(By.css('.profile'));
+    const avatar = fixture.debugElement.query(By.css('#avatar'));
     expect(avatar).toBeTruthy();
     expect(component.initials).toBeTruthy();
   });

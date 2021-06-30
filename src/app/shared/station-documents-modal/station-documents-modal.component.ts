@@ -75,6 +75,7 @@ export class StationDocumentsModalComponent implements OnInit {
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
+        this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
@@ -106,6 +107,16 @@ export class StationDocumentsModalComponent implements OnInit {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
+  }
+
+  /**
+   * Get the initials needed for a user avatar.
+   *
+   * @param document A given document object.
+   * @returns A string of initials.
+   */
+  getDocInitials(document: Document): string {
+    return document?.firstName.charAt(0) + document?.lastName.charAt(0);
   }
 
 }

@@ -1,4 +1,4 @@
-@import 'variables', 'functions';
+@import 'rithm-light-palettes', 'variables', 'functions';
 
 mat-card {
   padding: 8px;
@@ -20,18 +20,7 @@ mat-card {
     margin-top: 10px;
 
     span.circles {
-      div.avatar,
       div.doc-count {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px solid $secondary-gray;
-        background: $secondary-gray;
-        line-height: 28px;
-        text-align: center;
-        color: #fff;
-        font-weight: 600;
-        font-size: font-calc(12);
         margin: 5px 2px;
         float: left;
 
@@ -41,6 +30,7 @@ mat-card {
 
         &:hover {
           cursor: pointer;
+          background: map-get($secondary-gray-palette, 600);
         }
       }
     }
