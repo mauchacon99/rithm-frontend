@@ -29,45 +29,7 @@
                   <p>Enter your info to create your account.</p>
                 </div>
               </div>
-              <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
-                <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible" [passReq]="signUpForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
-                <!-- First name -->
-                <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
-                  <mat-label>First name</mat-label>
-                  <input type="text" matInput placeholder="First name" formControlName="firstName" autocomplete="given-name">
-                </mat-form-field>
-                <!-- Last name -->
-                <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
-                  <mat-label>Last name</mat-label>
-                  <input type="text" matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
-                </mat-form-field>
-                <!-- Email -->
-                <mat-form-field class="col-12" appearance="outline">
-                  <mat-label>Email</mat-label>
-                  <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-                </mat-form-field>
-                <!-- Password -->
-                <mat-form-field class="col-12" appearance="outline">
-                  <mat-label>Password</mat-label>
-                  <input type="password" matInput placeholder="Password" formControlName="password" (focus)="togglePassReq('password')" (focusout)="togglePassReq('')" autocomplete="new-password">
-                </mat-form-field>
-                <!-- Confirm Password -->
-                <mat-form-field class="col-12" appearance="outline">
-                  <mat-label>Confirm Password</mat-label>
-                  <input type="password" matInput placeholder="Confirm password" formControlName="confirmPassword" (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')" autocomplete="new-password">
-                </mat-form-field>
-                <!-- Terms and conditions -->
-                <div class="col-12">
-                  <mat-checkbox formControlName="agreeToTerms">
-                    I have read and agree to the&nbsp;
-                  </mat-checkbox>
-                  <a id="terms" (click)="openTerms()">terms & conditions</a>
-                </div>
-                <!-- Create account button -->
-                <div class="col-12 mt-3">
-                  <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">Create Account</button>
-                </div>
-              </form>
+              <app-user-form></app-user-form>
             </span>
             <!-- Loading Indicator -->
             <span *ngIf="isLoading" class="spinner">
