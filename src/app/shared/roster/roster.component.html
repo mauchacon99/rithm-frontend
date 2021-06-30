@@ -3,6 +3,6 @@
     (click)="openModal(rosterComponent)" class="circles">
       <app-user-avatar [workerInitials]="initial"></app-user-avatar>
   </div>
-  <div *ngIf="station.numberOfWorkers > 3" class="circles circle-30-default" (click)="openModal(rosterComponent)">
+  <div *ngIf="station.numberOfWorkers > 3" class="circles circle-30-secondary" (click)="openModal(rosterComponent)">
     +{{station.numberOfWorkers - 2}}</div>
 </span>
