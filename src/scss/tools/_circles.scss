@@ -15,6 +15,6 @@
 }
 
 //Used as the User Avatar and on the Worker Roster Modal
-.circle-40-default {
+.circle-40-secondary {
   @include circle(40px, 40px, font-calc(16), 40px, map-get($secondary-gray-palette, 600), #fff);
 }
