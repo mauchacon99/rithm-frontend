@@ -19,7 +19,7 @@ export class AccountSettingsComponent {
   /** Whether the account settings is loading. */
   isLoading = true;
 
-  /** Helper class for password requirements. */
+  /** User Account Info modal. */
   userAccountInfo: UserAccountInfo;
 
   constructor(private userService: UserService,
