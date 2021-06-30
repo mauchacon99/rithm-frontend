@@ -9,3 +9,48 @@
       $end-color
     );
 }
+
+/// The styling needed to display an element as a circle.
+/// @param {string} $height The size of the circle
+/// @param {string} $width Should match $height
+/// @param {string} $background-color Color of circle, can use a palette here.
+/// @param {string} $background-hover If a palette is used in $background-color, this should be in that palette.
+/// @param {string} $border-color Circle's border
+/// @param {string} $font-size Use font-calc(#) here
+/// @param {string} $line-height Changes based on size of circle.
+@mixin circle (
+  $height,
+  $width,
+  $background-color,
+  $background-hover,
+  $border-color,
+  $font-size,
+  $line-height
+) {
+  height: $height;
+  width: $width;
+  border: 1px solid $border-color;
+  border-radius: 50%;
+  background: $background-color;
+  font-weight: 600;
+  font-size: $font-size;
+  text-align: center;
+  line-height: $line-height;
+  color: #fff;
+
+  &:hover {
+    cursor: pointer;
+    background: $background-hover;
+  }
+
+  img {
+    height: $height;
+    width: $width;
+    border-radius: 50%;
+    object-fit: contain;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
