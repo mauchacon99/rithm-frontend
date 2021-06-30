@@ -47,12 +47,4 @@ export class UserAvatarComponent implements OnInit {
     }
     this.initials = this.workerInitials as string;
   }
-
-  /** PLACEHOLDER, can use this to test profile pic functionality. */
-  // Set (click)="setTempProfilePic()" on parent div in the template.
-  setTempProfilePic(): void {
-    if (this.user) {
-      (<User>this.user).profilePic = '../../../assets/images/example-profile.jpg';
-    }
-  }
 }
