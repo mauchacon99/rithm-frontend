@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -34,7 +34,8 @@ export class RosterModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
     private dashboardService: DashboardService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private dialogRef: MatDialogRef<RosterModalComponent>,
   ) {
     this.stationRithmId = this.data.stationId;
   }
@@ -52,6 +53,7 @@ export class RosterModalComponent implements OnInit {
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
+        this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
