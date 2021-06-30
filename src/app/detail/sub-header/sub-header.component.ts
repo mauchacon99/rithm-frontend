@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Component for the sub header on document/station views that houses the
@@ -10,5 +10,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./sub-header.component.scss']
 })
 export class SubHeaderComponent {
-
+  /** detailItem. */
+  @Input() detailItem!: string;
 }
