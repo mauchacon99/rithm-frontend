@@ -1,5 +1,5 @@
 <div class="row">
-  <mat-card class="col-12">
+  <mat-card [class.load-spin]="isLoading" class="col-12">
     <div *ngIf="!isLoading" class="row no-gutters m-0">
       <div class="col-lg-8 col-md-12">
         <h4>

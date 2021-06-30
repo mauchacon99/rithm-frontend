@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardService } from '../dashboard.service';
+import { DocumentService } from 'src/app/core/document.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MockDashboardService, MockPopupService, MockUserService } from 'src/mocks';
-import { PopupService } from 'src/app/core/popup.service';
+import { MockDashboardService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { MatCardModule } from '@angular/material/card';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -22,6 +23,7 @@ describe('HeaderComponent', () => {
       ],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService }
       ]

@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { Document, StationDocumentsModalData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 /**
  * Reusable component for displaying a station's documents in a modal.
@@ -33,12 +34,16 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
+  /** Shows if user is on worker roster. */
+  isOnRoster = false;
+
   constructor(
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) public modalData: StationDocumentsModalData,
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
-    private dialogRef: MatDialogRef<StationDocumentsModalComponent>
+    private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
+    private router: Router
   ) {
     this.stationRithmId = this.modalData.stationId;
   }
@@ -64,6 +69,8 @@ export class StationDocumentsModalComponent implements OnInit {
         if (documentsResponse) {
           this.documents = documentsResponse.documentList;
           this.totalNumDocs = documentsResponse.numberOfDocument;
+          //to test this.CheckDocPermission(), comment out the below line.
+          this.isOnRoster = documentsResponse.isWorker;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -74,6 +81,18 @@ export class StationDocumentsModalComponent implements OnInit {
           true
         );
       });
+  }
+
+  /**
+   * Determines if User has permission to proceed to a linked document.
+   *
+   * @param rithmId The rithmId property of the document we will link to.
+   */
+  checkDocPermission(rithmId: string): void {
+    if (this.isOnRoster) {
+      this.router.navigateByUrl(`/document/${rithmId}`);
+      this.dialogRef.close();
+    }
   }
 
   /**
@@ -88,4 +107,5 @@ export class StationDocumentsModalComponent implements OnInit {
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
   }
+
 }
