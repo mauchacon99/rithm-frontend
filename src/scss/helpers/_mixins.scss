@@ -1,3 +1,6 @@
+@import './variables';
+@import './rithm-light-palettes';
+
 /// A two color 45 degree gradient
 /// @param {string} $start-color The starting color
 /// @param {string} $end-color The ending color
@@ -11,21 +14,23 @@
 }
 
 /// The styling needed to display an element as a circle.
-/// @param {string} $height The size of the circle
+/// @param {string} $height Use 30px or 40px
 /// @param {string} $width Should match $height
-/// @param {string} $background-color Color of circle, can use a palette here.
-/// @param {string} $background-hover If a palette is used in $background-color, this should be in that palette.
-/// @param {string} $border-color Circle's border
 /// @param {string} $font-size Use font-calc(#) here
-/// @param {string} $line-height Changes based on size of circle.
+/// @param {string} $line-height Set based on size of circle.
+/// @param {string} $background-hover Defaults to map-get($secondary-gray-palette, 600)
+/// @param {string} $border-color Defaults to $secondary-gray. Either match background-color or use #fff
+/// @param {string} $background-color Defaults to $secondary-gray, can use a palette here
+/// @param {string} $cursor Defaults to pointer
 @mixin circle (
   $height,
   $width,
-  $background-color,
-  $background-hover,
-  $border-color,
   $font-size,
-  $line-height
+  $line-height,
+  $background-hover: map-get($secondary-gray-palette, 600),
+  $border-color: $secondary-gray,
+  $background-color: $secondary-gray,
+  $cursor: pointer
 ) {
   height: $height;
   width: $width;
@@ -37,9 +42,10 @@
   text-align: center;
   line-height: $line-height;
   color: #fff;
+  overflow: hidden;
 
   &:hover {
-    cursor: pointer;
+    cursor: $cursor;
     background: $background-hover;
   }
 
@@ -47,7 +53,7 @@
     height: $height;
     width: $width;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
 
     &:hover {
       opacity: 0.9;
