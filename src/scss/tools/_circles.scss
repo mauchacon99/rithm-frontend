@@ -10,7 +10,7 @@
 }
 
 //Used on Priority
-.circle-30-blue {
+.circle-30-accent {
   @include circle(30px, 30px, font-calc(16), 28px, $accent-blue,  $accent-blue, $accent-blue, default);
 }
 
