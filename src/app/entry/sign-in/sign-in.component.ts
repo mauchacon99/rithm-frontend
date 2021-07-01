@@ -25,6 +25,9 @@ export class SignInComponent implements OnInit {
   /** Sign in form. */
   signInForm: FormGroup;
 
+  /** Delete form. */
+  deleteForm: FormGroup;
+
   /** Is it loading. */
   isLoading = false;
 
@@ -39,6 +42,28 @@ export class SignInComponent implements OnInit {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
+    });
+    this.deleteForm = this.fb.group({
+      email: ['', Validators.email]
+    });
+  }
+
+  /** Delete. */
+  delete(): void {
+    this.isLoading = true;
+    const formValues = this.deleteForm.value;
+    this.userService.delete(formValues.email)
+    .pipe(first())
+    .subscribe(() => {
+      this.isLoading = false;
+      this.popupService.notify('Deleted should have worked');
+    }, (error) => {
+      this.isLoading = false;
+      this.errorService.displayError(
+        'unable to delete. ',
+        error,
+        true
+      );
     });
   }
 
