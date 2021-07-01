@@ -1,0 +1,113 @@
+name: Test Deployments
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+    branches:
+      - "dev"
+
+jobs:
+
+  # Deploys the web app
+  web-app:
+    runs-on: [self-hosted, test]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling app
+      run: npm run build
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+    - name: Deploying app
+      run: Copy-Item ./dist/rithm/* D:/inetpub/testapp.rithm.tech -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name testapp
+
+  # Deploys the Karma test coverage site
+  test-coverage:
+    runs-on: [self-hosted, test]
+    needs: web-app
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Generating test coverage
+      run: npm run test-ci
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./coverage/rithm/* C:/inetpub/testapi.rithm.tech/karmacoverage -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name testapp
+
+  # Deploys the Compodoc documentation site
+  compodoc:
+    runs-on: [self-hosted, test]
+    needs: web-app
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling documentation
+      run: npm run compile-docs
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./documentation/* C:/inetpub/testapi.rithm.tech/compodoc -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name testapp
+
+  # Deploys the SassDoc documentation site
+  sassdoc:
+    runs-on: [self-hosted, test]
+    needs: web-app
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling documentation
+      run: npm run compile-style-docs
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./sassdoc/* C:/inetpub/testapi.rithm.tech/sassdoc -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name testapp
