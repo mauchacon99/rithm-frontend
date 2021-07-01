@@ -6,7 +6,6 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { environment } from 'src/environments/environment';
 import { EmailLinkParams } from 'src/helpers';
 import { EmailLinkType } from 'src/models';
 
@@ -19,9 +18,6 @@ import { EmailLinkType } from 'src/models';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-
-  /** TODO: remove me. */
-  env = environment.baseApiUrl;
 
   /** Whether the user entered invalid credentials. */
   invalidCredentials = false;
