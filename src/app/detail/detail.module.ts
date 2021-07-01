@@ -26,7 +26,9 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
   exports: [
     SubHeaderComponent,
     DocumentTemplateComponent,
-    ConnectedStationPaneComponent
+    ConnectedStationPaneComponent,
+    StationInfoHeaderComponent,
+    DocumentInfoHeaderComponent
   ]
 })
 export class DetailModule { }
