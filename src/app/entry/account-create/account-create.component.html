@@ -18,7 +18,7 @@
             <span [ngClass]="{'transparent': isLoading}">
               <div class="row mt-1">
                 <div class="col-12">
-                  <a class="overline"  routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
+                  <a class="overline" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
                 </div>
               </div>
               <div class="row mt-3">
@@ -29,7 +29,21 @@
                   <p>Enter your info to create your account.</p>
                 </div>
               </div>
-              <app-user-form></app-user-form>
+              <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
+                <app-user-form></app-user-form>
+                <!-- Terms and conditions -->
+                <div class="col-12">
+                  <mat-checkbox formControlName="agreeToTerms">
+                    I have read and agree to the&nbsp;
+                  </mat-checkbox>
+                  <a id="terms" (click)="openTerms()">terms & conditions</a>
+                </div>
+                <!-- Create account button -->
+                <div class="col-12 mt-3">
+                  <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">Create
+                    Account</button>
+                </div>
+              </form>
             </span>
             <!-- Loading Indicator -->
             <span *ngIf="isLoading" class="spinner">
