@@ -42,18 +42,6 @@
                       <button type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
                     </div>
                   </form>
-                  <!-- ONLY FOR TESTING SHOULD NOT BE MERGED INTO DEV -->
-                  <form [formGroup]="deleteForm" (ngSubmit)="delete()" class="row">
-                    <!-- Email -->
-                      <mat-form-field class="col-12" appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-                      </mat-form-field>
-                    <!-- Delete button -->
-                    <div class="col-12">
-                      <button type="submit" mat-raised-button color="accent">DELETE</button>
-                    </div>
-                  </form>
               <!-- Register -->
               <mat-card-footer class="row">
                 <div class="col center-text">

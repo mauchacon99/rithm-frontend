@@ -45,6 +45,7 @@ export class UserService {
     }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
+        console.log(this.accessToken);
         this.user = response.user;
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
         localStorage.setItem('user', JSON.stringify(this.user));
@@ -138,7 +139,11 @@ export class UserService {
  */
   delete(email: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`, {
-      email
+      headers: {
+        // eslint-disable-next-line @typescript-eslint/quotes
+        "Content-Type": "application/json"
+      },
+      body:{email}
     });
   }
 
