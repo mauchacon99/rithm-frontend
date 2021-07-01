@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
@@ -17,9 +17,9 @@ import { DialogData } from 'src/models';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent {
-  /** Sign up form. */
-  signUpForm: FormGroup;
+export class UserFormComponent implements OnInit {
+  /** Receive the FormGroup data from parent. */
+  public signUpForm: FormGroup;
 
   /** Are password requirements visible. */
   passReqVisible = false;
@@ -44,7 +44,8 @@ export class UserFormComponent {
     private errorService: ErrorService,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private controlContainer: ControlContainer
   ) {
     this.passwordRequirements = new PasswordRequirements();
 
@@ -77,6 +78,13 @@ export class UserFormComponent {
       ],
       agreeToTerms: [false, [Validators.requiredTrue]]
     });
+  }
+
+  /**
+   * Sets the FormGroup to be equal to the parent formGroup.
+   */
+  ngOnInit(): void {
+    this.signUpForm = <FormGroup>this.controlContainer.control;
   }
 
   /**
@@ -117,38 +125,6 @@ export class UserFormComponent {
             true
           );
         }
-      });
-  }
-
-  /**
-   * Open the terms and conditions modal.
-   */
-  openTerms(): void {
-    this.userService.getTermsConditions()
-      .pipe(first())
-      .subscribe((termsConditions) => {
-        if (termsConditions) {
-          this.modalMessage = termsConditions;
-          this.isLoading = false;
-
-          const data = {
-            title: 'Terms and Conditions',
-            message: this.modalMessage,
-            okButtonText: 'Agree',
-            width: '90%'
-          };
-
-          this.popupService.confirm(data).then((result) => {
-            this.signUpForm.get('agreeToTerms')?.setValue(result);
-          });
-        }
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
       });
   }
 

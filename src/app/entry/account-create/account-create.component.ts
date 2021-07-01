@@ -21,9 +21,6 @@ export class AccountCreateComponent {
   /** Sign up form. */
   signUpForm: FormGroup;
 
-  /** Are password requirements visible. */
-  passReqVisible = false;
-
   /** Show passwords match validation in child component. */
   showMatch = false;
 
@@ -77,17 +74,6 @@ export class AccountCreateComponent {
       ],
       agreeToTerms: [false, [Validators.requiredTrue]]
     });
-  }
-
-  /**
-   * Toggle visibility of password requirements.
-   *
-   * @param errorsFieldToCheck What field to get errors for child component.
-   */
-  togglePassReq(errorsFieldToCheck: string): void {
-    this.errorsToGet = errorsFieldToCheck;
-    this.passReqVisible = !this.passReqVisible;
-    this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 
   /**
