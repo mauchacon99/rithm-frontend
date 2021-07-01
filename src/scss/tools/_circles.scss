@@ -1,0 +1,20 @@
+@import '../helpers/mixins';
+@import '../helpers/variables';
+@import '../helpers/rithm-light-palettes';
+
+//global styling for circle elements.
+
+//Used on Worker Roster, Documents, the Documents modal, and Notifications
+.circle-30-secondary {
+  @include circle(30px, font-calc(12), 28px);
+}
+
+//Used on Priority
+.circle-30-accent {
+  @include circle(30px, font-calc(16), 28px, $accent-blue,  $accent-blue, $accent-blue, default);
+}
+
+//Used as the User Avatar and on the Worker Roster Modal
+.circle-40-secondary {
+  @include circle(40px, font-calc(16), 40px, map-get($secondary-gray-palette, 600), #fff);
+}

@@ -1,9 +1,7 @@
-import { ComponentType } from '@angular/cdk/portal';
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
-import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { Component, Input } from '@angular/core';
 import { DashboardStationData } from 'src/models';
+import { MatDialog } from '@angular/material/dialog';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 
 /**
  * Component for displaying a card with station information on the dashboard.
@@ -13,37 +11,17 @@ import { DashboardStationData } from 'src/models';
   templateUrl: './station-card.component.html',
   styleUrls: ['./station-card.component.scss']
 })
-export class StationCardComponent implements OnInit {
+export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
-
-  /** Set the number of roster members to show when more than 3 members.  */
-  slices = 2;
-
-  /** Roster modal component. */
-  rosterComponent = RosterModalComponent;
-
-  /** Station documents modal component. */
-  stationDocsComponent = StationDocumentsModalComponent;
 
   constructor(private dialog: MatDialog) {}
 
   /**
-   * Set the number of roster members to show when less than 3.
+   * Opens Station Docs Modal with document information.
    */
-  ngOnInit(): void {
-    if (this.station.numberOfWorkers <= 3) {
-      this.slices = this.station.numberOfWorkers;
-    }
-  }
-
-  /**
-   * Opens a modal with roster or document information.
-   *
-   * @param component The component to open.
-   */
-  openModal(component: ComponentType<unknown>): void {
-    this.dialog.open(component, {
+  openDocsModal(): void {
+    this.dialog.open(StationDocumentsModalComponent, {
       minWidth: '325px',
       data: { stationName: this.station.stationName, stationId: this.station.rithmId }
     });

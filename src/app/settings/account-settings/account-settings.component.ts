@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserAccountInfo } from 'src/models';
+import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 
 /**
@@ -19,8 +19,11 @@ export class AccountSettingsComponent {
   /** Whether the account settings is loading. */
   isLoading = false;
 
-  /** User Account Info modal. */
+  /** User Account Info model. */
   userAccountInfo: UserAccountInfo;
+
+  /** Notification settings model. */
+  notificationSettings: NotificationSettings;
 
   constructor(private userService: UserService,
     private popupService: PopupService,
@@ -29,6 +32,10 @@ export class AccountSettingsComponent {
       firstName: 'James',
       lastName: 'Anderson',
       newPassword: 'mamamia'
+    };
+    this.notificationSettings = {
+      comments: true,
+      commentMentions: false
     };
   }
 
@@ -41,6 +48,25 @@ export class AccountSettingsComponent {
       .subscribe(() => {
         this.isLoading = false;
         this.popupService.notify('Your account settings are updated.');
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
+  /**
+   * Update notification settings info.
+   */
+  updateNotificationSettings(): void {
+    this.userService.updateNotificationSettings(this.notificationSettings)
+      .pipe(first())
+      .subscribe(() => {
+        this.isLoading = false;
+        this.popupService.notify('Your notification settings are updated.');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(

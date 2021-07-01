@@ -66,17 +66,10 @@
         }
 
         div.priority {
-          width: 30px;
-          height: 30px;
-          text-align: center;
-          line-height: 31px;
-          border-radius: 50%;
-          background: $accent-blue;
           display: block;
           float: left;
           margin-right: 10px;
           padding-left: 2px;
-          color: #fff;
         }
 
         i {
@@ -89,19 +82,10 @@
         }
 
         div.initials {
-          width: 30px;
-          height: 30px;
-          text-align: center;
-          line-height: 31px;
-          border-radius: 50%;
           display: block;
           float: left;
-          background: $secondary-gray;
-          color: #fff;
-          font-weight: 600;
           padding-left: 1px;
           margin-right: 10px;
-          font-size: font-calc(14);
         }
       }
     }

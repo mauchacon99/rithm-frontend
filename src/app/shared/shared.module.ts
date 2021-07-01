@@ -66,7 +66,8 @@ import { UserFormComponent } from './user-form/user-form.component';
     PasswordRequirementsComponent,
     UserAvatarComponent,
     PaginationComponent,
-    UserFormComponent
+    UserFormComponent,
+    RosterComponent
   ]
 })
 export class SharedModule { }

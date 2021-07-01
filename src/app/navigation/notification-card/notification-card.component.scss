@@ -5,28 +5,6 @@
   width: 280px;
 }
 
-.profile-photo {
-  background-color: $secondary-gray;
-  border: solid 1px $secondary-gray;
-  height: 30px;
-  width: 30px;
-  overflow: hidden;
-
-  img {
-    object-fit: cover;
-    width: 30px;
-    height: 30px;
-  }
-
-  p {
-    color: #fff;
-    text-align: center;
-    line-height: 28px;
-    font-size: font-calc(13);
-    font-weight: 600;
-  }
-}
-
 .badge {
   width: 15px;
   height: 15px;

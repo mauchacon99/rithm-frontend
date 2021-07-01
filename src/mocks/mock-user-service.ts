@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
@@ -208,6 +208,23 @@ export class MockUserService {
     lorem augue, dignissim eget malesuada vitae, dictum sollicitudin augue. Curabitur cursus scelerisque pellentesque.
     Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam id mauris id quam faucibus facilisis.`;
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Attempts to reset notification settings.
+   *
+   * @param notificationSettings The user notification settings object.
+   * @returns An empty observable.
+   */
+  updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
+    if (!notificationSettings) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    }
+    return of().pipe(delay(1000));
   }
 
 }
