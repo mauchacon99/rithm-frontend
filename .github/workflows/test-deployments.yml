@@ -23,7 +23,7 @@ jobs:
       run: npm ci
 
     - name: Compiling app
-      run: npm run build
+      run: npm run build-test
 
     - name: Stopping IIS pool
       run: c:\batch\elevate Stop-WebAppPool -Name testapp
