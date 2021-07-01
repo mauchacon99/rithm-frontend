@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 import { DocumentService } from 'src/app/core/document.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockDocumentService, MockPopupService } from 'src/mocks';
+import { DocumentListCardComponent } from '../document-list-card/document-list-card.component';
 
 import { PriorityQueueComponent } from './priority-queue.component';
 
@@ -11,7 +13,10 @@ describe('PriorityQueueComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PriorityQueueComponent],
+      declarations: [
+        PriorityQueueComponent,
+        MockComponent(DocumentListCardComponent)
+      ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: PopupService, useClass: MockPopupService }

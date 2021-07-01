@@ -62,7 +62,8 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
     MatTooltipModule,
     PasswordRequirementsComponent,
     UserAvatarComponent,
-    PaginationComponent
+    PaginationComponent,
+    RosterComponent
   ]
 })
 export class SharedModule { }

@@ -1,1 +1,8 @@
-<p>roster works!</p>
+<span>
+  <div *ngFor="let initial of station.workerInitials | slice:0:slices"
+    (click)="openRosterModal()" class="circles">
+      <app-user-avatar [workerInitials]="initial"></app-user-avatar>
+  </div>
+  <div *ngIf="station.numberOfWorkers > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
+    +{{station.numberOfWorkers - 2}}</div>
+</span>

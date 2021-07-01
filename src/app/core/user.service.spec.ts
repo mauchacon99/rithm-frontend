@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, UserAccountInfo } from 'src/models';
 
 import { UserService } from './user.service';
 
@@ -218,4 +218,37 @@ describe('UserService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should return terms and conditions', () => {
+    service.getTermsConditions()
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+  });
+
+  it('should update user account settings', () => {
+    const changedAccountInfo: UserAccountInfo = {
+      firstName: 'James',
+      lastName: 'Anderson',
+      newPassword: 'mamamia'
+    };
+
+    service.updateUserAccount(changedAccountInfo)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
+  it('should update notification settings', () => {
+    const notificationSettings: NotificationSettings = {
+      comments: true,
+      commentMentions: false
+    };
+
+    service.updateNotificationSettings(notificationSettings)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
 });

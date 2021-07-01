@@ -4,6 +4,9 @@ export const environment = {
   /** The base URL for the Rithm API. */
   baseApiUrl: 'https://api.rithm.tech', // TODO: Point to actual URL
 
+  /** The base URL for the deployed Rithm app. */
+  baseAppUrl: 'https://app.rithm.tech', // TODO: Point to actual URL
+
   /** The lifetime for which an access token is valid in milliseconds. */
   accessTokenLifetime: 900000
 };

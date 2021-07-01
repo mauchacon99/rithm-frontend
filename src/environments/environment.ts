@@ -6,7 +6,10 @@ export const environment = {
   production: false,
 
   /** The base URL for the Rithm API. */
-  baseApiUrl: 'https://api.rithm.tech',
+  baseApiUrl: 'https://devapi.rithm.tech',
+
+  /** The base URL for the deployed Rithm app. */
+  baseAppUrl: 'https://devapp.rithm.tech',
 
   /** The lifetime for which an access token is valid in milliseconds. */
   accessTokenLifetime: 900000

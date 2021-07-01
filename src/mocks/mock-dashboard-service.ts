@@ -59,6 +59,7 @@ export class MockDashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
     const expectedResponse: Array<WorkerRosterResponse> = [
       {

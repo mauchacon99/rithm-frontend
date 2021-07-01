@@ -3,7 +3,7 @@
   <div *ngIf="!isLoading" class="users">
     <div class="row" *ngFor="let user of users">
       <div class="col-2">
-        <div class="avatar">{{user.firstName.charAt(0).toUpperCase()}}{{user.lastName.charAt(0).toUpperCase()}}</div>
+        <app-user-avatar [user]="user"></app-user-avatar>
       </div>
       <div class="col-10">
         <p>

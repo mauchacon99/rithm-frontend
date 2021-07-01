@@ -5,18 +5,20 @@ import { MockDocumentService } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DialogData } from 'src/models';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
   message: 'This is an example alert used for testing.',
   okButtonText: 'Understood',
-  cancelButtonText: 'Cancel'
+  cancelButtonText: 'Cancel',
 };
 
 describe('StationDocumentsModalComponent', () => {
@@ -24,13 +26,24 @@ describe('StationDocumentsModalComponent', () => {
   let fixture: ComponentFixture<StationDocumentsModalComponent>;
   let loader: HarnessLoader;
 
+  const dialogMock = {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    close: () => { }
+    };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationDocumentsModalComponent],
-      imports: [MatTooltipModule, NoopAnimationsModule],
+      imports: [
+        RouterTestingModule,
+        NoopAnimationsModule,
+        MatTooltipModule,
+        MatProgressSpinnerModule,
+        MatDialogModule
+      ],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialogRef, useValue: dialogMock },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: PopupService, useClass: MockPopupService }
@@ -54,6 +67,14 @@ describe('StationDocumentsModalComponent', () => {
     expect(component.documents.length).toBeGreaterThanOrEqual(0);
     expect(component.documents).toBeGreaterThanOrEqual(0);
     // expect(component.isWorker).toBe(true || false);
+  });
+
+  xit('should link to a document if clicked with proper permissions', () => {
+    // TODO: This test not currently working.
+    component.isOnRoster = true;
+    expect(component.checkDocPermission('1')).toBeTruthy();
+    component.isOnRoster = false;
+    expect(component.checkDocPermission('1')).toBeFalsy();
   });
 
   xit('should display a tooltip if the document is escalated', fakeAsync(() => {

@@ -18,6 +18,7 @@ import { EmailLinkType } from 'src/models';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+
   /** Whether the user entered invalid credentials. */
   invalidCredentials = false;
 

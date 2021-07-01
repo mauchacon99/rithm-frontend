@@ -1,1 +1,10 @@
-// styles here
+@import 'rithm-light-palettes', 'variables', 'functions';
+
+.circles {
+  margin: 5px 2px;
+  float: left;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
