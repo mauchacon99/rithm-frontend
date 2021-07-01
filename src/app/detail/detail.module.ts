@@ -27,7 +27,11 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
     MatButtonModule
   ],
   exports: [
-    SubHeaderComponent
+    SubHeaderComponent,
+    DocumentTemplateComponent,
+    ConnectedStationPaneComponent,
+    StationInfoHeaderComponent,
+    DocumentInfoHeaderComponent
   ]
 })
 export class DetailModule { }

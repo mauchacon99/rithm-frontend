@@ -1,0 +1,63 @@
+name: Test Deployments
+
+on:
+  push:
+    paths:
+      - "src/**"
+    branches:
+      - "test"
+
+jobs:
+
+  # Deploys the web app
+  web-app:
+    runs-on: [self-hosted, test]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling app
+      run: npm run build-test
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+    - name: Deploying app
+      run: Copy-Item ./dist/rithm/* D:/inetpub/testapp.rithm.tech -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name testapp
+
+  # TODO: deploy test coverage when folder on machine is set up
+
+  # Deploys the Karma test coverage site
+  # test-coverage:
+  #   runs-on: [self-hosted, test]
+  #   needs: web-app
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
+
+  #   - name: Installing dependencies
+  #     run: npm ci
+
+  #   - name: Generating test coverage
+  #     run: npm run test-ci
+
+  #   - name: Stopping IIS pool
+  #     run: c:\batch\elevate Stop-WebAppPool -Name testapp
+
+  #   - name: Deploying documentation site
+  #     run: Copy-Item ./coverage/rithm/* D:/inetpub/testapi.rithm.tech/karmacoverage -Recurse -Force
+
+  #   - name: Starting IIS pool
+  #     run: c:\batch\elevate Start-WebAppPool -Name testapp
