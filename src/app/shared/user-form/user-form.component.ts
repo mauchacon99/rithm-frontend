@@ -98,48 +98,4 @@ export class UserFormComponent implements OnInit {
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 
-  /**
-   * Attempts to create a new account with the provided form information.
-   */
-  createAccount(): void {
-    this.isLoading = true;
-    const formValues = this.signUpForm.value;
-    this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
-      .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.openValidateEmailModal();
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        const errorMessage: string = error.error.error;
-
-        if (errorMessage === 'This username has already been used.') {
-          this.popupService.alert({
-            title: 'Account Already Exists',
-            message: 'An account has already been created for this email address. Try signing into this account instead.'
-          });
-        } else {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
-          );
-        }
-      });
-  }
-
-  /**
-   * Open the alert to validate their email address.
-   */
-  openValidateEmailModal(): void {
-    const data: DialogData = {
-      title: 'Validate your email address',
-      message: 'Almost there! Please check your email for a link to validate your Rithm account.'
-    };
-
-    this.popupService.alert(data).then(() => {
-      this.router.navigate(['']);
-    });
-  }
-
 }
