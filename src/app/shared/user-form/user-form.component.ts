@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ControlContainer, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ControlContainer, FormBuilder, FormGroup,  Validators } from '@angular/forms';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -11,6 +11,9 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit {
+  /** Pass password validation to Parent Component. */
+  @Output() checkPasswordValidation = new EventEmitter<boolean>();
+
   /** Receive the FormGroup data from parent. */
   public signUpForm: FormGroup;
 
@@ -79,6 +82,7 @@ export class UserFormComponent implements OnInit {
     this.errorsToGet = errorsFieldToCheck;
     this.passReqVisible = !this.passReqVisible;
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
+    this.checkPasswordValidation.emit(this.showMatch);
   }
 
 }

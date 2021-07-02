@@ -53,23 +53,14 @@ export class AccountCreateComponent {
         '',
         [
           Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar()
+          this.onPasswordValidated
         ]
       ],
       confirmPassword: [
         '',
         [
           Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar(),
-          this.passwordRequirements.passwordsMatch()
+          this.onPasswordValidated
         ]
       ],
       agreeToTerms: [false, [Validators.requiredTrue]]
@@ -152,4 +143,16 @@ export class AccountCreateComponent {
     });
   }
 
+  /**
+   * Looking for match.
+   *
+   * @param match Is it a match.
+   * @returns Boolean that represents if validation is match.
+   */
+  onPasswordValidated(match: boolean): boolean {
+    if (match) {
+      return true;
+    }
+    return false;
+  }
 }

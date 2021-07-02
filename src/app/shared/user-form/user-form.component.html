@@ -1,5 +1,5 @@
-  <div [formGroup]="signUpForm">
-    <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible" [passReq]="signUpForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
+<div [formGroup]="signUpForm">
+  <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible" [passReq]="signUpForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
   <!-- First name -->
   <mat-form-field class="col-md-6 col-sm-12" appearance="outline">
     <mat-label>First name</mat-label>
@@ -25,4 +25,4 @@
     <mat-label>Confirm Password</mat-label>
     <input type="password" matInput placeholder="Confirm password" formControlName="confirmPassword" (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')" autocomplete="new-password">
   </mat-form-field>
-  </div>
+</div>
