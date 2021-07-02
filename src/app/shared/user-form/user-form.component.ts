@@ -1,13 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
-import { ErrorService } from 'src/app/core/error.service';
-import { UserService } from 'src/app/core/user.service';
+import { Component, OnInit } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
-import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { DialogData } from 'src/models';
 
 /**
  * Reusable form component that gets a user's first and last names, email, and password.
@@ -33,18 +26,8 @@ export class UserFormComponent implements OnInit {
   /** Helper class for password requirements. */
   private passwordRequirements: PasswordRequirements;
 
-  /** Show loading indicator while request is being made. */
-  isLoading = false;
-
-  /** Temp message for terms modal. */
-  modalMessage = ``;
-
   constructor(
-    private userService: UserService,
-    private errorService: ErrorService,
     private fb: FormBuilder,
-    private popupService: PopupService,
-    private router: Router,
     private controlContainer: ControlContainer
   ) {
     this.passwordRequirements = new PasswordRequirements();
