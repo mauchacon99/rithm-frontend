@@ -6,15 +6,20 @@ div.station {
   background: #fff;
   padding: 5px 10px;
   margin: 10px 10px;
+  display: block;
+  position: relative;
 
   svg {
+    position: absolute;
+
     &.left {
-      margin-left: 150px;
-      top: 0;
+      margin-left: 29px;
+      top: 50px;
     }
 
     &.right {
-      margin-right: 50px;
+      margin-left: -156px;
+      top: 50px;
     }
   }
 }
