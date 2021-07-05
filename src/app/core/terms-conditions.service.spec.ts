@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TermsAndConditionsService } from './termsAndConditions.service';
+import { TermsAndConditionsService } from './terms-conditions.service';
 
 describe('TermsAndConditionsService', () => {
   let service: TermsAndConditionsService;

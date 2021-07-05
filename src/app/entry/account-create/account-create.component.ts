@@ -10,8 +10,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DialogData } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { TermsConditionsComponentComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
-import { TermsAndConditionsService } from 'src/app/core/termsAndConditions.service';
+import { TermsConditionsComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { TermsAndConditionsService } from 'src/app/core/terms-conditions.service';
 import { Subject } from 'rxjs';
 
 /**
@@ -45,7 +45,7 @@ export class AccountCreateComponent implements OnInit {
   modalMessage = ``;
 
   /** Terms and conditions modal component. */
-  termsAndConditionsComponent = TermsConditionsComponentComponent;
+  termsAndConditionsComponent = TermsConditionsComponent;
 
   /** The subject data for terms and conditions data. */
   sub$ = new Subject();
