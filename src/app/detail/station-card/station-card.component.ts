@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 /**
  * Station card component.
  */
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./station-card.component.scss']
 })
 export class StationCardComponent {
-
+  /** Location of the panel. */
+  @Input() location!: 'left' | 'right';
 }
