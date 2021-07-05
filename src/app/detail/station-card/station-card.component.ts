@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component } from '@angular/core';
+/**
+ * Station card component.
+ */
 @Component({
   selector: 'app-station-card',
   templateUrl: './station-card.component.html',
   styleUrls: ['./station-card.component.scss']
 })
-export class StationCardComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class StationCardComponent {
 
 }
