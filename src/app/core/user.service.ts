@@ -223,7 +223,7 @@ export class UserService {
    * @returns An empty observable.
    */
   updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateNotificationSettings`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
       notificationSettings);
   }
 

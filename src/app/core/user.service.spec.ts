@@ -249,6 +249,14 @@ describe('UserService', () => {
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(notificationSettings);
+
+    req.flush(null);
+    httpTestingController.verify();
   });
 
 });
