@@ -1,6 +1,15 @@
 // Styles here
 div.station {
   width: 160px;
+
+  @media screen and (max-width: 1130px) {
+    width: 140px;
+  }
+
+  @media screen and (max-width: 1030px) {
+    width: 130px;
+  }
+
   height: 110px;
   border-radius: 4px;
   background: #fff;
@@ -13,12 +22,22 @@ div.station {
     position: absolute;
 
     &.left {
-      margin-left: 29px;
+      margin-left: 150px;
       top: 50px;
+
+      @media screen and (max-width: 1130px) {
+        margin-left: 130px;
+        top: 50px;
+      }
+
+      @media screen and (max-width: 1030px) {
+        margin-left: 120px;
+        top: 50px;
+      }
     }
 
     &.right {
-      margin-left: -156px;
+      margin-left: -35px;
       top: 50px;
     }
   }
