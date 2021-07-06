@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class TermsAndConditionsService {
+export class TermsConditionsService {
 
   /** The terms and conditions agreed or not. */
   private agreed$ = new BehaviorSubject<boolean>(false);

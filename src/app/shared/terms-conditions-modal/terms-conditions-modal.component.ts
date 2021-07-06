@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { TermsAndConditionsService } from 'src/app/core/terms-conditions.service';
+import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
 import { UserService } from 'src/app/core/user.service';
 import { DialogData } from 'src/models';
 
@@ -15,7 +15,7 @@ import { DialogData } from 'src/models';
   templateUrl: './terms-conditions-modal.component.html',
   styleUrls: ['./terms-conditions-modal.component.scss']
 })
-export class TermsConditionsComponent implements OnInit {
+export class TermsConditionsModalComponent implements OnInit {
 
   /** The title to be displayed on the dialog. */
   title: string;
@@ -35,7 +35,7 @@ export class TermsConditionsComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
     private userService: UserService,
     private errorService: ErrorService,
-    private termsAndConditionsService: TermsAndConditionsService) {
+    private termsAndConditionsService: TermsConditionsService) {
     this.title = data.title;
     this.message = data.message;
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';

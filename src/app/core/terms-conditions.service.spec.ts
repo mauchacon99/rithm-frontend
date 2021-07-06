@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TermsAndConditionsService } from './terms-conditions.service';
+import { TermsConditionsService } from './terms-conditions.service';
 
-describe('TermsAndConditionsService', () => {
-  let service: TermsAndConditionsService;
+describe('TermsConditionsService', () => {
+  let service: TermsConditionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TermsAndConditionsService);
+    service = TestBed.inject(TermsConditionsService);
   });
 
   it('should be created', () => {

@@ -5,11 +5,11 @@ import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { DialogData } from 'src/models';
 
-import { TermsConditionsComponent } from './terms-conditions-modal.component';
+import { TermsConditionsModalComponent } from './terms-conditions-modal.component';
 
-describe('TermsConditionsComponentComponent', () => {
-  let component: TermsConditionsComponent;
-  let fixture: ComponentFixture<TermsConditionsComponent>;
+describe('TermsConditionsModalComponent', () => {
+  let component: TermsConditionsModalComponent;
+  let fixture: ComponentFixture<TermsConditionsModalComponent>;
 
   const DIALOG_TEST_DATA: DialogData = {
     title: 'Terms and Conditions',
@@ -20,7 +20,7 @@ describe('TermsConditionsComponentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TermsConditionsComponent],
+      declarations: [TermsConditionsModalComponent],
       imports: [MatDialogModule],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -32,7 +32,7 @@ describe('TermsConditionsComponentComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TermsConditionsComponent);
+    fixture = TestBed.createComponent(TermsConditionsModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

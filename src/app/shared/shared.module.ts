@@ -21,7 +21,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
-import { TermsConditionsComponent } from './terms-conditions-modal/terms-conditions-modal.component';
+import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import { TermsConditionsComponent } from './terms-conditions-modal/terms-conditi
     RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent,
-    TermsConditionsComponent
+    TermsConditionsModalComponent
   ],
   imports: [
     CommonModule,

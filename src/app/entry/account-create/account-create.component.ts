@@ -10,8 +10,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DialogData } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { TermsConditionsComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
-import { TermsAndConditionsService } from 'src/app/core/terms-conditions.service';
+import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
 import { Subject } from 'rxjs';
 
 /**
@@ -45,7 +45,7 @@ export class AccountCreateComponent implements OnInit {
   modalMessage = ``;
 
   /** Terms and conditions modal component. */
-  termsAndConditionsComponent = TermsConditionsComponent;
+  termsAndConditionsComponent = TermsConditionsModalComponent;
 
   /** The subject data for terms and conditions data. */
   sub$ = new Subject();
@@ -57,7 +57,7 @@ export class AccountCreateComponent implements OnInit {
     private popupService: PopupService,
     private router: Router,
     private dialog: MatDialog,
-    private termsAndConditionsService: TermsAndConditionsService
+    private termsConditionsService: TermsConditionsService
   ) {
     this.passwordRequirements = new PasswordRequirements();
 
@@ -98,7 +98,7 @@ export class AccountCreateComponent implements OnInit {
    */
   ngOnInit(): void {
     // eslint-disable-next-line rxjs/no-ignored-error
-    this.termsAndConditionsService.currentAgreed$.pipe(takeUntil(this.sub$)).subscribe((agreed) => {
+    this.termsConditionsService.currentAgreed$.pipe(takeUntil(this.sub$)).subscribe((agreed) => {
       this.signUpForm.get('agreeToTerms')?.setValue(agreed);
     });
   }
