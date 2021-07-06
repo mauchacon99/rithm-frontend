@@ -2,12 +2,12 @@
   <div class="col-12 col-md-2">
     <h6>Station Information</h6>
   </div>
-  <div class="col-6 col-md-7">
+  <div [ngClass]="{'col-6': type === 'worker', 'col-md-7': type === 'worker'}">
     <div class="name">
       Untitled Station
     </div>
   </div>
-  <div class="col-6 col-md-3">
+  <div [ngClass]="{'col-6': type === 'worker', 'col-md-3': type === 'worker'}">
     <p class="overline">supervisor roster</p>
     <app-roster></app-roster>
   </div>
