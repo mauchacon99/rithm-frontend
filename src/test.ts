@@ -23,3 +23,7 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
+// TODO: Update when fixed: https://github.com/angular/angular/issues/36430
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+console.error = (data: any) => fail(data);
