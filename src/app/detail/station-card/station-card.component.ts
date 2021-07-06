@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ConnectedStationInfo } from 'src/models/connected-station-info';
 /**
  * Station card component.
  */
@@ -10,4 +11,7 @@ import { Component, Input } from '@angular/core';
 export class StationCardComponent {
   /** Location of the panel. */
   @Input() location!: 'left' | 'right';
+
+  /** The station information. */
+  @Input() station!: ConnectedStationInfo;
 }

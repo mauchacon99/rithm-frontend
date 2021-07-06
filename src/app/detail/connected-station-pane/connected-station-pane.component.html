@@ -1,4 +1,10 @@
-<aside [ngClass]="{'left': location === 'left', 'right': location === 'right'}">
-  <app-station-card [location]='location'></app-station-card>
-  <app-station-card [location]='location'></app-station-card>
+<aside class="left" *ngIf="location === 'left'">
+  <span *ngFor="let station of previousStations">
+    <app-station-card [station]="station" [location]='location'></app-station-card>
+  </span>
+</aside>
+<aside class="right" *ngIf="location === 'right'">
+  <span *ngFor="let station of forwardStations">
+    <app-station-card [station]="station" [location]='location'></app-station-card>
+  </span>
 </aside>
