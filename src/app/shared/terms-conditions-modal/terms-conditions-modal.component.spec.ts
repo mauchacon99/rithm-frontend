@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
@@ -21,7 +22,10 @@ describe('TermsConditionsModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TermsConditionsModalComponent],
-      imports: [MatDialogModule],
+      imports: [
+        MatDialogModule,
+        MatProgressSpinnerModule
+      ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
