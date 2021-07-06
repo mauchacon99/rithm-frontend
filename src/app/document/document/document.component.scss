@@ -1,1 +1,19 @@
-// styles here
+.sub-header {
+  height: 45px;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+}
+
+.page {
+  margin-top: 45px;
+
+  .container-fluid {
+    .row {
+      .bg-white {
+        overflow-y: scroll;
+        max-height: calc(100vh - 110px);
+      }
+    }
+  }
+}
