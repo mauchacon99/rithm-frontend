@@ -9,6 +9,7 @@ import { HistoryComponent } from './history/history.component';
 import { CommentComponent } from './comment/comment.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
+import { StationCardComponent } from './station-card/station-card.component';
 
 
 
@@ -20,7 +21,8 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
     HistoryComponent,
     CommentComponent,
     DocumentTemplateComponent,
-    SubHeaderComponent
+    SubHeaderComponent,
+    StationCardComponent
   ],
   imports: [
     CommonModule,
