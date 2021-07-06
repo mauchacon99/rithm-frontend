@@ -1,1 +1,17 @@
-// Styles here
+@import '../../../scss/helpers/variables';
+
+.page {
+  .container {
+    mat-card {
+      h3 {
+        color: $accent-blue;
+      }
+
+      form {
+        .buttons {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
