@@ -1,0 +1,18 @@
+<!-- Title -->
+<h4 id="title" class="text-center">{{title}}</h4>
+
+<!-- Message -->
+<p id="message">{{message}}</p>
+
+<!-- Loader -->
+<div [class.load-spin]="isLoading" *ngIf="isLoading" class="row no-gutters">
+  <div class="col-12 text-center">
+    <mat-spinner [diameter]="100" class="m-auto" color="accent"></mat-spinner>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div *ngIf="!isLoading" mat-dialog-actions class="row justify-content-end">
+  <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial (click)="isAgreed(false)">{{cancelButtonText}}</button>
+  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true" (click)="isAgreed(true)">{{okButtonText}}</button>
+</div>

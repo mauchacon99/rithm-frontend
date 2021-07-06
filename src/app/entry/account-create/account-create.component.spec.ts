@@ -13,6 +13,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -28,7 +29,8 @@ describe('AccountCreateComponent', () => {
         ReactiveFormsModule,
         MatCheckboxModule,
         MatInputModule,
-        MatCardModule
+        MatCardModule,
+        MatDialogModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

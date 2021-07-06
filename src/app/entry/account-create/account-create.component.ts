@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,11 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogData } from 'src/models';
+import { MatDialog } from '@angular/material/dialog';
+import { ComponentType } from '@angular/cdk/portal';
+import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
+import { Subject } from 'rxjs';
 
 /**
  * Component used for creating an account.
@@ -17,7 +22,7 @@ import { DialogData } from 'src/models';
   templateUrl: './account-create.component.html',
   styleUrls: ['./account-create.component.scss']
 })
-export class AccountCreateComponent {
+export class AccountCreateComponent implements OnInit {
   /** Sign up form. */
   signUpForm: FormGroup;
 
@@ -39,12 +44,20 @@ export class AccountCreateComponent {
   /** Temp message for terms modal. */
   modalMessage = ``;
 
+  /** Terms and conditions modal component. */
+  termsAndConditionsComponent = TermsConditionsModalComponent;
+
+  /** The subject data for terms and conditions data. */
+  sub$ = new Subject();
+
   constructor(
     private userService: UserService,
     private errorService: ErrorService,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private termsConditionsService: TermsConditionsService
   ) {
     this.passwordRequirements = new PasswordRequirements();
 
@@ -76,6 +89,17 @@ export class AccountCreateComponent {
         ]
       ],
       agreeToTerms: [false, [Validators.requiredTrue]]
+    });
+  }
+
+  /**
+   * Sets terms and conditions agreed or not.
+   *
+   */
+  ngOnInit(): void {
+    // eslint-disable-next-line rxjs/no-ignored-error
+    this.termsConditionsService.currentAgreed$.pipe(takeUntil(this.sub$)).subscribe((agreed) => {
+      this.signUpForm.get('agreeToTerms')?.setValue(agreed);
     });
   }
 
@@ -122,34 +146,20 @@ export class AccountCreateComponent {
 
   /**
    * Open the terms and conditions modal.
+   *
+   * @param component The component to open.
    */
-  openTerms(): void {
-    this.userService.getTermsConditions()
-      .pipe(first())
-      .subscribe((termsConditions) => {
-        if (termsConditions) {
-          this.modalMessage = termsConditions;
-          this.isLoading = false;
-
-          const data = {
-            title: 'Terms and Conditions',
-            message: this.modalMessage,
-            okButtonText: 'Agree',
-            width: '90%'
-          };
-
-          this.popupService.confirm(data).then((result) => {
-            this.signUpForm.get('agreeToTerms')?.setValue(result);
-          });
-        }
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
+  openTerms(component: ComponentType<unknown>): void {
+    this.dialog.open(component, {
+      width: '90%',
+      height: '76%',
+      data: {
+        title: 'Terms and Conditions',
+        message: '',
+        okButtonText: 'Agree',
+        width: '90%'
+      }
+    });
   }
 
   /**
