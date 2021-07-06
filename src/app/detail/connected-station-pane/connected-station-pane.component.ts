@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ConnectedStationInfo, ForwardPreviousStationsDocument } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs/operators';
@@ -32,6 +32,9 @@ export class ConnectedStationPaneComponent implements OnInit {
 
   /** Id of a station. */
   stationId = '';
+
+  /** Location of the panel. */
+  @Input() location!: 'left' | 'right';
 
   /**
    * Get forward and previous stations for a specific document.
