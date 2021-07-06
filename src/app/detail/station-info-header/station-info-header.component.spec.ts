@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { RosterComponent } from 'src/app/shared/roster/roster.component';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
 
@@ -8,7 +10,10 @@ describe('StationInfoHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationInfoHeaderComponent ]
+      declarations: [
+        StationInfoHeaderComponent,
+        MockComponent(RosterComponent)
+      ]
     })
     .compileComponents();
   });
