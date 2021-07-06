@@ -1,16 +1,20 @@
 section.row {
-  align-items: center;
-  justify-content: center;
+  // align-items: center;
+  // justify-content: center;
   padding: 10px 0;
 
   div {
-    div.title {
-      float: left;
+    h6 {
       padding: 0 5px;
+
+      @media screen and (max-width: 767px) {
+        text-align: center;
+        padding-bottom: 10px;
+      }
     }
 
     div.name {
-      float: left;
+      // float: left;
       padding: 5px 10px;
     }
   }
