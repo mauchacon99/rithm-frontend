@@ -1,1 +1,23 @@
-// styles here
+.sub-header {
+  height: 45px;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+}
+
+.page {
+  margin-top: 45px;
+
+  @media screen and (max-width: 991px) {
+    min-height: calc(100vh - 110px);
+  }
+
+  .container-fluid {
+    .row {
+      .bg-white {
+        overflow-y: scroll;
+        height: calc(100vh - 110px);
+      }
+    }
+  }
+}
