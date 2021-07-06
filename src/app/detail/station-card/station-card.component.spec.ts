@@ -16,6 +16,11 @@ describe('StationCardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationCardComponent);
     component = fixture.componentInstance;
+    component.station = {
+      stationName: 'New Station',
+      totalDocuments: 5,
+      isGenerator: true
+    };
     fixture.detectChanges();
   });
 
