@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+
 import { StationInfoHeaderComponent } from './station-info-header/station-info-header.component';
 import { DocumentInfoHeaderComponent } from './document-info-header/document-info-header.component';
 import { ConnectedStationPaneComponent } from './connected-station-pane/connected-station-pane.component';
@@ -21,7 +23,8 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
     SubHeaderComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatButtonModule
   ],
   exports: [
     SubHeaderComponent,
