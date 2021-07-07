@@ -10,6 +10,7 @@ import { CommentComponent } from './comment/comment.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { StationCardComponent } from './station-card/station-card.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -26,7 +27,8 @@ import { StationCardComponent } from './station-card/station-card.component';
   ],
   imports: [
     CommonModule,
-    MatButtonModule
+    MatButtonModule,
+    SharedModule
   ],
   exports: [
     SubHeaderComponent,

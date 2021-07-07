@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Reusable component for the station information header.
@@ -9,5 +9,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./station-info-header.component.scss']
 })
 export class StationInfoHeaderComponent {
+  /** Type of user looking at a document. */
+  @Input() type!: 'admin' | 'super' | 'worker';
+
+  constructor() {
+    this.type = 'worker';
+  }
 
 }
