@@ -48,7 +48,7 @@
         </div>
         <!-- Last updated -->
         <div class="col-2 d-none d-lg-block">
-          {{ getElapsedTime(document.lastUpdated) }}
+          {{ ((getElapsedTime(document.lastUpdated) === 'Yesterday') || (getElapsedTime(document.lastUpdated) === 'Unknown')) ? (getElapsedTime(document.lastUpdated)) : getElapsedTime(document.lastUpdated)  + ' ago'}}
         </div>
       </div>
     </span>
