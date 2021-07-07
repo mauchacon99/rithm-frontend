@@ -70,7 +70,7 @@ export class UtcTimeConversion {
 
     //if elapsed time is greater than a day.
     if (elapsedTime < 1000 * 60 * 60 * 24 * 2) {
-      return '1 day';
+      return 'Yesterday';
     }
     return `${Math.floor(elapsedTime / (1000 * 60 * 60 * 24))} days`;
   }
