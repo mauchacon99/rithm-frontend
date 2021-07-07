@@ -21,12 +21,6 @@ export class AccountCreateComponent {
   /** Sign up form. */
   signUpForm: FormGroup;
 
-  /** Show passwords match validation in child component. */
-  showMatch = false;
-
-  /** What errors to get from validator. */
-  errorsToGet = '';
-
   /** Helper class for password requirements. */
   private passwordRequirements: PasswordRequirements;
 
@@ -46,23 +40,34 @@ export class AccountCreateComponent {
     this.passwordRequirements = new PasswordRequirements();
 
     this.signUpForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          this.onPasswordValidated
-        ]
-      ],
-      confirmPassword: [
-        '',
-        [
-          Validators.required,
-          this.onPasswordValidated
-        ]
-      ],
+      userForm: this.fb.group({
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            this.passwordRequirements.isGreaterThanEightChars(),
+            this.passwordRequirements.hasOneLowerCaseChar(),
+            this.passwordRequirements.hasOneUpperCaseChar(),
+            this.passwordRequirements.hasOneDigitChar(),
+            this.passwordRequirements.hasOneSpecialChar()
+          ]
+        ],
+        confirmPassword: [
+          '',
+          [
+            Validators.required,
+            this.passwordRequirements.isGreaterThanEightChars(),
+            this.passwordRequirements.hasOneLowerCaseChar(),
+            this.passwordRequirements.hasOneUpperCaseChar(),
+            this.passwordRequirements.hasOneDigitChar(),
+            this.passwordRequirements.hasOneSpecialChar(),
+            this.passwordRequirements.passwordsMatch()
+          ]
+        ],
+      }),
       agreeToTerms: [false, [Validators.requiredTrue]]
     });
   }
@@ -72,7 +77,7 @@ export class AccountCreateComponent {
    */
   createAccount(): void {
     this.isLoading = true;
-    const formValues = this.signUpForm.value;
+    const formValues = this.signUpForm.value.userForm;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
       .subscribe(() => {
@@ -144,15 +149,11 @@ export class AccountCreateComponent {
   }
 
   /**
-   * Looking for match.
+   * Formgroup for userForm.
    *
-   * @param match Is it a match.
-   * @returns Boolean that represents if validation is match.
+   * @returns SignUpForm property userForm.
    */
-  onPasswordValidated(match: boolean): boolean {
-    if (match) {
-      return true;
-    }
-    return false;
+  get userForm(): FormGroup {
+    return this.signUpForm.get('userForm') as FormGroup;
   }
 }

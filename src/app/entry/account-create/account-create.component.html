@@ -30,7 +30,7 @@
                 </div>
               </div>
               <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
-                <app-user-form (checkPasswordValidation)="onPasswordValidated($event)" [formGroup]="signUpForm"></app-user-form>
+                <app-user-form [userForm]="userForm"></app-user-form>
                 <!-- Terms and conditions -->
                 <div class="col-12">
                   <mat-checkbox formControlName="agreeToTerms">
