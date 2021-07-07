@@ -132,9 +132,8 @@ export class UserService {
 
 /**
  * Deletes a given user in the system.
- * THIS IS ONLY FOR TESTING, SHOULD NOT BE MERGED INTO DEV.
  *
- * @param email The new user's email address.
+ * @param email The user's email address.
  * @returns An empty observable.
  */
   delete(email: string): Observable<unknown> {

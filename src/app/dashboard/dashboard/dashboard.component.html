@@ -1,16 +1,4 @@
 <div class="page textured-bg">
-  <!-- ONLY FOR TESTING SHOULD NOT BE MERGED INTO DEV -->
-  <form [formGroup]="deleteForm" (ngSubmit)="deleteUser()" class="row">
-    <!-- Email -->
-      <mat-form-field class="col-12" appearance="outline">
-        <mat-label>Email</mat-label>
-        <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-      </mat-form-field>
-    <!-- Delete button -->
-    <div class="col-12">
-      <button type="submit" mat-raised-button color="accent">DELETE</button>
-    </div>
-  </form>
   <div class="container">
     <app-header></app-header>
     <div class="row">

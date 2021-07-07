@@ -23,6 +23,7 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
+import { UserRemovalComponent } from './user-removal/user-removal.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-co
     StationDocumentsModalComponent,
     UserAvatarComponent,
     UserFormComponent,
-    TermsConditionsModalComponent
+    TermsConditionsModalComponent,
+    UserRemovalComponent
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-co
     UserAvatarComponent,
     PaginationComponent,
     UserFormComponent,
+    UserRemovalComponent,
     RosterComponent
   ]
 })
