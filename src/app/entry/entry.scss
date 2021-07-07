@@ -3,6 +3,7 @@
 .page {
   @include gradient($secondary-gray, $secondary-blue);
 
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

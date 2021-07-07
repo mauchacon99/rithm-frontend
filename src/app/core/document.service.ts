@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
-import { Document, StationDocumentsResponse, ForwardPreviousStationsDocument, ConnectedStationInfo } from 'src/models';
+import {
+  Document, StationDocumentsResponse, ForwardPreviousStationsDocument, ConnectedStationInfo, DocumentStationInformation
+} from 'src/models';
 
 // const MICROSERVICE_PATH = '/documentservice';
 
@@ -225,6 +227,29 @@ export class DocumentService {
     const data: ForwardPreviousStationsDocument = {
       previousStations: previousStations,
       followingStations: followingStations
+    };
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of forward and previous stations for a specific document.
+   *
+   * @param documentId The Specific id of document.
+   * @param stationId The Specific id of station.
+   * @param mode The Specific user type supervisor or worker or admin.
+   * @returns A list of forward and previous stations for a specific document.
+   */
+  getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
+    const data: DocumentStationInformation = {
+      documentName: 'Requirement',
+      documentPriority: 1,
+      currentAssignedUser: 'WU',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationName: 'Development',
+      stationPriority: 2,
+      supervisorRoster: ['MP', 'RU', 'HP'],
+      workerRoster: []
     };
     return of(data).pipe(delay(1000));
   }
