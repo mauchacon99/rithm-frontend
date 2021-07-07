@@ -13,7 +13,7 @@ export class StationInfoHeaderComponent {
   @Input() type!: 'admin' | 'super' | 'worker';
 
   constructor() {
-    this.type = 'worker';
+    this.type = 'super';
   }
 
 }
