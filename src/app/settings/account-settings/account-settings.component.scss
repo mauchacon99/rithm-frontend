@@ -1,6 +1,12 @@
 @import '../../../scss/helpers/variables';
 
 .page {
+  height: calc(100vh - 65px);
+
+  @media screen and (max-width: 575px) {
+    padding-bottom: 0;
+  }
+
   .container {
     mat-card {
       @media screen and (max-width: 575px) {
