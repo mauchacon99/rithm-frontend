@@ -44,7 +44,7 @@
     "@angular-eslint/template-parser": "^12.2.0",
     "@angular/cli": "^12.1.1",
     "@angular/compiler-cli": "^12.1.0",
-    "@compodoc/compodoc": "^1.1.11",
+    "@compodoc/compodoc": "^1.1.12",
     "@strut-software/eslint-config": "^1.0.7",
     "@strut-software/stylelint-config": "^1.0.8",
     "@types/jasmine": "^3.7.8",
