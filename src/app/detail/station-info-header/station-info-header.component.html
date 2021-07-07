@@ -12,7 +12,11 @@
       Untitled Station
     </div>
   </div>
-  <div [ngClass]="{'d-none': type === 'worker' || 'super'}" class="d-block col-md-2">
+  <div class="col-md-2"
+  [ngClass]="{
+    'd-none': type === 'worker' || 'super',
+    'd-block': type === 'admin'
+  }">
     <button mat-stroked-button color="accent">Edit Station</button>
   </div>
   <div class="col-6 col-md-2">
