@@ -11,13 +11,15 @@
     <input type="text" matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
   </mat-form-field>
   <!-- Email -->
-  <mat-form-field class="col-12" appearance="outline">
-    <mat-label>Email</mat-label>
-    <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-  </mat-form-field>
+  <div *ngIf="accountCreateForm">
+    <mat-form-field class="col-12" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
+    </mat-form-field>
+  </div>
   <!-- Password -->
   <mat-form-field class="col-12" appearance="outline">
-    <mat-label>Password</mat-label>
+    <mat-label>{{togglePassLabel(accountCreateForm)}}Password</mat-label>
     <input type="password" matInput placeholder="Password" formControlName="password" (focus)="togglePassReq('password')" (focusout)="togglePassReq('')" autocomplete="new-password">
   </mat-form-field>
   <!-- Confirm Password -->

@@ -13,6 +13,9 @@ export class UserFormComponent {
   /** Receive the FormGroup data from parent. */
   @Input() userForm!: FormGroup;
 
+  /** Is this form part of account creation? */
+  @Input() accountCreateForm!: boolean;
+
   /** Are password requirements visible. */
   passReqVisible = false;
 
@@ -33,4 +36,16 @@ export class UserFormComponent {
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 
+  /**
+   * Toggle password label.
+   *
+   * @param isCreate An input determining whether this form will be used in account creation.
+   * @returns A string.
+   */
+  togglePassLabel(isCreate: boolean): string {
+    if (!isCreate) {
+      return 'New ';
+    }
+    return '';
+  }
 }
