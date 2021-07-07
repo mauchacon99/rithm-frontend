@@ -53,4 +53,14 @@ describe('DocumentService', () => {
       });
   });
 
+  it('should return document and station information', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const documentId = 'E204F369-386F-4E41';
+    const mode = 'worker';
+    service.getDocumentInfo(stationId, documentId, mode)
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+  });
+
 });
