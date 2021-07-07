@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
 import { RosterComponent } from './roster.component';
 
@@ -9,7 +11,10 @@ describe('RosterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RosterComponent ],
+      declarations: [
+        RosterComponent,
+        MockComponent(UserAvatarComponent)
+      ],
       imports: [
         MatDialogModule
       ]

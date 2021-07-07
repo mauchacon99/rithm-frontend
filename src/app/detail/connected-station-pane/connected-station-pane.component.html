@@ -1,1 +1,10 @@
-<p>connected-station-pane works!</p>
+<aside class="left" *ngIf="location === 'left'">
+  <span *ngFor="let station of previousStations">
+    <app-station-card [station]="station" [location]='location'></app-station-card>
+  </span>
+</aside>
+<aside class="right" *ngIf="location === 'right'">
+  <span *ngFor="let station of forwardStations">
+    <app-station-card [station]="station" [location]='location'></app-station-card>
+  </span>
+</aside>

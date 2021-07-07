@@ -22,6 +22,7 @@ import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { UserFormComponent } from './user-form/user-form.component';
     RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent,
-    UserFormComponent
+    UserFormComponent,
+    TermsConditionsModalComponent
   ],
   imports: [
     CommonModule,

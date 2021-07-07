@@ -48,7 +48,10 @@ You can find the deployed web app at the following locations. Each is using a di
 Runs the web app locally on your system.
 
 `npm run build`\
-Builds the app to the `/dist` folder without running the project.
+Builds the app to the `/dist` folder without running the project using the dev environment.
+
+`npm run build-test`\
+Builds the app to the `/dist` folder without running the project using the test environment.
 
 `npm run test`\
 Serves the test summary page and runs all of the defined tests in the project.

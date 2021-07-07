@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MockComponent } from 'ng-mocks';
-import { RosterComponent } from 'src/app/shared/roster/roster.component';
 
 import { StationCardComponent } from './station-card.component';
 
@@ -12,14 +8,7 @@ describe('StationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        StationCardComponent,
-        MockComponent(RosterComponent)
-      ],
-      imports: [
-        MatDialogModule,
-        MatCardModule
-      ]
+      declarations: [ StationCardComponent ]
     })
     .compileComponents();
   });
@@ -28,13 +17,9 @@ describe('StationCardComponent', () => {
     fixture = TestBed.createComponent(StationCardComponent);
     component = fixture.componentInstance;
     component.station = {
-      rithmId: '2',
-      numberOfDocuments: 2,
-      stationName: 'station-2',
-      numberOfWorkers: 6,
-      workerInitials: [
-        'XR', 'PD'
-      ]
+      stationName: 'New Station',
+      totalDocuments: 5,
+      isGenerator: true
     };
     fixture.detectChanges();
   });

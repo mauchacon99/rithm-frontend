@@ -197,7 +197,7 @@ export class UserService {
    * @returns An empty observable.
    */
   updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateUserAccount`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`,
       changedAccountInfo);
   }
 
@@ -241,7 +241,7 @@ export class UserService {
    * @returns An empty observable.
    */
   updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/updateNotificationSettings`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
       notificationSettings);
   }
 
