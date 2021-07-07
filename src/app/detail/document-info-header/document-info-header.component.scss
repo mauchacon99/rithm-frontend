@@ -1,1 +1,22 @@
-// Styles here
+section.row {
+  padding: 10px 0;
+
+  div {
+    h6 {
+      padding: 0 5px;
+
+      @media screen and (max-width: 767px) {
+        text-align: center;
+        padding-bottom: 10px;
+      }
+    }
+
+    form {
+      width: 100%;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}
