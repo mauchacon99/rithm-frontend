@@ -19,3 +19,4 @@ export * from './connected-station-info';
 export * from './forward-previous-stations-document';
 export * from './user-account-info';
 export * from './notification-settings';
+export * from './document-station-info';
