@@ -1,9 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ConnectedStationInfo, ForwardPreviousStationsDocument } from 'src/models';
-import { DocumentService } from 'src/app/core/document.service';
-import { first } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorService } from 'src/app/core/error.service';
+import { Component, Input } from '@angular/core';
+import { ConnectedStationInfo } from 'src/models';
 
 /**
  * Reusable component for the pane showing the upstream/downstream stations.
@@ -13,46 +9,15 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './connected-station-pane.component.html',
   styleUrls: ['./connected-station-pane.component.scss']
 })
-export class ConnectedStationPaneComponent implements OnInit {
+export class ConnectedStationPaneComponent {
 
-  constructor(private documentService: DocumentService,
-    private errorService: ErrorService) { }
+  /** Location of the panel relative to the screen. */
+  @Input() location!: 'left' | 'right';
 
-  /** List of forward stations. */
-  forwardStations = Array<ConnectedStationInfo>();
-
-  /** List of previous stations. */
-  previousStations = Array<ConnectedStationInfo>();
+  /** The list of stations to display in the pane. */
+  @Input() stations: ConnectedStationInfo[] = [];
 
   /** Whether the header data is loading. */
   isLoading = true;
-
-  /** Id of a document. */
-  documentId = '';
-
-  /** Id of a station. */
-  stationId = '';
-
-  /** Location of the panel. */
-  @Input() location!: 'left' | 'right';
-
-  /**
-   * Get forward and previous stations for a specific document.
-   */
-  ngOnInit(): void {
-    this.documentService.getConnectedStationInfo(this.documentId, this.stationId)
-      .pipe(first())
-      .subscribe((connectedStations) => {
-        this.forwardStations = connectedStations.followingStations;
-        this.previousStations = connectedStations.previousStations;
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
-  }
 
 }
