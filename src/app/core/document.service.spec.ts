@@ -1,9 +1,10 @@
-/* eslint-disable rxjs/no-ignored-error */
+ /* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 import { ForwardPreviousStationsDocument } from 'src/models';
 import { DocumentService } from './document.service';
+import { DocumentStationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -69,10 +70,31 @@ describe('DocumentService', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
     const mode = 'worker';
+    const expectedResponse: DocumentStationInformation = {
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      currentAssignedUser: 'NS',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationName: 'Development',
+      stationPriority: 2,
+      supervisorRoster: ['SA', 'RI', 'NI'],
+      workerRoster: []
+    };
+
     service.getDocumentInfo(stationId, documentId, mode)
       .subscribe((response) => {
         expect(response).toBeDefined();
       });
+
+    // outgoing request
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo?documentId=${documentId}&stationId=${stationId}&mode=${mode}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });

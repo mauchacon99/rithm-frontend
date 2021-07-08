@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DocumentStationInformation } from 'src/models';
 
 /**
  * Reusable component for the station information header.
@@ -11,6 +12,9 @@ import { Component, Input } from '@angular/core';
 export class StationInfoHeaderComponent {
   /** Type of user looking at a document. */
   @Input() type!: 'admin' | 'super' | 'worker';
+
+  /** Document information object passed from parent. */
+  @Input() stationInformation!: DocumentStationInformation;
 
   constructor() {
     this.type = 'worker';

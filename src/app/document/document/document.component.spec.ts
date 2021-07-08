@@ -7,9 +7,9 @@ import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header
 import { DocumentTemplateComponent } from 'src/app/detail/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
-
 import { DocumentComponent } from './document.component';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -24,6 +24,9 @@ describe('DocumentComponent', () => {
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
         MockComponent(DocumentTemplateComponent)
+      ],
+      imports: [
+        HttpClientTestingModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -41,5 +44,15 @@ describe('DocumentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  beforeEach(async () => {
+    component.ngOnInit();
+
+    await fixture.whenStable();
+  });
+
+  it('should retrieve document data', () => {
+    expect(component.documentInformation).toBeDefined();
   });
 });

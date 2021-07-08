@@ -201,18 +201,9 @@ export class DocumentService {
    * @returns A list of forward and previous stations for a specific document.
    */
   getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
-    const data: DocumentStationInformation = {
-      documentName: 'Requirement',
-      documentPriority: 1,
-      currentAssignedUser: 'WU',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationName: 'Development',
-      stationPriority: 2,
-      supervisorRoster: ['MP', 'RU', 'HP'],
-      workerRoster: []
-    };
-    return of(data).pipe(delay(1000));
+    return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo`,
+      { params: { documentId, stationId, mode }}
+    );
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DocumentStationInformation } from 'src/models';
 
 /**
  * Reusable component for the document information header.
@@ -12,6 +13,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class DocumentInfoHeaderComponent {
   /** Type of user looking at a document. */
   @Input() userType!: 'admin' | 'super' | 'worker';
+
+  /** Document information object passed from parent. */
+  @Input() documentInformation!: DocumentStationInformation;
 
   /** Document name form. */
   documentNameForm: FormGroup;

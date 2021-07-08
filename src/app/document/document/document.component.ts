@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 
 /**
@@ -19,6 +21,12 @@ export class DocumentComponent implements OnInit {
 
   /** The id of the station that this document is in. */
   private stationId: string;
+
+  /** Document information. */
+  documentInformation!: DocumentStationInformation;
+
+  /** Whether the stations are being loaded. */
+  documentLoading = false;
 
   /** List of forward stations. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -39,10 +47,11 @@ export class DocumentComponent implements OnInit {
   }
 
   /**
-   * Get forward and previous stations for a specific document.
+   * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
     this.getConnectedStations();
+    this.getDocumentStationData();
   }
 
   /**
@@ -58,6 +67,27 @@ export class DocumentComponent implements OnInit {
       this.connectedStationsLoading = false;
     }, (error) => {
       this.connectedStationsLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error,
+        true
+      );
+    });
+  }
+
+  /**
+   * Get data about the document and station the document is in.
+   */
+  private getDocumentStationData(): void {
+    this.documentService.getDocumentInfo(this.documentId, this.stationId, 'Worker')
+    .pipe(first())
+    .subscribe((document) => {
+      if (document) {
+        this.documentInformation = document;
+      }
+      this.documentLoading = false;
+    }, (error: HttpErrorResponse) => {
+      this.documentLoading = false;
       this.errorService.displayError(
         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
         error,
