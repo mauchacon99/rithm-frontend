@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -19,6 +19,11 @@ describe('TermsConditionsModalComponent', () => {
     width: '90%'
   };
 
+  const dialogMock = {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    close: () => { }
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TermsConditionsModalComponent],
@@ -28,6 +33,7 @@ describe('TermsConditionsModalComponent', () => {
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
+        { provide: MatDialogRef, useValue: dialogMock },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: PopupService, useClass: MockPopupService }
       ]
@@ -43,5 +49,9 @@ describe('TermsConditionsModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display terms and conditions text', () => {
+    expect(component.message).toBeDefined();
   });
 });
