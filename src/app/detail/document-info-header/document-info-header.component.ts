@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Reusable component for the document information header.
@@ -9,5 +10,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./document-info-header.component.scss']
 })
 export class DocumentInfoHeaderComponent {
+  /** Type of user looking at a document. */
+  @Input() userType!: 'admin' | 'super' | 'worker';
 
+  /** Document name form. */
+  documentNameForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.userType = 'worker';
+    this.documentNameForm = this.fb.group({
+      name: ['']
+    });
+  }
 }
