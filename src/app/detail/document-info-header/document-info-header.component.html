@@ -3,11 +3,11 @@
     <h6>Document Information</h6>
   </div>
   <div class="col-12 col-md-10">
-    <form>
+    <form [formGroup]="documentNameForm">
       <mat-form-field appearance="outline">
         <mat-label>Document name</mat-label><!-- TODO: Display current document name -->
         <!-- TODO: Disable input if Station template designates it as not editable by worker -->
-        <input id="name" type="text" matInput placeholder="Untitled document">
+        <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
       </mat-form-field>
     </form>
   </div>
