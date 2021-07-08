@@ -1,10 +1,16 @@
 /* eslint-disable rxjs/no-ignored-error */
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpParams } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { environment } from 'src/environments/environment';
+import { ForwardPreviousStationsDocument } from 'src/models';
 import { DocumentService } from './document.service';
+
+const MICROSERVICE_PATH = '/documentservice/api/document';
 
 describe('DocumentService', () => {
   let service: DocumentService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,6 +19,7 @@ describe('DocumentService', () => {
       ]
     });
     service = TestBed.inject(DocumentService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
 
@@ -46,11 +53,24 @@ describe('DocumentService', () => {
   it('should return forward and previous stations for a specific document', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
-    service.getConnectedStationInfo(stationId, documentId)
+    const expectedResponse: ForwardPreviousStationsDocument = {
+      previousStations: [],
+      followingStations: []
+    };
+
+    service.getConnectedStationInfo(documentId, stationId)
       .subscribe((response) => {
-        expect(response.followingStations.length).toBeGreaterThanOrEqual(0);
-        expect(response.previousStations.length).toBeGreaterThanOrEqual(0);
+        expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/connectedstationinfo?documentId=${documentId}&stationId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return document and station information', () => {
