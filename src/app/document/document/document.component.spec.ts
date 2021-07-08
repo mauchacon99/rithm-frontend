@@ -10,7 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { DocumentComponent } from './document.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatCardModule } from '@angular/material/card';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks';
 
@@ -31,8 +30,7 @@ describe('DocumentComponent', () => {
       imports: [
         HttpClientModule,
         MatDialogModule,
-        MatSnackBarModule,
-        MatCardModule
+        MatSnackBarModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService }

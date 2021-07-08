@@ -18,13 +18,6 @@
         overflow-y: scroll;
         height: calc(100vh - 110px);
       }
-
-      &.load-spin {
-        display: flex;
-        align-content: center;
-        justify-content: center;
-        flex-direction: column;
-      }
     }
   }
 }
