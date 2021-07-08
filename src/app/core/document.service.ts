@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-// import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
-import {
-  Document, StationDocumentsResponse, ForwardPreviousStationsDocument, ConnectedStationInfo, DocumentStationInformation
-} from 'src/models';
+import { Document, StationDocumentsResponse, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
+import { environment } from 'src/environments/environment';
 
-// const MICROSERVICE_PATH = '/documentservice';
+const MICROSERVICE_PATH = '/documentservice/api/document';
 
 /**
  * Service for all document behavior and business logic.
@@ -188,33 +186,10 @@ export class DocumentService {
    * @returns A list of forward and previous stations for a specific document.
    */
   getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
-    const previousStations: Array<ConnectedStationInfo> = [{
-      stationName: 'Development',
-      totalDocuments: 5,
-      isGenerator: true
-    }, {
-      stationName: 'Requirement',
-      totalDocuments: 8,
-      isGenerator: false
-    }];
-    const followingStations: Array<ConnectedStationInfo> = [{
-      stationName: 'Station-1',
-      totalDocuments: 2,
-      isGenerator: true
-    }, {
-      stationName: 'Station-2',
-      totalDocuments: 0,
-      isGenerator: false
-    }, {
-      stationName: 'Station-3',
-      totalDocuments: 3,
-      isGenerator: true
-    }];
-    const data: ForwardPreviousStationsDocument = {
-      previousStations: previousStations,
-      followingStations: followingStations
-    };
-    return of(data).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('documentId', documentId)
+      .set('stationId', stationId);
+    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connectedstationinfo`, { params });
   }
 
   /**

@@ -31,7 +31,6 @@ describe('ConnectedStationPaneComponent', () => {
   });
 
   it('should return forward and previous stations for a specific document', () => {
-    expect(component.forwardStations.length).toBeGreaterThanOrEqual(0);
-    expect(component.previousStations.length).toBeGreaterThanOrEqual(0);
+    expect(component.stations.length).toBeGreaterThanOrEqual(0);
   });
 });
