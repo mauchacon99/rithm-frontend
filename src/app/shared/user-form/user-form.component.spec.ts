@@ -1,5 +1,5 @@
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
@@ -8,7 +8,7 @@ import { UserFormComponent } from './user-form.component';
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
-  const formBuilder: FormBuilder = new FormBuilder();
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,10 +22,9 @@ describe('UserFormComponent', () => {
     .compileComponents();
   });
 
-  beforeEach(inject([FormBuilder], (fb: FormBuilder) => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(UserFormComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     const passwordRequirements = new PasswordRequirements();
     component.userForm = formBuilder.group({
       firstName: ['', [Validators.required]],
@@ -55,30 +54,11 @@ describe('UserFormComponent', () => {
         ]
       ],
     });
-  }));
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should check the validation of the password field', () => {
-    const password = component.userForm.controls['password'];
-    expect(password.valid).toBeFalsy();
-
-    password.setValue('');
-    expect(password.hasError('required')).toBeTruthy();
-
-    password.setValue('1234567');
-    expect(password.hasError('missingPassLength')).toBeTruthy();
-    expect(password.hasError('missingLowerChar')).toBeTruthy();
-    expect(password.hasError('missingUpperChar')).toBeTruthy();
-    expect(password.hasError('missingSpecialChar')).toBeTruthy();
-
-    password.setValue('abcde');
-    expect(password.hasError('missingPassLength')).toBeTruthy();
-    expect(password.hasError('missingUpperChar')).toBeTruthy();
-    expect(password.hasError('missingSpecialChar')).toBeTruthy();
-    // expect(password.hasError('mismatchingPasswords')).toBeTruthy();
   });
 
   it('should check the validation of the first name field', () => {
@@ -108,6 +88,26 @@ describe('UserFormComponent', () => {
     expect(email.hasError('email')).toBeTruthy();
   });
 
+  it('should check the validation of the password field', () => {
+    const password = component.userForm.controls['password'];
+    expect(password.valid).toBeFalsy();
+
+    password.setValue('');
+    expect(password.hasError('required')).toBeTruthy();
+
+    password.setValue('1234567');
+    expect(password.hasError('missingPassLength')).toBeTruthy();
+    expect(password.hasError('missingLowerChar')).toBeTruthy();
+    expect(password.hasError('missingUpperChar')).toBeTruthy();
+    expect(password.hasError('missingSpecialChar')).toBeTruthy();
+
+    password.setValue('abcde');
+    expect(password.hasError('missingPassLength')).toBeTruthy();
+    expect(password.hasError('missingUpperChar')).toBeTruthy();
+    expect(password.hasError('missingSpecialChar')).toBeTruthy();
+    // expect(password.hasError('mismatchingPasswords')).toBeTruthy();
+  });
+
   it('should check the validation of the confirm password field', () => {
     const confirmPassword = component.userForm.controls['confirmPassword'];
     expect(confirmPassword.valid).toBeFalsy();
@@ -128,8 +128,8 @@ describe('UserFormComponent', () => {
   });
 
   xit('should check if the password and confirm password fields are matching', () => {
-    const password = component.signUpForm.controls['password'];
-    const confirmPassword = component.signUpForm.controls['confirmPassword'];
+    const password = component.userForm.controls['password'];
+    const confirmPassword = component.userForm.controls['confirmPassword'];
 
     password.setValue('Password!2');
     confirmPassword.setValue('Password!3');
