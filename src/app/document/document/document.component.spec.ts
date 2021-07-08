@@ -8,10 +8,9 @@ import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.compone
 import { HttpClientModule } from '@angular/common/http';
 
 import { DocumentComponent } from './document.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -28,12 +27,11 @@ describe('DocumentComponent', () => {
         MockComponent(DocumentTemplateComponent)
       ],
       imports: [
-        HttpClientModule,
-        MatDialogModule,
-        MatSnackBarModule
+        HttpClientModule
       ],
       providers: [
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
     .compileComponents();

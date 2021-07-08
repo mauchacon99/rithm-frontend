@@ -14,7 +14,7 @@ export class StationInfoHeaderComponent {
   @Input() type!: 'admin' | 'super' | 'worker';
 
   /** Document information object passed from parent. */
-  @Input() documentInformation!: DocumentStationInformation;
+  @Input() stationInformation!: DocumentStationInformation;
 
   constructor() {
     this.type = 'worker';
