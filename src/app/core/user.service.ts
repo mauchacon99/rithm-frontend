@@ -189,31 +189,7 @@ export class UserService {
    * @returns A terms and conditions observable.
    */
   getTermsConditions(): Observable<string> {
-    const data = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur non ipsum a porta.
-    Aenean condimentum sem id lobortis ornare.Fusce venenatis efficitur pulvinar. Vivamus dignissim erat odio,
-    ac interdum mi viverra nec. Nunc rutrum dolor a augue convallis, ac iaculis mauris dapibus.\n\nFusce non est libero. Fusce porttitor
-    ex id convallis facilisis. Pellentesque sit amet eleifend quam, eget pharetra ipsum. Proin id mattis sem. In vitae sem massa.\n\n
-    In hac habitasse platea dictumst. Nunc ut dui leo. Phasellus semper est vel ultricies tempus.  Proin ac lectus risus. Duis vestibulum
-    libero velit, ac consequat urna feugiat sit amet. Vestibulum et purus elit. Donec eu nunc lobortis, consectetur ipsum et, mollis
-    dui. Mauris tempus, est at posuere mollis, nunc turpis vestibulum velit, sit amet rutrum tortor velit a augue.\n\nSed dignissim,
-    turpis ac maximus facilisis, purus risus posuere metus, ut eleifend tellus nisi pretium est. Fusce ut diam hendrerit, pretium
-    eros a, lacinia orci. Nunc justo velit, consequat dapibus justo in, elementum mattis massa.\n\nNunc id malesuada leo.
-    Praesent in faucibus ante, eget dignissim ipsum. Etiam egestas ex tortor, nec consectetur nibh pharetra et. Aenean
-    gravida magna libero, nec tincidunt libero malesuada eu. Vivamus faucibus lobortis faucibus. Sed in tellus eget dui tincidunt
-    lobortis. Sed magna turpis, vestibulum nec malesuada dapibus, aliquam ut magna. Cras sagittis mi quis vulputate efficitur.
-    Nunc tempus nibh sed sollicitudin aliquet. Vestibulum nec diam lorem.  Pellentesque habitant morbi tristique senectus et netus
-    et malesuada fames ac turpis egestas. Sed dignissim magna in nibh consequat iaculis. Sed interdum pharetra consequat. Sed
-    dolor leo, tincidunt eu sollicitudin at, commodo ac odio. Aliquam aliquam imperdiet metus a hendrerit. Integer ornare ut
-    ipsum nec dictum. Vivamus id fringilla leo. Ut nisl augue, eleifend nec condimentum tempus, faucibus quis augue.\n\n
-    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla ornare sapien quam,
-    ut pulvinar purus tempus ut. Curabitur vehicula lacus in lacinia cursus. Quisque dictum est sed risus malesuada pellentesque.
-    Vestibulum vehicula gravida erat eu elementum. Cras egestas sed nisl ut vulputate. Nulla in suscipit justo.  Pellentesque a magna
-    tincidunt, ultricies felis vel, venenatis sem. Vestibulum et sodales tortor. Donec suscipit nec diam in sagittis. Proin hendrerit,
-    libero et semper aliquet, mi velit varius dolor, a venenatis lacus leo eget risus. Vestibulum congue volutpat auctor.
-    Maecenas faucibus ipsum ac velit porta, vitae condimentum est venenatis. Proin dapibus suscipit elit in tincidunt. Morbi
-    lorem augue, dignissim eget malesuada vitae, dictum sollicitudin augue. Curabitur cursus scelerisque pellentesque.
-    Aenean sit amet enim magna. Suspendisse ut tristique nunc, a luctus nisi. Nullam id mauris id quam faucibus facilisis.`;
-    return of(data).pipe(delay(1000));
+    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`);
   }
 
   /**
