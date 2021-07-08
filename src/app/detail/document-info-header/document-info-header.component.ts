@@ -24,4 +24,11 @@ export class DocumentInfoHeaderComponent {
       name: ['']
     });
   }
+
+  /**
+   * Open the priority modal.
+   */
+  openModal(): void {
+    // do the thing
+  }
 }

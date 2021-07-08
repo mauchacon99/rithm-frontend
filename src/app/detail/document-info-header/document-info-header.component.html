@@ -17,7 +17,7 @@
     'col-4 col-md-2': (userType === 'admin' || 'super')
   }">
   <!-- TODO: Admin and Supers need to be able to open the modal -->
-    <div class="circle-30-accent priority" [ngClass]="{'mat-elevation-z4': userType === ('super' || 'admin')}">
+    <div (click)="openModal()" class="circle-30-accent priority" [ngClass]="{'mat-elevation-z4': userType === ('super' || 'admin')}">
       1 <!-- TODO: get current priority level -->
     </div>
     <button *ngIf="userType === 'admin' || userType === 'super'" mat-icon-button>
