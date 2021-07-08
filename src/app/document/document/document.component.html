@@ -6,8 +6,8 @@
     <div class="row m-0">
       <app-connected-station-pane [location]='"left"' class="d-none d-lg-block col-2"></app-connected-station-pane>
       <div class="col-12 col-lg-8 bg-white">
-        <app-station-info-header></app-station-info-header>
-        <app-document-info-header></app-document-info-header>
+        <app-station-info-header [documentInformation]="documentInformation"></app-station-info-header>
+        <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
         <app-document-template></app-document-template>
       </div>
       <app-connected-station-pane [location]='"right"' class="d-none d-lg-block col-2"></app-connected-station-pane>

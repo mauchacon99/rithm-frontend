@@ -56,7 +56,6 @@ describe('DocumentComponent', () => {
   });
 
   it('should retrieve document data', () => {
-    expect(component.documentName).toBeDefined();
-    expect(component.stationName).toBeDefined();
+    expect(component.documentInformation).toBeDefined();
   });
 });

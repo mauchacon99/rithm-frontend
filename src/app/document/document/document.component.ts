@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { DocumentStationInformation } from 'src/models';
 
 /**
  * Main component for viewing a document.
@@ -17,32 +18,8 @@ export class DocumentComponent implements OnInit {
   /** Whether the stations are being loaded. */
   isLoading = true;
 
-  /** Given Document Name. */
-  documentName!: string;
-
-  /** Given document priority. */
-  documentPriority = 0;
-
-  /** Given Assigned User. */
-  currentAssignedUser!: string;
-
-  /** Time Doc was created. */
-  flowedTimeUTC!: string;
-
-  /** Last time Doc was updated. */
-  lastUpdatedUTC!: string;
-
-  /** Name of station doc is assigned to. */
-  stationName!: string;
-
-  /** Priority of given station. */
-  stationPriority = 0;
-
-  /** Given station supervisors. */
-  supervisorRoster!: string[];
-
-  /** Given Station worker roster.. */
-  workerRoster!: string[];
+  /** Document information. */
+  documentInformation!: DocumentStationInformation;
 
   constructor(
     private documentService: DocumentService,
@@ -57,15 +34,7 @@ export class DocumentComponent implements OnInit {
     .pipe(first())
     .subscribe((document) => {
       if (document) {
-        this.documentName = document.documentName;
-        this.documentPriority = document.documentPriority;
-        this.currentAssignedUser = document.currentAssignedUser;
-        this.flowedTimeUTC = document.flowedTimeUTC;
-        this.lastUpdatedUTC = document.lastUpdatedUTC;
-        this.stationName = document.stationName;
-        this.stationPriority = document.stationPriority;
-        this.supervisorRoster = document.supervisorRoster;
-        this.workerRoster = document.workerRoster;
+        this.documentInformation = document;
       }
       this.isLoading = false;
     }, (error: HttpErrorResponse) => {
