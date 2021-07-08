@@ -13,6 +13,6 @@ export class DocumentInfoHeaderComponent {
   @Input() type!: 'admin' | 'super' | 'worker';
 
   constructor() {
-    this.type = 'super';
+    this.type = 'worker';
   }
 }

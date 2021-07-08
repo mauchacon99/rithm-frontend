@@ -13,22 +13,22 @@
   <div class="offset-md-2"
   [ngClass]="{
     'col-2': type === 'worker',
-    'col-4 col-md-2': type === 'admin' || 'super'
+    'col-4 col-md-2': (type === 'admin' || 'super')
   }">
     <div class="circle-30-accent priority" [ngClass]="{'mat-elevation-z4': type === ('super' || 'admin')}">
       1
     </div>
-    <button *ngIf="type === 'admin' || 'super'" mat-icon-button>
+    <button *ngIf="type === 'admin' || type === 'super'" mat-icon-button>
       <!-- TODO: Display if not locked -->
       <i class="fas fa-pen"></i>
       <!-- TODO: Display if someone is editing/working -->
       <!-- <i class="fas fa-lock"></i> -->
     </button>
   </div>
-  <div class="text-center meta-data"
+  <div class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': type === 'worker',
-    'col-8 col-md-4': type === 'admin' || 'super'
+    'col-8': (type === 'admin' || 'super')
   }">
     Time in station<br>
     <span>20 minutes</span>
@@ -36,7 +36,7 @@
   <div class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': type === 'worker',
-    'd-none d-md-block': type === 'admin' || 'super'
+    'd-none d-md-block': (type === 'admin' || 'super')
   }">
     Last updated<br>
     <span>1 hour ago</span>
