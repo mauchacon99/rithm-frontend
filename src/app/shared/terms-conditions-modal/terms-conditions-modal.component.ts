@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
@@ -33,6 +33,7 @@ export class TermsConditionsModalComponent implements OnInit {
   isLoading = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
+  private dialogRef: MatDialogRef<TermsConditionsModalComponent>,
     private userService: UserService,
     private errorService: ErrorService,
     private termsAndConditionsService: TermsConditionsService) {
@@ -63,6 +64,7 @@ export class TermsConditionsModalComponent implements OnInit {
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
+        this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
