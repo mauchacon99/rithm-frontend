@@ -11,6 +11,8 @@ import { DocumentComponent } from './document.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
+import { DocumentService } from 'src/app/core/document.service';
+import { MockDocumentService } from 'src/mocks';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -31,6 +33,9 @@ describe('DocumentComponent', () => {
         MatDialogModule,
         MatSnackBarModule,
         MatCardModule
+      ],
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService }
       ]
     })
     .compileComponents();
@@ -44,5 +49,16 @@ describe('DocumentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  beforeEach(async () => {
+    component.ngOnInit();
+
+    await fixture.whenStable();
+  });
+
+  it('should retrieve document data', () => {
+    expect(component.documentName).toBeDefined();
+    expect(component.stationName).toBeDefined();
   });
 });
