@@ -5,8 +5,12 @@ import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header
 import { DocumentTemplateComponent } from 'src/app/detail/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
+import { HttpClientModule } from '@angular/common/http';
 
 import { DocumentComponent } from './document.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -21,6 +25,12 @@ describe('DocumentComponent', () => {
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
         MockComponent(DocumentTemplateComponent)
+      ],
+      imports: [
+        HttpClientModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatCardModule
       ]
     })
     .compileComponents();

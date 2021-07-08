@@ -1,10 +1,15 @@
-/* eslint-disable rxjs/no-ignored-error */
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+ /* eslint-disable rxjs/no-ignored-error */
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { DocumentService } from './document.service';
+import { environment } from 'src/environments/environment';
+import { DocumentStationInformation } from 'src/models';
+
+const MICROSERVICE_PATH = '/documentservice/api/document';
 
 describe('DocumentService', () => {
   let service: DocumentService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,6 +18,7 @@ describe('DocumentService', () => {
       ]
     });
     service = TestBed.inject(DocumentService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
 
@@ -57,10 +63,31 @@ describe('DocumentService', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
     const mode = 'worker';
+    const expectedResponse: DocumentStationInformation = {
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      currentAssignedUser: 'NS',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationName: 'Development',
+      stationPriority: 2,
+      supervisorRoster: ['SA', 'RI', 'NI'],
+      workerRoster: []
+    };
+
     service.getDocumentInfo(stationId, documentId, mode)
       .subscribe((response) => {
         expect(response).toBeDefined();
       });
+
+    // outgoing request
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo?documentId=${documentId}&stationId=${stationId}&mode=${mode}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });

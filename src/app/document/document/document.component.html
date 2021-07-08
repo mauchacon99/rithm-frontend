@@ -1,16 +1,29 @@
 <div class="sub-header">
   <app-sub-header></app-sub-header>
 </div>
-<div class="page textured-bg pb-0">
-  <div class="container-fluid p-0">
-    <div class="row m-0">
-      <app-connected-station-pane [location]='"left"' class="d-none d-lg-block col-2"></app-connected-station-pane>
-      <div class="col-12 col-lg-8 bg-white">
-        <app-station-info-header></app-station-info-header>
-        <app-document-info-header></app-document-info-header>
-        <app-document-template></app-document-template>
+<mat-card [class.load-spin]="isLoading" class="col-12">
+  <div *ngIf="!isLoading" class="page textured-bg pb-0">
+    <div class="container-fluid p-0">
+      <div class="row m-0">
+        <app-connected-station-pane [location]='"left"' class="d-none d-lg-block col-2"></app-connected-station-pane>
+        <div class="col-12 col-lg-8 bg-white">
+          <app-station-info-header></app-station-info-header>
+          <app-document-info-header></app-document-info-header>
+          <app-document-template></app-document-template>
+          <div>
+            <p>{{documentName}}</p>
+            <p>{{documentPriority}}</p>
+            <p>{{currentAssignedUser}}</p>
+            <p>{{flowedTimeUTC}}</p>
+            <p>{{lastUpdatedUTC}}</p>
+            <p>{{stationName}}</p>
+            <p>{{stationPriority}}</p>
+            <p>{{supervisorRoster}}</p>
+            <p>{{workerRoster}}</p>
+          </div>
+        </div>
+        <app-connected-station-pane [location]='"right"' class="d-none d-lg-block col-2"></app-connected-station-pane>
       </div>
-      <app-connected-station-pane [location]='"right"' class="d-none d-lg-block col-2"></app-connected-station-pane>
     </div>
   </div>
-</div>
+</mat-card>

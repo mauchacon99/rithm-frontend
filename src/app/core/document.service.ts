@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-// import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { delay } from 'rxjs/operators';
 import {
   Document, StationDocumentsResponse, ForwardPreviousStationsDocument, ConnectedStationInfo, DocumentStationInformation
 } from 'src/models';
 
-// const MICROSERVICE_PATH = '/documentservice';
+const MICROSERVICE_PATH = '/documentservice/api/document';
 
 /**
  * Service for all document behavior and business logic.
@@ -240,18 +240,9 @@ export class DocumentService {
    * @returns A list of forward and previous stations for a specific document.
    */
   getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
-    const data: DocumentStationInformation = {
-      documentName: 'Requirement',
-      documentPriority: 1,
-      currentAssignedUser: 'WU',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationName: 'Development',
-      stationPriority: 2,
-      supervisorRoster: ['MP', 'RU', 'HP'],
-      workerRoster: []
-    };
-    return of(data).pipe(delay(1000));
+    return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo`,
+      { params: { documentId, stationId, mode }}
+    );
   }
 
 }
