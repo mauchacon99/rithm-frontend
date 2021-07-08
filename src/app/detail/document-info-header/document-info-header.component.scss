@@ -1,4 +1,4 @@
-@import 'variables', 'functions';
+@import 'variables', 'functions', 'rithm-light-palettes';
 
 section.row {
   padding: 10px 0;
@@ -30,6 +30,7 @@ section.row {
 
     button {
       float: left;
+      color: map-get($secondary-gray-palette, 300);
     }
   }
 
