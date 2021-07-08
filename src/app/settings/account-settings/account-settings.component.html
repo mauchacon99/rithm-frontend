@@ -1,1 +1,27 @@
-<p>account-settings works!</p>
+<div class="page textured-bg">
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">
+        <h3 class="mb-4">Account Settings</h3>
+
+        <form (ngSubmit)="updateSettings()">
+          <app-general-account-settings></app-general-account-settings>
+
+          <app-notification-settings></app-notification-settings>
+
+          <div class="row">
+            <a (click)="viewTermsAndConditions()" class="col my-3">View the terms & conditions</a>
+          </div>
+
+          <div class="buttons mt-4">
+            <button type="submit" mat-raised-button color="accent">Save Changes</button>
+          </div>
+        </form>
+
+
+
+      </mat-card>
+    </div>
+  </div>
+</div>
