@@ -27,7 +27,7 @@ export class DocumentComponent implements OnInit {
   previousStations: ConnectedStationInfo[] = [];
 
   /** Whether the request to get connected stations is currently underway. */
-  private connectedStationsLoading = false;
+  connectedStationsLoading = false;
 
   constructor(
     private documentService: DocumentService,
