@@ -4,13 +4,13 @@
 <div class="page textured-bg pb-0">
   <div class="container-fluid p-0">
     <div class="row m-0">
-      <app-connected-station-pane [location]='"left"' class="d-none d-lg-block col-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations" [isLoading]="connectedStationsLoading" class="d-none d-lg-block col-2"></app-connected-station-pane>
       <div class="col-12 col-lg-8 bg-white">
-        <app-station-info-header></app-station-info-header>
-        <app-document-info-header></app-document-info-header>
+        <app-station-info-header [stationInformation]="documentInformation"></app-station-info-header>
+        <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
         <app-document-template></app-document-template>
       </div>
-      <app-connected-station-pane [location]='"right"' class="d-none d-lg-block col-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" [isLoading]="connectedStationsLoading" class="d-none d-lg-block col-2"></app-connected-station-pane>
     </div>
   </div>
 </div>

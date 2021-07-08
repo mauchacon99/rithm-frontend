@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Document } from 'src/models';
-import { DocumentService } from '../../core/document.service';
+import { DashboardService } from '../dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs/operators';
 
@@ -21,7 +21,7 @@ export class PriorityQueueComponent implements OnInit {
   isLoading = true;
 
   constructor(
-    private documentService: DocumentService,
+    private dashboardService: DashboardService,
     private errorService: ErrorService
   ) { }
 
@@ -29,7 +29,7 @@ export class PriorityQueueComponent implements OnInit {
    * Gets a list of priority queue documents on load.
    */
   ngOnInit(): void {
-    this.documentService.getPriorityQueueDocuments()
+    this.dashboardService.getPriorityQueueDocuments()
       .pipe(first())
       .subscribe((documents) => {
         this.isLoading = false;
