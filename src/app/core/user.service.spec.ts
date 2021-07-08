@@ -267,4 +267,20 @@ describe('UserService', () => {
     httpTestingController.verify();
   });
 
+  it('should return terms and conditions text', () => {
+    const termsAndConditions = 'This isTerms and conditions text';
+
+    service.getTermsConditions()
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // outgoing request
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(termsAndConditions);
+    httpTestingController.verify();
+  });
+
 });
