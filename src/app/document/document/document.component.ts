@@ -30,7 +30,7 @@ export class DocumentComponent implements OnInit {
    * Establish document data.
    */
   ngOnInit(): void {
-    this.documentService.getDocumentInfo('CEF8BC19-6308-4E8D-A254-DC67EC84530C', 'AA6AB2CD-D721-4686-B6DB-1BADD9FAE283', 'Worker')
+    this.documentService.getDocumentInfo('ED6148C9-ABB7-408E-A210-9242B2735B1C', 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0', 'Worker')
     .pipe(first())
     .subscribe((document) => {
       if (document) {
@@ -46,6 +46,4 @@ export class DocumentComponent implements OnInit {
       );
     });
   }
-
-
 }
