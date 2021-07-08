@@ -34,8 +34,8 @@ export class DocumentComponent implements OnInit {
     private errorService: ErrorService
   ) {
     // TODO: update these
-    this.documentId = '1';
-    this.stationId = '2';
+    this.documentId = 'CEF8BC19-6308-4E8D-A254-DC67EC84530C';
+    this.stationId = 'AA6AB2CD-D721-4686-B6DB-1BADD9FAE283';
   }
 
   /**
