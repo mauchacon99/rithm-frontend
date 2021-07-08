@@ -272,7 +272,7 @@ describe('UserService', () => {
 
     service.getTermsConditions()
       .subscribe((response) => {
-        expect(response).toBeFalsy();
+        expect(response).toBeDefined();
       });
 
     // outgoing request
