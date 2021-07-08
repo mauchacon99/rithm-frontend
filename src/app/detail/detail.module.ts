@@ -11,6 +11,8 @@ import { DocumentTemplateComponent } from './document-template/document-template
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { StationCardComponent } from './station-card/station-card.component';
 import { SharedModule } from '../shared/shared.module';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -28,7 +30,9 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     MatButtonModule,
-    SharedModule
+    SharedModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   exports: [
     SubHeaderComponent,

@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
+import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
+import { GeneralAccountSettingsComponent } from '../general-account-settings/general-account-settings.component';
+import { NotificationSettingsComponent } from '../notification-settings/notification-settings.component';
 
 import { AccountSettingsComponent } from './account-settings.component';
 
@@ -11,7 +15,14 @@ describe('AccountSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountSettingsComponent ],
+      declarations: [
+        AccountSettingsComponent,
+        MockComponent(GeneralAccountSettingsComponent),
+        MockComponent(NotificationSettingsComponent)
+      ],
+      imports: [
+        MatCardModule
+      ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService }

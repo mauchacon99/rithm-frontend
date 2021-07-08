@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse } from 'src/models';
+import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse, Document } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -44,6 +44,15 @@ export class DashboardService {
   getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
     // eslint-disable-next-line max-len
     return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+  }
+
+  /**
+   * Gets a list of priority queue documents.
+   *
+   * @returns A list of top priority queue documents.
+   */
+  getPriorityQueueDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
   }
 
 }

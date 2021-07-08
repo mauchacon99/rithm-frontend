@@ -40,9 +40,16 @@ export class AccountSettingsComponent {
   }
 
   /**
+   * Updates all settings for the user.
+   */
+  updateSettings(): void {
+    // TODO: determine changes and make requests
+  }
+
+  /**
    * Update user account settings data.
    */
-  updateUserAccount(): void {
+  private updateUserAccount(): void {
     this.userService.updateUserAccount(this.userAccountInfo)
       .pipe(first())
       .subscribe(() => {
@@ -61,7 +68,7 @@ export class AccountSettingsComponent {
   /**
    * Update notification settings info.
    */
-  updateNotificationSettings(): void {
+  private updateNotificationSettings(): void {
     this.userService.updateNotificationSettings(this.notificationSettings)
       .pipe(first())
       .subscribe(() => {
@@ -75,6 +82,13 @@ export class AccountSettingsComponent {
           true
         );
       });
+  }
+
+  /**
+   * Opens the terms and conditions in a modal.
+   */
+  viewTermsAndConditions(): void {
+    // TODO: open terms & conditions modal
   }
 
 }
