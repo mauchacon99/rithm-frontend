@@ -31,6 +31,7 @@
               </div>
               <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
                 <app-user-form [userForm]="userForm" [accountCreateForm]="true"></app-user-form>
+
                 <!-- Terms and conditions -->
                 <div class="col-12">
                   <mat-checkbox formControlName="agreeToTerms">
@@ -38,13 +39,16 @@
                   </mat-checkbox>
                   <a id="terms" (click)="openTerms(termsAndConditionsComponent)">terms & conditions</a>
                 </div>
+
                 <!-- Create account button -->
                 <div class="col-12 mt-3">
                   <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">Create
                     Account</button>
                 </div>
+
               </form>
             </span>
+
             <!-- Loading Indicator -->
             <span *ngIf="isLoading" class="spinner">
               <div class="row">
@@ -53,6 +57,7 @@
                 </div>
               </div>
             </span>
+
           </div>
         </div>
       </mat-card>

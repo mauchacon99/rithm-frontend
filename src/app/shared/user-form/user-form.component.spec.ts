@@ -12,14 +12,14 @@ describe('UserFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserFormComponent ],
+      declarations: [UserFormComponent],
       imports: [
         MatFormFieldModule,
         ReactiveFormsModule
       ],
-      providers: [ { provide: FormBuilder, useValue: formBuilder } ]
+      providers: [{ provide: FormBuilder, useValue: formBuilder }]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
