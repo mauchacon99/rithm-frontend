@@ -1,3 +1,5 @@
+@import 'variables', 'functions';
+
 section.row {
   padding: 10px 0;
 
@@ -17,6 +19,25 @@ section.row {
       mat-form-field {
         width: 100%;
       }
+    }
+
+    .priority {
+      background: $warning-red;
+      border-color: transparent;
+      float: left;
+      margin-top: 5px;
+    }
+
+    button {
+      float: left;
+    }
+  }
+
+  .meta-data {
+    font-size: font-calc(12);
+
+    span {
+      color: $accent-blue;
     }
   }
 }
