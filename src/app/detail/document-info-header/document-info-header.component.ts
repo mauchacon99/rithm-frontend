@@ -11,15 +11,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class DocumentInfoHeaderComponent {
   /** Type of user looking at a document. */
-  @Input() type!: 'admin' | 'super' | 'worker';
+  @Input() userType!: 'admin' | 'super' | 'worker';
 
   /** Document name form. */
   documentNameForm: FormGroup;
 
   constructor(
-    public fb: FormBuilder
+    private fb: FormBuilder
   ) {
-    this.type = 'worker';
+    this.userType = 'worker';
     this.documentNameForm = this.fb.group({
       name: ['']
     });
