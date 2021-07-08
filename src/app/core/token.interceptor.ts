@@ -13,7 +13,8 @@ const NO_AUTH_ROUTES = [
   '/refreshtoken',
   '/validateemail',
   '/forgotpassword',
-  '/resetpassword'
+  '/resetpassword',
+  '/gettermsandconditions'
 ];
 
 /**
