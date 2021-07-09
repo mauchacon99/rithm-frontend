@@ -14,7 +14,7 @@
   </div>
   <div class="col-6 col-md-3 col-xl-2">
     <p class="overline">supervisor roster</p>
-    <!-- <app-roster [station]="stationInformation"></app-roster> -->
+    <app-roster [users]="stationInformation.supervisorRoster"></app-roster>
   </div>
   <div class="col-6"
   [ngClass]="{
@@ -22,7 +22,7 @@
     'col-md-3 col-xl-2': type === 'super' || 'admin'
   }">
     <p class="overline">worker roster</p>
-    <!-- TODO: Pass station to component <app-roster></app-roster> -->
+    <app-roster [users]="stationInformation.workerRoster"></app-roster>
   </div>
 </section>
 <div class="row">
