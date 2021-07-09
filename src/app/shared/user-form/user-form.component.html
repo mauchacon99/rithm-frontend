@@ -1,4 +1,4 @@
-<form [formGroup]="userForm">
+<ng-container [formGroup]="userForm">
   <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible"
     [passReq]="userForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
 
@@ -35,4 +35,4 @@
     <input type="password" matInput placeholder="Confirm password" formControlName="confirmPassword"
       (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')" autocomplete="new-password">
   </mat-form-field>
-</form>
+</ng-container>

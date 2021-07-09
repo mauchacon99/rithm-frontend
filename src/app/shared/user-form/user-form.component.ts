@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup, } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, Validators, } from '@angular/forms';
+import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
  * Reusable form component that gets a user's first and last names, email, and password.
@@ -9,9 +10,8 @@ import { FormGroup, } from '@angular/forms';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent {
-  /** Receive the FormGroup data from parent. */
-  @Input() userForm!: FormGroup;
+export class UserFormComponent implements ControlValueAccessor {
+  userForm: FormGroup;
 
   /** Is this form part of account creation? */
   @Input() accountCreateForm!: boolean;
@@ -24,6 +24,61 @@ export class UserFormComponent {
 
   /** What errors to get from validator. */
   errorsToGet = '';
+
+  passwordRequirements = new PasswordRequirements();
+
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.userForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar()
+        ]
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          this.passwordRequirements.isGreaterThanEightChars(),
+          this.passwordRequirements.hasOneLowerCaseChar(),
+          this.passwordRequirements.hasOneUpperCaseChar(),
+          this.passwordRequirements.hasOneDigitChar(),
+          this.passwordRequirements.hasOneSpecialChar(),
+          this.passwordRequirements.passwordsMatch()
+        ]
+      ],
+    });
+  }
+
+  onTouched: () => void = () => { };
+
+  writeValue(val: any): void {
+    val && this.userForm.setValue(val, { emitEvent: false });
+  }
+
+  registerOnChange(fn: any): void {
+    console.log("on change");
+    this.userForm.valueChanges.subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    console.log("on blur");
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.userForm.disable() : this.userForm.enable();
+  }
 
   /**
    * Toggle visibility of password requirements.
