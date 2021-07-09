@@ -20,6 +20,9 @@ export class RosterComponent implements OnInit {
   /** The station info to display. */
   @Input() station?: DashboardStationData;
 
+  /** Determines whether to display a stations worker or supervisor roster. */
+  @Input() isWorker!: boolean;
+
   /** The array of users passed to display. */
   @Input() users!: Array<string>;
 
@@ -44,7 +47,7 @@ export class RosterComponent implements OnInit {
     if (this.station) {
       this.dialog.open(RosterModalComponent, {
         minWidth: '325px',
-        data: { stationName: this.station.stationName, stationId: this.station.rithmId }
+        data: { stationName: this.station.stationName, stationId: this.station.rithmId, isWorker: this.isWorker}
       });
     }
   }

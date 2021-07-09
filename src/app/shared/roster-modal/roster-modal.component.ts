@@ -17,13 +17,13 @@ import { RosterModalData, WorkerRosterResponse } from 'src/models';
 export class RosterModalComponent implements OnInit {
 
   /** Whether the modal is being used for the work roster. */
-  @Input() isWorker = true;
+  isWorker = true;
 
   /** The id of the station. */
-  @Input() stationRithmId = '';
+  stationRithmId = '';
 
   /** The name of station. */
-  @Input() stationName = '';
+  stationName = '';
 
   /** Whether the content is being loaded. */
   isLoading = true;
