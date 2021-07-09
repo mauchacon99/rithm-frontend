@@ -34,6 +34,7 @@ describe('RosterComponent', () => {
         'XR', 'PD'
       ]
     };
+    component.users = ['XR', 'PD', 'SA'];
     fixture.detectChanges();
   });
 

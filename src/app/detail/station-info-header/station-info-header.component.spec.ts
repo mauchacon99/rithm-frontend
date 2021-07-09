@@ -21,6 +21,17 @@ describe('StationInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoHeaderComponent);
     component = fixture.componentInstance;
+    component.stationInformation = {
+      documentName: 'Requirement',
+      documentPriority: 1,
+      currentAssignedUser: 'WU',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationName: 'Development',
+      stationPriority: 2,
+      supervisorRoster: ['MP', 'RU', 'HP'],
+      workerRoster: []
+    };
     fixture.detectChanges();
   });
 

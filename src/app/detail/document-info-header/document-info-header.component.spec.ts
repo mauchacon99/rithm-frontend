@@ -24,6 +24,17 @@ describe('DocumentInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoHeaderComponent);
     component = fixture.componentInstance;
+    component.documentInformation = {
+      documentName: 'Requirement',
+      documentPriority: 1,
+      currentAssignedUser: 'WU',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationName: 'Development',
+      stationPriority: 2,
+      supervisorRoster: ['MP', 'RU', 'HP'],
+      workerRoster: []
+    };
     fixture.detectChanges();
   });
 
