@@ -9,12 +9,12 @@
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
-      A really long Untitled Station Name<!-- TODO: display station name -->
+      {{stationInformation.stationName}}
     </div>
   </div>
   <div class="col-6 col-md-3 col-xl-2">
     <p class="overline">supervisor roster</p>
-    <!-- TODO: Pass station to component <app-roster></app-roster> -->
+    <!-- <app-roster [station]="stationInformation"></app-roster> -->
   </div>
   <div class="col-6"
   [ngClass]="{
