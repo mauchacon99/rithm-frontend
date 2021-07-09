@@ -5,6 +5,9 @@ import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ComponentType } from '@angular/cdk/portal';
+import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 
 /**
  * Component for all of the account settings.
@@ -25,8 +28,12 @@ export class AccountSettingsComponent {
   /** Notification settings model. */
   notificationSettings: NotificationSettings;
 
+  /** Terms and conditions modal component. */
+  termsAndConditionsComponent = TermsConditionsModalComponent;
+
   constructor(private userService: UserService,
     private popupService: PopupService,
+    private dialog: MatDialog,
     private errorService: ErrorService,) {
     this.userAccountInfo = {
       firstName: 'James',
@@ -86,9 +93,21 @@ export class AccountSettingsComponent {
 
   /**
    * Opens the terms and conditions in a modal.
+   *
+   * @param component The component to open.
    */
-  viewTermsAndConditions(): void {
-    // TODO: open terms & conditions modal
+  viewTermsAndConditions(component: ComponentType<unknown>): void {
+    this.dialog.open(component, {
+      width: '90%',
+      height: '76%',
+      data: {
+        title: 'Terms and Conditions',
+        message: '',
+        okButtonText: 'Ok',
+        width: '90%',
+        showAgreeButton: false
+      }
+    });
   }
 
 }
