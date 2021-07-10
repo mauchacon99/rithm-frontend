@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Component for the comments pane for stations and documents.
+ * Component for an individual comment.
  */
 @Component({
   selector: 'app-comment',
