@@ -13,6 +13,7 @@ import { StationCardComponent } from './station-card/station-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
 
 
 
@@ -25,7 +26,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommentComponent,
     DocumentTemplateComponent,
     SubHeaderComponent,
-    StationCardComponent
+    StationCardComponent,
+    CommentDrawerComponent
   ],
   imports: [
     CommonModule,
