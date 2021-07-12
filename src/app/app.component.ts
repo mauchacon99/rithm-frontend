@@ -14,7 +14,7 @@ import { UserService } from './core/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy { // TODO: delete me
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   /** Get the sidenav component. */
   @ViewChild('mobileNav')
