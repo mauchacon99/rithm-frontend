@@ -12,6 +12,7 @@ jobs:
   # Deploys the web app
   web-app:
     runs-on: [self-hosted, test]
+    timeout-minutes: 15
 
     steps:
     - uses: actions/checkout@v2
