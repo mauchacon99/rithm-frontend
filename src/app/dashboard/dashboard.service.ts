@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -42,8 +42,9 @@ export class DashboardService {
    * @returns A list of worker roster of a station.
    */
   getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
-    // eslint-disable-next-line max-len
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+    const params = new HttpParams()
+      .set('stationrithmId', stationId);
+    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster`, { params });
   }
 
   /**
@@ -53,6 +54,15 @@ export class DashboardService {
    */
   getPriorityQueueDocuments(): Observable<Document[]> {
     return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
+  }
+
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+  getPreviouslyStartedDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previouslystarteddocuments`);
   }
 
 }
