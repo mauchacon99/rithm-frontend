@@ -25,7 +25,7 @@
     "@angular/platform-browser": "^12.1.0",
     "@angular/platform-browser-dynamic": "^12.1.0",
     "@angular/router": "^12.1.0",
-    "autoprefixer": "^10.2.6",
+    "autoprefixer": "^10.3.0",
     "bourbon": "^7.0.0",
     "gsap": "^3.7.0",
     "ng-click-outside": "^8.0.0",
