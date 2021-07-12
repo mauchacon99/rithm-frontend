@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -42,9 +42,7 @@ export class DashboardService {
    * @returns A list of worker roster of a station.
    */
   getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
-    const params = new HttpParams()
-      .set('stationrithmId', stationId);
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster`, { params });
+    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationrithmId=${stationId}`);
   }
 
   /**
