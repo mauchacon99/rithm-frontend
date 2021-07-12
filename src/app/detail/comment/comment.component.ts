@@ -32,6 +32,9 @@ export class CommentComponent {
   /** Timecode. */
   UTCtimecode = '2021-07-12T19:06:47.3506612Z';
 
+  /** Has the comment been read before? */
+  read = false;
+
   constructor(
     private utcTimeConversion: UtcTimeConversion
   ) {}

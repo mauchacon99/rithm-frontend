@@ -26,7 +26,7 @@ describe('UtcTimeConversion', () => {
   it('should return date and time', () => {
     const useDate = '2021-07-12T17:26:47.3506612Z';
 
-    expect(conversion.getDateAndTime(useDate)).toMatch(/Jul 12 at 11:26 am/);
+    expect(conversion.getDateAndTime(useDate)).toMatch(/Jul 12, 2021 at 11:26 am/);
   });
 
   it('should return text with minutes elapsed', () => {
