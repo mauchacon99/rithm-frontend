@@ -25,16 +25,11 @@ describe('RosterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RosterComponent);
     component = fixture.componentInstance;
-    component.station = {
-      rithmId: '2',
-      numberOfDocuments: 2,
-      stationName: 'station-2',
-      numberOfWorkers: 6,
-      workerInitials: [
-        'XR', 'PD'
-      ]
-    };
-    component.users = ['XR', 'PD', 'SA'];
+    component.rosterSize = 7;
+    component.rosterArray = ['XR', 'PD', 'SA'];
+    component.isWorker = true;
+    component.stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+    component.stationName = 'Samus Returns',
     fixture.detectChanges();
   });
 
