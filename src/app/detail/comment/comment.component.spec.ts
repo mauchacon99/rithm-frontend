@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 
 import { CommentComponent } from './comment.component';
 
@@ -8,7 +10,10 @@ describe('CommentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentComponent ]
+      declarations: [
+        CommentComponent,
+        MockComponent(UserAvatarComponent)
+      ]
     })
     .compileComponents();
   });

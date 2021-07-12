@@ -1,1 +1,8 @@
-<p>comment works better!</p>
+<span class="row">
+  <app-user-avatar [user]="user"></app-user-avatar>
+  <span>
+    <h4 class="subtitle-medium">{{ name }}</h4>
+    <div class="body-small">{{ message }}</div>
+    <div class="overline">{{ convertTimecode(UTCtimecode) }}</div>
+  </span>
+</span>
