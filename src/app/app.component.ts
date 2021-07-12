@@ -16,9 +16,9 @@ import { UserService } from './core/user.service';
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
-  /** Get the sidenav component. */
-  @ViewChild('mobileNav')
-  private mobileSideNav!: MatSidenav;
+  /** The. */
+  @ViewChild('sideNav')
+  private sideNav!: MatSidenav;
 
   /** Destroyed. */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -59,7 +59,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
    * Set the current sidenav in the service.
    */
   ngAfterViewInit(): void {
-    this.sidenavService.setSidenav(this.mobileSideNav);
+    this.sidenavService.setSidenav(this.sideNav);
   }
 
   /**
@@ -101,7 +101,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       this.userService.signOut();
     }
 
-    this.mobileSideNav.toggle();
+    this.sideNav.toggle();
   }
 
 }

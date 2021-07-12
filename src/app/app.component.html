@@ -6,8 +6,8 @@
 
 <mat-drawer-container [ngClass]="{'sign-in': !showTopNav}" hasBackdrop="true">
 
-  <!-- Mobile side nav -->
-  <mat-drawer #mobileNav mode="over">
+  <!-- Side nav -->
+  <mat-drawer #sideNav mode="over">
     <a *ngFor="let link of mobileLinks" routerLink="{{link.link}}" (click)="selectNavItem(link.name)">
       <div class="row no-gutters">
         <div class="col">
