@@ -44,7 +44,7 @@ export class UtcTimeConversion {
     eg: an hour is broken into 60 minutes, there are 60 seconds in a minute,and 1000 ms in a second.
     this is written as 1000*60*60 */
 
-    // TODO: Simplify getElapsedTimeText logic
+    // TODO: [RIT-679] Simplify getElapsedTimeText logic
 
     //If elapsedTime is set to 0 its because no string was input in a related method.
     //This prevents us from returning NaN.

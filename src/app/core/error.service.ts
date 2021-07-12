@@ -18,7 +18,7 @@ export class ErrorService {
    */
   logError(error: Error): void {
     console.error(error);
-    // TODO: Add error log reporting using some third-party service
+    // TODO: [RIT-680] Add error log reporting using some logging service
   }
 
   /**
