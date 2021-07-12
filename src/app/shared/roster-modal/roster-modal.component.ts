@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -44,7 +44,7 @@ export class RosterModalComponent implements OnInit {
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.dashboardService.getWorkerRoster(this.stationRithmId)
+    this.dashboardService.getWorkerRoster(this.stationRithmId, this.isWorker)
       .pipe(first())
       .subscribe((response) => {
         this.isLoading = false;

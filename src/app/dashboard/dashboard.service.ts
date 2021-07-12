@@ -39,11 +39,18 @@ export class DashboardService {
    * Gets a list of worker roster of a station.
    *
    * @param stationId The id of the station for which to get the roster.
+   * @param isWorker Tells whether to get the worker roster or supervisor roster.
    * @returns A list of worker roster of a station.
    */
-  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
-    // eslint-disable-next-line max-len
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+  getWorkerRoster(stationId: string, isWorker: boolean): Observable<WorkerRosterResponse[]> {
+    if (isWorker) {
+      // eslint-disable-next-line max-len
+      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+    } else {
+      //TODO: need an api route to get supervisor roster.
+      // eslint-disable-next-line max-len
+      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+    }
   }
 
   /**
