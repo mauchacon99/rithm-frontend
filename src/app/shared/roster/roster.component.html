@@ -1,8 +1,8 @@
 <span>
-  <div *ngFor="let user of users | slice:0:slices"
+  <div *ngFor="let user of rosterArray | slice:0:slices"
     (click)="openRosterModal()" class="circles">
       <app-user-avatar [workerInitials]="user"></app-user-avatar>
   </div>
-  <div *ngIf="users.length > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
-    +{{users.length - 2}}</div>
+  <div *ngIf="rosterSize > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
+    +{{rosterSize - 2}}</div>
 </span>

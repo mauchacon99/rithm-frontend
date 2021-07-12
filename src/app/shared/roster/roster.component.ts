@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DashboardStationData } from 'src/models';
+import { DashboardStationData, DocumentStationInformation } from 'src/models';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -12,19 +12,22 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./roster.component.scss']
 })
 export class RosterComponent implements OnInit {
-  //TODO: find a way to get better parity between different interfaces
-  //that might be passed to station. EG: DashboardStationData and DocumentStationInformation.
-  //maybe combine into single interface?
-  //This would make it easier to implement Roster Component throughout the app.
+  //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
-  /** The station info to display. */
-  @Input() station?: DashboardStationData;
+  /** The roster array. */
+  @Input() rosterArray!: string[];
 
-  /** Determines whether to display a stations worker or supervisor roster. */
+  /** The roster size. */
+  @Input() rosterSize!: number;
+
+  /** Station name. Needed for openRosterModal. */
+  @Input() stationName!: string;
+
+  /** Station ID. Needed for openRosterModal. */
+  @Input() stationId!: string;
+
+  /** Determines if roster is a worker or supervisor roster. Needed for openRosterModal. */
   @Input() isWorker!: boolean;
-
-  /** The array of users passed to display. */
-  @Input() users!: Array<string>;
 
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
@@ -35,8 +38,8 @@ export class RosterComponent implements OnInit {
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (this.users.length <= 3) {
-      this.slices = this.users.length;
+    if (this.rosterSize <= 3) {
+      this.slices = this.rosterSize;
     }
   }
 
@@ -44,14 +47,10 @@ export class RosterComponent implements OnInit {
    * Opens a modal with roster information.
    */
   openRosterModal(): void {
-    if (this.station) {
-      this.dialog.open(RosterModalComponent, {
-        minWidth: '325px',
-        data: { stationName: this.station.stationName, stationId: this.station.rithmId, isWorker: this.isWorker}
-      });
-    }
+    this.dialog.open(RosterModalComponent, {
+      minWidth: '325px',
+      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker}
+    });
   }
-
-
 
 }
