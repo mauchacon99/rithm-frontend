@@ -17,7 +17,7 @@ import { RosterModalData, WorkerRosterResponse } from 'src/models';
 export class RosterModalComponent implements OnInit {
 
   /** Whether the modal is being used for the work roster. */
-  isWorker = true;
+  isWorker: boolean;
 
   /** The id of the station. */
   stationRithmId = '';
@@ -38,6 +38,7 @@ export class RosterModalComponent implements OnInit {
     private dialogRef: MatDialogRef<RosterModalComponent>,
   ) {
     this.stationRithmId = this.data.stationId;
+    this.isWorker = this.data.isWorker;
   }
 
   /**

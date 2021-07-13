@@ -47,9 +47,8 @@ export class DashboardService {
       // eslint-disable-next-line max-len
       return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
     } else {
-      //TODO: need an api route to get supervisor roster.
       // eslint-disable-next-line max-len
-      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);
     }
   }
 

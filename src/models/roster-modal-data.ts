@@ -8,4 +8,7 @@
 
   /** The stationId. */
   stationId: string;
+
+  /** Is this roster a worker roster? */
+  isWorker: boolean;
 }
