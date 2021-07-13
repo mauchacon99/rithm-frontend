@@ -32,8 +32,11 @@ export class TermsConditionsModalComponent implements OnInit {
   /** Show loading indicator while request is being made. */
   isLoading = false;
 
+  /** Show or hide, Agree and cancel button. */
+  showAgreeButton: boolean;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
-  private dialogRef: MatDialogRef<TermsConditionsModalComponent>,
+    private dialogRef: MatDialogRef<TermsConditionsModalComponent>,
     private userService: UserService,
     private errorService: ErrorService,
     private termsAndConditionsService: TermsConditionsService) {
@@ -41,6 +44,7 @@ export class TermsConditionsModalComponent implements OnInit {
     this.message = data.message;
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
     this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
+    this.showAgreeButton = data.showAgreeButton ? data.showAgreeButton : false;
   }
 
   /**

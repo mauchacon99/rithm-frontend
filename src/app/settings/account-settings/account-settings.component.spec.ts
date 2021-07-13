@@ -6,7 +6,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { GeneralAccountSettingsComponent } from '../general-account-settings/general-account-settings.component';
 import { NotificationSettingsComponent } from '../notification-settings/notification-settings.component';
-
+import { MatDialogModule } from '@angular/material/dialog';
 import { AccountSettingsComponent } from './account-settings.component';
 
 describe('AccountSettingsComponent', () => {
@@ -21,7 +21,8 @@ describe('AccountSettingsComponent', () => {
         MockComponent(NotificationSettingsComponent)
       ],
       imports: [
-        MatCardModule
+        MatCardModule,
+        MatDialogModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

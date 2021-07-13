@@ -24,4 +24,7 @@ export interface DialogData {
   /** The width of dialog. */
   width?: string;
 
+  /** Show agree and cancel button. */
+  showAgreeButton?: boolean;
+
 }
