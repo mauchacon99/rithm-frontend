@@ -157,7 +157,8 @@ export class AccountCreateComponent implements OnInit {
         title: 'Terms and Conditions',
         message: '',
         okButtonText: 'Agree',
-        width: '90%'
+        width: '90%',
+        showAgreeButton: true
       }
     });
   }
