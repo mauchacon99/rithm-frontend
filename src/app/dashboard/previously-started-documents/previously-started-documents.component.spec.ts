@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DocumentService } from 'src/app/core/document.service';
+import { DashboardService } from '../dashboard.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockDocumentService, MockPopupService } from 'src/mocks';
+import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { MockComponent } from 'ng-mocks';
 
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents.component';
@@ -18,7 +18,7 @@ describe('PreviouslyStartedDocumentsComponent', () => {
         MockComponent(DocumentListCardComponent)
       ],
       providers: [
-        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService }
       ],
     })

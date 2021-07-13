@@ -36,13 +36,6 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should return a list of previously started documents', () => {
-    service.getPreviouslyStartedDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
-  });
-
   it('should return forward and previous stations for a specific document', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
