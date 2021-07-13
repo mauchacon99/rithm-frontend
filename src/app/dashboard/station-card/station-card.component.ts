@@ -22,7 +22,7 @@ export class StationCardComponent {
    */
   openDocsModal(): void {
     this.dialog.open(StationDocumentsModalComponent, {
-      minWidth: '325px',
+      minWidth: '370px',
       data: { stationName: this.station.stationName, stationId: this.station.rithmId }
     });
   }
