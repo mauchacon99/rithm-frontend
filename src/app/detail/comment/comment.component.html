@@ -1,9 +1,13 @@
 <div class="row" [ngClass]="{'read': read}">
-  <app-user-avatar [user]="user"></app-user-avatar>
-  <span>
+  <div class="p-2">
+    <app-user-avatar [user]="user"></app-user-avatar>
+  </div>
+  <span class="col p-0 py-2">
     <h4 class="subtitle-medium">{{ name }}</h4>
     <div class="body-small">{{ message }}</div>
     <div class="overline">{{ convertTimecode(UTCtimecode) }}</div>
   </span>
-
+  <div class="p-2">
+    <div class="newBadge" *ngIf="!read"></div>
+  </div>
 </div>
