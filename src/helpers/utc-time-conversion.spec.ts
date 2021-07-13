@@ -23,6 +23,12 @@ describe('UtcTimeConversion', () => {
     expect(conversion.getMillisecondsElapsed(SAMPLE_TIME)).toEqual(300000);
   });
 
+  it('should return date and time', () => {
+    const useDate = '2021-07-12T17:26:47.3506612Z';
+
+    expect(conversion.getDateAndTime(useDate)).toMatch(/Jul 12, 2021/);
+  });
+
   it('should return text with minutes elapsed', () => {
     const now = new Date().getTime();
     const adjustTime = now - (1000 * 60 * 15);

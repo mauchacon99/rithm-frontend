@@ -3,6 +3,21 @@
  */
 export class UtcTimeConversion {
   /**
+   * Method converting a timestamp into a date and time.
+   *
+   * @param timestamp A UTC time formatted string.
+   * @returns String showing date and time.
+   */
+  getDateAndTime(timestamp: string): string {
+    const d = new Date(timestamp),
+      minutes = d.getMinutes().toString().length === 1 ? '0' + d.getMinutes() : d.getMinutes(),
+      hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
+      ampm = d.getHours() >= 12 ? 'pm' : 'am',
+      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + hours + ':' + minutes + ' ' + ampm;
+  }
+
+  /**
    * Method converting a timestamp to UTC milliseconds.
    *
    * @param timeStamp A UTC time formatted string.

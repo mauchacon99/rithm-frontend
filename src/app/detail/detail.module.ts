@@ -41,7 +41,8 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
     DocumentTemplateComponent,
     ConnectedStationPaneComponent,
     StationInfoHeaderComponent,
-    DocumentInfoHeaderComponent
+    DocumentInfoHeaderComponent,
+    CommentComponent
   ]
 })
 export class DetailModule { }
