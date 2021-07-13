@@ -12,6 +12,7 @@ jobs:
   # Deploys the web app
   web-app:
     runs-on: [self-hosted, dev]
+    timeout-minutes: 15
 
     steps:
     - uses: actions/checkout@v2
@@ -38,6 +39,7 @@ jobs:
   test-coverage:
     runs-on: [self-hosted, dev]
     needs: web-app
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -64,6 +66,7 @@ jobs:
   compodoc:
     runs-on: [self-hosted, dev]
     needs: web-app
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -90,6 +93,7 @@ jobs:
   sassdoc:
     runs-on: [self-hosted, dev]
     needs: web-app
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
