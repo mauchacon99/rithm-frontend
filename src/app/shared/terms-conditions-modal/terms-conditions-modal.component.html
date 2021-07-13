@@ -11,8 +11,13 @@
   </div>
 </div>
 
-<!-- Buttons -->
-<div *ngIf="!isLoading" mat-dialog-actions class="row justify-content-end">
+<!-- Agree and Cancel Buttons -->
+<div *ngIf="!isLoading && showAgreeButton" mat-dialog-actions class="row justify-content-end">
   <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial (click)="isAgreed(false)">{{cancelButtonText}}</button>
   <button id="confirm" mat-button color="accent" [mat-dialog-close]="true" (click)="isAgreed(true)">{{okButtonText}}</button>
+</div>
+
+<!-- Ok Button -->
+<div *ngIf="!isLoading && !showAgreeButton" mat-dialog-actions class="row justify-content-end">
+  <button id="ok" mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
 </div>
