@@ -17,7 +17,7 @@ export class ConnectedStationPaneComponent {
   /** The list of stations to display in the pane. */
   @Input() stations: ConnectedStationInfo[] = [];
 
-  // TODO: Decide and implement some loading indicator
+  // TODO: [RIT-681] Decide and implement some loading indicator for connected station pane
   /** Whether the header data is loading. */
   @Input() isLoading!: boolean;
 
