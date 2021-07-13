@@ -1,7 +1,6 @@
 section {
   @media screen and (max-width: 575px) {
     div.row {
-      // margin-left: 10px;
       &:first-child {
         margin-right: 0 !important;
         margin-left: 0 !important;
