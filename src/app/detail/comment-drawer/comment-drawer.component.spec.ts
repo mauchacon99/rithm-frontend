@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CommentService } from 'src/app/core/comment.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks';
+import { MockCommentService } from 'src/mocks/mock-comment-service';
 import { CommentDrawerComponent } from './comment-drawer.component';
 
 describe('CommentDrawerComponent', () => {
@@ -8,9 +11,13 @@ describe('CommentDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentDrawerComponent ]
+      declarations: [CommentDrawerComponent],
+      providers: [
+        { provide: CommentService, useClass: MockCommentService },
+        { provide: PopupService, useClass: MockPopupService }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
