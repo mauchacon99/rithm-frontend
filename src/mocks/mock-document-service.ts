@@ -79,51 +79,6 @@ export class MockDocumentService {
   }
 
   /**
-   * Gets a list of previously started documents.
-   *
-   * @returns A list of previously started documents.
-   */
-  getPreviouslyStartedDocuments(): Observable<Document[]> {
-    const filterData: Document[] = [
-      {
-        rithmId: '',
-        documentName: 'Really long document name',
-        stationName: 'really long Station name',
-        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
-        priority: 1,
-        firstName: '',
-        lastName: '',
-        blocked: false,
-        lastUpdated: '2021-06-16T17:26:47.3506612Z',
-        userRithmId: '',
-        documentRithmId: '',
-        docName: '',
-        flowedTimeUTC: '',
-        stationRithmId: '',
-        id: 1
-      },
-      {
-        rithmId: '',
-        documentName: 'New Doc 2',
-        stationName: 'Station name',
-        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
-        priority: 2,
-        firstName: '',
-        lastName: '',
-        blocked: false,
-        lastUpdated: '2021-06-16T17:26:47.3506612Z',
-        userRithmId: '',
-        documentRithmId: '',
-        docName: '',
-        flowedTimeUTC: '',
-        stationRithmId: '',
-        id: 1
-      }
-    ];
-    return of(filterData).pipe(delay(1000));
-  }
-
-  /**
    * Gets a list of forward and previous stations for a specific document.
    *
    * @param documentId The Specific id of document.

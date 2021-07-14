@@ -61,4 +61,13 @@ export class DashboardService {
     return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
   }
 
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+  getPreviouslyStartedDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previouslystarteddocuments`);
+  }
+
 }

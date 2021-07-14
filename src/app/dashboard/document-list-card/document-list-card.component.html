@@ -14,7 +14,7 @@
         {{ document?.stationName }}
       </div>
       <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
-        {{ getElapsedTime(document.flowedTimeUTC) }} in station
+        {{ ((getElapsedTime(document.flowedTimeUTC) === 'Unknown')) ? '' : getElapsedTime(document.flowedTimeUTC)  + ' in station'}}
       </div>
       <div *ngIf="!isPriority" class="col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2 d-block">
         <button mat-stroked-button color="accent">

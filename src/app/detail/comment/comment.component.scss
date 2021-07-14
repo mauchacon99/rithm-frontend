@@ -1,1 +1,26 @@
-// Styles here
+@import 'variables', 'functions', 'rithm-light-palettes';
+
+.row {
+  &.read {
+    opacity: 0.7;
+  }
+
+  .new-badge {
+    height: 10px;
+    width: 10px;
+    background: $accent-blue;
+    border-radius: 50%;
+  }
+
+  .body-small {
+    line-height: 18px;
+  }
+
+  .subtitle-medium {
+    color: $accent-blue;
+  }
+
+  .overline {
+    color: map-get($secondary-gray-palette, 400);
+  }
+}

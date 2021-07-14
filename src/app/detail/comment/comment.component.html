@@ -1,1 +1,13 @@
-<p>comment works!</p>
+<div class="row" [ngClass]="{'read': read}">
+  <div class="p-2">
+    <app-user-avatar [user]="user"></app-user-avatar>
+  </div>
+  <span class="col p-0 py-2">
+    <h4 class="subtitle-medium pb-1">{{ name }}</h4>
+    <div class="body-small">{{ message }}</div>
+    <div class="overline pt-1">{{ convertTimecode(UTCtimecode) }}</div>
+  </span>
+  <div class="p-2">
+    <div class="new-badge" *ngIf="!read"></div>
+  </div>
+</div>
