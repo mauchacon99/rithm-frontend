@@ -42,29 +42,29 @@ export class SidenavDrawerService {
   }
 
   /**
-   * Open the sidenav.
+   * Opens the specified sidenav or drawer.
    *
    * @param sidenavDrawer The sidenav or drawer to open.
    */
   open(sidenavDrawer: SidenavDrawerStatus): void {
     if (sidenavDrawer === SidenavDrawerStatus.closed) {
-      throw new Error(`'Closed' is not a valid option to open a sidenav or drawer. Please use the close() method isntead.`);
+      throw new Error(`'Closed' is not a valid option to open a sidenav or drawer. Please use the close() method instead.`);
     }
     this.sidenavDrawerStatus$.next(sidenavDrawer);
   }
 
 
   /**
-   * Close all drawers and the sidenav.
+   * Closes all drawers and the sidenav.
    */
   close(): void {
     this.sidenavDrawerStatus$.next(SidenavDrawerStatus.closed);
   }
 
   /**
-   * Toggle open/close of sidenav.
+   * Toggles the open state of the specified sidenav or drawer.
    *
-   * @param sidenavDrawer The side nav or drawer to toggle.
+   * @param sidenavDrawer The sidenav or drawer to toggle.
    */
   toggle(sidenavDrawer: SidenavDrawerStatus): void {
     const newStatus = this.sidenavDrawerStatus$.value === SidenavDrawerStatus.closed ? sidenavDrawer : SidenavDrawerStatus.closed;
