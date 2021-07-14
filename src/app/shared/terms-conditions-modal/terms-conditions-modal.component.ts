@@ -64,7 +64,7 @@ export class TermsConditionsModalComponent implements OnInit {
       .subscribe((termsConditions) => {
         if (termsConditions) {
           this.message = termsConditions;
-          this.isLoading = false;
+          // this.isLoading = false;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

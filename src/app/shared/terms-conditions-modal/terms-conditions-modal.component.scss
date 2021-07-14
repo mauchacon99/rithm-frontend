@@ -7,6 +7,12 @@ p {
   overflow-y: scroll;
 }
 
+.loader {
+  height: calc(100% - 24px);
+  display: flex;
+  align-items: center;
+}
+
 div.load-spin {
   display: flex;
   flex-direction: row;
