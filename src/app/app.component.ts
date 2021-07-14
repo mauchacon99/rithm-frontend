@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SidenavDrawerStatus } from 'src/models/enums/sidenav-drawer-status.enum';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
@@ -14,11 +15,11 @@ import { UserService } from './core/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
-  /** The. */
-  @ViewChild('sideNav')
-  private sideNav!: MatSidenav;
+  /** The sidenav displayed on mobile. */
+  @ViewChild('sidenav')
+  private sidenav!: MatSidenav;
 
   /** Destroyed. */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -52,15 +53,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
-    public router: Router
+    private router: Router
   ) { }
-
-  /**
-   * Set the current sidenav in the service.
-   */
-  ngAfterViewInit(): void {
-    this.sidenavDrawerService.setSidenav(this.sideNav);
-  }
 
   /**
    * Check the url path and show/hide the navigation.
@@ -81,6 +75,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }, err => {
       console.error(err);
     });
+
+    this.sidenavDrawerService.sidenavDrawerStatus$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((status) => {
+        if (status === SidenavDrawerStatus.sidenavOpen) {
+          this.sidenav.open();
+        } else {
+          if (this.sidenav) {
+            this.sidenav.close();
+          }
+        }
+      }, (error) => {
+        // TODO: log error
+      });
   }
 
   /**
@@ -100,8 +108,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (item === 'Sign Out') {
       this.userService.signOut();
     }
-
-    this.sideNav.toggle();
+    this.sidenavDrawerService.close();
   }
 
 }

@@ -7,7 +7,7 @@
 <mat-sidenav-container [ngClass]="{'sign-in': !showTopNav}" hasBackdrop="true">
 
   <!-- Side nav -->
-  <mat-sidenav #sideNav mode="over">
+  <mat-sidenav #sidenav mode="over">
     <a *ngFor="let link of mobileLinks" routerLink="{{link.link}}" (click)="selectNavItem(link.name)">
       <div class="row no-gutters">
         <div class="col">

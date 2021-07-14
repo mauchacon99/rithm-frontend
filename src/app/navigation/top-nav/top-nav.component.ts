@@ -3,6 +3,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { User } from 'src/models';
+import { SidenavDrawerStatus } from 'src/models/enums/sidenav-drawer-status.enum';
 
 /**
  * Component for the top site navigation.
@@ -41,7 +42,7 @@ export class TopNavComponent {
    * Toggle opening and closing of the mobile navigation.
    */
   toggle(): void {
-    this.sidenavDrawerService.toggle();
+    this.sidenavDrawerService.toggle(SidenavDrawerStatus.sidenavOpen);
   }
 
   /**
