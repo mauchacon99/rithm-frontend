@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDrawer, MatDrawerMode } from '@angular/material/sidenav';
+import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -18,6 +18,7 @@ import { ConnectedStationInfo } from 'src/models';
 })
 export class DocumentComponent implements OnInit {
 
+  /** The element for the comment drawer. */
   @ViewChild('commentDrawer', {static: true})
   commentDrawer!: MatDrawer;
 
