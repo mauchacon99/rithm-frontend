@@ -3,7 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SidenavService } from './core/sidenav.service';
+import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
 /**
@@ -50,7 +50,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   ];
 
   constructor(
-    private sidenavService: SidenavService,
+    private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     public router: Router
   ) { }
@@ -59,7 +59,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
    * Set the current sidenav in the service.
    */
   ngAfterViewInit(): void {
-    this.sidenavService.setSidenav(this.sideNav);
+    this.sidenavDrawerService.setSidenav(this.sideNav);
   }
 
   /**
