@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { DocumentService } from 'src/app/core/document.service';
+import { DashboardService } from '../dashboard.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { Document } from 'src/models';
 
@@ -21,7 +21,7 @@ export class PreviouslyStartedDocumentsComponent implements OnInit {
   isLoading = true;
 
   constructor(
-    private documentService: DocumentService,
+    private dashboardService: DashboardService,
     private errorService: ErrorService
   ) { }
 
@@ -29,7 +29,7 @@ export class PreviouslyStartedDocumentsComponent implements OnInit {
    * Gets top 5 previously started documents on load.
    */
   ngOnInit(): void {
-    this.documentService.getPreviouslyStartedDocuments()
+    this.dashboardService.getPreviouslyStartedDocuments()
       .pipe(first())
       .subscribe((documents) => {
         this.isLoading = false;
