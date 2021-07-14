@@ -36,7 +36,7 @@ export class CommentDrawerComponent {
    * @param documentRithmId Document posted to.
    * @param stationRithmId Station document is housed in.
    */
-  private postComment(
+  postComment(
       displayText: string,
       dateCreated: string,
       userRithmId: string,
