@@ -7,7 +7,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CommentService {
-  /** Endpoint for posting a new comment. */
+
+  /**
+   * Posts a new comment to a document or station.
+   */
   postDocumentComment(): void {
     //do it
   }
