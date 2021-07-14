@@ -6,7 +6,6 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
-import { Location } from '@angular/common';
 
 /**
  * Main component for viewing a document.
@@ -36,7 +35,6 @@ export class DocumentComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private location: Location,
     private router: Router,
     private route: ActivatedRoute
   ) { }
