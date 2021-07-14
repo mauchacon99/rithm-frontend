@@ -9,7 +9,6 @@ import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/s
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { DocumentComponent } from './document.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentDrawerComponent } from 'src/app/detail/comment-drawer/comment-drawer.component';
@@ -31,7 +30,6 @@ describe('DocumentComponent', () => {
       ],
       imports: [
         BrowserAnimationsModule,
-        HttpClientTestingModule,
         MatSidenavModule
       ],
       providers: [
