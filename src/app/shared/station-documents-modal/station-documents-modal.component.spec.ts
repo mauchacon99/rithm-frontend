@@ -71,9 +71,9 @@ describe('StationDocumentsModalComponent', () => {
 
   xit('should link to a document if clicked with proper permissions', () => {
     // TODO: This test not currently working.
-    component.isOnRoster = true;
+    component.userType = 'worker' || 'admin' || 'supervisor';
     expect(component.checkDocPermission('1')).toBeTruthy();
-    component.isOnRoster = false;
+    component.userType = 'none';
     expect(component.checkDocPermission('1')).toBeFalsy();
   });
 

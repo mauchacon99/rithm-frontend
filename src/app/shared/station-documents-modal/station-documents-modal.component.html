@@ -1,8 +1,13 @@
 <div class="modal-container">
   <h4 class="text-center">{{ modalData.stationName }}</h4>
   <div class="doc-container">
-    <span *ngIf="!isLoading">
-      <p class="warn" *ngIf="!this.isOnRoster">You are not a part of this station.</p>
+    <span *ngIf="!isLoading && totalNumDocs === 0">
+      <div class="no-documents">
+        There are no documents in this station
+      </div>
+    </span>
+    <span *ngIf="!isLoading && totalNumDocs > 0">
+      <p class="warn" *ngIf="userType === userTypeEnum.none">You are not a part of this station.</p>
       <div class="row no-gutters">
         <div class="col-9 col-md-5 col-lg-4 col-xl-5 pl-5">
           <strong>Document</strong>
@@ -17,38 +22,38 @@
           <strong>Last Updated</strong>
         </div>
       </div>
-      <div *ngFor="let document of documents" (click)="checkDocPermission(document.rithmId)" [ngClass]="{'link-permission' : this.isOnRoster}" class="doc-link row no-gutters">
+      <div *ngFor="let document of documents" (click)="checkDocPermission(document.rithmId)" [ngClass]="{'link-permission' : userType !== userTypeEnum.none}" class="doc-link row no-gutters">
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!document.blocked" class="col-9 col-md-5 col-lg-4 col-xl-5">
+          [matTooltipDisabled]="!document.isEscalated" class="col-9 col-md-5 col-lg-4 col-xl-5">
           <!-- Priority -->
           <div class="priority circle-30-accent">
             {{ document.priority }}
           </div>
-          <p [ngClass]="{'warn' : document.blocked }">
-            <!-- Blocked icon -->
-            <i *ngIf="document.blocked" class="fas fa-exclamation-circle"></i>
+          <p [ngClass]="{'warn' : document.isEscalated }">
+            <!-- Escalated icon -->
+            <i *ngIf="document.isEscalated" class="fas fa-exclamation-circle"></i>
             <!-- Document name -->
-            {{ document?.docName }}
+            {{ document?.documentName }}
           </p>
         </div>
         <!-- Assigned -->
         <div class="col-3 col-md-3 col-md-4 col-lg-3">
-          <span *ngIf="document?.firstName && document?.lastName">
+          <span *ngIf="document?.userAssigned">
             <div class="initials">
               <app-user-avatar [workerInitials]="getDocInitials(document)"></app-user-avatar>
             </div>
             <div class="d-none d-md-block">
-              {{ document?.firstName }} {{ document?.lastName }}
+              {{ document?.userAssigned }}
             </div>
           </span>
         </div>
         <!-- Time in station -->
         <div class="col-2 d-none d-md-block col-md-3 col-xl-2">
-          {{ getElapsedTime(document.timeEnteredStation) }}
+          {{ getElapsedTime(document.flowedTimeUTC) }}
         </div>
         <!-- Last updated -->
         <div class="col-2 d-none d-lg-block">
-          {{ ((getElapsedTime(document.lastUpdated) === '1 day') || (getElapsedTime(document.lastUpdated) === 'Unknown')) ? (getElapsedTime(document.lastUpdated) === '1 day' ? 'Yesterday' : getElapsedTime(document.lastUpdated)) : getElapsedTime(document.lastUpdated)  + ' ago'}}
+          {{ ((getElapsedTime(document.updatedTimeUTC) === '1 day') || (getElapsedTime(document.updatedTimeUTC) === 'Unknown')) ? (getElapsedTime(document.updatedTimeUTC) === '1 day' ? 'Yesterday' : getElapsedTime(document.updatedTimeUTC)) : getElapsedTime(document.updatedTimeUTC)  + ' ago'}}
         </div>
       </div>
     </span>
@@ -58,7 +63,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!isLoading" class="row no-gutters justify-content-center">
+  <div *ngIf="!isLoading && totalNumDocs > 0" class="row no-gutters justify-content-center">
     <app-pagination (currentPageNum)="getDocuments($event)" [numDocs]="totalNumDocs" [activeNum]="activeNum">
     </app-pagination>
   </div>

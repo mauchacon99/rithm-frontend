@@ -9,7 +9,7 @@ import { Document } from './document';
   /** Total number of documents. */
   numberOfDocument: number;
 
-  /** The user is worker roster OR supervisor roster. */
-  isWorker: boolean;
+  /** The user role is worker, admin, supervisor or none. */
+  userType: string;
 
 }

@@ -123,15 +123,12 @@ describe('DashboardService', () => {
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
-        flowedTimeUTC: '0001-01-01T00:00:00',
+        flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         id: 7,
         rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
-        docName: '',
-        firstName: '',
-        lastName: '',
-        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
-        blocked: false,
-        lastUpdated: ''
+        updatedTimeUTC: '',
+        isEscalated: false,
+        userAssigned: ''
       }];
 
     service.getPriorityQueueDocuments()
@@ -155,15 +152,12 @@ describe('DashboardService', () => {
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
-        flowedTimeUTC: '0001-01-01T00:00:00',
+        flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         id: 7,
         rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
-        docName: '',
-        firstName: '',
-        lastName: '',
-        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
-        blocked: false,
-        lastUpdated: ''
+        updatedTimeUTC: '',
+        isEscalated: false,
+        userAssigned: ''
       }];
 
     service.getPreviouslyStartedDocuments()
