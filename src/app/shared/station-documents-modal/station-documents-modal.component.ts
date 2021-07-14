@@ -49,8 +49,6 @@ export class StationDocumentsModalComponent implements OnInit {
     private router: Router
   ) {
     this.stationRithmId = this.modalData.stationId;
-    // TODO: Remove this once request to get station documents is merged!
-    this.stationRithmId = 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0';
   }
 
   /**
