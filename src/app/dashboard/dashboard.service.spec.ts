@@ -107,7 +107,37 @@ describe('DashboardService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationrithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${rithmId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should successfully fetch data for dashboard supervisor roster', () => {
+    const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
+    const expectedResponse: Array<WorkerRosterResponse> = [
+      {
+        firstName: 'Adarsh',
+        lastName: 'Achar',
+        email: 'adarsh.achar@inpivota.com'
+      }
+      ,
+      {
+        firstName: 'Tyler',
+        lastName: 'Hendrickson',
+        email: 'hendricksontyler@icloud.com'
+      }
+    ];
+
+    service.getSupervisorRoster(rithmId)
+      .subscribe((response) => {
+        expect(response.length).toBeGreaterThanOrEqual(0);
+      });
+
+    // outgoing request
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${rithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
