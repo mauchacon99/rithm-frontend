@@ -349,3 +349,13 @@ button {
   font-weight: 600;
   font-family: Montserrat, sans-serif;
 }
+
+/// Body Small
+/// Regular 14px
+.body-small {
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  font-size: font-calc(14);
+  line-height: 1;
+  letter-spacing: normal;
+}

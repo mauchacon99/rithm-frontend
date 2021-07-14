@@ -36,13 +36,6 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should return a list of previously started documents', () => {
-    service.getPreviouslyStartedDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
-  });
-
   it('should return forward and previous stations for a specific document', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
@@ -76,10 +69,13 @@ describe('DocumentService', () => {
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
+      numberOfSupervisors: 7,
       supervisorRoster: ['SA', 'RI', 'NI'],
-      workerRoster: []
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
     };
 
     service.getDocumentInfo(stationId, documentId, mode)

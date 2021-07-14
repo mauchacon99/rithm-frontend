@@ -79,51 +79,6 @@ export class MockDocumentService {
   }
 
   /**
-   * Gets a list of previously started documents.
-   *
-   * @returns A list of previously started documents.
-   */
-  getPreviouslyStartedDocuments(): Observable<Document[]> {
-    const filterData: Document[] = [
-      {
-        rithmId: '',
-        documentName: 'Really long document name',
-        stationName: 'really long Station name',
-        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
-        priority: 1,
-        firstName: '',
-        lastName: '',
-        blocked: false,
-        lastUpdated: '2021-06-16T17:26:47.3506612Z',
-        userRithmId: '',
-        documentRithmId: '',
-        docName: '',
-        flowedTimeUTC: '',
-        stationRithmId: '',
-        id: 1
-      },
-      {
-        rithmId: '',
-        documentName: 'New Doc 2',
-        stationName: 'Station name',
-        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
-        priority: 2,
-        firstName: '',
-        lastName: '',
-        blocked: false,
-        lastUpdated: '2021-06-16T17:26:47.3506612Z',
-        userRithmId: '',
-        documentRithmId: '',
-        docName: '',
-        flowedTimeUTC: '',
-        stationRithmId: '',
-        id: 1
-      }
-    ];
-    return of(filterData).pipe(delay(1000));
-  }
-
-  /**
    * Gets a list of forward and previous stations for a specific document.
    *
    * @param documentId The Specific id of document.
@@ -163,15 +118,18 @@ export class MockDocumentService {
    */
    getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
     const data: DocumentStationInformation = {
-      documentName: 'Requirement',
-      documentPriority: 1,
-      currentAssignedUser: 'WU',
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
-      supervisorRoster: ['MP', 'RU', 'HP'],
-      workerRoster: []
+      numberOfSupervisors: 7,
+      supervisorRoster: ['SA', 'RI', 'NI'],
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
     };
     return of(data).pipe(delay(1000));
   }

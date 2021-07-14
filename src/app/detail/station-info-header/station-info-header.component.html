@@ -9,12 +9,18 @@
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
-      A really long Untitled Station Name<!-- TODO: display station name -->
+      {{stationInformation?.stationName}}
     </div>
   </div>
   <div class="col-6 col-md-3 col-xl-2">
     <p class="overline">supervisor roster</p>
-    <!-- TODO: Pass station to component <app-roster></app-roster> -->
+    <app-roster
+      [rosterArray]="stationInformation.supervisorRoster"
+      [rosterSize]="stationInformation.numberOfSupervisors"
+      [stationId]="stationInformation.stationId"
+      [stationName]="stationInformation.stationName"
+      [isWorker]="false"
+    ></app-roster>
   </div>
   <div class="col-6"
   [ngClass]="{
@@ -22,7 +28,13 @@
     'col-md-3 col-xl-2': type === 'super' || 'admin'
   }">
     <p class="overline">worker roster</p>
-    <!-- TODO: Pass station to component <app-roster></app-roster> -->
+    <app-roster
+      [rosterArray]="stationInformation.workerRoster"
+      [rosterSize]="stationInformation.numberOfWorkers"
+      [stationId]="stationInformation.stationId"
+      [stationName]="stationInformation.stationName"
+      [isWorker]="true"
+    ></app-roster>
   </div>
 </section>
 <div class="row">

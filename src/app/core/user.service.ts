@@ -189,7 +189,7 @@ export class UserService {
    * @returns A terms and conditions observable.
    */
   getTermsConditions(): Observable<string> {
-    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`);
+    return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`, { responseType: 'text' });
   }
 
   /**

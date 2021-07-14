@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DashboardStationData } from 'src/models';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -12,21 +11,34 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./roster.component.scss']
 })
 export class RosterComponent implements OnInit {
-  /** The station info to display. */
-  @Input() station!: DashboardStationData;
+  //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
+
+  /** The roster array. */
+  @Input() rosterArray!: string[];
+
+  /** The roster size. */
+  @Input() rosterSize!: number;
+
+  /** Station name. Needed for openRosterModal. */
+  @Input() stationName!: string;
+
+  /** Station ID. Needed for openRosterModal. */
+  @Input() stationId!: string;
+
+  /** Determines if roster is a worker or supervisor roster. Needed for openRosterModal. */
+  @Input() isWorker!: boolean;
 
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
   constructor(private dialog: MatDialog) {}
 
-
   /**
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (this.station.numberOfWorkers <= 3) {
-      this.slices = this.station.numberOfWorkers;
+    if (this.rosterSize <= 3) {
+      this.slices = this.rosterSize;
     }
   }
 
@@ -36,10 +48,8 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
-      data: { stationName: this.station.stationName, stationId: this.station.rithmId }
+      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker}
     });
   }
-
-
 
 }

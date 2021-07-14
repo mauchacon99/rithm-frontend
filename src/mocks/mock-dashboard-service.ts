@@ -79,6 +79,29 @@ export class MockDashboardService {
   }
 
   /**
+   * Gets a list of supervisor roster of a station.
+   *
+   * @param stationId The id of the station for which to get the roster.
+   * @returns A list of supervisor roster of a station.
+   */
+  getSupervisorRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+    const expectedResponse: Array<WorkerRosterResponse> = [
+      {
+        firstName: 'Adarsh',
+        lastName: 'Achar',
+        email: 'adarsh.achar@inpivota.com'
+      }
+      ,
+      {
+        firstName: 'Tyler',
+        lastName: 'Hendrickson',
+        email: 'hendricksontyler@icloud.com'
+      }
+    ];
+    return of(expectedResponse).pipe(delay(1000));
+  }
+
+  /**
    * Gets a list of priority queue documents.
    *
    * @returns A list of top priority queue documents.
@@ -103,6 +126,51 @@ export class MockDashboardService {
         lastUpdated: ''
       }];
     return of(expectedResponse).pipe(delay(1000));
+  }
+
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+  getPreviouslyStartedDocuments(): Observable<Document[]> {
+    const filterData: Document[] = [
+      {
+        rithmId: '',
+        documentName: 'Really long document name',
+        stationName: 'really long Station name',
+        timeEnteredStation: '2021-06-18T17:26:47.3506612Z',
+        priority: 1,
+        firstName: '',
+        lastName: '',
+        blocked: false,
+        lastUpdated: '2021-06-16T17:26:47.3506612Z',
+        userRithmId: '',
+        documentRithmId: '',
+        docName: '',
+        flowedTimeUTC: '',
+        stationRithmId: '',
+        id: 1
+      },
+      {
+        rithmId: '',
+        documentName: 'New Doc 2',
+        stationName: 'Station name',
+        timeEnteredStation: '2021-06-18T21:17:34.3506612Z',
+        priority: 2,
+        firstName: '',
+        lastName: '',
+        blocked: false,
+        lastUpdated: '2021-06-16T17:26:47.3506612Z',
+        userRithmId: '',
+        documentRithmId: '',
+        docName: '',
+        flowedTimeUTC: '',
+        stationRithmId: '',
+        id: 1
+      }
+    ];
+    return of(filterData).pipe(delay(1000));
   }
 
 }

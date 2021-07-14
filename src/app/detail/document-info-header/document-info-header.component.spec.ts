@@ -24,6 +24,20 @@ describe('DocumentInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoHeaderComponent);
     component = fixture.componentInstance;
+    component.documentInformation = {
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      currentAssignedUser: 'NS',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationName: 'Development',
+      stationPriority: 2,
+      numberOfSupervisors: 7,
+      supervisorRoster: ['SA', 'RI', 'NI'],
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
+    };
     fixture.detectChanges();
   });
 
