@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService } from 'src/mocks';
 import { MockCommentService } from 'src/mocks/mock-comment-service';
@@ -35,7 +35,7 @@ describe('CommentDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('posted comment should update postedComment', () => {
+  it('posted comment should update postedComment', fakeAsync(() => {
     const comment = {
       displayText: 'test',
       dateCreated: '2021-07-14T18:57:59.771Z',
@@ -44,8 +44,8 @@ describe('CommentDrawerComponent', () => {
       stationRithmId: '1234'
     };
     component.postComment(comment.dateCreated, comment.displayText, comment.documentRithmId, comment.stationRithmId, comment.userRithmId);
-
+    tick(1000);
     expect(component.postedComment).toBeDefined();
 
-  });
+  }));
 });
