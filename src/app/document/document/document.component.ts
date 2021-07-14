@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentStationInformation } from 'src/models';
@@ -39,7 +40,8 @@ export class DocumentComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private route: ActivatedRoute
   ) {
     // TODO: update these
     this.documentId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
@@ -50,6 +52,7 @@ export class DocumentComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.getParams();
     this.getConnectedStations();
     this.getDocumentStationData();
   }
@@ -59,6 +62,7 @@ export class DocumentComponent implements OnInit {
    */
   private getConnectedStations(): void {
     this.connectedStationsLoading = true;
+    console.log(this.stationId);
     this.documentService.getConnectedStationInfo(this.documentId, this.stationId)
     .pipe(first())
     .subscribe((connectedStations) => {
@@ -95,5 +99,25 @@ export class DocumentComponent implements OnInit {
       );
     });
   }
+
+  /**
+   * CC.
+   */
+   private getParams(): void {
+    this.route.queryParams
+    .pipe(first())
+    .subscribe((params) => {
+      this.stationId = params.stationId;
+      //this.documentId = params.documentId;
+      //console.log(params);
+    }, (error: HttpErrorResponse) => {
+      this.documentLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error,
+        true
+      );
+    });
+   }
 
 }

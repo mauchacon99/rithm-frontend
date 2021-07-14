@@ -91,7 +91,9 @@ export class StationDocumentsModalComponent implements OnInit {
    */
   checkDocPermission(rithmId: string): void {
     if (this.isOnRoster) {
-      this.router.navigateByUrl(`/document/${rithmId}`);
+      //this.router.navigateByUrl(`/document/${rithmId}`);
+      this.router.navigate(
+        [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});
       this.dialogRef.close();
     }
   }
