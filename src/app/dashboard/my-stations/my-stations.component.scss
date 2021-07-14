@@ -1,7 +1,10 @@
 section {
   @media screen and (max-width: 575px) {
-    h4 {
-      margin-left: 10px;
+    div.row {
+      &:first-child {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+      }
     }
   }
 }
