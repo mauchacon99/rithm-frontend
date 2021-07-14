@@ -42,7 +42,7 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
     ConnectedStationPaneComponent,
     StationInfoHeaderComponent,
     DocumentInfoHeaderComponent,
-    CommentComponent
+    CommentDrawerComponent
   ]
 })
 export class DetailModule { }
