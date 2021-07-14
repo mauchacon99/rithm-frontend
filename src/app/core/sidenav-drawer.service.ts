@@ -12,6 +12,35 @@ export class SidenavDrawerService {
   /** The state of the sidenav and drawers in the app. */
   sidenavDrawerStatus$ = new BehaviorSubject(SidenavDrawerStatus.closed);
 
+  /** Whether to show the backdrop for an opened drawer. */
+  private _drawerHasBackdrop!: boolean;
+
+  /**
+   * Whether to show the backdrop for an opened drawer (readonly).
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this._drawerHasBackdrop;
+  }
+
+  constructor() {
+    this.determineBackdropDisplay();
+
+    // TODO: Do this without using window
+    window.addEventListener('resize', () => {
+      // TODO: Define this magic number
+      this.determineBackdropDisplay();
+    });
+  }
+
+  /**
+   * Determines whether to show the drawer backdrop based on the current window width.
+   */
+  private determineBackdropDisplay() {
+    this._drawerHasBackdrop = window.innerWidth <= 991;
+  }
+
   /**
    * Open the sidenav.
    *

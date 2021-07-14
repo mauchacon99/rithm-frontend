@@ -2,8 +2,8 @@
   <app-sub-header></app-sub-header>
 </div>
 
-<mat-drawer-container>
-  <mat-drawer #commentDrawer>
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #commentDrawer mode="over" position="end">
     <app-comment-drawer></app-comment-drawer>
   </mat-drawer>
 
