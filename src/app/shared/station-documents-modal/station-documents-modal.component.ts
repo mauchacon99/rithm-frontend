@@ -49,6 +49,8 @@ export class StationDocumentsModalComponent implements OnInit {
     private router: Router
   ) {
     this.stationRithmId = this.modalData.stationId;
+    // TODO: Remove this once request to get station documents is merged!
+    this.stationRithmId = 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0';
   }
 
   /**
@@ -93,7 +95,9 @@ export class StationDocumentsModalComponent implements OnInit {
    */
   checkDocPermission(rithmId: string): void {
     if (this.userType !== UserType.none) {
-      this.router.navigateByUrl(`/document/${rithmId}`);
+      //this.router.navigateByUrl(`/document/${rithmId}`);
+      this.router.navigate(
+        [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});
       this.dialogRef.close();
     }
   }

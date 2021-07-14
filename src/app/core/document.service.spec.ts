@@ -94,10 +94,13 @@ describe('DocumentService', () => {
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
+      numberOfSupervisors: 7,
       supervisorRoster: ['SA', 'RI', 'NI'],
-      workerRoster: []
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
     };
 
     service.getDocumentInfo(stationId, documentId, mode)

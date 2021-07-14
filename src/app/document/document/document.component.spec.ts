@@ -10,6 +10,7 @@ import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.compone
 import { DocumentComponent } from './document.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -26,7 +27,8 @@ describe('DocumentComponent', () => {
         MockComponent(DocumentTemplateComponent)
       ],
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -46,13 +48,4 @@ describe('DocumentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  beforeEach(async () => {
-    component.ngOnInit();
-
-    await fixture.whenStable();
-  });
-
-  it('should retrieve document data', () => {
-    expect(component.documentInformation).toBeDefined();
-  });
 });

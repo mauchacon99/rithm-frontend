@@ -79,6 +79,29 @@ export class MockDashboardService {
   }
 
   /**
+   * Gets a list of supervisor roster of a station.
+   *
+   * @param stationId The id of the station for which to get the roster.
+   * @returns A list of supervisor roster of a station.
+   */
+  getSupervisorRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+    const expectedResponse: Array<WorkerRosterResponse> = [
+      {
+        firstName: 'Adarsh',
+        lastName: 'Achar',
+        email: 'adarsh.achar@inpivota.com'
+      }
+      ,
+      {
+        firstName: 'Tyler',
+        lastName: 'Hendrickson',
+        email: 'hendricksontyler@icloud.com'
+      }
+    ];
+    return of(expectedResponse).pipe(delay(1000));
+  }
+
+  /**
    * Gets a list of priority queue documents.
    *
    * @returns A list of top priority queue documents.
