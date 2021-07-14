@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentStationInformation } from 'src/models';
@@ -16,84 +17,128 @@ import { ConnectedStationInfo } from 'src/models';
 })
 export class DocumentComponent implements OnInit {
 
-  /** The id of the document that is being viewed. */
-  private documentId: string;
-
-  /** The id of the station that this document is in. */
-  private stationId: string;
-
-  /** Document information. */
+  /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
 
-  /** Whether the stations are being loaded. */
-  documentLoading = false;
+  /** Whether the request to get the document info is currently underway. */
+  documentLoading = true;
 
-  /** List of forward stations. */
+  /** The list of stations that this document could flow to. */
   forwardStations: ConnectedStationInfo[] = [];
 
-  /** List of previous stations. */
+  /** The list of stations that this document came from. */
   previousStations: ConnectedStationInfo[] = [];
 
   /** Whether the request to get connected stations is currently underway. */
-  connectedStationsLoading = false;
+  connectedStationsLoading = true;
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService
-  ) {
-    // TODO: update these
-    this.documentId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    this.stationId = 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0';
-  }
+    private errorService: ErrorService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.getConnectedStations();
-    this.getDocumentStationData();
+    this.getParams();
   }
 
   /**
-   * Retrieves a list of the connected stations for the given document.
+   * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
-  private getConnectedStations(): void {
-    this.connectedStationsLoading = true;
-    this.documentService.getConnectedStationInfo(this.documentId, this.stationId)
-    .pipe(first())
-    .subscribe((connectedStations) => {
-      this.forwardStations = connectedStations.followingStations;
-      this.previousStations = connectedStations.previousStations;
-      this.connectedStationsLoading = false;
-    }, (error) => {
-      this.connectedStationsLoading = false;
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error,
-        true
-      );
-    });
+  private getParams(): void {
+    this.route.queryParams
+      .pipe(first())
+      .subscribe((params) => {
+
+        if (!params.stationId || !params.documentId) {
+          this.handleInvalidParams();
+        } else {
+          this.getDocumentStationData(params.documentId, params.stationId);
+          this.getConnectedStations(params.documentId, params.stationId);
+        }
+      }, (error) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
+  /**
+   * Navigates the user back to dashboard and displays a message about the invalid params.
+   */
+  private handleInvalidParams(): void {
+    this.navigateBack();
+    this.errorService.displayError(
+      'The link you followed is invalid. Please double check the URL and try again.',
+      new Error('Invalid params for document'),
+      true
+    );
+  }
+
+  /**
+   * Navigates the user back to the dashboard page.
+   */
+  private navigateBack(): void {
+    // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
+    // const previousPage = this.location.getState();
+
+    // If no previous page, go to dashboard
+    this.router.navigateByUrl('dashboard');
   }
 
   /**
    * Get data about the document and station the document is in.
+   *
+   * @param documentId The id of the document for which to get data.
+   * @param stationId The id of the station that the document is in.
    */
-  private getDocumentStationData(): void {
-    this.documentService.getDocumentInfo(this.documentId, this.stationId, 'Worker')
-    .pipe(first())
-    .subscribe((document) => {
-      if (document) {
-        this.documentInformation = document;
-      }
-      this.documentLoading = false;
-    }, (error: HttpErrorResponse) => {
-      this.documentLoading = false;
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error,
-        true
-      );
-    });
+  private getDocumentStationData(documentId: string, stationId: string): void {
+    this.documentLoading = true;
+    this.documentService.getDocumentInfo(documentId, stationId, 'Worker')
+      .pipe(first())
+      .subscribe((document) => {
+        if (document) {
+          this.documentInformation = document;
+        }
+        this.documentLoading = false;
+      }, (error: HttpErrorResponse) => {
+        this.documentLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
+  /**
+   * Retrieves a list of the connected stations for the given document.
+   *
+   * @param documentId The id of the document for which to retrieve previous stations.
+   * @param stationId The id of the station for which to retrieve forward stations.
+   */
+  private getConnectedStations(documentId: string, stationId: string): void {
+    this.connectedStationsLoading = true;
+    this.documentService.getConnectedStationInfo(documentId, stationId)
+      .pipe(first())
+      .subscribe((connectedStations) => {
+        this.forwardStations = connectedStations.followingStations;
+        this.previousStations = connectedStations.previousStations;
+        this.connectedStationsLoading = false;
+      }, (error) => {
+        this.connectedStationsLoading = false;
+        this.errorService.displayError(
+          'Failed to get connected stations for this document.',
+          error,
+          false
+        );
+      });
   }
 
 }

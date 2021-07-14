@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Document, StationDocumentsResponse, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
+import { StationDocumentsResponse, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -28,7 +28,7 @@ export class DocumentService {
     const ELEMENT_DATA: StationDocumentsResponse = {
       documentList: [
         /* eslint-disable max-len */
-        { rithmId: '1', docName: 'Almond Flour', stationName: 'Dry Goods & Liquids', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', documentName: '', flowedTimeUTC: '', stationRithmId: '', id: 1 },
+        { rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C', docName: 'Almond Flour', stationName: 'Dry Goods & Liquids', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 2, firstName: '', lastName: '', blocked: true, lastUpdated: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C', documentName: '', flowedTimeUTC: '', stationRithmId: 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0', id: 1 },
         { rithmId: '2', docName: 'Apple Crisps', stationName: 'Dry Goods & Liquids', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: 'John', lastName: 'Doe', blocked: false, lastUpdated: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', documentName: '', flowedTimeUTC: '', stationRithmId: '', id: 1 },
         { rithmId: '3', docName: 'Apple Sauce', stationName: 'Dry Goods & Liquids', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 3, firstName: '', lastName: '', blocked: false, lastUpdated: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', documentName: '', flowedTimeUTC: '', stationRithmId: '', id: 1 },
         { rithmId: '4', docName: 'Bagel Seasoning', stationName: 'Dry Goods & Liquids', timeEnteredStation: '2021-06-16T17:26:47.3506612Z', priority: 7, firstName: '', lastName: '', blocked: false, lastUpdated: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', documentName: '', flowedTimeUTC: '', stationRithmId: '', id: 1 },
