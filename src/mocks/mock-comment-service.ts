@@ -16,8 +16,6 @@ export class MockCommentService {
     const comment: Comment = {
       displayText: 'Here is a test message that is a test and a message.',
       dateCreated: '2021-07-12T19:06:47.3506612Z',
-      dateLastEdited: '2021-07-12T19:06:47.3506612Z',
-      archived: false,
       userRithmId: '1234',
       documentRithmId: '1234',
       stationRithmId: '1234'
