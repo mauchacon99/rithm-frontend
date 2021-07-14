@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -28,6 +29,9 @@ export class RosterModalComponent implements OnInit {
   /** Whether the content is being loaded. */
   isLoading = true;
 
+  /** Roster type. */
+  roster$: Observable<WorkerRosterResponse[]>;
+
   /** Worker roster list. */
   users = Array<WorkerRosterResponse>();
 
@@ -39,13 +43,19 @@ export class RosterModalComponent implements OnInit {
   ) {
     this.stationRithmId = this.data.stationId;
     this.isWorker = this.data.isWorker;
+
+    if(this.isWorker) {
+      this.roster$ = this.dashboardService.getWorkerRoster(this.stationRithmId);
+    } else {
+      this.roster$ = this.dashboardService.getSupervisorRoster(this.stationRithmId);
+    }
   }
 
   /**
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.dashboardService.getWorkerRoster(this.stationRithmId, this.isWorker)
+    this.roster$
       .pipe(first())
       .subscribe((response) => {
         this.isLoading = false;

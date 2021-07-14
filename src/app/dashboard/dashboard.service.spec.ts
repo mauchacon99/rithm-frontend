@@ -101,7 +101,7 @@ describe('DashboardService', () => {
       }
     ];
 
-    service.getWorkerRoster(rithmId, true)
+    service.getWorkerRoster(rithmId)
       .subscribe((response) => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
