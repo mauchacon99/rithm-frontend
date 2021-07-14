@@ -22,6 +22,7 @@ import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-co
     RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent,
-    TermsConditionsModalComponent
+    TermsConditionsModalComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     CommonModule,
