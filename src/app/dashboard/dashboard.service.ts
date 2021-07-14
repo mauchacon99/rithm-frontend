@@ -45,7 +45,7 @@ export class DashboardService {
   getWorkerRoster(stationId: string, isWorker: boolean): Observable<WorkerRosterResponse[]> {
     if (isWorker) {
       // eslint-disable-next-line max-len
-      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+      return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${stationId}`);
     } else {
       // eslint-disable-next-line max-len
       return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);

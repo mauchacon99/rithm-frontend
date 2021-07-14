@@ -107,7 +107,7 @@ describe('DashboardService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationrithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${rithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
