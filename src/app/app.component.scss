@@ -1,1 +1,47 @@
-// Add styles
+@import 'variables', 'functions', 'mixins';
+
+.page {
+  @include gradient($secondary-gray, $secondary-blue);
+}
+
+mat-drawer-container {
+  margin-top: 65px;
+  height: calc(100vh - 65px);
+
+  mat-drawer {
+    padding-top: 15px;
+    width: 230px;
+
+    a {
+      font-size: font-calc(16);
+      text-transform: capitalize;
+
+      .row {
+        padding: 20px 0 20px 15px;
+        width: 100%;
+      }
+
+      &:nth-child(3) {
+        .row {
+          border-top: 1px solid $accent-blue;
+        }
+      }
+    }
+  }
+
+  mat-drawer-content {
+    // height: calc(100vh + 65px);
+    flex: 1 1 auto;
+
+    @media screen and (max-width: 991px) {
+      &.non-entry {
+        height: calc(100vh - 65px);
+      }
+    }
+  }
+
+  &.sign-in {
+    margin-top: 0;
+    height: 100vh;
+  }
+}

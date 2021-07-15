@@ -1,3 +1,5 @@
 {
-  "extends": "stylelint-config-standard"
+  "extends": "@strut-software/stylelint-config",
+  "rules": {
+  }
 }

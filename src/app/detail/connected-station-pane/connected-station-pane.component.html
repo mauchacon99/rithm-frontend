@@ -1,0 +1,5 @@
+<aside [class]="location">
+  <span *ngFor="let station of stations">
+    <app-station-card [station]="station" [location]='location'></app-station-card>
+  </span>
+</aside>

@@ -1,0 +1,117 @@
+name: Dev Deployments
+
+on:
+  push:
+    paths:
+      - "src/**"
+    branches:
+      - "dev"
+
+jobs:
+
+  # Deploys the web app
+  web-app:
+    runs-on: [self-hosted, dev]
+    timeout-minutes: 15
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling app
+      run: npm run build
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+    - name: Deploying app
+      run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name devapp
+
+  # Deploys the Karma test coverage site
+  test-coverage:
+    runs-on: [self-hosted, dev]
+    needs: web-app
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Generating test coverage
+      run: npm run test-ci
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name devapp
+
+  # Deploys the Compodoc documentation site
+  compodoc:
+    runs-on: [self-hosted, dev]
+    needs: web-app
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling documentation
+      run: npm run compile-docs
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name devapp
+
+  # Deploys the SassDoc documentation site
+  sassdoc:
+    runs-on: [self-hosted, dev]
+    needs: web-app
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Installing dependencies
+      run: npm ci
+
+    - name: Compiling documentation
+      run: npm run compile-style-docs
+
+    - name: Stopping IIS pool
+      run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+    - name: Deploying documentation site
+      run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
+
+    - name: Starting IIS pool
+      run: c:\batch\elevate Start-WebAppPool -Name devapp

@@ -1,0 +1,22 @@
+// Primary Colors---------------
+@import './rithm-light-palettes';
+
+/// Rithm Primary color 1 - Blue
+$primary-blue: map-get($primary-palette, 500);
+
+// Accent Colors---------------
+
+/// Rithm Accent Blue
+$accent-blue: map-get($accent-palette, 500);
+
+// Secondary Colors---------------
+
+/// Rithm Black
+$secondary-black: #202020;
+/// Rithm Secondary Blue
+$secondary-blue: #2b3c54;
+/// Rithm Secondary Gray
+$secondary-gray: #667080;
+
+// Warning Colors---------------
+$warning-red: map-get($error-palette, 500);

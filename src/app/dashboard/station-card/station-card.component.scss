@@ -1,0 +1,38 @@
+@import 'rithm-light-palettes', 'variables', 'functions';
+
+mat-card {
+  padding: 8px;
+  margin-top: 10px;
+  height: 102px;
+
+  h6 {
+    font-weight: 500;
+    color: $accent-blue;
+  }
+
+  .docs {
+    margin-left: 15px;
+  }
+
+  .roster,
+  .docs {
+    float: left;
+    margin-top: 10px;
+
+    span.circles {
+      div.doc-count {
+        margin: 5px 2px;
+        float: left;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:hover {
+          cursor: pointer;
+          background: map-get($secondary-gray-palette, 600);
+        }
+      }
+    }
+  }
+}

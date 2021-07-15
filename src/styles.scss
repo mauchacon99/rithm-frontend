@@ -1,1 +1,118 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+// Plus imports for other components in your app.
+
+@use '~@angular/material' as mat;
+
+// Import all helpers
+@import './scss/helpers/index';
+
+/// Import Tools from tools file
+/// Contains global styles for buttons, forms and typography
+@import './scss/tools/index';
+
+// Rithm light Theme
+@import './scss/themes/index';
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core($custom-typography);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$rithm-primary: mat.define-palette(mat.$indigo-palette);
+/* stylelint-disable */
+$rithm-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+/* stylelint-enable */
+
+// The warn palette is optional (defaults to red).
+$rithm-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$rithm-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $rithm-primary,
+      accent: $rithm-accent,
+      warn: $rithm-warn,
+    )
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($rithm-theme);
+
+// Apply Rithm light theme
+@include mat.all-component-themes($rithm-light);
+
+// Global Styles Below
+/// Global page Styles
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: $primary-blue;
+}
+
+/// Set the height of the page
+/// Apply page specific styles within the component
+.page {
+  width: 100vw;
+  position: relative;
+  overflow: auto;
+  padding-bottom: 20px;
+}
+
+.textured-bg {
+  background-image: url('./assets/images/patterns/dust_scratches.png');
+  background-repeat: repeat;
+}
+
+/// Overrides the default accent color for the snackbar action
+.snackbar {
+  .mat-simple-snackbar-action {
+    color: #fff;
+  }
+}
+
+.snackbar-error {
+  color: $warning-red;
+  background-color: map-get($error-palette, 50);
+
+  .mat-simple-snackbar-action {
+    color: $warning-red;
+  }
+}
+
+/// Hide content
+.transparent {
+  visibility: hidden;
+}
+
+/// Styling of links globally
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  font-size: font-calc(14);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/// Color Application classes
+.warn {
+  color: $warning-red;
+}
+
+.bg-white {
+  background-color: #fff;
+}

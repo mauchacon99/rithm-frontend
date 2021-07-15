@@ -1,0 +1,10 @@
+<!-- Title -->
+<h4 id="title" class="text-center" [ngClass]="{'error-title': title === 'Error'}">{{title}}</h4>
+
+<!-- Message -->
+<p id="message">{{message}}</p>
+
+<!-- Buttons -->
+<div mat-dialog-actions class="row justify-content-end">
+  <button mat-button [color]="materialColor" [mat-dialog-close]="true" cdkFocusInitial>{{okButtonText}}</button>
+</div>

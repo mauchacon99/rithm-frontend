@@ -3,6 +3,7 @@
 
 *.ts @HendricksonTyler
 *.js @HendricksonTyler
+.stylelintrc.json @belugasanity
 *.json @HendricksonTyler
 
 *.spec.ts @HendricksonTyler
@@ -11,3 +12,5 @@
 
 rithm/src/assets/**/* @belugasanity
 
+
+.browserslistrc @belugasanity

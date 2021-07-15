@@ -3,7 +3,21 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+
+  /** Whether the environment is used for testing. */
+  testing: false,
+
+  /** Whether the environment is used for production. */
+  production: false,
+
+  /** The base URL for the Rithm API. */
+  baseApiUrl: 'https://devapi.rithm.tech',
+
+  /** The base URL for the deployed Rithm app. */
+  baseAppUrl: 'https://devapp.rithm.tech',
+
+  /** The lifetime for which an access token is valid in milliseconds. */
+  accessTokenLifetime: 900000
 };
 
 /*
@@ -13,4 +27,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

@@ -1,0 +1,13 @@
+@import 'variables';
+@import '../dialog.scss';
+
+.error-title {
+  color: $warning-red;
+}
+
+p {
+  padding: 15px 0;
+  white-space: pre-wrap;
+  max-height: 450px;
+  overflow-y: scroll;
+}

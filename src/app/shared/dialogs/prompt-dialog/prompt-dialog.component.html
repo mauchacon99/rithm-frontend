@@ -1,0 +1,21 @@
+<!-- Title -->
+<h4 id="title">{{title}}</h4>
+
+<div class="row"><!-- TODO: Adjust padding when we start using this -->
+
+  <!-- Message -->
+  <p id="message">{{message}}</p>
+
+  <!-- Input -->
+  <mat-form-field class="col-12 p-0" appearance="outline">
+    <mat-label *ngIf="promptLabel">{{promptLabel}}</mat-label>
+    <input matInput cdkFocusInitial [(ngModel)]="promptInput">
+  </mat-form-field>
+
+</div>
+
+<!-- Buttons -->
+<div mat-dialog-actions class="row justify-content-end">
+  <button id="cancel" mat-button [mat-dialog-close]="undefined">{{cancelButtonText}}</button>
+  <button id="confirm" mat-button color="accent" [mat-dialog-close]="promptInput">{{okButtonText}}</button>
+</div>

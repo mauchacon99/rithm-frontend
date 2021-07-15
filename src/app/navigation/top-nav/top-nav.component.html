@@ -1,0 +1,28 @@
+<nav class="mat-elevation-z4">
+  <button (click)="toggle()" mat-icon-button class="d-md-none">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="logo">
+    <img src="../../../assets/logo/white-icon-white-text.svg" alt="Rithm">
+  </div>
+  <ul class="d-none d-md-block">
+    <li *ngFor="let navItem of navItems" routerLink="{{navItem}}" [routerLinkActive]="['active']">
+      <a>{{navItem}}</a>
+    </li>
+  </ul>
+  <button id="notification-button" (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button>
+    <i class="fas fa-bell"></i>
+  </button>
+  <div [matMenuTriggerFor]="userMenu" class="userMenu d-none d-md-block">
+    <app-user-avatar [user]="user"></app-user-avatar>
+  </div>
+</nav>
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item routerLink="settings/account">
+    My Account
+  </button>
+  <button mat-menu-item (click)="signOut()">
+    Sign Out
+  </button>
+</mat-menu>
+<app-notification-menu-container *ngIf="notificationsVisible"></app-notification-menu-container>
