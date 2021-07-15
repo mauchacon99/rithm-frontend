@@ -56,6 +56,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
+    LoadingIndicatorComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,

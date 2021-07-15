@@ -28,9 +28,5 @@
       </div>
     </span>
   </span>
-  <div *ngIf="isLoading" class="row no-gutters loading">
-    <div class="col-12 text-center">
-      <mat-spinner [diameter]="100" class="m-auto" color="accent"></mat-spinner>
-    </div>
-  </div>
+  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
 </mat-card>

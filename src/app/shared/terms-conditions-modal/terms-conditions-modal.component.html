@@ -8,11 +8,6 @@
 
 <!-- Loader -->
 <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-<!-- <div [class.load-spin]="isLoading" *ngIf="isLoading" class="row no-gutters">
-  <div class="col-12 text-center">
-    <mat-spinner [diameter]="100" class="m-auto" color="accent"></mat-spinner>
-  </div>
-</div> -->
 
 <!-- Agree and Cancel Buttons -->
 <div *ngIf="!isLoading && showAgreeButton" mat-dialog-actions class="row justify-content-end">
