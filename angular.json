@@ -116,6 +116,9 @@
           "configurations": {
             "production": {
               "browserTarget": "rithm:build:production"
+            },
+            "test": {
+              "browserTarget": "rithm:build:test"
             }
           }
         },
