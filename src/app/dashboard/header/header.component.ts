@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
         if (res) {
           this.numPrevDocs = res.startedDocuments;
           this.numStations = res.rosterStations;
-          this.isLoading = false;
+          // this.isLoading = false;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

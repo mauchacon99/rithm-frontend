@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 /**
  * Loading indicator component.
  */
@@ -7,6 +7,19 @@ import { Component } from '@angular/core';
   templateUrl: './loading-indicator.component.html',
   styleUrls: ['./loading-indicator.component.scss']
 })
-export class LoadingIndicatorComponent {
+export class LoadingIndicatorComponent implements OnInit{
+  /** A custom diameter property. */
+  @Input() customDiameter?: number;
 
+  /** The diameter property. */
+  diameter = 100;
+
+  /**
+   * Sets diameter to customDiameter.
+   */
+  ngOnInit(): void {
+    if (this.customDiameter) {
+      this.diameter = this.customDiameter;
+    }
+  }
 }
