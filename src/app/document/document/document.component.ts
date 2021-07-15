@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 
@@ -16,6 +18,10 @@ import { ConnectedStationInfo } from 'src/models';
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+
+  /** The component for the drawer that houses comments and history. */
+  @ViewChild('detailDrawer', {static: true})
+  detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
@@ -34,6 +40,7 @@ export class DocumentComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
+    private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute
@@ -43,7 +50,17 @@ export class DocumentComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.setDrawer(this.detailDrawer);
     this.getParams();
+  }
+
+  /**
+   * Whether to show the backdrop for the comment and history drawers.
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
   /**
