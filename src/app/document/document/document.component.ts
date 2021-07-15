@@ -19,9 +19,9 @@ import { ConnectedStationInfo } from 'src/models';
 })
 export class DocumentComponent implements OnInit {
 
-  /** The element for the comment drawer. */
-  @ViewChild('commentDrawer', {static: true})
-  commentDrawer!: MatDrawer;
+  /** The component for the drawer that houses comments and history. */
+  @ViewChild('detailDrawer', {static: true})
+  detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
@@ -50,7 +50,7 @@ export class DocumentComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.commentDrawer.open();
+    this.detailDrawer.open();
     this.getParams();
   }
 
