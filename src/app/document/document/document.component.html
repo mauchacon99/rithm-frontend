@@ -4,7 +4,7 @@
 
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
   <mat-drawer #detailDrawer mode="over" position="end">
-    <app-comment-drawer></app-comment-drawer>
+    <app-detail-drawer [itemType]="'comments'"></app-detail-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
