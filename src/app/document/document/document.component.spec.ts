@@ -11,8 +11,8 @@ import { DocumentComponent } from './document.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommentDrawerComponent } from 'src/app/detail/comment-drawer/comment-drawer.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -23,7 +23,7 @@ describe('DocumentComponent', () => {
       declarations: [
         DocumentComponent,
         MockComponent(SubHeaderComponent),
-        MockComponent(CommentDrawerComponent),
+        MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
