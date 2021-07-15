@@ -12,6 +12,7 @@ import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentDrawerComponent } from 'src/app/detail/comment-drawer/comment-drawer.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -30,6 +31,7 @@ describe('DocumentComponent', () => {
       ],
       imports: [
         BrowserAnimationsModule,
+        RouterTestingModule,
         MatSidenavModule
       ],
       providers: [
@@ -50,13 +52,4 @@ describe('DocumentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  beforeEach(async () => {
-    component.ngOnInit();
-
-    await fixture.whenStable();
-  });
-
-  it('should retrieve document data', () => {
-    expect(component.documentInformation).toBeDefined();
-  });
 });

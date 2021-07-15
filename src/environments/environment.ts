@@ -3,6 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+
+  /** Whether the environment is used for testing. */
+  testing: false,
+
+  /** Whether the environment is used for production. */
   production: false,
 
   /** The base URL for the Rithm API. */
