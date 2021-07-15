@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { first } from 'rxjs/operators';
 import { CommentService } from 'src/app/core/comment.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { Comment } from 'src/models';
 
 /**
  * Component for containing all comments in the side drawer for a station or document.
@@ -16,6 +17,9 @@ export class CommentDrawerComponent {
 
   /** Is the content being loaded. */
   isLoading = true;
+
+  /** List of comments for a document. */
+  comments: Comment[] = [];
 
   constructor(private commentService: CommentService,
     private errorService: ErrorService) { }
@@ -33,6 +37,7 @@ export class CommentDrawerComponent {
     this.commentService.getDocumentComments(documentId, stationId, pageNumber, commentsPerPage)
       .pipe(first())
       .subscribe((commentsResponse) => {
+        this.comments = commentsResponse;
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
