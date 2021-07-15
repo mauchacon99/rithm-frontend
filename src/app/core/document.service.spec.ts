@@ -32,7 +32,7 @@ describe('DocumentService', () => {
     const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
     const expectedResponse: StationDocumentsResponse = {
-      documentList: [
+      documents: [
         { rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '2', documentName: 'Apple Crisps', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 7, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '3', documentName: 'Apple Sauce', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 3, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
@@ -44,11 +44,11 @@ describe('DocumentService', () => {
         { rithmId: '9', documentName: 'Bowtie Pasta', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '', priority: 2, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '10', documentName: 'Calcium', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 3, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
       ],
-      numberOfDocument: 40, userType: 'admin'
+      totalDocuments: 40, userType: 'admin'
     };
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response) => {
-        expect(response.documentList.length).toBeGreaterThanOrEqual(0);
+        expect(response.documents.length).toBeGreaterThanOrEqual(0);
       });
 
     const req = httpTestingController.expectOne(
@@ -94,10 +94,13 @@ describe('DocumentService', () => {
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
+      numberOfSupervisors: 7,
       supervisorRoster: ['SA', 'RI', 'NI'],
-      workerRoster: []
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
     };
 
     service.getDocumentInfo(stationId, documentId, mode)

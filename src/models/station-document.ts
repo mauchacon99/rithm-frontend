@@ -4,10 +4,10 @@ import { Document } from './document';
  */
  export interface StationDocumentsResponse {
   /** List of the documents. */
-  documentList: Array<Document>;
+  documents: Array<Document>;
 
   /** Total number of documents. */
-  numberOfDocument: number;
+  totalDocuments: number;
 
   /** The user role is worker, admin, supervisor or none. */
   userType: string;

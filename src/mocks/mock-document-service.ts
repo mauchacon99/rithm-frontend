@@ -21,7 +21,7 @@ export class MockDocumentService {
    */
   getStationDocuments(stationId: string, pageNum: number): Observable<StationDocumentsResponse> {
     const ELEMENT_DATA: StationDocumentsResponse = {
-      documentList: [
+      documents: [
         /* eslint-disable max-len */
         { rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '2', documentName: 'Apple Crisps', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 7, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
@@ -65,15 +65,15 @@ export class MockDocumentService {
         { rithmId: '40', documentName: 'Vitamin E Oil', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 4, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         /* eslint-enable max-len */
       ],
-      numberOfDocument: 40, userType: 'worker'
+      totalDocuments: 40, userType: 'worker'
     };
     // return this.http.get<DashboardStationResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Stations`);
     if (pageNum === 1) {
       pageNum = 0;
-      ELEMENT_DATA.documentList = ELEMENT_DATA.documentList.slice(pageNum, 10);
+      ELEMENT_DATA.documents = ELEMENT_DATA.documents.slice(pageNum, 10);
     } else {
       pageNum = ((pageNum * 10) - 10);
-      ELEMENT_DATA.documentList = ELEMENT_DATA.documentList.slice(pageNum, (pageNum + 10));
+      ELEMENT_DATA.documents = ELEMENT_DATA.documents.slice(pageNum, (pageNum + 10));
     }
     return of(ELEMENT_DATA).pipe(delay(1000));
   }
@@ -118,15 +118,18 @@ export class MockDocumentService {
    */
    getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
     const data: DocumentStationInformation = {
-      documentName: 'Requirement',
-      documentPriority: 1,
-      currentAssignedUser: 'WU',
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
-      supervisorRoster: ['MP', 'RU', 'HP'],
-      workerRoster: []
+      numberOfSupervisors: 7,
+      supervisorRoster: ['SA', 'RI', 'NI'],
+      numberOfWorkers: 7,
+      workerRoster: ['LA','OT','SS']
     };
     return of(data).pipe(delay(1000));
   }
