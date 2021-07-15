@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { SidenavService } from './core/sidenav.service';
 import { UserService } from './core/user.service';
 
+// TODO: remove me
+
 /**
  * The main component loaded for the app.
  */
