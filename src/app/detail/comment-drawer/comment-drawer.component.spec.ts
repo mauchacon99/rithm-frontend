@@ -14,9 +14,6 @@ describe('CommentDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ CommentDrawerComponent ],
-      imports: [
-        HttpClientTestingModule
-      ],
       providers: [
         { provide: CommentService, useClass: MockCommentService,},
         { provide: ErrorService, useClass: MockErrorService}
@@ -43,7 +40,7 @@ describe('CommentDrawerComponent', () => {
       documentRithmId: '1234',
       stationRithmId: '1234'
     };
-    component.postComment(comment.dateCreated, comment.displayText, comment.documentRithmId, comment.stationRithmId, comment.userRithmId);
+    component.postComment(comment);
     tick(1000);
     expect(component.postedComment).toBeDefined();
 

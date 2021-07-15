@@ -10,21 +10,12 @@ export class MockCommentService {
   /**
    * Posts a new comment to a document or station.
    *
-   * @param displayText Text of comment.
-   * @param dateCreated Date comment was posted.
-   * @param userRithmId User commenting.
-   * @param documentRithmId Document posted to.
-   * @param stationRithmId Station document is housed in.
+   * @param comment A Comment interface.
+   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
    * @returns Comment observable.
    */
-   postDocumentComment(
-    displayText: string,
-    dateCreated: string,
-    userRithmId: string,
-    documentRithmId: string,
-    stationRithmId: string
-   ): Observable<Comment> {
-    const comment: Comment = {
+   postDocumentComment(comment: Comment): Observable<Comment> {
+    const response: Comment = {
       displayText: 'string',
       dateCreated: '2021-07-14T18:57:59.771Z',
       dateLastEdited: '2021-07-14T18:57:59.771Z',
@@ -52,7 +43,7 @@ export class MockCommentService {
       rithmId: 'string'
     };
 
-    return of(comment).pipe(delay(1000));
+    return of(response).pipe(delay(1000));
   }
 
 }

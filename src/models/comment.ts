@@ -3,7 +3,7 @@ import { Station } from './station';
 import { User } from './user';
 
 /**
- * Comment data.
+ * Represents all info about a comment on a station or document.
  */
  export interface Comment {
   /** The text to display. */

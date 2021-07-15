@@ -30,21 +30,14 @@ export class CommentDrawerComponent {
   /**
    * Post a new comment.
    *
-   * @param displayText Text of comment.
-   * @param dateCreated Date comment was posted.
-   * @param userRithmId User commenting.
-   * @param documentRithmId Document posted to.
-   * @param stationRithmId Station document is housed in.
+   * @param comment A Comment interface.
+   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
    */
   postComment(
-      displayText: string,
-      dateCreated: string,
-      userRithmId: string,
-      documentRithmId: string,
-      stationRithmId: string
+  comment: Comment
   ): void {
     this.loadingPostedComment = true;
-    this.commentService.postDocumentComment(displayText, dateCreated, userRithmId, documentRithmId, stationRithmId)
+    this.commentService.postDocumentComment(comment)
     .pipe(first())
     .subscribe((comment) => {
       if (comment) {

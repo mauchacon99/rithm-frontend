@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -19,26 +19,16 @@ export class CommentService {
   /**
    * Posts a new comment to a document or station.
    *
-   * @param displayText Text of comment.
-   * @param dateCreated Date comment was posted.
-   * @param userRithmId User commenting.
-   * @param documentRithmId Document posted to.
-   * @param stationRithmId Station document is housed in.
+   * @param comment A Comment interface.
+   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
    * @returns Observable of Comment.
    */
   postDocumentComment(
-    displayText: string,
-    dateCreated: string,
-    userRithmId: string,
-    documentRithmId: string,
-    stationRithmId: string
+    comment: Comment
   ): Observable<Comment> {
     return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
-      displayText,
-      dateCreated,
-      userRithmId,
-      documentRithmId,
-      stationRithmId
+      comment
+      //not currently actually requiring withCredentials.
     }, { withCredentials: true });
   }
 }
