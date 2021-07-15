@@ -1,10 +1,20 @@
 @import '../dialogs/dialog.scss';
 
 p {
-  padding: 15px 0;
+  padding: 10px 0;
   white-space: pre-wrap;
-  max-height: 450px;
+  max-height: 85%;
   overflow-y: scroll;
+
+  @media screen and (min-width: 991px) {
+    padding: 15px 0;
+    max-height: 90%;
+  }
+
+  @media screen and (min-width: 1499px) {
+    padding: 15px 0;
+    max-height: 85%;
+  }
 }
 
 div.load-spin {
