@@ -19,6 +19,8 @@
             <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
             <app-document-template></app-document-template>
           </div>
+          <app-connected-station-pane [location]='"right"' [stations]="forwardStations"
+            [isLoading]="connectedStationsLoading" class="d-none d-lg-block col-2"></app-connected-station-pane>
         </div>
       </div>
     </div>
