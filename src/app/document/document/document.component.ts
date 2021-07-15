@@ -63,8 +63,7 @@ export class DocumentComponent implements OnInit {
       }, (error) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
@@ -76,8 +75,7 @@ export class DocumentComponent implements OnInit {
     this.navigateBack();
     this.errorService.displayError(
       'The link you followed is invalid. Please double check the URL and try again.',
-      new Error('Invalid params for document'),
-      true
+      new Error('Invalid params for document')
     );
   }
 
@@ -111,8 +109,7 @@ export class DocumentComponent implements OnInit {
         this.documentLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }

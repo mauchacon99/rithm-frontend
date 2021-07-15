@@ -1,5 +1,10 @@
 export const environment = {
-  production: true,
+
+  /** Whether the environment is used for testing. */
+  testing: true,
+
+  /** Whether the environment is used for production. */
+  production: false,
 
   /** The base URL for the Rithm API. */
   baseApiUrl: 'https://testapi.rithm.tech',

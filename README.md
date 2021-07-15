@@ -2,6 +2,8 @@
 
 [![Dev Deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml)
 
+[![Test Deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/test-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/test-deployments.yml)
+
 ## Getting Started
 
 Clone the repo and perform an `npm i` in the base directory to install all of the dependencies for the project.
