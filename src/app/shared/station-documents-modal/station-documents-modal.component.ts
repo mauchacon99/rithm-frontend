@@ -69,7 +69,6 @@ export class StationDocumentsModalComponent implements OnInit {
     this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
       .subscribe((documentsResponse) => {
-        console.log(documentsResponse);
         if (documentsResponse) {
           this.documents = documentsResponse.documents;
           this.totalNumDocs = documentsResponse.totalDocuments;
