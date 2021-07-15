@@ -56,6 +56,7 @@
                   "with": "src/environments/environment.testing.ts"
                 }
               ],
+              "index": "src/index.testing.html",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
