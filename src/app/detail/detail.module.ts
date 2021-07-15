@@ -14,6 +14,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
+import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
 
 
 
@@ -27,7 +28,8 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
     SubHeaderComponent,
     StationCardComponent,
     HistoryDrawerComponent,
-    CommentDrawerComponent
+    CommentDrawerComponent,
+    DetailDrawerComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
     ConnectedStationPaneComponent,
     StationInfoHeaderComponent,
     DocumentInfoHeaderComponent,
-    CommentDrawerComponent
+    CommentDrawerComponent,
+    DetailDrawerComponent
   ]
 })
 export class DetailModule { }
