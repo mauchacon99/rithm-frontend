@@ -29,7 +29,7 @@ export class ErrorService {
    * @param important Whether the error is important and requires a dismissal (using an
    * alert). Optional; defaults to `false` (non-important).
    */
-  displayError(displayMessage: string, error: Error, important = false): void {
+  displayError(displayMessage: string, error: Error, important = true): void {
     this.logError(error);
 
     if (important) {

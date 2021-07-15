@@ -38,12 +38,12 @@ describe('ErrorService', () => {
   });
 
   it('should display important errors to user', () => {
-    service.displayError('Ruh roh, Raggy', new Error('Zoinks'), true);
+    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
     expect(popupService.alert).toHaveBeenCalled();
   });
 
   it('should display minor errors to user', () => {
-    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
+    service.displayError('Ruh roh, Raggy', new Error('Zoinks'), false);
     expect(popupService.notify).toHaveBeenCalled();
   });
 
