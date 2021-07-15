@@ -42,6 +42,9 @@ You can find the deployed web app at the following locations. Each is using a di
 [Development](https://devapp.rithm.tech) \
 [Testing](https://testapp.rithm.tech)
 
+Username: `docuser` \
+Password: `R1thmD0c5`
+
 ## Scripts
 
 `npm start`\
