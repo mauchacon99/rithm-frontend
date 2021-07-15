@@ -3,7 +3,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SidenavDrawerStatus } from 'src/models/enums/sidenav-drawer-status.enum';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
@@ -18,8 +17,8 @@ import { UserService } from './core/user.service';
 export class AppComponent implements OnInit, OnDestroy {
 
   /** The sidenav displayed on mobile. */
-  @ViewChild('sidenav')
-  private sidenav!: MatSidenav;
+  @ViewChild('sidenav', { static: true })
+  sidenav!: MatSidenav;
 
   /** Destroyed. */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -60,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.setSidenav(this.sidenav);
     this.router.events.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((e) => {
@@ -75,20 +75,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }, err => {
       console.error(err);
     });
-
-    this.sidenavDrawerService.sidenavDrawerStatus$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((status) => {
-        if (status === SidenavDrawerStatus.sidenavOpen) {
-          this.sidenav.open();
-        } else {
-          if (this.sidenav) {
-            this.sidenav.close();
-          }
-        }
-      }, (error) => {
-        // TODO: log error
-      });
   }
 
   /**
@@ -108,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (item === 'Sign Out') {
       this.userService.signOut();
     }
-    this.sidenavDrawerService.close();
+    this.sidenavDrawerService.closeSidenav();
   }
 
 }

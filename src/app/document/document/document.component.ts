@@ -50,7 +50,7 @@ export class DocumentComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.detailDrawer.open();
+    this.sidenavDrawerService.setDrawer(this.detailDrawer);
     this.getParams();
   }
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { SidenavDrawerStatus } from 'src/models/enums/sidenav-drawer-status.enum';
+import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 
 /**
  * Service for all behavior and state for the sidenav and drawers.
@@ -9,8 +8,17 @@ import { SidenavDrawerStatus } from 'src/models/enums/sidenav-drawer-status.enum
   providedIn: 'root'
 })
 export class SidenavDrawerService {
-  /** The state of the sidenav and drawers in the app. */
-  sidenavDrawerStatus$ = new BehaviorSubject(SidenavDrawerStatus.closed);
+  /** The sidenav component for the mobile navigation. */
+  private sidenavComponent!: MatSidenav;
+
+  /** The drawer component for the page. */
+  private drawerComponent?: MatDrawer;
+
+  /** The name of the context for which the drawer is opened. */
+  drawerContext = '';
+
+  /** Optional data that is available to the drawer. */
+  drawerData?: unknown;
 
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
@@ -42,32 +50,83 @@ export class SidenavDrawerService {
   }
 
   /**
-   * Opens the specified sidenav or drawer.
+   * Sets the instance of the sidenav component for further action.
    *
-   * @param sidenavDrawer The sidenav or drawer to open.
+   * @param component The component used for the sidenav.
    */
-  open(sidenavDrawer: SidenavDrawerStatus): void {
-    if (sidenavDrawer === SidenavDrawerStatus.closed) {
-      throw new Error(`'Closed' is not a valid option to open a sidenav or drawer. Please use the close() method instead.`);
+  setSidenav(component: MatSidenav): void {
+    this.sidenavComponent = component;
+  }
+
+  /**
+   * Opens the sidenav for mobile navigation.
+   */
+  openSidenav(): void {
+    if (this.drawerComponent) {
+      this.drawerComponent.close();
     }
-    this.sidenavDrawerStatus$.next(sidenavDrawer);
+    this.sidenavComponent.open();
   }
 
-
   /**
-   * Closes all drawers and the sidenav.
+   * Closes the sidenav for mobile navigation.
    */
-  close(): void {
-    this.sidenavDrawerStatus$.next(SidenavDrawerStatus.closed);
+  closeSidenav(): void {
+    this.sidenavComponent.close();
   }
 
   /**
-   * Toggles the open state of the specified sidenav or drawer.
+   * Toggles the open state of the sidenav for mobile navigation.
+   */
+  toggleSidenav(): void {
+    !this.sidenavComponent.opened ? this.openSidenav() : this.closeSidenav();
+  }
+
+  /**
+   * Sets the instance of the drawer component fo rfurther action.
    *
-   * @param sidenavDrawer The sidenav or drawer to toggle.
+   * @param component The component used for the drawer.
    */
-  toggle(sidenavDrawer: SidenavDrawerStatus): void {
-    const newStatus = this.sidenavDrawerStatus$.value === SidenavDrawerStatus.closed ? sidenavDrawer : SidenavDrawerStatus.closed;
-    this.sidenavDrawerStatus$.next(newStatus);
+  setDrawer(component: MatDrawer): void {
+    this.drawerComponent = component;
+  }
+
+  /**
+   * Opens the app side drawer component.
+   *
+   * @param context The name of the context for which the drawer is opened.
+   * @param data Any data to optionally pass to the drawer.
+   */
+  openDrawer(context: string, data?: unknown): void {
+    if (!this.drawerComponent) {
+      throw new Error('The drawer component is not defined. Did you forget to set it?');
+    }
+    this.drawerContext = context;
+    this.drawerData = data;
+    this.sidenavComponent.close();
+    this.drawerComponent.open();
+  }
+
+  /**
+   * Closes the app side drawer component.
+   */
+  closeDrawer(): void {
+    if (!this.drawerComponent) {
+      throw new Error('The drawer component is not defined. Did you forget to set it?');
+    }
+    this.drawerComponent.close();
+  }
+
+  /**
+   * Toggles the open state of the drawer component.
+   *
+   * @param context The name of the context for which the drawer is opened.
+   * @param data Any data to optionally pass to the drawer.
+   */
+  toggleDrawer(context: string, data?: unknown): void {
+    if (!this.drawerComponent) {
+      throw new Error('The drawer component is not defined. Did you forget to set it?');
+    }
+    !this.drawerComponent.opened ? this.openDrawer(context, data) : this.closeDrawer();
   }
 }
