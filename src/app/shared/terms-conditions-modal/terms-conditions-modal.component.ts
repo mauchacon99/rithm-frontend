@@ -71,8 +71,7 @@ export class TermsConditionsModalComponent implements OnInit {
         this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
