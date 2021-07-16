@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Comment } from 'src/models';
+import { environment } from 'src/environments/environment';
+
+const MICROSERVICE_PATH = '/userservice/api/comment';
 
 /**
  * Service for all interactions involving a comments.
@@ -40,6 +43,22 @@ export class CommentService {
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
     }];
     return of(comments).pipe(delay(1000));
+  }
+
+  /**
+   * Posts a new comment to a document or station.
+   *
+   * @param comment A Comment interface.
+   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
+   * @returns Observable of Comment.
+   */
+  postDocumentComment(
+    comment: Comment
+  ): Observable<Comment> {
+    return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
+      comment
+      //not currently actually requiring withCredentials.
+    }, { withCredentials: true });
   }
 
 }

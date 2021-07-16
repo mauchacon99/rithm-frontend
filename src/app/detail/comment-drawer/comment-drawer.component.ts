@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { first } from 'rxjs/operators';
+import { Component } from '@angular/core';
 import { CommentService } from 'src/app/core/comment.service';
+import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Comment } from 'src/models';
+
 
 /**
  * Component for containing all comments in the side drawer for a station or document.
@@ -14,6 +15,11 @@ import { Comment } from 'src/models';
   styleUrls: ['./comment-drawer.component.scss']
 })
 export class CommentDrawerComponent {
+  /** Is the posted comment loading? */
+  loadingPostedComment = false;
+
+  /** The posted comment data. */
+  postedComment?: Comment;
 
   /** Is the content being loaded. */
   isLoading = true;
@@ -43,10 +49,35 @@ export class CommentDrawerComponent {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
+   * Post a new comment.
+   *
+   * @param comment A Comment interface.
+   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
+   */
+  postComment(
+    comment: Comment
+  ): void {
+    this.loadingPostedComment = true;
+    this.commentService.postDocumentComment(comment)
+      .pipe(first())
+      .subscribe((comment) => {
+        if (comment) {
+          this.postedComment = comment;
+        }
+        this.loadingPostedComment = false;
+      }, (error: HttpErrorResponse) => {
+        this.loadingPostedComment = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
           true
         );
       });
   }
-
 }
