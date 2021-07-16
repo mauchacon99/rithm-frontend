@@ -29,6 +29,19 @@ div {
       }
     }
 
+    &.active {
+      i {
+        /* stylelint-disable-next-line */
+        color: map-get($accent-palette, A100);
+      }
+
+      &:hover {
+        i {
+          color: map-get($accent-palette, 100);
+        }
+      }
+    }
+
     &:last-child {
       margin-right: 25px;
 
