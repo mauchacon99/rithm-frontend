@@ -77,6 +77,13 @@ describe('SignInComponent', () => {
     expect(message.classes['transparent']).toBeFalsy();
   });
 
+  xit('should display loading indicator during request', async () => {
+    // TODO: adjust this so it works with new loader component.
+    // component.signIn();
+    // const spinnerHarness = await loader.getHarness(MatProgressSpinnerHarness);
+    // expect(spinnerHarness).toBeTruthy();
+  });
+
   xit('should display message to verify email if not validated', async () => {
     // TODO: Add test for verify email message
   });
