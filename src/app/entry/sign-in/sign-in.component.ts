@@ -81,8 +81,7 @@ export class SignInComponent implements OnInit {
   private showInvalidLinkMessage(error: Error): void {
     this.errorService.displayError(
       'The link you followed was invalid. Please double check the link in your email and try again.',
-      error,
-      true
+      error
     );
   }
 
@@ -112,8 +111,7 @@ export class SignInComponent implements OnInit {
         } else {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
+            error
           );
         }
       });
@@ -137,8 +135,7 @@ export class SignInComponent implements OnInit {
         this.errorService.displayError(
           'Something went wrong on our end and we were unable to validate your email address. ' +
           'We\'ve made note of this. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }

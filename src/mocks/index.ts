@@ -1,3 +1,4 @@
+export * from './mock-comment-service';
 export * from './mock-dashboard-service';
 export * from './mock-document-service';
 export * from './mock-error-service';

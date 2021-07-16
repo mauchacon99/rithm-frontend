@@ -137,8 +137,7 @@ export class AccountCreateComponent implements OnInit {
         } else {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
+            error
           );
         }
       });

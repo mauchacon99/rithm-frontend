@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { DocumentRoutingModule } from './document-routing.module';
 import { DetailModule } from '../detail/detail.module';
 import { SharedModule } from '../shared/shared.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     DocumentRoutingModule,
+    MatSidenavModule,
     DetailModule,
     SharedModule
   ]
