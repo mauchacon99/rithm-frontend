@@ -5,7 +5,7 @@ import { ConnectedStationInfo } from 'src/models';
  * Reusable component for the pane showing the upstream/downstream stations.
  */
 @Component({
-  selector: 'app-connected-station-pane',
+  selector: 'app-connected-station-pane[location][stations][isLoading]',
   templateUrl: './connected-station-pane.component.html',
   styleUrls: ['./connected-station-pane.component.scss']
 })

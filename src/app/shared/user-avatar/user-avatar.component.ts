@@ -11,8 +11,6 @@ import { User, WorkerRosterResponse } from 'src/models';
   styleUrls: ['./user-avatar.component.scss']
 })
 export class UserAvatarComponent implements OnInit {
-  //Can I make these required in some way?
-
   /** User property. */
   @Input() user?: User | WorkerRosterResponse;
 
