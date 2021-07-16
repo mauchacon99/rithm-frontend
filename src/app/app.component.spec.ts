@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockUserService } from 'src/mocks';
 import { AppComponent } from './app.component';
-import { SidenavService } from './core/sidenav.service';
 import { UserService } from './core/user.service';
 
 describe('AppComponent', () => {
@@ -20,7 +19,6 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: UserService, useValue: MockUserService },
-        { provide: SidenavService, useValue: {} }
       ]
     }).compileComponents();
   });

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SidenavService } from './sidenav.service';
+import { SidenavDrawerService } from './sidenav-drawer.service';
 
-describe('SidenavService', () => {
-  let service: SidenavService;
+describe('SidenavDrawerService', () => {
+  let service: SidenavDrawerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SidenavService);
+    service = TestBed.inject(SidenavDrawerService);
   });
 
   it('should be created', () => {

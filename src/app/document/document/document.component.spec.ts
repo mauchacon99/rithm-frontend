@@ -9,8 +9,11 @@ import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/s
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { DocumentComponent } from './document.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -21,14 +24,18 @@ describe('DocumentComponent', () => {
       declarations: [
         DocumentComponent,
         MockComponent(SubHeaderComponent),
+        MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
         MockComponent(DocumentTemplateComponent)
       ],
       imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes(
+          [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
+        ),
+        MatSidenavModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },

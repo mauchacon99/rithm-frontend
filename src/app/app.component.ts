@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SidenavService } from './core/sidenav.service';
+import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
 /**
@@ -14,11 +14,11 @@ import { UserService } from './core/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
-  /** Get the sidenav component. */
-  @ViewChild('mobileNav')
-  private mobileSideNav!: MatSidenav;
+  /** The sidenav displayed on mobile. */
+  @ViewChild('sidenav', { static: true })
+  sidenav!: MatSidenav;
 
   /** Destroyed. */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -50,22 +50,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   ];
 
   constructor(
-    private sidenavService: SidenavService,
+    private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
-    public router: Router
+    private router: Router
   ) { }
-
-  /**
-   * Set the current sidenav in the service.
-   */
-  ngAfterViewInit(): void {
-    this.sidenavService.setSidenav(this.mobileSideNav);
-  }
 
   /**
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.setSidenav(this.sidenav);
     this.router.events.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((e) => {
@@ -100,8 +94,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (item === 'Sign Out') {
       this.userService.signOut();
     }
-
-    this.mobileSideNav.toggle();
+    this.sidenavDrawerService.closeSidenav();
   }
 
 }

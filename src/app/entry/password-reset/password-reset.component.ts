@@ -91,8 +91,7 @@ export class PasswordResetComponent implements OnInit {
         this.isLoading = false;
         this.errorService.displayError(
           'The link you followed was invalid. Please double check the link in your email and try again.',
-          error,
-          true
+          error
         );
       });
   }
@@ -122,8 +121,7 @@ export class PasswordResetComponent implements OnInit {
       this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong and we were unable to reset your password. Please try again in a little while.',
-        error,
-        true
+        error
       );
     });
   }
