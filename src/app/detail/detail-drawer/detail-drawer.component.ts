@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
@@ -9,17 +11,30 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './detail-drawer.component.html',
   styleUrls: ['./detail-drawer.component.scss']
 })
-export class DetailDrawerComponent {
+export class DetailDrawerComponent implements OnDestroy {
+
+  private destroyed$ = new Subject();
 
   /**
    * The type of detail item to display in the drawer.
    */
-  itemType: string;
+  itemType = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService
   ) {
-    this.itemType = this.sidenavDrawerService.drawerContext;
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.itemType = context;
+      }, (error) => {
+
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }
