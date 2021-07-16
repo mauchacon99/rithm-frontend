@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { FormsModule } from '@angular/forms';
-import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,6 +21,7 @@ import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 
 @NgModule({
@@ -29,14 +29,14 @@ import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-co
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent,
     PasswordRequirementsComponent,
     RosterComponent,
     PaginationComponent,
     RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent,
-    TermsConditionsModalComponent
+    TermsConditionsModalComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +56,7 @@ import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-co
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent,
+    LoadingIndicatorComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
