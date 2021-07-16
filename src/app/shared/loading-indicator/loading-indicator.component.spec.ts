@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { LoadingIndicatorComponent } from './loading-indicator.component';
 
@@ -8,7 +9,8 @@ describe('LoadingIndicatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoadingIndicatorComponent ]
+      declarations: [ LoadingIndicatorComponent ],
+      imports: [ MatProgressSpinnerModule ]
     })
     .compileComponents();
   });

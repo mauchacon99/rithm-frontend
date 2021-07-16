@@ -16,6 +16,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -24,7 +26,10 @@ describe('SignInComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignInComponent],
+      declarations: [
+        SignInComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
@@ -55,12 +60,6 @@ describe('SignInComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should display loading indicator during request', async () => {
-    component.signIn();
-    const spinnerHarness = await loader.getHarness(MatProgressSpinnerHarness);
-    expect(spinnerHarness).toBeTruthy();
   });
 
   it('should display invalid credentials message', () => {

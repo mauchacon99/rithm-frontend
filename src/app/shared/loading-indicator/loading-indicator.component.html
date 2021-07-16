@@ -1,5 +1,8 @@
 <div class="indicator-container">
-  <div class="">
-    <mat-spinner [diameter]="diameter" class="m-auto" color="accent"></mat-spinner>
+  <div [ngClass]="{'inline-styles': inlineText}">
+    <mat-spinner [diameter]="diameter" [ngClass]="{'m-auto': !inlineText}" color="accent"></mat-spinner>
+      <p *ngIf="inlineText" class="subtitle-medium">
+        {{ inlineText }}
+      </p>
   </div>
 </div>
