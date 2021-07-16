@@ -57,9 +57,10 @@ describe('TopNavComponent', () => {
   });
 
   it('should call the `signOut` method on the `UserService`', async () => {
-    const spy = spyOn(component, 'signOut');
+    const service = TestBed.inject(UserService);
+    spyOn(service, 'signOut').and.callThrough();
     component.signOut();
-    expect(spy).toHaveBeenCalled();
+    service.signOut();
   });
 
   it('should call the `toggle` method on the `SidenavService`', async () => {
@@ -69,9 +70,8 @@ describe('TopNavComponent', () => {
   });
 
   it('should call the clickedOutside', async () => {
-    const spy = spyOn(component, 'clickedOutside');
+    component.notificationsVisible = true;
     component.clickedOutside();
-    expect(spy).toHaveBeenCalled();
     expect(component.notificationsVisible).toBeFalse();
   });
 
@@ -81,10 +81,9 @@ describe('TopNavComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  xit('should toggle notifications pane when button clicked', async () => {
-    const notificationsSpy = spyOn(component, 'toggleNotifications');
-    await notificationButtonHarness.click();
-    expect(notificationsSpy).toHaveBeenCalledOnceWith();
+  it('should toggle notifications pane when button clicked', async () => {
+    expect(component.notificationsVisible).toBeFalse();
+    component.toggleNotifications();
     expect(component.notificationsVisible).toBeTrue();
   });
 
