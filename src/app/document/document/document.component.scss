@@ -5,6 +5,14 @@
   z-index: 9;
 }
 
+mat-drawer-container {
+  mat-drawer {
+    width: 280px;
+    height: calc(100vh - 110px);
+    margin-top: 45px;
+  }
+}
+
 .page {
   margin-top: 45px;
 
