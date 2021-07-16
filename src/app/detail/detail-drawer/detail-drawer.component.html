@@ -1,0 +1,7 @@
+<ng-container *ngIf="itemType === 'comments'; else history">
+  <app-comment-drawer></app-comment-drawer>
+</ng-container>
+
+<ng-template #history>
+  <app-history-drawer></app-history-drawer>
+</ng-template>
