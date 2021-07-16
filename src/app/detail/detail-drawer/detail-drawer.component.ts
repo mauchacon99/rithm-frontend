@@ -14,6 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 })
 export class DetailDrawerComponent implements OnDestroy {
 
+  /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
 
   /**
@@ -34,6 +35,9 @@ export class DetailDrawerComponent implements OnDestroy {
       });
   }
 
+  /**
+   * Completes all subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
