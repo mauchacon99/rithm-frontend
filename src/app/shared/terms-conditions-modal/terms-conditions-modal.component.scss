@@ -1,19 +1,17 @@
 @import '../dialogs/dialog.scss';
 
 p {
-  padding: 10px 0;
+  padding: 15px 0;
   white-space: pre-wrap;
-  max-height: 85%;
+  max-height: 450px;
   overflow-y: scroll;
 
-  @media screen and (min-width: 991px) {
-    padding: 15px 0;
-    max-height: 90%;
+  @media screen and (max-height: 420px) {
+    max-height: 200px;
   }
 
-  @media screen and (min-width: 1499px) {
-    padding: 15px 0;
-    max-height: 85%;
+  @media screen and (max-height: 375px) {
+    max-height: 150px;
   }
 }
 
