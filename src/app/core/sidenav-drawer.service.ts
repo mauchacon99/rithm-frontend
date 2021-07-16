@@ -19,7 +19,7 @@ export class SidenavDrawerService {
   drawerContext$: Subject<string> = new Subject();
 
   /** Optional data that is available to the drawer. */
-  drawerData?: unknown;
+  drawerData$ = new Subject();
 
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
@@ -103,7 +103,7 @@ export class SidenavDrawerService {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
     }
     this.drawerContext$.next(context);
-    this.drawerData = data;
+    this.drawerData$.next(data);
     this.sidenavComponent.close();
     this.drawerComponent.open();
   }

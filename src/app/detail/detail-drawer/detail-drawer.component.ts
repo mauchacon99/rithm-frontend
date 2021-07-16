@@ -22,6 +22,12 @@ export class DetailDrawerComponent implements OnDestroy {
    */
   itemType = '';
 
+  /** The id of the station for which this drawer was opened, or the station in which the document resides. */
+  stationId = '';
+
+  /** The id of the document for which this drawer was opened. */
+  documentId = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService
@@ -30,6 +36,17 @@ export class DetailDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.itemType = context;
+      }, (error) => {
+        this.errorService.logError(error);
+      });
+
+    this.sidenavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      // TODO: rework typing on this
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((context: any) => {
+        this.stationId = context.stationId;
+        this.documentId = context.documentId;
       }, (error) => {
         this.errorService.logError(error);
       });
