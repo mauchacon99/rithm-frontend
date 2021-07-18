@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
+import { Subject } from 'rxjs';
 
 /**
  * Service for all behavior and state for the sidenav and drawers.
@@ -15,10 +16,10 @@ export class SidenavDrawerService {
   private drawerComponent?: MatDrawer;
 
   /** The name of the context for which the drawer is opened. */
-  drawerContext = '';
+  drawerContext$: Subject<string> = new Subject();
 
   /** Optional data that is available to the drawer. */
-  drawerData?: unknown;
+  drawerData$ = new Subject();
 
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
@@ -101,8 +102,8 @@ export class SidenavDrawerService {
     if (!this.drawerComponent) {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
     }
-    this.drawerContext = context;
-    this.drawerData = data;
+    this.drawerContext$.next(context);
+    this.drawerData$.next(data);
     this.sidenavComponent.close();
     this.drawerComponent.open();
   }

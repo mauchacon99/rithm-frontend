@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 
@@ -36,7 +37,8 @@ import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
     MatButtonModule,
     SharedModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTabsModule
   ],
   exports: [
     SubHeaderComponent,
