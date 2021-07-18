@@ -22,6 +22,12 @@ mat-drawer-container {
   }
 }
 
+mat-tab-header {
+  position: fixed !important;
+  z-index: 2;
+  background: #fff;
+}
+
 mat-ink-bar.mat-ink-bar {
   background: $accent-blue !important;
 }
