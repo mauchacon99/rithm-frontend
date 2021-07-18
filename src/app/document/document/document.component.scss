@@ -22,6 +22,10 @@ mat-drawer-container {
   }
 }
 
+mat-ink-bar.mat-ink-bar {
+  background: $accent-blue !important;
+}
+
 .page {
   margin-top: 45px;
 
