@@ -13,6 +13,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
@@ -33,7 +35,10 @@ describe('StationDocumentsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StationDocumentsModalComponent],
+      declarations: [
+        StationDocumentsModalComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         RouterTestingModule,
         NoopAnimationsModule,

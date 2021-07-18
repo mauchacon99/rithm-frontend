@@ -108,6 +108,14 @@ a {
   }
 }
 
+/// Global styling of loading indicator
+.loader {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /// Color Application classes
 .warn {
   color: $warning-red;

@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
 import { DialogData } from 'src/models';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 
 import { TermsConditionsModalComponent } from './terms-conditions-modal.component';
 
@@ -26,7 +28,10 @@ describe('TermsConditionsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TermsConditionsModalComponent],
+      declarations: [
+        TermsConditionsModalComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         MatDialogModule,
         MatProgressSpinnerModule
