@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -43,7 +43,10 @@ export class CommentService {
    * @returns A list of comments based on documentId and stationId.
    */
   getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number): Observable<Comment[]> {
-      return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true });
+    // eslint-disable-next-line max-len
+    const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNumber', pageNumber).set('commentsPerPage', commentsPerPage);
+
+    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true, params });
 
     // const comments: Comment[] = [{
     //   displayText: 'This is first comment',
