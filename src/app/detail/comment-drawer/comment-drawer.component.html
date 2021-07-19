@@ -1,7 +1,10 @@
 <mat-tab-group>
   <mat-tab label="Station">
-    <ng-template matTabContent *ngIf="!isLoading">
-      <div class="comment-container" >
+    <ng-template matTabContent>
+      <div class="comment-container">
+        <div class="my-2">
+          <app-loading-indicator [inlineText]="'Loading...'" *ngIf="isLoading"></app-loading-indicator>
+        </div>
         <app-comment></app-comment>
         <app-comment></app-comment>
         <app-comment></app-comment>
@@ -16,7 +19,6 @@
         <app-comment></app-comment>
       </div>
     </ng-template>
-    <app-loading-indicator [inlineText]="'Loading...'" class="loader" *ngIf="isLoading"></app-loading-indicator>
   </mat-tab>
   <mat-tab label="Document">
     <ng-template matTabContent>

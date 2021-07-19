@@ -44,7 +44,7 @@ export class CommentDrawerComponent {
       .pipe(first())
       .subscribe((commentsResponse) => {
         this.comments = commentsResponse;
-        // this.isLoading = false;
+        this.isLoading = false;
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(
