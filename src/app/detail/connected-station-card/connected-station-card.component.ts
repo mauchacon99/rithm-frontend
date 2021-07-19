@@ -4,11 +4,11 @@ import { ConnectedStationInfo } from 'src/models/connected-station-info';
  * Station card component.
  */
 @Component({
-  selector: 'app-station-card[location][station]',
-  templateUrl: './station-card.component.html',
-  styleUrls: ['./station-card.component.scss']
+  selector: 'app-connected-station-card[location][station]',
+  templateUrl: './connected-station-card.component.html',
+  styleUrls: ['./connected-station-card.component.scss']
 })
-export class StationCardComponent {
+export class ConnectedStationCardComponent {
   /** Location of the panel. */
   @Input() location!: 'left' | 'right';
 

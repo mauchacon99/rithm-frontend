@@ -1,9 +1,12 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatTabsModule } from '@angular/material/tabs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService } from 'src/mocks';
 import { MockCommentService } from 'src/mocks/mock-comment-service';
 import { CommentService } from '../comment.service';
+import { CommentComponent } from '../comment/comment.component';
 
 import { CommentDrawerComponent } from './comment-drawer.component';
 
@@ -13,13 +16,20 @@ describe('CommentDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentDrawerComponent ],
+      declarations: [
+        CommentDrawerComponent,
+        MockComponent(CommentComponent)
+      ],
+      imports: [
+        MatTabsModule,
+        BrowserAnimationsModule
+      ],
       providers: [
-        { provide: CommentService, useClass: MockCommentService,},
-        { provide: ErrorService, useClass: MockErrorService}
-      ]
+        { provide: CommentService, useClass: MockCommentService },
+        { provide: ErrorService, useClass: MockErrorService }
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

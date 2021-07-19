@@ -9,6 +9,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -16,7 +18,10 @@ describe('PasswordResetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PasswordResetComponent ],
+      declarations: [
+        PasswordResetComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
