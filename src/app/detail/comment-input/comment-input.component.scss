@@ -1,1 +1,11 @@
-// styles here
+@import 'functions';
+
+mat-form-field {
+  margin: 10px 5px;
+}
+
+/* stylelint-disable-next-line */
+::ng-deep .mat-icon-button {
+  font-size: font-calc(21);
+  top: -3px;
+}
