@@ -1,3 +1,5 @@
+@import 'variables', 'functions';
+
 .sidebar-container {
   margin-top: 50px;
 
@@ -6,6 +8,17 @@
     flex-direction: column-reverse;
     height: calc(100vh - 247px);
     overflow-y: auto;
+
+    .load-more {
+      transition: background-color 0.25s;
+      color: $accent-blue;
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: map-get($secondary-gray-palette, 50);
+      }
+    }
   }
 }
 

@@ -15,8 +15,9 @@
           <app-comment></app-comment>
           <app-comment></app-comment>
           <app-comment></app-comment>
-          <div *ngIf="loadingMoreComments" class="my-2 loadMore">
-            <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+          <div class="my-2">
+            <app-loading-indicator *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
+            <div class="load-more subtitle-medium" (click)="mockLoadMore()" *ngIf="!loadingMoreComments">Load More</div>
           </div>
         </div>
       </div>

@@ -48,6 +48,14 @@ export class CommentDrawerComponent implements OnInit {
   }
 
   /**
+   * Mock of load more function.
+   */
+  mockLoadMore(): void {
+    this.loadingMoreComments = true;
+    setTimeout(() => this.loadingMoreComments = false, 500);
+  }
+
+  /**
    * Gets the initial list of comments to load.
    *
    * @param documentId The documentId of document for which comments needs to be fetched.
