@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,11 +25,11 @@ describe('CommentDrawerComponent', () => {
         BrowserAnimationsModule
       ],
       providers: [
-        { provide: CommentService, useClass: MockCommentService,},
-        { provide: ErrorService, useClass: MockErrorService}
-      ]
+        { provide: CommentService, useClass: MockCommentService },
+        { provide: ErrorService, useClass: MockErrorService }
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
