@@ -1,4 +1,5 @@
 <aside [class]="location">
+  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
   <span *ngFor="let station of stations">
     <app-station-card [station]="station" [location]='location'></app-station-card>
   </span>

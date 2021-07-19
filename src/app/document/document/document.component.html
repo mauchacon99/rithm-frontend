@@ -1,7 +1,7 @@
 <div class="sub-header">
   <app-sub-header></app-sub-header>
 </div>
-
+<app-loading-indicator class="loader" *ngIf="connectedStationsLoading"></app-loading-indicator>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
   <mat-drawer #detailDrawer mode="over" position="end">
     <app-detail-drawer></app-detail-drawer>
