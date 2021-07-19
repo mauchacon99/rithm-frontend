@@ -6,6 +6,10 @@ p {
   max-height: 450px;
   overflow-y: scroll;
 
+  @media screen and (max-width: 400px) {
+    max-height: 80%;
+  }
+
   @media screen and (max-height: 420px) {
     max-height: 200px;
   }

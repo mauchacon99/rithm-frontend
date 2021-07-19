@@ -131,13 +131,18 @@ a {
 
   .mat-dialog-container {
     width: 90%;
-    height: 76%;
+    height: 100%;
 
     @media screen and (min-width: 991px) {
       height: 100%;
     }
 
     @media screen and (max-height: 420px) {
+      height: 100%;
+      width: 95%;
+    }
+
+    @media screen and (max-height: 320px) {
       height: 100%;
       width: 95%;
     }
