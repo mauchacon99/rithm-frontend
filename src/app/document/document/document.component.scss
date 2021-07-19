@@ -7,7 +7,8 @@
   z-index: 9;
 }
 
-mat-drawer-container {
+/* stylelint-disable-next-line */
+::ng-deep mat-drawer-container {
   mat-drawer {
     width: 280px;
     height: calc(100vh - 110px);
@@ -22,13 +23,8 @@ mat-drawer-container {
   }
 }
 
-mat-tab-header {
-  position: fixed !important;
-  z-index: 2;
-  background: #fff;
-}
-
-mat-ink-bar.mat-ink-bar {
+/* stylelint-disable-next-line */
+::ng-deep mat-ink-bar.mat-ink-bar {
   background: $accent-blue !important;
 }
 
