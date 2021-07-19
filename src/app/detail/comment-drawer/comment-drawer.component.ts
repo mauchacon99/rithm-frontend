@@ -50,18 +50,19 @@ export class CommentDrawerComponent implements OnInit {
    * Display initial group of comments.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.drawerData$
-      .subscribe((res) => {
-        const info = res as DocumentStationInformation;
-        this.stationId = info.stationId;
-        this.documentId = info.documentId;
-        this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
-      }, (error: HttpErrorResponse) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+    this.isLoading = false;
+    // this.sidenavDrawerService.drawerData$
+    //   .subscribe((res) => {
+    //     const info = res as DocumentStationInformation;
+    //     this.stationId = info.stationId;
+    //     this.documentId = info.documentId;
+    //     this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
+    //   }, (error: HttpErrorResponse) => {
+    //     this.errorService.displayError(
+    //       'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+    //       error
+    //     );
+    //   });
   }
 
   /**
