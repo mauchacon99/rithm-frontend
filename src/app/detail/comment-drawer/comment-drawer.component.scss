@@ -1,7 +1,7 @@
 .sidebar-container {
   margin-top: 50px;
 
-  .loading {
+  .loadMore {
     margin-top: 60px;
   }
 
@@ -11,4 +11,8 @@
     height: calc(100vh - 247px);
     overflow-y: auto;
   }
+}
+
+.loader {
+  height: calc(100vh - 247px);
 }
