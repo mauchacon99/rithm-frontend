@@ -43,21 +43,23 @@ export class CommentService {
    * @returns A list of comments based on documentId and stationId.
    */
   getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number): Observable<Comment[]> {
-    const comments: Comment[] = [{
-      displayText: 'This is first comment',
-      dateCreated: '2021-06-16T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }, {
-      displayText: 'This is second comment',
-      dateCreated: '2021-06-15T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-12T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }];
-    return of(comments).pipe(delay(1000));
+      return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true });
+
+    // const comments: Comment[] = [{
+    //   displayText: 'This is first comment',
+    //   dateCreated: '2021-06-16T17:26:47.3506612Z',
+    //   dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+    //   archived: false,
+    //   rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+    //   userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    // }, {
+    //   displayText: 'This is second comment',
+    //   dateCreated: '2021-06-15T17:26:47.3506612Z',
+    //   dateLastEdited: '2021-07-12T17:26:47.3506612Z',
+    //   archived: false,
+    //   rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+    //   userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    // }];
+    // return of(comments).pipe(delay(1000));
   }
 }
