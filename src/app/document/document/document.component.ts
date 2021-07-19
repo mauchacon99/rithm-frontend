@@ -26,6 +26,9 @@ export class DocumentComponent implements OnInit {
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
 
+  /** Document Id. */
+  private documentId = '';
+
   /** Whether the request to get the document info is currently underway. */
   documentLoading = true;
 
@@ -74,6 +77,7 @@ export class DocumentComponent implements OnInit {
         if (!params.stationId || !params.documentId) {
           this.handleInvalidParams();
         } else {
+          this.documentId = params.documentId;
           this.getDocumentStationData(params.documentId, params.stationId);
           this.getConnectedStations(params.documentId, params.stationId);
         }
@@ -119,6 +123,7 @@ export class DocumentComponent implements OnInit {
       .pipe(first())
       .subscribe((document) => {
         if (document) {
+          document.documentId = this.documentId;
           this.documentInformation = document;
         }
         this.documentLoading = false;

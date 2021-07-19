@@ -3,21 +3,12 @@
     <ng-template matTabContent>
       <div class="sidebar-container" *ngIf="!isLoading">
         <div class="comment-container">
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
-          <app-comment></app-comment>
+          <div *ngFor="let comment of comments">
+            <app-comment [commentData]="comment"></app-comment>
+          </div>
           <div class="my-2">
             <app-loading-indicator *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
-            <div class="load-more subtitle-medium" (click)="mockLoadMore()" *ngIf="!loadingMoreComments">Load More</div>
+            <div class="load-more subtitle-medium" (click)="loadMore()" *ngIf="!loadingMoreComments">Load More</div>
           </div>
         </div>
       </div>

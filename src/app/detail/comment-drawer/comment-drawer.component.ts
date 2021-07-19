@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { Comment } from 'src/models';
+import { Comment, DocumentStationInformation } from 'src/models';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 
 /**
@@ -15,6 +16,11 @@ import { Comment } from 'src/models';
   styleUrls: ['./comment-drawer.component.scss']
 })
 export class CommentDrawerComponent implements OnInit {
+  /** Station this drawer is attached to. */
+  stationId = '';
+
+  /** Document this drawer is attached to. */
+  documentId = '';
 
   /** Is the content being loaded. */
   isLoading = true;
@@ -36,23 +42,33 @@ export class CommentDrawerComponent implements OnInit {
 
   constructor(
     private commentService: CommentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService
   ) { }
 
   /**
    * Display initial group of comments.
    */
   ngOnInit(): void {
-    // getDocumentComments()
-    setTimeout(() => this.isLoading = false, 500);
+    this.sidenavDrawerService.drawerData$
+      .subscribe((res) => {
+        const info = res as DocumentStationInformation;
+        this.stationId = info.stationId;
+        this.documentId = info.documentId;
+        this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
+      }, (error: HttpErrorResponse) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
-   * Mock of load more function.
+   * A function that loads the next page of comments.
    */
-  mockLoadMore(): void {
-    this.loadingMoreComments = true;
-    setTimeout(() => this.loadingMoreComments = false, 500);
+  loadMore(): void {
+    this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, false);
   }
 
   /**

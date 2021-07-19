@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UtcTimeConversion } from 'src/helpers';
-import { User } from 'src/models';
+import { User, Comment } from 'src/models';
 
 /**
  * Component for an individual comment.
@@ -11,26 +11,21 @@ import { User } from 'src/models';
   styleUrls: ['./comment.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class CommentComponent {
+export class CommentComponent implements OnInit{
+  /** The Data needed to construct the comment. */
+  @Input() commentData!: Comment;
+
   /** User commenting. */
-  user: User = {
-    rithmId: '123',
-    firstName: 'Testy',
-    lastName: 'Test',
-    email: 'test@test.com',
-    objectPermissions: [],
-    groups: [],
-    createdDate: '1/2/34'
-  };
+  user!: User | undefined;
 
   /** Full name. */
-  name = this.user.firstName + ' ' + this.user.lastName;
+  name!: string;
 
   /** Comment message. */
-  message = 'Here is a test message that is a test and a message.';
+  message!: string;
 
   /** Timecode. */
-  UTCtimecode = '2021-07-12T19:06:47.3506612Z';
+  dateCreated!: string;
 
   /** Has the comment been read before? */
   read = false;
@@ -38,6 +33,16 @@ export class CommentComponent {
   constructor(
     private utcTimeConversion: UtcTimeConversion
   ) {}
+
+  /**
+   * Sets variables from the passed input data.
+   */
+  ngOnInit(): void {
+    this.name = this.commentData.user?.firstName + ' ' + this.commentData.user?.lastName;
+    this.message = this.commentData.displayText;
+    this.dateCreated = this.commentData.dateCreated;
+    this.user = this.commentData.user;
+  }
 
   /**
    * Convert a UTC Timecode into date and time.

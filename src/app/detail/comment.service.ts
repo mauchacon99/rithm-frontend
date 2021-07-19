@@ -46,7 +46,7 @@ export class CommentService {
     // eslint-disable-next-line max-len
     const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNumber', pageNumber).set('commentsPerPage', commentsPerPage);
 
-    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true, params });
+    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true, params: params });
 
     // const comments: Comment[] = [{
     //   displayText: 'This is first comment',
