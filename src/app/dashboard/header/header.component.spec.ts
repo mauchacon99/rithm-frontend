@@ -8,6 +8,8 @@ import { MockDashboardService, MockUserService, MockDocumentService, MockPopupSe
 import { UserService } from 'src/app/core/user.service';
 import { MatCardModule } from '@angular/material/card';
 import { PopupService } from 'src/app/core/popup.service';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -15,7 +17,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent],
+      declarations: [
+        HeaderComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         RouterTestingModule,
         MatProgressSpinnerModule,

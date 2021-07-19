@@ -4,6 +4,8 @@ import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('MyStationsComponent', () => {
   let component: MyStationsComponent;
@@ -11,7 +13,10 @@ describe('MyStationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MyStationsComponent],
+      declarations: [
+        MyStationsComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         MatProgressSpinnerModule
       ],

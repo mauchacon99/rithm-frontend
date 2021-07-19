@@ -9,9 +9,5 @@
       </mat-card>
     </span>
   </div>
-  <div *ngIf="isLoading" class="row justify-content-center p-0 mt-5">
-    <div class="col text-center">
-      <mat-spinner color="accent" class="m-auto"></mat-spinner>
-    </div>
-  </div>
+  <app-loading-indicator class="loader mt-5" *ngIf="isLoading"></app-loading-indicator>
 </section>

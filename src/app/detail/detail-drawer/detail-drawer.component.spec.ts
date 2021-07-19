@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from 'src/mocks';
 import { CommentDrawerComponent } from '../comment-drawer/comment-drawer.component';
 import { HistoryDrawerComponent } from '../history-drawer/history-drawer.component';
 
@@ -15,6 +17,9 @@ describe('DetailDrawerComponent', () => {
         DetailDrawerComponent,
         MockComponent(CommentDrawerComponent),
         MockComponent(HistoryDrawerComponent)
+      ],
+      providers: [
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
     .compileComponents();
