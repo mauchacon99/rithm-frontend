@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 /**
  * Comment input component.
  */
@@ -8,5 +9,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./comment-input.component.scss']
 })
 export class CommentInputComponent {
+  /** The comment form. */
+  @Input() commentForm!: FormGroup;
 
+  /**
+   * Add the comment.
+   */
+  addComment(): void {
+    // TODO: RIT-645, Add comment
+  }
 }

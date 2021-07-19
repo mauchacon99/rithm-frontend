@@ -1,1 +1,9 @@
-<p>comment-input works!</p>
+<form [formGroup]="commentForm" (ngSubmit)="addComment()">
+  <mat-form-field appearance="outline">
+    <mat-label>Add a comment</mat-label>
+    <input matInput type="text" placeholder="Comment..." formControlName="comment">
+  </mat-form-field>
+  <button mat-icon-button color="accent">
+    <i class="fas fa-paper-plane"></i>
+  </button>
+</form>
