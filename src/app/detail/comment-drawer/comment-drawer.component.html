@@ -1,20 +1,26 @@
 <mat-tab-group>
   <mat-tab label="Station">
     <ng-template matTabContent>
-      <div class="comment-container">
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
-        <app-comment></app-comment>
+      <div class="sidebar-container" *ngIf="!isLoading">
+        <div *ngIf="loadMore" class="mb-2 loadMore">
+          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        </div>
+        <div class="comment-container">
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+          <app-comment></app-comment>
+        </div>
       </div>
+      <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
     </ng-template>
   </mat-tab>
   <mat-tab label="Document">

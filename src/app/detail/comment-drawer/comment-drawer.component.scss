@@ -1,5 +1,18 @@
-.comment-container {
-  height: calc(100vh - 247px);
-  overflow-y: auto;
+.sidebar-container {
   margin-top: 50px;
+
+  .loadMore {
+    margin-top: 60px;
+  }
+
+  .comment-container {
+    display: flex;
+    flex-direction: column-reverse;
+    height: calc(100vh - 247px);
+    overflow-y: auto;
+  }
+}
+
+.loader {
+  height: calc(100vh - 247px);
 }
