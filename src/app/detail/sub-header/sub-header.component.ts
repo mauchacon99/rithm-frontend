@@ -14,6 +14,9 @@ export class SubHeaderComponent {
   /** DetailItem. */
   @Input() detailItem!: string;
 
+  /** Current active icon. */
+  activeItem = 'none';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService
   ) {}
@@ -25,5 +28,10 @@ export class SubHeaderComponent {
    */
   toggleDrawer(drawerItem: 'comments' | 'history'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+    if ((drawerItem === 'history' && this.activeItem === 'none') || (drawerItem === 'comments' && this.activeItem === 'none')) {
+      this.activeItem = drawerItem;
+    } else {
+      this.activeItem = 'none';
+    }
   }
 }
