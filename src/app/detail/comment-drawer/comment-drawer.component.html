@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab label="Station">
     <ng-template matTabContent>
-      <div class="sidebar-container" *ngIf="!isLoading">
+      <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="sidebar-container" *ngIf="!isLoading">
         <div>
           <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
           <div class="comment-container" *ngIf="comments.length > 0">
@@ -22,7 +22,7 @@
   </mat-tab>
   <mat-tab label="Document">
     <ng-template matTabContent>
-      <div class="sidebar-container" *ngIf="!isLoading">
+      <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="sidebar-container" *ngIf="!isLoading">
         <div>
           <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
           <div class="comment-container" *ngIf="comments.length > 0">

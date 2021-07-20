@@ -1,12 +1,12 @@
 @import 'variables', 'functions';
 
 .sidebar-container {
+  height: calc(100vh - 247px);
+  overflow-y: auto;
+
   .comment-container {
     display: flex;
     flex-direction: column-reverse;
-    justify-content: flex-end;
-    height: calc(100vh - 247px);
-    overflow-y: auto;
 
     .load-more {
       transition: background-color 0.25s;
