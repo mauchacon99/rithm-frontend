@@ -32,6 +32,7 @@ export class DetailDrawerComponent implements OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService
   ) {
+    console.log('detail constructor')
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
@@ -59,6 +60,7 @@ export class DetailDrawerComponent implements OnDestroy {
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
+    console.log('destroy')
     this.destroyed$.next();
     this.destroyed$.complete();
   }

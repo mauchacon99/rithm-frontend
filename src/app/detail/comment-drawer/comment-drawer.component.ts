@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -15,7 +15,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './comment-drawer.component.html',
   styleUrls: ['./comment-drawer.component.scss']
 })
-export class CommentDrawerComponent implements OnInit {
+export class CommentDrawerComponent implements OnInit, OnDestroy {
   /** Station this drawer is attached to. */
   stationId = '';
 
@@ -27,6 +27,9 @@ export class CommentDrawerComponent implements OnInit {
 
   /** Are more comments being loaded. */
   loadingMoreComments = false;
+
+  /** No more comments to load. */
+  commentsEnd = false;
 
   /** Current page to get comments from. */
   commentPage = 1;
@@ -51,13 +54,13 @@ export class CommentDrawerComponent implements OnInit {
    */
   ngOnInit(): void {
     this.sidenavDrawerService.drawerData$
-      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+      .pipe(first())
       .subscribe((res) => {
         const info = res as DocumentStationInformation;
         if (info) {
           this.stationId = info.stationId;
           this.documentId = info.documentId;
-          this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
+          this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, true);
         }
       }, (error: HttpErrorResponse) => {
         this.errorService.displayError(
@@ -68,10 +71,17 @@ export class CommentDrawerComponent implements OnInit {
   }
 
   /**
+   * Testing.
+   */
+  ngOnDestroy(): void {
+    console.log('destroyed');
+  }
+
+  /**
    * A function that loads the next page of comments.
    */
   loadMore(): void {
-    this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, false);
+    this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, false);
   }
 
   /**
@@ -89,8 +99,12 @@ export class CommentDrawerComponent implements OnInit {
     this.commentService.getDocumentComments(documentId, stationId, pageNumber, commentsPerPage)
       .pipe(first())
       .subscribe((commentsResponse) => {
-        initialGet ? this.comments = commentsResponse : this.comments = this.comments.concat(commentsResponse);
-        ++this.commentPage;
+        this.comments = this.comments.concat(commentsResponse);
+        if (commentsResponse.length === 20) {
+          ++this.commentPage;
+        } else {
+          this.commentsEnd = true;
+        }
         initialGet ? this.isLoading = false : this.loadingMoreComments = false;
       }, (error: HttpErrorResponse) => {
         initialGet ? this.isLoading = false : this.loadingMoreComments = false;

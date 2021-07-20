@@ -38,13 +38,13 @@ export class CommentService {
    *
    * @param documentId The documentId of document for which comments needs to be fetched.
    * @param stationId Id of station for which comments needs to be fetched.
-   * @param pageNumber The desired page number of results.
+   * @param pageNum The desired page number of results.
    * @param commentsPerPage The limit of comments per page.
    * @returns A list of comments based on documentId and stationId.
    */
-  getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number): Observable<Comment[]> {
+  getDocumentComments(documentId: string, stationId: string, pageNum: number, commentsPerPage: number): Observable<Comment[]> {
     // eslint-disable-next-line max-len
-    const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNumber', pageNumber).set('commentsPerPage', commentsPerPage);
+    const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNum', pageNum).set('commentsPerPage', commentsPerPage);
 
     return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: false, params: params });
 

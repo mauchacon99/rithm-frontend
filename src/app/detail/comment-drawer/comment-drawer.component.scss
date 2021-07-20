@@ -18,14 +18,20 @@
         background-color: map-get($secondary-gray-palette, 50);
       }
     }
+
+    .no-more {
+      color: $accent-blue;
+      text-align: center;
+    }
   }
 
   .no-comments {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
+    justify-content: center;
     color: $accent-blue;
     text-align: center;
-    height: calc(65vh - 247px);
+    height: calc(100vh - 247px);
   }
 }
 
