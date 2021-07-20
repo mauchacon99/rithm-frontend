@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Comment } from 'src/models';
 import { delay } from 'rxjs/operators';
 
-const MICROSERVICE_PATH = '/userservice/api/comment';
+const MICROSERVICE_PATH = '/commentservice/api/comment';
 
 /**
  * Service for all behavior involving comments.
@@ -44,25 +44,25 @@ export class CommentService {
    */
   getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number): Observable<Comment[]> {
     // eslint-disable-next-line max-len
-    const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNumber', pageNumber).set('commentsPerPage', commentsPerPage);
+    // const params = new HttpParams().set('documentId',documentId).set('stationId', stationId).set('pageNumber', pageNumber).set('commentsPerPage', commentsPerPage);
 
-    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true, params: params });
+    // return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { withCredentials: true, params: params });
 
-    // const comments: Comment[] = [{
-    //   displayText: 'This is first comment',
-    //   dateCreated: '2021-06-16T17:26:47.3506612Z',
-    //   dateLastEdited: '2021-07-14T17:26:47.3506612Z',
-    //   archived: false,
-    //   rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-    //   userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    // }, {
-    //   displayText: 'This is second comment',
-    //   dateCreated: '2021-06-15T17:26:47.3506612Z',
-    //   dateLastEdited: '2021-07-12T17:26:47.3506612Z',
-    //   archived: false,
-    //   rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-    //   userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    // }];
-    // return of(comments).pipe(delay(1000));
+    const comments: Comment[] = [{
+      displayText: 'This is first comment',
+      dateCreated: '2021-06-16T17:26:47.3506612Z',
+      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+      archived: false,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    }, {
+      displayText: 'This is second comment',
+      dateCreated: '2021-06-15T17:26:47.3506612Z',
+      dateLastEdited: '2021-07-12T17:26:47.3506612Z',
+      archived: false,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    }];
+    return of(comments).pipe(delay(1000));
   }
 }

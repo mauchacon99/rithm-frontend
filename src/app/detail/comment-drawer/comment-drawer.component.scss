@@ -4,14 +4,9 @@
   .comment-container {
     display: flex;
     flex-direction: column-reverse;
+    justify-content: flex-start;
     height: calc(100vh - 247px);
     overflow-y: auto;
-
-    .no-comments {
-      color: $accent-blue;
-      text-align: center;
-      height: calc(70vh - 247px);
-    }
 
     .load-more {
       transition: background-color 0.25s;
@@ -23,6 +18,14 @@
         background-color: map-get($secondary-gray-palette, 50);
       }
     }
+  }
+
+  .no-comments {
+    display: flex;
+    flex-direction: column-reverse;
+    color: $accent-blue;
+    text-align: center;
+    height: calc(65vh - 247px);
   }
 }
 

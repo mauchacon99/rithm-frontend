@@ -2,9 +2,9 @@
   <mat-tab label="Station">
     <ng-template matTabContent>
       <div class="sidebar-container" *ngIf="!isLoading">
-        <div class="comment-container">
+        <div>
           <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
-          <div *ngIf="comments.length > 0">
+          <div class="comment-container" *ngIf="comments.length > 0">
             <div *ngFor="let comment of comments">
               <app-comment [commentData]="comment"></app-comment>
             </div>
