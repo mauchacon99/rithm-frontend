@@ -65,7 +65,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     PasswordRequirementsComponent,
     UserAvatarComponent,
     PaginationComponent,
-    RosterComponent
+    RosterComponent,
   ]
 })
 export class SharedModule { }
