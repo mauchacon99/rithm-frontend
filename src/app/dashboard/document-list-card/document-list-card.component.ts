@@ -6,7 +6,7 @@ import { UtcTimeConversion } from 'src/helpers';
  * Component for displaying a list of documents on the dashboard.
  */
 @Component({
-  selector: 'app-document-list-card',
+  selector: 'app-document-list-card[documents][isLoading][isPriority]',
   templateUrl: './document-list-card.component.html',
   styleUrls: ['./document-list-card.component.scss'],
   providers: [UtcTimeConversion]

@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CommentInputComponent } from './comment-input/comment-input.component';
 
 
 
@@ -30,7 +31,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     ConnectedStationCardComponent,
     HistoryDrawerComponent,
     CommentDrawerComponent,
-    DetailDrawerComponent
+    DetailDrawerComponent,
+    CommentInputComponent
   ],
   imports: [
     CommonModule,
