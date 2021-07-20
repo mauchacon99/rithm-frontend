@@ -47,7 +47,7 @@ export class StationDocumentsModalComponent implements OnInit {
   ) {
     this.stationRithmId = this.modalData.stationId;
     // TODO: Remove this once request to get station documents is merged!
-    this.stationRithmId = 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0';
+    this.stationRithmId = 'fee2302c-87fe-474f-b564-ded6b119c6f6';
   }
 
   /**
@@ -70,6 +70,11 @@ export class StationDocumentsModalComponent implements OnInit {
       .subscribe((documentsResponse) => {
         if (documentsResponse) {
           this.documents = documentsResponse.documentList;
+          // TODO: Remove this once request to get station documents is merged!
+          for (const document of this.documents) {
+            document.rithmId = '1D8B5C35-0127-4099-948E-796B2A904DD6';
+          }
+
           this.totalNumDocs = documentsResponse.numberOfDocument;
           //to test this.CheckDocPermission(), comment out the below line.
           this.isOnRoster = documentsResponse.isWorker;
