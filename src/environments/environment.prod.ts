@@ -1,4 +1,9 @@
 export const environment = {
+
+  /** Whether the environment is used for testing. */
+  testing: false,
+
+  /** Whether the environment is used for production. */
   production: true,
 
   /** The base URL for the Rithm API. */

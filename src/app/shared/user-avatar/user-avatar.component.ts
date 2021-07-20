@@ -24,6 +24,7 @@ export class UserAvatarComponent implements OnInit {
   profile = false;
 
   /**
+   * Determines if this is used as a profile.
    * Ensures that the initials property is set with user's initials.
    */
   ngOnInit(): void {

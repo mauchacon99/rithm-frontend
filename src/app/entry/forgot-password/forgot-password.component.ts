@@ -47,8 +47,7 @@ export class ForgotPasswordComponent {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong and we were unable to send you an email. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }

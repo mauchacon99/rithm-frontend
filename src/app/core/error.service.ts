@@ -18,7 +18,7 @@ export class ErrorService {
    */
   logError(error: Error): void {
     console.error(error);
-    // TODO: Add error log reporting using some third-party service
+    // TODO: [RIT-680] Add error log reporting using some logging service
   }
 
   /**
@@ -29,7 +29,7 @@ export class ErrorService {
    * @param important Whether the error is important and requires a dismissal (using an
    * alert). Optional; defaults to `false` (non-important).
    */
-  displayError(displayMessage: string, error: Error, important = false): void {
+  displayError(displayMessage: string, error: Error, important = true): void {
     this.logError(error);
 
     if (important) {

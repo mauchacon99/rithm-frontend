@@ -43,7 +43,18 @@ export class DashboardService {
    */
   getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/StationRoster?stationRithmId=${stationId}`);
+    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${stationId}`);
+  }
+
+  /**
+   * Gets a list of supervisor roster of a station.
+   *
+   * @param stationId The id of the station for which to get the roster.
+   * @returns A list of supervisor roster of a station.
+   */
+  getSupervisorRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+    // eslint-disable-next-line max-len
+    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);
   }
 
   /**
@@ -53,6 +64,15 @@ export class DashboardService {
    */
   getPriorityQueueDocuments(): Observable<Document[]> {
     return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
+  }
+
+  /**
+   * Gets a list of previously started documents.
+   *
+   * @returns A list of previously started documents.
+   */
+  getPreviouslyStartedDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previouslystarteddocuments`);
   }
 
 }

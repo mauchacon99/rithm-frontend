@@ -2,7 +2,13 @@
   <h6>{{station?.stationName}}</h6>
   <div class="roster">
     <p class="overline">worker roster</p>
-    <app-roster [station]="station"></app-roster>
+    <app-roster
+      [rosterArray]="station.workerInitials"
+      [rosterSize]="station.numberOfWorkers"
+      [stationId]="station.rithmId!"
+      [stationName]="station.stationName"
+      [isWorker]="true"
+  ></app-roster>
   </div>
   <div class="docs">
     <p class="overline">documents</p>

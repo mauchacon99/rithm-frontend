@@ -13,6 +13,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 const DIALOG_TEST_DATA: DialogData = {
   title: 'Roster',
@@ -33,7 +35,10 @@ describe('StationDocumentsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StationDocumentsModalComponent],
+      declarations: [
+        StationDocumentsModalComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         RouterTestingModule,
         NoopAnimationsModule,
@@ -65,15 +70,15 @@ describe('StationDocumentsModalComponent', () => {
 
   it('should return zero or more documents', () => {
     expect(component.documents.length).toBeGreaterThanOrEqual(0);
-    expect(component.documents).toBeGreaterThanOrEqual(0);
+    expect(component.totalNumDocs).toBeGreaterThanOrEqual(0);
     // expect(component.isWorker).toBe(true || false);
   });
 
   xit('should link to a document if clicked with proper permissions', () => {
     // TODO: This test not currently working.
-    component.isOnRoster = true;
+    component.userType = 'worker' || 'admin' || 'supervisor';
     expect(component.checkDocPermission('1')).toBeTruthy();
-    component.isOnRoster = false;
+    component.userType = 'none';
     expect(component.checkDocPermission('1')).toBeFalsy();
   });
 

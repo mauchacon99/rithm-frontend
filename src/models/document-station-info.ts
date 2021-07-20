@@ -19,14 +19,23 @@ export interface DocumentStationInformation {
   /** The last updated Time in UTC. */
   lastUpdatedUTC: string;
 
+  /** The global Rithm id for the station. */
+  stationId: string;
+
   /** The name of the station. */
   stationName: string;
 
   /** The priority of the station. */
   stationPriority: number;
 
+  /** The number of supervisors on the roster. */
+  numberOfSupervisors: number;
+
   /** The list of supervisors. */
   supervisorRoster: Array<string>;
+
+  /** The number of workers on the roster. */
+  numberOfWorkers: number;
 
   /** The list of workers. */
   workerRoster: Array<string>;

@@ -1,9 +1,13 @@
-<!-- TODO: Fix notification toast container to not block interactions with UI underneath -->
+<!-- TODO: [RIT-682] Fix notification toast container to not block interactions with UI underneath -->
 <!-- <app-notification-toasts-container></app-notification-toasts-container> -->
 
+<!-- Top nav -->
 <app-top-nav *ngIf="showTopNav"></app-top-nav>
-<mat-drawer-container [ngClass]="{'sign-in': !showTopNav}" hasBackdrop="true">
-  <mat-drawer #mobileNav mode="over">
+
+<mat-sidenav-container [ngClass]="{'sign-in': !showTopNav}" hasBackdrop="true">
+
+  <!-- Side nav -->
+  <mat-sidenav #sidenav mode="over">
     <a *ngFor="let link of mobileLinks" routerLink="{{link.link}}" (click)="selectNavItem(link.name)">
       <div class="row no-gutters">
         <div class="col">
@@ -12,8 +16,11 @@
         </div>
       </div>
     </a>
-  </mat-drawer>
-  <mat-drawer-content [ngClass]="{'non-entry': showTopNav}">
+  </mat-sidenav>
+
+  <!-- Main page content -->
+  <mat-sidenav-content [ngClass]="{'non-entry': showTopNav}">
     <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

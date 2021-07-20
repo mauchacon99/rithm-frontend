@@ -9,8 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FullScreenLoaderComponent } from './full-screen-loader/full-screen-loader.component';
+import { FormsModule } from '@angular/forms';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,6 +23,7 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 
 @NgModule({
@@ -31,7 +31,6 @@ import { UserRemovalComponent } from './user-removal/user-removal.component';
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent,
     PasswordRequirementsComponent,
     RosterComponent,
     PaginationComponent,
@@ -40,7 +39,8 @@ import { UserRemovalComponent } from './user-removal/user-removal.component';
     UserAvatarComponent,
     UserFormComponent,
     TermsConditionsModalComponent,
-    UserRemovalComponent
+    UserRemovalComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -54,14 +54,13 @@ import { UserRemovalComponent } from './user-removal/user-removal.component';
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule,
-    ReactiveFormsModule
+    MatTooltipModule
   ],
   exports: [
     AlertDialogComponent,
     ConfirmDialogComponent,
     PromptDialogComponent,
-    FullScreenLoaderComponent,
+    LoadingIndicatorComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,

@@ -1,1 +1,12 @@
-// styles here
+.sidebar-container {
+  .comment-container {
+    display: flex;
+    flex-direction: column-reverse;
+    height: calc(100vh - 247px);
+    overflow-y: auto;
+  }
+}
+
+.loader {
+  height: calc(100vh - 247px);
+}

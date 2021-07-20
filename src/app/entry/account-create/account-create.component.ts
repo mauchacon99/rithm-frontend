@@ -92,8 +92,7 @@ export class AccountCreateComponent implements OnInit {
         } else {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
+            error
           );
         }
       });
@@ -106,13 +105,13 @@ export class AccountCreateComponent implements OnInit {
    */
   openTerms(component: ComponentType<unknown>): void {
     this.dialog.open(component, {
-      width: '90%',
-      height: '76%',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
         okButtonText: 'Agree',
-        width: '90%'
+        width: '90%',
+        showAgreeButton: true
       }
     });
   }

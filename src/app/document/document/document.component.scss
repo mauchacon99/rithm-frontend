@@ -1,8 +1,31 @@
+@import 'functions', 'variables';
+
 .sub-header {
   height: 45px;
   position: fixed;
   width: 100%;
   z-index: 9;
+}
+
+/* stylelint-disable-next-line */
+::ng-deep mat-drawer-container {
+  mat-drawer {
+    width: 280px;
+    height: calc(100vh - 110px);
+    margin-top: 45px;
+
+    .mat-tab-label {
+      min-width: 140px !important;
+      font-size: font-calc(14);
+      color: $accent-blue;
+      opacity: 1;
+    }
+  }
+}
+
+/* stylelint-disable-next-line */
+::ng-deep mat-ink-bar.mat-ink-bar {
+  background: $accent-blue !important;
 }
 
 .page {

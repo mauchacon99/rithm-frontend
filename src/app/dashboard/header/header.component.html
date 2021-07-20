@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row px-3 px-lg-0">
   <mat-card [class.load-spin]="isLoading" class="col-12">
     <div *ngIf="!isLoading" class="row no-gutters m-0">
       <div class="col-lg-8 col-md-12">
@@ -15,10 +15,6 @@
         <button mat-raised-button color="accent" class="align-middle">Start Working</button>
       </div>
     </div>
-    <div *ngIf="isLoading" class="row justify-content-center m-0 no-gutters">
-      <div class="col-12 text-center">
-        <mat-spinner [diameter]="46" class="m-auto" color="accent"></mat-spinner>
-      </div>
-    </div>
+    <app-loading-indicator [diameter]="46" class="loader" *ngIf="isLoading"></app-loading-indicator>
   </mat-card>
 </div>

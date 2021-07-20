@@ -1,6 +1,6 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { SidenavService } from 'src/app/core/sidenav.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { User } from 'src/models';
 
@@ -30,7 +30,7 @@ export class TopNavComponent {
   notificationsVisible = false;
 
   constructor(
-    private sidenavService: SidenavService,
+    private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService
     ) {
     // Setup...
@@ -41,7 +41,7 @@ export class TopNavComponent {
    * Toggle opening and closing of the mobile navigation.
    */
   toggle(): void {
-    this.sidenavService.toggle();
+    this.sidenavDrawerService.toggleSidenav();
   }
 
   /**
@@ -53,7 +53,7 @@ export class TopNavComponent {
     this.innerWidth = window.innerWidth;
 
     if (this.innerWidth >= 768) {
-      this.sidenavService.close();
+      this.sidenavDrawerService.closeSidenav();
     }
     if (this.innerWidth <= 768) {
       this.userMenuTrigger.closeMenu();

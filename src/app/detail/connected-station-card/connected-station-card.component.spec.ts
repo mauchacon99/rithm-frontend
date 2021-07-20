@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StationCardComponent } from './station-card.component';
+import { ConnectedStationCardComponent } from './connected-station-card.component';
 
 describe('StationCardComponent', () => {
-  let component: StationCardComponent;
-  let fixture: ComponentFixture<StationCardComponent>;
+  let component: ConnectedStationCardComponent;
+  let fixture: ComponentFixture<ConnectedStationCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationCardComponent ]
+      declarations: [ ConnectedStationCardComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StationCardComponent);
+    fixture = TestBed.createComponent(ConnectedStationCardComponent);
     component = fixture.componentInstance;
     component.station = {
       stationName: 'New Station',

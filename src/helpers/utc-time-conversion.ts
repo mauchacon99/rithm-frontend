@@ -3,6 +3,21 @@
  */
 export class UtcTimeConversion {
   /**
+   * Method converting a timestamp into a date and time.
+   *
+   * @param timestamp A UTC time formatted string.
+   * @returns String showing date and time.
+   */
+  getDateAndTime(timestamp: string): string {
+    const d = new Date(timestamp),
+      minutes = d.getMinutes().toString().length === 1 ? '0' + d.getMinutes() : d.getMinutes(),
+      hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
+      ampm = d.getHours() >= 12 ? 'pm' : 'am',
+      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + hours + ':' + minutes + ' ' + ampm;
+  }
+
+  /**
    * Method converting a timestamp to UTC milliseconds.
    *
    * @param timeStamp A UTC time formatted string.
@@ -44,7 +59,7 @@ export class UtcTimeConversion {
     eg: an hour is broken into 60 minutes, there are 60 seconds in a minute,and 1000 ms in a second.
     this is written as 1000*60*60 */
 
-    // TODO: Simplify getElapsedTimeText logic
+    // TODO: [RIT-679] Simplify getElapsedTimeText logic
 
     //If elapsedTime is set to 0 its because no string was input in a related method.
     //This prevents us from returning NaN.
@@ -70,7 +85,7 @@ export class UtcTimeConversion {
 
     //if elapsed time is greater than a day.
     if (elapsedTime < 1000 * 60 * 60 * 24 * 2) {
-      return 'Yesterday';
+      return `1 day`;
     }
     return `${Math.floor(elapsedTime / (1000 * 60 * 60 * 24))} days`;
   }

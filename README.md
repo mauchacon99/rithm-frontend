@@ -2,6 +2,8 @@
 
 [![Dev Deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/dev-deployments.yml)
 
+[![Test Deployments](https://github.com/strut-software/rithm-front-end/actions/workflows/test-deployments.yml/badge.svg)](https://github.com/strut-software/rithm-front-end/actions/workflows/test-deployments.yml)
+
 ## Getting Started
 
 Clone the repo and perform an `npm i` in the base directory to install all of the dependencies for the project.
@@ -41,6 +43,9 @@ You can find the deployed web app at the following locations. Each is using a di
 
 [Development](https://devapp.rithm.tech) \
 [Testing](https://testapp.rithm.tech)
+
+Username: `docuser` \
+Password: `R1thmD0c5`
 
 ## Scripts
 

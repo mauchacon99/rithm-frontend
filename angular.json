@@ -56,6 +56,10 @@
                   "with": "src/environments/environment.testing.ts"
                 }
               ],
+              "index": {
+                "input": "src/index.testing.html",
+                "output": "index.html"
+              },
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -116,6 +120,9 @@
           "configurations": {
             "production": {
               "browserTarget": "rithm:build:production"
+            },
+            "test": {
+              "browserTarget": "rithm:build:test"
             }
           }
         },

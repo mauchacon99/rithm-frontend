@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -17,16 +18,19 @@ import { RosterModalData, WorkerRosterResponse } from 'src/models';
 export class RosterModalComponent implements OnInit {
 
   /** Whether the modal is being used for the work roster. */
-  @Input() isWorker = true;
+  isWorker: boolean;
 
   /** The id of the station. */
-  @Input() stationRithmId = '';
+  stationRithmId = '';
 
   /** The name of station. */
-  @Input() stationName = '';
+  stationName = '';
 
   /** Whether the content is being loaded. */
   isLoading = true;
+
+  /** Roster type. */
+  roster$: Observable<WorkerRosterResponse[]>;
 
   /** Worker roster list. */
   users = Array<WorkerRosterResponse>();
@@ -38,13 +42,20 @@ export class RosterModalComponent implements OnInit {
     private dialogRef: MatDialogRef<RosterModalComponent>,
   ) {
     this.stationRithmId = this.data.stationId;
+    this.isWorker = this.data.isWorker;
+
+    if(this.isWorker) {
+      this.roster$ = this.dashboardService.getWorkerRoster(this.stationRithmId);
+    } else {
+      this.roster$ = this.dashboardService.getSupervisorRoster(this.stationRithmId);
+    }
   }
 
   /**
    * Gets the users to show in dialog.
    */
   ngOnInit(): void {
-    this.dashboardService.getWorkerRoster(this.stationRithmId)
+    this.roster$
       .pipe(first())
       .subscribe((response) => {
         this.isLoading = false;
@@ -56,8 +67,7 @@ export class RosterModalComponent implements OnInit {
         this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
