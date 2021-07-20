@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -46,6 +46,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule, // TODO: Remove this? Only required by user removal (test component)
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
