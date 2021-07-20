@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -15,7 +15,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './comment-drawer.component.html',
   styleUrls: ['./comment-drawer.component.scss']
 })
-export class CommentDrawerComponent implements OnInit, OnDestroy {
+export class CommentDrawerComponent implements OnInit {
   /** Station this drawer is attached to. */
   stationId = '';
 
@@ -68,13 +68,6 @@ export class CommentDrawerComponent implements OnInit, OnDestroy {
           error
         );
       });
-  }
-
-  /**
-   * Testing.
-   */
-  ngOnDestroy(): void {
-    console.log('destroyed');
   }
 
   /**
