@@ -70,15 +70,15 @@ describe('StationDocumentsModalComponent', () => {
 
   it('should return zero or more documents', () => {
     expect(component.documents.length).toBeGreaterThanOrEqual(0);
-    expect(component.documents).toBeGreaterThanOrEqual(0);
+    expect(component.totalNumDocs).toBeGreaterThanOrEqual(0);
     // expect(component.isWorker).toBe(true || false);
   });
 
   xit('should link to a document if clicked with proper permissions', () => {
     // TODO: This test not currently working.
-    component.isOnRoster = true;
+    component.userType = 'worker' || 'admin' || 'supervisor';
     expect(component.checkDocPermission('1')).toBeTruthy();
-    component.isOnRoster = false;
+    component.userType = 'none';
     expect(component.checkDocPermission('1')).toBeFalsy();
   });
 

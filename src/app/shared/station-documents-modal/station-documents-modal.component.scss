@@ -11,7 +11,7 @@
   .doc-container {
     width: 1000px;
     height: 535px;
-    overflow-y: scroll;
+    overflow-y: auto;
     cursor: default;
 
     @media screen and (max-width: 1499px) {
@@ -95,6 +95,15 @@
       align-items: center;
       display: flex;
       justify-content: center;
+    }
+
+    .no-documents {
+      display: flex;
+      flex-direction: row;
+      align-content: flex-start;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
     }
   }
 }
