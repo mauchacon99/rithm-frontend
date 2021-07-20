@@ -1,5 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, Validators, } from '@angular/forms';
+import { Component, forwardRef, Input } from '@angular/core';
+import {
+  AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
+  NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators,
+} from '@angular/forms';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -8,16 +11,29 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  styleUrls: ['./user-form.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => UserFormComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => UserFormComponent),
+      multi: true
+    }
+  ]
 })
-export class UserFormComponent implements ControlValueAccessor {
+export class UserFormComponent implements ControlValueAccessor, Validator {
+  /** Whether this form is to be used for account create (defaults to `false`). */
+  @Input() accountCreate = false;
+
+  /** The form for the user info. */
   userForm: FormGroup;
 
-  /** Is this form part of account creation? */
-  @Input() accountCreateForm!: boolean;
-
-  /** Are password requirements visible. */
-  passReqVisible = false;
+  /** Whether the password requirements are visible. */
+  passwordRequirementsVisible = false;
 
   /** Show passwords match validation in child component. */
   showMatch = false;
@@ -60,6 +76,26 @@ export class UserFormComponent implements ControlValueAccessor {
     });
   }
 
+  /**
+   * The label to be displayed above password fields.
+   *
+   * @returns The input label text.
+   */
+  get passwordLabel(): string {
+    return this.accountCreate ? 'password' : 'new password';
+  }
+
+  /**
+   * Toggles visibility of the password requirements popup.
+   *
+   * @param errorsFieldToCheck The field to get errors for child component.
+   */
+  togglePasswordRequirements(errorsFieldToCheck: string): void {
+    this.errorsToGet = errorsFieldToCheck;
+    this.passwordRequirementsVisible = !this.passwordRequirementsVisible;
+    this.showMatch = errorsFieldToCheck === 'confirmPassword';
+  }
+
   onTouched: () => void = () => { };
 
   writeValue(val: any): void {
@@ -80,27 +116,13 @@ export class UserFormComponent implements ControlValueAccessor {
     isDisabled ? this.userForm.disable() : this.userForm.enable();
   }
 
-  /**
-   * Toggle visibility of password requirements.
-   *
-   * @param errorsFieldToCheck What field to get errors for child component.
-   */
-  togglePassReq(errorsFieldToCheck: string): void {
-    this.errorsToGet = errorsFieldToCheck;
-    this.passReqVisible = !this.passReqVisible;
-    this.showMatch = errorsFieldToCheck === 'confirmPassword';
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.userForm.valid ? null : {
+      invalidForm: {
+        valid: false,
+        message: 'User form is invalid'
+      }
+    };
   }
 
-  /**
-   * Toggle password label.
-   *
-   * @param isCreate An input determining whether this form will be used in account creation.
-   * @returns A string.
-   */
-  togglePassLabel(isCreate: boolean): string {
-    if (!isCreate) {
-      return 'New ';
-    }
-    return '';
-  }
 }

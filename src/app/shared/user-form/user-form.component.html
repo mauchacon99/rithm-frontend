@@ -1,5 +1,5 @@
 <ng-container [formGroup]="userForm">
-  <app-password-requirements class="mat-elevation-z8" *ngIf="passReqVisible"
+  <app-password-requirements class="mat-elevation-z8" *ngIf="passwordRequirementsVisible"
     [passReq]="userForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
 
   <!-- First name -->
@@ -15,7 +15,7 @@
   </mat-form-field>
 
   <!-- Email -->
-  <div *ngIf="accountCreateForm">
+  <div *ngIf="accountCreate">
     <mat-form-field class="col-12" appearance="outline">
       <mat-label>Email</mat-label>
       <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
@@ -24,15 +24,15 @@
 
   <!-- Password -->
   <mat-form-field class="col-12" appearance="outline">
-    <mat-label>{{togglePassLabel(accountCreateForm)}}Password</mat-label>
+    <mat-label>{{ passwordLabel }}</mat-label>
     <input type="password" matInput placeholder="Password" formControlName="password"
-      (focus)="togglePassReq('password')" (focusout)="togglePassReq('')" autocomplete="new-password">
+      (focus)="togglePasswordRequirements('password')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
   </mat-form-field>
 
   <!-- Confirm Password -->
   <mat-form-field class="col-12" appearance="outline">
-    <mat-label>Confirm Password</mat-label>
+    <mat-label>Confirm {{ passwordLabel }}</mat-label>
     <input type="password" matInput placeholder="Confirm password" formControlName="confirmPassword"
-      (focus)="togglePassReq('confirmPassword')" (focusout)="togglePassReq('')" autocomplete="new-password">
+      (focus)="togglePasswordRequirements('confirmPassword')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
   </mat-form-field>
 </ng-container>
