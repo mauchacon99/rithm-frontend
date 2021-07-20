@@ -15,12 +15,27 @@
           </div>
         </div>
       </div>
+      <app-comment-input></app-comment-input>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
     </ng-template>
   </mat-tab>
   <mat-tab label="Document">
     <ng-template matTabContent>
-      Content 2
+      <div class="comment-container">
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+        <app-comment></app-comment>
+      </div>
+      <app-comment-input></app-comment-input>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

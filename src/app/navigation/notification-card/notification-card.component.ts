@@ -5,7 +5,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
  * Reusable component for notification cards.
  */
 @Component({
-  selector: 'app-notification-card',
+  selector: 'app-notification-card[title]',
   templateUrl: './notification-card.component.html',
   styleUrls: ['./notification-card.component.scss'],
   animations: [
