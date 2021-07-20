@@ -59,4 +59,35 @@ describe('CommentDrawerComponent', () => {
     expect(component.postedComment).toBeDefined();
 
   }));
+
+  it('should have more than 0 comments', fakeAsync(() => {
+    component.getDocumentComments('1234','1234',0,20,false);
+    tick(1000);
+    expect(component.comments.length).toBeGreaterThan(0);
+  }));
+
+  it('should load more comments', fakeAsync(() => {
+    component.documentId = '1234';
+    component.stationId = '1234';
+    component.commentPage = 0;
+    component.comments = [{
+      displayText: 'This is first comment',
+      dateCreated: '2021-06-16T17:26:47.3506612Z',
+      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+      archived: false,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    }, {
+      displayText: 'This is second comment',
+      dateCreated: '2021-06-15T17:26:47.3506612Z',
+      dateLastEdited: '2021-07-12T17:26:47.3506612Z',
+      archived: false,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    }];
+
+    component.loadMore();
+    tick(1000);
+    expect(component.comments.length).toBe(4);
+  }));
 });
