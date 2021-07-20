@@ -3,8 +3,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService } from 'src/mocks';
 import { MockCommentService } from 'src/mocks/mock-comment-service';
+import { CommentInputComponent } from '../comment-input/comment-input.component';
 import { CommentService } from '../comment.service';
 import { CommentComponent } from '../comment/comment.component';
 
@@ -18,7 +20,9 @@ describe('CommentDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         CommentDrawerComponent,
-        MockComponent(CommentComponent)
+        MockComponent(CommentComponent),
+        MockComponent(LoadingIndicatorComponent),
+        MockComponent(CommentInputComponent)
       ],
       imports: [
         MatTabsModule,

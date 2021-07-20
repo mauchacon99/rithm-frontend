@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
  * Reusable component for all user/roster selection and display.
  */
 @Component({
-  selector: 'app-roster',
+  selector: 'app-roster[rosterArray][rosterSize][stationName][stationId][isWorker]',
   templateUrl: './roster.component.html',
   styleUrls: ['./roster.component.scss']
 })
