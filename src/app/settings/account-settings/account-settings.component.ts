@@ -91,8 +91,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-      width: '90%',
-      height: '76%',
+    panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
