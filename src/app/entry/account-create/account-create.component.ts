@@ -150,8 +150,7 @@ export class AccountCreateComponent implements OnInit {
    */
   openTerms(component: ComponentType<unknown>): void {
     this.dialog.open(component, {
-      width: '90%',
-      height: '76%',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
