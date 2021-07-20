@@ -1,13 +1,15 @@
-<!-- Title -->
-<h4 id="title" class="text-center">{{title}}</h4>
+<div class="modal-container">
+  <!-- Title -->
+  <h4 id="title" class="text-center">{{title}}</h4>
+  <!-- Message -->
+  <p *ngIf="!isLoading" id="message">
+    {{message}}
+  </p>
+  <!-- Loader -->
+  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+</div>
 
-<!-- Message -->
-<p *ngIf="!isLoading" id="message">
-  {{message}}
-</p>
 
-<!-- Loader -->
-<app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
 
 <!-- Agree and Cancel Buttons -->
 <div *ngIf="!isLoading && showAgreeButton" mat-dialog-actions class="row justify-content-end">
