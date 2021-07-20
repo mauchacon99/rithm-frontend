@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -14,7 +14,7 @@ import { Comment } from 'src/models';
   templateUrl: './comment-drawer.component.html',
   styleUrls: ['./comment-drawer.component.scss']
 })
-export class CommentDrawerComponent {
+export class CommentDrawerComponent implements OnInit {
   /** Is the posted comment loading? */
   loadingPostedComment = false;
 
@@ -24,11 +24,24 @@ export class CommentDrawerComponent {
   /** Is the content being loaded. */
   isLoading = true;
 
+  /** Are more comments being loaded. */
+  loadMore = true;
+
   /** List of comments for a document. */
   comments: Comment[] = [];
 
-  constructor(private commentService: CommentService,
-    private errorService: ErrorService) { }
+  constructor(
+    private commentService: CommentService,
+    private errorService: ErrorService
+  ) { }
+
+  /**
+   * Display initial group of comments.
+   */
+  ngOnInit(): void {
+    // getDocumentComments()
+    setTimeout(() => this.isLoading = false, 2000);
+  }
 
   /**
    * Gets a list of comments.
