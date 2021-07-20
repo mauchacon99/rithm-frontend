@@ -69,6 +69,7 @@ describe('SignInComponent', () => {
 
     component.signInForm.controls['email'].setValue('incorrect@email.com');
     component.signInForm.controls['password'].setValue('password1234');
+    //TODO: Investigate why this unit test isn't self contained.
     component.signIn();
     jasmine.clock().tick(1000);
     fixture.detectChanges();

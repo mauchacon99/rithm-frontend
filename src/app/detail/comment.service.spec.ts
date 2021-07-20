@@ -6,7 +6,7 @@ import { Comment } from 'src/models/comment';
 
 import { CommentService } from './comment.service';
 
-const MICROSERVICE_PATH = '/userservice/api/comment';
+const MICROSERVICE_PATH = '/commentservice/api/comment';
 
 const testComment: Comment = {
   displayText: 'string',

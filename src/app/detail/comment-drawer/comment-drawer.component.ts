@@ -29,7 +29,7 @@ export class CommentDrawerComponent implements OnInit {
   loadingMoreComments = false;
 
   /** Current page to get comments from. */
-  commentPage = 0;
+  commentPage = 1;
 
   /** Is the posted comment loading? */
   loadingPostedComment = false;
@@ -54,9 +54,11 @@ export class CommentDrawerComponent implements OnInit {
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       .subscribe((res) => {
         const info = res as DocumentStationInformation;
-        this.stationId = info.stationId;
-        this.documentId = info.documentId;
-        this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
+        if (info) {
+          this.stationId = info.stationId;
+          this.documentId = info.documentId;
+          this.getDocumentComments(this.stationId, this.documentId, this.commentPage, 10, true);
+        }
       }, (error: HttpErrorResponse) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
