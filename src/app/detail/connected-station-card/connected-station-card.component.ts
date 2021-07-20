@@ -4,7 +4,7 @@ import { ConnectedStationInfo } from 'src/models/connected-station-info';
  * Station card component.
  */
 @Component({
-  selector: 'app-connected-station-card',
+  selector: 'app-connected-station-card[location][station]',
   templateUrl: './connected-station-card.component.html',
   styleUrls: ['./connected-station-card.component.scss']
 })

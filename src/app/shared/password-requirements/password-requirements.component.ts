@@ -5,7 +5,7 @@ import { ValidationErrors } from '@angular/forms';
  * Component for displaying satisfied and needed password requirements to the user.
  */
 @Component({
-  selector: 'app-password-requirements',
+  selector: 'app-password-requirements[passReq][match]',
   templateUrl: './password-requirements.component.html',
   styleUrls: ['./password-requirements.component.scss']
 })

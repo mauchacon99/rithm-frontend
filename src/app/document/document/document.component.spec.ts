@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -28,7 +29,8 @@ describe('DocumentComponent', () => {
         MockComponent(ConnectedStationPaneComponent),
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
-        MockComponent(DocumentTemplateComponent)
+        MockComponent(DocumentTemplateComponent),
+        MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
         BrowserAnimationsModule,
