@@ -10,7 +10,7 @@
             </div>
             <div class="m-2 comments-top">
               <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
-              <button mat-flat-button color="accent" class="col" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</button>
+              <button mat-button color="accent" class="col" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</button>
               <div class="no-more" *ngIf="commentsEnd">No more comments</div>
             </div>
           </div>
