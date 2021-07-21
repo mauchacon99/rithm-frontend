@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
  * Reusable component for pagination with clickable pages.
  */
 @Component({
-  selector: 'app-pagination',
+  selector: 'app-pagination[numDocs][activeNum]',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })

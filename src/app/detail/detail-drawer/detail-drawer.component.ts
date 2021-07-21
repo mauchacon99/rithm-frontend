@@ -1,0 +1,63 @@
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+
+/**
+ * Component for all content inside the drawer for detail (station/document) pages.
+ */
+@Component({
+  selector: 'app-detail-drawer',
+  templateUrl: './detail-drawer.component.html',
+  styleUrls: ['./detail-drawer.component.scss']
+})
+export class DetailDrawerComponent implements OnDestroy {
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject();
+
+  /**
+   * The type of detail item to display in the drawer.
+   */
+  itemType = '';
+
+  /** The id of the station for which this drawer was opened, or the station in which the document resides. */
+  stationId = '';
+
+  /** The id of the document for which this drawer was opened. */
+  documentId = '';
+
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private errorService: ErrorService
+  ) {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.itemType = context;
+      }, (error) => {
+        this.errorService.logError(error);
+      });
+
+    this.sidenavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      // TODO: rework typing on this
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((context: any) => {
+        this.stationId = context.stationId;
+        this.documentId = context.documentId;
+      }, (error) => {
+        this.errorService.logError(error);
+      });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+}

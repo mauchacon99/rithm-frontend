@@ -7,7 +7,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
  * Component for displaying a card with station information on the dashboard.
  */
 @Component({
-  selector: 'app-station-card',
+  selector: 'app-station-card[station]',
   templateUrl: './station-card.component.html',
   styleUrls: ['./station-card.component.scss']
 })

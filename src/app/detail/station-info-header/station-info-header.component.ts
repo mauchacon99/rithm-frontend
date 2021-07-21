@@ -5,7 +5,7 @@ import { DocumentStationInformation } from 'src/models';
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header',
+  selector: 'app-station-info-header[stationInformation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss']
 })

@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocumentsModalData } from 'src/models';
+import { Document, StationDocumentsModalData, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -34,8 +34,11 @@ export class StationDocumentsModalComponent implements OnInit {
   /** Total number of documents at this station. */
   totalNumDocs = 0;
 
-  /** Shows if user is on worker roster. */
-  isOnRoster = false;
+  /** Role of the user. */
+  userType = 'none';
+
+  /** The user type enum object. */
+  userTypeEnum = UserType;
 
   constructor(
     private documentService: DocumentService,
@@ -46,8 +49,6 @@ export class StationDocumentsModalComponent implements OnInit {
     private router: Router
   ) {
     this.stationRithmId = this.modalData.stationId;
-    // TODO: Remove this once request to get station documents is merged!
-    this.stationRithmId = 'B9F1132A-6AE8-4701-8EED-B1ECC04D10D0';
   }
 
   /**
@@ -69,10 +70,9 @@ export class StationDocumentsModalComponent implements OnInit {
       .pipe(first())
       .subscribe((documentsResponse) => {
         if (documentsResponse) {
-          this.documents = documentsResponse.documentList;
-          this.totalNumDocs = documentsResponse.numberOfDocument;
-          //to test this.CheckDocPermission(), comment out the below line.
-          this.isOnRoster = documentsResponse.isWorker;
+          this.documents = documentsResponse.documents;
+          this.totalNumDocs = documentsResponse.totalDocuments;
+          this.userType = <UserType>documentsResponse.userType;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -80,8 +80,7 @@ export class StationDocumentsModalComponent implements OnInit {
         this.dialogRef.close();
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
@@ -92,7 +91,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param rithmId The rithmId property of the document we will link to.
    */
   checkDocPermission(rithmId: string): void {
-    if (this.isOnRoster) {
+    if (this.userType !== UserType.none) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
       this.router.navigate(
         [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});
@@ -120,7 +119,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @returns A string of initials.
    */
   getDocInitials(document: Document): string {
-    return document?.firstName.charAt(0) + document?.lastName.charAt(0);
+    return document?.userAssigned?.split(' ')[0]?.charAt(0) + document?.userAssigned?.split(' ')[1]?.charAt(0);
   }
 
 }

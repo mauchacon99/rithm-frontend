@@ -1,17 +1,27 @@
 <div class="sub-header">
   <app-sub-header></app-sub-header>
 </div>
-<div class="page textured-bg pb-0">
-  <div class="container-fluid p-0">
-    <div class="row m-0">
-      <app-connected-station-pane [location]='"left"' [stations]="previousStations" [isLoading]="connectedStationsLoading" class="d-none d-lg-block col-2"></app-connected-station-pane>
-      <!-- TODO: Remove this ngIf and replace with loading indicator -->
-      <div class="col-12 col-lg-8 bg-white" *ngIf="documentInformation">
-        <app-station-info-header [stationInformation]="documentInformation"></app-station-info-header>
-        <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-        <app-document-template></app-document-template>
+
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #detailDrawer mode="over" position="end">
+    <app-detail-drawer></app-detail-drawer>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="page textured-bg pb-0">
+      <div class="container-fluid p-0">
+        <div class="row m-0">
+          <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
+          <div class="col-12 col-lg-8 bg-white">
+            <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
+            <app-station-info-header  *ngIf="!documentLoading" [stationInformation]="documentInformation"></app-station-info-header>
+            <app-document-info-header  *ngIf="!documentLoading" [documentInformation]="documentInformation"></app-document-info-header>
+            <app-document-template  *ngIf="!documentLoading"></app-document-template>
+          </div>
+          <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
+        </div>
       </div>
-      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" [isLoading]="connectedStationsLoading" class="d-none d-lg-block col-2"></app-connected-station-pane>
     </div>
-  </div>
-</div>
+  </mat-drawer-content>
+
+</mat-drawer-container>

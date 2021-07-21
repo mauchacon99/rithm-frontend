@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { DialogData } from 'src/models';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 import { RosterModalComponent } from './roster-modal.component';
 
 const DIALOG_TEST_DATA: DialogData = {
@@ -20,7 +22,10 @@ describe('RosterModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RosterModalComponent ],
+      declarations: [
+        RosterModalComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       imports: [
         MatProgressSpinnerModule,
         MatDialogModule

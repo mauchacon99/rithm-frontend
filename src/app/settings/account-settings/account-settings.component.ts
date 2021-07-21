@@ -62,8 +62,7 @@ export class AccountSettingsComponent {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
@@ -81,8 +80,7 @@ export class AccountSettingsComponent {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
+          error
         );
       });
   }
@@ -93,8 +91,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-      width: '90%',
-      height: '76%',
+    panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
