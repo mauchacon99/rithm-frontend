@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import {
-  AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
+  ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators,
 } from '@angular/forms';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
@@ -41,6 +41,7 @@ export class UserFormComponent implements ControlValueAccessor, Validator {
   /** What errors to get from validator. */
   errorsToGet = '';
 
+  /** Helper class for password requirements. */
   passwordRequirements = new PasswordRequirements();
 
   constructor(
@@ -100,25 +101,58 @@ export class UserFormComponent implements ControlValueAccessor, Validator {
     this.showMatch = errorsFieldToCheck === 'confirmPassword';
   }
 
+  /**
+   * The `onTouched` function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onTouched: () => void = () => { };
 
+  /**
+   * Writes a value to this form.
+   *
+   * @param val The value to be written.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
     val && this.userForm.setValue(val, { emitEvent: false });
   }
 
+  /**
+   * Registers a function with the `onChange` event.
+   *
+   * @param fn The function to register.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   registerOnChange(fn: any): void {
+    // TODO: check for memory leak
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.userForm.valueChanges.subscribe(fn);
   }
 
-  registerOnTouched(fn: any): void {
+  /**
+   * Registers a function with the `onTouched` event.
+   *
+   * @param fn The function to register.
+   */
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
+  /**
+   * Sets the disabled state of this form control.
+   *
+   * @param isDisabled The disabled state to set.
+   */
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.userForm.disable() : this.userForm.enable();
   }
 
-  validate(control: AbstractControl): ValidationErrors | null {
+  /**
+   * Reports whether this form control is valid.
+   *
+   * @returns Validation errors, if any.
+   */
+  validate(): ValidationErrors | null {
     return this.userForm.valid ? null : {
       invalidForm: {
         valid: false,
