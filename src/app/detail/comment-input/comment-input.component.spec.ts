@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CommentInputComponent } from './comment-input.component';
 
@@ -12,8 +14,10 @@ describe('CommentInputComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ CommentInputComponent ],
       imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatInputModule,
         MatFormFieldModule,
-        ReactiveFormsModule
       ]
     })
     .compileComponents();
@@ -25,7 +29,7 @@ describe('CommentInputComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
