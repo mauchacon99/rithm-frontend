@@ -29,7 +29,7 @@
             <div *ngFor="let comment of comments">
               <app-comment [commentData]="comment"></app-comment>
             </div>
-            <div class="my-2">
+            <div class="my-2 comments-top">
               <app-loading-indicator *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
               <button mat-button color="accent" class="col" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</div>
               <div class="no-more" *ngIf="commentsEnd">No more comments</div>
