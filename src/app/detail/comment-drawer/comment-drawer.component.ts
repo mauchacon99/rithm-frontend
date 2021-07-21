@@ -60,7 +60,7 @@ export class CommentDrawerComponent implements OnInit {
         if (info) {
           this.stationId = info.stationId;
           this.documentId = info.documentId;
-          this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 2, true);
+          this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, true);
         }
       }, (error: HttpErrorResponse) => {
         this.errorService.displayError(
@@ -74,7 +74,7 @@ export class CommentDrawerComponent implements OnInit {
    * A function that loads the next page of comments.
    */
   loadMore(): void {
-    this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 2, false);
+    this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, false);
   }
 
   /**
@@ -93,7 +93,7 @@ export class CommentDrawerComponent implements OnInit {
       .pipe(first())
       .subscribe((commentsResponse) => {
         this.comments = this.comments.concat(commentsResponse);
-        if (commentsResponse.length === 2) {
+        if (commentsResponse.length === 20) {
           ++this.commentPage;
         } else {
           this.commentsEnd = true;
