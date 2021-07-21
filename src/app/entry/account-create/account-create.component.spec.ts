@@ -12,7 +12,6 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,7 +29,6 @@ describe('AccountCreateComponent', () => {
         MockComponent(UserFormComponent)
       ],
       imports: [
-        BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatCheckboxModule,

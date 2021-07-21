@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockPopupService } from 'src/mocks';
 
 import { ErrorService } from './error.service';
@@ -12,10 +10,7 @@ describe('ErrorService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-      ],
+      imports: [],
       providers: [
         { provide: PopupService, useClass: MockPopupService }
       ]

@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockPopupService, MockUserService } from 'src/mocks';
@@ -20,9 +19,9 @@ describe('UserRemovalComponent', () => {
       declarations: [ UserRemovalComponent ],
       imports: [
         ReactiveFormsModule,
+        NoopAnimationsModule,
         MatFormFieldModule,
-        MatInputModule,
-        BrowserAnimationsModule
+        MatInputModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

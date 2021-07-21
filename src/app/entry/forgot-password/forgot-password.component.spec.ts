@@ -7,9 +7,9 @@ import { UserService } from 'src/app/core/user.service';
 
 import { ForgotPasswordComponent } from './forgot-password.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
@@ -19,7 +19,7 @@ describe('ForgotPasswordComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ForgotPasswordComponent ],
       imports: [
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatProgressSpinnerModule,

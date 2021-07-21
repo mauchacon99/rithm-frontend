@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
@@ -25,8 +25,8 @@ describe('CommentDrawerComponent', () => {
         MockComponent(CommentInputComponent)
       ],
       imports: [
-        MatTabsModule,
-        BrowserAnimationsModule
+        NoopAnimationsModule,
+        MatTabsModule
       ],
       providers: [
         { provide: CommentService, useClass: MockCommentService },
