@@ -6,6 +6,7 @@ import { GeneralAccountSettingsComponent } from './general-account-settings/gene
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -18,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     SettingsRoutingModule,
+    SharedModule,
     MatCardModule,
     MatButtonModule
   ]
