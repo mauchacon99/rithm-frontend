@@ -1,7 +1,10 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatInputHarness } from '@angular/material/input/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
@@ -10,6 +13,7 @@ import { UserFormComponent } from './user-form.component';
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
+  let loader: HarnessLoader;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -31,6 +35,7 @@ describe('UserFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserFormComponent);
     component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
     const passwordRequirements = new PasswordRequirements();
     component.userForm = formBuilder.group({
       firstName: ['', [Validators.required]],
@@ -135,6 +140,65 @@ describe('UserFormComponent', () => {
 
     expect(confirmPassword.hasError('mismatchingPasswords')).toBeTrue();
     expect(component.userForm.valid).toBeFalse();
+  });
+
+  it('should have correct password labels for account create', () => {
+    component.accountCreate = true;
+    const passwordLabel = component.getPasswordLabel();
+    const confirmPasswordLabel = component.getPasswordLabel(true);
+    expect(passwordLabel).toEqual('Password');
+    expect(confirmPasswordLabel).toEqual('Confirm password');
+  });
+
+  it('should have correct password labels for general account settings', () => {
+    component.accountCreate = false;
+    const passwordLabel = component.getPasswordLabel();
+    const confirmPasswordLabel = component.getPasswordLabel(true);
+    expect(passwordLabel).toEqual('New password');
+    expect(confirmPasswordLabel).toEqual('Confirm new password');
+  });
+
+  it('should toggle password requirements based on focus', async () => {
+    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements');
+    const passwordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#password' }));
+
+    await passwordHarness.focus();
+    expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('password');
+
+    // TODO: test for focusout
+    // await passwordHarness.blur();
+    // expect(passwordRequirementsSpy).toHaveBeenCalledWith('');
+  });
+
+  it('should toggle confirm password requirements based on focus', async () => {
+    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements');
+    const confirmPasswordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#confirmPassword' }));
+
+    await confirmPasswordHarness.focus();
+    expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('confirmPassword');
+    // TODO: test for focusout
+    // await confirmPasswordHarness.blur();
+    // expect(passwordRequirementsSpy).toHaveBeenCalledWith('');
+  });
+
+  it('should toggle password requirements', () => {
+    expect(component.passwordRequirementsVisible).toBeFalse();
+    component.togglePasswordRequirements('password');
+    expect(component.errorsToGet).toEqual('password');
+    expect(component.passwordRequirementsVisible).toBeTrue();
+    expect(component.showMatch).toBeFalse();
+    component.togglePasswordRequirements('');
+    expect(component.passwordRequirementsVisible).toBeFalse();
+  });
+
+  it('should toggle confirm password requirements', () => {
+    expect(component.passwordRequirementsVisible).toBeFalse();
+    component.togglePasswordRequirements('confirmPassword');
+    expect(component.errorsToGet).toEqual('confirmPassword');
+    expect(component.passwordRequirementsVisible).toBeTrue();
+    expect(component.showMatch).toBeTrue();
+    component.togglePasswordRequirements('');
+    expect(component.passwordRequirementsVisible).toBeFalse();
   });
 
 

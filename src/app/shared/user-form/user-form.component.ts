@@ -107,12 +107,10 @@ export class UserFormComponent implements ControlValueAccessor, Validator {
   }
 
   registerOnChange(fn: any): void {
-    console.log("on change");
     this.userForm.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
-    console.log("on blur");
     this.onTouched = fn;
   }
 
