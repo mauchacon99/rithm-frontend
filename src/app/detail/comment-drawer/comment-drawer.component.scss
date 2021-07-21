@@ -8,20 +8,14 @@
     display: flex;
     flex-direction: column-reverse;
 
-    .load-more {
-      transition: background-color 0.25s;
-      color: $accent-blue;
-      text-align: center;
-      cursor: pointer;
+    .comments-top {
+      height: 36px;
 
-      &:hover {
-        background-color: map-get($secondary-gray-palette, 50);
+      .no-more {
+        padding: 14px;
+        color: $accent-blue;
+        text-align: center;
       }
-    }
-
-    .no-more {
-      color: $accent-blue;
-      text-align: center;
     }
   }
 
