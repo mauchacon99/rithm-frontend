@@ -79,10 +79,14 @@ export class UserFormComponent implements ControlValueAccessor, Validator {
   /**
    * The label to be displayed above password fields.
    *
+   * @param confirm Whether the password label is for the confirm field (defaults to `false`).
    * @returns The input label text.
    */
-  get passwordLabel(): string {
-    return this.accountCreate ? 'password' : 'new password';
+  getPasswordLabel(confirm = false): string {
+    const confirmText = confirm ? 'confirm ' : '';
+    const passwordText = this.accountCreate ? 'password' : 'new password';
+    const label = confirmText + passwordText;
+    return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
   /**
