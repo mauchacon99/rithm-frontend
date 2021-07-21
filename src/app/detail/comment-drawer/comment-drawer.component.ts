@@ -6,6 +6,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { Comment, DocumentStationInformation } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
+/** Variable that sets number of comments retrieved on a get request. */
+const COMMENTS_PER_PAGE = 20;
 
 /**
  * Component for containing all comments in the side drawer for a station or document.
@@ -55,12 +57,12 @@ export class CommentDrawerComponent implements OnInit {
   ngOnInit(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(first())
-      .subscribe((res) => {
-        const info = res as DocumentStationInformation;
+      .subscribe((drawerData) => {
+        const info = drawerData as DocumentStationInformation;
         if (info) {
           this.stationId = info.stationId;
           this.documentId = info.documentId;
-          this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, true);
+          this.getDocumentComments(true);
         }
       }, (error: HttpErrorResponse) => {
         this.errorService.displayError(
@@ -74,33 +76,40 @@ export class CommentDrawerComponent implements OnInit {
    * A function that loads the next page of comments.
    */
   loadMore(): void {
-    this.getDocumentComments(this.documentId, this.stationId, this.commentPage, 20, false);
+    this.getDocumentComments(false);
   }
+
+
 
   /**
    * Gets the initial list of comments to load.
    *
-   * @param documentId The documentId of document for which comments needs to be fetched.
-   * @param stationId Id of station for which comments needs to be fetched.
-   * @param pageNumber The desired page number of results, use this.commentPage.
-   * @param commentsPerPage The limit of comments per page.
    * @param initialGet Is this an initial get of comments?
    */
   // eslint-disable-next-line max-len
-  getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number, initialGet: boolean): void {
-    initialGet ? this.isLoading = true : this.loadingMoreComments = true;
-    this.commentService.getDocumentComments(documentId, stationId, pageNumber, commentsPerPage)
+  private getDocumentComments(initialGet: boolean): void {
+  /**
+   * Reuseable ternary statement for setting loading variables.
+   *
+   * @param loading Set the variables to true or false.
+   */
+    const setLoading = (loading: boolean) => {
+      initialGet ? this.isLoading = loading : this.loadingMoreComments = loading;
+    };
+
+    setLoading(true);
+    this.commentService.getDocumentComments(this.documentId, this.stationId, this.commentPage, COMMENTS_PER_PAGE)
       .pipe(first())
       .subscribe((commentsResponse) => {
         this.comments = this.comments.concat(commentsResponse);
-        if (commentsResponse.length === 20) {
+        if (commentsResponse.length === COMMENTS_PER_PAGE) {
           ++this.commentPage;
         } else {
           this.commentsEnd = true;
         }
-        initialGet ? this.isLoading = false : this.loadingMoreComments = false;
+        setLoading(false);
       }, (error: HttpErrorResponse) => {
-        initialGet ? this.isLoading = false : this.loadingMoreComments = false;
+        setLoading(false);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error

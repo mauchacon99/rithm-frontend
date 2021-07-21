@@ -11,7 +11,7 @@ import { User, Comment } from 'src/models';
   styleUrls: ['./comment.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class CommentComponent implements OnInit{
+export class CommentComponent {
   /** The Data needed to construct the comment. */
   @Input() commentData!: Comment;
 
@@ -33,16 +33,6 @@ export class CommentComponent implements OnInit{
   constructor(
     private utcTimeConversion: UtcTimeConversion
   ) {}
-
-  /**
-   * Sets variables from the passed input data.
-   */
-  ngOnInit(): void {
-    this.name = this.commentData.user?.firstName + ' ' + this.commentData.user?.lastName;
-    this.message = this.commentData.displayText;
-    this.dateCreated = this.commentData.dateCreated;
-    this.user = this.commentData.user;
-  }
 
   /**
    * Convert a UTC Timecode into date and time.

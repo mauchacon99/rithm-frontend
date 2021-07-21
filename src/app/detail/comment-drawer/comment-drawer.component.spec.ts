@@ -60,12 +60,6 @@ describe('CommentDrawerComponent', () => {
 
   }));
 
-  it('should have more than 0 comments', fakeAsync(() => {
-    component.getDocumentComments('1234','1234',0,20,false);
-    tick(1000);
-    expect(component.comments.length).toBeGreaterThan(0);
-  }));
-
   it('should load more comments', fakeAsync(() => {
     component.documentId = '1234';
     component.stationId = '1234';
