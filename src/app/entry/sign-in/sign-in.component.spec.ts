@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPopupService, MockUserService } from 'src/mocks';
@@ -33,7 +32,6 @@ describe('SignInComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatProgressSpinnerModule,
         MatCardModule,
         MatInputModule
       ],

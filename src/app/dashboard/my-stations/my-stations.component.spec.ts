@@ -3,7 +3,6 @@ import { MockDashboardService, MockPopupService } from 'src/mocks';
 import { DashboardService } from '../dashboard.service';
 import { MyStationsComponent } from './my-stations.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
@@ -17,9 +16,7 @@ describe('MyStationsComponent', () => {
         MyStationsComponent,
         MockComponent(LoadingIndicatorComponent)
       ],
-      imports: [
-        MatProgressSpinnerModule
-      ],
+      imports: [],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: PopupService, useClass: MockPopupService }
