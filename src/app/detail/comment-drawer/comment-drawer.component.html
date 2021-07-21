@@ -20,6 +20,9 @@
             <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
           </div>
         </div>
+        <div *ngIf="newCommentLoading">
+          <app-loading-indicator [inlineText]="'Adding your comment'"></app-loading-indicator>
+        </div>
       </div>
       <app-comment-input></app-comment-input>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>

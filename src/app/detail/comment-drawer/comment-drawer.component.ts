@@ -27,6 +27,9 @@ export class CommentDrawerComponent implements OnInit {
   /** Are more comments being loaded. */
   loadMore = true;
 
+  /** Is a new comment being added? */
+  newCommentLoading = false;
+
   /** List of comments for a document. */
   comments: Comment[] = [];
 
