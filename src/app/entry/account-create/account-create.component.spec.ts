@@ -12,10 +12,11 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
+import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -56,21 +57,27 @@ describe('AccountCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open terms and conditions pop up', () => {
+  it('should call openTerms when link clicked', () => {
     const notificationsSpy = spyOn(component, 'openTerms');
     const link = fixture.debugElement.nativeElement.querySelector('#terms');
     link.click();
     expect(notificationsSpy).toHaveBeenCalled();
   });
 
+  it('should call service to open terms and conditions', () => {
+    const dialog = TestBed.inject(MatDialog);
+    const dialogSpy = spyOn(dialog, 'open');
+    component.openTerms(MockComponent(TermsConditionsModalComponent));
+    expect(dialogSpy).toHaveBeenCalledTimes(1);
+  });
+
+
   describe('createAccount button', () => {
     let buttonHarness: MatButtonHarness;
     let formGroup: FormGroup;
-    let signUpGroup: FormGroup;
 
     beforeEach(async () => {
-      formGroup = component.userForm;
-      signUpGroup = component.signUpForm;
+      formGroup = component.signUpForm;
       buttonHarness = await loader.getHarness(MatButtonHarness);
       spyOn(component, 'createAccount');
     });
@@ -84,33 +91,34 @@ describe('AccountCreateComponent', () => {
       expect(await buttonHarness.isDisabled()).toBeTrue();
     });
 
-    it('should be disabled when form is invalid', async () => {
-      formGroup.controls['firstName'].setValue('');
-      formGroup.controls['lastName'].setValue('');
-      formGroup.controls['email'].setValue('test@email....com');
-      formGroup.controls['password'].setValue('password1234');
-      formGroup.controls['confirmPassword'].setValue('password1234');
-      signUpGroup.controls['agreeToTerms'].setValue(false);
+    it('should be disabled when terms are not agreed to', async () => {
+      formGroup.controls['agreeToTerms'].setValue(false);
+      expect(await buttonHarness.isDisabled()).toBeTrue();
+    });
+
+    it('should be disabled when user form is invalid', async () => {
+      formGroup.controls['agreeToTerms'].setValue(true);
+      expect(formGroup.controls['userForm'].valid).toBeFalse();
       expect(await buttonHarness.isDisabled()).toBeTrue();
     });
 
     it('should be enabled when form is filled out', async () => {
-      formGroup.controls['firstName'].setValue('Adam');
-      formGroup.controls['lastName'].setValue('Jones');
-      formGroup.controls['email'].setValue('test@email.com');
-      formGroup.controls['password'].setValue('Password@123');
-      formGroup.controls['confirmPassword'].setValue('Password@123');
-      signUpGroup.controls['agreeToTerms'].setValue(true);
+      // formGroup.controls['firstName'].setValue('Adam');
+      // formGroup.controls['lastName'].setValue('Jones');
+      // formGroup.controls['email'].setValue('test@email.com');
+      // formGroup.controls['password'].setValue('Password@123');
+      // formGroup.controls['confirmPassword'].setValue('Password@123');
+      formGroup.controls['agreeToTerms'].setValue(true);
       expect(await buttonHarness.isDisabled()).toBeFalse();
     });
 
     it('should sign in when clicked', async () => {
-      formGroup.controls['firstName'].setValue('Adam');
-      formGroup.controls['lastName'].setValue('Jones');
-      formGroup.controls['email'].setValue('test@email.com');
-      formGroup.controls['password'].setValue('Password@123');
-      formGroup.controls['confirmPassword'].setValue('Password@123');
-      signUpGroup.controls['agreeToTerms'].setValue(true);
+      // formGroup.controls['firstName'].setValue('Adam');
+      // formGroup.controls['lastName'].setValue('Jones');
+      // formGroup.controls['email'].setValue('test@email.com');
+      // formGroup.controls['password'].setValue('Password@123');
+      // formGroup.controls['confirmPassword'].setValue('Password@123');
+      formGroup.controls['agreeToTerms'].setValue(true);
       expect(await buttonHarness.isDisabled()).toBeFalse(); // This needs to be present for some reason...
 
       const spy = spyOn(component, 'openValidateEmailModal');
@@ -121,10 +129,11 @@ describe('AccountCreateComponent', () => {
       expect(component.createAccount).toHaveBeenCalled();
     });
 
-    it('should open validate email modal', async () => {
-      const spy = spyOn(component, 'openValidateEmailModal');
+    it('should open validate email modal', () => {
+      const popupService = TestBed.inject(PopupService);
+      const spy = spyOn(popupService, 'alert');
       component.openValidateEmailModal();
-      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 

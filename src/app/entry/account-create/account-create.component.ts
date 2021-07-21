@@ -53,7 +53,7 @@ export class AccountCreateComponent implements OnInit {
     this.passwordRequirements = new PasswordRequirements();
 
     this.signUpForm = this.fb.group({
-      accountInfo: this.fb.control(''),
+      userForm: this.fb.control(''),
       agreeToTerms: [false, [Validators.requiredTrue]]
     });
   }
