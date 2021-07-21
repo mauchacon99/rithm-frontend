@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 import { UserFormComponent } from './user-form.component';
@@ -12,9 +14,13 @@ describe('UserFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserFormComponent],
+      declarations: [
+        UserFormComponent
+      ],
       imports: [
+        NoopAnimationsModule,
         MatFormFieldModule,
+        MatInputModule,
         ReactiveFormsModule
       ],
       providers: [{ provide: FormBuilder, useValue: formBuilder }]
