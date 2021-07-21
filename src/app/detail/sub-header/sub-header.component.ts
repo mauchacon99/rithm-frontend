@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DocumentStationInformation } from 'src/models';
 
 /**
  * Component for the sub header on document/station views that houses the
@@ -14,6 +15,9 @@ export class SubHeaderComponent {
   /** DetailItem. */
   @Input() detailItem!: string;
 
+  /** Parent document information. */
+  @Input() documentInformation?: DocumentStationInformation;
+
   /** Current active icon. */
   activeItem = 'none';
 
@@ -27,7 +31,7 @@ export class SubHeaderComponent {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'comments' | 'history'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem);
+    this.sidenavDrawerService.toggleDrawer(drawerItem, this.documentInformation);
     if ((drawerItem === 'history' && this.activeItem === 'none') || (drawerItem === 'comments' && this.activeItem === 'none')) {
       this.activeItem = drawerItem;
     } else {

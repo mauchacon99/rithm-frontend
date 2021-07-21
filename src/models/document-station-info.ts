@@ -7,6 +7,9 @@ export interface DocumentStationInformation {
   /** The name of the document. */
   documentName: string;
 
+  /** Document Id. */
+  documentId: string;
+
   /** The priority of the document. */
   documentPriority: number;
 

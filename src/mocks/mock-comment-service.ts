@@ -12,11 +12,11 @@ export class MockCommentService {
    *
    * @param documentId The documentId of document for which comments needs to be fetched.
    * @param stationId Id of station for which comments needs to be fetched.
-   * @param pageNumber The desired page number of results.
+   * @param pageNum The desired page number of results.
    * @param commentsPerPage The limit of comments per page.
    * @returns A list of comments based on documentId and stationId.
    */
-  getDocumentComments(documentId: string, stationId: string, pageNumber: number, commentsPerPage: number): Observable<Comment[]> {
+  getDocumentComments(documentId: string, stationId: string, pageNum: number, commentsPerPage: number): Observable<Comment[]> {
     const comments: Comment[] = [{
       displayText: 'This is first comment',
       dateCreated: '2021-06-16T17:26:47.3506612Z',

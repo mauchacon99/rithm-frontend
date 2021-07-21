@@ -45,8 +45,11 @@ export class DetailDrawerComponent implements OnDestroy {
       // TODO: rework typing on this
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .subscribe((context: any) => {
-        this.stationId = context.stationId;
-        this.documentId = context.documentId;
+        // TODO: TYLER LOOK INTO THIS JEEZ.
+        if (context) {
+          this.stationId = context.stationId;
+          this.documentId = context.documentId;
+        }
       }, (error) => {
         this.errorService.logError(error);
       });
