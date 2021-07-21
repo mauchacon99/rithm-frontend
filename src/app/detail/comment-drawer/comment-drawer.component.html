@@ -31,7 +31,7 @@
             </div>
             <div class="my-2">
               <app-loading-indicator *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
-              <div class="load-more subtitle-medium" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</div>
+              <button mat-button color="accent" class="col" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</div>
               <div class="no-more" *ngIf="commentsEnd">No more comments</div>
             </div>
           </div>
