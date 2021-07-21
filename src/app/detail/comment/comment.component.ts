@@ -15,18 +15,6 @@ export class CommentComponent {
   /** The Data needed to construct the comment. */
   @Input() commentData!: Comment;
 
-  /** User commenting. */
-  user!: User | undefined;
-
-  /** Full name. */
-  name!: string;
-
-  /** Comment message. */
-  message!: string;
-
-  /** Timecode. */
-  dateCreated!: string;
-
   /** Has the comment been read before? */
   read = false;
 

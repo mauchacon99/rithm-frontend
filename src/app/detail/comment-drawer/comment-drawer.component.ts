@@ -86,7 +86,6 @@ export class CommentDrawerComponent implements OnInit {
    *
    * @param initialGet Is this an initial get of comments?
    */
-  // eslint-disable-next-line max-len
   private getDocumentComments(initialGet: boolean): void {
   /**
    * Reuseable ternary statement for setting loading variables.

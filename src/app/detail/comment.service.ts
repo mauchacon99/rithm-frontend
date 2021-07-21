@@ -54,6 +54,6 @@ export class CommentService {
       .set('pageNum', pageNum)
       .set('commentsPerPage', commentsPerPage);
 
-    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { params: params });
+    return this.http.get<Comment[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, { params });
   }
 }
