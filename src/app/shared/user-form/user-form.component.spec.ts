@@ -67,80 +67,74 @@ describe('UserFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check the validation of the first name field', () => {
+  it('should require a first name', () => {
     const firstName = component.userForm.controls['firstName'];
-    expect(firstName.valid).toBeFalsy();
-
-    firstName.setValue('');
-    expect(firstName.hasError('required')).toBeTruthy();
+    expect(firstName.valid).toBeFalse();
+    expect(firstName.hasError('required')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
-  it('should check the last name field validation', () => {
+  it('should require a last name', () => {
     const lastName = component.userForm.controls['lastName'];
-    expect(lastName.valid).toBeFalsy();
-
-    lastName.setValue('');
-    expect(lastName.hasError('required')).toBeTruthy();
+    expect(lastName.valid).toBeFalse();
+    expect(lastName.hasError('required')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
-  it('should check the validation of the email field', () => {
+  it('should require an email', () => {
     const email = component.userForm.controls['email'];
-    expect(email.valid).toBeFalsy();
-
-    email.setValue('');
-    expect(email.hasError('required')).toBeTruthy();
-
-    email.setValue('test.com');
-    expect(email.hasError('email')).toBeTruthy();
+    expect(email.valid).toBeFalse();
+    expect(email.hasError('required')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
-  it('should check the validation of the password field', () => {
+  it('should require a valid email', () => {
+    const email = component.userForm.controls['email'];
+    email.setValue('test.com');
+    expect(email.valid).toBeFalse();
+    expect(email.hasError('email')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
+  });
+
+  it('should require a password', () => {
     const password = component.userForm.controls['password'];
-    expect(password.valid).toBeFalsy();
+    expect(password.valid).toBeFalse();
+    expect(password.hasError('required')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
+  });
 
-    password.setValue('');
-    expect(password.hasError('required')).toBeTruthy();
-
+  it('should require password to pass criteria', () => {
+    const password = component.userForm.controls['password'];
     password.setValue('1234567');
-    expect(password.hasError('missingPassLength')).toBeTruthy();
-    expect(password.hasError('missingLowerChar')).toBeTruthy();
-    expect(password.hasError('missingUpperChar')).toBeTruthy();
-    expect(password.hasError('missingSpecialChar')).toBeTruthy();
+    expect(password.hasError('missingPassLength')).toBeTrue();
+    expect(password.hasError('missingLowerChar')).toBeTrue();
+    expect(password.hasError('missingUpperChar')).toBeTrue();
+    expect(password.hasError('missingSpecialChar')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
 
     password.setValue('abcde');
-    expect(password.hasError('missingPassLength')).toBeTruthy();
-    expect(password.hasError('missingUpperChar')).toBeTruthy();
-    expect(password.hasError('missingSpecialChar')).toBeTruthy();
-    // expect(password.hasError('mismatchingPasswords')).toBeTruthy();
+    expect(password.hasError('missingPassLength')).toBeTrue();
+    expect(password.hasError('missingUpperChar')).toBeTrue();
+    expect(password.hasError('missingSpecialChar')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
-  it('should check the validation of the confirm password field', () => {
+  it('should require a confirm password entry', () => {
     const confirmPassword = component.userForm.controls['confirmPassword'];
-    expect(confirmPassword.valid).toBeFalsy();
-
-    confirmPassword.setValue('');
-    expect(confirmPassword.hasError('required')).toBeTruthy();
-
-    confirmPassword.setValue('1234567');
-    expect(confirmPassword.hasError('missingPassLength')).toBeTruthy();
-    expect(confirmPassword.hasError('missingLowerChar')).toBeTruthy();
-    expect(confirmPassword.hasError('missingUpperChar')).toBeTruthy();
-    expect(confirmPassword.hasError('missingSpecialChar')).toBeTruthy();
-
-    confirmPassword.setValue('abcde');
-    expect(confirmPassword.hasError('missingPassLength')).toBeTruthy();
-    expect(confirmPassword.hasError('missingUpperChar')).toBeTruthy();
-    expect(confirmPassword.hasError('missingSpecialChar')).toBeTruthy();
+    expect(confirmPassword.valid).toBeFalse();
+    expect(confirmPassword.hasError('required')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
-  xit('should check if the password and confirm password fields are matching', () => {
+  it('should check that the password and confirm password fields are matching', () => {
     const password = component.userForm.controls['password'];
     const confirmPassword = component.userForm.controls['confirmPassword'];
 
     password.setValue('Password!2');
     confirmPassword.setValue('Password!3');
 
-    expect(confirmPassword.hasError('mismatchedPasswords')).toBeTruthy();
+    expect(confirmPassword.hasError('mismatchingPasswords')).toBeTrue();
+    expect(component.userForm.valid).toBeFalse();
   });
 
 
