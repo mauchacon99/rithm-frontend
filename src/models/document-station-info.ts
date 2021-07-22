@@ -7,9 +7,6 @@ export interface DocumentStationInformation {
   /** The name of the document. */
   documentName: string;
 
-  /** Document Id. */
-  documentId: string;
-
   /** The priority of the document. */
   documentPriority: number;
 
@@ -42,4 +39,7 @@ export interface DocumentStationInformation {
 
   /** The list of workers. */
   workerRoster: Array<string>;
+
+  /** Document rithm Id. */
+  documentRithmId: string;
 }

@@ -1,9 +1,12 @@
 <mat-tab-group animationDuration="300ms">
-  <mat-tab label="Station">
+  <mat-tab label="Document">
     <ng-template matTabContent>
       <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="sidebar-container" *ngIf="!isLoading">
         <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
         <div class="comment-container" *ngIf="comments.length > 0">
+          <div *ngIf="loadingPostedComment">
+            <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
+          </div>
           <div *ngFor="let comment of comments">
             <app-comment [commentData]="comment"></app-comment>
           </div>
@@ -18,16 +21,19 @@
       <app-comment-input></app-comment-input>
     </ng-template>
   </mat-tab>
-  <mat-tab label="Document">
+  <mat-tab label="Station">
     <ng-template matTabContent>
       <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="sidebar-container" *ngIf="!isLoading">
         <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
         <div class="comment-container" *ngIf="comments.length > 0">
+          <div *ngIf="loadingPostedComment">
+            <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
+          </div>
           <div *ngFor="let comment of comments">
             <app-comment [commentData]="comment"></app-comment>
           </div>
-          <div class="my-2 comments-top">
-            <app-loading-indicator *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
+          <div class="m-2 comments-top">
+            <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
             <button mat-button color="accent" class="col" (click)="loadMore()" *ngIf="!loadingMoreComments && !commentsEnd">Load More</button>
             <div class="no-more" *ngIf="commentsEnd">No more comments</div>
           </div>

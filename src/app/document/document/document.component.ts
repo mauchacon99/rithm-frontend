@@ -123,7 +123,6 @@ export class DocumentComponent implements OnInit {
       .pipe(first())
       .subscribe((document) => {
         if (document) {
-          document.documentId = this.documentId;
           this.documentInformation = document;
         }
         this.documentLoading = false;
