@@ -115,31 +115,4 @@ export class CommentDrawerComponent implements OnInit {
         );
       });
   }
-
-  /**
-   * Post a new comment.
-   *
-   * @param comment A Comment interface.
-   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
-   */
-  postComment(
-    comment: Comment
-  ): void {
-    this.loadingPostedComment = true;
-    this.commentService.postDocumentComment(comment)
-      .pipe(first())
-      .subscribe((comment) => {
-        if (comment) {
-          this.postedComment = comment;
-        }
-        this.loadingPostedComment = false;
-      }, (error: HttpErrorResponse) => {
-        this.loadingPostedComment = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
-  }
 }
