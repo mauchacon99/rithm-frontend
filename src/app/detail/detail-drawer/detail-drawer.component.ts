@@ -48,7 +48,7 @@ export class DetailDrawerComponent implements OnDestroy {
         // TODO: TYLER LOOK INTO THIS JEEZ.
         if (context) {
           this.stationId = context.stationId;
-          this.documentId = context.documentId;
+          this.documentId = context.documentRithmId;
         }
       }, (error) => {
         this.errorService.logError(error);
