@@ -10,11 +10,11 @@ import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.compone
 import { DocumentComponent } from './document.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -33,7 +33,7 @@ describe('DocumentComponent', () => {
         MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         RouterTestingModule.withRoutes(
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),

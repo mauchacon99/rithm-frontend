@@ -1,3 +1,4 @@
+
 @import '../entry.scss';
 @import 'functions';
 
@@ -10,14 +11,6 @@
 
 .right-entry {
   form.row {
-    app-password-requirements {
-      position: absolute;
-      width: 100%;
-      z-index: 999;
-      background: #fff;
-      padding: 20px 0;
-    }
-
     div.col-12 a {
       font-size: font-calc(16);
       line-height: 24px;

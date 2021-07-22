@@ -4,8 +4,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPopupService, MockUserService } from 'src/mocks';
@@ -15,9 +13,9 @@ import { SignInComponent } from './sign-in.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -31,10 +29,9 @@ describe('SignInComponent', () => {
         MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatProgressSpinnerModule,
         MatCardModule,
         MatInputModule
       ],
@@ -69,6 +66,7 @@ describe('SignInComponent', () => {
 
     component.signInForm.controls['email'].setValue('incorrect@email.com');
     component.signInForm.controls['password'].setValue('password1234');
+    //TODO: Investigate why this unit test isn't self contained.
     component.signIn();
     jasmine.clock().tick(1000);
     fixture.detectChanges();

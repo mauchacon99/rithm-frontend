@@ -3,7 +3,6 @@ import { DashboardService } from '../dashboard.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MockDashboardService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { MatCardModule } from '@angular/material/card';
@@ -23,7 +22,6 @@ describe('HeaderComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        MatProgressSpinnerModule,
         MatCardModule
       ],
       providers: [

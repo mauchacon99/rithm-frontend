@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 
 import { GeneralAccountSettingsComponent } from './general-account-settings.component';
 
@@ -8,7 +10,10 @@ describe('GeneralAccountSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GeneralAccountSettingsComponent ]
+      declarations: [
+        GeneralAccountSettingsComponent,
+        MockComponent(UserFormComponent)
+      ]
     })
     .compileComponents();
   });
