@@ -1,12 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  ConnectedStationInfo,
-  Document,
-  DocumentStationInformation,
-  ForwardPreviousStationsDocument,
-  StationDocumentsResponse
-} from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocumentsResponse } from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
  */
@@ -115,11 +110,11 @@ export class MockDocumentService {
    * @param stationId The Specific id of station.
    * @returns A list of forward and previous stations for a specific document.
    */
-   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
+  getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     const data: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
-      documentId:'E204F369-386F-4E41',
+      documentId: 'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
@@ -129,7 +124,7 @@ export class MockDocumentService {
       numberOfSupervisors: 7,
       supervisorRoster: ['SA', 'RI', 'NI'],
       numberOfWorkers: 7,
-      workerRoster: ['LA','OT','SS']
+      workerRoster: ['LA', 'OT', 'SS']
     };
     return of(data).pipe(delay(1000));
   }

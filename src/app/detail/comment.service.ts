@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Comment } from 'src/models';
-import { delay } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/commentservice/api/comment';
 

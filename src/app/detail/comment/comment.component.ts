@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UtcTimeConversion } from 'src/helpers';
-import { User, Comment } from 'src/models';
+import { Comment } from 'src/models';
 
 /**
  * Component for an individual comment.
