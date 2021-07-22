@@ -45,7 +45,6 @@ export class UserService {
     }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
-        console.log(this.accessToken);
         this.user = response.user;
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
         localStorage.setItem('user', JSON.stringify(this.user));
