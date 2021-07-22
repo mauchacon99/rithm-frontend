@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators,
 } from '@angular/forms';
@@ -55,37 +56,67 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
    */
   ngOnInit(): void {
     this.userForm = this.fb.group({
-      firstName: [!this.accountCreate ? this.userService.user?.firstName : '', [Validators.required]],
-      lastName: [!this.accountCreate ? this.userService.user?.lastName : '', [Validators.required]],
-      email: [{
+      firstName: [
+        !this.accountCreate ? this.userService.user?.firstName : '',
+        [Validators.required]
+      ],
+      lastName: [
+        !this.accountCreate ? this.userService.user?.lastName : '',
+        [Validators.required]
+      ],
+      email: [
+        {
           value: !this.accountCreate ? this.userService.user?.email : '',
           disabled: !this.accountCreate
         },
-        [Validators.required, Validators.email]],
+        [ Validators.email]],
       password: [
         '',
-        [
-          Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar()
-        ]
+        []
       ],
       confirmPassword: [
         '',
-        [
-          Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar(),
-          this.passwordRequirements.passwordsMatch()
-        ]
+        []
       ],
     });
+    this.userForm.get('password')?.setValidators([
+      // this.passwordRequirements.isGreaterThanEightChars(),
+      // this.passwordRequirements.hasOneLowerCaseChar(),
+      // this.passwordRequirements.hasOneUpperCaseChar(),
+      // this.passwordRequirements.hasOneDigitChar(),
+      // this.passwordRequirements.hasOneSpecialChar()
+    ]);
+    this.userForm.get('confirmPassword')?.setValidators([
+      // this.passwordRequirements.isGreaterThanEightChars(),
+      // this.passwordRequirements.hasOneLowerCaseChar(),
+      // this.passwordRequirements.hasOneUpperCaseChar(),
+      // this.passwordRequirements.hasOneDigitChar(),
+      // this.passwordRequirements.hasOneSpecialChar(),
+      // this.passwordRequirements.passwordsMatch()
+    ]);
+    if (this.accountCreate) {
+      this.userForm.get('password')?.setValidators(Validators.required);
+      this.userForm.get('confirmPassword')?.setValidators(Validators.required);
+    } else {
+      this.userForm.get('password')?.setValidators((control: AbstractControl): ValidationErrors | null => {
+        // do your validation logic here:
+        if (this.userForm?.get('confirmPassword')?.value) {
+          if (!control.value) {
+            return {required: true};
+          }
+        }
+        // all is fine:
+        return null;
+      });
+      this.userForm.get('confirmPassword')?.setValidators((control: AbstractControl): ValidationErrors | null => {
+        if (this.userForm?.get('password')?.value) {
+          if (!control.value) {
+            return {required: true};
+          }
+        }
+        return null;
+      });
+    }
   }
 
   /**
