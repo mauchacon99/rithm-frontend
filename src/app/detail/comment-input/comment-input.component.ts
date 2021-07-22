@@ -23,8 +23,8 @@ export class CommentInputComponent {
   /** Whether a comment is currently being posted. */
   @Output() private postingComment = new EventEmitter<boolean>();
 
-  /**  */
-  @Output() private addedComment = new EventEmitter<Comment>();
+  /** The newly posted comment. */
+  @Output() private newComment = new EventEmitter<Comment>();
 
   /** The form for adding a new comment. */
   commentForm: FormGroup;
@@ -53,8 +53,7 @@ export class CommentInputComponent {
     this.commentService.postDocumentComment(newComment)
       .pipe(first())
       .subscribe((comment) => {
-        if (comment) {
-        }
+        this.newComment.emit(comment);
         this.postingComment.emit(false);
       }, (error) => {
         this.postingComment.emit(false);

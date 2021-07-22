@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Comment } from 'src/models';
 
@@ -24,9 +25,35 @@ export class CommentService {
    * @returns Observable of Comment.
    */
   postDocumentComment(comment: Comment): Observable<Comment> {
-    return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
-      ...comment
-    });
+    const response: Comment = {
+      displayText: comment.displayText,
+      dateCreated: '2021-07-14T18:57:59.771Z',
+      dateLastEdited: '2021-07-14T18:57:59.771Z',
+      archived: true,
+      user: {
+        rithmId: '123',
+        firstName: 'Testy',
+        lastName: 'Test',
+        email: 'test@test.com',
+        objectPermissions: [],
+        groups: [],
+        createdDate: '1/2/34'
+      },
+      station: {
+        name: 'string',
+        instructions: 'sdfa',
+        documents: 1,
+        supervisors: [],
+        rosterUsers: []
+      },
+      document: {
+        // eslint-disable-next-line max-len
+        rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1
+      },
+      rithmId: 'string'
+    };
+
+    return of(response).pipe(delay(1000));
   }
 
   /**

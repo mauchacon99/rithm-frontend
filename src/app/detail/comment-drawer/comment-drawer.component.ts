@@ -125,4 +125,13 @@ export class CommentDrawerComponent implements OnInit {
   setPostingLoading(loadingStatus: boolean): void {
     this.loadingPostedComment = loadingStatus;
   }
+
+  /**
+   * Adds a newly posted comment to the list of comments.
+   *
+   * @param comment The comment that was newly added.
+   */
+  addNewComment(comment: Comment): void {
+    this.comments.unshift(comment);
+  }
 }
