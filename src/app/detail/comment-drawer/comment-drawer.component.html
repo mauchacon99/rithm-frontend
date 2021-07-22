@@ -27,7 +27,7 @@
         <div *ngIf="comments.length === 0" class="p-2 no-comments">There are currently no comments</div>
         <div class="comment-container" *ngIf="comments.length > 0">
           <div *ngIf="loadingPostedComment">
-            <app-loading-indicator [inlineText]="'Adding your comment'"></app-loading-indicator>
+            <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
           </div>
           <div *ngFor="let comment of comments">
             <app-comment [commentData]="comment"></app-comment>
