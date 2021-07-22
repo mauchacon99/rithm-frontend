@@ -1,8 +1,9 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators,
 } from '@angular/forms';
+import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
 /**
@@ -25,12 +26,12 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
     }
   ]
 })
-export class UserFormComponent implements ControlValueAccessor, Validator {
+export class UserFormComponent implements OnInit,ControlValueAccessor, Validator {
   /** Whether this form is to be used for account create (defaults to `false`). */
   @Input() accountCreate = false;
 
   /** The form for the user info. */
-  userForm: FormGroup;
+  userForm!: FormGroup;
 
   /** Whether the password requirements are visible. */
   passwordRequirementsVisible = false;
@@ -45,12 +46,22 @@ export class UserFormComponent implements ControlValueAccessor, Validator {
   passwordRequirements = new PasswordRequirements();
 
   constructor(
-    private fb: FormBuilder
-  ) {
+    private fb: FormBuilder,
+    private userService: UserService
+  ) { }
+
+  /**
+   * Set up FormBuilder group.
+   */
+  ngOnInit(): void {
     this.userForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      firstName: [!this.accountCreate ? this.userService.user?.firstName : '', [Validators.required]],
+      lastName: [!this.accountCreate ? this.userService.user?.lastName : '', [Validators.required]],
+      email: [{
+          value: !this.accountCreate ? this.userService.user?.email : '',
+          disabled: !this.accountCreate
+        },
+        [Validators.required, Validators.email]],
       password: [
         '',
         [
