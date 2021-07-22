@@ -42,7 +42,7 @@ export class UserService {
     return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/login`, {
       email,
       password
-    }).pipe(
+    }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
         this.user = response.user;
