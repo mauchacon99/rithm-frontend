@@ -116,4 +116,13 @@ export class CommentDrawerComponent implements OnInit {
         );
       });
   }
+
+  /**
+   * Sets the loading status when a comment is loading.
+   *
+   * @param loadingStatus The incoming loading status of the post comment request.
+   */
+  setPostingLoading(loadingStatus: boolean): void {
+    this.loadingPostedComment = loadingStatus;
+  }
 }

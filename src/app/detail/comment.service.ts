@@ -25,7 +25,7 @@ export class CommentService {
    */
   postDocumentComment(comment: Comment): Observable<Comment> {
     return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
-      comment
+      ...comment
     });
   }
 

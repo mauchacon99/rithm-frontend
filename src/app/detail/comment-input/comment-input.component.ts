@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -20,6 +20,12 @@ export class CommentInputComponent {
   /** The id of the document that the user is commenting on (only applicable for document comments). */
   @Input() documentId?: string;
 
+  /** Whether a comment is currently being posted. */
+  @Output() private postingComment = new EventEmitter<boolean>();
+
+  /**  */
+  @Output() private addedComment = new EventEmitter<Comment>();
+
   /** The form for adding a new comment. */
   commentForm: FormGroup;
 
@@ -37,6 +43,7 @@ export class CommentInputComponent {
    * Add the comment.
    */
   addComment(): void {
+    this.postingComment.emit(true);
     const newComment: Comment = {
       displayText: this.commentForm.controls['comment'].value,
       stationRithmId: this.stationId,
@@ -48,7 +55,9 @@ export class CommentInputComponent {
       .subscribe((comment) => {
         if (comment) {
         }
+        this.postingComment.emit(false);
       }, (error) => {
+        this.postingComment.emit(false);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
