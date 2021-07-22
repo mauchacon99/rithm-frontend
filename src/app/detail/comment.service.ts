@@ -24,9 +24,7 @@ export class CommentService {
    * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
    * @returns Observable of Comment.
    */
-  postDocumentComment(
-    comment: Comment
-  ): Observable<Comment> {
+  postDocumentComment(comment: Comment): Observable<Comment> {
     return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
       comment
       //not currently actually requiring withCredentials.
