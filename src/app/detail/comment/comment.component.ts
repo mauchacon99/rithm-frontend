@@ -28,7 +28,10 @@ export class CommentComponent {
    * @param timeCommented Reflects time a comment was made.
    * @returns A string with date and time.
    */
-   convertTimecode(timeCommented: string): string {
-    return this.utcTimeConversion.getDateAndTime(timeCommented);
+   convertTimecode(timeCommented?: string): string {
+     if (timeCommented) {
+       return this.utcTimeConversion.getDateAndTime(timeCommented);
+     }
+     return 'Unknown';
    }
 }
