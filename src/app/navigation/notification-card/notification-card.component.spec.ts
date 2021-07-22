@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 
@@ -17,7 +17,7 @@ describe('NotificationCardComponent', () => {
         MockComponent(UserAvatarComponent)
       ],
       imports: [
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         MatCardModule
       ]
     })

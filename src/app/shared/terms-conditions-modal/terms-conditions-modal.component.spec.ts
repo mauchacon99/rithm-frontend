@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
@@ -33,8 +32,7 @@ describe('TermsConditionsModalComponent', () => {
         MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
-        MatDialogModule,
-        MatProgressSpinnerModule
+        MatDialogModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

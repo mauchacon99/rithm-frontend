@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -27,7 +26,6 @@ describe('RosterModalComponent', () => {
         MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
-        MatProgressSpinnerModule,
         MatDialogModule
       ],
       providers: [

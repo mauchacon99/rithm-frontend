@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
 
@@ -13,9 +13,9 @@ describe('DocumentInfoHeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ DocumentInfoHeaderComponent ],
       imports: [
+        NoopAnimationsModule,
         ReactiveFormsModule,
-        MatInputModule,
-        BrowserAnimationsModule
+        MatInputModule
       ]
     })
     .compileComponents();

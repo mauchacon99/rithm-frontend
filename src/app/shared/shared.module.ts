@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -20,7 +20,9 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { RosterModalComponent } from './roster-modal/roster-modal.component';
 import { StationDocumentsModalComponent } from './station-documents-modal/station-documents-modal.component';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
+import { UserFormComponent } from './user-form/user-form.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
+import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 
@@ -35,13 +37,16 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     RosterModalComponent,
     StationDocumentsModalComponent,
     UserAvatarComponent,
+    UserFormComponent,
     TermsConditionsModalComponent,
+    UserRemovalComponent,
     LoadingIndicatorComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule, // TODO: Remove this? Only required by user removal (test component)
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
@@ -65,7 +70,9 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     PasswordRequirementsComponent,
     UserAvatarComponent,
     PaginationComponent,
-    RosterComponent,
+    UserFormComponent,
+    UserRemovalComponent,
+    RosterComponent
   ]
 })
 export class SharedModule { }
