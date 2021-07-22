@@ -61,7 +61,7 @@ export class CommentDrawerComponent implements OnInit {
         const info = drawerData as DocumentStationInformation;
         if (info) {
           this.stationId = info.stationId;
-          this.documentId = info.documentId;
+          this.documentId = info.documentRithmId;
           this.getDocumentComments(true);
         }
       }, (error: HttpErrorResponse) => {
