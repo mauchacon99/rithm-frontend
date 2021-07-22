@@ -21,14 +21,14 @@
   </mat-form-field>
 
   <!-- Password -->
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field [ngClass]="{'col-12': accountCreate, 'col-6': !accountCreate}" appearance="outline">
     <mat-label>{{ getPasswordLabel() }}</mat-label>
     <input id="password" type="password" matInput placeholder="Password" formControlName="password"
       (focus)="togglePasswordRequirements('password')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
   </mat-form-field>
 
   <!-- Confirm Password -->
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field [ngClass]="{'col-12': accountCreate, 'col-6': !accountCreate}" appearance="outline">
     <mat-label>{{ getPasswordLabel(true) }}</mat-label>
     <input id="confirmPassword" type="password" matInput placeholder="Confirm password" formControlName="confirmPassword"
       (focus)="togglePasswordRequirements('confirmPassword')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
