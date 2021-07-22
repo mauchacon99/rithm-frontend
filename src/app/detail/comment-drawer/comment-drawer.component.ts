@@ -43,7 +43,7 @@ export class CommentDrawerComponent implements OnInit {
   postedComment?: Comment;
 
   /** Is a new comment being added? */
-  newCommentLoading = false;
+  newCommentLoading = true;
 
   /** List of comments for a document. */
   comments: Comment[] = [];
