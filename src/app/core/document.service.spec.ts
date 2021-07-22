@@ -87,7 +87,6 @@ describe('DocumentService', () => {
   it('should return document and station information', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
-    const mode = 'worker';
     const expectedResponse: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
@@ -104,14 +103,14 @@ describe('DocumentService', () => {
       workerRoster: ['LA','OT','SS']
     };
 
-    service.getDocumentInfo(stationId, documentId, mode)
+    service.getDocumentInfo(stationId, documentId)
       .subscribe((response) => {
         expect(response).toBeDefined();
       });
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo?documentId=${documentId}&stationId=${stationId}&mode=${mode}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo?documentId=${documentId}&stationId=${stationId}`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toEqual(null);
 

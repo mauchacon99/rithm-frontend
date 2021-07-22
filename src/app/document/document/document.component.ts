@@ -119,7 +119,7 @@ export class DocumentComponent implements OnInit {
    */
   private getDocumentStationData(documentId: string, stationId: string): void {
     this.documentLoading = true;
-    this.documentService.getDocumentInfo(documentId, stationId, 'Worker')
+    this.documentService.getDocumentInfo(documentId, stationId)
       .pipe(first())
       .subscribe((document) => {
         if (document) {
