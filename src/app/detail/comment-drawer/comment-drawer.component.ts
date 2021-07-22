@@ -79,19 +79,17 @@ export class CommentDrawerComponent implements OnInit {
     this.getDocumentComments(false);
   }
 
-
-
   /**
    * Gets the initial list of comments to load.
    *
    * @param initialGet Is this an initial get of comments?
    */
   private getDocumentComments(initialGet: boolean): void {
-  /**
-   * Reuseable ternary statement for setting loading variables.
-   *
-   * @param loading Set the variables to true or false.
-   */
+    /**
+     * Reuseable ternary statement for setting loading variables.
+     *
+     * @param loading Set the variables to true or false.
+     */
     const setLoading = (loading: boolean) => {
       initialGet ? this.isLoading = loading : this.loadingMoreComments = loading;
     };
