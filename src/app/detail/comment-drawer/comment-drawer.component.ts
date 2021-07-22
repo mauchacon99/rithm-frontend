@@ -22,7 +22,7 @@ export class CommentDrawerComponent implements OnInit {
   stationId = '';
 
   /** Document this drawer is attached to. */
-  documentId = '';
+  documentId?: string;
 
   /** Is the content being loaded. */
   isLoading = true;
@@ -85,6 +85,9 @@ export class CommentDrawerComponent implements OnInit {
    * @param initialGet Is this an initial get of comments?
    */
   private getDocumentComments(initialGet: boolean): void {
+    if (!this.documentId) {
+      throw new Error('Document ID is missing from drawer data');
+    }
     /**
      * Reuseable ternary statement for setting loading variables.
      *
