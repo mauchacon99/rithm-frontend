@@ -17,6 +17,7 @@ describe('TopNavComponent', () => {
   let fixture: ComponentFixture<TopNavComponent>;
   let loader: HarnessLoader;
   let notificationButtonHarness: MatButtonHarness;
+  let signOutSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -56,11 +57,10 @@ describe('TopNavComponent', () => {
     expect(notificationButtonHarness).toBeTruthy();
   });
 
-  it('should call the `signOut` method on the `UserService`', async () => {
-    const service = TestBed.inject(UserService);
-    spyOn(service, 'signOut').and.callThrough();
+  it('should call the `signOut` method on the `UserService`', () => {
+    signOutSpy = spyOn(TestBed.inject(UserService), 'signOut');
     component.signOut();
-    service.signOut();
+    expect(signOutSpy).toHaveBeenCalled();
   });
 
   it('should call the `toggle` method on the `SidenavService`', async () => {
@@ -69,7 +69,7 @@ describe('TopNavComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call the clickedOutside', async () => {
+  it('should call the clickedOutside', () => {
     component.notificationsVisible = true;
     component.clickedOutside();
     expect(component.notificationsVisible).toBeFalse();
@@ -81,7 +81,7 @@ describe('TopNavComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should toggle notifications pane when button clicked', async () => {
+  it('should toggle notifications pane when button clicked', () => {
     expect(component.notificationsVisible).toBeFalse();
     component.toggleNotifications();
     expect(component.notificationsVisible).toBeTrue();
