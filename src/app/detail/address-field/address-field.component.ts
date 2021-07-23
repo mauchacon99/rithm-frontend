@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
+/**
+ * Reusable component for every address field.
+ */
 @Component({
   selector: 'app-address-field',
   templateUrl: './address-field.component.html',
   styleUrls: ['./address-field.component.scss']
 })
-export class AddressFieldComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class AddressFieldComponent {
 
 }
