@@ -1,5 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
+const NUM_PER_PAGE = 10;
+const MIN_NUM_RECORDS = 1;
+const MAX_NUM_RECORDS = 10;
+const INIT_PAGE_NUM = 1;
+const LAST_PAGE_NUM = 5;
+const RESET_PAGE_NUM_LIMIT = 5;
+const ACTIVE_NUM_LIMIT_RESET_PAGE_NUM = 3;
+
 /**
  * Reusable component for pagination with clickable pages.
  */
@@ -33,32 +41,37 @@ export class PaginationComponent implements OnInit {
   /** Where to end the array of pages. */
   endingPageNum = 5;
 
+  /** Increment page number by 1 to navigate to next page. */
+  readonly nextPage = 1;
+
+  /** Decrement page number by 1 to navigate to previous page. */
+  readonly prevPage = -1;
+
   /**
    * Calculates number of pages.
    * Creates list of document ranges to be displayed.
    */
   ngOnInit(): void {
-    this.numPages = Math.ceil(this.numDocs / 10);
+    this.numPages = Math.ceil(this.numDocs / NUM_PER_PAGE);
     this.pagesArr = [];
     this.rangeArr = [];
 
-    let startingNum = 1;
-    let endingNum = 10;
-    const numPerPage = 10;
+    let startingNum = MIN_NUM_RECORDS;
+    let endingNum = MAX_NUM_RECORDS;
 
-    for (let page = 0; page <= this.numPages - 1; page++){
-      startingNum = 1;
-      endingNum = 10;
-      startingNum += numPerPage * page;
-      endingNum += numPerPage * page;
-      if (page !== this.numPages -1){
+    for (let page = 0; page <= this.numPages - 1; page++) {
+      startingNum = MIN_NUM_RECORDS;
+      endingNum = MAX_NUM_RECORDS;
+      startingNum += NUM_PER_PAGE * page;
+      endingNum += NUM_PER_PAGE * page;
+      if (page !== this.numPages - 1) {
         this.rangeArr.push(`${startingNum}-${endingNum}`);
       } else {
         this.rangeArr.push(`${startingNum}-${this.numDocs}`);
       }
     }
 
-    while(this.numPages--) {
+    while (this.numPages--) {
       this.pagesArr[this.numPages] = this.numPages + 1;
     }
   }
@@ -71,16 +84,16 @@ export class PaginationComponent implements OnInit {
   clickPage(pageNum: number): void {
     this.activeNum = pageNum;
 
-    if (this.activeNum >= this.pagesArr.length - 2 && this.pagesArr.length > 5) {
-      this.startingPageNum = this.pagesArr.length - 5;
+    if (this.activeNum >= this.pagesArr.length - 2 && this.pagesArr.length > RESET_PAGE_NUM_LIMIT) {
+      this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
       this.endingPageNum = this.pagesArr.length;
     }
-    if (this.activeNum <= 3) {
-      this.startingPageNum = 0;
-      this.endingPageNum = 5;
+    if (this.activeNum <= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+      this.startingPageNum = INIT_PAGE_NUM;
+      this.endingPageNum = LAST_PAGE_NUM;
     }
-    if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > 3) {
-      this.startingPageNum = this.activeNum - 3;
+    if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+      this.startingPageNum = this.activeNum - ACTIVE_NUM_LIMIT_RESET_PAGE_NUM;
       this.endingPageNum = this.activeNum + 2;
     }
     this.emitPageNum(this.activeNum);
@@ -93,16 +106,16 @@ export class PaginationComponent implements OnInit {
    */
   changePage(num: number): void {
     this.activeNum += num;
-    if (this.pagesArr.length > 5 && this.activeNum >= 3) {
+    if (this.pagesArr.length > RESET_PAGE_NUM_LIMIT && this.activeNum >= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
       if (this.activeNum >= this.pagesArr.length - 2) {
-        this.startingPageNum = this.pagesArr.length - 5;
+        this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
         this.endingPageNum = this.pagesArr.length;
       }
-      if (this.activeNum <= 3) {
-        this.startingPageNum = 0;
-        this.endingPageNum = 5;
+      if (this.activeNum <= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+        this.startingPageNum = INIT_PAGE_NUM;
+        this.endingPageNum = LAST_PAGE_NUM;
       }
-      if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > 3) {
+      if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
         this.startingPageNum += num;
         this.endingPageNum += num;
       }
