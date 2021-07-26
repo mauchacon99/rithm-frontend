@@ -1,3 +1,5 @@
+import { FieldType } from './enums';
+
 /**
  * Represents a question.
  */
@@ -9,7 +11,7 @@ export interface Question {
   /** Question instructions. */
   instructions: string;
   /** Type of the question. */
-  type: string;
+  type: FieldType;
   /** Is the question read only? */
   isReadOnly: boolean;
   /** Is the question required? */
