@@ -24,7 +24,7 @@ describe('StationInfoHeaderComponent', () => {
     component.stationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
-      documentId:'E204F369-386F-4E41',
+      documentRithmId:'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
