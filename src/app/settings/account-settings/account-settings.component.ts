@@ -57,7 +57,8 @@ export class AccountSettingsComponent {
    */
   updateSettings(): void {
     this.isLoading = true;
-    console.log(this.settingsForm.value.generalSettingsForm.firstName + ' ' + this.settingsForm.value.generalSettingsForm.password);
+    // eslint-disable-next-line max-len
+    console.log(this.settingsForm.value.generalSettingsForm.value.userForm.firstName + ' ' + this.settingsForm.value.generalSettingsForm.value.userForm.password);
     // this.updateUserAccount();
     // this.updateNotificationSettings();
   }
