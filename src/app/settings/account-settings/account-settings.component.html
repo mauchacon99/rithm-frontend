@@ -5,8 +5,8 @@
       <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">
         <h3 class="mb-4">Account Settings</h3>
 
-        <form (ngSubmit)="updateSettings()">
-          <app-general-account-settings></app-general-account-settings>
+        <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+          <app-general-account-settings formControlName="generalSettingsForm"></app-general-account-settings>
 
           <app-notification-settings></app-notification-settings>
 

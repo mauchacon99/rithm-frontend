@@ -7,6 +7,7 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for all of the account settings.
@@ -17,6 +18,8 @@ import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-m
   styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent {
+  /** Settings form. */
+  settingsForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
@@ -27,10 +30,13 @@ export class AccountSettingsComponent {
   /** Notification settings model. */
   notificationSettings: NotificationSettings;
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
+    private errorService: ErrorService,
+    private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private errorService: ErrorService,) {
+    ) {
     this.userAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
@@ -40,6 +46,10 @@ export class AccountSettingsComponent {
       comments: true,
       commentMentions: false
     };
+
+    this.settingsForm = this.fb.group({
+      generalSettingsForm: this.fb.control('')
+    });
   }
 
   /**
@@ -47,8 +57,9 @@ export class AccountSettingsComponent {
    */
   updateSettings(): void {
     this.isLoading = true;
-    this.updateUserAccount();
-    this.updateNotificationSettings();
+    console.log(this.settingsForm.value.generalSettingsForm.firstName + ' ' + this.settingsForm.value.generalSettingsForm.password);
+    // this.updateUserAccount();
+    // this.updateNotificationSettings();
   }
 
   /**
