@@ -1,6 +1,6 @@
 export enum FieldType {
   SHORT_TEXT = 'string',
-  LONG_TEXT = 'text',
+  LONG_TEXT = 'textarea',
   URL = 'url',
   EMAIL = 'email',
   ADDRESS = 'address',

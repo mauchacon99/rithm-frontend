@@ -62,7 +62,7 @@ export class DocumentComponent implements OnInit {
     {
       id: 3,
       prompt: 'Fake question 3',
-      instructions: 'Fake instructions 3',
+      instructions: '',
       type: FieldType.URL,
       isReadOnly: false,
       isRequired: true
@@ -72,6 +72,14 @@ export class DocumentComponent implements OnInit {
       prompt: 'Fake question 4',
       instructions: 'Fake instructions 4',
       type: FieldType.EMAIL,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 5,
+      prompt: 'Fake question 5',
+      instructions: '',
+      type: FieldType.NUMBER,
       isReadOnly: false,
       isRequired: true
     }

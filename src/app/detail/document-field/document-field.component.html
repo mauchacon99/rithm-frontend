@@ -1,11 +1,16 @@
-<p>document-field works!</p>
-
 <!-- TODO: Field instructions here (if added) -->
-
+<p *ngIf="field.instructions !== ''">
+  {{field.instructions}}
+</p>
 <!-- TODO: Programmatically decide which of these fields to display here -->
-<app-text-field *ngIf="field.type === (fieldTypes.SHORT_TEXT || fieldTypes.LONG_TEXT || fieldTypes.URL || fieldTypes.EMAIL)"></app-text-field>
-<app-number-field></app-number-field>
+<app-text-field *ngIf="
+field.type === fieldTypes.SHORT_TEXT ||
+field.type === fieldTypes.LONG_TEXT ||
+field.type === fieldTypes.URL ||
+field.type === fieldTypes.EMAIL"
+[field]="field"></app-text-field>
+<!-- <app-number-field></app-number-field>
 <app-date-field></app-date-field>
 <app-address-field></app-address-field>
 <app-select-field></app-select-field>
-<app-check-field></app-check-field>
+<app-check-field></app-check-field> -->
