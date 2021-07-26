@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Question } from 'src/models';
 
 /**
  * Component for the document template area of a station/document.
@@ -14,6 +15,6 @@ export class DocumentTemplateComponent {
   @Input() generalInstructions!: string;
 
   /** The document fields in the template area for the station/document. */
-  @Input() documentFields!: any[]; // TODO: determine an interface for this
+  @Input() documentFields!: Question[];
 
 }
