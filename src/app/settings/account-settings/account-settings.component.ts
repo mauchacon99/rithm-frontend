@@ -46,7 +46,9 @@ export class AccountSettingsComponent {
    * Updates all settings for the user.
    */
   updateSettings(): void {
-    // TODO: determine changes and make requests
+    this.isLoading = true;
+    this.updateUserAccount();
+    this.updateNotificationSettings();
   }
 
   /**
@@ -91,7 +93,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-    panelClass: 'terms-condition',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
