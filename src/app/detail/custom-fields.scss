@@ -1,9 +1,15 @@
+@import 'rithm-light-palettes';
+
 div.icon {
   width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  i {
+    color: map-get($secondary-gray-palette, 200);
+  }
 
   &.icon-top {
     align-items: start !important;
