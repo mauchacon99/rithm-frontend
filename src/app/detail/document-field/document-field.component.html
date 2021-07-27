@@ -1,8 +1,7 @@
-<!-- TODO: Field instructions here (if added) -->
 <p *ngIf="field.instructions !== ''">
   {{field.instructions}}
 </p>
-<!-- TODO: Programmatically decide which of these fields to display here -->
+
 <app-text-field *ngIf="
 field.type === fieldTypes.SHORT_TEXT ||
 field.type === fieldTypes.LONG_TEXT ||
