@@ -171,6 +171,7 @@ export class DocumentComponent implements OnInit {
         }
         this.documentLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -194,6 +195,7 @@ export class DocumentComponent implements OnInit {
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
       }, (error) => {
+        this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
           'Failed to get connected stations for this document.',
