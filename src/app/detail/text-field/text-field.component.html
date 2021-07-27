@@ -1,14 +1,7 @@
-<div *ngIf="field.type !== fieldTypeEnum.LONG_TEXT" class="row no-gutters">
+<div class="row no-gutters">
   <mat-form-field class="col-12" appearance="outline">
     <mat-label>{{field.prompt}}</mat-label>
-    <input matInput placeholder="{{field.prompt}}" type="{{field.type}}">
-  </mat-form-field>
-</div>
-<!-- TODO: Combine to have more reusable code -->
-<!-- TODO: If field is required add attribute -->
-<div *ngIf="field.type === fieldTypeEnum.LONG_TEXT" class="row no-gutters">
-  <mat-form-field class="col-12" appearance="outline">
-    <mat-label>{{field.prompt}}</mat-label>
-    <textarea matInput placeholder="{{field.prompt}}" rows="3"></textarea>
+    <input *ngIf="field.type !== fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field.prompt}}" type="{{field.type}}" [required]="field.isRequired">
+    <textarea *ngIf="field.type === fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field.prompt}}" rows="3" [required]="field.isRequired"></textarea>
   </mat-form-field>
 </div>

@@ -49,7 +49,7 @@ export class DocumentComponent implements OnInit {
       instructions: 'Fake instructions 1',
       type: FieldType.SHORT_TEXT,
       isReadOnly: false,
-      isRequired: true
+      isRequired: false
     },
     {
       id: 2,
