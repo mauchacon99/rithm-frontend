@@ -1,1 +1,21 @@
-// styles here
+@import 'functions';
+
+div.icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.long-text {
+    align-items: start !important;
+  }
+}
+
+// .template-fields ::ng-deep .mat-form-field-empty.mat-form-field-label, .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+//   padding-left: 25px;
+// }
+
+// .template-fields ::ng-deep .mat-focused .mat-form-field-label {
+//   padding-left: 33px;
+// }
