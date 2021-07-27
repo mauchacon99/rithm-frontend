@@ -11,7 +11,8 @@ field?.type === fieldTypes.EMAIL"
 <app-number-field *ngIf="
 field?.type === fieldTypes.NUMBER ||
 field?.type === fieldTypes.PHONE ||
-field?.type === fieldTypes.CURRENCY"></app-number-field>
+field?.type === fieldTypes.CURRENCY"
+[field]="field"></app-number-field>
 <app-date-field *ngIf="
 field?.type === fieldTypes.DATE ||
 field?.type === fieldTypes.DATETIME"></app-date-field>
