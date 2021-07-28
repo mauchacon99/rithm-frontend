@@ -26,6 +26,7 @@ export class CommentInputComponent {
   /** The newly posted comment. */
   @Output() private newComment = new EventEmitter<Comment>();
 
+
   /** The form for adding a new comment. */
   commentForm: FormGroup;
 
@@ -43,6 +44,7 @@ export class CommentInputComponent {
    * Add the comment.
    */
   addComment(): void {
+    this.commentForm.disable();
     this.postingComment.emit(true);
     const newComment: Comment = {
       displayText: this.commentForm.controls['comment'].value,
@@ -53,10 +55,12 @@ export class CommentInputComponent {
     this.commentService.postDocumentComment(newComment)
       .pipe(first())
       .subscribe((comment) => {
+        this.commentForm.enable();
         this.newComment.emit(comment);
         this.postingComment.emit(false);
         this.commentForm.get('comment')?.reset('');
       }, (error) => {
+        this.commentForm.enable();
         this.postingComment.emit(false);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
