@@ -18,7 +18,7 @@
         </div>
       </div>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-      <app-comment-input></app-comment-input>
+      <app-comment-input [stationId]="stationId" [documentId]="documentId" (postingComment)="setPostingLoading($event)" (newComment)="addNewComment($event)"></app-comment-input>
     </ng-template>
   </mat-tab>
   <mat-tab label="Station">

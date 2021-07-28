@@ -46,20 +46,6 @@ describe('CommentDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('posted comment should update postedComment', fakeAsync(() => {
-    const comment = {
-      displayText: 'test',
-      dateCreated: '2021-07-14T18:57:59.771Z',
-      userRithmId: '1234',
-      documentRithmId: '1234',
-      stationRithmId: '1234'
-    };
-    component.postComment(comment);
-    tick(1000);
-    expect(component.postedComment).toBeDefined();
-
-  }));
-
   it('should load more comments', fakeAsync(() => {
     component.documentId = '1234';
     component.stationId = '1234';
