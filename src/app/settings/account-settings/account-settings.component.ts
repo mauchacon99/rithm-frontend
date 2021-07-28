@@ -7,6 +7,7 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for all of the account settings.
@@ -17,6 +18,8 @@ import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-m
   styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent {
+  /** Sign up form. */
+  signUpForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
@@ -30,7 +33,8 @@ export class AccountSettingsComponent {
   constructor(private userService: UserService,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private errorService: ErrorService,) {
+    private errorService: ErrorService,
+    private fb: FormBuilder,) {
     this.userAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
@@ -40,6 +44,9 @@ export class AccountSettingsComponent {
       comments: true,
       commentMentions: false
     };
+    this.signUpForm = this.fb.group({
+      userForm: this.fb.control('')
+    });
   }
 
   /**
@@ -91,7 +98,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-    panelClass: 'terms-condition',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
@@ -100,6 +107,15 @@ export class AccountSettingsComponent {
         showAgreeButton: false
       }
     });
+  }
+
+  /**
+   * Formgroup for userForm.
+   *
+   * @returns SignUpForm property userForm.
+   */
+  get userForm(): FormGroup {
+    return this.signUpForm.get('userForm') as FormGroup;
   }
 
 }

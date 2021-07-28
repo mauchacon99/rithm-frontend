@@ -1,3 +1,4 @@
 <h4 class="pb-3">General Account Settings</h4>
-
-<app-user-form class="row"></app-user-form>
+<span [formGroup]="parentFormGroup">
+  <app-user-form class="row" formControlName="userForm"></app-user-form>
+</span>

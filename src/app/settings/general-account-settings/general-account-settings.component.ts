@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 /**
  * Component for the general account settings section of account settings.
@@ -9,5 +10,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./general-account-settings.component.scss']
 })
 export class GeneralAccountSettingsComponent {
+  /** Getting parent form group. */
+  @Input() parentFormGroup!: FormGroup;
 
 }
