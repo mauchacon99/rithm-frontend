@@ -22,7 +22,7 @@ export class CommentDrawerComponent implements OnInit {
   stationId = '';
 
   /** Document this drawer is attached to. */
-  documentId = '';
+  documentId?: string;
 
   /** Is the content being loaded. */
   isLoading = true;
@@ -79,19 +79,20 @@ export class CommentDrawerComponent implements OnInit {
     this.getDocumentComments(false);
   }
 
-
-
   /**
    * Gets the initial list of comments to load.
    *
    * @param initialGet Is this an initial get of comments?
    */
   private getDocumentComments(initialGet: boolean): void {
-  /**
-   * Reuseable ternary statement for setting loading variables.
-   *
-   * @param loading Set the variables to true or false.
-   */
+    if (!this.documentId) {
+      throw new Error('Document ID is missing from drawer data');
+    }
+    /**
+     * Reuseable ternary statement for setting loading variables.
+     *
+     * @param loading Set the variables to true or false.
+     */
     const setLoading = (loading: boolean) => {
       initialGet ? this.isLoading = loading : this.loadingMoreComments = loading;
     };
@@ -117,29 +118,20 @@ export class CommentDrawerComponent implements OnInit {
   }
 
   /**
-   * Post a new comment.
+   * Sets the loading status when a comment is loading.
    *
-   * @param comment A Comment interface.
-   * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
+   * @param loadingStatus The incoming loading status of the post comment request.
    */
-  postComment(
-    comment: Comment
-  ): void {
-    this.loadingPostedComment = true;
-    this.commentService.postDocumentComment(comment)
-      .pipe(first())
-      .subscribe((comment) => {
-        if (comment) {
-          this.postedComment = comment;
-        }
-        this.loadingPostedComment = false;
-      }, (error: HttpErrorResponse) => {
-        this.loadingPostedComment = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
+  setPostingLoading(loadingStatus: boolean): void {
+    this.loadingPostedComment = loadingStatus;
+  }
+
+  /**
+   * Adds a newly posted comment to the list of comments.
+   *
+   * @param comment The comment that was newly added.
+   */
+  addNewComment(comment: Comment): void {
+    this.comments.unshift(comment);
   }
 }
