@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Comment } from 'src/models';
-import { delay } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/commentservice/api/comment';
 
@@ -24,13 +24,10 @@ export class CommentService {
    * Comment needs parameters: displayText, DateCreated, UserRithmId, documentRithmId, and stationRithmId.
    * @returns Observable of Comment.
    */
-  postDocumentComment(
-    comment: Comment
-  ): Observable<Comment> {
+  postDocumentComment(comment: Comment): Observable<Comment> {
     return this.http.post<Comment>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`, {
-      comment
-      //not currently actually requiring withCredentials.
-    }, { withCredentials: true });
+      ...comment
+    });
   }
 
   /**

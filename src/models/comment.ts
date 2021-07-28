@@ -10,7 +10,7 @@ import { User } from './user';
   displayText: string;
 
   /** The date the comment was created. */
-  dateCreated: string;
+  dateCreated?: string;
 
   /** The date the comment was last edited. */
   dateLastEdited?: string;
