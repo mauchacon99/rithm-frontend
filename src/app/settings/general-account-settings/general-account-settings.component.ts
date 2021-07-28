@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for the general account settings section of account settings.
@@ -13,4 +13,9 @@ export class GeneralAccountSettingsComponent {
   /** Getting parent form group. */
   @Input() parentFormGroup!: FormGroup;
 
+  constructor(private fb: FormBuilder) {
+    this.parentFormGroup = this.fb.group({
+      userForm: this.fb.control('')
+    });
+  }
 }
