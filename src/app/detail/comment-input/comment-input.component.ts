@@ -55,6 +55,7 @@ export class CommentInputComponent {
       .subscribe((comment) => {
         this.newComment.emit(comment);
         this.postingComment.emit(false);
+        this.commentForm.get('comment')?.reset('');
       }, (error) => {
         this.postingComment.emit(false);
         this.errorService.displayError(
