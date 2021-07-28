@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FieldType, Question } from 'src/models';
+import { Question } from 'src/models';
+import { FieldType } from 'src/models/enums/field-type.enum';
 
 /**
  * Reusable component for all fields involving text.

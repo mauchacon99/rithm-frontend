@@ -1,4 +1,5 @@
 import { FieldType } from './enums';
+import { Option } from './option';
 
 /**
  * Represents a question.
@@ -16,4 +17,6 @@ export interface Question {
   isReadOnly: boolean;
   /** Is the question required? */
   isRequired: boolean;
+  /** Array of answers. */
+  options?: Option[];
 }

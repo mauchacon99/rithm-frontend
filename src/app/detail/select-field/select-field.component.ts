@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Question } from 'src/models/question';
+import { FieldType } from 'src/models/enums/field-type.enum';
 
 /**
  * Reusable field for every select/multi select dropdown.
@@ -12,5 +13,12 @@ import { Question } from 'src/models/question';
 export class SelectFieldComponent {
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** The field type of the input. */
+  fieldTypeEnum = FieldType;
+
+  constructor() {
+    console.log(this.field);
+  }
 
 }
