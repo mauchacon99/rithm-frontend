@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -25,7 +26,7 @@ import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
 
-
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { CheckFieldComponent } from './check-field/check-field.component';
     DateFieldComponent,
     AddressFieldComponent,
     SelectFieldComponent,
-    CheckFieldComponent
+    CheckFieldComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +55,8 @@ import { CheckFieldComponent } from './check-field/check-field.component';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatTabsModule
+    MatTabsModule,
+    NgxMaskModule.forRoot(),
   ],
   exports: [
     SubHeaderComponent,
