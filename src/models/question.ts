@@ -17,6 +17,6 @@ export interface Question {
   isReadOnly: boolean;
   /** Is the question required? */
   isRequired: boolean;
-  /** Array of answers. */
+  /** Array of options. */
   options?: Option[];
 }
