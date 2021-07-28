@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Question } from 'src/models/question';
 
 /**
  * Reusable field for every select/multi select dropdown.
@@ -9,5 +10,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./select-field.component.scss']
 })
 export class SelectFieldComponent {
+  /** The document field to display. */
+  @Input() field!: Question;
 
 }
