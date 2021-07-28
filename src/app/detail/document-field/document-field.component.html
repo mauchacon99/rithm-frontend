@@ -15,7 +15,8 @@ field?.type === fieldTypes.CURRENCY"
 [field]="field"></app-number-field>
 <app-date-field *ngIf="
 field?.type === fieldTypes.DATE ||
-field?.type === fieldTypes.DATETIME"></app-date-field>
+field?.type === fieldTypes.DATETIME"
+[field]="field"></app-date-field>
 <app-address-field *ngIf="
 field?.type === fieldTypes.ADDRESS"></app-address-field>
 <app-select-field *ngIf="
