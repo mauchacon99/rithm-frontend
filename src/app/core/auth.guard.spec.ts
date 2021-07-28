@@ -1,26 +1,25 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockPopupService } from 'src/mocks';
+import { MockPopupService, MockUserService } from 'src/mocks';
 
 import { AuthGuard } from './auth.guard';
 import { PopupService } from './popup.service';
+import { UserService } from './user.service';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
+  let userSignedInSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
         RouterTestingModule,
-        HttpClientModule,
-        MatButtonModule
+        HttpClientModule
       ],
       providers: [
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService }
       ]
     });
     guard = TestBed.inject(AuthGuard);
@@ -28,6 +27,12 @@ describe('AuthGuard', () => {
 
   it('should be created', () => {
     expect(guard).toBeTruthy();
+  });
+
+  it('should determine if the user is signed in and can perform the attempted routing action', () => {
+    userSignedInSpy = spyOn(TestBed.inject(UserService), 'isSignedIn');
+    guard.canActivate();
+    expect(userSignedInSpy).toHaveBeenCalled();
   });
 
   xit('should navigate back to login if not signed in', () => {

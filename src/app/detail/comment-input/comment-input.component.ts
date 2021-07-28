@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 /**
  * Comment input component.
  */
@@ -9,8 +10,16 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./comment-input.component.scss']
 })
 export class CommentInputComponent {
-  /** The comment form. */
-  @Input() commentForm!: FormGroup;
+  /** The form for adding a new comment. */
+  commentForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.commentForm = this.fb.group({
+      comment: ['', [Validators.required]]
+    });
+  }
 
   /**
    * Add the comment.

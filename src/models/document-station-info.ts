@@ -39,4 +39,7 @@ export interface DocumentStationInformation {
 
   /** The list of workers. */
   workerRoster: Array<string>;
+
+  /** Document rithm Id. */
+  documentRithmId: string;
 }

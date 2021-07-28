@@ -49,12 +49,11 @@ export class DocumentService {
    *
    * @param documentId The Specific id of document.
    * @param stationId The Specific id of station.
-   * @param mode The Specific user type supervisor or worker or admin.
    * @returns A list of forward and previous stations for a specific document.
    */
-  getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
+  getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo`,
-      { params: { documentId, stationId, mode }}
+      { params: { documentId, stationId }}
     );
   }
 

@@ -9,6 +9,8 @@ import { MyStationsComponent } from './my-stations/my-stations.component';
 import { SharedModule } from '../shared/shared.module';
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents/previously-started-documents.component';
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -17,7 +19,9 @@ import { PriorityQueueComponent } from './priority-queue/priority-queue.componen
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    MatInputModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

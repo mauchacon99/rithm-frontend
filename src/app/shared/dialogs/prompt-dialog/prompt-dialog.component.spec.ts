@@ -11,7 +11,7 @@ import { DialogData } from 'src/models';
 
 import { PromptDialogComponent } from './prompt-dialog.component';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
 const DIALOG_TEST_DATA: DialogData = {
@@ -34,10 +34,10 @@ describe('PromptDialogComponent', () => {
       declarations: [PromptDialogComponent],
       imports: [
         FormsModule,
+        NoopAnimationsModule,
         MatDialogModule,
         MatButtonModule,
-        MatInputModule,
-        BrowserAnimationsModule
+        MatInputModule
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }

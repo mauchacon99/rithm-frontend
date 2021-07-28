@@ -26,15 +26,6 @@ export class AccountCreateComponent implements OnInit {
   /** Sign up form. */
   signUpForm: FormGroup;
 
-  /** Are password requirements visible. */
-  passReqVisible = false;
-
-  /** Show passwords match validation in child component. */
-  showMatch = false;
-
-  /** What errors to get from validator. */
-  errorsToGet = '';
-
   /** Helper class for password requirements. */
   private passwordRequirements: PasswordRequirements;
 
@@ -62,32 +53,7 @@ export class AccountCreateComponent implements OnInit {
     this.passwordRequirements = new PasswordRequirements();
 
     this.signUpForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar()
-        ]
-      ],
-      confirmPassword: [
-        '',
-        [
-          Validators.required,
-          this.passwordRequirements.isGreaterThanEightChars(),
-          this.passwordRequirements.hasOneLowerCaseChar(),
-          this.passwordRequirements.hasOneUpperCaseChar(),
-          this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar(),
-          this.passwordRequirements.passwordsMatch()
-        ]
-      ],
+      userForm: this.fb.control(''),
       agreeToTerms: [false, [Validators.requiredTrue]]
     });
   }
@@ -104,22 +70,11 @@ export class AccountCreateComponent implements OnInit {
   }
 
   /**
-   * Toggle visibility of password requirements.
-   *
-   * @param errorsFieldToCheck What field to get errors for child component.
-   */
-  togglePassReq(errorsFieldToCheck: string): void {
-    this.errorsToGet = errorsFieldToCheck;
-    this.passReqVisible = !this.passReqVisible;
-    this.showMatch = errorsFieldToCheck === 'confirmPassword';
-  }
-
-  /**
    * Attempts to create a new account with the provided form information.
    */
   createAccount(): void {
     this.isLoading = true;
-    const formValues = this.signUpForm.value;
+    const formValues = this.signUpForm.value.userForm;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
       .subscribe(() => {
@@ -175,4 +130,12 @@ export class AccountCreateComponent implements OnInit {
     });
   }
 
+  /**
+   * Formgroup for userForm.
+   *
+   * @returns SignUpForm property userForm.
+   */
+  get userForm(): FormGroup {
+    return this.signUpForm.get('userForm') as FormGroup;
+  }
 }

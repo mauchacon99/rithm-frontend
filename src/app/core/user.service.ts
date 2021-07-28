@@ -129,6 +129,22 @@ export class UserService {
     });
   }
 
+/**
+ * Deletes a given user in the system.
+ *
+ * @param email The user's email address.
+ * @returns An empty observable.
+ */
+  delete(email: string): Observable<unknown> {
+    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`, {
+      headers: {
+        // eslint-disable-next-line @typescript-eslint/quotes
+        "Content-Type": "application/json"
+      },
+      body:{email}
+    });
+  }
+
   /**
    * Attempts to validate an email address with the API.
    *

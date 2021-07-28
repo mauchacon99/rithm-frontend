@@ -113,13 +113,13 @@ export class MockDocumentService {
    *
    * @param documentId The Specific id of document.
    * @param stationId The Specific id of station.
-   * @param mode The Specific user type supervisor or worker or admin.
    * @returns A list of forward and previous stations for a specific document.
    */
-   getDocumentInfo(documentId: string, stationId: string, mode: string): Observable<DocumentStationInformation> {
+   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     const data: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
+      documentRithmId:'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',

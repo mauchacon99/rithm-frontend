@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
 
@@ -13,9 +13,9 @@ describe('DocumentInfoHeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ DocumentInfoHeaderComponent ],
       imports: [
+        NoopAnimationsModule,
         ReactiveFormsModule,
-        MatInputModule,
-        BrowserAnimationsModule
+        MatInputModule
       ]
     })
     .compileComponents();
@@ -27,6 +27,7 @@ describe('DocumentInfoHeaderComponent', () => {
     component.documentInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
+      documentRithmId:'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',

@@ -12,7 +12,7 @@ import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {  } from '@angular/material/progress-spinner';
 import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 
@@ -43,7 +43,6 @@ describe('StationDocumentsModalComponent', () => {
         RouterTestingModule,
         NoopAnimationsModule,
         MatTooltipModule,
-        MatProgressSpinnerModule,
         MatDialogModule
       ],
       providers: [

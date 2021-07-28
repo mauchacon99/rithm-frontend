@@ -6,11 +6,11 @@ import { UserService } from 'src/app/core/user.service';
 
 import { PasswordResetComponent } from './password-reset.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -23,7 +23,7 @@ describe('PasswordResetComponent', () => {
         MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatCardModule,

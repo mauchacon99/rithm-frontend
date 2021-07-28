@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UtcTimeConversion } from 'src/helpers';
-import { User } from 'src/models';
+import { User, Comment } from 'src/models';
 
 /**
  * Component for an individual comment.
@@ -12,25 +12,8 @@ import { User } from 'src/models';
   providers: [UtcTimeConversion]
 })
 export class CommentComponent {
-  /** User commenting. */
-  user: User = {
-    rithmId: '123',
-    firstName: 'Testy',
-    lastName: 'Test',
-    email: 'test@test.com',
-    objectPermissions: [],
-    groups: [],
-    createdDate: '1/2/34'
-  };
-
-  /** Full name. */
-  name = this.user.firstName + ' ' + this.user.lastName;
-
-  /** Comment message. */
-  message = 'Here is a test message that is a test and a message.';
-
-  /** Timecode. */
-  UTCtimecode = '2021-07-12T19:06:47.3506612Z';
+  /** The Data needed to construct the comment. */
+  @Input() commentData!: Comment;
 
   /** Has the comment been read before? */
   read = false;

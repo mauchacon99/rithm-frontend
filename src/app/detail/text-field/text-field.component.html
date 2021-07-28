@@ -1,0 +1,7 @@
+<div class="row no-gutters">
+  <mat-form-field class="col-12" appearance="outline">
+    <mat-label>{{field?.prompt}}</mat-label>
+    <input *ngIf="field?.type !== fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field?.prompt}}" type="{{field?.type}}" [required]="field?.isRequired">
+    <textarea *ngIf="field?.type === fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field?.prompt}}" rows="3" [required]="field?.isRequired"></textarea>
+  </mat-form-field>
+</div>
