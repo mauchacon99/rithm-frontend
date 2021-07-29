@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Comment } from 'src/models';

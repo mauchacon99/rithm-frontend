@@ -16,7 +16,7 @@
             <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
             <app-station-info-header *ngIf="!documentLoading" [stationInformation]="documentInformation"></app-station-info-header>
             <app-document-info-header *ngIf="!documentLoading" [documentInformation]="documentInformation"></app-document-info-header>
-            <app-document-template [generalInstructions]="'instructions here'" [documentFields]="['field', 'field']" *ngIf="!documentLoading"></app-document-template>
+            <app-document-template [generalInstructions]="'instructions here'" [documentFields]="fakeFields" *ngIf="!documentLoading"></app-document-template>
           </div>
           <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
         </div>

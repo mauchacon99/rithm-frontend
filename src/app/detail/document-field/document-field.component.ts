@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { FieldType, Question } from 'src/models';
 
 /**
  * Reusable component for every field on a document.
@@ -11,6 +12,9 @@ import { Component, Input } from '@angular/core';
 export class DocumentFieldComponent {
 
   /** The document field to display. */
-  @Input() field!: any; // TODO: define interface for this
+  @Input() field!: Question;
+
+  /** The field type. */
+  fieldTypes = FieldType;
 
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse } from 'src/models';
 import { delay } from 'rxjs/operators';
