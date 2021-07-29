@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators,
+  NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators,
 } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
@@ -69,7 +69,11 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
           value: !this.accountCreate ? this.userService.user?.email : '',
           disabled: !this.accountCreate
         },
-        [ Validators.email]],
+        [
+          Validators.email,
+          Validators.required
+        ]
+      ],
       password: [
         '',
         []
@@ -79,43 +83,52 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
         []
       ],
     });
-    this.userForm.get('password')?.setValidators([
-      // this.passwordRequirements.isGreaterThanEightChars(),
-      // this.passwordRequirements.hasOneLowerCaseChar(),
-      // this.passwordRequirements.hasOneUpperCaseChar(),
-      // this.passwordRequirements.hasOneDigitChar(),
-      // this.passwordRequirements.hasOneSpecialChar()
-    ]);
-    this.userForm.get('confirmPassword')?.setValidators([
-      // this.passwordRequirements.isGreaterThanEightChars(),
-      // this.passwordRequirements.hasOneLowerCaseChar(),
-      // this.passwordRequirements.hasOneUpperCaseChar(),
-      // this.passwordRequirements.hasOneDigitChar(),
-      // this.passwordRequirements.hasOneSpecialChar(),
-      // this.passwordRequirements.passwordsMatch()
-    ]);
+
+    const pass: ValidatorFn[] = [
+      this.passwordRequirements.isGreaterThanEightChars(),
+      this.passwordRequirements.hasOneLowerCaseChar(),
+      this.passwordRequirements.hasOneUpperCaseChar(),
+      this.passwordRequirements.hasOneDigitChar(),
+      this.passwordRequirements.hasOneSpecialChar()
+    ];
+    const confirmPass = [
+      ...pass,
+      this.passwordRequirements.passwordsMatch()
+    ];
+
+    //Set the validation for passwords.
     if (this.accountCreate) {
-      this.userForm.get('password')?.setValidators(Validators.required);
-      this.userForm.get('confirmPassword')?.setValidators(Validators.required);
+      this.userForm.get('password')?.setValidators([...pass, Validators.required]);
+      this.userForm.get('confirmPassword')?.setValidators([...confirmPass, Validators.required]);
     } else {
-      this.userForm.get('password')?.setValidators((control: AbstractControl): ValidationErrors | null => {
-        // do your validation logic here:
-        if (this.userForm?.get('confirmPassword')?.value) {
-          if (!control.value) {
-            return {required: true};
+      this.userForm.get('password')?.setValidators(
+        [
+          ...pass,
+          (control: AbstractControl): ValidationErrors | null => {
+            // do your validation logic here:
+            if (this.userForm?.get('confirmPassword')?.value) {
+              if (!control.value) {
+                return {required: true};
+              }
+            }
+            // all is fine:
+            return null;
           }
-        }
-        // all is fine:
-        return null;
-      });
-      this.userForm.get('confirmPassword')?.setValidators((control: AbstractControl): ValidationErrors | null => {
-        if (this.userForm?.get('password')?.value) {
-          if (!control.value) {
-            return {required: true};
+        ]
+      );
+      this.userForm.get('confirmPassword')?.setValidators(
+        [
+          ...confirmPass,
+            (control: AbstractControl): ValidationErrors | null => {
+            if (this.userForm?.get('password')?.value) {
+              if (!control.value) {
+                return {required: true};
+              }
+            }
+            return null;
           }
-        }
-        return null;
-      });
+        ]
+      );
     }
   }
 
