@@ -13,6 +13,7 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { ConnectedStationCardComponent } from './connected-station-card/connected-station-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
@@ -25,6 +26,7 @@ import { DateFieldComponent } from './date-field/date-field.component';
 import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -56,6 +58,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatInputModule,
     ReactiveFormsModule,
     MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgxMaskModule.forRoot(),
   ],
   exports: [
