@@ -16,8 +16,5 @@ export class SelectFieldComponent {
   /** The field type of the input. */
   fieldTypeEnum = FieldType;
 
-  constructor() {
-    console.log(this.field);
-  }
 
 }
