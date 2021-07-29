@@ -27,6 +27,7 @@ import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -61,6 +62,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
+    MatSelectModule
   ],
   exports: [
     SubHeaderComponent,
