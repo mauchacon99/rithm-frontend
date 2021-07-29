@@ -14,11 +14,11 @@
           <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
-            <div *ngIf="!documentLoading">
+            <span *ngIf="!documentLoading">
               <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
               <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
               <app-document-template [generalInstructions]="'instructions here'" [documentFields]="fakeFields" ></app-document-template>
-            </div>
+            </span>
           </div>
           <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
         </div>
