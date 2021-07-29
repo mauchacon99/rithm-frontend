@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EmailLinkParams } from 'src/helpers';
 import { EmailLinkType } from 'src/models';
-
 import { ResetPasswordGuard } from './reset-password.guard';
 
 describe('ResetPasswordGuard', () => {
