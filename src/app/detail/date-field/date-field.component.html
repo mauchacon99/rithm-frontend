@@ -5,7 +5,7 @@
       <i *ngIf="field.type === fieldTypeEnum.DATE" class="fas fa-calendar-day"></i>
       <i *ngIf="field.type === fieldTypeEnum.DATETIME" class="fas fa-clock"></i>
     </div>
-    <input *ngIf="field?.type === fieldTypeEnum.DATE" mask="00/00/0000" matInput placeholder="{{field?.prompt}}" type="text" [required]="field?.isRequired">
-    <input *ngIf="field?.type === fieldTypeEnum.DATETIME"  mask="00/00/0000 00:00" matInput placeholder="{{field?.prompt}}" type="text" [required]="field?.isRequired">
+    <input *ngIf="field?.type === fieldTypeEnum.DATE" matInput placeholder="{{field?.prompt}}" type="date" [required]="field?.isRequired">
+    <input *ngIf="field?.type === fieldTypeEnum.DATETIME" matInput placeholder="{{field?.prompt}}" type="datetime-local" [required]="field?.isRequired">
   </mat-form-field>
 </div>

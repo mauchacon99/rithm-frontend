@@ -87,7 +87,7 @@ export class DocumentComponent implements OnInit {
       id: 6,
       prompt: 'Fake question 6',
       instructions: '',
-      type: FieldType.DATETIME,
+      type: FieldType.DATE,
       isReadOnly: false,
       isRequired: true
     }
