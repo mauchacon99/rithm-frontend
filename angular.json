@@ -22,6 +22,7 @@
           "options": {
             "aot": true,
             "outputPath": "dist/rithm",
+            "outputHashing": "all",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
