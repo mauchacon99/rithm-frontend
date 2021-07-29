@@ -122,9 +122,10 @@ export class MockDocumentService {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: ['SA', 'RI', 'NI'],
+      supervisorRoster: [{firstName: 'supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'}],
       numberOfWorkers: 7,
-      workerRoster: ['LA', 'OT', 'SS']
+      workerRoster: [{firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
+      { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }]
     };
     return of(data).pipe(delay(1000));
   }

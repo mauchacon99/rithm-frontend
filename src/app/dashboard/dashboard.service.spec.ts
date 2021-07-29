@@ -58,7 +58,8 @@ describe('DashboardService', () => {
         stationName: 'station-1',
         numberOfWorkers: 3,
         workerInitials: [
-          'AA', 'AB'
+          {firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'},
+          {firstName: 'Harry', lastName : 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com'}
         ]
       },
       {
@@ -67,7 +68,8 @@ describe('DashboardService', () => {
         stationName: 'station-2',
         numberOfWorkers: 6,
         workerInitials: [
-          'XR', 'PD'
+          {firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
+          {firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'}
         ]
       }
     ];

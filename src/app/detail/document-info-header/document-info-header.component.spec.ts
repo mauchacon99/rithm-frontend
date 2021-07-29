@@ -11,14 +11,14 @@ describe('DocumentInfoHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DocumentInfoHeaderComponent ],
+      declarations: [DocumentInfoHeaderComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('DocumentInfoHeaderComponent', () => {
     component.documentInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
+      documentRithmId: 'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
@@ -35,9 +35,10 @@ describe('DocumentInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: ['SA', 'RI', 'NI'],
+      supervisorRoster: [{ firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com' }],
       numberOfWorkers: 7,
-      workerRoster: ['LA','OT','SS']
+      workerRoster: [{firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
+      { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }]
     };
     fixture.detectChanges();
   });

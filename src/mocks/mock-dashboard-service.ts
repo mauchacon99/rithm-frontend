@@ -38,7 +38,8 @@ export class MockDashboardService {
         stationName: 'station-1',
         numberOfWorkers: 3,
         workerInitials: [
-          'AA', 'AB'
+          { firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       },
       {
@@ -47,7 +48,8 @@ export class MockDashboardService {
         stationName: 'station-2',
         numberOfWorkers: 6,
         workerInitials: [
-          'XR', 'PD'
+          { firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       }
     ];

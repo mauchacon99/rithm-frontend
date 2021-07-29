@@ -21,7 +21,7 @@ describe('StationCardComponent', () => {
         MatCardModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -33,7 +33,8 @@ describe('StationCardComponent', () => {
       stationName: 'station-2',
       numberOfWorkers: 6,
       workerInitials: [
-        'XR', 'PD'
+        { firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com' },
+        { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
       ]
     };
     fixture.detectChanges();
