@@ -1,3 +1,5 @@
+import { WorkerRosterResponse } from './worker-roster-response';
+
 /**
  * Represents Dashboard stations data.
  */
@@ -16,6 +18,6 @@
   numberOfWorkers: number;
 
   /** Worker Initials. */
-  workerInitials: Array<string>;
+  workerInitials: Array<WorkerRosterResponse>;
 
 }

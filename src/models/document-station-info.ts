@@ -1,4 +1,4 @@
-
+import { WorkerRosterResponse } from './worker-roster-response';
 /**
  * Represents all information about document and station.
  */
@@ -32,13 +32,13 @@ export interface DocumentStationInformation {
   numberOfSupervisors: number;
 
   /** The list of supervisors. */
-  supervisorRoster: Array<string>;
+  supervisorRoster: Array<WorkerRosterResponse>;
 
   /** The number of workers on the roster. */
   numberOfWorkers: number;
 
   /** The list of workers. */
-  workerRoster: Array<string>;
+  workerRoster: Array<WorkerRosterResponse>;
 
   /** Document rithm Id. */
   documentRithmId: string;

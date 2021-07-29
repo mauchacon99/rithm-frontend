@@ -33,4 +33,7 @@ export interface User {
 
   /** The date that this user was created. */
   createdDate: string;
+
+  /** The is Assigned property to match worker roster model. */
+  isAssigned?: boolean;
 }
