@@ -3,14 +3,14 @@
  */
 export enum UserType {
   /** The user with role worker. */
-  worker = 'worker',
+  Worker = 'worker',
 
   /** The user with role supervisor. */
-  supervisor = 'supervisor',
+  Supervisor = 'supervisor',
 
   /** The user with role admin. */
-  admin = 'admin',
+  Admin = 'admin',
 
   /** The user with no role assigned. */
-  none = 'none'
+  None = 'none'
 }

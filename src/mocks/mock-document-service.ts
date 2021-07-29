@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocumentsResponse } from 'src/models';
+import {
+  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocumentsResponse, UserType
+} from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
  */
@@ -60,7 +62,7 @@ export class MockDocumentService {
         { rithmId: '40', documentName: 'Vitamin E Oil', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 4, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         /* eslint-enable max-len */
       ],
-      totalDocuments: 40, userType: 'worker'
+      totalDocuments: 40, userType: UserType.Worker
     };
     // return this.http.get<DashboardStationResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Stations`);
     if (pageNum === 1) {

@@ -3,7 +3,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocumentsResponse } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocumentsResponse, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
 
@@ -44,7 +44,7 @@ describe('DocumentService', () => {
         { rithmId: '9', documentName: 'Bowtie Pasta', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '', priority: 2, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '10', documentName: 'Calcium', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 3, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
       ],
-      totalDocuments: 40, userType: 'admin'
+      totalDocuments: 40, userType: UserType.Admin
     };
     service.getStationDocuments(stationId, pageNum)
       .subscribe((response) => {

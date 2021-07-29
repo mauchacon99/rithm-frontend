@@ -3,24 +3,24 @@
 </p>
 
 <app-text-field *ngIf="
-field?.type === fieldTypes.SHORT_TEXT ||
-field?.type === fieldTypes.LONG_TEXT ||
+field?.type === fieldTypes.ShortText ||
+field?.type === fieldTypes.LongText ||
 field?.type === fieldTypes.URL ||
-field?.type === fieldTypes.EMAIL"
+field?.type === fieldTypes.Email"
 [field]="field"></app-text-field>
 <app-number-field *ngIf="
-field?.type === fieldTypes.NUMBER ||
-field?.type === fieldTypes.PHONE ||
-field?.type === fieldTypes.CURRENCY"></app-number-field>
+field?.type === fieldTypes.Number ||
+field?.type === fieldTypes.Phone ||
+field?.type === fieldTypes.Currency"></app-number-field>
 <app-date-field *ngIf="
-field?.type === fieldTypes.DATE ||
-field?.type === fieldTypes.DATETIME"></app-date-field>
+field?.type === fieldTypes.Date ||
+field?.type === fieldTypes.DateTime"></app-date-field>
 <app-address-field *ngIf="
-field?.type === fieldTypes.ADDRESS"></app-address-field>
+field?.type === fieldTypes.Address"></app-address-field>
 <app-select-field *ngIf="
-field?.type === fieldTypes.SELECT ||
-field?.type === fieldTypes.MULTI_SELECT"
+field?.type === fieldTypes.Select ||
+field?.type === fieldTypes.MultiSelect"
 [field]="field"></app-select-field>
 <app-check-field *ngIf="
-field?.type === fieldTypes.CHECKBOX ||
-field?.type === fieldTypes.CHECKLIST"></app-check-field>
+field?.type === fieldTypes.CheckBox ||
+field?.type === fieldTypes.CheckList"></app-check-field>

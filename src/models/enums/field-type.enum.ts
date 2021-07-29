@@ -3,31 +3,31 @@
  */
 export enum FieldType {
   /** Short text field. */
-  SHORT_TEXT = 'string',
+  ShortText = 'string',
   /** Text area. */
-  LONG_TEXT = 'textarea',
+  LongText = 'textarea',
   /** URL input type. */
   URL = 'url',
   /** Email input type. */
-  EMAIL = 'email',
+  Email = 'email',
   /** Address input type. */
-  ADDRESS = 'address',
+  Address = 'address',
   /** Number input type. */
-  NUMBER = 'integer',
+  Number = 'integer',
   /** Phone number input type. */
-  PHONE = 'phone',
+  Phone = 'phone',
   /** Currency input type. */
-  CURRENCY = 'currency',
+  Currency = 'currency',
   /** Select input type. */
-  SELECT = 'select',
+  Select = 'select',
   /** Multi select input type. */
-  MULTI_SELECT = 'multi-select',
+  MultiSelect = 'multi-select',
   /** Date input type. */
-  DATE = 'date',
+  Date = 'date',
   /** Date time input type. */
-  DATETIME = 'datetime',
+  DateTime = 'datetime',
   /** Checkbox input type. */
-  CHECKBOX = 'checkbox',
+  CheckBox = 'checkbox',
   /** Checklist input type. */
-  CHECKLIST = 'checklist'
+  CheckList = 'checklist'
 }

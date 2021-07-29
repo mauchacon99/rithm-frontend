@@ -1,4 +1,5 @@
 import { Document } from './document';
+import { UserType } from './enums';
 /**
  * Station documents data.
  */
@@ -10,6 +11,6 @@ import { Document } from './document';
   totalDocuments: number;
 
   /** The user role is worker, admin, supervisor or none. */
-  userType: string;
+  userType: UserType;
 
 }

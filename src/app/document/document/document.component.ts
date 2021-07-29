@@ -47,7 +47,7 @@ export class DocumentComponent implements OnInit {
       id: 1,
       prompt: 'Fake question 1',
       instructions: 'Fake instructions 1',
-      type: FieldType.SHORT_TEXT,
+      type: FieldType.ShortText,
       isReadOnly: false,
       isRequired: false
     },
@@ -55,7 +55,7 @@ export class DocumentComponent implements OnInit {
       id: 2,
       prompt: 'Fake question 2',
       instructions: 'Fake instructions 2',
-      type: FieldType.LONG_TEXT,
+      type: FieldType.LongText,
       isReadOnly: false,
       isRequired: true
     },
@@ -71,7 +71,7 @@ export class DocumentComponent implements OnInit {
       id: 4,
       prompt: 'Fake question 4',
       instructions: 'Fake instructions 4',
-      type: FieldType.EMAIL,
+      type: FieldType.Email,
       isReadOnly: false,
       isRequired: true
     },
@@ -79,7 +79,7 @@ export class DocumentComponent implements OnInit {
       id: 5,
       prompt: 'Fake question 5',
       instructions: '',
-      type: FieldType.NUMBER,
+      type: FieldType.Number,
       isReadOnly: false,
       isRequired: true
     },
@@ -87,7 +87,7 @@ export class DocumentComponent implements OnInit {
       id: 6,
       prompt: 'Fake question 6',
       instructions: 'Fake instructions 6',
-      type: FieldType.SELECT,
+      type: FieldType.Select,
       isReadOnly: false,
       isRequired: true,
       options: [
@@ -113,7 +113,7 @@ export class DocumentComponent implements OnInit {
       id: 7,
       prompt: 'Fake question 7',
       instructions: 'Fake instructions 7',
-      type: FieldType.MULTI_SELECT,
+      type: FieldType.MultiSelect,
       isReadOnly: false,
       isRequired: true,
       options: [

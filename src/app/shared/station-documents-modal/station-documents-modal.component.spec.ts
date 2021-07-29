@@ -4,7 +4,7 @@ import { StationDocumentsModalComponent } from './station-documents-modal.compon
 import { MockDocumentService } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
-import { DialogData } from 'src/models';
+import { DialogData, UserType } from 'src/models';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -75,9 +75,9 @@ describe('StationDocumentsModalComponent', () => {
 
   xit('should link to a document if clicked with proper permissions', () => {
     // TODO: This test not currently working.
-    component.userType = 'worker' || 'admin' || 'supervisor';
+    component.userType = UserType.Worker || UserType.Admin || UserType.Supervisor;
     expect(component.checkDocPermission('1')).toBeTruthy();
-    component.userType = 'none';
+    component.userType = UserType.None;
     expect(component.checkDocPermission('1')).toBeFalsy();
   });
 
@@ -90,7 +90,6 @@ describe('StationDocumentsModalComponent', () => {
         await harness.show();
         const tooltipText = await harness.getTooltipText();
         expect(tooltipText).toEqual('This document has been escalated.');
-
       });
   }));
 

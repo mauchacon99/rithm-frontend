@@ -3,17 +3,17 @@
  */
 export enum SidenavDrawerStatus {
   /** The mobile sidenav is open. */
-  sidenavOpen = 'sidenavOpen',
+  SidenavOpen = 'sidenavOpen',
 
   /** The comment drawer is open for a document or station. */
-  commentDrawerOpen = 'commentDrawerOpen',
+  CommentDrawerOpen = 'commentDrawerOpen',
 
   /** The history drawer is open for a document or station. */
-  historyDrawerOpen = 'historyDrawerOpen',
+  HistoryDrawerOpen = 'historyDrawerOpen',
 
   /** The map drawer is open. */
-  mapDrawerOpen = 'mapDrawerOpen',
+  MapDrawerOpen = 'mapDrawerOpen',
 
   /** All drawers and the sidenav are closed. */
-  closed = 'closed'
+  Closed = 'closed'
 }
