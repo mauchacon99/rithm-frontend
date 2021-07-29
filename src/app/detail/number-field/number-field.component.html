@@ -3,7 +3,7 @@
     <mat-label>{{field?.prompt}}</mat-label>
     <div matPrefix class="icon">
       <i *ngIf="field.type === fieldTypeEnum.NUMBER" class="fa fa-pencil-square-o"></i>
-      <i *ngIf="field.type === fieldTypeEnum.CURRENCY" class="fa fa-money"></i>
+      <i *ngIf="field.type === fieldTypeEnum.CURRENCY" class="fas fa-money-bill-wave"></i>
       <i *ngIf="field.type === fieldTypeEnum.PHONE" class="fa fa-phone"></i>
     </div>
     <input *ngIf="field?.type === fieldTypeEnum.NUMBER" mask="separator" [allowNegativeNumbers]="true" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field?.isRequired">
