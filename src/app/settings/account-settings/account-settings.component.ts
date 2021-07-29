@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -7,7 +7,7 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
  * Component for all of the account settings.
@@ -15,7 +15,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AccountSettingsComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AccountSettingsComponent),
+      multi: true
+    }
+  ]
 })
 export class AccountSettingsComponent {
   /** Settings form. */
@@ -48,7 +60,7 @@ export class AccountSettingsComponent {
     };
 
     this.settingsForm = this.fb.group({
-      generalSettingsForm: this.fb.control('')
+      userForm: this.fb.control('')
     });
   }
 
