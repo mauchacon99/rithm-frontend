@@ -124,3 +124,8 @@ a {
 .bg-white {
   background-color: #fff;
 }
+
+.mat-form-field-appearance-outline .mat-form-field-prefix,
+.mat-form-field-appearance-outline .mat-form-field-suffix {
+  place-self: center;
+}

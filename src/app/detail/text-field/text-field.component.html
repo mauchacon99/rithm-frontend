@@ -1,7 +1,13 @@
-<div class="row no-gutters">
+<div class="row no-gutters template-fields">
   <mat-form-field class="col-12" appearance="outline">
     <mat-label>{{field?.prompt}}</mat-label>
-    <input *ngIf="field?.type !== fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field?.prompt}}" type="{{field?.type}}" [required]="field?.isRequired">
+    <div matPrefix class="icon" [ngClass]="{'icon-top': field.type === fieldTypeEnum.LONG_TEXT}">
+      <i *ngIf="field.type === fieldTypeEnum.SHORT_TEXT" class="fas fa-font"></i>
+      <i *ngIf="field.type === fieldTypeEnum.LONG_TEXT" class="fas fa-paragraph"></i>
+      <i *ngIf="field.type === fieldTypeEnum.URL" class="fas fa-link"></i>
+      <i *ngIf="field.type === fieldTypeEnum.EMAIL" class="far fa-envelope"></i>
+    </div>
+    <input *ngIf="field?.type !== fieldTypeEnum.LONG_TEXT" matInput type="{{field?.type}}" [required]="field?.isRequired" class="font-awesome">
     <textarea *ngIf="field?.type === fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field?.prompt}}" rows="3" [required]="field?.isRequired"></textarea>
   </mat-form-field>
 </div>
