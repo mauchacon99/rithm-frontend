@@ -2,7 +2,9 @@
   <mat-form-field class="col-12" appearance="outline">
     <mat-label>{{field?.prompt}}</mat-label>
       <input *ngIf="field?.type === fieldTypeEnum.DATE" matInput [matDatepicker]="picker" placeholder="{{field?.prompt}}" [required]="field?.isRequired">
-      <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matPrefix class="icon" [for]="picker">
+        <i matDatepickerToggleIcon class="fas fa-calendar-day"></i>
+      </mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 </div>
