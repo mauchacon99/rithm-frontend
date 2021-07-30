@@ -1,1 +1,8 @@
-<p>check-field works!</p>
+<div class="row no-gutters template-fields">
+  <mat-form-field class="col-12" appearance="outline">
+    <mat-label>{{field?.prompt}}</mat-label>
+    <section>
+      <mat-checkbox *ngIf="field.type === fieldTypeEnum.CHECKBOX">{{field?.prompt}}</mat-checkbox>
+    </section>
+ </mat-form-field>
+</div>
