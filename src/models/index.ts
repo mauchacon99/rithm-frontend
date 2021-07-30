@@ -21,3 +21,4 @@ export * from './user-account-info';
 export * from './notification-settings';
 export * from './document-station-info';
 export * from './comment';
+export * from './question';

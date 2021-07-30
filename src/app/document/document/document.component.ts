@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
+import { DocumentStationInformation, FieldType, Question } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 
 /**
@@ -40,6 +40,102 @@ export class DocumentComponent implements OnInit {
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
+
+  /** Fake fields, TODO: remove. */
+  fakeFields: Question[] = [
+    {
+      id: 1,
+      prompt: 'Fake question 1',
+      instructions: 'Fake instructions 1',
+      type: FieldType.SHORT_TEXT,
+      isReadOnly: false,
+      isRequired: false
+    },
+    {
+      id: 2,
+      prompt: 'Fake question 2',
+      instructions: 'Fake instructions 2',
+      type: FieldType.LONG_TEXT,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 3,
+      prompt: 'Fake question 3',
+      instructions: '',
+      type: FieldType.URL,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 4,
+      prompt: 'Fake question 4',
+      instructions: 'Fake instructions 4',
+      type: FieldType.EMAIL,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 5,
+      prompt: 'Fake question 5',
+      instructions: '',
+      type: FieldType.NUMBER,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 6,
+      prompt: 'Fake question 6',
+      instructions: 'Fake instructions 6',
+      type: FieldType.SELECT,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      id: 7,
+      prompt: 'Fake question 7',
+      instructions: 'Fake instructions 7',
+      type: FieldType.MULTI_SELECT,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+  ];
 
   constructor(
     private documentService: DocumentService,
@@ -127,6 +223,7 @@ export class DocumentComponent implements OnInit {
         }
         this.documentLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -150,6 +247,7 @@ export class DocumentComponent implements OnInit {
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
       }, (error) => {
+        this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
           'Failed to get connected stations for this document.',
