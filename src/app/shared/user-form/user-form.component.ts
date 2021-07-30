@@ -84,26 +84,26 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
       ],
     });
 
-    const pass: ValidatorFn[] = [
+    const passwordValidators: ValidatorFn[] = [
       this.passwordRequirements.isGreaterThanEightChars(),
       this.passwordRequirements.hasOneLowerCaseChar(),
       this.passwordRequirements.hasOneUpperCaseChar(),
       this.passwordRequirements.hasOneDigitChar(),
       this.passwordRequirements.hasOneSpecialChar()
     ];
-    const confirmPass = [
-      ...pass,
+    const confirmPasswordValidators = [
+      ...passwordValidators,
       this.passwordRequirements.passwordsMatch()
     ];
 
     //Set the validation for passwords.
     if (this.accountCreate) {
-      this.userForm.get('password')?.setValidators([...pass, Validators.required]);
-      this.userForm.get('confirmPassword')?.setValidators([...confirmPass, Validators.required]);
+      this.userForm.get('password')?.setValidators([...passwordValidators, Validators.required]);
+      this.userForm.get('confirmPassword')?.setValidators([...confirmPasswordValidators, Validators.required]);
     } else {
       this.userForm.get('password')?.setValidators(
         [
-          ...pass,
+          ...passwordValidators,
           (control: AbstractControl): ValidationErrors | null => {
             // do your validation logic here:
             if (this.userForm?.get('confirmPassword')?.value) {
@@ -118,7 +118,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
       );
       this.userForm.get('confirmPassword')?.setValidators(
         [
-          ...confirmPass,
+          ...confirmPasswordValidators,
             (control: AbstractControl): ValidationErrors | null => {
             if (this.userForm?.get('password')?.value) {
               if (!control.value) {
