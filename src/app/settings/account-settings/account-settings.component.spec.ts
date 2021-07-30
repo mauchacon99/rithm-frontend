@@ -8,6 +8,7 @@ import { GeneralAccountSettingsComponent } from '../general-account-settings/gen
 import { NotificationSettingsComponent } from '../notification-settings/notification-settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AccountSettingsComponent } from './account-settings.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent;
@@ -22,7 +23,8 @@ describe('AccountSettingsComponent', () => {
       ],
       imports: [
         MatCardModule,
-        MatDialogModule
+        MatDialogModule,
+        ReactiveFormsModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
