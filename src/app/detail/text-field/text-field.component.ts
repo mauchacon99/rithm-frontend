@@ -10,8 +10,9 @@ import { FieldType, Question } from 'src/models';
   styleUrls: ['./text-field.component.scss']
 })
 export class TextFieldComponent {
-    /** The document field to display. */
-    @Input() field!: Question;
+
+  /** The document field to display. */
+  @Input() field!: Question;
 
   /** The field type of the input. */
   fieldTypeEnum = FieldType;
