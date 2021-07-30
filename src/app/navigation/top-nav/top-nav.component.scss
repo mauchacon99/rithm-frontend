@@ -34,6 +34,7 @@ nav {
       min-width: 100px;
       padding: 23px 10px;
       text-align: center;
+      height: 100%;
 
       &:hover {
         cursor: pointer;
@@ -64,7 +65,7 @@ nav {
 
     i {
       color: #fff;
-      font-size: font-calc(24);
+      font-size: fixed-font-size(24);
     }
 
     &:hover {

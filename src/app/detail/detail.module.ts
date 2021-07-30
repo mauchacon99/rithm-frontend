@@ -24,6 +24,7 @@ import { DateFieldComponent } from './date-field/date-field.component';
 import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -54,7 +55,8 @@ import { CheckFieldComponent } from './check-field/check-field.component';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   exports: [
     SubHeaderComponent,

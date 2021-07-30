@@ -19,7 +19,8 @@ field?.type === fieldTypes.DATETIME"></app-date-field>
 field?.type === fieldTypes.ADDRESS"></app-address-field>
 <app-select-field *ngIf="
 field?.type === fieldTypes.SELECT ||
-field?.type === fieldTypes.MULTI_SELECT"></app-select-field>
+field?.type === fieldTypes.MULTI_SELECT"
+[field]="field"></app-select-field>
 <app-check-field *ngIf="
 field?.type === fieldTypes.CHECKBOX ||
 field?.type === fieldTypes.CHECKLIST"></app-check-field>

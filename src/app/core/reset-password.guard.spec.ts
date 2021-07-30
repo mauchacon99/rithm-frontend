@@ -1,4 +1,3 @@
-/* eslint-disable  */
 import { TestBed } from '@angular/core/testing';
 import { convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
