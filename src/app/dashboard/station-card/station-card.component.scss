@@ -8,6 +8,9 @@ mat-card {
   h6 {
     font-weight: 500;
     color: $accent-blue;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .docs {
