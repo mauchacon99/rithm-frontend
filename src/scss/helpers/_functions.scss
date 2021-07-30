@@ -4,3 +4,8 @@
 @function font-calc($target-size) {
   @return math.div($target-size, 16) + rem;
 }
+/// Return a fixed font-size in pixels
+/// @param {number} $size the size of the font in px
+@function fixed-font-size($size) {
+  @return $size + px;
+}

@@ -82,7 +82,59 @@ export class DocumentComponent implements OnInit {
       type: FieldType.NUMBER,
       isReadOnly: false,
       isRequired: true
-    }
+    },
+    {
+      id: 6,
+      prompt: 'Fake question 6',
+      instructions: 'Fake instructions 6',
+      type: FieldType.SELECT,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      id: 7,
+      prompt: 'Fake question 7',
+      instructions: 'Fake instructions 7',
+      type: FieldType.MULTI_SELECT,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
   ];
 
   constructor(
@@ -171,6 +223,7 @@ export class DocumentComponent implements OnInit {
         }
         this.documentLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -194,6 +247,7 @@ export class DocumentComponent implements OnInit {
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
       }, (error) => {
+        this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
           'Failed to get connected stations for this document.',

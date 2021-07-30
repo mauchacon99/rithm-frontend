@@ -81,8 +81,6 @@ describe('CommentService', () => {
   it('should respond with a posted comment', () => {
     const comment = {
       displayText: 'test',
-      dateCreated: '2021-07-14T18:57:59.771Z',
-      userRithmId: '1234',
       documentRithmId: '1234',
       stationRithmId: '1234'
     };
@@ -98,7 +96,7 @@ describe('CommentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual({ comment });
+    expect(req.request.body).toEqual({ ...comment });
 
     req.flush(expectedResponse);
     httpTestingController.verify();

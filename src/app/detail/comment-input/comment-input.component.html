@@ -3,7 +3,7 @@
     <mat-label>Add a comment</mat-label>
     <input matInput type="text" placeholder="Add a comment..." formControlName="comment">
   </mat-form-field>
-  <button id="commentPostButton" mat-icon-button color="accent" [disabled]="!commentForm.valid">
+  <button type="submit" id="commentPostButton" mat-icon-button color="accent" [disabled]="!commentForm.valid">
     <i class="fas fa-paper-plane"></i>
   </button>
 </form>

@@ -6,6 +6,9 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockCommentService, MockErrorService } from 'src/mocks';
+import { CommentService } from '../comment.service';
 
 import { CommentInputComponent } from './comment-input.component';
 
@@ -22,6 +25,10 @@ describe('CommentInputComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatFormFieldModule,
+      ],
+      providers: [
+        { provide: CommentService, useClass: MockCommentService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
     .compileComponents();
