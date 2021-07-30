@@ -15,20 +15,22 @@
   </mat-form-field>
 
   <!-- Email -->
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field [ngClass]="{'col-md-6 col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
     <mat-label>Email</mat-label>
     <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
   </mat-form-field>
 
+  <div *ngIf="!accountCreate" class="col-md-6 col-sm-12"></div>
+
   <!-- Password -->
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field [ngClass]="{'col-md-6 col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
     <mat-label>{{ getPasswordLabel() }}</mat-label>
     <input id="password" type="password" matInput placeholder="Password" formControlName="password"
       (focus)="togglePasswordRequirements('password')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
   </mat-form-field>
 
   <!-- Confirm Password -->
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field [ngClass]="{'col-md-6 col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
     <mat-label>{{ getPasswordLabel(true) }}</mat-label>
     <input id="confirmPassword" type="password" matInput placeholder="Confirm password" formControlName="confirmPassword"
       (focus)="togglePasswordRequirements('confirmPassword')" (focusout)="togglePasswordRequirements('')" autocomplete="new-password">

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -7,6 +7,7 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
  * Component for all of the account settings.
@@ -14,9 +15,23 @@ import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-m
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AccountSettingsComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AccountSettingsComponent),
+      multi: true
+    }
+  ]
 })
 export class AccountSettingsComponent {
+  /** Settings form. */
+  settingsForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
@@ -27,10 +42,13 @@ export class AccountSettingsComponent {
   /** Notification settings model. */
   notificationSettings: NotificationSettings;
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
+    private errorService: ErrorService,
+    private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private errorService: ErrorService,) {
+    ) {
     this.userAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
@@ -40,13 +58,21 @@ export class AccountSettingsComponent {
       comments: true,
       commentMentions: false
     };
+
+    this.settingsForm = this.fb.group({
+      userForm: this.fb.control('')
+    });
   }
 
   /**
    * Updates all settings for the user.
    */
   updateSettings(): void {
-    // TODO: determine changes and make requests
+    this.isLoading = true;
+    // eslint-disable-next-line max-len
+    console.log(this.settingsForm.value.userForm.firstName + ' ' + this.settingsForm.value.userForm.password);
+    this.updateUserAccount();
+    this.updateNotificationSettings();
   }
 
   /**
@@ -91,7 +117,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-    panelClass: 'terms-condition',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
