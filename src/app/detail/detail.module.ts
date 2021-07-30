@@ -29,6 +29,7 @@ import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
+//This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
