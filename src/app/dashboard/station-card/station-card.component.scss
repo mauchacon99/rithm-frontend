@@ -19,6 +19,10 @@ mat-card {
     float: left;
     margin-top: 10px;
 
+    p.overline {
+      font-size: fixed-font-size(10) !important;
+    }
+
     span.circles {
       div.doc-count {
         margin: 5px 2px;
