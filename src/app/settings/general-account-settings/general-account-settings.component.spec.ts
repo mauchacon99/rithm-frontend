@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 
@@ -13,6 +14,9 @@ describe('GeneralAccountSettingsComponent', () => {
       declarations: [
         GeneralAccountSettingsComponent,
         MockComponent(UserFormComponent)
+      ],
+      imports: [
+        ReactiveFormsModule
       ]
     })
     .compileComponents();
