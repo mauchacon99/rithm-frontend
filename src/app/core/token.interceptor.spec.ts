@@ -71,9 +71,13 @@ describe('TokenInterceptor', () => {
 
   it('should sign the user out if an auth-required request is made when the user is not signed in', () => {
     const service = TestBed.inject(DashboardService);
+    const spy = spyOn(TestBed.inject(UserService), 'signOut');
+    let res;
     service.getDashboardHeader().subscribe(response => {
-      expect(response).toBeFalsy();
+      res = response;
     });
+    expect(spy).toHaveBeenCalled();
+    expect(res).toBeUndefined();
   });
 
 });
