@@ -15,11 +15,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
 })
 export class AccountSettingsComponent {
-  /** Sign up form. */
-  signUpForm: FormGroup;
+  /** Settings form. */
+  settingsForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
@@ -30,11 +30,13 @@ export class AccountSettingsComponent {
   /** Notification settings model. */
   notificationSettings: NotificationSettings;
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
+    private errorService: ErrorService,
+    private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private errorService: ErrorService,
-    private fb: FormBuilder,) {
+    ) {
     this.userAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
@@ -44,7 +46,8 @@ export class AccountSettingsComponent {
       comments: true,
       commentMentions: false
     };
-    this.signUpForm = this.fb.group({
+
+    this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
     });
   }
@@ -53,7 +56,10 @@ export class AccountSettingsComponent {
    * Updates all settings for the user.
    */
   updateSettings(): void {
-    // TODO: determine changes and make requests
+    this.isLoading = true;
+    this.updateUserAccount();
+    // TODO: enable when notifications settings are addressed
+    // this.updateNotificationSettings();
   }
 
   /**
@@ -107,15 +113,6 @@ export class AccountSettingsComponent {
         showAgreeButton: false
       }
     });
-  }
-
-  /**
-   * Formgroup for userForm.
-   *
-   * @returns SignUpForm property userForm.
-   */
-  get userForm(): FormGroup {
-    return this.signUpForm.get('userForm') as FormGroup;
   }
 
 }

@@ -5,8 +5,10 @@
       <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">
         <h3 class="mb-4">Account Settings</h3>
 
-        <form (ngSubmit)="updateSettings()" [formGroup]="signUpForm">
-          <app-general-account-settings [parentFormGroup]="signUpForm"></app-general-account-settings>
+        <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+          <h4 class="pb-3">General Account Settings</h4>
+
+          <app-user-form formControlName="userForm" class="row"></app-user-form>
 
           <app-notification-settings></app-notification-settings>
 
@@ -15,7 +17,7 @@
           </div>
 
           <div class="buttons mt-4">
-            <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.dirty || !signUpForm.valid">Save Changes</button>
+            <button type="submit" mat-raised-button color="accent" [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
           </div>
         </form>
 
