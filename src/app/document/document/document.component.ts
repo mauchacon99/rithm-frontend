@@ -166,7 +166,12 @@ export class DocumentComponent implements OnInit {
       type: FieldType.CHECKBOX,
       isReadOnly: false,
       isRequired: true,
-      options: []
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+      ]
     },
     {
       id: 12,
