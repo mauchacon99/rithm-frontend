@@ -84,8 +84,32 @@ export class DocumentComponent implements OnInit {
       isRequired: true
     },
     {
-      id: 6,
+      id: 5,
       prompt: 'Fake question 6',
+      instructions: '',
+      type: FieldType.PHONE,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 5,
+      prompt: 'Fake question 7',
+      instructions: '',
+      type: FieldType.CURRENCY,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 8,
+      prompt: 'Fake question 8',
+      instructions: '',
+      type: FieldType.DATE,
+      isReadOnly: false,
+      isRequired: true
+    },
+    {
+      id: 6,
+      prompt: 'Fake question 9',
       instructions: 'Fake instructions 6',
       type: FieldType.SELECT,
       isReadOnly: false,
@@ -111,7 +135,7 @@ export class DocumentComponent implements OnInit {
     },
     {
       id: 7,
-      prompt: 'Fake question 7',
+      prompt: 'Fake question 10',
       instructions: 'Fake instructions 7',
       type: FieldType.MULTI_SELECT,
       isReadOnly: false,

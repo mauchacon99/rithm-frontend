@@ -28,7 +28,7 @@
 }
 
 /* stylelint-disable-next-line */
-:host::ng-deep .userAvatar {
+:host::ng-deep .user-avatar {
   .circle-30-secondary:hover {
     cursor: default;
     background-color: $secondary-gray;
