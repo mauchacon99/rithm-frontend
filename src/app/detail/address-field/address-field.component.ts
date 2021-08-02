@@ -353,7 +353,7 @@ export class AddressFieldComponent {
       id: 5,
       prompt: 'Postal code',
       instructions: '',
-      type: FieldType.NUMBER,
+      type: FieldType.ADDRESS,
       isReadOnly: false,
       isRequired: true
     },
