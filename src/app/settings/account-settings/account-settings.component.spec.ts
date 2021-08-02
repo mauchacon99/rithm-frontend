@@ -3,12 +3,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { MockPopupService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 import { NotificationSettingsComponent } from '../notification-settings/notification-settings.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { AccountSettingsComponent } from './account-settings.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
+import { ErrorService } from 'src/app/core/error.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent;
@@ -30,7 +31,8 @@ describe('AccountSettingsComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
     .compileComponents();

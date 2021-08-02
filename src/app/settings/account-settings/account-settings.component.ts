@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -7,7 +7,7 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
-import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for all of the account settings.
@@ -16,18 +16,6 @@ import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angul
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AccountSettingsComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AccountSettingsComponent),
-      multi: true
-    }
-  ]
 })
 export class AccountSettingsComponent {
   /** Settings form. */
@@ -69,10 +57,9 @@ export class AccountSettingsComponent {
    */
   updateSettings(): void {
     this.isLoading = true;
-    // eslint-disable-next-line max-len
-    console.log(this.settingsForm.value.userForm.firstName + ' ' + this.settingsForm.value.userForm.password);
     this.updateUserAccount();
-    this.updateNotificationSettings();
+    // TODO: enable when notifications settings are addressed
+    // this.updateNotificationSettings();
   }
 
   /**
@@ -127,14 +114,5 @@ export class AccountSettingsComponent {
       }
     });
   }
-
-  // /**
-  //  * Formgroup for userForm.
-  //  *
-  //  * @returns SignUpForm property userForm.
-  //  */
-  // get userForm(): FormGroup {
-  //   return this.signUpForm.get('userForm') as FormGroup;
-  // }
 
 }

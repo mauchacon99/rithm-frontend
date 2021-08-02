@@ -15,12 +15,10 @@
   </mat-form-field>
 
   <!-- Email -->
-  <mat-form-field [ngClass]="{'col-md-6 col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
+  <mat-form-field [ngClass]="{'col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
     <mat-label>Email</mat-label>
     <input type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
   </mat-form-field>
-
-  <div *ngIf="!accountCreate" class="col-md-6 col-sm-12"></div>
 
   <!-- Password -->
   <mat-form-field [ngClass]="{'col-md-6 col-sm-12' : !accountCreate, 'col-12' : accountCreate}" appearance="outline">
