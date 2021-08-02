@@ -1,7 +1,7 @@
 /**
  * Represents data to be displayed in the top header of the worker dashboard.
  *
- * @see `DashboardCount` model in back end.
+ * @see `DashboardCount` model in the back end.
  */
 export interface WorkerDashboardHeaderData {
 
