@@ -11,10 +11,12 @@ field?.type === fieldTypes.Email"
 <app-number-field *ngIf="
 field?.type === fieldTypes.Number ||
 field?.type === fieldTypes.Phone ||
-field?.type === fieldTypes.Currency"></app-number-field>
+field?.type === fieldTypes.Currency"
+[field]="field"></app-number-field>
 <app-date-field *ngIf="
 field?.type === fieldTypes.Date ||
-field?.type === fieldTypes.DateTime"></app-date-field>
+field?.type === fieldTypes.DateTime"
+[field]="field"></app-date-field>
 <app-address-field *ngIf="
 field?.type === fieldTypes.Address"></app-address-field>
 <app-select-field *ngIf="
