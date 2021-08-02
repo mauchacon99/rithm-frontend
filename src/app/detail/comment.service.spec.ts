@@ -10,23 +10,13 @@ const MICROSERVICE_PATH = '/commentservice/api/comment';
 
 const testComment: Comment = {
   displayText: 'string',
+  stationRithmId: 'jkdfkdf',
   dateCreated: '2021-07-14T18:57:59.771Z',
   dateLastEdited: '2021-07-14T18:57:59.771Z',
   archived: true,
   userFirstName: 'Alex',
   userLastName: 'Can',
   userFullName: 'Alex Can',
-  station: {
-    name: 'string',
-    instructions: 'sdfa',
-    documents: 1,
-    supervisors: [],
-    rosterUsers: []
-  },
-  document: {
-    // eslint-disable-next-line max-len
-    rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1
-  },
   rithmId: 'string'
 };
 
