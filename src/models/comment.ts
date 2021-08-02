@@ -1,11 +1,10 @@
 import { Document } from './document';
 import { Station } from './station';
-import { User } from './user';
 
 /**
  * Represents all info about a comment on a station or document.
  */
- export interface Comment {
+export interface Comment {
   /** The text to display. */
   displayText: string;
 
@@ -24,9 +23,6 @@ import { User } from './user';
   /** Id of user that made the comment. */
   userRithmId?: string;
 
-  /** User that made the comment. */
-  user?: User;
-
   /** Id of document where the comment is located. */
   documentRithmId?: string;
 
@@ -38,5 +34,14 @@ import { User } from './user';
 
   /** Station where comment is located. */
   station?: Station;
+
+  /** First name of the user that made the comment. */
+  userFirstName?: string;
+
+  /** Last name of user the that made the comment. */
+  userLastName?: string;
+
+  /** Full name of user the that made the comment. */
+  userFullName?: string;
 
 }

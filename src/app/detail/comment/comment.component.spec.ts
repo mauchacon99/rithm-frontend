@@ -26,15 +26,9 @@ describe('CommentComponent', () => {
       dateCreated: '2021-07-14T18:57:59.771Z',
       dateLastEdited: '2021-07-14T18:57:59.771Z',
       archived: true,
-      user: {
-        rithmId: '123',
-        firstName: 'Testy',
-        lastName: 'Test',
-        email: 'test@test.com',
-        objectPermissions: [],
-        groups: [],
-        createdDate: '1/2/34'
-      },
+      userFirstName: 'Alex',
+      userLastName: 'Can',
+      userFullName: 'Alex Can',
       station: {
         name: 'string',
         instructions: 'sdfa',
