@@ -7,11 +7,11 @@
  export interface ConnectedStationInfo {
 
   /** The name name of the station. */
-  stationName: string;
+  readonly stationName: string;
 
   /** Total documents currently in the station. */
-  totalDocuments: number;
+  readonly totalDocuments: number;
 
   /** Whether the station generates new documents or not. */
-  isGenerator: boolean;
+  readonly isGenerator: boolean;
 }

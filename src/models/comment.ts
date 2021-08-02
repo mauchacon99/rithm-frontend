@@ -3,34 +3,34 @@
  */
 export interface Comment {
   /** The text to display. */
-  displayText: string;
+  readonly displayText: string;
 
   /** Id of station where the comment is located. */
-  stationRithmId: string;
+  readonly stationRithmId: string;
 
   /** Id of document where the comment is located. Only present for document comments. */
-  documentRithmId?: string;
+  readonly documentRithmId?: string;
 
   /** The date the comment was created. */
-  dateCreated?: string;
+  readonly dateCreated?: string;
 
   /** The date the comment was last edited. */
-  dateLastEdited?: string;
+  readonly dateLastEdited?: string;
 
   /** Indicates whether the comment is archived. */
-  archived?: boolean;
+  readonly archived?: boolean;
 
   /** Id of the comment. */
-  rithmId?: string;
+  readonly rithmId?: string;
 
   /** Id of user that made the comment. */
-  userRithmId?: string;
+  readonly userRithmId?: string;
 
   /** First name of the user that made the comment. */
-  userFirstName?: string;
+  readonly userFirstName?: string;
 
   /** Last name of user the that made the comment. */
-  userLastName?: string;
+  readonly userLastName?: string;
 
   /**
    * Full name of user the that made the comment.
@@ -38,6 +38,6 @@ export interface Comment {
    * @deprecated Don't use this; it might be removed in the future. Use `userFirstName`
    * and `userLastName` instead.
    */
-  userFullName?: string;
+  readonly userFullName?: string;
 
 }
