@@ -30,5 +30,5 @@
 /* stylelint-disable-next-line */
 :host::ng-deep .circle-30-secondary:hover {
   cursor: default;
-  background-color: #667080;
+  background-color: $secondary-gray;
 }
