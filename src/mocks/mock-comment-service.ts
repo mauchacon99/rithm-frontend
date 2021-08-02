@@ -20,6 +20,7 @@ export class MockCommentService {
   getDocumentComments(documentId: string, stationId: string, pageNum: number, commentsPerPage: number): Observable<Comment[]> {
     const comments: Comment[] = [{
       displayText: 'This is first comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-16T17:26:47.3506612Z',
       dateLastEdited: '2021-07-14T17:26:47.3506612Z',
       archived: false,
@@ -27,6 +28,7 @@ export class MockCommentService {
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
     }, {
       displayText: 'This is second comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-15T17:26:47.3506612Z',
       dateLastEdited: '2021-07-12T17:26:47.3506612Z',
       archived: false,
@@ -46,23 +48,13 @@ export class MockCommentService {
   postDocumentComment(comment: Comment): Observable<Comment> {
     const response: Comment = {
       displayText: 'string',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-07-14T18:57:59.771Z',
       dateLastEdited: '2021-07-14T18:57:59.771Z',
       archived: true,
       userFirstName: 'Alex',
       userLastName: 'Can',
       userFullName: 'Alex Can',
-      station: {
-        name: 'string',
-        instructions: 'sdfa',
-        documents: 1,
-        supervisors: [],
-        rosterUsers: []
-      },
-      document: {
-        // eslint-disable-next-line max-len
-        rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1
-      },
       rithmId: 'string'
     };
 
