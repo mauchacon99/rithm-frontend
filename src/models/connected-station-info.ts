@@ -1,6 +1,6 @@
 
 /**
- * Represents all information about connected Station.
+ * Represents all information about a connected station.
  */
  export interface ConnectedStationInfo {
 
