@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
-import { DashboardHeaderResponse, DashboardStationData, WorkerRosterResponse } from 'src/models';
+import { WorkerDashboardHeaderData, DashboardStationData, WorkerRosterResponse } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
 
@@ -14,12 +14,13 @@ export class MockDashboardService {
    *
    * @returns Dashboard header data.
    */
-  getDashboardHeader(): Observable<DashboardHeaderResponse> {
-    const dashboardHeaderData: DashboardHeaderResponse = {
+  getDashboardHeader(): Observable<WorkerDashboardHeaderData> {
+    const dashboardHeaderData: WorkerDashboardHeaderData = {
       userRithmId: '1234',
       id: 1,
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
+      lazyLoader: {}
     };
 
     return of(dashboardHeaderData).pipe(delay(1000));
