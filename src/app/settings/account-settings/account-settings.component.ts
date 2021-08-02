@@ -115,13 +115,4 @@ export class AccountSettingsComponent {
     });
   }
 
-  // /**
-  //  * Formgroup for userForm.
-  //  *
-  //  * @returns SignUpForm property userForm.
-  //  */
-  // get userForm(): FormGroup {
-  //   return this.signUpForm.get('userForm') as FormGroup;
-  // }
-
 }
