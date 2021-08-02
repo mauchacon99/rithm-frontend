@@ -4,10 +4,10 @@
 export enum FieldType {
 
   /** Short text field. */
-  ShortText = 'string',
+  ShortText = 'shortText',
 
   /** Text area. */
-  LongText = 'textarea',
+  LongText = 'longText',
 
   /** URL input type. */
   URL = 'url',
@@ -19,19 +19,19 @@ export enum FieldType {
   Address = 'address',
 
   /** Number input type. */
-  Number = 'integer',
+  Number = 'number',
 
   /** Phone number input type. */
-  Phone = 'phone',
+  Phone = 'phoneNumber',
 
   /** Currency input type. */
   Currency = 'currency',
 
   /** Select input type. */
-  Select = 'select',
+  Select = 'singleDropdown',
 
   /** Multi select input type. */
-  MultiSelect = 'multi-select',
+  MultiSelect = 'multiDropdown',
 
   /** Date input type. */
   Date = 'date',
@@ -40,9 +40,9 @@ export enum FieldType {
   DateTime = 'datetime',
 
   /** Checkbox input type. */
-  CheckBox = 'checkbox',
+  CheckBox = 'singleCheckbox',
 
   /** Checklist input type. */
-  CheckList = 'checklist'
+  CheckList = 'multiCheckbox'
 
 }
