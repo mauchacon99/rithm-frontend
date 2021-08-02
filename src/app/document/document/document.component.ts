@@ -87,7 +87,7 @@ export class DocumentComponent implements OnInit {
       id: 5,
       prompt: 'Fake question 6',
       instructions: '',
-      type: FieldType.PHONE,
+      type: FieldType.Phone,
       isReadOnly: false,
       isRequired: true
     },
@@ -95,7 +95,7 @@ export class DocumentComponent implements OnInit {
       id: 5,
       prompt: 'Fake question 7',
       instructions: '',
-      type: FieldType.CURRENCY,
+      type: FieldType.Currency,
       isReadOnly: false,
       isRequired: true
     },
@@ -103,7 +103,7 @@ export class DocumentComponent implements OnInit {
       id: 8,
       prompt: 'Fake question 8',
       instructions: '',
-      type: FieldType.DATE,
+      type: FieldType.Date,
       isReadOnly: false,
       isRequired: true
     },
