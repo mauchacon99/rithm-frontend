@@ -26,3 +26,9 @@
     color: map-get($secondary-gray-palette, 400);
   }
 }
+
+/* stylelint-disable-next-line */
+:host::ng-deep .circle-30-secondary:hover {
+  cursor: default;
+  background-color: #667080;
+}
