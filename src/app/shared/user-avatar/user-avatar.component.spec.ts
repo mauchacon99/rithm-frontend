@@ -30,8 +30,6 @@ describe('UserAvatarComponent', () => {
       firstName: 'Testy',
       lastName: 'Test',
       email: 'test@test.com',
-      objectPermissions: [],
-      groups: [],
       createdDate: '1/2/34'
     };
     fixture.detectChanges();
