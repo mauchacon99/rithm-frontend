@@ -1,7 +1,7 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { DashboardHeaderResponse, Document } from 'src/models';
+import { WorkerDashboardHeaderData, Document } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, WorkerRosterResponse } from 'src/models';
@@ -29,11 +29,12 @@ describe('DashboardService', () => {
   });
 
   it('should successfully get dashboard header data', () => {
-    const expectedResponse: DashboardHeaderResponse = {
+    const expectedResponse: WorkerDashboardHeaderData = {
       userRithmId: '1234',
       id: 1,
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
+      lazyLoader: {}
     };
 
     service.getDashboardHeader()
