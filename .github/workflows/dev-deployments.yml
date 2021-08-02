@@ -53,14 +53,8 @@ jobs:
     - name: Generating test coverage
       run: npm run test-ci
 
-    - name: Stopping IIS pool
-      run: c:\batch\elevate Stop-WebAppPool -Name devapp
-
     - name: Deploying documentation site
       run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
-
-    - name: Starting IIS pool
-      run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the Compodoc documentation site
   compodoc:
@@ -80,14 +74,8 @@ jobs:
     - name: Compiling documentation
       run: npm run compile-docs
 
-    - name: Stopping IIS pool
-      run: c:\batch\elevate Stop-WebAppPool -Name devapp
-
     - name: Deploying documentation site
       run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
-
-    - name: Starting IIS pool
-      run: c:\batch\elevate Start-WebAppPool -Name devapp
 
   # Deploys the SassDoc documentation site
   sassdoc:
@@ -107,11 +95,5 @@ jobs:
     - name: Compiling documentation
       run: npm run compile-style-docs
 
-    - name: Stopping IIS pool
-      run: c:\batch\elevate Stop-WebAppPool -Name devapp
-
     - name: Deploying documentation site
       run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
-
-    - name: Starting IIS pool
-      run: c:\batch\elevate Start-WebAppPool -Name devapp
