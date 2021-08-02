@@ -182,7 +182,7 @@ export class DocumentComponent implements OnInit {
         },
         {
           value: 'Option 2',
-          isSelected: true
+          isSelected: false
         },
         {
           value: 'Option 3',

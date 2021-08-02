@@ -1,1 +1,13 @@
 @import '../custom-fields.scss';
+@import 'variables';
+
+.check-field {
+  min-height: 87px;
+  line-height: 30px;
+  color: $secondary-gray;
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -1,6 +1,10 @@
-<div class="row no-gutters template-fields">
+<div class="row no-gutters check-field">
       <mat-checkbox *ngIf="field.type === fieldTypeEnum.CHECKBOX" [required]="field?.isRequired">
         {{field?.prompt}}
       </mat-checkbox>
-
+      <div *ngIf="field.type === fieldTypeEnum.CHECKLIST" class="checklist">
+        <mat-checkbox *ngFor="let option of field?.options" [value]="option.value">
+          {{option.value}}
+        </mat-checkbox>
+      </div>
 </div>
