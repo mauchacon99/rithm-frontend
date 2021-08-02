@@ -1,1 +1,6 @@
 @import '../custom-fields.scss';
+
+/* stylelint-disable-next-line */
+.selects ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  height: 63px;
+}
