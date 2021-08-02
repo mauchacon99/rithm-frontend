@@ -23,11 +23,11 @@ jobs:
     - name: Installing dependencies
       run: npm ci
 
-    - name: Compiling app
-      run: npm run build
-
     - name: Stopping IIS pool
       run: c:\batch\elevate Stop-WebAppPool -Name devapp
+
+    - name: Compiling app
+      run: npm run build
 
     - name: Deploying app
       run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
