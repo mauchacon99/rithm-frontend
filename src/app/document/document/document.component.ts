@@ -78,13 +78,13 @@ export class DocumentComponent implements OnInit {
     {
       id: 5,
       prompt: 'Fake question 5',
-      instructions: '',
+      instructions: 'Fake question 5',
       type: FieldType.NUMBER,
       isReadOnly: false,
       isRequired: true
     },
     {
-      id: 5,
+      id: 6,
       prompt: 'Fake question 6',
       instructions: '',
       type: FieldType.PHONE,
@@ -92,7 +92,7 @@ export class DocumentComponent implements OnInit {
       isRequired: true
     },
     {
-      id: 5,
+      id: 7,
       prompt: 'Fake question 7',
       instructions: '',
       type: FieldType.CURRENCY,
@@ -102,15 +102,15 @@ export class DocumentComponent implements OnInit {
     {
       id: 8,
       prompt: 'Fake question 8',
-      instructions: '',
+      instructions: 'Fake question 8',
       type: FieldType.DATE,
       isReadOnly: false,
       isRequired: true
     },
     {
-      id: 6,
+      id: 9,
       prompt: 'Fake question 9',
-      instructions: 'Fake instructions 6',
+      instructions: 'Fake instructions 9',
       type: FieldType.SELECT,
       isReadOnly: false,
       isRequired: true,
@@ -134,9 +134,9 @@ export class DocumentComponent implements OnInit {
       ]
     },
     {
-      id: 7,
+      id: 10,
       prompt: 'Fake question 10',
-      instructions: 'Fake instructions 7',
+      instructions: 'Fake instructions 10',
       type: FieldType.MULTI_SELECT,
       isReadOnly: false,
       isRequired: true,
@@ -148,6 +148,46 @@ export class DocumentComponent implements OnInit {
         {
           value: 'Option 2',
           isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      id: 11,
+      prompt: 'Fake question 11',
+      instructions: 'Fake instructions 11',
+      type: FieldType.CHECKBOX,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+      ]
+    },
+    {
+      id: 12,
+      prompt: 'Fake question 12',
+      instructions: 'Fake instructions 12',
+      type: FieldType.CHECKLIST,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: false
         },
         {
           value: 'Option 3',

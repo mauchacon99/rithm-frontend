@@ -1,1 +1,7 @@
-<p>check-field works!</p>
+<div class="row no-gutters check-field pb-4">
+      <div class="checklist">
+        <mat-checkbox *ngFor="let option of field?.options" [value]="option.value">
+          {{option.value}}
+        </mat-checkbox>
+      </div>
+</div>
