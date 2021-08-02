@@ -6,7 +6,7 @@
       <i *ngIf="field.type === fieldTypeEnum.CURRENCY" class="fas fa-money-bill-wave"></i>
       <i *ngIf="field.type === fieldTypeEnum.PHONE" class="fa fa-phone"></i>
     </div>
-    <input *ngIf="field?.type === fieldTypeEnum.NUMBER" mask="separator" [allowNegativeNumbers]="true" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field?.isRequired">
+    <input *ngIf="field?.type === fieldTypeEnum.NUMBER" matInput placeholder="{{field?.prompt}}" type="number" [required]="field?.isRequired">
     <input *ngIf="field?.type === fieldTypeEnum.CURRENCY" prefix="$ " mask="separator.2" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field?.isRequired">
     <input *ngIf="field?.type === fieldTypeEnum.PHONE" mask="(000) 000-0000" matInput placeholder="{{field?.prompt}}" type="tel" [required]="field?.isRequired">
   </mat-form-field>
