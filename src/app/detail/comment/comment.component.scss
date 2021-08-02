@@ -28,7 +28,9 @@
 }
 
 /* stylelint-disable-next-line */
-:host::ng-deep .circle-30-secondary:hover {
-  cursor: default;
-  background-color: $secondary-gray;
+:host::ng-deep .userAvatar {
+  .circle-30-secondary:hover {
+    cursor: default;
+    background-color: $secondary-gray;
+  }
 }
