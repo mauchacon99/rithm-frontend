@@ -1,0 +1,23 @@
+/**
+ * Represents data to be displayed in the top header of the worker dashboard.
+ *
+ * @see `DashboardCount` model in back end.
+ */
+export interface WorkerDashboardHeaderData {
+
+  /** The Rithm ID for the user that requested the dashboard header. */
+  userRithmId: string;
+
+  /** The number of previously started documents for the user. */
+  startedDocuments: number;
+
+  /** The number of stations where the user is on the work roster. */
+  rosterStations: number;
+
+  /** The database ID for the header object. */
+  id: number;
+
+  /** Unknown object. Don't use. */
+  lazyLoader: unknown;
+
+}
