@@ -141,7 +141,7 @@ export class UserService {
         // eslint-disable-next-line @typescript-eslint/quotes
         "Content-Type": "application/json"
       },
-      body:{email}
+      body: { email }
     });
   }
 
