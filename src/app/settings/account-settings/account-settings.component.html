@@ -10,8 +10,6 @@
 
           <app-user-form formControlName="userForm" class="row"></app-user-form>
 
-          <app-notification-settings></app-notification-settings>
-
           <div class="row">
             <a (click)="viewTermsAndConditions()" class="col my-3">View the terms & conditions</a>
           </div>
@@ -20,8 +18,6 @@
             <button type="submit" mat-raised-button color="accent" [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
           </div>
         </form>
-
-
 
       </mat-card>
     </div>
