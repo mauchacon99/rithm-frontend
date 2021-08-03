@@ -26,3 +26,10 @@
     color: map-get($secondary-gray-palette, 400);
   }
 }
+
+:host::ng-deep .user-avatar {
+  .circle-30-secondary:hover {
+    cursor: default;
+    background-color: $secondary-gray;
+  }
+}

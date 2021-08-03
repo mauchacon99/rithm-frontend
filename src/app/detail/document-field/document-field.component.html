@@ -11,15 +11,19 @@ field?.type === fieldTypes.EMAIL"
 <app-number-field *ngIf="
 field?.type === fieldTypes.NUMBER ||
 field?.type === fieldTypes.PHONE ||
-field?.type === fieldTypes.CURRENCY"></app-number-field>
+field?.type === fieldTypes.CURRENCY"
+[field]="field"></app-number-field>
 <app-date-field *ngIf="
 field?.type === fieldTypes.DATE ||
-field?.type === fieldTypes.DATETIME"></app-date-field>
+field?.type === fieldTypes.DATETIME"
+[field]="field"></app-date-field>
 <app-address-field *ngIf="
 field?.type === fieldTypes.ADDRESS"></app-address-field>
 <app-select-field *ngIf="
 field?.type === fieldTypes.SELECT ||
-field?.type === fieldTypes.MULTI_SELECT"></app-select-field>
+field?.type === fieldTypes.MULTI_SELECT"
+[field]="field"></app-select-field>
 <app-check-field *ngIf="
 field?.type === fieldTypes.CHECKBOX ||
-field?.type === fieldTypes.CHECKLIST"></app-check-field>
+field?.type === fieldTypes.CHECKLIST"
+[field]="field"></app-check-field>
