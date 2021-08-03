@@ -8,6 +8,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation, FieldType, Question } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Main component for viewing a document.
@@ -18,6 +19,8 @@ import { ConnectedStationInfo } from 'src/models';
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+  /** Document form. */
+  documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', {static: true})
@@ -232,8 +235,13 @@ export class DocumentComponent implements OnInit {
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.documentForm = this.fb.group({
+      textField: this.fb.control('')
+    });
+  }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
