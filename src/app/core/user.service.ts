@@ -208,15 +208,16 @@ export class UserService {
     return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`, { responseType: 'text' });
   }
 
+  // TODO: Re-enable when addressing notification settings
   /**
    * Attempts to reset notification settings.
    *
    * @param notificationSettings The user notification settings object.
    * @returns An empty observable.
    */
-  updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
-      notificationSettings);
-  }
+  // updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
+  //   return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
+  //     notificationSettings);
+  // }
 
 }

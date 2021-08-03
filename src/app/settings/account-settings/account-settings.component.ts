@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserAccountInfo, NotificationSettings } from 'src/models';
+import { UserAccountInfo } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
@@ -27,8 +27,9 @@ export class AccountSettingsComponent {
   /** User Account Info model. */
   userAccountInfo: UserAccountInfo;
 
-  /** Notification settings model. */
-  notificationSettings: NotificationSettings;
+  // TODO: Re-enable when addressing notification settings
+  // /** Notification settings model. */
+  // notificationSettings: NotificationSettings;
 
   constructor(
     private userService: UserService,
@@ -42,11 +43,6 @@ export class AccountSettingsComponent {
       lastName: 'Anderson',
       newPassword: 'mamamia'
     };
-    this.notificationSettings = {
-      comments: true,
-      commentMentions: false
-    };
-
     this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
     });
@@ -80,23 +76,25 @@ export class AccountSettingsComponent {
       });
   }
 
+
+  // TODO: Re-enable when addressing notification settings
   /**
    * Update notification settings info.
    */
-  private updateNotificationSettings(): void {
-    this.userService.updateNotificationSettings(this.notificationSettings)
-      .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.popupService.notify('Your notification settings are updated.');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-  }
+  // private updateNotificationSettings(): void {
+  //   this.userService.updateNotificationSettings(this.notificationSettings)
+  //     .pipe(first())
+  //     .subscribe(() => {
+  //       this.isLoading = false;
+  //       this.popupService.notify('Your notification settings are updated.');
+  //     }, (error: HttpErrorResponse) => {
+  //       this.isLoading = false;
+  //       this.errorService.displayError(
+  //         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+  //         error
+  //       );
+  //     });
+  // }
 
   /**
    * Opens the terms and conditions in a modal.
