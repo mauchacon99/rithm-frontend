@@ -21,14 +21,19 @@ export class UserService {
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
 
-  /** The currently signed in user. */
-  user: User | undefined;
-
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router) {
-    this.user = JSON.parse(localStorage.getItem('user') as string) as User;
+    private router: Router) {}
+
+  /**
+   * The currently signed in user.
+   *
+   * @returns The currently signed in user.
+   */
+  get user(): User {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
   }
 
   /**
@@ -45,9 +50,8 @@ export class UserService {
     }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
-        this.user = response.user;
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
-        localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(response.user));
         return response;
       })
     );
@@ -58,7 +62,6 @@ export class UserService {
    */
   signOut(): void {
     this.accessToken = undefined;
-    this.user = undefined;
     this.cookieService.deleteAll();
     localStorage.clear();
     sessionStorage.clear();
@@ -198,15 +201,17 @@ export class UserService {
     const changedAccountInfo = this.getChangedAccountInfo(accountInfo);
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`, changedAccountInfo)
       .pipe(map(() => {
+        const user = this.user;
         if (!this.user) {
           throw new Error('There is no existing user to update');
         }
         if (changedAccountInfo.firstName) {
-          this.user.firstName = changedAccountInfo.firstName;
+          user.firstName = changedAccountInfo.firstName;
         }
         if (changedAccountInfo.lastName) {
-          this.user.lastName = changedAccountInfo.lastName;
+          user.lastName = changedAccountInfo.lastName;
         }
+        localStorage.setItem('user', JSON.stringify(user));
       }));
   }
 
