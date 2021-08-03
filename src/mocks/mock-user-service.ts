@@ -167,7 +167,7 @@ export class MockUserService {
    * @returns An empty observable.
    */
   updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
-    if (!changedAccountInfo) {
+    if (!accountInfo) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
