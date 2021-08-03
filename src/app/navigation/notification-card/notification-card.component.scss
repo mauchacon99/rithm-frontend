@@ -5,18 +5,10 @@
   width: 280px;
 }
 
-.badge {
-  width: 15px;
-  height: 15px;
-  background-color: $accent-blue;
-  border-radius: 50%;
+.badge-accent {
   position: absolute;
   top: 18px;
   right: 7px;
-  font-size: fixed-font-size(8);
-  color: #fff;
-  text-align: center;
-  line-height: 15px;
 }
 
 .subtitle-medium {

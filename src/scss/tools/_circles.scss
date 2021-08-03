@@ -18,3 +18,7 @@
 .circle-40-secondary {
   @include circle(40px, fixed-font-size(16), 40px, map-get($secondary-gray-palette, 600), #fff);
 }
+
+.badge-accent {
+  @include circle(15px, fixed-font-size(8), 15px, map-get($accent-palette, 300), $accent-blue, $accent-blue, default);
+}
