@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserAccountInfo } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
@@ -24,9 +23,6 @@ export class AccountSettingsComponent {
   /** Whether the account settings is loading. */
   isLoading = false;
 
-  /** User Account Info model. */
-  userAccountInfo: UserAccountInfo;
-
   // TODO: Re-enable when addressing notification settings
   // /** Notification settings model. */
   // notificationSettings: NotificationSettings;
@@ -38,11 +34,6 @@ export class AccountSettingsComponent {
     private popupService: PopupService,
     private dialog: MatDialog,
     ) {
-    this.userAccountInfo = {
-      firstName: 'James',
-      lastName: 'Anderson',
-      newPassword: 'mamamia'
-    };
     this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
     });
@@ -62,7 +53,10 @@ export class AccountSettingsComponent {
    * Update user account settings data.
    */
   private updateUserAccount(): void {
-    this.userService.updateUserAccount(this.userAccountInfo)
+    const userFormData = this.settingsForm.get('userForm')?.value;
+    const { firstName, lastName, confirmPassword } = userFormData;
+
+    this.userService.updateUserAccount({ firstName, lastName, newPassword: confirmPassword })
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;
@@ -75,7 +69,6 @@ export class AccountSettingsComponent {
         );
       });
   }
-
 
   // TODO: Re-enable when addressing notification settings
   /**

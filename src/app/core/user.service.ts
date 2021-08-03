@@ -6,7 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -191,12 +191,47 @@ export class UserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param changedAccountInfo The user account settings object.
+   * @param accountInfo The new account settings to be updated.
    * @returns An empty observable.
    */
-  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`,
-      changedAccountInfo);
+  updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
+    const changedAccountInfo = this.getChangedAccountInfo(accountInfo);
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`, changedAccountInfo)
+      .pipe(map(() => {
+        if (!this.user) {
+          throw new Error('There is no existing user to update');
+        }
+        if (changedAccountInfo.firstName) {
+          this.user.firstName = changedAccountInfo.firstName;
+        }
+        if (changedAccountInfo.lastName) {
+          this.user.lastName = changedAccountInfo.lastName;
+        }
+      }));
+  }
+
+  /**
+   * Returns user account info with only the changed fields.
+   *
+   * @param accountInfo The original account info with all fields present.
+   * @returns The filtered account info with only changed fields.
+   */
+  private getChangedAccountInfo(accountInfo: UserAccountInfo): UserAccountInfo {
+    const changedAccountInfo: UserAccountInfo = {};
+
+    if (accountInfo.firstName !== this.user?.firstName) {
+      changedAccountInfo.firstName = accountInfo.firstName;
+    }
+
+    if (accountInfo.lastName !== this.user?.lastName) {
+      changedAccountInfo.lastName = accountInfo.lastName;
+    }
+
+    if (accountInfo.newPassword) {
+      changedAccountInfo.newPassword = accountInfo.newPassword;
+    }
+
+    return changedAccountInfo;
   }
 
   /**

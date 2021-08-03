@@ -163,10 +163,10 @@ export class MockUserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param changedAccountInfo The user account settings object.
+   * @param accountInfo The user account settings object.
    * @returns An empty observable.
    */
-  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
+  updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
     if (!changedAccountInfo) {
       return throwError(new HttpErrorResponse({
         error: {
