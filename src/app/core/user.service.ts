@@ -24,7 +24,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router) {}
+    private router: Router
+  ) { }
 
   /**
    * The currently signed in user.
