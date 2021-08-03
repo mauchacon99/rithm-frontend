@@ -18,18 +18,18 @@ const MICROSERVICE_PATH = '/userservice/api/user';
 })
 export class UserService {
 
+  /** The access token to be used to authenticate for every request. */
+  accessToken: AccessToken | undefined;
+
+  /** The currently signed in user. */
+  user: User | undefined;
+
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
     private router: Router) {
     this.user = JSON.parse(localStorage.getItem('user') as string) as User;
   }
-
-  /** The access token to be used to authenticate for every request. */
-  accessToken: AccessToken | undefined;
-
-  /** The currently signed in user. */
-  user: User | undefined;
 
   /**
    * Signs the user in to the system.
