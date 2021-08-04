@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, UserAccountInfo } from 'src/models';
+import { SignInResponse, TokenResponse, UserAccountInfo } from 'src/models';
 
 import { UserService } from './user.service';
 
@@ -70,10 +70,10 @@ describe('UserService', () => {
 
   it('should clear memory on sign out', () => {
     service.accessToken = new AccessToken('jdkfjslkdjflks');
-    service.user = testUser;
+    localStorage.setItem('user', JSON.stringify(testUser));
     service.signOut();
     expect(service.accessToken).toBeUndefined();
-    expect(service.user).toBeUndefined();
+    expect(service.user).toBeNull();
   });
 
   it('should clear local storage on sign out', () => {
@@ -227,6 +227,7 @@ describe('UserService', () => {
   });
 
   it('should update user account settings', () => {
+    localStorage.setItem('user', JSON.stringify(testUser));
     const changedAccountInfo: UserAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
