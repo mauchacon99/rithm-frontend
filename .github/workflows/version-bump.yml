@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: 'actions/checkout@v2'
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: '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'
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -30,7 +30,7 @@ jobs:
           tag-prefix: 'v'
           target-branch: 'dev'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: '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'
 
       - name: 'Concatenate package.json'
         run: cat ./package.json
