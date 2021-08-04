@@ -4,6 +4,10 @@
 
 export const environment = {
 
+  /** The version number for the app. */
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  appVersionNumber: `${require('../../package.json').version}-dev`,
+
   /** Whether the environment is used for testing. */
   testing: false,
 
