@@ -104,14 +104,13 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
       this.userForm.get('password')?.setValidators(
         [
           ...passwordValidators,
-          (control: AbstractControl): ValidationErrors | null => {
-            // do your validation logic here:
-            if (this.userForm?.get('confirmPassword')?.value) {
-              if (!control.value) {
-                return {required: true};
-              }
+          (): ValidationErrors | null => {
+            this.userForm.get('confirmPassword')?.setValidators(
+              [...confirmPasswordValidators]
+            );
+            if (this.userForm?.dirty) {
+              this.userForm?.get('confirmPassword')?.updateValueAndValidity();
             }
-            // all is fine:
             return null;
           }
         ]
@@ -119,11 +118,12 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
       this.userForm.get('confirmPassword')?.setValidators(
         [
           ...confirmPasswordValidators,
-            (control: AbstractControl): ValidationErrors | null => {
-            if (this.userForm?.get('password')?.value) {
-              if (!control.value) {
-                return {required: true};
-              }
+          (): ValidationErrors | null => {
+            this.userForm.get('password')?.setValidators(
+              [...passwordValidators]
+            );
+            if (this.userForm?.dirty) {
+              this.userForm?.get('password')?.updateValueAndValidity();
             }
             return null;
           }
