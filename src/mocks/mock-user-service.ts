@@ -15,7 +15,7 @@ export class MockUserService {
   accessToken = new AccessToken('tokentokentokentokentoken');
 
   /** The currently signed in user. */
-  user: User | undefined = {
+  user: User = {
     rithmId: '123',
     firstName: 'Testy',
     lastName: 'Test',

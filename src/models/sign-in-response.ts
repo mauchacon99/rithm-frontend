@@ -10,5 +10,5 @@ export interface SignInResponse extends TokenResponse {
   refreshTokenGuid: string;
 
   /** The object for the newly-signed in user. */
-  user?: User;
+  user: User;
 }
