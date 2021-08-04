@@ -1,6 +1,5 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { FieldType, Question } from 'src/models';
 
 /**
@@ -13,12 +12,12 @@ import { FieldType, Question } from 'src/models';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => UserFormComponent),
+      useExisting: forwardRef(() => DocumentFieldComponent),
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => UserFormComponent),
+      useExisting: forwardRef(() => DocumentFieldComponent),
       multi: true
     }
   ]

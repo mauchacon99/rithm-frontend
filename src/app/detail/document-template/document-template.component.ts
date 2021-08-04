@@ -13,12 +13,12 @@ import { Question } from 'src/models';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => UserFormComponent),
+      useExisting: forwardRef(() => DocumentTemplateComponent),
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => UserFormComponent),
+      useExisting: forwardRef(() => DocumentTemplateComponent),
       multi: true
     }
   ]
