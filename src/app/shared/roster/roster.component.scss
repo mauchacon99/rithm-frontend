@@ -8,17 +8,9 @@
     margin-left: 0;
   }
 
-  .badge {
-    width: 15px;
-    height: 15px;
-    background-color: $accent-blue;
-    border-radius: 50%;
+  .badge-accent {
     position: absolute;
     margin-top: -13px;
     margin-left: 27px;
-    font-size: font-calc(8);
-    color: #fff;
-    text-align: center;
-    line-height: 15px;
   }
 }
