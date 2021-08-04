@@ -1,8 +1,8 @@
 name: Version Bump
 
 on:
-  pull_request:
-    branches: [ dev ]
+  push:
+    branches: [ test ]
 
 jobs:
 
@@ -34,8 +34,3 @@ jobs:
 
       - name: 'Concatenate package.json'
         run: cat ./package.json
-
-      # - name: 'Output Step'
-      #   env:
-      #     NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
-      #   run: echo "new tag $NEW_TAG"

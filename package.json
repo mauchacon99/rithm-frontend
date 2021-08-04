@@ -1,6 +1,6 @@
 {
   "name": "rithm",
-  "version": "0.0.0",
+  "version": "0.0.8",
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
