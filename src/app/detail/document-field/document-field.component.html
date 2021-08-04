@@ -7,7 +7,7 @@ field?.type === fieldTypes.SHORT_TEXT ||
 field?.type === fieldTypes.LONG_TEXT ||
 field?.type === fieldTypes.URL ||
 field?.type === fieldTypes.EMAIL"
-[field]="field"></app-text-field>
+[field]="field" formControlName="textField" ></app-text-field>
 <app-number-field *ngIf="
 field?.type === fieldTypes.NUMBER ||
 field?.type === fieldTypes.PHONE ||

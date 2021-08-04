@@ -54,30 +54,30 @@ export class DocumentComponent implements OnInit {
       isReadOnly: false,
       isRequired: false
     },
-    {
-      id: 2,
-      prompt: 'Fake question 2',
-      instructions: 'Fake instructions 2',
-      type: FieldType.LONG_TEXT,
-      isReadOnly: false,
-      isRequired: true
-    },
-    {
-      id: 3,
-      prompt: 'Fake question 3',
-      instructions: '',
-      type: FieldType.URL,
-      isReadOnly: false,
-      isRequired: true
-    },
-    {
-      id: 4,
-      prompt: 'Fake question 4',
-      instructions: 'Fake instructions 4',
-      type: FieldType.EMAIL,
-      isReadOnly: false,
-      isRequired: true
-    },
+    // {
+    //   id: 2,
+    //   prompt: 'Fake question 2',
+    //   instructions: 'Fake instructions 2',
+    //   type: FieldType.LONG_TEXT,
+    //   isReadOnly: false,
+    //   isRequired: true
+    // },
+    // {
+    //   id: 3,
+    //   prompt: 'Fake question 3',
+    //   instructions: '',
+    //   type: FieldType.URL,
+    //   isReadOnly: false,
+    //   isRequired: true
+    // },
+    // {
+    //   id: 4,
+    //   prompt: 'Fake question 4',
+    //   instructions: 'Fake instructions 4',
+    //   type: FieldType.EMAIL,
+    //   isReadOnly: false,
+    //   isRequired: true
+    // },
     {
       id: 5,
       prompt: 'Fake question 5',
@@ -239,7 +239,7 @@ export class DocumentComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.documentForm = this.fb.group({
-      textField: this.fb.control('')
+      documentTemplateForm: this.fb.control('')
     });
   }
 
