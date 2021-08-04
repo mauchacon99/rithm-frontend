@@ -26,7 +26,7 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           default: patch
-          commit-message: 'chore: bump version to {{ version }}'
+          commit-message: 'chore: bump version to {{version}}'
           tag-prefix: 'v'
           target-branch: 'dev'
         env:
