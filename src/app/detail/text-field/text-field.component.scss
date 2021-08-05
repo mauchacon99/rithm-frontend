@@ -1,1 +1,10 @@
 @import '../custom-fields.scss';
+
+textarea {
+  min-height: 19px;
+}
+
+.long-text ::ng-deep .mat-form-field-prefix {
+  top: 27px;
+  align-self: start;
+}

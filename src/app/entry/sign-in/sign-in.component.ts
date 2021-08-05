@@ -55,9 +55,9 @@ export class SignInComponent implements OnInit {
         if (emailLinkParams.type && !emailLinkParams.valid) {
           this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
         } else {
-          if (emailLinkParams.type === EmailLinkType.register) {
+          if (emailLinkParams.type === EmailLinkType.Register) {
             this.validateEmail(emailLinkParams.guid as string, emailLinkParams.email as string);
-          } else if (emailLinkParams.type === EmailLinkType.forgotPassword) {
+          } else if (emailLinkParams.type === EmailLinkType.ForgotPassword) {
             this.router.navigate(['password-reset'], {
               queryParams: {
                 type: emailLinkParams.type,

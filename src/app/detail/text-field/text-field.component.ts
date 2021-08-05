@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 // eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
-import { FieldType, Question } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for all fields involving text.
@@ -31,7 +31,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   @Input() field!: Question;
 
   /** The field type of the input. */
-  fieldTypeEnum = FieldType;
+  fieldTypeEnum = QuestionFieldType;
 
   constructor(
     private fb: FormBuilder,

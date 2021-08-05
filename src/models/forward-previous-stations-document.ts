@@ -1,4 +1,5 @@
 import { ConnectedStationInfo } from './connected-station-info';
+
 /**
  * Represents forward and previous stations for a specific document.
  */

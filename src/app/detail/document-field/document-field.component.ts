@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FieldType, Question } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for every field on a document.
@@ -30,7 +30,7 @@ export class DocumentFieldComponent {
   @Input() field!: Question;
 
   /** The field type. */
-  fieldTypes = FieldType;
+  fieldTypes = QuestionFieldType;
 
   constructor(
     private fb: FormBuilder,

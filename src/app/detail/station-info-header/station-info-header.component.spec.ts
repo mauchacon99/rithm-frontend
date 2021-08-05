@@ -32,9 +32,10 @@ describe('StationInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: ['SA', 'RI', 'NI'],
+      supervisorRoster: [],
       numberOfWorkers: 7,
-      workerRoster: ['LA','OT','SS']
+      workerRoster: [],
+      questions: []
     };
     fixture.detectChanges();
   });
