@@ -10,5 +10,5 @@
   lastName?: string;
 
   /** The user's new password. */
-  newPassword?: string;
+  password?: string;
 }
