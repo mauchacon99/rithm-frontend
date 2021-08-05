@@ -18,11 +18,13 @@ field?.type === fieldTypes.Date ||
 field?.type === fieldTypes.DateTime"
 [field]="field"></app-date-field>
 <app-address-field *ngIf="
-field?.type === fieldTypes.Address"></app-address-field>
+field?.type === fieldTypes.Address"
+[field]="field"></app-address-field>
 <app-select-field *ngIf="
 field?.type === fieldTypes.Select ||
 field?.type === fieldTypes.MultiSelect"
 [field]="field"></app-select-field>
 <app-check-field *ngIf="
 field?.type === fieldTypes.CheckBox ||
-field?.type === fieldTypes.CheckList"></app-check-field>
+field?.type === fieldTypes.CheckList"
+[field]="field"></app-check-field>
