@@ -17,10 +17,8 @@ export class MockDashboardService {
   getDashboardHeader(): Observable<WorkerDashboardHeaderData> {
     const dashboardHeaderData: WorkerDashboardHeaderData = {
       userRithmId: '1234',
-      id: 1,
       startedDocuments: 5,
-      rosterStations: 4,
-      lazyLoader: {}
+      rosterStations: 4
     };
 
     return of(dashboardHeaderData).pipe(delay(1000));

@@ -14,10 +14,4 @@ export interface WorkerDashboardHeaderData {
   /** The number of stations where the user is on the work roster. */
   rosterStations: number;
 
-  /** The database ID for the header object. */
-  id: number;
-
-  /** Unknown object. Don't use. */
-  lazyLoader: unknown;
-
 }

@@ -31,10 +31,8 @@ describe('DashboardService', () => {
   it('should successfully get dashboard header data', () => {
     const expectedResponse: WorkerDashboardHeaderData = {
       userRithmId: '1234',
-      id: 1,
       startedDocuments: 5,
-      rosterStations: 4,
-      lazyLoader: {}
+      rosterStations: 4
     };
 
     service.getDashboardHeader()
