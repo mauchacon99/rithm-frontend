@@ -113,7 +113,7 @@ export class MockDocumentService {
    * @returns A list of forward and previous stations for a specific document.
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
-    const data: DocumentStationInformation = {
+    const documentInfo: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId:'E204F369-386F-4E41',
@@ -124,11 +124,12 @@ export class MockDocumentService {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: ['SA', 'RI', 'NI'],
+      supervisorRoster: [],
       numberOfWorkers: 7,
-      workerRoster: ['LA', 'OT', 'SS']
+      workerRoster: [],
+      questions: []
     };
-    return of(data).pipe(delay(1000));
+    return of(documentInfo).pipe(delay(1000));
   }
 
 
