@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Comment } from 'src/models';
@@ -14,6 +14,10 @@ import { CommentService } from '../comment.service';
   styleUrls: ['./comment-input.component.scss']
 })
 export class CommentInputComponent {
+
+  /** The form group directive to reset form state. */
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
   /** The id of the station that the user is commenting on or that the document is in. */
   @Input() stationId!: string;
 
@@ -59,6 +63,7 @@ export class CommentInputComponent {
         this.newComment.emit(comment);
         this.postingComment.emit(false);
         this.commentForm.get('comment')?.reset('');
+        this.formDirective.resetForm();
       }, (error) => {
         this.commentForm.enable();
         this.postingComment.emit(false);
