@@ -55,10 +55,10 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @returns A string based on the field type.
    */
    name(): string {
-    switch(this.field?.type) {
+    switch(this.field.questionType.typeString) {
       case this.fieldTypeEnum.URL:
         return 'url';
-      case this.fieldTypeEnum.EMAIL:
+      case this.fieldTypeEnum.Email:
         return 'email';
       default:
         return 'shortText';
