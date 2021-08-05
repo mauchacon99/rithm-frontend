@@ -7,7 +7,7 @@ import { User } from './user';
 export interface SignInResponse extends TokenResponse {
 
   /** The GUID refresh token used for getting future access tokens (in addition to the cookie refresh token). */
-  refreshTokenGuid: string;
+  readonly refreshTokenGuid: string;
 
   /** The object for the newly-signed in user. */
   user: User;

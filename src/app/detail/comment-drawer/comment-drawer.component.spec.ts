@@ -52,6 +52,7 @@ describe('CommentDrawerComponent', () => {
     component.commentPage = 0;
     component.comments = [{
       displayText: 'This is first comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-16T17:26:47.3506612Z',
       dateLastEdited: '2021-07-14T17:26:47.3506612Z',
       archived: false,
@@ -59,6 +60,7 @@ describe('CommentDrawerComponent', () => {
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
     }, {
       displayText: 'This is second comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-15T17:26:47.3506612Z',
       dateLastEdited: '2021-07-12T17:26:47.3506612Z',
       archived: false,

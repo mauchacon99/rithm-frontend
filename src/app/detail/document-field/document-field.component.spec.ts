@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
+import { QuestionFieldType } from 'src/models';
 import { AddressFieldComponent } from '../address-field/address-field.component';
 import { CheckFieldComponent } from '../check-field/check-field.component';
 import { DateFieldComponent } from '../date-field/date-field.component';
@@ -31,6 +32,18 @@ describe('DocumentFieldComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentFieldComponent);
     component = fixture.componentInstance;
+    component.field = {
+      prompt: 'Address line 1',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    };
     fixture.detectChanges();
   });
 

@@ -20,8 +20,8 @@ export class MockUserService {
     firstName: 'Testy',
     lastName: 'Test',
     email: 'test@test.com',
-    objectPermissions: [],
-    groups: [],
+    isEmailVerified: true,
+    notificationSettings: null,
     createdDate: '1/2/34'
   };
 

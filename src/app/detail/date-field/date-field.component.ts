@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FieldType, Question } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for every date field.
@@ -15,6 +15,6 @@ export class DateFieldComponent {
   @Input() field!: Question;
 
   /** The field type of the input. */
-  fieldTypeEnum = FieldType;
+  fieldTypeEnum = QuestionFieldType;
 
 }

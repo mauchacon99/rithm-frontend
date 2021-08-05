@@ -3,8 +3,8 @@
  */
 export enum EmailLinkType {
   /** The email link is used for verifying an email address after registration. */
-  register = 'register',
+  Register = 'register',
 
   /** The email link is used for initiating password reset. */
-  forgotPassword = 'reset'
+  ForgotPassword = 'reset'
 }
