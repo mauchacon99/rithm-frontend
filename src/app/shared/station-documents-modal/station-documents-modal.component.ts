@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocumentsModalData, UserType } from 'src/models';
+import { Document, StationDocumentsModalData, StationRosterMember, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -118,8 +118,14 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param document A given document object.
    * @returns A string of initials.
    */
-  getDocInitials(document: Document): string {
-    return document?.userAssigned?.split(' ')[0]?.charAt(0) + document?.userAssigned?.split(' ')[1]?.charAt(0);
+  getRosterMember(document: Document): StationRosterMember {
+    const names = document.userAssigned.split(' ');
+    return {
+      userRithmId: '',
+      firstName: names[0],
+      lastName: names[1],
+      email: ''
+    };
   }
 
 }
