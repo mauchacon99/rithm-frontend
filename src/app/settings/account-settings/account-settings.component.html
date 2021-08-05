@@ -1,5 +1,6 @@
 <div class="page textured-bg">
-  <div class="container">
+  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+  <div class="container" *ngIf="!isLoading">
     <div class="row justify-content-center">
 
       <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">

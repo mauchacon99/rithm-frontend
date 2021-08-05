@@ -64,6 +64,7 @@ export class AccountSettingsComponent {
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;
+        this.settingsForm.reset();
         this.popupService.notify('Your account settings are updated.');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
