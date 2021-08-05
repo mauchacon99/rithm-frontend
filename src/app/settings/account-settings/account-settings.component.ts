@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
@@ -25,11 +24,9 @@ export class AccountSettingsComponent {
   /** Whether the account settings is loading. */
   isLoading = false;
 
-  /** User Account Info model. */
-  userAccountInfo: UserAccountInfo;
-
-  /** Notification settings model. */
-  notificationSettings: NotificationSettings;
+  // TODO: Re-enable when addressing notification settings
+  // /** Notification settings model. */
+  // notificationSettings: NotificationSettings;
 
   /** The version number for the app. */
   readonly appVersionNumber = environment.appVersionNumber;
@@ -41,16 +38,6 @@ export class AccountSettingsComponent {
     private popupService: PopupService,
     private dialog: MatDialog,
     ) {
-    this.userAccountInfo = {
-      firstName: 'James',
-      lastName: 'Anderson',
-      newPassword: 'mamamia'
-    };
-    this.notificationSettings = {
-      comments: true,
-      commentMentions: false
-    };
-
     this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
     });
@@ -70,10 +57,14 @@ export class AccountSettingsComponent {
    * Update user account settings data.
    */
   private updateUserAccount(): void {
-    this.userService.updateUserAccount(this.userAccountInfo)
+    const userFormData = this.settingsForm.get('userForm')?.value;
+    const { firstName, lastName, confirmPassword } = userFormData;
+
+    this.userService.updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())
       .subscribe(() => {
         this.isLoading = false;
+        this.settingsForm.reset();
         this.popupService.notify('Your account settings are updated.');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
@@ -84,23 +75,24 @@ export class AccountSettingsComponent {
       });
   }
 
+  // TODO: Re-enable when addressing notification settings
   /**
    * Update notification settings info.
    */
-  private updateNotificationSettings(): void {
-    this.userService.updateNotificationSettings(this.notificationSettings)
-      .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.popupService.notify('Your notification settings are updated.');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-  }
+  // private updateNotificationSettings(): void {
+  //   this.userService.updateNotificationSettings(this.notificationSettings)
+  //     .pipe(first())
+  //     .subscribe(() => {
+  //       this.isLoading = false;
+  //       this.popupService.notify('Your notification settings are updated.');
+  //     }, (error: HttpErrorResponse) => {
+  //       this.isLoading = false;
+  //       this.errorService.displayError(
+  //         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+  //         error
+  //       );
+  //     });
+  // }
 
   /**
    * Opens the terms and conditions in a modal.
