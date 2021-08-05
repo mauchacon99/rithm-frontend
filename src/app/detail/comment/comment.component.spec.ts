@@ -29,7 +29,6 @@ describe('CommentComponent', () => {
       archived: true,
       userFirstName: 'Alex',
       userLastName: 'Can',
-      userFullName: 'Alex Can',
       rithmId: 'string'
     };
     fixture.detectChanges();

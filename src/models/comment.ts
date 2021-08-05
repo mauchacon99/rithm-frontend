@@ -32,12 +32,4 @@ export interface Comment {
   /** Last name of user the that made the comment. */
   readonly userLastName?: string;
 
-  /**
-   * Full name of user the that made the comment.
-   *
-   * @deprecated Don't use this; it might be removed in the future. Use `userFirstName`
-   * and `userLastName` instead.
-   */
-  readonly userFullName?: string;
-
 }

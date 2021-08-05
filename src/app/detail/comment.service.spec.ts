@@ -16,7 +16,6 @@ const testComment: Comment = {
   archived: true,
   userFirstName: 'Alex',
   userLastName: 'Can',
-  userFullName: 'Alex Can',
   rithmId: 'string'
 };
 
