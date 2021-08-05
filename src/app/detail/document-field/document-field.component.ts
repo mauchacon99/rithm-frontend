@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+// eslint-disable-next-line max-len
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -22,7 +23,7 @@ import { QuestionFieldType, Question } from 'src/models';
     }
   ]
 })
-export class DocumentFieldComponent {
+export class DocumentFieldComponent implements ControlValueAccessor, Validator {
   /** The form to add to the template.*/
   documentFieldForm!: FormGroup;
 
@@ -40,5 +41,63 @@ export class DocumentFieldComponent {
     });
   }
 
+  /**
+   * The `onTouched` function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouched: () => void = () => { };
 
+  /**
+   * Writes a value to this form.
+   *
+   * @param val The value to be written.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  writeValue(val: any): void {
+    val && this.documentFieldForm.setValue(val, { emitEvent: false });
+  }
+
+  /**
+   * Registers a function with the `onChange` event.
+   *
+   * @param fn The function to register.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  registerOnChange(fn: any): void {
+    // TODO: check for memory leak
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.documentFieldForm.valueChanges.subscribe(fn);
+  }
+
+  /**
+   * Registers a function with the `onTouched` event.
+   *
+   * @param fn The function to register.
+   */
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  /**
+   * Sets the disabled state of this form control.
+   *
+   * @param isDisabled The disabled state to set.
+   */
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.documentFieldForm.disable() : this.documentFieldForm.enable();
+  }
+
+  /**
+   * Reports whether this form control is valid.
+   *
+   * @returns Validation errors, if any.
+   */
+  validate(): ValidationErrors | null {
+    return this.documentFieldForm.valid ? null : {
+      invalidForm: {
+        valid: false,
+        message: 'User form is invalid'
+      }
+    };
+  }
 }

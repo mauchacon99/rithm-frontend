@@ -1,13 +1,15 @@
-<!-- TODO: General instructions here -->
-<h6 class="py-3">General Instructions</h6>
-<p>
-  {{generalInstructions}}
-</p>
-<hr class="my-3">
+<ng-container [formGroup]="documentTemplateForm">
+  <!-- TODO: General instructions here -->
+  <h6 class="py-3">General Instructions</h6>
+  <p>
+    {{generalInstructions}}
+  </p>
+  <hr class="my-3">
 
-<app-document-field *ngFor="let field of documentFields" [field]="field" formControlName="documentFieldForm"></app-document-field>
+  <app-document-field *ngFor="let field of documentFields" [field]="field" formControlName="documentFieldForm"></app-document-field>
 
 
-<!-- TODO: All items dropdown here -->
+  <!-- TODO: All items dropdown here -->
 
-<!-- TODO: Hidden items dropdown here (if admin?) -->
+  <!-- TODO: Hidden items dropdown here (if admin?) -->
+</ng-container>
