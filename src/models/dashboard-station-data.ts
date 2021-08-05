@@ -1,3 +1,5 @@
+import { StationRosterMember } from './station-roster-member';
+
 /**
  * Represents data about a station to be displayed on the dashboard (workers and supervisors).
  *
@@ -17,8 +19,7 @@
   /** The total number of workers on the worker roster for the station. */
   numberOfWorkers: number;
 
-  // TODO: update this when the route has been fixed
-  /** The initials of users on the worker roster. */
-  workerInitials: string[];
+  /** The list of members on the worker roster. */
+  worker: StationRosterMember[];
 
 }

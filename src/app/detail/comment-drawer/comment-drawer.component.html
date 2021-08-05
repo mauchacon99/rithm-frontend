@@ -8,7 +8,7 @@
             <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
           </div>
           <div *ngFor="let comment of comments">
-            <app-comment [commentData]="comment"></app-comment>
+            <app-comment [comment]="comment"></app-comment>
           </div>
           <div class="m-2 comments-top">
             <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
@@ -30,7 +30,7 @@
             <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
           </div>
           <div *ngFor="let comment of comments">
-            <app-comment [commentData]="comment"></app-comment>
+            <app-comment [comment]="comment"></app-comment>
           </div>
           <div class="m-2 comments-top">
             <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>

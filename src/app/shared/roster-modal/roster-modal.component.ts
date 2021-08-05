@@ -33,7 +33,7 @@ export class RosterModalComponent implements OnInit {
   roster$: Observable<StationRosterMember[]>;
 
   /** Worker roster list. */
-  users = Array<StationRosterMember>();
+  members: StationRosterMember[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
@@ -57,10 +57,10 @@ export class RosterModalComponent implements OnInit {
   ngOnInit(): void {
     this.roster$
       .pipe(first())
-      .subscribe((response) => {
+      .subscribe((rosterMembers) => {
         this.isLoading = false;
-        if (response) {
-          this.users = response;
+        if (rosterMembers) {
+          this.members = rosterMembers;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
