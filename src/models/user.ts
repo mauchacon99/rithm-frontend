@@ -21,6 +21,9 @@ export interface User {
   /** The settings for the user's notification preferences. */
   notificationSettings: unknown; // TODO: update to match back end when story is completed
 
+  /** The is Assigned property to match worker roster model. */
+  isAssigned?: boolean;
+
   /** The date at which this user was created. */
   readonly createdDate: string;
 }

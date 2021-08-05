@@ -6,14 +6,14 @@ import { Comment } from 'src/models';
  * Component for an individual comment.
  */
 @Component({
-  selector: 'app-comment',
+  selector: 'app-comment[comment]',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
   providers: [UtcTimeConversion]
 })
 export class CommentComponent {
   /** The Data needed to construct the comment. */
-  @Input() commentData!: Comment;
+  @Input() comment!: Comment;
 
   /** Has the comment been read before? */
   read = false;

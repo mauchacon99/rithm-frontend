@@ -1,11 +1,11 @@
 <div class="row m-0" [ngClass]="{'read': read}">
   <div class="p-2 user-avatar">
-    <app-user-avatar [workerInitials]="commentData.userFirstName?.charAt(0) + '' + commentData.userLastName?.charAt(0)"></app-user-avatar>
+    <app-user-avatar [firstName]="comment.userFirstName!" [lastName]="comment.userLastName!"></app-user-avatar>
   </div>
   <span class="col p-0 py-2">
-    <h4 class="subtitle-medium pb-1">{{ commentData.userFirstName }} {{ commentData.userLastName }}</h4>
-    <div class="body-small">{{ commentData.displayText }}</div>
-    <div class="overline pt-1">{{ convertTimecode(commentData?.dateCreated) }}</div>
+    <h4 class="subtitle-medium pb-1">{{ comment.userFirstName }} {{ comment.userLastName }}</h4>
+    <div class="body-small">{{ comment.displayText }}</div>
+    <div class="overline pt-1">{{ convertTimecode(comment?.dateCreated) }}</div>
   </span>
   <div class="p-2">
     <div class="new-badge" *ngIf="!read"></div>

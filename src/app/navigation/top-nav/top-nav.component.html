@@ -14,7 +14,7 @@
     <i class="fas fa-bell"></i>
   </button>
   <div [matMenuTriggerFor]="userMenu" class="userMenu d-none d-md-block">
-    <app-user-avatar [user]="user"></app-user-avatar>
+    <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [navProfile]="true"></app-user-avatar>
   </div>
 </nav>
 <mat-menu #userMenu="matMenu">
