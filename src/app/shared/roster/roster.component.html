@@ -1,8 +1,8 @@
 <span>
-  <div *ngFor="let user of rosterArray | slice:0:slices"
+  <div *ngFor="let member of rosterMembers | slice:0:slices"
     (click)="openRosterModal()" class="circles">
-      <app-user-avatar [user]="user"></app-user-avatar>
-      <div *ngIf="user.isAssigned" class="badge-accent mat-elevation-z4">
+      <app-user-avatar [user]="member"></app-user-avatar>
+      <div *ngIf="member.isAssigned" class="badge-accent mat-elevation-z4">
         <i class="fas fa-check"></i>
       </div>
   </div>

@@ -7,15 +7,15 @@ import { StationRosterMember } from 'src/models';
  * Reusable component for all user/roster selection and display.
  */
 @Component({
-  selector: 'app-roster[rosterArray][rosterSize][stationName][stationId][isWorker]',
+  selector: 'app-roster[rosterMembers][rosterSize][stationName][stationId][isWorker]',
   templateUrl: './roster.component.html',
   styleUrls: ['./roster.component.scss']
 })
 export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
-  /** The roster array. */
-  @Input() rosterArray!: StationRosterMember[];
+  /** The list of members on the roster. */
+  @Input() rosterMembers!: StationRosterMember[];
 
   /** The roster size. */
   @Input() rosterSize!: number;
