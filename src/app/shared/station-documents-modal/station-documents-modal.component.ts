@@ -3,7 +3,7 @@ import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
-import { Document, StationDocumentsModalData, StationRosterMember, UserType } from 'src/models';
+import { Document, StationDocumentsModalData, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -112,20 +112,17 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
+  // TODO: get first and last names separately from API to avoid necessitating the following:
   /**
-   * Get the initials needed for a user avatar.
+   * Gets a specified portion of a full name.
    *
-   * @param document A given document object.
-   * @returns A string of initials.
+   * @param fullName The full name of the assigned user.
+   * @param firstLastIndex The index of the desired name portion (0 for first, 1 for last).
+   * @returns The desired name.
    */
-  getRosterMember(document: Document): StationRosterMember {
-    const names = document.userAssigned.split(' ');
-    return {
-      userRithmId: '',
-      firstName: names[0],
-      lastName: names[1],
-      email: ''
-    };
+  getNamePortion(fullName: string, firstLastIndex: 0 | 1): string {
+    const names = fullName.split(' ');
+    return names[firstLastIndex];
   }
 
 }
