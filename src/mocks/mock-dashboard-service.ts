@@ -75,7 +75,7 @@ export class MockDashboardService {
         userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
     return of(expectedResponse).pipe(delay(1000));
@@ -100,7 +100,7 @@ export class MockDashboardService {
         userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
     return of(expectedResponse).pipe(delay(1000));

@@ -99,7 +99,7 @@ describe('DashboardService', () => {
         userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
 
@@ -129,7 +129,7 @@ describe('DashboardService', () => {
         userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
 
