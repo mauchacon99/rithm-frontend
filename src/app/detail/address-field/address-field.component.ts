@@ -23,7 +23,7 @@ export class AddressFieldComponent {
       id: 1,
       prompt: 'Address line 1',
       instructions: '',
-      type: FieldType.SHORT_TEXT,
+      type: FieldType.ShortText,
       isReadOnly: false,
       isRequired: true
     },
@@ -31,7 +31,7 @@ export class AddressFieldComponent {
       id: 2,
       prompt: 'Address line 2',
       instructions: '',
-      type: FieldType.SHORT_TEXT,
+      type: FieldType.ShortText,
       isReadOnly: false,
       isRequired: false
     },
@@ -39,7 +39,7 @@ export class AddressFieldComponent {
       id: 3,
       prompt: 'City',
       instructions: '',
-      type: FieldType.SHORT_TEXT,
+      type: FieldType.ShortText,
       isReadOnly: false,
       isRequired: true
     },
@@ -47,7 +47,7 @@ export class AddressFieldComponent {
       id: 4,
       prompt: 'State',
       instructions: '',
-      type: FieldType.SELECT,
+      type: FieldType.Select,
       isReadOnly: false,
       isRequired: true,
       options:
@@ -353,7 +353,7 @@ export class AddressFieldComponent {
       id: 5,
       prompt: 'Postal code',
       instructions: '',
-      type: FieldType.ADDRESS,
+      type: FieldType.Address,
       isReadOnly: false,
       isRequired: true
     },
