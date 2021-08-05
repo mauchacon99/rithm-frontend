@@ -6,7 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -18,18 +18,24 @@ const MICROSERVICE_PATH = '/userservice/api/user';
 })
 export class UserService {
 
-  constructor(
-    private http: HttpClient,
-    private cookieService: CookieService,
-    private router: Router) {
-    this.user = JSON.parse(localStorage.getItem('user') as string) as User;
-  }
-
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
 
-  /** The currently signed in user. */
-  user: User | undefined;
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+    private router: Router
+  ) { }
+
+  /**
+   * The currently signed in user.
+   *
+   * @returns The currently signed in user.
+   */
+  get user(): User {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  }
 
   /**
    * Signs the user in to the system.
@@ -45,9 +51,8 @@ export class UserService {
     }, { withCredentials: true }).pipe(
       map((response) => {
         this.accessToken = new AccessToken(response.accessToken);
-        this.user = response.user;
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
-        localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(response.user));
         return response;
       })
     );
@@ -58,7 +63,6 @@ export class UserService {
    */
   signOut(): void {
     this.accessToken = undefined;
-    this.user = undefined;
     this.cookieService.deleteAll();
     localStorage.clear();
     sessionStorage.clear();
@@ -141,7 +145,7 @@ export class UserService {
         // eslint-disable-next-line @typescript-eslint/quotes
         "Content-Type": "application/json"
       },
-      body:{email}
+      body: { email }
     });
   }
 
@@ -191,12 +195,49 @@ export class UserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param changedAccountInfo The user account settings object.
+   * @param accountInfo The new account settings to be updated.
    * @returns An empty observable.
    */
-  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`,
-      changedAccountInfo);
+  updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
+    const changedAccountInfo = this.getChangedAccountInfo(accountInfo);
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`, changedAccountInfo)
+      .pipe(map(() => {
+        const user = this.user;
+        if (!this.user) {
+          throw new Error('There is no existing user to update');
+        }
+        if (changedAccountInfo.firstName) {
+          user.firstName = changedAccountInfo.firstName;
+        }
+        if (changedAccountInfo.lastName) {
+          user.lastName = changedAccountInfo.lastName;
+        }
+        localStorage.setItem('user', JSON.stringify(user));
+      }));
+  }
+
+  /**
+   * Returns user account info with only the changed fields.
+   *
+   * @param accountInfo The original account info with all fields present.
+   * @returns The filtered account info with only changed fields.
+   */
+  private getChangedAccountInfo(accountInfo: UserAccountInfo): UserAccountInfo {
+    const changedAccountInfo: UserAccountInfo = {};
+
+    if (accountInfo.firstName !== this.user?.firstName) {
+      changedAccountInfo.firstName = accountInfo.firstName;
+    }
+
+    if (accountInfo.lastName !== this.user?.lastName) {
+      changedAccountInfo.lastName = accountInfo.lastName;
+    }
+
+    if (accountInfo.password) {
+      changedAccountInfo.password = accountInfo.password;
+    }
+
+    return changedAccountInfo;
   }
 
   /**
@@ -208,15 +249,16 @@ export class UserService {
     return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`, { responseType: 'text' });
   }
 
+  // TODO: Re-enable when addressing notification settings
   /**
    * Attempts to reset notification settings.
    *
    * @param notificationSettings The user notification settings object.
    * @returns An empty observable.
    */
-  updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
-      notificationSettings);
-  }
+  // updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
+  //   return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
+  //     notificationSettings);
+  // }
 
 }
