@@ -1,4 +1,4 @@
-import { Question } from './question';
+import { QuestionList } from './question-list';
 import { StationRosterMember } from './station-roster-member';
 
 /**
@@ -48,5 +48,5 @@ export interface DocumentStationInformation {
   documentRithmId: string;
 
   /** The list of fields in the template area for the document/station. */
-  questions: Question[];
+  questions: QuestionList[];
 }
