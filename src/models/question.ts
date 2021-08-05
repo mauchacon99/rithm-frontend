@@ -1,22 +1,30 @@
-import { FieldType } from './enums';
-import { Option } from './option';
+import { QuestionOption } from './question-option';
+import { QuestionType } from './question-type';
 
 /**
- * Represents a question.
+ * Represents a question/field on a station or document.
  */
 export interface Question {
-  /** ID of the question. */
-  id: number;
-  /** Name/label of the question. */
+
+  /** The name/label of the question. */
   prompt: string;
-  /** Question instructions. */
-  instructions: string;
+
+  /** Instructions for filling out the question. */
+  instructions?: string; // TODO: get this from the back end
+
   /** Type of the question. */
-  type: FieldType;
-  /** Is the question read only? */
+  questionType: QuestionType;
+
+  /** Whether the question is read only and only for reference. */
   isReadOnly: boolean;
-  /** Is the question required? */
+
+  /** Whether the question is required for the worker to fill out. */
   isRequired: boolean;
-  /** Array of options. */
-  options?: Option[];
+
+  /** Whether the question is private. */
+  isPrivate: boolean;
+
+  /** The list of selectable options for the question. */
+  options?: QuestionOption[]; // TODO: get this from the back end
+
 }

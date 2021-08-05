@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FieldType, Question } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for all fields involving numbers.
@@ -14,5 +14,5 @@ export class NumberFieldComponent {
   @Input() field!: Question;
 
   /** The field type of the input. */
-  fieldTypeEnum = FieldType;
+  fieldTypeEnum = QuestionFieldType;
 }

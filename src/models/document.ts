@@ -1,41 +1,38 @@
 /**
- * Previously Started documents data.
+ * Represents all info about a document as shown in a list.
  */
 export interface Document {
-  /** Id of the user. */
-  userRithmId: string;
+  // /** The global Rithm ID for this user. */
+  // userRithmId: string;
 
-  /** Document Id of the document. */
+  /** Global Rithm ID for the document. */
   documentRithmId: string;
 
-  /** Name of the document. */
+  /** The name of the document. */
   documentName: string;
 
-  /** Id of station. */
+  /** The global Rithm ID of the station containing the document. */
   stationRithmId: string;
 
-  /** Name of the Station. */
+  /** Name of the station containing the document. */
   stationName: string;
 
-  /** Priority of the document. */
+  /** The priority of the document. */
   priority: number;
 
-  /** The flowed Time in UTC. */
+  /** The time at which the document was last flowed in ISO string date format. */
   flowedTimeUTC: string;
 
-  /** The document id. */
-  id: number;
+  // /** The global Rithm ID for this user. */
+  // rithmId: string;
 
-  /** The global Rithm ID for this user. */
-  rithmId: string;
-
-  /** If the document is escalated. */
+  /** Whether the document is escalated. */
   isEscalated: boolean;
 
   /** Last updated timestamp in UTC. */
   updatedTimeUTC: string;
 
-  /** User assigned for document. */
+  /** The full name of the user assigned to the document. */
   userAssigned: string;
 
 }
