@@ -1,39 +1,39 @@
 import { AbstractControl } from '@angular/forms';
-import { PasswordRequirements } from './password-requirements';
+import { DocumentFieldValidation } from './document-field-validation';
 
 describe('PasswordRequirementsService', () => {
-  let helper: PasswordRequirements;
+  let helper: DocumentFieldValidation;
 
   beforeEach(() => {
-    helper = new PasswordRequirements();
+    helper = new DocumentFieldValidation();
   });
 
   it('should be created', () => {
     expect(helper).toBeTruthy();
   });
 
-  it('should validate length of characters', () => {
-    let control = { value: '12345678' };
-    const result = helper.isGreaterThanEightChars()(control as AbstractControl);
+  it('should validate an address', () => {
+    let control = { value: '123 street' };
+    const result = helper.addressValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
-    control = { value: '1234' };
-    const result2 = helper.isGreaterThanEightChars()(control as AbstractControl);
+    control = { value: '!$34a' };
+    const result2 = helper.addressValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({missingPassLength: true});
+    expect(result2).toEqual({addressIncorrect: true});
   });
 
-  it('should validate 1 lowercase character', () => {
+  it('should validate currency', () => {
     let control = { value: 'PaSSWORD' };
-    const result = helper.hasOneLowerCaseChar()(control as AbstractControl);
+    const result = helper.currencyValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
     control = { value: 'PASSWORD' };
-    const result2 = helper.hasOneLowerCaseChar()(control as AbstractControl);
+    const result2 = helper.currencyValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({missingLowerChar: true});
+    expect(result2).toEqual({currencyIncorrect: true});
   });
 
   it('should validate 1 uppercase character', () => {
