@@ -67,7 +67,6 @@ export class AppComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     ).subscribe((e) => {
       if (e instanceof NavigationEnd) {
-        console.log(e);
         const path = e.url;
         this.showTopNav =
           path !== '' &&
