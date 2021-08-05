@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FieldType, Question } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
  * Reusable component for all fields involving text.
@@ -10,10 +10,11 @@ import { FieldType, Question } from 'src/models';
   styleUrls: ['./text-field.component.scss']
 })
 export class TextFieldComponent {
-    /** The document field to display. */
-    @Input() field!: Question;
+
+  /** The document field to display. */
+  @Input() field!: Question;
 
   /** The field type of the input. */
-  fieldTypeEnum = FieldType;
+  fieldTypeEnum = QuestionFieldType;
 
 }

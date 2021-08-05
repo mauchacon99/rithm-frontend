@@ -10,29 +10,12 @@ const MICROSERVICE_PATH = '/commentservice/api/comment';
 
 const testComment: Comment = {
   displayText: 'string',
+  stationRithmId: 'jkdfkdf',
   dateCreated: '2021-07-14T18:57:59.771Z',
   dateLastEdited: '2021-07-14T18:57:59.771Z',
   archived: true,
-  user: {
-    rithmId: '123',
-    firstName: 'Testy',
-    lastName: 'Test',
-    email: 'test@test.com',
-    objectPermissions: [],
-    groups: [],
-    createdDate: '1/2/34'
-  },
-  station: {
-    name: 'string',
-    instructions: 'sdfa',
-    documents: 1,
-    supervisors: [],
-    rosterUsers: []
-  },
-  document: {
-    // eslint-disable-next-line max-len
-    rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1
-  },
+  userFirstName: 'Alex',
+  userLastName: 'Can',
   rithmId: 'string'
 };
 
@@ -62,14 +45,14 @@ describe('CommentService', () => {
 
     const expectedResponse: Comment[] = [testComment];
 
-    service.getDocumentComments( documentId,stationId, pageNum, commentsPerPage)
+    service.getDocumentComments(documentId, stationId, pageNum, commentsPerPage)
       .subscribe((response) => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
 
     const req = httpTestingController.expectOne(
-     // eslint-disable-next-line max-len
-     `${environment.baseApiUrl}${MICROSERVICE_PATH}/Document?documentId=${documentId}&stationId=${stationId}&pageNum=${pageNum}&commentsPerPage=${commentsPerPage}`
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/Document?documentId=${documentId}&stationId=${stationId}&pageNum=${pageNum}&commentsPerPage=${commentsPerPage}`
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
@@ -81,8 +64,6 @@ describe('CommentService', () => {
   it('should respond with a posted comment', () => {
     const comment = {
       displayText: 'test',
-      dateCreated: '2021-07-14T18:57:59.771Z',
-      userRithmId: '1234',
       documentRithmId: '1234',
       stationRithmId: '1234'
     };
@@ -98,7 +79,7 @@ describe('CommentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/Document`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual({ comment });
+    expect(req.request.body).toEqual({ ...comment });
 
     req.flush(expectedResponse);
     httpTestingController.verify();

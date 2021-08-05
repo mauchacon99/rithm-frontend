@@ -71,4 +71,25 @@ describe('PasswordRequirementsService', () => {
 
     expect(result2).toEqual({missingSpecialChar: true});
   });
+
+  it('should pass when control is left blank', () => {
+    const control = { value: '' };
+
+    const result = helper.isGreaterThanEightChars()(control as AbstractControl);
+    expect(result).toBeNull();
+
+    const result2 = helper.hasOneLowerCaseChar()(control as AbstractControl);
+    expect(result2).toBeNull();
+
+    const result3 = helper.hasOneUpperCaseChar()(control as AbstractControl);
+    expect(result3).toBeNull();
+
+    const result4 = helper.hasOneDigitChar()(control as AbstractControl);
+    expect(result4).toBeNull();
+
+    const result5 = helper.hasOneSpecialChar()(control as AbstractControl);
+    expect(result5).toBeNull();
+
+
+  });
 });

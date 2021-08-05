@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -12,6 +13,7 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { ConnectedStationCardComponent } from './connected-station-card/connected-station-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentDrawerComponent } from './comment-drawer/comment-drawer.component';
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
@@ -24,8 +26,11 @@ import { DateFieldComponent } from './date-field/date-field.component';
 import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
-
+//This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
   declarations: [
@@ -46,7 +51,7 @@ import { CheckFieldComponent } from './check-field/check-field.component';
     DateFieldComponent,
     AddressFieldComponent,
     SelectFieldComponent,
-    CheckFieldComponent
+    CheckFieldComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +59,11 @@ import { CheckFieldComponent } from './check-field/check-field.component';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaskModule.forRoot(),
+    MatSelectModule
   ],
   exports: [
     SubHeaderComponent,

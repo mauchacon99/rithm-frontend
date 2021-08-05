@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, WorkerRosterResponse } from 'src/models';
+import { User, StationRosterMember } from 'src/models';
 
 
 /**
@@ -12,7 +12,7 @@ import { User, WorkerRosterResponse } from 'src/models';
 })
 export class UserAvatarComponent implements OnInit {
   /** User property. */
-  @Input() user?: User | WorkerRosterResponse;
+  @Input() user?: User | StationRosterMember;
 
   /** Initials from  DashboardStationData.*/
   @Input() workerInitials?: string;

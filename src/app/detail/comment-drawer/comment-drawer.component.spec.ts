@@ -46,26 +46,13 @@ describe('CommentDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('posted comment should update postedComment', fakeAsync(() => {
-    const comment = {
-      displayText: 'test',
-      dateCreated: '2021-07-14T18:57:59.771Z',
-      userRithmId: '1234',
-      documentRithmId: '1234',
-      stationRithmId: '1234'
-    };
-    component.postComment(comment);
-    tick(1000);
-    expect(component.postedComment).toBeDefined();
-
-  }));
-
   it('should load more comments', fakeAsync(() => {
     component.documentId = '1234';
     component.stationId = '1234';
     component.commentPage = 0;
     component.comments = [{
       displayText: 'This is first comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-16T17:26:47.3506612Z',
       dateLastEdited: '2021-07-14T17:26:47.3506612Z',
       archived: false,
@@ -73,6 +60,7 @@ describe('CommentDrawerComponent', () => {
       userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
     }, {
       displayText: 'This is second comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-06-15T17:26:47.3506612Z',
       dateLastEdited: '2021-07-12T17:26:47.3506612Z',
       archived: false,

@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
@@ -129,12 +129,12 @@ export class UserService {
     });
   }
 
-/**
- * Deletes a given user in the system.
- *
- * @param email The user's email address.
- * @returns An empty observable.
- */
+  /**
+   * Deletes a given user in the system.
+   *
+   * @param email The user's email address.
+   * @returns An empty observable.
+   */
   delete(email: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`, {
       headers: {

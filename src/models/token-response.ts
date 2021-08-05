@@ -4,5 +4,5 @@
 export interface TokenResponse {
 
   /** The access token for future requests. */
-  accessToken: string;
+  readonly accessToken: string;
 }

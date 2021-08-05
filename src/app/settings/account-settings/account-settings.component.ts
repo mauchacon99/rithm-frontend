@@ -7,6 +7,8 @@ import { UserAccountInfo, NotificationSettings } from 'src/models';
 import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 /**
  * Component for all of the account settings.
@@ -14,9 +16,11 @@ import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-m
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
 })
 export class AccountSettingsComponent {
+  /** Settings form. */
+  settingsForm: FormGroup;
 
   /** Whether the account settings is loading. */
   isLoading = false;
@@ -27,10 +31,16 @@ export class AccountSettingsComponent {
   /** Notification settings model. */
   notificationSettings: NotificationSettings;
 
-  constructor(private userService: UserService,
+  /** The version number for the app. */
+  readonly appVersionNumber = environment.appVersionNumber;
+
+  constructor(
+    private userService: UserService,
+    private errorService: ErrorService,
+    private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
-    private errorService: ErrorService,) {
+    ) {
     this.userAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
@@ -40,13 +50,20 @@ export class AccountSettingsComponent {
       comments: true,
       commentMentions: false
     };
+
+    this.settingsForm = this.fb.group({
+      userForm: this.fb.control('')
+    });
   }
 
   /**
    * Updates all settings for the user.
    */
   updateSettings(): void {
-    // TODO: determine changes and make requests
+    this.isLoading = true;
+    this.updateUserAccount();
+    // TODO: enable when notifications settings are addressed
+    // this.updateNotificationSettings();
   }
 
   /**
@@ -91,7 +108,7 @@ export class AccountSettingsComponent {
    */
   viewTermsAndConditions(): void {
     this.dialog.open(TermsConditionsModalComponent, {
-    panelClass: 'terms-condition',
+      panelClass: 'terms-condition',
       data: {
         title: 'Terms and Conditions',
         message: '',
