@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
-import { WorkerDashboardHeaderData, DashboardStationData, WorkerRosterResponse } from 'src/models';
+import { WorkerDashboardHeaderData, DashboardStationData, StationRosterMember } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
 
@@ -63,15 +63,16 @@ export class MockDashboardService {
    * @returns A list of worker roster of a station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
-    const expectedResponse: Array<WorkerRosterResponse> = [
+  getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
+    const expectedResponse: StationRosterMember[] = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
-      }
-      ,
+      },
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'hendricksontyler@icloud.com'
@@ -86,15 +87,17 @@ export class MockDashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of supervisor roster of a station.
    */
-  getSupervisorRoster(stationId: string): Observable<WorkerRosterResponse[]> {
-    const expectedResponse: Array<WorkerRosterResponse> = [
+  getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
+    const expectedResponse: Array<StationRosterMember> = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
       }
       ,
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'hendricksontyler@icloud.com'

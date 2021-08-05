@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { WorkerDashboardHeaderData, DashboardStationData, WorkerRosterResponse, Document } from 'src/models';
+import { WorkerDashboardHeaderData, DashboardStationData, StationRosterMember, Document } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -41,9 +41,9 @@ export class DashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
-  getWorkerRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+  getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${stationId}`);
   }
 
   /**
@@ -52,9 +52,9 @@ export class DashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of supervisor roster of a station.
    */
-  getSupervisorRoster(stationId: string): Observable<WorkerRosterResponse[]> {
+  getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<WorkerRosterResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);
   }
 
   /**

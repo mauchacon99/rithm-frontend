@@ -30,6 +30,8 @@ describe('UserAvatarComponent', () => {
       firstName: 'Testy',
       lastName: 'Test',
       email: 'test@test.com',
+      isEmailVerified: true,
+      notificationSettings: [],
       createdDate: '1/2/34'
     };
     fixture.detectChanges();

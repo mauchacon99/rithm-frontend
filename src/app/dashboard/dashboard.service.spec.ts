@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { WorkerDashboardHeaderData, Document } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
-import { DashboardStationData, WorkerRosterResponse } from 'src/models';
+import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -88,14 +88,15 @@ describe('DashboardService', () => {
 
   it('should successfully fetch data for dashboard worker roster', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const expectedResponse: Array<WorkerRosterResponse> = [
+    const expectedResponse: Array<StationRosterMember> = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
-      }
-      ,
+      },
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'hendricksontyler@icloud.com'
@@ -117,14 +118,15 @@ describe('DashboardService', () => {
 
   it('should successfully fetch data for dashboard supervisor roster', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const expectedResponse: Array<WorkerRosterResponse> = [
+    const expectedResponse: Array<StationRosterMember> = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
-      }
-      ,
+      },
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'hendricksontyler@icloud.com'
