@@ -14,9 +14,6 @@ export class UserAvatarComponent implements OnInit {
   /** User property. */
   @Input() user?: User | StationRosterMember;
 
-  /** Initials from  DashboardStationData.*/
-  @Input() workerInitials?: string;
-
   /** User initials. Set with this.setInitials(). */
   initials = '';
 
@@ -38,13 +35,10 @@ export class UserAvatarComponent implements OnInit {
    * Obtain user's initials.
    */
   setInitials(): void {
-    if (this.profile === true) {
-      const firstInitial = this.user?.firstName.charAt(0);
-      const lastInitial = this.user?.lastName.charAt(0);
+    const firstInitial = this.user?.firstName.charAt(0);
+    const lastInitial = this.user?.lastName.charAt(0);
 
-      this.initials = firstInitial as string + lastInitial as string;
-      return;
-    }
-    this.initials = this.workerInitials as string;
+    this.initials = firstInitial as string + lastInitial as string;
+    return;
   }
 }
