@@ -148,15 +148,12 @@ describe('DashboardService', () => {
   it('should return a list of priority queue documents', () => {
     const expectedResponse: Array<Document> = [
       {
-        userRithmId: '3BA8535A-7AAD-4D96-BB18-7612EFDCE2DA',
         documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
         documentName: 'Granola',
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        id: 7,
-        rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
         updatedTimeUTC: '',
         isEscalated: false,
         userAssigned: ''
@@ -177,15 +174,12 @@ describe('DashboardService', () => {
   it('should return a list of previously started documents', () => {
     const expectedResponse: Array<Document> = [
       {
-        userRithmId: '3BA8535A-7AAD-4D96-BB18-7612EFDCE2DA',
         documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
         documentName: 'Granola',
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        id: 7,
-        rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
         updatedTimeUTC: '',
         isEscalated: false,
         userAssigned: ''
