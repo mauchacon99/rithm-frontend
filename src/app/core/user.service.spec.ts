@@ -231,7 +231,7 @@ describe('UserService', () => {
     const changedAccountInfo: UserAccountInfo = {
       firstName: 'James',
       lastName: 'Anderson',
-      newPassword: 'mamamia'
+      password: 'mamamia'
     };
 
     service.updateUserAccount(changedAccountInfo)
