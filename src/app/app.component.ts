@@ -6,6 +6,9 @@ import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
+const REGISTER_URL = 'type=register';
+const RESET_PASSWORD_URL = 'password-reset';
+
 /**
  * The main component loaded for the app.
  */
@@ -64,13 +67,16 @@ export class AppComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     ).subscribe((e) => {
       if (e instanceof NavigationEnd) {
+        console.log(e);
         const path = e.url;
         this.showTopNav =
           path !== '' &&
           path !== '/' &&
           path !== '/forgot-password' &&
           path !== '/account-create' &&
-          path !== '/password-reset';
+          path !== '/password-reset' &&
+          (path?.toLowerCase().indexOf(REGISTER_URL) === -1) &&
+          (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
       }
     }, err => {
       console.error(err);
