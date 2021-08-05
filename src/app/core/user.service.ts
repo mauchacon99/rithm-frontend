@@ -233,8 +233,8 @@ export class UserService {
       changedAccountInfo.lastName = accountInfo.lastName;
     }
 
-    if (accountInfo.newPassword) {
-      changedAccountInfo.newPassword = accountInfo.newPassword;
+    if (accountInfo.password) {
+      changedAccountInfo.password = accountInfo.password;
     }
 
     return changedAccountInfo;
