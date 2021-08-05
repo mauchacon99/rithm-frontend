@@ -7,7 +7,7 @@ export * from './user';
 export * from './worker-dashboard-header-data';
 export * from './dashboard-station-data';
 export * from './document';
-export * from './station-document';
+export * from './station-documents';
 export * from './station-documents-modal-data';
 export * from './station-roster-member';
 export * from './roster-modal-data';

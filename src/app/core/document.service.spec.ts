@@ -3,7 +3,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocumentsResponse, UserType } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
 
@@ -31,7 +31,7 @@ describe('DocumentService', () => {
   it('should return a list of documents for a station', () => {
     const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
-    const expectedResponse: StationDocumentsResponse = {
+    const expectedResponse: StationDocuments = {
       documents: [
         { rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
         { rithmId: '2', documentName: 'Apple Crisps', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 7, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },

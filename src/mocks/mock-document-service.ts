@@ -2,7 +2,7 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocumentsResponse, UserType
+  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocuments, UserType
 } from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
@@ -16,8 +16,8 @@ export class MockDocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocumentsResponse> {
-    const ELEMENT_DATA: StationDocumentsResponse = {
+  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocuments> {
+    const ELEMENT_DATA: StationDocuments = {
       documents: [
         /* eslint-disable max-len */
         { rithmId: '1', documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', userRithmId: '', documentRithmId: '', stationRithmId: '', id: 1 },
