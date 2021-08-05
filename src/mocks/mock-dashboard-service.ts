@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
-import { WorkerDashboardHeaderData, DashboardStationData, StationRosterMember } from 'src/models';
+import { WorkerDashboardHeader, DashboardStationData, StationRosterMember } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
 
@@ -14,8 +14,8 @@ export class MockDashboardService {
    *
    * @returns Dashboard header data.
    */
-  getDashboardHeader(): Observable<WorkerDashboardHeaderData> {
-    const dashboardHeaderData: WorkerDashboardHeaderData = {
+  getDashboardHeader(): Observable<WorkerDashboardHeader> {
+    const dashboardHeaderData: WorkerDashboardHeader = {
       userRithmId: '1234',
       startedDocuments: 5,
       rosterStations: 4

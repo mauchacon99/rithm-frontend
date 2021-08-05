@@ -3,7 +3,7 @@
  *
  * @see `DashboardCount` model in the back end.
  */
-export interface WorkerDashboardHeaderData {
+export interface WorkerDashboardHeader {
 
   /** The Rithm ID for the user that requested the dashboard header. */
   userRithmId: string;

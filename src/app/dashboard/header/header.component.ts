@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/models';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { WorkerDashboardHeaderData } from 'src/models';
+import { WorkerDashboardHeader } from 'src/models';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardService.getDashboardHeader()
       .pipe(first())
-      .subscribe((headerData: WorkerDashboardHeaderData) => {
+      .subscribe((headerData: WorkerDashboardHeader) => {
         if (headerData) {
           this.numPrevDocs = headerData.startedDocuments;
           this.numStations = headerData.rosterStations;

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { WorkerDashboardHeaderData, DashboardStationData, StationRosterMember, Document } from 'src/models';
+import { WorkerDashboardHeader, DashboardStationData, StationRosterMember, Document } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -22,8 +22,8 @@ export class DashboardService {
    *
    * @returns Dashboard header data.
    */
-  getDashboardHeader(): Observable<WorkerDashboardHeaderData> {
-    return this.http.get<WorkerDashboardHeaderData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
+  getDashboardHeader(): Observable<WorkerDashboardHeader> {
+    return this.http.get<WorkerDashboardHeader>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
   }
 
   /**
