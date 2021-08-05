@@ -1,15 +1,15 @@
 <section>
   <h4 class="text-center">{{ isWorker ? 'Worker' : 'Supervisor' }} Roster</h4>
   <div *ngIf="!isLoading" class="users">
-    <div class="row" *ngFor="let user of users">
+    <div class="row" *ngFor="let member of members">
       <div class="col-2">
-        <app-user-avatar firstName="Tyler" lastName="Hendrickson"></app-user-avatar>
+        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName"></app-user-avatar>
       </div>
       <div class="col-10">
         <p>
-          {{user?.firstName}} {{user?.lastName}}
+          {{member.firstName}} {{member.lastName}}
           <br>
-          <span class="overline">{{user?.email}}</span>
+          <span class="overline">{{member.email}}</span>
         </p>
       </div>
     </div>
