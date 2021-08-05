@@ -6,13 +6,13 @@ import { User, StationRosterMember } from 'src/models';
  * Reusable component for displaying a user's avatar.
  */
 @Component({
-  selector: 'app-user-avatar',
+  selector: 'app-user-avatar[user]',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss']
 })
 export class UserAvatarComponent implements OnInit {
   /** User property. */
-  @Input() user?: User | StationRosterMember;
+  @Input() user!: User | StationRosterMember;
 
   /** User initials. Set with this.setInitials(). */
   initials = '';
@@ -35,10 +35,9 @@ export class UserAvatarComponent implements OnInit {
    * Obtain user's initials.
    */
   setInitials(): void {
-    const firstInitial = this.user?.firstName.charAt(0);
-    const lastInitial = this.user?.lastName.charAt(0);
+    const firstInitial = this.user.firstName.charAt(0);
+    const lastInitial = this.user.lastName.charAt(0);
 
-    this.initials = firstInitial as string + lastInitial as string;
-    return;
+    this.initials = firstInitial + lastInitial;
   }
 }
