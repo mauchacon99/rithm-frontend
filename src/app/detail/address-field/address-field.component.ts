@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FieldType, Question } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Reusable component for every address field.
@@ -15,41 +15,57 @@ export class AddressFieldComponent {
   @Input() field!: Question;
 
   /** The field type of the input. */
-  fieldTypeEnum = FieldType;
+  fieldTypeEnum = QuestionFieldType;
 
   /** Set up the address form fields. */
   addressFields: Question[] = [
     {
-      id: 1,
       prompt: 'Address line 1',
       instructions: '',
-      type: FieldType.ShortText,
-      isReadOnly: false,
-      isRequired: true
-    },
-    {
-      id: 2,
-      prompt: 'Address line 2',
-      instructions: '',
-      type: FieldType.ShortText,
-      isReadOnly: false,
-      isRequired: false
-    },
-    {
-      id: 3,
-      prompt: 'City',
-      instructions: '',
-      type: FieldType.ShortText,
-      isReadOnly: false,
-      isRequired: true
-    },
-    {
-      id: 4,
-      prompt: 'State',
-      instructions: '',
-      type: FieldType.Select,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Address line 2',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false
+    },
+    {
+      prompt: 'City',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'State',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Select,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
       options:
       [
         {
@@ -350,12 +366,16 @@ export class AddressFieldComponent {
       ]
     },
     {
-      id: 5,
       prompt: 'Postal code',
       instructions: '',
-      type: FieldType.Address,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Address,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
   ];
 

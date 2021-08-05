@@ -1,7 +1,7 @@
 /**
- * Represents the type of a field.
+ * Represents all the various types of a question/field.
  */
-export enum FieldType {
+export enum QuestionFieldType {
 
   /** Short text field. */
   ShortText = 'shortText',

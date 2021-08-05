@@ -1,30 +1,30 @@
-<p *ngIf="field?.instructions !== ''">
-  {{field?.instructions}}
+<p *ngIf="field.instructions !== ''">
+  {{field.instructions}}
 </p>
 
 <app-text-field *ngIf="
-field?.type === fieldTypes.ShortText ||
-field?.type === fieldTypes.LongText ||
-field?.type === fieldTypes.URL ||
-field?.type === fieldTypes.Email"
+field.questionType.typeString === fieldTypes.ShortText ||
+field.questionType.typeString === fieldTypes.LongText ||
+field.questionType.typeString === fieldTypes.URL ||
+field.questionType.typeString === fieldTypes.Email"
 [field]="field"></app-text-field>
 <app-number-field *ngIf="
-field?.type === fieldTypes.Number ||
-field?.type === fieldTypes.Phone ||
-field?.type === fieldTypes.Currency"
+field.questionType.typeString === fieldTypes.Number ||
+field.questionType.typeString === fieldTypes.Phone ||
+field.questionType.typeString === fieldTypes.Currency"
 [field]="field"></app-number-field>
 <app-date-field *ngIf="
-field?.type === fieldTypes.Date ||
-field?.type === fieldTypes.DateTime"
+field.questionType.typeString === fieldTypes.Date ||
+field.questionType.typeString === fieldTypes.DateTime"
 [field]="field"></app-date-field>
 <app-address-field *ngIf="
-field?.type === fieldTypes.Address"
+field.questionType.typeString === fieldTypes.Address"
 [field]="field"></app-address-field>
 <app-select-field *ngIf="
-field?.type === fieldTypes.Select ||
-field?.type === fieldTypes.MultiSelect"
+field.questionType.typeString === fieldTypes.Select ||
+field.questionType.typeString === fieldTypes.MultiSelect"
 [field]="field"></app-select-field>
 <app-check-field *ngIf="
-field?.type === fieldTypes.CheckBox ||
-field?.type === fieldTypes.CheckList"
+field.questionType.typeString === fieldTypes.CheckBox ||
+field.questionType.typeString === fieldTypes.CheckList"
 [field]="field"></app-check-field>

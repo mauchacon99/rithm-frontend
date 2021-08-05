@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, FieldType, Question } from 'src/models';
+import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 
 /**
@@ -44,76 +44,112 @@ export class DocumentComponent implements OnInit {
   /** Fake fields, TODO: remove. */
   fakeFields: Question[] = [
     {
-      id: 1,
       prompt: 'Fake question 1',
       instructions: 'Fake instructions 1',
-      type: FieldType.ShortText,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: false
+      isRequired: false,
+      isPrivate: false
     },
     {
-      id: 2,
       prompt: 'Fake question 2',
       instructions: 'Fake instructions 2',
-      type: FieldType.LongText,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.LongText,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 3,
       prompt: 'Fake question 3',
       instructions: '',
-      type: FieldType.URL,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.URL,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 4,
       prompt: 'Fake question 4',
       instructions: 'Fake instructions 4',
-      type: FieldType.Email,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Email,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 5,
       prompt: 'Fake question 5',
       instructions: 'Fake question 5',
-      type: FieldType.Number,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Number,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 6,
       prompt: 'Fake question 6',
       instructions: '',
-      type: FieldType.Phone,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Phone,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 7,
       prompt: 'Fake question 7',
       instructions: '',
-      type: FieldType.Currency,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Currency,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 8,
       prompt: 'Fake question 8',
       instructions: 'Fake question 8',
-      type: FieldType.Date,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Date,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 9,
       prompt: 'Fake question 9',
       instructions: 'Fake instructions 9',
-      type: FieldType.Select,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Select,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
+      isPrivate: false,
       options: [
         {
           value: 'Option 1',
@@ -134,12 +170,16 @@ export class DocumentComponent implements OnInit {
       ]
     },
     {
-      id: 10,
       prompt: 'Fake question 10',
       instructions: 'Fake instructions 10',
-      type: FieldType.MultiSelect,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.MultiSelect,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
+      isPrivate: false,
       options: [
         {
           value: 'Option 1',
@@ -160,12 +200,16 @@ export class DocumentComponent implements OnInit {
       ]
     },
     {
-      id: 11,
       prompt: 'Fake question 11',
       instructions: 'Fake instructions 11',
-      type: FieldType.CheckBox,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.CheckBox,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
+      isPrivate: false,
       options: [
         {
           value: 'Option 1',
@@ -174,12 +218,16 @@ export class DocumentComponent implements OnInit {
       ]
     },
     {
-      id: 12,
       prompt: 'Fake question 12',
       instructions: 'Fake instructions 12',
-      type: FieldType.CheckList,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.CheckList,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
+      isPrivate: false,
       options: [
         {
           value: 'Option 1',
@@ -200,30 +248,16 @@ export class DocumentComponent implements OnInit {
       ]
     },
     {
-      id: 13,
       prompt: 'Fake question 13',
       instructions: 'Fake instructions 13',
-      type: FieldType.Address,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Address,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
       isRequired: true,
-      options: [
-        {
-          value: 'Option 1',
-          isSelected: false
-        },
-        {
-          value: 'Option 2',
-          isSelected: false
-        },
-        {
-          value: 'Option 3',
-          isSelected: false
-        },
-        {
-          value: 'Option 4',
-          isSelected: false
-        }
-      ]
+      isPrivate: false
     },
   ];
 
