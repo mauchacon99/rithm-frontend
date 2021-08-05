@@ -1,9 +1,9 @@
-<div class="row no-gutters">
+<div class="row no-gutters selects">
   <mat-form-field class="col-12" appearance="outline">
     <mat-label>{{field?.prompt}}</mat-label>
     <mat-select [multiple]="field?.type === fieldTypeEnum.MULTI_SELECT" [required]="field?.isRequired">
       <mat-option *ngFor="let option of field?.options" [value]="option.value">
-        {{option.value}}
+        {{option.displayText ? option.displayText : option.value}}
       </mat-option>
     </mat-select>
   </mat-form-field>

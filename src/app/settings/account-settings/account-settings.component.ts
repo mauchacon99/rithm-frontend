@@ -7,6 +7,7 @@ import { UserService } from '../../core/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 /**
  * Component for all of the account settings.
@@ -26,6 +27,9 @@ export class AccountSettingsComponent {
   // TODO: Re-enable when addressing notification settings
   // /** Notification settings model. */
   // notificationSettings: NotificationSettings;
+
+  /** The version number for the app. */
+  readonly appVersionNumber = environment.appVersionNumber;
 
   constructor(
     private userService: UserService,

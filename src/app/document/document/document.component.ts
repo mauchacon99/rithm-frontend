@@ -199,6 +199,32 @@ export class DocumentComponent implements OnInit {
         }
       ]
     },
+    {
+      id: 13,
+      prompt: 'Fake question 13',
+      instructions: 'Fake instructions 13',
+      type: FieldType.ADDRESS,
+      isReadOnly: false,
+      isRequired: true,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: false
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
   ];
 
   constructor(

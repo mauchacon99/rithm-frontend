@@ -18,7 +18,8 @@ field?.type === fieldTypes.DATE ||
 field?.type === fieldTypes.DATETIME"
 [field]="field"></app-date-field>
 <app-address-field *ngIf="
-field?.type === fieldTypes.ADDRESS"></app-address-field>
+field?.type === fieldTypes.ADDRESS"
+[field]="field"></app-address-field>
 <app-select-field *ngIf="
 field?.type === fieldTypes.SELECT ||
 field?.type === fieldTypes.MULTI_SELECT"
