@@ -12,13 +12,13 @@ export class DocumentFieldValidation {
   private currency_regex = new RegExp(/^[0-9]*\.?[0-9]*$|^$/);
 
   /** Regex to check date input. */
-  private date_regex = new RegExp(/[0-9]{4}-[0-9]{2}[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}--+|^$/);
+  private date_regex = new RegExp(/^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$|^$/);
 
   /** Regex to check zip code input. */
   private zip_regex = new RegExp(/^[0-9]{5}|^$/);
 
   /** Regex to check phone input. */
-  private phone_regex = new RegExp(/\([0-9]{3}\)[0-9]{3}-[0-9]{4}|^$/);
+  private phone_regex = new RegExp(/\([0-9]{3}\) ?[0-9]{3}-[0-9]{4}|^$/);
 
   /** Regex to check url input. */
   private url_regex = new RegExp(/^(ftp|http|https):\/\/[^ "]+$|^$/);

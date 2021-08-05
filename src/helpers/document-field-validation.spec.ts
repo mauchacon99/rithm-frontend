@@ -25,71 +25,84 @@ describe('PasswordRequirementsService', () => {
   });
 
   it('should validate currency', () => {
-    let control = { value: 'PaSSWORD' };
+    let control = { value: '32.21' };
     const result = helper.currencyValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
-    control = { value: 'PASSWORD' };
+    control = { value: '1.2.3' };
     const result2 = helper.currencyValidation()(control as AbstractControl);
 
     expect(result2).toEqual({currencyIncorrect: true});
   });
 
-  it('should validate 1 uppercase character', () => {
-    let control = { value: 'pAssword' };
-    const result = helper.hasOneUpperCaseChar()(control as AbstractControl);
+  it('should validate date', () => {
+    let control = { value: '01/02/1995' };
+    const result = helper.dateValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
-    control = { value: 'password' };
-    const result2 = helper.hasOneUpperCaseChar()(control as AbstractControl);
+    control = { value: 'Dec/02/1990' };
+    const result2 = helper.dateValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({missingUpperChar: true});
+    expect(result2).toEqual({dateIncorrect: true});
   });
 
-  it('should validate a number character', () => {
-    let control = { value: 'Password1' };
-    const result = helper.hasOneDigitChar()(control as AbstractControl);
+  it('should validate a zip code', () => {
+    let control = { value: '12345' };
+    const result = helper.zipValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
-    control = { value: 'password' };
-    const result2 = helper.hasOneDigitChar()(control as AbstractControl);
+    control = { value: '1234' };
+    const result2 = helper.zipValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({missingDigitChar: true});
+    expect(result2).toEqual({zipIncorrect: true});
   });
 
-  it('should validate 1 special character', () => {
-    let control = { value: 'Password!' };
-    const result = helper.hasOneSpecialChar()(control as AbstractControl);
+  it('should validate a phone number', () => {
+    let control = { value: '(801) 123-1234' };
+    const result = helper.phoneValidation()(control as AbstractControl);
 
     expect(result).toBeNull();
 
-    control = { value: 'password' };
-    const result2 = helper.hasOneSpecialChar()(control as AbstractControl);
+    control = { value: '123456' };
+    const result2 = helper.phoneValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({missingSpecialChar: true});
+    expect(result2).toEqual({phoneIncorrect: true});
+  });
+
+  it('should validate a url', () => {
+    let control = { value: 'http://d' };
+    const result = helper.urlValidation()(control as AbstractControl);
+
+    expect(result).toBeNull();
+
+    control = { value: 'google.com' };
+    const result2 = helper.urlValidation()(control as AbstractControl);
+
+    expect(result2).toEqual({urlIncorrect: true});
   });
 
   it('should pass when control is left blank', () => {
     const control = { value: '' };
 
-    const result = helper.isGreaterThanEightChars()(control as AbstractControl);
+    const result = helper.addressValidation()(control as AbstractControl);
     expect(result).toBeNull();
 
-    const result2 = helper.hasOneLowerCaseChar()(control as AbstractControl);
+    const result2 = helper.currencyValidation()(control as AbstractControl);
     expect(result2).toBeNull();
 
-    const result3 = helper.hasOneUpperCaseChar()(control as AbstractControl);
+    const result3 = helper.dateValidation()(control as AbstractControl);
     expect(result3).toBeNull();
 
-    const result4 = helper.hasOneDigitChar()(control as AbstractControl);
+    const result4 = helper.zipValidation()(control as AbstractControl);
     expect(result4).toBeNull();
 
-    const result5 = helper.hasOneSpecialChar()(control as AbstractControl);
+    const result5 = helper.phoneValidation()(control as AbstractControl);
     expect(result5).toBeNull();
 
-
+    const result6 = helper.urlValidation()(control as AbstractControl);
+    expect(result6).toBeNull();
   });
 });
