@@ -5,20 +5,20 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, UserAccountInfo } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 import { UserService } from './user.service';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
-const testUser = {
+const testUser: User = {
   firstName: 'Samus',
   lastName: 'Aran',
   email: 'ycantmetroidcrawl@metroid.com',
+  isEmailVerified: true,
   createdDate: new Date().toISOString(),
-  groups: [],
   rithmId: 'kj34k3jkj',
-  objectPermissions: []
+  notificationSettings: null
 };
 
 describe('UserService', () => {

@@ -1,10 +1,10 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { DashboardHeaderResponse, Document } from 'src/models';
+import { WorkerDashboardHeader, Document } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
-import { DashboardStationData, WorkerRosterResponse } from 'src/models';
+import { DashboardStationData, StationRosterMember } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -29,9 +29,8 @@ describe('DashboardService', () => {
   });
 
   it('should successfully get dashboard header data', () => {
-    const expectedResponse: DashboardHeaderResponse = {
+    const expectedResponse: WorkerDashboardHeader = {
       userRithmId: '1234',
-      id: 1,
       startedDocuments: 5,
       rosterStations: 4
     };
@@ -89,17 +88,18 @@ describe('DashboardService', () => {
 
   it('should successfully fetch data for dashboard worker roster', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const expectedResponse: Array<WorkerRosterResponse> = [
+    const expectedResponse: Array<StationRosterMember> = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
-      }
-      ,
+      },
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
 
@@ -118,17 +118,18 @@ describe('DashboardService', () => {
 
   it('should successfully fetch data for dashboard supervisor roster', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
-    const expectedResponse: Array<WorkerRosterResponse> = [
+    const expectedResponse: Array<StationRosterMember> = [
       {
+        userRithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
-      }
-      ,
+      },
       {
+        userRithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'hendricksontyler@icloud.com'
+        email: 'tyler.hendrickson@rithm.software'
       }
     ];
 
@@ -149,15 +150,12 @@ describe('DashboardService', () => {
   it('should return a list of priority queue documents', () => {
     const expectedResponse: Array<Document> = [
       {
-        userRithmId: '3BA8535A-7AAD-4D96-BB18-7612EFDCE2DA',
         documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
         documentName: 'Granola',
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        id: 7,
-        rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
         updatedTimeUTC: '',
         isEscalated: false,
         userAssigned: ''
@@ -178,15 +176,12 @@ describe('DashboardService', () => {
   it('should return a list of previously started documents', () => {
     const expectedResponse: Array<Document> = [
       {
-        userRithmId: '3BA8535A-7AAD-4D96-BB18-7612EFDCE2DA',
         documentRithmId: '200E132A-3B78-433F-9E6C-22E3A0BDBD8B',
         documentName: 'Granola',
         stationRithmId: '9360D633-A1B9-4AC5-93E8-58316C1FDD9F',
         stationName: 'Step 4',
         priority: 18,
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        id: 7,
-        rithmId: 'D9003E45-DC4F-4D03-ADA2-61037903CBCB',
         updatedTimeUTC: '',
         isEscalated: false,
         userAssigned: ''

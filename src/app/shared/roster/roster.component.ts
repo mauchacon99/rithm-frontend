@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { WorkerRosterResponse } from 'src/models';
+import { StationRosterMember } from 'src/models';
 
 /**
  * Reusable component for all user/roster selection and display.
@@ -15,7 +15,7 @@ export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
   /** The roster array. */
-  @Input() rosterArray!: WorkerRosterResponse[];
+  @Input() rosterArray!: StationRosterMember[];
 
   /** The roster size. */
   @Input() rosterSize!: number;

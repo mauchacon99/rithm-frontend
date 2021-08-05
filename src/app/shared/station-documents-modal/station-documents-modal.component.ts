@@ -35,7 +35,7 @@ export class StationDocumentsModalComponent implements OnInit {
   totalNumDocs = 0;
 
   /** Role of the user. */
-  userType = 'none';
+  userType = UserType.None;
 
   /** The user type enum object. */
   userTypeEnum = UserType;
@@ -72,7 +72,7 @@ export class StationDocumentsModalComponent implements OnInit {
         if (documentsResponse) {
           this.documents = documentsResponse.documents;
           this.totalNumDocs = documentsResponse.totalDocuments;
-          this.userType = <UserType>documentsResponse.userType;
+          this.userType = documentsResponse.userType;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -91,7 +91,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param rithmId The rithmId property of the document we will link to.
    */
   checkDocPermission(rithmId: string): void {
-    if (this.userType !== UserType.none) {
+    if (this.userType !== UserType.None) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
       this.router.navigate(
         [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});

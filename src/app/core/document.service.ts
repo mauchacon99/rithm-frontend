@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { StationDocumentsResponse, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -23,11 +23,11 @@ export class DocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocumentsResponse> {
+  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocuments> {
     const params = new HttpParams()
       .set('stationId', stationId)
       .set('pageNum', pageNum);
-    return this.http.get<StationDocumentsResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationdocuments`, { params });
+    return this.http.get<StationDocuments>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationdocuments`, { params });
   }
 
   /**

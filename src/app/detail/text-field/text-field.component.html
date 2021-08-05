@@ -1,13 +1,13 @@
 <div class="row no-gutters template-fields">
-  <mat-form-field class="col-12" appearance="outline">
+  <mat-form-field class="col-12" appearance="outline" [ngClass]="{'long-text': field.questionType.typeString === fieldTypeEnum.LongText}">
     <mat-label>{{field?.prompt}}</mat-label>
-    <div matPrefix class="icon" [ngClass]="{'icon-top': field.type === fieldTypeEnum.LONG_TEXT}">
-      <i *ngIf="field.type === fieldTypeEnum.SHORT_TEXT" class="fas fa-font"></i>
-      <i *ngIf="field.type === fieldTypeEnum.LONG_TEXT" class="fas fa-paragraph"></i>
-      <i *ngIf="field.type === fieldTypeEnum.URL" class="fas fa-link"></i>
-      <i *ngIf="field.type === fieldTypeEnum.EMAIL" class="far fa-envelope"></i>
+    <div matPrefix class="icon" [ngClass]="{'icon-top': field.questionType.typeString === fieldTypeEnum.LongText}">
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.ShortText" class="fas fa-font"></i>
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.LongText" class="fas fa-paragraph"></i>
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.URL" class="fas fa-link"></i>
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.Email" class="far fa-envelope"></i>
     </div>
-    <input *ngIf="field?.type !== fieldTypeEnum.LONG_TEXT" matInput type="{{field?.type}}" [required]="field?.isRequired" class="font-awesome">
-    <textarea *ngIf="field?.type === fieldTypeEnum.LONG_TEXT" matInput placeholder="{{field?.prompt}}" rows="3" [required]="field?.isRequired"></textarea>
+    <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText" matInput type="{{field.questionType.typeString}}" [required]="field?.isRequired" class="font-awesome">
+    <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText" matInput placeholder="{{field?.prompt}}" rows="3" [required]="field?.isRequired" spellcheck="true"></textarea>
   </mat-form-field>
 </div>

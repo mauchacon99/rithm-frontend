@@ -35,10 +35,10 @@ describe('DocumentInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: [{ firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com' }],
+      supervisorRoster: [],
       numberOfWorkers: 7,
-      workerRoster: [{firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
-      { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }]
+      workerRoster: [],
+      questions: []
     };
     fixture.detectChanges();
   });
