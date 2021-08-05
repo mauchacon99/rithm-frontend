@@ -1,6 +1,9 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-// eslint-disable-next-line max-len
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor, FormBuilder, FormGroup,
+  NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, Validators
+} from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -41,12 +44,27 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    this.textField = this.fb.group({
-      shortText: ['', [Validators.required]],
-      // longText: ['', [Validators.required]],
-      // email: ['', [Validators.email, Validators.required]],
-      // url: ['', [Validators.required]]
-    });
+      switch(this.field.questionType.typeString) {
+        case this.fieldTypeEnum.LongText:
+          this.textField = this.fb.group({
+            longText: ['', []]
+          });
+          break;
+        case this.fieldTypeEnum.URL:
+          this.textField = this.fb.group({
+            url: ['', []]
+          });
+          break;
+        case this.fieldTypeEnum.Email:
+          this.textField = this.fb.group({
+            email: ['', [Validators.email]]
+          });
+          break;
+        default:
+          this.textField = this.fb.group({
+            shortText: ['', []]
+          });
+      }
   }
 
   /**

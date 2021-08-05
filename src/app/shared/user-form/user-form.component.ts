@@ -1,8 +1,8 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators,
+  ControlValueAccessor, FormBuilder, FormGroup,
+  NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, ValidatorFn, Validators,
 } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';

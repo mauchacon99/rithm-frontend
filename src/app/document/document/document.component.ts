@@ -58,42 +58,42 @@ export class DocumentComponent implements OnInit {
       isRequired: false,
       isPrivate: false
     },
-    // {
-    //   prompt: 'Fake question 2',
-    //   instructions: 'Fake instructions 2',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.LongText,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: true,
-    //   isPrivate: false
-    // },
-    // {
-    //   prompt: 'Fake question 3',
-    //   instructions: '',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.URL,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: true,
-    //   isPrivate: false
-    // },
-    // {
-    //   prompt: 'Fake question 4',
-    //   instructions: 'Fake instructions 4',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.Email,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: true,
-    //   isPrivate: false
-    // },
+    {
+      prompt: 'Fake question 2',
+      instructions: 'Fake instructions 2',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.LongText,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 3',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.URL,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 4',
+      instructions: 'Fake instructions 4',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Email,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
     {
       prompt: 'Fake question 5',
       instructions: 'Fake question 5',
