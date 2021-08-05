@@ -29,16 +29,16 @@ export class MockDashboardService {
    *
    * @returns Dashboard stations observable.
    */
-  getDashboardStations(): Observable<Array<DashboardStationData>> {
-    const dashboardStationData: Array<DashboardStationData> = [
+  getDashboardStations(): Observable<DashboardStationData[]> {
+    const dashboardStationData: DashboardStationData[] = [
       {
         rithmId: '1',
         numberOfDocuments: 5,
         stationName: 'station-1',
         numberOfWorkers: 3,
-        workerInitials: [
-          { firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+        worker: [
+          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       },
       {
@@ -46,9 +46,9 @@ export class MockDashboardService {
         numberOfDocuments: 2,
         stationName: 'station-2',
         numberOfWorkers: 6,
-        workerInitials: [
-          { firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+        worker: [
+          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       }
     ];

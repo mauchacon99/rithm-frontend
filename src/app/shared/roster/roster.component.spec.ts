@@ -26,8 +26,10 @@ describe('RosterComponent', () => {
     fixture = TestBed.createComponent(RosterComponent);
     component = fixture.componentInstance;
     component.rosterSize = 7;
-    component.rosterArray = [{ firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-    { firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }];
+    component.rosterMembers = [
+      { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+      { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+    ];
     component.isWorker = true;
     component.stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       component.stationName = 'Samus Returns',
