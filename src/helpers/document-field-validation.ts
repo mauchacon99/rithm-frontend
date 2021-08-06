@@ -4,6 +4,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
  * Helper for displaying and validating passwords.
  */
 export class DocumentFieldValidation {
+  //All the following Regex also allow for an empty string using |^$.
 
   /** Regex to check address input. */
   private address_regex = new RegExp(/^[A-Za-z0-9'\.\-\s\,]+$|^$/);

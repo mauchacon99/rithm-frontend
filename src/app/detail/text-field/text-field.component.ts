@@ -61,7 +61,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
           break;
         case this.fieldTypeEnum.Email:
           this.textField = this.fb.group({
-            email: ['', [Validators.email]]
+            email: ['', []]
           });
           break;
         default:
@@ -80,7 +80,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
       this.textField.get('longText')?.setValidators([Validators.required]);
     } else if (this.field.isRequired && this.name() === 'shortText') {
       this.textField.get('shortText')?.setValidators([Validators.required]);
-    //THe field is not required. Only need to set email and url.
+    //The field is not required. Only need to set email and url.
     } else if (!this.field.isRequired && this.name() === 'email') {
       this.textField.get('email')?.setValidators([Validators.email]);
     } else if (!this.field.isRequired && this.name() === 'url') {
