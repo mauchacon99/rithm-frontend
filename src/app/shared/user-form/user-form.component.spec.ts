@@ -1,12 +1,13 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PasswordRequirements } from 'src/helpers/password-requirements';
+import { UserService } from 'src/app/core/user.service';
+import { MockUserService } from 'src/mocks';
 
 import { UserFormComponent } from './user-form.component';
 
@@ -27,7 +28,10 @@ describe('UserFormComponent', () => {
         MatInputModule,
         ReactiveFormsModule
       ],
-      providers: [{ provide: FormBuilder, useValue: formBuilder }]
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: UserService, useClass: MockUserService }
+      ]
     })
       .compileComponents();
   });
@@ -35,36 +39,8 @@ describe('UserFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserFormComponent);
     component = fixture.componentInstance;
+    component.accountCreate = true;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    const passwordRequirements = new PasswordRequirements();
-    component.userForm = formBuilder.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          passwordRequirements.isGreaterThanEightChars(),
-          passwordRequirements.hasOneLowerCaseChar(),
-          passwordRequirements.hasOneUpperCaseChar(),
-          passwordRequirements.hasOneDigitChar(),
-          passwordRequirements.hasOneSpecialChar()
-        ]
-      ],
-      confirmPassword: [
-        '',
-        [
-          Validators.required,
-          passwordRequirements.isGreaterThanEightChars(),
-          passwordRequirements.hasOneLowerCaseChar(),
-          passwordRequirements.hasOneUpperCaseChar(),
-          passwordRequirements.hasOneDigitChar(),
-          passwordRequirements.hasOneSpecialChar(),
-          passwordRequirements.passwordsMatch()
-        ]
-      ],
-    });
     fixture.detectChanges();
   });
 
@@ -199,6 +175,24 @@ describe('UserFormComponent', () => {
     expect(component.showMatch).toBeTrue();
     component.togglePasswordRequirements('');
     expect(component.passwordRequirementsVisible).toBeFalse();
+  });
+
+  it('should disable email when accountCreate is false', () => {
+    component.accountCreate = false;
+    //TODO: See if there's a cleaner way to do this than call ngOnInit.
+    component.ngOnInit();
+
+    const email = component.userForm.controls['email'];
+
+    expect(email.disabled).toBeTrue();
+  });
+
+  it('should make password fields optional when accountCreate is false', () => {
+    component.accountCreate = false;
+    //TODO: See if there's a cleaner way to do this than call ngOnInit.
+    component.ngOnInit();
+
+    expect(component.userForm.valid).toBeTrue();
   });
 
 

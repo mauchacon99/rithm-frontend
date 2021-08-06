@@ -15,7 +15,7 @@
   <div class="col-6 col-md-3 col-xl-2">
     <p class="overline">supervisor roster</p>
     <app-roster
-      [rosterArray]="stationInformation.supervisorRoster"
+      [rosterMembers]="stationInformation.supervisorRoster"
       [rosterSize]="stationInformation.numberOfSupervisors"
       [stationId]="stationInformation.stationId"
       [stationName]="stationInformation.stationName"
@@ -29,7 +29,7 @@
   }">
     <p class="overline">worker roster</p>
     <app-roster
-      [rosterArray]="stationInformation.workerRoster"
+      [rosterMembers]="stationInformation.workerRoster"
       [rosterSize]="stationInformation.numberOfWorkers"
       [stationId]="stationInformation.stationId"
       [stationName]="stationInformation.stationName"

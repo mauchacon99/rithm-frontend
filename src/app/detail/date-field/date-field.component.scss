@@ -1,1 +1,8 @@
-// styles here
+@import 'rithm-light-palettes';
+@import '../custom-fields.scss';
+
+mat-datepicker-toggle.icon {
+  i {
+    color: map-get($accent-palette, 200);
+  }
+}

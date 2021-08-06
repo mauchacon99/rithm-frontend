@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, FieldType, Question } from 'src/models';
+import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 
 /**
@@ -44,45 +44,221 @@ export class DocumentComponent implements OnInit {
   /** Fake fields, TODO: remove. */
   fakeFields: Question[] = [
     {
-      id: 1,
       prompt: 'Fake question 1',
       instructions: 'Fake instructions 1',
-      type: FieldType.SHORT_TEXT,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: false
+      isRequired: false,
+      isPrivate: false
     },
     {
-      id: 2,
       prompt: 'Fake question 2',
       instructions: 'Fake instructions 2',
-      type: FieldType.LONG_TEXT,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.LongText,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 3,
       prompt: 'Fake question 3',
       instructions: '',
-      type: FieldType.URL,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.URL,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 4,
       prompt: 'Fake question 4',
       instructions: 'Fake instructions 4',
-      type: FieldType.EMAIL,
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Email,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
+      isRequired: true,
+      isPrivate: false
     },
     {
-      id: 5,
       prompt: 'Fake question 5',
-      instructions: '',
-      type: FieldType.NUMBER,
+      instructions: 'Fake question 5',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Number,
+        validationExpression: '.+'
+      },
       isReadOnly: false,
-      isRequired: true
-    }
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 6',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Phone,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 7',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Currency,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 8',
+      instructions: 'Fake question 8',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Date,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
+    {
+      prompt: 'Fake question 9',
+      instructions: 'Fake instructions 9',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Select,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      prompt: 'Fake question 10',
+      instructions: 'Fake instructions 10',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.MultiSelect,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: true
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      prompt: 'Fake question 11',
+      instructions: 'Fake instructions 11',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.CheckBox,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+      ]
+    },
+    {
+      prompt: 'Fake question 12',
+      instructions: 'Fake instructions 12',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.CheckList,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      options: [
+        {
+          value: 'Option 1',
+          isSelected: false
+        },
+        {
+          value: 'Option 2',
+          isSelected: false
+        },
+        {
+          value: 'Option 3',
+          isSelected: false
+        },
+        {
+          value: 'Option 4',
+          isSelected: false
+        }
+      ]
+    },
+    {
+      prompt: 'Fake question 13',
+      instructions: 'Fake instructions 13',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Address,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    },
   ];
 
   constructor(
@@ -171,6 +347,7 @@ export class DocumentComponent implements OnInit {
         }
         this.documentLoading = false;
       }, (error: HttpErrorResponse) => {
+        this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -194,6 +371,7 @@ export class DocumentComponent implements OnInit {
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
       }, (error) => {
+        this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
           'Failed to get connected stations for this document.',

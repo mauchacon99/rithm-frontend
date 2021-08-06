@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UtcTimeConversion } from 'src/helpers';
-import { User, Comment } from 'src/models';
+import { Comment } from 'src/models';
 
 /**
  * Component for an individual comment.
  */
 @Component({
-  selector: 'app-comment',
+  selector: 'app-comment[comment]',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
   providers: [UtcTimeConversion]
 })
 export class CommentComponent {
   /** The Data needed to construct the comment. */
-  @Input() commentData!: Comment;
+  @Input() comment!: Comment;
 
   /** Has the comment been read before? */
   read = false;
@@ -28,7 +28,10 @@ export class CommentComponent {
    * @param timeCommented Reflects time a comment was made.
    * @returns A string with date and time.
    */
-   convertTimecode(timeCommented: string): string {
-    return this.utcTimeConversion.getDateAndTime(timeCommented);
+   convertTimecode(timeCommented?: string): string {
+     if (timeCommented) {
+       return this.utcTimeConversion.getDateAndTime(timeCommented);
+     }
+     return 'Unknown';
    }
 }

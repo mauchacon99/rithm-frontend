@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { RosterModalData, WorkerRosterResponse } from 'src/models';
+import { RosterModalData, StationRosterMember } from 'src/models';
 
 /**
  * Reusable component for displaying the worker or supervisor roster for a station.
@@ -30,10 +30,10 @@ export class RosterModalComponent implements OnInit {
   isLoading = true;
 
   /** Roster type. */
-  roster$: Observable<WorkerRosterResponse[]>;
+  roster$: Observable<StationRosterMember[]>;
 
   /** Worker roster list. */
-  users = Array<WorkerRosterResponse>();
+  members: StationRosterMember[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: RosterModalData,
@@ -57,10 +57,10 @@ export class RosterModalComponent implements OnInit {
   ngOnInit(): void {
     this.roster$
       .pipe(first())
-      .subscribe((response) => {
+      .subscribe((rosterMembers) => {
         this.isLoading = false;
-        if (response) {
-          this.users = response;
+        if (rosterMembers) {
+          this.members = rosterMembers;
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

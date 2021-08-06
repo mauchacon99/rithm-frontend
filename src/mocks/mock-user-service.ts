@@ -15,13 +15,13 @@ export class MockUserService {
   accessToken = new AccessToken('tokentokentokentokentoken');
 
   /** The currently signed in user. */
-  user: User | undefined = {
+  user: User = {
     rithmId: '123',
     firstName: 'Testy',
     lastName: 'Test',
     email: 'test@test.com',
-    objectPermissions: [],
-    groups: [],
+    isEmailVerified: true,
+    notificationSettings: null,
     createdDate: '1/2/34'
   };
 
@@ -163,11 +163,11 @@ export class MockUserService {
   /**
    * Attempts to update user account settings.
    *
-   * @param changedAccountInfo The user account settings object.
+   * @param accountInfo The user account settings object.
    * @returns An empty observable.
    */
-  updateUserAccount(changedAccountInfo: UserAccountInfo): Observable<unknown> {
-    if (!changedAccountInfo) {
+  updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
+    if (!accountInfo) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'

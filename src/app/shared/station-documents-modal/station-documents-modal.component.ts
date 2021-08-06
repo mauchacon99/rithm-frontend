@@ -35,7 +35,7 @@ export class StationDocumentsModalComponent implements OnInit {
   totalNumDocs = 0;
 
   /** Role of the user. */
-  userType = 'none';
+  userType = UserType.None;
 
   /** The user type enum object. */
   userTypeEnum = UserType;
@@ -72,7 +72,7 @@ export class StationDocumentsModalComponent implements OnInit {
         if (documentsResponse) {
           this.documents = documentsResponse.documents;
           this.totalNumDocs = documentsResponse.totalDocuments;
-          this.userType = <UserType>documentsResponse.userType;
+          this.userType = documentsResponse.userType;
         }
         this.isLoading = false;
       }, (error: HttpErrorResponse) => {
@@ -91,7 +91,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param rithmId The rithmId property of the document we will link to.
    */
   checkDocPermission(rithmId: string): void {
-    if (this.userType !== UserType.none) {
+    if (this.userType !== UserType.None) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
       this.router.navigate(
         [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});
@@ -112,14 +112,17 @@ export class StationDocumentsModalComponent implements OnInit {
     );
   }
 
+  // TODO: get first and last names separately from API to avoid necessitating the following:
   /**
-   * Get the initials needed for a user avatar.
+   * Gets a specified portion of a full name.
    *
-   * @param document A given document object.
-   * @returns A string of initials.
+   * @param fullName The full name of the assigned user.
+   * @param firstLastIndex The index of the desired name portion (0 for first, 1 for last).
+   * @returns The desired name.
    */
-  getDocInitials(document: Document): string {
-    return document?.userAssigned?.split(' ')[0]?.charAt(0) + document?.userAssigned?.split(' ')[1]?.charAt(0);
+  getNamePortion(fullName: string, firstLastIndex: 0 | 1): string {
+    const names = fullName.split(' ');
+    return names[firstLastIndex];
   }
 
 }

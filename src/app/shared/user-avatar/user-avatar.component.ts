@@ -1,50 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { User, WorkerRosterResponse } from 'src/models';
-
+import { Component, Input } from '@angular/core';
 
 /**
  * Reusable component for displaying a user's avatar.
  */
 @Component({
-  selector: 'app-user-avatar',
+  selector: 'app-user-avatar[firstName][lastName]',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss']
 })
-export class UserAvatarComponent implements OnInit {
-  /** User property. */
-  @Input() user?: User | WorkerRosterResponse;
+export class UserAvatarComponent {
 
-  /** Initials from  DashboardStationData.*/
-  @Input() workerInitials?: string;
+  /** The first name of the user. */
+  @Input() firstName!: string;
 
-  /** User initials. Set with this.setInitials(). */
-  initials = '';
+  /** The last name of the user. */
+  @Input() lastName!: string;
 
-  /** Determine whether this avatar is for a profile or work roster. */
-  profile = false;
+  /** Whether this avatar is being used to display the signed in user in the top navigation. */
+  @Input() navProfile = false;
 
   /**
-   * Determines if this is used as a profile.
-   * Ensures that the initials property is set with user's initials.
+   * The first + last initials for the user.
+   *
+   * @returns The initials.
    */
-  ngOnInit(): void {
-    if (this.user) {
-      this.profile = true;
-    }
-    this.setInitials();
-  }
+  get initials(): string {
+    const firstInitial = this.firstName.charAt(0);
+    const lastInitial = this.lastName.charAt(0);
 
-  /**
-   * Obtain user's initials.
-   */
-  setInitials(): void {
-    if (this.profile === true) {
-      const firstInitial = this.user?.firstName.charAt(0);
-      const lastInitial = this.user?.lastName.charAt(0);
-
-      this.initials = firstInitial as string + lastInitial as string;
-      return;
-    }
-    this.initials = this.workerInitials as string;
+    return firstInitial + lastInitial;
   }
 }

@@ -1,14 +1,10 @@
-import { GlobalPermission } from './global-permission';
-import { Group } from './group';
-import { ObjectPermission } from './object-permission';
-
 /**
  * Represents all information about a Rithm user.
  */
 export interface User {
 
   /** The global Rithm ID for this user. */
-  rithmId: string;
+  readonly rithmId: string;
 
   /** The user's first name. */
   firstName: string;
@@ -17,20 +13,17 @@ export interface User {
   lastName: string;
 
   /** The email address registered to the user. */
-  email: string;
+  readonly email: string;
 
-  /** The profile picture set by the user. */
-  profilePic?: string;
+  /** Whether the user has verified their email address. */
+  readonly isEmailVerified: boolean;
 
-  /** The list of flow-level permissions that the user has. */
-  objectPermissions: ObjectPermission[];
+  /** The settings for the user's notification preferences. */
+  notificationSettings: unknown; // TODO: update to match back end when story is completed
 
-  /** The global permissions that the user has. */
-  globalPermission?: GlobalPermission;
+  /** The is Assigned property to match worker roster model. */
+  isAssigned?: boolean;
 
-  /** The groups that the user is a member of. */
-  groups: Group[];
-
-  /** The date that this user was created. */
-  createdDate: string;
+  /** The date at which this user was created. */
+  readonly createdDate: string;
 }

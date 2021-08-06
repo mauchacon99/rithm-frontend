@@ -8,7 +8,7 @@
             <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
           </div>
           <div *ngFor="let comment of comments">
-            <app-comment [commentData]="comment"></app-comment>
+            <app-comment [comment]="comment"></app-comment>
           </div>
           <div class="m-2 comments-top">
             <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>
@@ -18,7 +18,7 @@
         </div>
       </div>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-      <app-comment-input></app-comment-input>
+      <app-comment-input [stationId]="stationId" [documentId]="documentId" (postingComment)="setPostingLoading($event)" (newComment)="addNewComment($event)"></app-comment-input>
     </ng-template>
   </mat-tab>
   <mat-tab label="Station">
@@ -30,7 +30,7 @@
             <app-loading-indicator [inlineText]="'Adding your comment...'"></app-loading-indicator>
           </div>
           <div *ngFor="let comment of comments">
-            <app-comment [commentData]="comment"></app-comment>
+            <app-comment [comment]="comment"></app-comment>
           </div>
           <div class="m-2 comments-top">
             <app-loading-indicator class="no-more" *ngIf="loadingMoreComments" [inlineText]="'Loading...'"></app-loading-indicator>

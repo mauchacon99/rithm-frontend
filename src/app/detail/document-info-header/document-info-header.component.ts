@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation } from 'src/models';
+import { DocumentStationInformation, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -14,10 +14,13 @@ import { UtcTimeConversion } from 'src/helpers';
 })
 export class DocumentInfoHeaderComponent {
   /** Type of user looking at a document. */
-  @Input() userType!: 'admin' | 'super' | 'worker';
+  @Input() userType!: UserType;
 
   /** Document information object passed from parent. */
   @Input() documentInformation!: DocumentStationInformation;
+
+  /** Enum for all types of a user. */
+  userTypeEnum = UserType;
 
   /** Document name form. */
   documentNameForm: FormGroup;
@@ -26,7 +29,7 @@ export class DocumentInfoHeaderComponent {
     private fb: FormBuilder,
     private utcTimeConversion: UtcTimeConversion,
   ) {
-    this.userType = 'worker';
+    this.userType = UserType.Worker;
     this.documentNameForm = this.fb.group({
       name: ['']
     });
