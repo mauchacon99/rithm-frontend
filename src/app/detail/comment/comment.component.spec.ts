@@ -21,7 +21,7 @@ describe('CommentComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CommentComponent);
     component = fixture.componentInstance;
-    component.commentData = {
+    component.comment = {
       displayText: 'string',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       dateCreated: '2021-07-14T18:57:59.771Z',

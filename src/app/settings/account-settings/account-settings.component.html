@@ -1,5 +1,6 @@
 <div class="page textured-bg">
-  <div class="container">
+  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+  <div class="container" *ngIf="!isLoading">
     <div class="row justify-content-center">
 
       <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">
@@ -10,19 +11,16 @@
 
           <app-user-form formControlName="userForm" class="row"></app-user-form>
 
-          <app-notification-settings></app-notification-settings>
-
           <div class="row">
             <a (click)="viewTermsAndConditions()" class="col my-3">View the terms & conditions</a>
           </div>
 
           <div class="buttons mt-4">
-            <button type="submit" mat-raised-button color="accent" [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
+            <button type="submit" mat-raised-button color="accent"
+              [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
           </div>
           <div class="text-center overline">{{ appVersionNumber }}</div>
         </form>
-
-
 
       </mat-card>
     </div>

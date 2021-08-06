@@ -16,4 +16,7 @@ export interface StationRosterMember {
 
   /** The email address for the user. */
   readonly email: string;
+
+  /** The user assigned any document or not. */
+  isAssigned?: boolean;
 }
