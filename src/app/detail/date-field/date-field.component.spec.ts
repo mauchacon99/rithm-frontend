@@ -1,7 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { Question, QuestionFieldType } from 'src/models';
 
 import { DateFieldComponent } from './date-field.component';
+
+const FIELD: Question = {
+  prompt: 'Fake question 8',
+  instructions: 'Fake question 8',
+  questionType: {
+    rithmId: '',
+    typeString: QuestionFieldType.Date,
+    validationExpression: '.+'
+  },
+  isReadOnly: false,
+  isRequired: true,
+  isPrivate: false
+};
 
 describe('DateFieldComponent', () => {
   let component: DateFieldComponent;
