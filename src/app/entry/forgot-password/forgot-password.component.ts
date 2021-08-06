@@ -58,9 +58,8 @@ export class ForgotPasswordComponent {
   openAlert(): void {
     const data = {
       title: 'Request Sent',
-      message: `Please check your email for instructions on how to reset your password.
-      If you don't receive an email within 10 minutes, please double check that your entered
-      email is correct and try again.`
+      // eslint-disable-next-line max-len
+      message: `Please check your email for instructions on how to reset your password. If you don't receive an email within 10 minutes, please double check that your entered email is correct and try again.`
     };
 
     this.popupService.alert(data).then(() => {
