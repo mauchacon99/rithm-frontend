@@ -6,8 +6,8 @@
           Welcome, {{user?.firstName}} {{user?.lastName}}
         </h4>
         <p class="welcome-status">
-          You currently have <strong>{{numPrevDocs}} previously started documents</strong> and you're a member of
-          <strong>{{numStations}} stations</strong>.
+          You currently have <strong>{{numPrevDocs}} previously started document<span *ngIf="numPrevDocs > 1">s</span></strong> and you're a member of
+          <strong>{{numStations}} station<span *ngIf="numStations > 1">s</span></strong>.
         </p>
       </div>
       <div class="col-lg-4 col-md-12 welcome-buttons">
