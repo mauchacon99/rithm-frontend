@@ -48,27 +48,27 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-      switch(this.field.questionType.typeString) {
-        case this.fieldTypeEnum.LongText:
-          this.textField = this.fb.group({
-            longText: ['', []]
-          });
-          break;
-        case this.fieldTypeEnum.URL:
-          this.textField = this.fb.group({
-            url: ['', []]
-          });
-          break;
-        case this.fieldTypeEnum.Email:
-          this.textField = this.fb.group({
-            email: ['', []]
-          });
-          break;
-        default:
-          this.textField = this.fb.group({
-            shortText: ['', []]
-          });
-      }
+    switch(this.field.questionType.typeString) {
+      case this.fieldTypeEnum.LongText:
+        this.textField = this.fb.group({
+          longText: ['', []]
+        });
+        break;
+      case this.fieldTypeEnum.URL:
+        this.textField = this.fb.group({
+          url: ['', []]
+        });
+        break;
+      case this.fieldTypeEnum.Email:
+        this.textField = this.fb.group({
+          email: ['', []]
+        });
+        break;
+      default:
+        this.textField = this.fb.group({
+          shortText: ['', []]
+        });
+    }
 
     //Logic to determine if a field should be required, and the validators to give it.
     //The field is required. Validators.required must be included.
