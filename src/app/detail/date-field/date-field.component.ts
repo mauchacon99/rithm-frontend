@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup,
+import {
+  ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator, Validators
 } from '@angular/forms';
@@ -23,7 +24,7 @@ import { QuestionFieldType, Question } from 'src/models';
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => DateFieldComponent),
       multi: true
-    }
+    },
   ]
 })
 export class DateFieldComponent implements OnInit, ControlValueAccessor, Validator {
@@ -52,9 +53,7 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
     });
 
     if (this.field.isRequired) {
-      this.dateField.get('date')?.setValidators([this.fieldValidation.dateValidation(), Validators.required]);
-    } else {
-      this.dateField.get('date')?.setValidators([this.fieldValidation.dateValidation()]);
+      this.dateField.get('date')?.setValidators([Validators.required]);
     }
   }
 

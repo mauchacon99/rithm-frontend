@@ -12,9 +12,6 @@ export class DocumentFieldValidation {
   /** Regex to check currency input. */
   private currency_regex = new RegExp(/^[0-9]*\.?[0-9]*$|^$/);
 
-  /** Regex to check date input. */
-  private date_regex = new RegExp(/^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$|^$/);
-
   /** Regex to check zip code input. */
   private zip_regex = new RegExp(/^[0-9]{5}|^$/);
 
@@ -41,15 +38,6 @@ export class DocumentFieldValidation {
    */
   currencyValidation(): ValidatorFn {
     return this.testRegExp(this.currency_regex, 'currencyIncorrect');
-  }
-
-  /**
-   * Check if date field is correctly entered.
-   *
-   * @returns A validator function.
-   */
-  dateValidation(): ValidatorFn {
-    return this.testRegExp(this.date_regex, 'dateIncorrect');
   }
 
   /**
