@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { AccountSettingsService } from 'src/app/core/account-settings.service';
 
 /**
  * Component for all of the account settings.
@@ -37,6 +38,7 @@ export class AccountSettingsComponent {
     private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
+    private accountSettingsService: AccountSettingsService
     ) {
     this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
@@ -66,6 +68,7 @@ export class AccountSettingsComponent {
         this.isLoading = false;
         this.settingsForm.reset();
         this.popupService.notify('Your account settings are updated.');
+        this.accountSettingsService.setUser({ firstName, lastName });
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.errorService.displayError(
