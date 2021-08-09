@@ -1,8 +1,13 @@
-<p *ngIf="field.questionType.typeString === fieldTypeEnum.CheckList" class="pb-1">{{ field.prompt }}</p>
+<p *ngIf="isChecklistField" class="pb-1">{{ field.prompt }}</p>
+
 <div class="row no-gutters check-field pb-4">
-      <div class="checklist">
-        <mat-checkbox *ngFor="let possibleAnswer of field?.possibleAnswers">
-          {{possibleAnswer.text}}
-        </mat-checkbox>
-      </div>
+  <div class="checklist">
+    <ng-container *ngIf="isChecklistField">
+      <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers">
+        {{ possibleAnswer.text }}
+      </mat-checkbox>
+
+    </ng-container>
+    <mat-checkbox *ngIf="!isChecklistField">{{ field.prompt }}</mat-checkbox>
+  </div>
 </div>

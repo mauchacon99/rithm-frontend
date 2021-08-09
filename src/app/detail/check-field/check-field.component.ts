@@ -13,6 +13,13 @@ export class CheckFieldComponent {
   /** The document field to display. */
   @Input() field!: Question;
 
-  /** The field type of the input. */
-  fieldTypeEnum = QuestionFieldType;
+  /**
+   * Whether this check field is for a checklist.
+   *
+   * @returns True if field is a checklist, false if it a checkbox.
+   */
+  get isChecklistField(): boolean {
+    return this.field.questionType.typeString === QuestionFieldType.CheckList;
+  }
+
 }
