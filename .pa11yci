@@ -10,8 +10,11 @@
   },
   "urls": [
     {
+      "url": "https://localhost:4200/account-create",
+      "timeout": 8000
+    },
+    {
       "url": "https://localhost:4200/",
-      "screenCapture": "pa11y-screenshots/sign-in.png",
       "timeout": 8000,
       "actions": [
         "set field #email to workeruser@inpivota.com",
@@ -22,17 +25,10 @@
     },
     {
       "url": "https://localhost:4200/dashboard",
-      "screenCapture": "pa11y-screenshots/dashboard.png",
-      "timeout": 8000
-    },
-    {
-      "url": "https://localhost:4200/account-create",
-      "screenCapture": "pa11y-screenshots/account-create.png",
       "timeout": 8000
     },
     {
       "url": "https://localhost:4200/document",
-      "screenCapture": "pa11y-screenshots/document.png",
       "timeout": 8000
     }
   ]
