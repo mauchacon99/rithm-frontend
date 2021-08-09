@@ -22,7 +22,7 @@
     },
     {
       "files": [
-        "*.component.html"
+        "*.html"
       ],
       "extends": [],
       "rules": {}
