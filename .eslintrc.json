@@ -22,11 +22,9 @@
     },
     {
       "files": [
-        "*.html"
+        "*.component.html"
       ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
+      "extends": [],
       "rules": {}
     }
   ]

@@ -11,7 +11,8 @@
     "lint-style": "npx stylelint \"**/*.scss\"",
     "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "a11y": "pa11y-ci"
   },
   "private": true,
   "dependencies": {
