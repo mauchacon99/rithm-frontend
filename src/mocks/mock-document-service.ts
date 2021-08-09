@@ -238,22 +238,22 @@ export class MockDocumentService {
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,
-              options: [
+              possibleAnswers: [
                 {
-                  value: 'Option 1',
-                  isSelected: false
+                  text: 'Option 1',
+                  default: false
                 },
                 {
-                  value: 'Option 2',
-                  isSelected: true
+                  text: 'Option 2',
+                  default: true
                 },
                 {
-                  value: 'Option 3',
-                  isSelected: false
+                  text: 'Option 3',
+                  default: false
                 },
                 {
-                  value: 'Option 4',
-                  isSelected: false
+                  text: 'Option 4',
+                  default: false
                 }
               ]
             },
@@ -268,22 +268,22 @@ export class MockDocumentService {
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,
-              options: [
+              possibleAnswers: [
                 {
-                  value: 'Option 1',
-                  isSelected: false
+                  text: 'Option 1',
+                  default: false
                 },
                 {
-                  value: 'Option 2',
-                  isSelected: true
+                  text: 'Option 2',
+                  default: true
                 },
                 {
-                  value: 'Option 3',
-                  isSelected: false
+                  text: 'Option 3',
+                  default: false
                 },
                 {
-                  value: 'Option 4',
-                  isSelected: false
+                  text: 'Option 4',
+                  default: false
                 }
               ]
             },
@@ -298,10 +298,10 @@ export class MockDocumentService {
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,
-              options: [
+              possibleAnswers: [
                 {
-                  value: 'Option 1',
-                  isSelected: false
+                  text: 'Option 1',
+                  default: false
                 },
               ]
             },
@@ -316,22 +316,22 @@ export class MockDocumentService {
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,
-              options: [
+              possibleAnswers: [
                 {
-                  value: 'Option 1',
-                  isSelected: false
+                  text: 'Option 1',
+                  default: false
                 },
                 {
-                  value: 'Option 2',
-                  isSelected: false
+                  text: 'Option 2',
+                  default: false
                 },
                 {
-                  value: 'Option 3',
-                  isSelected: false
+                  text: 'Option 3',
+                  default: false
                 },
                 {
-                  value: 'Option 4',
-                  isSelected: false
+                  text: 'Option 4',
+                  default: false
                 }
               ]
             },
