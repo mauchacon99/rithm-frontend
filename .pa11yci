@@ -1,0 +1,39 @@
+{
+  "standard": "WCAG2AAA",
+  "level": "error",
+  "defaults": {
+    "timeout": 5000,
+    "threshold": 0,
+    "chromeLaunchConfig": {
+      "ignoreHTTPSErrors": true
+    }
+  },
+  "urls": [
+    {
+      "url": "https://localhost:4200/",
+      "screenCapture": "pa11y-screenshots/sign-in.png",
+      "timeout": 8000,
+      "actions": [
+        "set field #email to workeruser@inpivota.com",
+        "set field #password to R1thm?24601",
+        "click element #submit",
+        "wait for path to be /dashboard"
+      ]
+    },
+    {
+      "url": "https://localhost:4200/dashboard",
+      "screenCapture": "pa11y-screenshots/dashboard.png",
+      "timeout": 8000
+    },
+    {
+      "url": "https://localhost:4200/account-create",
+      "screenCapture": "pa11y-screenshots/account-create.png",
+      "timeout": 8000
+    },
+    {
+      "url": "https://localhost:4200/document",
+      "screenCapture": "pa11y-screenshots/document.png",
+      "timeout": 8000
+    }
+  ]
+}
