@@ -181,7 +181,7 @@ export class DocumentComponent implements OnInit {
         validationExpression: '.+'
       },
       isReadOnly: false,
-      isRequired: true,
+      isRequired: false,
       isPrivate: false,
       options: [
         {
