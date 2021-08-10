@@ -16,8 +16,8 @@ export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
 
-  /** Role of the user. */
-  userType = UserType.None;
+  // /** Role of the user. */
+  // userType = UserType.None;
 
 
   constructor(
@@ -27,15 +27,14 @@ export class StationCardComponent {
 
   /**
    * Determines if User has permission to proceed to a linked document.
-   *
-   * @param rithmId The rithmId property of the document we will link to.
    */
-  checkDocPermission(rithmId: string): void {
-    if (this.userType === UserType.Admin) {
+  checkStationEditPermission(): void {
+    // if (this.userType !== UserType.None) {
+      // console.log(this.userType)
       //this.router.navigateByUrl(`/station/${rithmId}`);
       this.router.navigate(
-        [`/station/${rithmId}`], { queryParams: { stationId: this.station.rithmId }});
-    }
+        [`/station`, {stationId: this.station.rithmId}]);
+    // }
   }
 
   /**
