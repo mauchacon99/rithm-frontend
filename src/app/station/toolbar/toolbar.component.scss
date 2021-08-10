@@ -1,7 +1,7 @@
 @import 'functions', 'rithm-light-palettes';
 
 .toolbar-container {
-  width: 325px;
+  width: 315px;
   border-radius: 4px;
   padding: 5px 0;
 
@@ -18,8 +18,9 @@
 
         p {
           font-size: fixed-font-size(12);
-          white-space: pre-wrap;
+          white-space: normal;
           line-height: 14px;
+          margin-top: 2px;
         }
       }
     }
