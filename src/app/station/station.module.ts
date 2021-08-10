@@ -7,6 +7,7 @@ import { DetailModule } from '../detail/detail.module';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   imports: [
     CommonModule,
     StationRoutingModule,
-    DetailModule
+    DetailModule,
+    MatButtonModule
   ]
 })
 export class StationModule { }

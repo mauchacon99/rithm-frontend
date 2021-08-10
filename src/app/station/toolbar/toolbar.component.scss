@@ -1,21 +1,26 @@
 @import 'functions', 'rithm-light-palettes';
 
 .toolbar-container {
-  width: 315px;
+  width: 325px;
   border-radius: 4px;
+  padding: 5px 0;
 
   div.row {
-    div {
+    button {
       text-align: center;
       padding: 5px;
 
-      i {
-        font-size: fixed-font-size(30);
-        color: map-get($primary-palette, 400);
-      }
+      ::ng-deep span.mat-button-wrapper {
+        i {
+          font-size: fixed-font-size(30);
+          color: map-get($primary-palette, 400);
+        }
 
-      p {
-        font-size: fixed-font-size(12);
+        p {
+          font-size: fixed-font-size(12);
+          white-space: pre-wrap;
+          line-height: 14px;
+        }
       }
     }
   }
