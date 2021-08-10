@@ -74,4 +74,13 @@ export class ToolbarComponent {
     this.isInlineToolbarOpen = !this.isInlineToolbarOpen;
   }
 
+  /**
+   * Check if toolbar is open before closing it.
+   */
+  clickedOutside(): void {
+    if (this.isInlineToolbarOpen) {
+      this.isInlineToolbarOpen = false;
+    }
+  }
+
 }

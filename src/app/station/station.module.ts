@@ -8,6 +8,7 @@ import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatButtonModule } from '@angular/material/button';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     StationRoutingModule,
     DetailModule,
-    MatButtonModule
+    MatButtonModule,
+    ClickOutsideModule
   ]
 })
 export class StationModule { }

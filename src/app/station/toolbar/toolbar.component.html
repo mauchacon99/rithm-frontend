@@ -1,4 +1,4 @@
-<button mat-button (click)="toggleInlineToolbar()" color="accent">
+<button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
   <i class="fas fa-plus"></i> Add field to document
 </button>
 <div class="toolbar-container mat-elevation-z4" *ngIf="isInlineToolbarOpen">
