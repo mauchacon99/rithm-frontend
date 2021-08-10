@@ -8,6 +8,8 @@ import { Component} from '@angular/core';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
+  /** Is the inline toolbar open? */
+  isInlineToolbarOpen = false;
 
   /** Tools in the toolbar. */
   tools: any[] = [
@@ -64,5 +66,12 @@ export class ToolbarComponent {
       icon: 'fas fa-chevron-circle-down'
     }
   ];
+
+  /**
+   * Toggle the inline toolbar.
+   */
+  toggleInlineToolbar(): void {
+    this.isInlineToolbarOpen = !this.isInlineToolbarOpen;
+  }
 
 }
