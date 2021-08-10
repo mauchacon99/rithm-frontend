@@ -13,7 +13,7 @@
   field.questionType.typeString === fieldTypes.Number ||
   field.questionType.typeString === fieldTypes.Phone ||
   field.questionType.typeString === fieldTypes.Currency"
-  [field]="field"></app-number-field>
+  [field]="field" formControlName="numberField"></app-number-field>
   <app-date-field *ngIf="
   field.questionType.typeString === fieldTypes.Date ||
   field.questionType.typeString === fieldTypes.DateTime"
