@@ -1,4 +1,4 @@
-@import 'functions', 'rithm-light-palettes';
+@import 'functions', 'rithm-light-palettes', 'variables';
 
 .toolbar-container {
   width: 315px;
@@ -21,6 +21,14 @@
           white-space: normal;
           line-height: 14px;
           margin-top: 2px;
+        }
+      }
+
+      &:hover {
+        color: $accent-blue;
+
+        ::ng-deep span.mat-button-wrapper i {
+          color: $accent-blue;
         }
       }
     }
