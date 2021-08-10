@@ -1,1 +1,20 @@
-// styles
+@import 'functions', 'rithm-light-palettes';
+
+.toolbar-container {
+  width: 315px;
+
+  div.row {
+    div {
+      text-align: center;
+
+      i {
+        font-size: fixed-font-size(30);
+        color: map-get($primary-palette, 400);
+      }
+
+      p {
+        font-size: fixed-font-size(12);
+      }
+    }
+  }
+}
