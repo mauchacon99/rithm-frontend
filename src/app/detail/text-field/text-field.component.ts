@@ -94,7 +94,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    *
    * @returns A string based on the field type.
    */
-   name(): string {
+  name(): string {
     switch(this.field.questionType.typeString) {
       case this.fieldTypeEnum.LongText:
         return 'longText';
