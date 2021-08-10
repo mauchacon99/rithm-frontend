@@ -22,7 +22,7 @@ import { AuthGuard } from './core/auth.guard';
     {
       path: 'station',
       loadChildren: () => import('./station/station.module').then(m => m.StationModule),
-      // canActivate: [AuthGuard]
+      canActivate: [AuthGuard]
     },
     {
       path: 'document',
