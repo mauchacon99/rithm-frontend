@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 
@@ -17,6 +18,7 @@ describe('StationCardComponent', () => {
         MockComponent(RosterComponent)
       ],
       imports: [
+        RouterTestingModule,
         MatDialogModule,
         MatCardModule
       ]
