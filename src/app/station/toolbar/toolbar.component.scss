@@ -2,10 +2,12 @@
 
 .toolbar-container {
   width: 315px;
+  border-radius: 4px;
 
   div.row {
     div {
       text-align: center;
+      padding: 5px;
 
       i {
         font-size: fixed-font-size(30);
