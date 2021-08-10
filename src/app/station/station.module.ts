@@ -6,13 +6,15 @@ import { StationComponent } from './station/station.component';
 import { DetailModule } from '../detail/detail.module';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
 @NgModule({
   declarations: [
     StationComponent,
     FlowLogicComponent,
-    PowersComponent
+    PowersComponent,
+    ToolbarComponent
   ],
   imports: [
     CommonModule,
