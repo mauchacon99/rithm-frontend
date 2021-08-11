@@ -42,3 +42,43 @@
     }
   }
 }
+
+.save-cancel-buttons {
+  text-align: left;
+  background-color: #fff;
+  border-top: 1px solid rgb(224, 208, 240);
+  box-shadow: 1px -2px 2px rgb(229, 228, 231);
+
+  button {
+    margin: 5px 0;
+
+    @media screen and (min-width: 991px) and (max-width: 1499px) {
+      margin: 15px 0;
+    }
+
+    &:last-child {
+      margin-left: 15px;
+    }
+  }
+}
+
+.flow-button {
+  text-align: left;
+  background-color: #fff;
+  border-top: 1px solid rgb(224, 208, 240);
+  box-shadow: 1px -2px 2px rgb(229, 228, 231);
+}
+
+.escalate {
+  font-size: xx-large;
+  color: $accent-blue;
+  padding-left: 30px;
+}
+
+.footer {
+  height: 45px;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+  bottom: 0;
+}

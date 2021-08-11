@@ -18,6 +18,18 @@
               <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
               <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
               <app-document-template [generalInstructions]="'instructions here'" [documentFields]="fakeFields" ></app-document-template>
+              <div class="row footer">
+                <div class="col-md-6 save-cancel-buttons">
+                  <button mat-stroked-button color="accent" class="align-middle">Cancel</button>
+                  <button mat-stroked-button color="accent" class="align-middle">Save</button>
+                </div>
+                <div class="col-md-2 flow-button">
+                  <button mat-raised-button color="accent" class="align-right">Flow</button>
+                </div>
+                <div class="col-md-1 escalate">
+                  <i class="fas fa-exclamation-circle"></i>
+                </div>
+              </div>
             </form>
           </div>
           <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
@@ -27,3 +39,16 @@
   </mat-drawer-content>
 
 </mat-drawer-container>
+
+<!-- <div class="row footer">
+  <div class="col-md-8 save-cancel-buttons">
+    <button mat-stroked-button color="accent" class="align-middle">Cancel</button>
+    <button mat-stroked-button color="accent" class="align-middle">Save</button>
+  </div>
+  <div class="col-md-3 flow-button">
+    <button mat-raised-button color="accent" class="align-right">Flow</button>
+  </div>
+  <div class="col-md-1 escalate">
+    <i class="fas fa-exclamation-circle"></i>
+  </div>
+</div> -->
