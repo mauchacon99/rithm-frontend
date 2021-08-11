@@ -17,22 +17,24 @@ export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
 
-  /** The user's role. */
-  role: 'admin' | null;
+  /** Does the user have admin privileges? */
+  isAdmin = false;
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private userService: UserService
   ) {
-    this.role = this.userService.user.role;
+    if (this.userService.user.role === 'admin') {
+      this.isAdmin = true;
+    }
   }
 
   /**
    * Determines if User has permission to proceed to a linked document.
    */
   checkStationEditPermission(): void {
-    if (this.role === 'admin') {
+    if (this.isAdmin) {
       this.router.navigate(
         [`/station`, this.station.rithmId]);
     }
