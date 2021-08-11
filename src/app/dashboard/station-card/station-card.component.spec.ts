@@ -3,7 +3,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
+import { UserService } from 'src/app/core/user.service';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MockUserService } from 'src/mocks';
 
 import { StationCardComponent } from './station-card.component';
 
@@ -21,6 +23,9 @@ describe('StationCardComponent', () => {
         RouterTestingModule,
         MatDialogModule,
         MatCardModule
+      ],
+      providers: [
+        { provide: UserService, useClass: MockUserService }
       ]
     })
       .compileComponents();

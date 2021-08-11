@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DashboardStationData, User, UserType } from 'src/models';
+import { DashboardStationData } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { Router } from '@angular/router';
@@ -17,28 +17,25 @@ export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
 
-  /** The user that is currently signed in. */
-  user: User | undefined;
-
-  /** The user type enum object. */
-  userTypeEnum = UserType;
+  /** The user's role. */
+  role: 'admin' | null;
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private userService: UserService
   ) {
-    this.user = this.userService.user;
+    this.role = this.userService.user.role;
   }
 
   /**
    * Determines if User has permission to proceed to a linked document.
    */
   checkStationEditPermission(): void {
-    // if (this.userType !== UserType.None) {
+    if (this.role === 'admin') {
       this.router.navigate(
         [`/station`, this.station.rithmId]);
-    // }
+    }
   }
 
   /**

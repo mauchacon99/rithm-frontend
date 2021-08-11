@@ -18,7 +18,8 @@ const testUser: User = {
   isEmailVerified: true,
   createdDate: new Date().toISOString(),
   rithmId: 'kj34k3jkj',
-  notificationSettings: null
+  notificationSettings: null,
+  role: null
 };
 
 describe('UserService', () => {
