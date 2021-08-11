@@ -29,7 +29,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class DateFieldComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
-  dateField!: FormGroup;
+  dateFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -48,12 +48,12 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    this.dateField = this.fb.group({
+    this.dateFieldForm = this.fb.group({
       date: ['', []]
     });
 
     if (this.field.isRequired) {
-      this.dateField.get('date')?.setValidators([Validators.required]);
+      this.dateFieldForm.get('date')?.setValidators([Validators.required]);
     }
   }
 
@@ -70,7 +70,7 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
-    val && this.dateField.setValue(val, { emitEvent: false });
+    val && this.dateFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -82,7 +82,7 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.dateField.valueChanges.subscribe(fn);
+    this.dateFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -100,7 +100,7 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.dateField.disable() : this.dateField.enable();
+    isDisabled ? this.dateFieldForm.disable() : this.dateFieldForm.enable();
   }
 
   /**
@@ -109,10 +109,10 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.dateField.valid ? null : {
+    return this.dateFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Date field form is invalid'
       }
     };
   }

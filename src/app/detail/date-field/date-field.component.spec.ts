@@ -58,11 +58,11 @@ describe('DateFieldComponent', () => {
   });
 
   it('should require an input in date field', () => {
-    const date = component.dateField.controls['date'];
+    const date = component.dateFieldForm.controls['date'];
     expect(component.field.questionType.typeString).toBeTruthy();
     expect(date.valid).toBeFalse();
     expect(date.hasError('required')).toBeTrue();
-    expect(component.dateField.valid).toBeFalse();
+    expect(component.dateFieldForm.valid).toBeFalse();
   });
 
 });
