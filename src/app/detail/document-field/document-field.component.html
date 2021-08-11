@@ -1,5 +1,5 @@
 <ng-container [formGroup]="documentFieldForm">
-  <p *ngIf="field.instructions !== ''">
+  <p *ngIf="field.instructions">
     {{field.instructions}}
   </p>
 
@@ -8,7 +8,7 @@
   field.questionType.typeString === fieldTypes.LongText ||
   field.questionType.typeString === fieldTypes.URL ||
   field.questionType.typeString === fieldTypes.Email"
-  [field]="field" formControlName="textField" ></app-text-field>
+  [field]="field" formControlName="textField"></app-text-field>
   <app-number-field *ngIf="
   field.questionType.typeString === fieldTypes.Number ||
   field.questionType.typeString === fieldTypes.Phone ||

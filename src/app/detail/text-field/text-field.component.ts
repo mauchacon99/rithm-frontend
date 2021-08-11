@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
+  ValidationErrors, Validator, ValidatorFn, Validators
 } from '@angular/forms';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -29,7 +29,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class TextFieldComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
-  textField!: FormGroup;
+  textFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -48,63 +48,30 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.LongText:
-        this.textField = this.fb.group({
-          longText: ['', []]
-        });
-        break;
-      case this.fieldTypeEnum.URL:
-        this.textField = this.fb.group({
-          url: ['', []]
-        });
-        break;
-      case this.fieldTypeEnum.Email:
-        this.textField = this.fb.group({
-          email: ['', []]
-        });
-        break;
-      default:
-        this.textField = this.fb.group({
-          shortText: ['', []]
-        });
-    }
+    this.textFieldForm = this.fb.group({
+      [this.field.questionType.typeString]: ['', []]
+    });
 
     //Logic to determine if a field should be required, and the validators to give it.
+    const validators: ValidatorFn[] = [];
+
     //The field is required. Validators.required must be included.
-    if (this.field.isRequired && this.name() === 'email') {
-      this.textField.get('email')?.setValidators([Validators.email, Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'url') {
-      this.textField.get('url')?.setValidators([this.fieldValidation.urlValidation(), Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'longText') {
-      this.textField.get('longText')?.setValidators([Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'shortText') {
-      this.textField.get('shortText')?.setValidators([Validators.required]);
-    //The field is not required. Only need to set email and url.
-    } else if (!this.field.isRequired && this.name() === 'email') {
-      this.textField.get('email')?.setValidators([Validators.email]);
-    } else if (!this.field.isRequired && this.name() === 'url') {
-      this.textField.get('url')?.setValidators([this.fieldValidation.urlValidation()]);
+    if (this.field.isRequired) {
+      validators.push(Validators.required);
     }
 
-  }
-
-  /**
-   * FormControlName.
-   *
-   * @returns A string based on the field type.
-   */
-   name(): string {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.LongText:
-        return 'longText';
-      case this.fieldTypeEnum.URL:
-        return 'url';
-      case this.fieldTypeEnum.Email:
-        return 'email';
-      default:
-        return 'shortText';
+    //Need to set email and url.
+    switch (this.field.questionType.typeString) {
+      case QuestionFieldType.Email:
+        validators.push(Validators.email);
+        break;
+      case QuestionFieldType.URL:
+        validators.push(this.fieldValidation.urlValidation());
+        break;
     }
+
+    this.textFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+
   }
 
   /**
@@ -120,7 +87,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
-    val && this.textField.setValue(val, { emitEvent: false });
+    val && this.textFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -132,7 +99,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.textField.valueChanges.subscribe(fn);
+    this.textFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -150,7 +117,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.textField.disable() : this.textField.enable();
+    isDisabled ? this.textFieldForm.disable() : this.textFieldForm.enable();
   }
 
   /**
@@ -159,10 +126,10 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.textField.valid ? null : {
+    return this.textFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Text field form is invalid'
       }
     };
   }
