@@ -4,6 +4,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
  * Helper for displaying and validating passwords.
  */
 export class PasswordRequirements {
+  //All the following Regex also allow for an empty string using |^$.
 
   /** Regex to check for 8 chars. */
   private at_least_eight_chars = new RegExp(/^.{8,63}$|^$/);
