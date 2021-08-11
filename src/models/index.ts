@@ -21,3 +21,4 @@ export * from './question';
 export * from './question-type';
 export * from './question-list';
 export * from './question-option';
+export * from './station-info';
