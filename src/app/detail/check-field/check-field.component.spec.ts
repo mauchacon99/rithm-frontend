@@ -60,10 +60,10 @@ describe('CheckFieldComponent', () => {
   });
 
   it('should require an input in check field', () => {
-    const check = component.checkField.controls['checkBox'];
+    const check = component.checkFieldForm.controls['singleCheckbox'];
     expect(component.field.questionType.typeString).toBeTruthy();
     expect(check.valid).toBeFalse();
     expect(check.hasError('required')).toBeTrue();
-    expect(component.checkField.valid).toBeFalse();
+    expect(component.checkFieldForm.valid).toBeFalse();
   });
 });

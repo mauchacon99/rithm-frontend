@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
+  ValidationErrors, Validator, ValidatorFn, Validators
 } from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -28,7 +28,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class CheckFieldComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
-  checkField!: FormGroup;
+  checkFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -44,39 +44,20 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.CheckList:
-        this.checkField = this.fb.group({
-          checkList: [false, []]
-        });
-        break;
-      default:
-        this.checkField = this.fb.group({
-          checkBox: [false, []]
-        });
-      }
+    this.checkFieldForm = this.fb.group({
+      [this.field.questionType.typeString]: ['', []]
+    });
 
     //Logic to determine if a field should be required, and the validators to give it.
-    //The field is required. Validators.required must be included.
-    if (this.field.isRequired && this.name() === 'checkList') {
-      this.checkField.get('checkList')?.setValidators([Validators.requiredTrue]);
-    } else if (this.field.isRequired && this.name() === 'checkBox') {
-      this.checkField.get('CheckBox')?.setValidators([Validators.requiredTrue]);
-    }
-  }
+    const validators: ValidatorFn[] = [];
 
-  /**
-   * FormControlName.
-   *
-   * @returns A string based on the field type.
-   */
-  name(): string {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.CheckList:
-        return 'checkList';
-      default:
-        return 'checkBox';
+    //The field is required. Validators.required must be included.
+    if (this.field.isRequired) {
+      validators.push(Validators.required);
     }
+
+    this.checkFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+
   }
 
   /**
@@ -92,7 +73,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
-    val && this.checkField.setValue(val, { emitEvent: false });
+    val && this.checkFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -104,7 +85,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.checkField.valueChanges.subscribe(fn);
+    this.checkFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -122,7 +103,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.checkField.disable() : this.checkField.enable();
+    isDisabled ? this.checkFieldForm.disable() : this.checkFieldForm.enable();
   }
 
   /**
@@ -131,10 +112,10 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.checkField.valid ? null : {
+    return this.checkFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Check field form is invalid'
       }
     };
   }

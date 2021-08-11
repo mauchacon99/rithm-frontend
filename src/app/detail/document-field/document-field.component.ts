@@ -40,7 +40,8 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
     private fb: FormBuilder,
   ) {
     this.documentFieldForm = this.fb.group({
-      textField: this.fb.control('')
+      textFieldForm: this.fb.control(''),
+      checkFieldForm: this.fb.control(''),
     });
   }
 
