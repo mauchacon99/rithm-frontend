@@ -72,11 +72,11 @@ describe('SelectFieldComponent', () => {
   });
 
   it('should require an input in select field', () => {
-    const select = component.selectField.controls['select'];
+    const select = component.selectFieldForm.controls['singleDropdown'];
     expect(component.field.questionType.typeString).toBeTruthy();
     expect(select.valid).toBeFalse();
     expect(select.hasError('required')).toBeTrue();
-    expect(component.selectField.valid).toBeFalse();
+    expect(component.selectFieldForm.valid).toBeFalse();
   });
 
 });

@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
+  ValidationErrors, Validator, ValidatorFn, Validators
 } from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -28,7 +28,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class SelectFieldComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
-  selectField!: FormGroup;
+  selectFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -44,39 +44,19 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.LongText:
-        this.selectField = this.fb.group({
-          multiSelect: ['', []]
-        });
-        break;
-      default:
-        this.selectField = this.fb.group({
-          select: ['', []]
-        });
-    }
+    this.selectFieldForm = this.fb.group({
+      [this.field.questionType.typeString]: ['', []]
+    });
 
     //Logic to determine if a field should be required, and the validators to give it.
-    //The field is required. Validators.required must be included.
-    if (this.field.isRequired && this.name() === 'multiSelect') {
-      this.selectField.get('multiSelect')?.setValidators([Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'select') {
-      this.selectField.get('select')?.setValidators([Validators.required]);
-    }
-  }
+    const validators: ValidatorFn[] = [];
 
-  /**
-   * FormControlName.
-   *
-   * @returns A string based on the field type.
-   */
-    name(): string {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.LongText:
-        return 'multiSelect';
-      default:
-        return 'select';
+    //The field is required. Validators.required must be included.
+    if (this.field.isRequired) {
+      validators.push(Validators.required);
     }
+
+    this.selectFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
   }
 
   /**
@@ -92,7 +72,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
-    val && this.selectField.setValue(val, { emitEvent: false });
+    val && this.selectFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -104,7 +84,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.selectField.valueChanges.subscribe(fn);
+    this.selectFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -122,7 +102,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.selectField.disable() : this.selectField.enable();
+    isDisabled ? this.selectFieldForm.disable() : this.selectFieldForm.enable();
   }
 
   /**
@@ -131,10 +111,10 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.selectField.valid ? null : {
+    return this.selectFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Select field form is invalid'
       }
     };
   }
