@@ -60,7 +60,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
       validators.push(Validators.required);
     }
 
-    //Need to set email and url.
+    //Need to set zip, currency and phone validation.
     switch (this.field.questionType.typeString) {
       case QuestionFieldType.Address:
         validators.push(this.fieldValidation.zipValidation());
