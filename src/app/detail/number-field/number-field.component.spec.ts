@@ -89,11 +89,11 @@ describe('NumberFieldComponent', () => {
     });
 
     it('should require an input in number field', () => {
-      const number = component.numberField.controls['number'];
+      const number = component.numberFieldForm.controls['number'];
       expect(component.field.questionType.typeString).toBeTruthy();
       expect(number.valid).toBeFalse();
       expect(number.hasError('required')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
 
   });
@@ -106,18 +106,18 @@ describe('NumberFieldComponent', () => {
     });
 
     it('should not require an input in phone field', () => {
-      const phone = component.numberField.controls['phone'];
+      const phone = component.numberFieldForm.controls['phoneNumber'];
       expect(phone.valid).toBeTrue();
       expect(phone.hasError('required')).toBeFalse();
-      expect(component.numberField.valid).toBeTrue();
+      expect(component.numberFieldForm.valid).toBeTrue();
     });
 
     it('should require a valid phone', () => {
-      const phone = component.numberField.controls['phone'];
+      const phone = component.numberFieldForm.controls['phoneNumber'];
       phone.setValue('4564');
       expect(phone.valid).toBeFalse();
       expect(phone.hasError('phoneIncorrect')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
 
@@ -129,18 +129,18 @@ describe('NumberFieldComponent', () => {
     });
 
     it('should require an input in currency field', () => {
-      const currency = component.numberField.controls['currency'];
+      const currency = component.numberFieldForm.controls['currency'];
       expect(currency.valid).toBeFalse();
       expect(currency.hasError('required')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
 
     it('should require a valid currency', () => {
-      const currency = component.numberField.controls['currency'];
+      const currency = component.numberFieldForm.controls['currency'];
       currency.setValue('45.45.45');
       expect(currency.valid).toBeFalse();
       expect(currency.hasError('currencyIncorrect')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
 
@@ -163,18 +163,18 @@ describe('NumberFieldComponent', () => {
     });
 
     it('should require an input for a zip code', () => {
-      const zip = component.numberField.controls['address'];
+      const zip = component.numberFieldForm.controls['address'];
       expect(zip.valid).toBeFalse();
       expect(zip.hasError('required')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
 
     it('should require a valid zip', () => {
-      const zip = component.numberField.controls['address'];
+      const zip = component.numberFieldForm.controls['address'];
       zip.setValue('455');
       expect(zip.valid).toBeFalse();
       expect(zip.hasError('zipIncorrect')).toBeTrue();
-      expect(component.numberField.valid).toBeFalse();
+      expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
 

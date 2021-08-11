@@ -8,12 +8,12 @@
   field.questionType.typeString === fieldTypes.LongText ||
   field.questionType.typeString === fieldTypes.URL ||
   field.questionType.typeString === fieldTypes.Email"
-  [field]="field" formControlName="textField"></app-text-field>
+  [field]="field" formControlName="textFieldForm"></app-text-field>
   <app-number-field *ngIf="
   field.questionType.typeString === fieldTypes.Number ||
   field.questionType.typeString === fieldTypes.Phone ||
   field.questionType.typeString === fieldTypes.Currency"
-  [field]="field" formControlName="numberField"></app-number-field>
+  [field]="field" formControlName="numberFieldForm"></app-number-field>
   <app-date-field *ngIf="
   field.questionType.typeString === fieldTypes.Date ||
   field.questionType.typeString === fieldTypes.DateTime"

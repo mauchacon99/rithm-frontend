@@ -1,4 +1,4 @@
-<div [formGroup]="numberField" class="row no-gutters template-fields">
+<div [formGroup]="numberFieldForm" class="row no-gutters template-fields">
   <mat-form-field class="col-12" appearance="outline">
     <mat-label>{{field.prompt}}</mat-label>
     <div matPrefix class="icon">
@@ -6,9 +6,9 @@
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Currency" class="fas fa-money-bill-wave"></i>
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Phone" class="fa fa-phone"></i>
     </div>
-    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Number" mask="separator" [allowNegativeNumbers]="true" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="name()">
-    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Address" mask="00000"  matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="name()">
-    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Currency" prefix="$ " mask="separator.2" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="name()">
-    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Phone" mask="(000) 000-0000" [dropSpecialCharacters]="false" matInput placeholder="{{field?.prompt}}" type="tel" [required]="field.isRequired" inputmode="numeric" [formControlName]="name()">
+    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Number" mask="separator" [allowNegativeNumbers]="true" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType.typeString">
+    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Address" mask="00000"  matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType.typeString">
+    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Currency" prefix="$ " mask="separator.2" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType.typeString">
+    <input *ngIf="field.questionType.typeString === fieldTypeEnum.Phone" mask="(000) 000-0000" [dropSpecialCharacters]="false" matInput placeholder="{{field?.prompt}}" type="tel" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType.typeString">
   </mat-form-field>
 </div>

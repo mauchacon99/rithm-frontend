@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
+  ValidationErrors, Validator, ValidatorFn, Validators
 } from '@angular/forms';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -29,7 +29,7 @@ import { QuestionFieldType, Question } from 'src/models';
 })
 export class NumberFieldComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
-  numberField!: FormGroup;
+  numberFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -48,65 +48,33 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    * Set up Formbuilder group.
    */
   ngOnInit(): void {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.Address:
-        this.numberField = this.fb.group({
-          address: ['', []]
-        });
-        break;
-      case this.fieldTypeEnum.Currency:
-        this.numberField = this.fb.group({
-          currency: ['', []]
-        });
-        break;
-      case this.fieldTypeEnum.Phone:
-        this.numberField = this.fb.group({
-          phone: ['', []]
-        });
-        break;
-      default:
-        this.numberField = this.fb.group({
-          number: ['', []]
-        });
-    }
+    this.numberFieldForm = this.fb.group({
+      [this.field.questionType.typeString]: ['', []]
+    });
 
     //Logic to determine if a field should be required, and the validators to give it.
+    const validators: ValidatorFn[] = [];
+
     //The field is required. Validators.required must be included.
-    if (this.field.isRequired && this.name() === 'address') {
-      this.numberField.get('address')?.setValidators([this.fieldValidation.zipValidation(), Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'currency') {
-      this.numberField.get('currency')?.setValidators([this.fieldValidation.currencyValidation(), Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'phone') {
-      this.numberField.get('phone')?.setValidators([this.fieldValidation.phoneValidation(),Validators.required]);
-    } else if (this.field.isRequired && this.name() === 'number') {
-      this.numberField.get('number')?.setValidators([Validators.required]);
-    //The field is not required. Only need to set address, currency and phone.
-    } else if (!this.field.isRequired && this.name() === 'address') {
-      this.numberField.get('address')?.setValidators([this.fieldValidation.zipValidation()]);
-    } else if (!this.field.isRequired && this.name() === 'currency') {
-      this.numberField.get('currency')?.setValidators([this.fieldValidation.currencyValidation()]);
-    } else if (!this.field.isRequired && this.name() === 'phone') {
-      this.numberField.get('phone')?.setValidators([this.fieldValidation.phoneValidation()]);
+    if (this.field.isRequired) {
+      validators.push(Validators.required);
     }
 
-  }
-
-  /**
-   * FormControlName.
-   *
-   * @returns A string based on the field type.
-   */
-   name(): string {
-    switch(this.field.questionType.typeString) {
-      case this.fieldTypeEnum.Address:
-        return 'address';
-      case this.fieldTypeEnum.Currency:
-        return 'currency';
-      case this.fieldTypeEnum.Phone:
-        return 'phone';
-      default:
-        return 'number';
+    //Need to set email and url.
+    switch (this.field.questionType.typeString) {
+      case QuestionFieldType.Address:
+        validators.push(this.fieldValidation.zipValidation());
+        break;
+      case QuestionFieldType.Currency:
+        validators.push(this.fieldValidation.currencyValidation());
+        break;
+      case QuestionFieldType.Phone:
+        validators.push(this.fieldValidation.phoneValidation());
+        break;
     }
+
+    this.numberFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+
   }
 
   /**
@@ -122,7 +90,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   writeValue(val: any): void {
-    val && this.numberField.setValue(val, { emitEvent: false });
+    val && this.numberFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -134,7 +102,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.numberField.valueChanges.subscribe(fn);
+    this.numberFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -152,7 +120,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.numberField.disable() : this.numberField.enable();
+    isDisabled ? this.numberFieldForm.disable() : this.numberFieldForm.enable();
   }
 
   /**
@@ -161,10 +129,10 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.numberField.valid ? null : {
+    return this.numberFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Number field form is invalid'
       }
     };
   }
