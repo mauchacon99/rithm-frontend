@@ -14,4 +14,14 @@ describe('StationService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should return station information', () => {
+    const stationId = 'E204F369-386F-4E41';
+
+    service.getStationInfo(stationId)
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+  });
+
 });

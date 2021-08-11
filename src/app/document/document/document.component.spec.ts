@@ -15,10 +15,12 @@ import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawe
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
   let fixture: ComponentFixture<DocumentComponent>;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,9 +39,11 @@ describe('DocumentComponent', () => {
         RouterTestingModule.withRoutes(
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),
-        MatSidenavModule
+        MatSidenavModule,
+        ReactiveFormsModule
       ],
       providers: [
+        { provide: FormBuilder, useValue: formBuilder },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService }
       ]
