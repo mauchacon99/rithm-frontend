@@ -25,7 +25,7 @@
         "*.html"
       ],
       "extends": [
-        "plugin:@angular-eslint/template/recommended"
+        "@strut-software/eslint-config/angular-html"
       ],
       "rules": {}
     }
