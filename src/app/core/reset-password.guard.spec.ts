@@ -28,6 +28,7 @@ describe('ResetPasswordGuard', () => {
   });
 
   it('should navigate back to sign in if params are invalid', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const invalidParams: any = {
       queryParamMap: convertToParamMap(
         { guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
@@ -37,6 +38,7 @@ describe('ResetPasswordGuard', () => {
   });
 
   it('should navigate back to sign in if params are valid, but type is not reset', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const validParams: any = {
       queryParamMap: convertToParamMap(
         { type: 'register', guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
@@ -46,6 +48,7 @@ describe('ResetPasswordGuard', () => {
   });
 
   it('should allow navigation if params are valid and type is reset', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const paramsToReset: any = {
       queryParamMap: convertToParamMap(
         { type: 'reset', guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })

@@ -36,7 +36,7 @@ export class UserRemovalComponent {
       .pipe(first())
       .subscribe(() => {
         this.popupService.notify('Deleted should have worked');
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.displayError(
           'unable to delete. ',
           error,

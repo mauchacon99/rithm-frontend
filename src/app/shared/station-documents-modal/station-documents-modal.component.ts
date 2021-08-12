@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { DocumentService } from '../../core/document.service';
 import { first } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
 import { Document, StationDocumentsModalData, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
@@ -75,7 +74,7 @@ export class StationDocumentsModalComponent implements OnInit {
           this.userType = documentsResponse.userType;
         }
         this.isLoading = false;
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.dialogRef.close();
         this.errorService.displayError(

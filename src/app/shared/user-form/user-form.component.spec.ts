@@ -120,18 +120,16 @@ describe('UserFormComponent', () => {
 
   it('should have correct password labels for account create', () => {
     component.accountCreate = true;
-    const passwordLabel = component.getPasswordLabel();
-    const confirmPasswordLabel = component.getPasswordLabel(true);
-    expect(passwordLabel).toEqual('Password');
-    expect(confirmPasswordLabel).toEqual('Confirm password');
+    component.ngOnInit();
+    expect(component.passwordLabel).toEqual('Password');
+    expect(component.confirmPasswordLabel).toEqual('Confirm password');
   });
 
   it('should have correct password labels for general account settings', () => {
     component.accountCreate = false;
-    const passwordLabel = component.getPasswordLabel();
-    const confirmPasswordLabel = component.getPasswordLabel(true);
-    expect(passwordLabel).toEqual('New password');
-    expect(confirmPasswordLabel).toEqual('Confirm new password');
+    component.ngOnInit();
+    expect(component.passwordLabel).toEqual('New password');
+    expect(component.confirmPasswordLabel).toEqual('Confirm new password');
   });
 
   it('should toggle password requirements based on focus', async () => {

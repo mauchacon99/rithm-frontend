@@ -21,7 +21,7 @@ export class StationService {
    */
    getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
-      rithmId: 'E204F369-386F-4E41',
+      rithmId: stationId,
       name: 'Dry Goods & Liquids',
       instructions: 'General instructions',
       dueDate: '2021-08-22T17:26:47.3506612Z',
