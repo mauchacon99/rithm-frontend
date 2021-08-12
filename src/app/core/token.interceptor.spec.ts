@@ -3,10 +3,9 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TokenInterceptor } from './token.interceptor';
-import { MockPopupService, MockUserService } from 'src/mocks';
+import { MockPopupService } from 'src/mocks';
 import { PopupService } from './popup.service';
 import { environment } from 'src/environments/environment';
-import { DashboardService } from '../dashboard/dashboard.service';
 import { UserService } from './user.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
