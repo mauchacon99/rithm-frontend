@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { first } from 'rxjs/operators';
@@ -64,7 +63,7 @@ export class CommentDrawerComponent implements OnInit {
           this.documentId = info.documentRithmId;
           this.getDocumentComments(true);
         }
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -108,7 +107,7 @@ export class CommentDrawerComponent implements OnInit {
           this.commentsEnd = true;
         }
         setLoading(false);
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         setLoading(false);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

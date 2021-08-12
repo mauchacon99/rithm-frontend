@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 
 /**
  * Service for all behavior and state for the sidenav and drawers.
@@ -19,7 +19,7 @@ export class SidenavDrawerService {
   drawerContext$: Subject<string> = new Subject();
 
   /** Optional data that is available to the drawer. */
-  drawerData$: BehaviorSubject<any> = new BehaviorSubject(null);
+  drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
 
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
