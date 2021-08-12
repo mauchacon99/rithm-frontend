@@ -56,4 +56,8 @@ export class StationService {
     return of(data).pipe(delay(1000));
   }
 
+  getAllStations(): void {
+
+  }
+
 }
