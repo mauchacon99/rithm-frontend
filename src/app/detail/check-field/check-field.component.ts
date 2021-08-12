@@ -71,7 +71,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    *
    * @param val The value to be written.
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line
   writeValue(val: any): void {
     val && this.checkFieldForm.setValue(val, { emitEvent: false });
   }
@@ -81,7 +81,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    *
    * @param fn The function to register.
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
