@@ -7,13 +7,13 @@ export class DocumentFieldValidation {
   //All the following Regex also allow for an empty string using |^$.
 
   /** Regex to check address input. */
-  private address_regex = new RegExp(/^[A-Za-z0-9'\.\-\s\,]+$|^$/);
+  private address_regex = new RegExp(/^[A-Za-z0-9'.\-\s,]+$|^$/);
 
   /** Regex to check currency input. */
   private currency_regex = new RegExp(/^[0-9]*\.?[0-9]*$|^$/);
 
   /** Regex to check date input. */
-  private date_regex = new RegExp(/^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$|^$/);
+  private date_regex = new RegExp(/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$|^$/);
 
   /** Regex to check zip code input. */
   private zip_regex = new RegExp(/^[0-9]{5}|^$/);
