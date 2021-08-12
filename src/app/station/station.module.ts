@@ -8,7 +8,11 @@ import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -23,7 +27,11 @@ import { ClickOutsideModule } from 'ng-click-outside';
     StationRoutingModule,
     DetailModule,
     MatButtonModule,
-    ClickOutsideModule
+    MatSidenavModule,
+    MatTabsModule,
+    ReactiveFormsModule,
+    ClickOutsideModule,
+    SharedModule
   ]
 })
 export class StationModule { }

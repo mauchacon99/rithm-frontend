@@ -2,14 +2,15 @@ import { Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator } from '@angular/forms';
-import { Question } from 'src/models';
+  ValidationErrors, Validator
+} from '@angular/forms';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Component for the document template area of a station/document.
  */
 @Component({
-  selector: 'app-document-template[documentFields][generalInstructions]',
+  selector: 'app-document-template[documentFields][generalInstructions][isStationEditMode]',
   templateUrl: './document-template.component.html',
   styleUrls: ['./document-template.component.scss'],
   providers: [
@@ -34,6 +35,23 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
 
   /** The document fields in the template area for the station/document. */
   @Input() documentFields!: Question[];
+
+  /** Station edit mode or not. */
+  @Input() isStationEditMode!: boolean;
+
+  /** The general instructions field. */
+  readonly field = {
+    prompt: 'General Instructions',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.LongText,
+      validationExpression: '.+',
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
 
   constructor(
     private fb: FormBuilder,

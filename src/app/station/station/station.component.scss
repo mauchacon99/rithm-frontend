@@ -1,1 +1,84 @@
-// styles here
+@import 'functions', 'variables';
+
+.sub-header {
+  height: 45px;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+}
+
+::ng-deep mat-drawer-container {
+  mat-drawer {
+    width: 280px;
+    height: calc(100vh - 110px);
+    margin-top: 45px;
+
+    .mat-tab-label {
+      min-width: 140px !important;
+      font-size: font-calc(14);
+      color: $accent-blue;
+      opacity: 1;
+    }
+  }
+}
+
+::ng-deep mat-ink-bar.mat-ink-bar {
+  background: $accent-blue !important;
+}
+
+.page {
+  margin-top: 45px;
+
+  @media screen and (max-width: 991px) {
+    min-height: calc(100vh - 110px);
+  }
+
+  .container-fluid {
+    .row {
+      .bg-white {
+        overflow-y: scroll;
+        height: calc(100vh - 110px);
+        padding-bottom: 40px;
+      }
+    }
+  }
+
+  .footer {
+    height: 45px;
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+    bottom: 0;
+
+    .save-cancel-buttons {
+      background-color: #fff;
+      border-top: 1px solid rgb(224, 208, 240);
+      box-shadow: 1px -2px 2px rgb(229, 228, 231);
+
+      button {
+        margin: 5px 0;
+
+        @media screen and (min-width: 991px) and (max-width: 1499px) {
+          margin: 15px 0;
+        }
+
+        &:last-child {
+          margin-left: 15px;
+        }
+      }
+    }
+
+    .align-button {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+::ng-deep .tab-content {
+  .mat-tab-label-content {
+    color: $accent-blue;
+  }
+}

@@ -18,12 +18,15 @@ export class SubHeaderComponent {
   /** Parent document information. */
   @Input() documentInformation?: DocumentStationInformation;
 
+  /** Parent title information. */
+  @Input() title?: string;
+
   /** Current active icon. */
   activeItem = 'none';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService
-  ) {}
+  ) { }
 
   /**
    * Toggles the open state detail drawer for comments or history.
