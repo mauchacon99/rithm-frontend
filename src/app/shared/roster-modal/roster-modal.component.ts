@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -44,7 +43,7 @@ export class RosterModalComponent implements OnInit {
     this.stationRithmId = this.data.stationId;
     this.isWorker = this.data.isWorker;
 
-    if(this.isWorker) {
+    if (this.isWorker) {
       this.roster$ = this.dashboardService.getWorkerRoster(this.stationRithmId);
     } else {
       this.roster$ = this.dashboardService.getSupervisorRoster(this.stationRithmId);
@@ -62,7 +61,7 @@ export class RosterModalComponent implements OnInit {
         if (rosterMembers) {
           this.members = rosterMembers;
         }
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.dialogRef.close();
         this.errorService.displayError(

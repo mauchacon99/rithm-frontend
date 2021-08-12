@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
@@ -66,7 +65,7 @@ export class TermsConditionsModalComponent implements OnInit {
           this.message = termsConditions;
           this.isLoading = false;
         }
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.dialogRef.close();
         this.errorService.displayError(

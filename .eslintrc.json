@@ -25,9 +25,12 @@
         "*.html"
       ],
       "extends": [
-        "plugin:@angular-eslint/template/recommended"
+        "@strut-software/eslint-config/angular-html"
       ],
-      "rules": {}
+      "rules": {
+        // TODO: remove this and fix lint issues
+        "@angular-eslint/template/no-call-expression": "warn"
+      }
     }
   ]
 }

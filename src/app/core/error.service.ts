@@ -11,12 +11,14 @@ export class ErrorService {
 
   constructor(private popupService: PopupService) {}
 
+  // TODO: add better checking for Error vs unknown type
+
   /**
    * Logs an error to the console.
    *
    * @param error The error that was encountered.
    */
-  logError(error: Error): void {
+  logError(error: Error | unknown): void {
     console.error(error);
     // TODO: [RIT-680] Add error log reporting using some logging service
   }
@@ -29,7 +31,7 @@ export class ErrorService {
    * @param important Whether the error is important and requires a dismissal (using an
    * alert). Optional; defaults to `false` (non-important).
    */
-  displayError(displayMessage: string, error: Error, important = true): void {
+  displayError(displayMessage: string, error: Error | unknown, important = true): void {
     this.logError(error);
 
     if (important) {
