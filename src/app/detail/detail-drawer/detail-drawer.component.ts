@@ -36,7 +36,7 @@ export class DetailDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.itemType = context;
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.logError(error);
       });
 
@@ -50,7 +50,7 @@ export class DetailDrawerComponent implements OnDestroy {
           this.stationId = context.stationId;
           this.documentId = context.documentRithmId;
         }
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.logError(error);
       });
   }

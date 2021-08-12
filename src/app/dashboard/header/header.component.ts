@@ -3,7 +3,6 @@ import { User } from 'src/models';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { WorkerDashboardHeader } from 'src/models';
 import { first } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
 
@@ -48,7 +47,7 @@ export class HeaderComponent implements OnInit {
           this.numStations = headerData.rosterStations;
           this.isLoading = false;
         }
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

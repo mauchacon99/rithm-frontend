@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
@@ -309,7 +308,7 @@ export class DocumentComponent implements OnInit {
           this.getDocumentStationData(params.documentId, params.stationId);
           this.getConnectedStations(params.documentId, params.stationId);
         }
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -354,7 +353,7 @@ export class DocumentComponent implements OnInit {
           this.documentInformation = document;
         }
         this.documentLoading = false;
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
@@ -378,7 +377,7 @@ export class DocumentComponent implements OnInit {
         this.forwardStations = connectedStations.followingStations;
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
-      }, (error) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(

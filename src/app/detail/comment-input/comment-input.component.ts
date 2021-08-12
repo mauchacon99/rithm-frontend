@@ -64,7 +64,7 @@ export class CommentInputComponent {
         this.postingComment.emit(false);
         this.commentForm.get('comment')?.reset('');
         this.formDirective.resetForm();
-      }, (error) => {
+      }, (error: unknown) => {
         this.commentForm.enable();
         this.postingComment.emit(false);
         this.errorService.displayError(

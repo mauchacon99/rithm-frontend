@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import { first } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardStationData } from 'src/models';
 
@@ -37,7 +36,7 @@ export class MyStationsComponent implements OnInit {
           this.stations = stations;
         }
         this.isLoading = false;
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
