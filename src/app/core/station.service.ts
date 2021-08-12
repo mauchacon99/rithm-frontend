@@ -56,8 +56,11 @@ export class StationService {
     return of(data).pipe(delay(1000));
   }
 
+  /**
+   * Gets all the stations from the API.
+   */
   getAllStations(): void {
-
+    // something here
   }
 
 }
