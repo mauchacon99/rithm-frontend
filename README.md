@@ -75,3 +75,6 @@ Compiles all of the JSDoc and Angular documentation using Compodoc.
 
 `npm run compile-style-docs`\
 Compiles all of the styling documentation using SassDoc.
+
+`npm run a11y`\
+Checks the project for accessibility issues.
