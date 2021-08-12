@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DashboardService } from '../dashboard.service';
@@ -36,7 +35,7 @@ export class PreviouslyStartedDocumentsComponent implements OnInit {
         if (documents) {
           this.previouslyStartedDocuments = documents;
         }
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
