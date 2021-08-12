@@ -33,12 +33,17 @@
     min-height: calc(100vh - 110px);
   }
 
-  .container-fluid {
-    .row {
-      .bg-white {
+  div.container-fluid {
+    div.row {
+      div.bg-white {
         overflow-y: scroll;
         height: calc(100vh - 110px);
         padding-bottom: 40px;
+
+        // Prevent horizontal scrollbar
+        form mat-tab-group ::ng-deep .mat-tab-body-content {
+          overflow-x: hidden;
+        }
       }
     }
   }
