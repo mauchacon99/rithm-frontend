@@ -77,7 +77,7 @@ export class NotificationMenuContainerComponent implements OnInit{
   /** Sort notifications by read value. */
   ngOnInit(): void {
     this.notifications.forEach(notification => {
-      if(notification.read) {
+      if (notification.read) {
         this.read.push(notification);
       } else {
         this.unread.push(notification);

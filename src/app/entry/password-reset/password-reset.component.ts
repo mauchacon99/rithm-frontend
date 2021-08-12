@@ -87,7 +87,7 @@ export class PasswordResetComponent implements OnInit {
         this.isLoading = false;
         this.email = params.get('email') as string;
         this.guid = params.get('guid') as string;
-      }, (error) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'The link you followed was invalid. Please double check the link in your email and try again.',
@@ -117,7 +117,7 @@ export class PasswordResetComponent implements OnInit {
     .subscribe(() => {
       this.isLoading = false;
       this.openAlert();
-    }, (error) => {
+    }, (error: unknown) => {
       this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong and we were unable to reset your password. Please try again in a little while.',

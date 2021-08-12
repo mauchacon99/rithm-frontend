@@ -80,8 +80,12 @@ export class AccountCreateComponent implements OnInit {
       .subscribe(() => {
         this.isLoading = false;
         this.openValidateEmailModal();
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
+
+        if (!(error instanceof HttpErrorResponse)) {
+          throw new Error('Unknown error');
+        }
         const errorMessage: string = error.error.error;
 
         if (errorMessage === 'This username has already been used.') {
