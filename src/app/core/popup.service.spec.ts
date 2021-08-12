@@ -72,7 +72,7 @@ describe('PopupService', () => {
     service.notify('mock notification');
     expect(snackBar).toHaveBeenCalledWith('mock notification', 'OK', {
       duration: 3500,
-      panelClass: false ? 'snackbar-error' : 'snackbar'
+      panelClass: 'snackbar'
     });
   });
 
@@ -80,7 +80,7 @@ describe('PopupService', () => {
     service.notify('mock notification', true);
     expect(snackBar).toHaveBeenCalledWith('mock notification', 'OK', {
       duration: 3500,
-      panelClass: true ? 'snackbar-error' : 'snackbar'
+      panelClass: 'snackbar-error'
     });
   });
 
