@@ -16,8 +16,4 @@ export class StationInfoHeaderComponent {
   /** Document information object passed from parent. */
   @Input() stationInformation!: DocumentStationInformation;
 
-  constructor() {
-    this.type = 'worker';
-  }
-
 }
