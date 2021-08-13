@@ -1,4 +1,6 @@
 <ng-container [formGroup]="stationTemplateForm">
-  <app-station-field [field]="stationInstructionsField" formControlName="stationFieldForm"></app-station-field>
+  <app-text-field [field]="stationInstructionsField"></app-text-field>
+  <!-- TODO: Loop over all the added fields and display them with their controls -->
+  <!-- <app-station-field [field]="stationInstructionsField" formControlName="stationFieldForm"></app-station-field> -->
   <hr class="my-3">
 </ng-container>
