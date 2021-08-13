@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { QuestionFieldType } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Template Component.
  */
@@ -12,6 +12,9 @@ import { QuestionFieldType } from 'src/models';
 export class StationTemplateComponent {
   /** The form to add to station. */
   stationTemplateForm!: FormGroup;
+
+  /** The station fields in the template area. */
+  @Input() stationFields!: Question[];
 
   /** The general instructions field. */
   readonly stationInstructionsField = {

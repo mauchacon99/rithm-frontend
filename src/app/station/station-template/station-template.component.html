@@ -1,6 +1,9 @@
 <ng-container [formGroup]="stationTemplateForm">
   <app-text-field [field]="stationInstructionsField"></app-text-field>
-  <!-- TODO: Loop over all the added fields and display them with their controls -->
-  <!-- <app-station-field [field]="stationInstructionsField" formControlName="stationFieldForm"></app-station-field> -->
+  <app-station-field *ngFor="let field of stationFields" [field]="field" formControlName="stationFieldForm"></app-station-field>
   <hr class="my-3">
+
+  <!-- TODO: All items expansion panel here -->
+
+  <!-- TODO: Hidden items expansion panel here (if admin) -->
 </ng-container>
