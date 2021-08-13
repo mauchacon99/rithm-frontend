@@ -40,7 +40,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   @Input() isStationEditMode!: boolean;
 
   /** The general instructions field. */
-  readonly field = {
+  readonly generalInstructionsField = {
     prompt: 'General Instructions',
     instructions: '',
     questionType: {
