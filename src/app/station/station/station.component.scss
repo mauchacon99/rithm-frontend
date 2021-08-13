@@ -37,7 +37,7 @@
     div.row {
       div.bg-white {
         overflow-y: scroll;
-        height: calc(100vh - 110px);
+        min-height: calc(100vh - 110px);
         padding-bottom: 45px;
 
         mat-tab-group ::ng-deep .mat-tab-body-wrapper {
