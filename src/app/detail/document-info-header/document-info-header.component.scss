@@ -42,3 +42,17 @@ section.row {
     }
   }
 }
+
+:host::ng-deep .mat-form-field-suffix {
+  display: flex;
+
+  .settings {
+    display: flex;
+    justify-content: flex-end;
+
+    i {
+      font-size: x-large;
+      color: map-get($primary-palette, 400);
+    }
+  }
+}

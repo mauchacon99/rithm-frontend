@@ -19,6 +19,9 @@ export class DocumentInfoHeaderComponent {
   /** Document information object passed from parent. */
   @Input() documentInformation!: DocumentStationInformation;
 
+  /** Station or Document looking at a document. */
+  @Input() isStation!: boolean;
+
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
@@ -42,9 +45,9 @@ export class DocumentInfoHeaderComponent {
    * @param timeEntered Reflects the date we're calculating against.
    * @returns A string reading something like "4 days" or "32 minutes".
    */
-     getElapsedTime(timeEntered: string): string {
-      return this.utcTimeConversion.getElapsedTimeText(
-        this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
-      );
-    }
+  getElapsedTime(timeEntered: string): string {
+    return this.utcTimeConversion.getElapsedTimeText(
+      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+    );
+  }
 }

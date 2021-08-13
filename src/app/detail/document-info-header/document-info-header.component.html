@@ -8,10 +8,13 @@
         <mat-label>{{ documentInformation.documentName }}</mat-label>
         <!-- TODO: Disable input if Station template designates it as not editable by worker -->
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
+        <div *ngIf="isStation" matSuffix class="icon icon-top settings">
+          <i class="fas fa-cog"></i>
+        </div>
       </mat-form-field>
     </form>
   </div>
-  <div class="offset-md-2"
+  <div *ngIf="!isStation" class="offset-md-2"
   [ngClass]="{
     'col-2': userType === userTypeEnum.Worker,
     'col-4 col-md-2': userType === userTypeEnum.Supervisor || userTypeEnum.Admin
@@ -27,7 +30,7 @@
       <!-- <i class="fas fa-lock"></i> -->
     </button>
   </div>
-  <div class="col-md-4 text-center meta-data"
+  <div *ngIf="!isStation" class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': userType === userTypeEnum.Worker,
     'col-8': userTypeEnum.Supervisor || userTypeEnum.Admin
@@ -35,7 +38,7 @@
     Time in station<br>
     <span>{{ getElapsedTime(documentInformation.flowedTimeUTC) }}</span>
   </div>
-  <div class="col-md-4 text-center meta-data"
+  <div *ngIf="!isStation" class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': userType === userTypeEnum.Worker,
     'd-none d-md-block': userTypeEnum.Supervisor || userTypeEnum.Admin
