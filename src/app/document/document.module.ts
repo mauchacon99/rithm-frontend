@@ -7,11 +7,15 @@ import { DetailModule } from '../detail/detail.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DocumentFieldComponent } from './document-field/document-field.component';
+import { DocumentTemplateComponent } from './document-template/document-template.component';
 
 
 @NgModule({
   declarations: [
-    DocumentComponent
+    DocumentComponent,
+    DocumentFieldComponent,
+    DocumentTemplateComponent
   ],
   imports: [
     CommonModule,
@@ -20,6 +24,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     DetailModule,
     SharedModule,
     ReactiveFormsModule
+  ],
+  exports: [
+    DocumentFieldComponent
   ]
 })
 export class DocumentModule { }

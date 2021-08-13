@@ -11,7 +11,7 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
 import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
 import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
-import { DocumentTemplateComponent } from 'src/app/detail/document-template/document-template.component';
+import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';

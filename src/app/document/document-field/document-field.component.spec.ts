@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { QuestionFieldType } from 'src/models';
-import { AddressFieldComponent } from '../address-field/address-field.component';
-import { CheckFieldComponent } from '../check-field/check-field.component';
-import { DateFieldComponent } from '../date-field/date-field.component';
-import { NumberFieldComponent } from '../number-field/number-field.component';
-import { SelectFieldComponent } from '../select-field/select-field.component';
-import { TextFieldComponent } from '../text-field/text-field.component';
+import { AddressFieldComponent } from '../../detail/address-field/address-field.component';
+import { CheckFieldComponent } from '../../detail/check-field/check-field.component';
+import { DateFieldComponent } from '../../detail/date-field/date-field.component';
+import { NumberFieldComponent } from '../../detail/number-field/number-field.component';
+import { SelectFieldComponent } from '../../detail/select-field/select-field.component';
+import { TextFieldComponent } from '../../detail/text-field/text-field.component';
 
 import { DocumentFieldComponent } from './document-field.component';
 
