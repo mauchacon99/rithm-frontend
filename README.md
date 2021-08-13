@@ -28,7 +28,7 @@ You can use any of the following pre-existing credentials for signing in:
 |rithmuser@inpivota.com|R1thm?24601|
 |supervisoruser@inpivota.com|R1thm?24601|
 |harrypotter@inpivota.com|R1thm?24601|
-|rithmadmin@inpivota.com|R1thm?24601|
+|rithmadmin@inpivota.com|R1thm?24601|User has admin privileges
 |marrypoppins@inpivota.com|R1thm?24601|User has no stations
 
 ## Documentation
