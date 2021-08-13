@@ -38,15 +38,10 @@
       div.bg-white {
         overflow-y: scroll;
         height: calc(100vh - 110px);
-        padding-bottom: 40px;
+        padding-bottom: 45px;
 
-        .tab-container {
-          height: calc(100vh - 280px);
-        }
-
-        // Prevent horizontal scrollbar
-        mat-tab-group ::ng-deep .mat-tab-body-content {
-          overflow-x: hidden;
+        mat-tab-group ::ng-deep .mat-tab-body-wrapper {
+          padding-bottom: 20px;
         }
       }
     }
@@ -55,33 +50,21 @@
   .footer {
     height: 45px;
     position: fixed;
-    // width: 100%;
     z-index: 9;
     bottom: 0;
-
-    .save-cancel-buttons {
-      background-color: #fff;
-      border-top: 1px solid rgb(224, 208, 240);
-      box-shadow: 1px -2px 2px rgb(229, 228, 231);
-
-      button {
-        margin: 5px 0;
-
-        @media screen and (min-width: 991px) and (max-width: 1499px) {
-          margin: 15px 0;
-        }
-
-        &:last-child {
-          margin-left: 15px;
-        }
-      }
-    }
+    border-top: 1px solid rgb(224, 208, 240);
+    box-shadow: 1px -2px 2px rgb(229, 228, 231);
+    background-color: #fff;
 
     .align-button {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      button {
+        margin: 5px 0;
+      }
     }
   }
 }
