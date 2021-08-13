@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { QuestionFieldType } from 'src/models';
 import { AddressFieldComponent } from '../address-field/address-field.component';
@@ -13,6 +14,7 @@ import { DocumentFieldComponent } from './document-field.component';
 describe('DocumentFieldComponent', () => {
   let component: DocumentFieldComponent;
   let fixture: ComponentFixture<DocumentFieldComponent>;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,6 +26,12 @@ describe('DocumentFieldComponent', () => {
         MockComponent(AddressFieldComponent),
         MockComponent(SelectFieldComponent),
         MockComponent(CheckFieldComponent),
+      ],
+      imports: [
+        ReactiveFormsModule
+      ],
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder }
       ]
     })
     .compileComponents();

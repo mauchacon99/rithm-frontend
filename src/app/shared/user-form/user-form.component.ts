@@ -1,8 +1,8 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators,
+  ControlValueAccessor, FormBuilder, FormGroup,
+  NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, ValidatorFn, Validators,
 } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
@@ -46,15 +46,23 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
   /** Helper class for password requirements. */
   passwordRequirements = new PasswordRequirements();
 
+  /** The label text to be displayed for the password field. */
+  passwordLabel = '';
+
+  /** The label text to be displayed for the confirm password field. */
+  confirmPasswordLabel = '';
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService
-  ) { }
+  ) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
+    this.passwordLabel = this.getPasswordLabel();
+    this.confirmPasswordLabel = this.getPasswordLabel(true);
     this.userForm = this.fb.group({
       firstName: [
         !this.accountCreate ? this.userService.user?.firstName : '',
@@ -138,7 +146,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
    * @param confirm Whether the password label is for the confirm field (defaults to `false`).
    * @returns The input label text.
    */
-  getPasswordLabel(confirm = false): string {
+  private getPasswordLabel(confirm = false): string {
     const confirmText = confirm ? 'confirm ' : '';
     const passwordText = this.accountCreate ? 'password' : 'new password';
     const label = confirmText + passwordText;
@@ -167,7 +175,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
    *
    * @param val The value to be written.
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line
   writeValue(val: any): void {
     val && this.userForm.setValue(val, { emitEvent: false });
   }
@@ -177,7 +185,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
    *
    * @param fn The function to register.
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil

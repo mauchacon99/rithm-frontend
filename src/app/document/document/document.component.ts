@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
@@ -8,6 +7,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Main component for viewing a document.
@@ -18,6 +18,8 @@ import { ConnectedStationInfo } from 'src/models';
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+  /** Document form. */
+  documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', {static: true})
@@ -46,8 +48,13 @@ export class DocumentComponent implements OnInit {
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.documentForm = this.fb.group({
+      documentTemplateForm: this.fb.control('')
+    });
+  }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
@@ -81,7 +88,7 @@ export class DocumentComponent implements OnInit {
           this.getDocumentStationData(params.documentId, params.stationId);
           this.getConnectedStations(params.documentId, params.stationId);
         }
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -126,7 +133,7 @@ export class DocumentComponent implements OnInit {
           this.documentInformation = document;
         }
         this.documentLoading = false;
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
@@ -150,7 +157,7 @@ export class DocumentComponent implements OnInit {
         this.forwardStations = connectedStations.followingStations;
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
-      }, (error) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
