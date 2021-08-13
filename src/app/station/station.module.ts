@@ -13,6 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { StationFieldComponent } from './station-field/station-field.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { SharedModule } from '../shared/shared.module';
     StationComponent,
     FlowLogicComponent,
     PowersComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    StationFieldComponent
   ],
   imports: [
     CommonModule,

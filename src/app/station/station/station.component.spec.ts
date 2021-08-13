@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
@@ -15,6 +16,7 @@ import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/s
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
 
@@ -33,7 +35,8 @@ describe('StationComponent', () => {
         MockComponent(StationInfoHeaderComponent),
         MockComponent(DocumentInfoHeaderComponent),
         MockComponent(DocumentTemplateComponent),
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
+        MockComponent(ToolbarComponent)
        ],
       imports: [
         NoopAnimationsModule,
@@ -41,7 +44,8 @@ describe('StationComponent', () => {
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),
         MatSidenavModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatTabsModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
