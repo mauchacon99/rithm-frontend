@@ -1,1 +1,4 @@
-<p>station-template works!</p>
+<ng-container [formGroup]="stationTemplateForm">
+  <app-station-field [field]="stationInstructionsField" formControlName="stationFieldForm"></app-station-field>
+  <hr class="my-3">
+</ng-container>

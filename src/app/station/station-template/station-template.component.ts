@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { QuestionFieldType } from 'src/models';
 /**
  * Station Template Component.
  */
@@ -8,5 +10,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./station-template.component.scss']
 })
 export class StationTemplateComponent {
+  /** The form to add to station. */
+  stationTemplateForm!: FormGroup;
+
+  /** The general instructions field. */
+  readonly stationInstructionsField = {
+    prompt: 'General Instructions',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.LongText,
+      validationExpression: '.+',
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
+
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.stationTemplateForm = this.fb.group({
+      stationFieldForm: this.fb.control('')
+    });
+  }
 
 }
