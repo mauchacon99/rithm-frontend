@@ -14,16 +14,19 @@
           <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
-            <form *ngIf="!documentLoading" autocomplete="off">
+            <!-- <form *ngIf="!documentLoading" autocomplete="off"> -->
               <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
               <mat-tab-group class="tab-content" animationDuration="300ms" mat-align-tabs="center">
                 <mat-tab label="Document">
                   <ng-template matTabContent>
-                    <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-                    <app-document-template [generalInstructions]="''" [documentFields]="fakeFields" [isStationEditMode]="true"></app-document-template>
-                    <app-toolbar></app-toolbar>
+                    <div class="tab-container">
+                      <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
+                      <app-document-template [generalInstructions]="''" [documentFields]="fakeFields" [isStationEditMode]="true"></app-document-template>
+                      <app-toolbar></app-toolbar>
+
+                    </div>
                     <div class="row footer">
-                      <div class="col-md-8 save-cancel-buttons">
+                      <div class="col-md-12 save-cancel-buttons">
                         <div class="align-button">
                           <button mat-stroked-button color="accent" class="align-middle">Cancel</button>
                           <button mat-raised-button color="accent" class="align-middle">Save</button>
@@ -38,7 +41,7 @@
                   </ng-template>
                 </mat-tab>
               </mat-tab-group>
-            </form>
+            <!-- </form> -->
           </div>
           <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
         </div>

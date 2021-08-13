@@ -1,11 +1,13 @@
-<button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
-  <i class="fas fa-plus"></i> Add field to document
-</button>
-<div class="toolbar-container mat-elevation-z4" *ngIf="isInlineToolbarOpen">
-  <div class="row no-gutters">
-    <button mat-button class="col-3" *ngFor="let tool of tools">
-      <i class="{{tool.icon}}"></i>
-      <p>{{tool.name}}</p>
-    </button>
+<div class="row">
+  <button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
+    <i class="fas fa-plus"></i> Add field to document
+  </button>
+  <div class="toolbar-container mat-elevation-z4" *ngIf="isInlineToolbarOpen">
+    <div class="row no-gutters">
+      <button mat-button class="col-3" *ngFor="let tool of tools">
+        <i class="{{tool.icon}}"></i>
+        <p>{{tool.name}}</p>
+      </button>
+    </div>
   </div>
 </div>

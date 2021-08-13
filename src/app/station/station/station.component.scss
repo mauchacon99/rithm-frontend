@@ -40,8 +40,12 @@
         height: calc(100vh - 110px);
         padding-bottom: 40px;
 
+        .tab-container {
+          height: calc(100vh - 280px);
+        }
+
         // Prevent horizontal scrollbar
-        form mat-tab-group ::ng-deep .mat-tab-body-content {
+        mat-tab-group ::ng-deep .mat-tab-body-content {
           overflow-x: hidden;
         }
       }
@@ -51,7 +55,7 @@
   .footer {
     height: 45px;
     position: fixed;
-    width: 100%;
+    // width: 100%;
     z-index: 9;
     bottom: 0;
 
