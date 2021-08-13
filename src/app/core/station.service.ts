@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { StationInformation } from 'src/models';
+import { Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationapi/api/station';
 
@@ -67,8 +67,8 @@ export class StationService {
    *
    * @returns The list of all stations.
    */
-  getAllStations(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
+  getAllStations(): Observable<Station[]> {
+    return this.http.get<Station[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
   }
 
 }
