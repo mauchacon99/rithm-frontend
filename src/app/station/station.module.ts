@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { StationTemplateComponent } from './station-template/station-template.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     FlowLogicComponent,
     PowersComponent,
     ToolbarComponent,
-    StationFieldComponent
+    StationFieldComponent,
+    StationTemplateComponent
   ],
   imports: [
     CommonModule,
