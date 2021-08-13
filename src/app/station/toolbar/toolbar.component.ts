@@ -12,7 +12,7 @@ export class ToolbarComponent {
   isInlineToolbarOpen = false;
 
   /** Tools in the toolbar. */
-  tools: any[] = [
+  tools = [
     {
       name: 'Short Text',
       icon: 'fas fa-font'

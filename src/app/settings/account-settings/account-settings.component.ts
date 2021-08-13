@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -69,7 +68,7 @@ export class AccountSettingsComponent {
         this.settingsForm.reset();
         this.popupService.notify('Your account settings are updated.');
         this.accountSettingsService.setUser({ firstName, lastName });
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

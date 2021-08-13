@@ -68,7 +68,7 @@ export class SignInComponent implements OnInit {
           }
         }
 
-      }, (error) => {
+      }, (error: unknown) => {
         this.showInvalidLinkMessage(error);
       });
   }
@@ -78,7 +78,7 @@ export class SignInComponent implements OnInit {
    *
    * @param error The error that was encountered (this is not displayed to the user).
    */
-  private showInvalidLinkMessage(error: Error): void {
+  private showInvalidLinkMessage(error: unknown): void {
     this.errorService.displayError(
       'The link you followed was invalid. Please double check the link in your email and try again.',
       error
@@ -97,8 +97,12 @@ export class SignInComponent implements OnInit {
       .pipe(first())
       .subscribe(() => {
         this.router.navigateByUrl('dashboard');
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.isLoading = false;
+
+        if (!(error instanceof HttpErrorResponse)) {
+          throw new Error('Unknown error occurred');
+        }
         const errorMessage: string = error.error.error;
 
         if (errorMessage.includes('Invalid')) {
@@ -130,7 +134,7 @@ export class SignInComponent implements OnInit {
       .subscribe(() => {
         this.isLoading = false;
         this.popupService.notify('Email successfully verified');
-      }, (error) => {
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we were unable to validate your email address. ' +
