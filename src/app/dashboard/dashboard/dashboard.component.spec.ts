@@ -5,6 +5,8 @@ import { HeaderComponent } from '../header/header.component';
 import { PriorityQueueComponent } from '../priority-queue/priority-queue.component';
 import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -18,9 +20,12 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent)
+      ],
+      providers: [
+        { provide: StationService, useClass: MockStationService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
