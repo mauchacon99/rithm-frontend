@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { StationInformation } from 'src/models';
 
-// const MICROSERVICE_PATH = '/stationapi/api/station';
+const MICROSERVICE_PATH = '/stationapi/api/station';
 
 /**
  * Service for all station behavior and business logic.
@@ -12,6 +14,10 @@ import { StationInformation } from 'src/models';
   providedIn: 'root'
 })
 export class StationService {
+
+  constructor(
+    private http: HttpClient
+  ) { }
 
   /**
    * Gets station information.
@@ -58,9 +64,11 @@ export class StationService {
 
   /**
    * Gets all the stations from the API.
+   *
+   * @returns The list of all stations.
    */
-  getAllStations(): void {
-    // something here
+  getAllStations(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
   }
 
 }
