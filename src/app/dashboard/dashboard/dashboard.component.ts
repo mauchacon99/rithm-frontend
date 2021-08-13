@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
+import { UserService } from 'src/app/core/user.service';
 import { Station } from 'src/models';
 
 /**
@@ -18,16 +19,28 @@ export class DashboardComponent {
   stations: Station[] = [];
 
   constructor(
-    private stationService: StationService
+    private stationService: StationService,
+    private userService: UserService
   ) {
 
     // TODO: remove when admin users can access stations through map
-    this.stationService.getAllStations()
-      .pipe(first())
-      .subscribe((stations) => {
-        this.stations = stations;
-      }, (error: unknown) => {
-        console.error(error);
-      });
+    if (this.isAdmin) {
+      this.stationService.getAllStations()
+        .pipe(first())
+        .subscribe((stations) => {
+          this.stations = stations;
+        }, (error: unknown) => {
+          console.error(error);
+        });
+    }
+  }
+
+  /**
+   * Whether the signed in user is an admin or not.
+   *
+   * @returns True if the user is an admin, false otherwise.
+   */
+  get isAdmin(): boolean {
+    return this.userService.user.role === 'admin';
   }
 }

@@ -10,7 +10,7 @@
     </div>
 
     <!-- TODO: remove when admin users can access stations through map -->
-    <div class="mt-3">
+    <div *ngIf="isAdmin" class="mt-3">
       <h6>TEMPORARY TESTING USE - Stations for Admin</h6>
       <a *ngFor="let station of stations" [routerLink]="['/station', station.rithmId]">
         {{ station.name }}
