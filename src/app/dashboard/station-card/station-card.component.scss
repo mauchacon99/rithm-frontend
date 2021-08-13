@@ -11,15 +11,6 @@ mat-card {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-
-    &.isAdmin {
-      text-decoration: none;
-      cursor: pointer;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
 
   .docs {
