@@ -57,6 +57,20 @@ export class StationFieldComponent {
     isPrivate: false
   };
 
+  /** The field for adding an item to a checklist field. */
+  checklistOptionField: Question = {
+    prompt: 'Add Item',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.ShortText,
+      validationExpression: '.+'
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
+
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[];
 
@@ -66,9 +80,15 @@ export class StationFieldComponent {
 
   /**
    * Add an option to the options array.
+   *
+   * @param fieldType The field type.
    */
-  addOption(): void {
-    this.options.push(this.selectOptionField);
+  addOption(fieldType: QuestionFieldType): void {
+    if (fieldType === QuestionFieldType.Select) {
+      this.options.push(this.selectOptionField);
+    } else {
+      this.options.push(this.checklistOptionField);
+    }
   }
 
 }
