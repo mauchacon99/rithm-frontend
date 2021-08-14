@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Question } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Field Component.
  */
@@ -11,5 +11,36 @@ import { Question } from 'src/models';
 export class StationFieldComponent {
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** The field type. */
+  fieldType = QuestionFieldType;
+
+  /** Instruction field to display. */
+  instructionField: Question = {
+    prompt: 'Instructions',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.LongText,
+      validationExpression: '.+'
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
+
+  /** Label field to display. */
+  labelField: Question = {
+    prompt: 'Label',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.ShortText,
+      validationExpression: '.+'
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
 
 }
