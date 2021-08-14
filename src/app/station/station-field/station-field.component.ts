@@ -43,14 +43,32 @@ export class StationFieldComponent {
     isPrivate: false
   };
 
+  /** The field for adding an option to a select field. */
+  selectOptionField: Question = {
+    prompt: 'Add Option',
+    instructions: '',
+    questionType: {
+      rithmId: '',
+      typeString: QuestionFieldType.ShortText,
+      validationExpression: '.+'
+    },
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false
+  };
+
   /** Array of options for a select/multi-select/checklist field. */
-  options: Question[] = [this.labelField];
+  options: Question[];
+
+  constructor() {
+    this.options = [];
+  }
 
   /**
    * Add an option to the options array.
    */
   addOption(): void {
-    this.options.push(this.labelField);
+    this.options.push(this.selectOptionField);
   }
 
 }

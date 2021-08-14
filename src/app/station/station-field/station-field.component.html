@@ -6,10 +6,7 @@
     <!-- Instructions -->
     <app-text-field [field]="instructionField"></app-text-field>
     <!-- Label -->
-    <ng-container *ngIf="field.questionType.typeString !== fieldType.Select && field.questionType.typeString !== fieldType.MultiSelect && field.questionType.typeString !== fieldType.CheckList">
-      <app-text-field [field]="labelField"></app-text-field>
-
-    </ng-container>
+    <app-text-field [field]="labelField"></app-text-field>
     <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
       <app-text-field *ngFor="let field of options" [field]="field"></app-text-field>
       <button mat-stroked-button color="accent" (click)="addOption()">

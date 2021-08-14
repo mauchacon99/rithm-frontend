@@ -74,7 +74,7 @@ export class StationComponent implements OnInit {
       instructions: '',
       questionType: {
         rithmId: '',
-        typeString: QuestionFieldType.CheckBox,
+        typeString: QuestionFieldType.CheckList,
         validationExpression: '.+'
       },
       isReadOnly: false,
