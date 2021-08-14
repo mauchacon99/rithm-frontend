@@ -9,7 +9,7 @@
     <app-text-field [field]="labelField"></app-text-field>
     <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
       <app-text-field *ngFor="let field of options" [field]="field"></app-text-field>
-      <button mat-stroked-button color="accent" (click)="addOption()">
+      <button mat-stroked-button color="accent" (click)="addOption()" class="mb-3">
         <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
           New Option
         </span>
@@ -17,6 +17,7 @@
           New Item
         </span>
       </button>
+      <br>
     </ng-container>
     <!-- Required Checkbox -->
     <mat-checkbox>
