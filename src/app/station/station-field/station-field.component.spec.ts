@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MockComponent } from 'ng-mocks';
+import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
 
 import { StationFieldComponent } from './station-field.component';
 
@@ -8,7 +11,13 @@ describe('StationFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationFieldComponent ]
+      declarations: [
+        StationFieldComponent,
+        MockComponent(TextFieldComponent)
+      ],
+      imports: [
+        MatCheckboxModule
+      ]
     })
     .compileComponents();
   });

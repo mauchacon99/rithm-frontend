@@ -19,6 +19,7 @@ import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
+import { StationTemplateComponent } from '../station-template/station-template.component';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -36,7 +37,8 @@ describe('StationComponent', () => {
         MockComponent(DocumentInfoHeaderComponent),
         MockComponent(DocumentTemplateComponent),
         MockComponent(LoadingIndicatorComponent),
-        MockComponent(ToolbarComponent)
+        MockComponent(ToolbarComponent),
+        MockComponent(StationTemplateComponent)
        ],
       imports: [
         NoopAnimationsModule,
