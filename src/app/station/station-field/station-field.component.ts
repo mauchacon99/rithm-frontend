@@ -84,11 +84,23 @@ export class StationFieldComponent {
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
+    // TODO: Add an incrementing ID.
     if (fieldType === QuestionFieldType.Select) {
       this.options.push(this.selectOptionField);
     } else {
       this.options.push(this.checklistOptionField);
     }
+  }
+
+  /**
+   * Remove an option from the options array.
+   *
+   * @param field The field to remove.
+   */
+  removeOption(field: Question): void {
+    // TODO: Use an ID to remove the option from the array.
+    const index = this.options.findIndex(x => x.prompt === field.prompt);
+    this.options.splice(index, 1);
   }
 
 }
