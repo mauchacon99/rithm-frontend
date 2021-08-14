@@ -39,7 +39,7 @@ export class StationFieldComponent {
       validationExpression: '.+'
     },
     isReadOnly: false,
-    isRequired: false,
+    isRequired: true,
     isPrivate: false
   };
 
@@ -53,7 +53,7 @@ export class StationFieldComponent {
       validationExpression: '.+'
     },
     isReadOnly: false,
-    isRequired: false,
+    isRequired: true,
     isPrivate: false
   };
 
@@ -67,7 +67,7 @@ export class StationFieldComponent {
       validationExpression: '.+'
     },
     isReadOnly: false,
-    isRequired: false,
+    isRequired: true,
     isPrivate: false
   };
 
