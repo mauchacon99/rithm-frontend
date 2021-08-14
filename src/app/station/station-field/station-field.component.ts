@@ -43,4 +43,14 @@ export class StationFieldComponent {
     isPrivate: false
   };
 
+  /** Array of options for a select/multi-select/checklist field. */
+  options: Question[] = [this.labelField];
+
+  /**
+   * Add an option to the options array.
+   */
+  addOption(): void {
+    this.options.push(this.labelField);
+  }
+
 }

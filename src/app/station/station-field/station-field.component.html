@@ -10,6 +10,17 @@
       <app-text-field [field]="labelField"></app-text-field>
 
     </ng-container>
+    <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
+      <app-text-field *ngFor="let field of options" [field]="field"></app-text-field>
+      <button mat-stroked-button color="accent" (click)="addOption()">
+        <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
+          New Option
+        </span>
+        <span *ngIf="field.questionType.typeString === fieldType.CheckList">
+          New Item
+        </span>
+      </button>
+    </ng-container>
     <!-- Required Checkbox -->
     <mat-checkbox>
       Required
