@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -82,69 +82,75 @@ describe('NumberFieldComponent', () => {
   });
 
   describe('number field', () => {
+    let numberField: AbstractControl;
+
     beforeEach(() => {
       component.field = FIELDS[0];
       component.ngOnInit();
+      numberField = component.numberFieldForm.controls['number'];
       fixture.detectChanges();
     });
 
     it('should require an input in number field', () => {
-      const number = component.numberFieldForm.controls['number'];
       expect(component.field.questionType.typeString).toBeTruthy();
-      expect(number.valid).toBeFalse();
-      expect(number.hasError('required')).toBeTrue();
+      expect(numberField.valid).toBeFalse();
+      expect(numberField.hasError('required')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
 
   });
 
   describe('phone field', () => {
+    let phoneField: AbstractControl;
+
     beforeEach(() => {
       component.field = FIELDS[1];
       component.ngOnInit();
+      phoneField = component.numberFieldForm.controls['phoneNumber'];
       fixture.detectChanges();
     });
 
     it('should not require an input in phone field', () => {
-      const phone = component.numberFieldForm.controls['phoneNumber'];
-      expect(phone.valid).toBeTrue();
-      expect(phone.hasError('required')).toBeFalse();
+      expect(phoneField.valid).toBeTrue();
+      expect(phoneField.hasError('required')).toBeFalse();
       expect(component.numberFieldForm.valid).toBeTrue();
     });
 
     it('should require a valid phone', () => {
-      const phone = component.numberFieldForm.controls['phoneNumber'];
-      phone.setValue('4564');
-      expect(phone.valid).toBeFalse();
-      expect(phone.hasError('phoneIncorrect')).toBeTrue();
+      phoneField.setValue('4564');
+      expect(phoneField.valid).toBeFalse();
+      expect(phoneField.hasError('phoneIncorrect')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
 
   describe('currency field', () => {
+    let currencyField: AbstractControl;
+
     beforeEach(() => {
       component.field = FIELDS[2];
       component.ngOnInit();
+      currencyField = component.numberFieldForm.controls['currency'];
       fixture.detectChanges();
     });
 
     it('should require an input in currency field', () => {
-      const currency = component.numberFieldForm.controls['currency'];
-      expect(currency.valid).toBeFalse();
-      expect(currency.hasError('required')).toBeTrue();
+      expect(currencyField.valid).toBeFalse();
+      expect(currencyField.hasError('required')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
 
     it('should require a valid currency', () => {
-      const currency = component.numberFieldForm.controls['currency'];
-      currency.setValue('45.45.45');
-      expect(currency.valid).toBeFalse();
-      expect(currency.hasError('currencyIncorrect')).toBeTrue();
+      currencyField.setValue('45.45.45');
+      expect(currencyField.valid).toBeFalse();
+      expect(currencyField.hasError('currencyIncorrect')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
 
   describe('zip validation', () => {
+    let zipField: AbstractControl;
+
     beforeEach(() => {
       component.field = {
         prompt: 'Postal code',
@@ -159,21 +165,20 @@ describe('NumberFieldComponent', () => {
         isPrivate: false
       };
       component.ngOnInit();
+      zipField = component.numberFieldForm.controls['address'];
       fixture.detectChanges();
     });
 
     it('should require an input for a zip code', () => {
-      const zip = component.numberFieldForm.controls['address'];
-      expect(zip.valid).toBeFalse();
-      expect(zip.hasError('required')).toBeTrue();
+      expect(zipField.valid).toBeFalse();
+      expect(zipField.hasError('required')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
 
     it('should require a valid zip', () => {
-      const zip = component.numberFieldForm.controls['address'];
-      zip.setValue('455');
-      expect(zip.valid).toBeFalse();
-      expect(zip.hasError('zipIncorrect')).toBeTrue();
+      zipField.setValue('455');
+      expect(zipField.valid).toBeFalse();
+      expect(zipField.hasError('zipIncorrect')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
