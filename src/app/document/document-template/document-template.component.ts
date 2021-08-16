@@ -10,7 +10,7 @@ import { Question, QuestionFieldType } from 'src/models';
  * Component for the document template area of a station/document.
  */
 @Component({
-  selector: 'app-document-template[documentFields][generalInstructions][isStationEditMode]',
+  selector: 'app-document-template[documentFields][generalInstructions]',
   templateUrl: './document-template.component.html',
   styleUrls: ['./document-template.component.scss'],
   providers: [
@@ -35,9 +35,6 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
 
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
-
-  /** Station edit mode or not. */
-  @Input() isStationEditMode!: boolean;
 
   /** The general instructions field. */
   readonly generalInstructionsField = {
