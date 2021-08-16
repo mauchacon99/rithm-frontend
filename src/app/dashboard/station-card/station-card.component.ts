@@ -15,7 +15,9 @@ export class StationCardComponent {
   /** The station info to display. */
   @Input() station!: DashboardStationData;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog
+  ) {}
 
   /**
    * Opens Station Docs Modal with document information.
