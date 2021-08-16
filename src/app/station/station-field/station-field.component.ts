@@ -88,23 +88,19 @@ export class StationFieldComponent implements OnInit {
    */
   addOption(fieldType: QuestionFieldType): void {
     if (fieldType === QuestionFieldType.Select) {
-      this.options.push(JSON.parse(JSON.stringify(this.selectOptionField)));
+      this.options.push(this.selectOptionField);
     } else {
-      this.options.push(JSON.parse(JSON.stringify(this.checklistOptionField)));
+      this.options.push(this.checklistOptionField);
     }
-    this.options.map((option, i) => {
-      option.id = i + 1;
-      return option;
-    });
   }
 
   /**
    * Remove an option from the options array.
    *
-   * @param field The field to remove.
+   * @param index The index of the field to remove.
    */
-  removeOption(field: Question): void {
-    this.options = this.options.filter(e => e.id !== field.id);
+  removeOption(index: number): void {
+    this.options.splice(index, 1);
   }
 
 }
