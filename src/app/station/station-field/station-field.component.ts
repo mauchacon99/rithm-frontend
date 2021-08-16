@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Field Component.
@@ -8,7 +8,7 @@ import { Question, QuestionFieldType } from 'src/models';
   templateUrl: './station-field.component.html',
   styleUrls: ['./station-field.component.scss']
 })
-export class StationFieldComponent {
+export class StationFieldComponent implements OnInit {
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -76,6 +76,13 @@ export class StationFieldComponent {
 
   constructor() {
     this.options = [];
+  }
+
+  /**
+   * On component initialization.
+   */
+  ngOnInit(): void {
+    this.labelField.questionType.typeString = this.field.questionType.typeString;
   }
 
   /**
