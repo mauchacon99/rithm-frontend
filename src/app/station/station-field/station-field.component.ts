@@ -72,11 +72,7 @@ export class StationFieldComponent implements OnInit {
   };
 
   /** Array of options for a select/multi-select/checklist field. */
-  options: Question[];
-
-  constructor() {
-    this.options = [];
-  }
+  options: Question[] = [];
 
   /**
    * On component initialization.
@@ -91,12 +87,15 @@ export class StationFieldComponent implements OnInit {
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    // TODO: Add an incrementing ID.
     if (fieldType === QuestionFieldType.Select) {
-      this.options.push(this.selectOptionField);
+      this.options.push(JSON.parse(JSON.stringify(this.selectOptionField)));
     } else {
-      this.options.push(this.checklistOptionField);
+      this.options.push(JSON.parse(JSON.stringify(this.checklistOptionField)));
     }
+    this.options.map((option, i) => {
+      option.id = i + 1;
+      return option;
+    });
   }
 
   /**
@@ -105,9 +104,7 @@ export class StationFieldComponent implements OnInit {
    * @param field The field to remove.
    */
   removeOption(field: Question): void {
-    // TODO: Use an ID to remove the option from the array.
-    const index = this.options.findIndex(x => x.prompt === field.prompt);
-    this.options.splice(index, 1);
+    this.options = this.options.filter(e => e.id !== field.id);
   }
 
 }

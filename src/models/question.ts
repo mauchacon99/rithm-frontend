@@ -27,4 +27,7 @@ export interface Question {
   /** The list of selectable options for the question. */
   options?: QuestionOption[]; // TODO: get this from the back end
 
+  /** Id to identify the options uniquely. */
+  id?: number;
+
 }
