@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 
 import { StationComponent } from './station.component';
 
@@ -8,7 +10,10 @@ describe('StationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StationComponent ]
+      declarations: [
+        StationComponent,
+        MockComponent(StationInfoHeaderComponent),
+      ]
     })
     .compileComponents();
   });
