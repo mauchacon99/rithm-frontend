@@ -3,7 +3,7 @@
   <div *ngIf="!isLoading" class="users">
     <div class="row" *ngFor="let member of members">
       <div class="col-2">
-        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName"></app-user-avatar>
+        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true"></app-user-avatar>
       </div>
       <div class="col-10">
         <p>
