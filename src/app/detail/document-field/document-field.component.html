@@ -24,7 +24,7 @@
   <app-select-field *ngIf="
   field.questionType.typeString === fieldTypes.Select ||
   field.questionType.typeString === fieldTypes.MultiSelect"
-  [field]="field"></app-select-field>
+  [field]="field" formControlName="selectFieldForm"></app-select-field>
   <app-check-field *ngIf="
   field.questionType.typeString === fieldTypes.CheckBox ||
   field.questionType.typeString === fieldTypes.CheckList"
