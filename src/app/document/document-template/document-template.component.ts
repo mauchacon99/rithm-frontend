@@ -4,7 +4,7 @@ import {
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator
 } from '@angular/forms';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
 
 /**
  * Component for the document template area of a station/document.
