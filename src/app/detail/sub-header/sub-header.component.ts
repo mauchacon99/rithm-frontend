@@ -12,8 +12,6 @@ import { DocumentStationInformation } from 'src/models';
   styleUrls: ['./sub-header.component.scss']
 })
 export class SubHeaderComponent {
-  /** DetailItem. */
-  @Input() detailItem!: string;
 
   /** Parent document information. */
   @Input() documentInformation?: DocumentStationInformation;
