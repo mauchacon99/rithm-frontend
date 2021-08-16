@@ -17,7 +17,7 @@
   <app-date-field *ngIf="
   field.questionType.typeString === fieldTypes.Date ||
   field.questionType.typeString === fieldTypes.DateTime"
-  [field]="field"></app-date-field>
+  [field]="field" formControlName="dateFieldForm"></app-date-field>
   <app-address-field *ngIf="
   field.questionType.typeString === fieldTypes.Address"
   [field]="field"></app-address-field>
