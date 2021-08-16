@@ -1,6 +1,6 @@
-<div class="row no-gutters check-field pb-4">
+<div [formGroup]="checkFieldForm" class="row no-gutters check-field pb-4">
       <div class="checklist">
-        <mat-checkbox *ngFor="let option of field?.options" [value]="option.value">
+        <mat-checkbox *ngFor="let option of field?.options" [value]="option.value" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString">
           {{option.value}}
         </mat-checkbox>
       </div>
