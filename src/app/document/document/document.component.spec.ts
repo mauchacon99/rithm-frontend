@@ -16,6 +16,7 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -40,7 +41,8 @@ describe('DocumentComponent', () => {
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),
         MatSidenavModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatTooltipModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

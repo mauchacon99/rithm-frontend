@@ -24,9 +24,6 @@ import { DocumentTemplateComponent } from './document-template/document-template
     DetailModule,
     SharedModule,
     ReactiveFormsModule
-  ],
-  exports: [
-    DocumentFieldComponent
   ]
 })
 export class DocumentModule { }
