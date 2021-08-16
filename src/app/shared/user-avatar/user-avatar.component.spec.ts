@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { By } from '@angular/platform-browser';
 import { UserAvatarComponent } from './user-avatar.component';
 
@@ -9,6 +10,7 @@ describe('UserAvatarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ UserAvatarComponent ],
+      imports: [ MatTooltipModule ]
     })
     .compileComponents();
   });
