@@ -17,6 +17,8 @@
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Select || field.questionType.typeString === fieldTypeEnum.MultiSelect" class="fas fa-chevron-circle-down"></i>
       <!-- Checklist Icon -->
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.CheckList" class="fas fa-list"></i>
+      <!-- Address icon -->
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.Address" class="far fa-address-card"></i>
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button mat-icon-button (click)="removeField(field)">
