@@ -1,3 +1,3 @@
-<div id="avatar" [ngClass]="{'circle-40-secondary' : navProfile, 'circle-30-secondary' : !navProfile}">
+<div id="avatar" [ngClass]="{'circle-40-secondary' : navProfile, 'circle-30-secondary' : !navProfile}" matTooltip="{{firstName + ' ' + lastName}}">
   <span>{{initials}}</span>
 </div>
