@@ -11,7 +11,8 @@
     "lint-style": "npx stylelint \"**/*.scss\"",
     "compile-docs": "compodoc -p tsconfig.json",
     "compile-style-docs": "sassdoc src/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "a11y": "pa11y-ci"
   },
   "private": true,
   "dependencies": {
@@ -35,7 +36,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.1202.1",
-    "@angular-devkit/build-angular": "~12.2.0",
+    "@angular-devkit/build-angular": "~12.2.1",
     "@angular-eslint/builder": "^12.3.1",
     "@angular-eslint/eslint-plugin": "^12.3.1",
     "@angular-eslint/eslint-plugin-template": "^12.3.1",
@@ -47,7 +48,7 @@
     "@strut-software/eslint-config": "^1.0.9",
     "@strut-software/stylelint-config": "^1.0.11",
     "@types/jasmine": "^3.8.2",
-    "@types/node": "^16.6.0",
+    "@types/node": "^16.6.1",
     "@typescript-eslint/eslint-plugin": "4.29.1",
     "@typescript-eslint/parser": "4.29.1",
     "eslint": "^7.32.0",
@@ -64,6 +65,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
     "ng-mocks": "^12.4.0",
+    "pa11y-ci": "2.4.2",
     "postcss-cli": "^8.3.1",
     "protractor": "~7.0.0",
     "sassdoc": "^2.7.3",
