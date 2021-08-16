@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DocumentStationInformation } from 'src/models';
+import { StationInformation } from 'src/models';
 
 /**
  * Main component for viewing a station.
@@ -12,20 +12,18 @@ import { DocumentStationInformation } from 'src/models';
 export class StationComponent {
 
   /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
+  stationInformation!: StationInformation;
 
   constructor() {
-    this.documentInformation = {
-      documentName: '',
-      documentPriority: 0,
-      currentAssignedUser: '',
-      flowedTimeUTC: '',
-      lastUpdatedUTC: '',
-      stationId: '',
-      stationName: 'Station name',
-      stationPriority: 0,
-      numberOfSupervisors: 2,
-      supervisorRoster: [
+    //TODO: remove temporary mock data.
+    this.stationInformation = {
+      rithmId: '',
+      name: 'Station name',
+      instructions: '',
+      dueDate: '',
+      nextStations: [],
+      previousStations: [],
+      supervisors: [
         {
           userRithmId: '',
           firstName: 'T',
@@ -41,8 +39,7 @@ export class StationComponent {
           isAssigned: true
         },
       ],
-      numberOfWorkers: 5,
-      workerRoster: [
+      workers: [
         {
           userRithmId: '',
           firstName: 'H',
@@ -58,7 +55,10 @@ export class StationComponent {
           isAssigned: true
         },
       ],
-      documentRithmId: '',
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: '',
       questions: []
     };
   }
