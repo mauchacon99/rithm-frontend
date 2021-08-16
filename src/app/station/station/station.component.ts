@@ -86,47 +86,6 @@ export class StationComponent implements OnInit {
           isSelected: true
         }]
     },
-    // {
-    //   prompt: 'Instructions',
-    //   instructions: '',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.LongText,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: false,
-    //   isPrivate: false
-    // },
-    // {
-    //   prompt: 'Label',
-    //   instructions: '',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.ShortText,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: false,
-    //   isPrivate: false
-    // },
-    // {
-    //   prompt: 'Fake question 8',
-    //   instructions: '',
-    //   questionType: {
-    //     rithmId: '',
-    //     typeString: QuestionFieldType.CheckBox,
-    //     validationExpression: '.+'
-    //   },
-    //   isReadOnly: false,
-    //   isRequired: true,
-    //   isPrivate: false,
-    //   options: [
-    //     {
-    //       value: 'Required field',
-    //       isSelected: true
-    //     }]
-    // }
   ];
 
   constructor(
