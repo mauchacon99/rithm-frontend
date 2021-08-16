@@ -1,10 +1,8 @@
 <ng-container [formGroup]="documentTemplateForm">
-  <span>
     <h6 class="py-3">General Instructions</h6>
     <p>
       {{generalInstructions}}
     </p>
-  </span>
   <hr class="my-3">
 
   <app-document-field *ngFor="let field of documentFields" [field]="field" formControlName="documentFieldForm"></app-document-field>
