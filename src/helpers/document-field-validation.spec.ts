@@ -1,7 +1,7 @@
 import { AbstractControl } from '@angular/forms';
 import { DocumentFieldValidation } from './document-field-validation';
 
-describe('PasswordRequirementsService', () => {
+describe('DocumentFieldValidation', () => {
   let helper: DocumentFieldValidation;
 
   beforeEach(() => {
@@ -34,18 +34,6 @@ describe('PasswordRequirementsService', () => {
     const result2 = helper.currencyValidation()(control as AbstractControl);
 
     expect(result2).toEqual({currencyIncorrect: true});
-  });
-
-  it('should validate date', () => {
-    let control = { value: '01/02/1995' };
-    const result = helper.dateValidation()(control as AbstractControl);
-
-    expect(result).toBeNull();
-
-    control = { value: 'Dec/02/1990' };
-    const result2 = helper.dateValidation()(control as AbstractControl);
-
-    expect(result2).toEqual({dateIncorrect: true});
   });
 
   it('should validate a zip code', () => {
@@ -92,9 +80,6 @@ describe('PasswordRequirementsService', () => {
 
     const result2 = helper.currencyValidation()(control as AbstractControl);
     expect(result2).toBeNull();
-
-    const result3 = helper.dateValidation()(control as AbstractControl);
-    expect(result3).toBeNull();
 
     const result4 = helper.zipValidation()(control as AbstractControl);
     expect(result4).toBeNull();
