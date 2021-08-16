@@ -44,4 +44,42 @@ describe('StationFieldComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should remove a field from the array of options', () => {
+    component.options = [
+      {
+        prompt: 'prompt 1',
+        instructions: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.LongText,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false
+      },
+      {
+        prompt: 'Prompt 2',
+        instructions: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.LongText,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false
+      }
+    ];
+    expect(component.options.length).toBe(2);
+    component.removeOption(1);
+    expect(component.options.length).toBe(1);
+  });
+
+  it('should add an option to the options array', () => {
+    component.options = [];
+    component.addOption(QuestionFieldType.Select);
+    expect(component.options.length).toBe(1);
+  });
 });
