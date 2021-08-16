@@ -28,6 +28,7 @@ You can use any of the following pre-existing credentials for signing in:
 |rithmuser@inpivota.com|R1thm?24601|
 |supervisoruser@inpivota.com|R1thm?24601|
 |harrypotter@inpivota.com|R1thm?24601|
+|rithmadmin@inpivota.com|R1thm?24601|User has admin privileges
 |marrypoppins@inpivota.com|R1thm?24601|User has no stations
 
 ## Documentation
@@ -75,3 +76,6 @@ Compiles all of the JSDoc and Angular documentation using Compodoc.
 
 `npm run compile-style-docs`\
 Compiles all of the styling documentation using SassDoc.
+
+`npm run a11y`\
+Checks the project for accessibility issues.

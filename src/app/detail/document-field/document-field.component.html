@@ -28,5 +28,5 @@
   <app-check-field *ngIf="
   field.questionType.typeString === fieldTypes.CheckBox ||
   field.questionType.typeString === fieldTypes.CheckList"
-  [field]="field"></app-check-field>
+  [field]="field" formControlName="checkFieldForm"></app-check-field>
 </ng-container>
