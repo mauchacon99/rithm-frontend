@@ -36,20 +36,6 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
-  /** The general instructions field. */
-  readonly generalInstructionsField = {
-    prompt: 'General Instructions',
-    instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.LongText,
-      validationExpression: '.+',
-    },
-    isReadOnly: false,
-    isRequired: false,
-    isPrivate: false
-  };
-
   constructor(
     private fb: FormBuilder,
   ) {

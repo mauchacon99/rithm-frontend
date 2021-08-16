@@ -87,11 +87,7 @@ export class StationFieldComponent implements OnInit {
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    if (fieldType === QuestionFieldType.Select) {
-      this.options.push(this.selectOptionField);
-    } else {
-      this.options.push(this.checklistOptionField);
-    }
+    this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
   }
 
   /**

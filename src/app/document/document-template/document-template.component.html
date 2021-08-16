@@ -5,7 +5,6 @@
       {{generalInstructions}}
     </p>
   </span>
-  <app-document-field [field]="generalInstructionsField" formControlName="documentFieldForm"></app-document-field>
   <hr class="my-3">
 
   <app-document-field *ngFor="let field of documentFields" [field]="field" formControlName="documentFieldForm"></app-document-field>
