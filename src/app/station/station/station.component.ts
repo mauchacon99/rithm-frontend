@@ -110,14 +110,14 @@ export class StationComponent implements OnInit {
       supervisors: [
         {
           userRithmId: '',
-          firstName: 'T',
+          firstName: 'Tyler',
           lastName: 'H',
           email: '',
           isAssigned: true
         },
         {
           userRithmId: '',
-          firstName: 'A',
+          firstName: 'Austin',
           lastName: 'B',
           email: '',
           isAssigned: true
@@ -126,14 +126,28 @@ export class StationComponent implements OnInit {
       workers: [
         {
           userRithmId: '',
-          firstName: 'H',
+          firstName: 'Harrison',
           lastName: 'K',
           email: '',
           isAssigned: true
         },
         {
           userRithmId: '',
-          firstName: 'A',
+          firstName: 'Adarsh',
+          lastName: 'A',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Harrison',
+          lastName: 'K',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Adarsh',
           lastName: 'A',
           email: '',
           isAssigned: true

@@ -14,7 +14,7 @@ export class StationInfoHeaderComponent implements OnInit {
   @Input() type!: 'admin' | 'super' | 'worker';
 
   /** Is component viewed in station edit mode? */
-  @Input() stationEditMode?: boolean;
+  @Input() stationEditMode!: boolean;
 
   /** Document information object passed from parent. */
   @Input() documentInformation!: DocumentStationInformation;

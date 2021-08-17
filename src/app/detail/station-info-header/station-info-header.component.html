@@ -18,7 +18,7 @@
   </div>
   <div *ngIf="stationEditMode" class="col-2"></div>
   <div [ngClass]="{
-    '': stationEditMode,
+    'ml-3': stationEditMode,
     'col-6 col-md-3 col-xl-2': !stationEditMode
   }">
     <p class="overline">supervisor roster</p>
@@ -28,13 +28,13 @@
       [stationId]="info.id"
       [stationName]="info.name"
       [isWorker]="false"
+      [editMode]="stationEditMode"
     ></app-roster>
   </div>
   <div class="col-6"
   [ngClass]="{
     'd-none': type === 'worker',
-    'col-md-3 col-xl-2': type === 'super' || 'admin',
-    '': stationEditMode
+    'col-md-3 col-xl-2': type === 'super' || 'admin'
   }">
     <p class="overline">worker roster</p>
     <app-roster
@@ -43,6 +43,7 @@
       [stationId]="info.id"
       [stationName]="info.name"
       [isWorker]="true"
+      [editMode]="stationEditMode"
     ></app-roster>
   </div>
 </section>

@@ -3,6 +3,13 @@
     (click)="openRosterModal()" class="circles">
       <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName"></app-user-avatar>
   </div>
-  <div *ngIf="rosterSize > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
+  <div *ngIf="!editMode && rosterSize > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
     +{{rosterSize - 2}}</div>
+  <div *ngIf="editMode" class="circles circle-30-secondary">
+    <div>
+      <i class="fas fa-plus fa-xs" ></i>
+      <i class="fas fa-slash fa-flip-horizontal fa-sm"></i>
+      <i class="fas fa-minus fa-xs"></i>
+    </div>
+  </div>
 </span>

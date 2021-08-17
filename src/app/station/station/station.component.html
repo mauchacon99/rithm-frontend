@@ -15,12 +15,11 @@
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
             <!-- <form *ngIf="!documentLoading" autocomplete="off"> -->
-              <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
+            <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
 
               <mat-tab-group mat-align-tabs="center">
                 <mat-tab label="Document">
                   <ng-template matTabContent>
-                    <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
                     <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
                     <app-station-template [stationFields]="fakeFields"></app-station-template>
                     <app-toolbar></app-toolbar>
