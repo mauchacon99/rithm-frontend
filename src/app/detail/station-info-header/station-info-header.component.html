@@ -8,7 +8,8 @@
   <div *ngIf="!stationEditMode"
   [ngClass]="{
     'col-6 col-md-7 col-xl-8': type === 'worker',
-    'col-12': type === ('super' || 'admin'), 'col-md-4 col-xl-6': type === 'super' || 'admin'
+    'col-12': type === ('super' || 'admin'),
+    'col-md-4 col-xl-6': type === 'super' || 'admin'
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
@@ -16,7 +17,10 @@
     </div>
   </div>
   <div *ngIf="stationEditMode" class="col-2"></div>
-  <div class="col-6 col-md-3 col-xl-2">
+  <div [ngClass]="{
+    '': stationEditMode,
+    'col-6 col-md-3 col-xl-2': !stationEditMode
+  }">
     <p class="overline">supervisor roster</p>
     <app-roster
       [rosterMembers]="info.supervisorRoster"
@@ -29,7 +33,8 @@
   <div class="col-6"
   [ngClass]="{
     'd-none': type === 'worker',
-    'col-md-3 col-xl-2': type === 'super' || 'admin'
+    'col-md-3 col-xl-2': type === 'super' || 'admin',
+    '': stationEditMode
   }">
     <p class="overline">worker roster</p>
     <app-roster
