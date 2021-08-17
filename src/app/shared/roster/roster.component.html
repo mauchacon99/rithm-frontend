@@ -5,11 +5,12 @@
   </div>
   <div *ngIf="!editMode && rosterSize > 3" class="circles circle-30-secondary" (click)="openRosterModal()">
     +{{rosterSize - 2}}</div>
-  <div *ngIf="editMode" class="circles circle-30-secondary">
-    <div>
-      <i class="fas fa-plus fa-xs" ></i>
-      <i class="fas fa-slash fa-flip-horizontal fa-sm"></i>
-      <i class="fas fa-minus fa-xs"></i>
+  <div *ngIf="editMode" class="circles circle-30-secondary icon">
+    <i class="fas fa-plus plus" ></i>
+    <i class="fas fa-slash fa-flip-horizontal slash"></i>
+    <i class="fas fa-minus minus"></i>
+    <div *ngIf="rosterSize > 3" class="badge-accent mat-elevation-z4">
+      +{{rosterSize - 2}}
     </div>
   </div>
 </span>
