@@ -4,7 +4,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
 import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
-import { DocumentTemplateComponent } from 'src/app/detail/document-template/document-template.component';
+import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { DocumentComponent } from './document.component';

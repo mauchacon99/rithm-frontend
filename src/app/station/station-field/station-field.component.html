@@ -1,0 +1,27 @@
+<div class="row mb-4">
+  <div class="col-1">
+    <!-- TODO: Add controls -->
+  </div>
+  <div class="col-11">
+    <!-- Instructions -->
+    <app-text-field [field]="instructionField"></app-text-field>
+    <!-- Label -->
+    <app-text-field [field]="labelField"></app-text-field>
+    <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
+      <app-text-field *ngFor="let field of options; let i = index" [field]="field" [removableField]="true" (removeOptionField)="removeOption(i)"></app-text-field>
+      <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
+        <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
+          New Option
+        </span>
+        <span *ngIf="field.questionType.typeString === fieldType.CheckList">
+          New Item
+        </span>
+      </button>
+      <br>
+    </ng-container>
+    <!-- Required Checkbox -->
+    <mat-checkbox>
+      Required
+    </mat-checkbox>
+  </div>
+</div>

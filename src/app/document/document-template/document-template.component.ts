@@ -2,7 +2,8 @@ import { Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator } from '@angular/forms';
+  ValidationErrors, Validator
+} from '@angular/forms';
 import { Question } from 'src/models';
 
 /**
@@ -32,7 +33,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   /** The general instructions to be displayed, if any. */
   @Input() generalInstructions!: string;
 
-  /** The document fields in the template area for the station/document. */
+  /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
   constructor(
