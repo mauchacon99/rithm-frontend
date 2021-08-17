@@ -3,7 +3,12 @@
     <h6>Station Information</h6>
   </div>
   <div *ngIf="stationEditMode" class="col-12 col-md-10">
-    <app-text-field [field]="nameField"></app-text-field>
+    <form [formGroup]="stationNameForm">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ info.name }}</mat-label>
+        <input id="name" type="text" matInput matNativeControl placeholder="Untitled station" formControlName="name">
+      </mat-form-field>
+    </form>
   </div>
   <div *ngIf="!stationEditMode"
   [ngClass]="{

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
 
 /**
@@ -25,6 +26,9 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Unify info. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info: any;
+
+  /** Station name form. */
+  stationNameForm: FormGroup;
 
   /** Field to change station name. */
   nameField!: Question;
@@ -56,5 +60,13 @@ export class StationInfoHeaderComponent implements OnInit {
       isRequired: true,
       isPrivate: false
     };
+  }
+
+  constructor(
+    private fb: FormBuilder,
+  ) {
+    this.stationNameForm = this.fb.group({
+      name: ['']
+    });
   }
 }
