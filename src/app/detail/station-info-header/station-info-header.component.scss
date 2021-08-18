@@ -1,3 +1,5 @@
+@import 'variables', 'functions', 'rithm-light-palettes';
+
 section.row {
   padding: 10px 0;
 
@@ -25,5 +27,10 @@ section.row {
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+  }
+
+  .priority {
+    margin-top: 20px;
+    margin-left: 10px;
   }
 }

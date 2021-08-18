@@ -36,10 +36,11 @@
       [editMode]="stationEditMode"
     ></app-roster>
   </div>
-  <div class="col-6"
+  <div
   [ngClass]="{
-    'd-none': type === 'worker',
-    'col-md-3 col-xl-2': type === 'super' || 'admin'
+    'd-none': type === 'worker' && !stationEditMode,
+    'col-md-3 col-xl-2': type === 'super' || 'admin' && !stationEditMode,
+    'mx-3' : stationEditMode
   }">
     <p class="overline">worker roster</p>
     <app-roster
@@ -51,7 +52,7 @@
       [editMode]="stationEditMode"
     ></app-roster>
   </div>
-  <div *ngIf="stationEditMode" class="circle-30-accent priority mat-elevation-z4">
+  <div *ngIf="stationEditMode" class="circle-25-warning priority mat-elevation-z4">
     1
   </div>
 </section>
