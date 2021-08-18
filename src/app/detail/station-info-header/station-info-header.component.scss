@@ -11,6 +11,14 @@ section.row {
       }
     }
 
+    form {
+      width: 100%;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
     div.name {
       padding: 5px 10px;
       overflow: hidden;
