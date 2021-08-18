@@ -1,6 +1,8 @@
 <ng-container [formGroup]="stationTemplateForm">
-  <app-text-field [field]="stationInstructionsField"></app-text-field>
-  <hr class="my-3">
+  <div class="row">
+    <div class="col-1"></div>
+    <app-text-field class="col-11" [field]="stationInstructionsField"></app-text-field>
+  </div>
   <app-station-field *ngFor="let field of stationFields" [field]="field" formControlName="stationFieldForm"></app-station-field>
 
   <!-- TODO: All items expansion panel here -->
