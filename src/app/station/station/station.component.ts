@@ -80,10 +80,10 @@ export class StationComponent implements OnInit {
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
-      options: [
+      possibleAnswers: [
         {
-          value: 'Required field',
-          isSelected: true
+          text: 'Required field',
+          default: true
         }]
     },
   ];
