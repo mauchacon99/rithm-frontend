@@ -5,7 +5,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
-import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
@@ -15,11 +14,12 @@ import { DocumentTemplateComponent } from 'src/app/document/document-template/do
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
+import { StationService } from 'src/app/core/station.service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -52,7 +52,7 @@ describe('StationComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
       ]
     })

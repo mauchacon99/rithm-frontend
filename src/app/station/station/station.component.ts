@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation, StationInformation, Question, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Main component for viewing a station.
@@ -28,11 +28,8 @@ export class StationComponent implements OnInit {
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
 
-  /** Document Id. */
-  private documentId = '';
-
   /** Whether the request to get the document info is currently underway. */
-  documentLoading = true;
+  documentLoading = false;
 
   /** The list of stations that this document could flow to. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -89,7 +86,7 @@ export class StationComponent implements OnInit {
   ];
 
   constructor(
-    private documentService: DocumentService,
+    private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
@@ -157,6 +154,23 @@ export class StationComponent implements OnInit {
       createdDate: '',
       updatedByRithmId: '',
       updatedDate: '',
+      questions: [],
+    };
+
+    this.documentInformation = {
+      documentName: 'Metroid Dread',
+      documentPriority: 5,
+      documentRithmId:'E204F369-386F-4E41',
+      currentAssignedUser: 'NS',
+      flowedTimeUTC: '1943827200000',
+      lastUpdatedUTC: '1943827200000',
+      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationName: 'Development',
+      stationPriority: 2,
+      numberOfSupervisors: 7,
+      supervisorRoster: [],
+      numberOfWorkers: 7,
+      workerRoster: [],
       questions: []
     };
   }
@@ -182,19 +196,14 @@ export class StationComponent implements OnInit {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.queryParams
+    this.route.params
       .pipe(first())
       .subscribe((params) => {
-
-        if (!params.stationId || !params.documentId) {
-          // this.handleInvalidParams();
-          this.documentId = 'FCB90EFE-5188-43A9-8C42-2D74D9E81AB1';
-          this.getDocumentStationData('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
-          this.getConnectedStations('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
+        if (!params.stationId) {
+          this.handleInvalidParams();
         } else {
-          this.documentId = 'FCB90EFE-5188-43A9-8C42-2D74D9E81AB1';
-          this.getDocumentStationData('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
-          this.getConnectedStations('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
+          this.getStationInfo(params.stationId);
+          // this.getConnectedStations('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -229,17 +238,17 @@ export class StationComponent implements OnInit {
   /**
    * Get data about the document and station the document is in.
    *
-   * @param documentId The id of the document for which to get data.
    * @param stationId The id of the station that the document is in.
    */
-  private getDocumentStationData(documentId: string, stationId: string): void {
+  // eslint-disable-next-line
+  private getStationInfo(stationId: string): void {
     this.documentLoading = true;
-    this.documentService.getDocumentInfo(documentId, stationId)
+    this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe((document) => {
-        if (document) {
-          this.documentInformation = document;
-        }
+      .subscribe(() => {
+        // if (document) {
+        //   this.documentInformation = document;
+        // }
         this.documentLoading = false;
       }, (error: unknown) => {
         this.navigateBack();
@@ -257,23 +266,26 @@ export class StationComponent implements OnInit {
    * @param documentId The id of the document for which to retrieve previous stations.
    * @param stationId The id of the station for which to retrieve forward stations.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private getConnectedStations(documentId: string, stationId: string): void {
-    this.connectedStationsLoading = true;
-    this.documentService.getConnectedStationInfo(documentId, stationId)
-      .pipe(first())
-      .subscribe((connectedStations) => {
-        this.forwardStations = connectedStations.followingStations;
-        this.previousStations = connectedStations.previousStations;
-        this.connectedStationsLoading = false;
-      }, (error: unknown) => {
-        this.navigateBack();
-        this.connectedStationsLoading = false;
-        this.errorService.displayError(
-          'Failed to get connected stations for this document.',
-          error,
-          false
-        );
-      });
+    // TODO: new request for connected stations?
+
+    // this.connectedStationsLoading = true;
+    // this.documentService.getConnectedStationInfo(documentId, stationId)
+    //   .pipe(first())
+    //   .subscribe((connectedStations) => {
+    //     this.forwardStations = connectedStations.followingStations;
+    //     this.previousStations = connectedStations.previousStations;
+    //     this.connectedStationsLoading = false;
+    //   }, (error: unknown) => {
+    //     this.navigateBack();
+    //     this.connectedStationsLoading = false;
+    //     this.errorService.displayError(
+    //       'Failed to get connected stations for this document.',
+    //       error,
+    //       false
+    //     );
+    //   });
   }
 
   /** The information about the document within a station. */
