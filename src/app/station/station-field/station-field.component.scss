@@ -1,1 +1,10 @@
-// Styles here.
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  i {
+    align-self: center;
+  }
+}
