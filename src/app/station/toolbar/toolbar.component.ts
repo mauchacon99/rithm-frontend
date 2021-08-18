@@ -68,6 +68,10 @@ export class ToolbarComponent {
   ];
 
   /**
+   * Add a given fieldtype to parent.
+   */
+
+  /**
    * Toggle the inline toolbar.
    */
   toggleInlineToolbar(): void {
