@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MockComponent } from 'ng-mocks';
+import { DocumentFieldComponent } from '../document-field/document-field.component';
 
 import { DocumentTemplateComponent } from './document-template.component';
 
@@ -10,7 +12,10 @@ describe('DocumentTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DocumentTemplateComponent ],
+      declarations: [
+        DocumentTemplateComponent,
+        MockComponent(DocumentFieldComponent)
+      ],
       imports: [
         ReactiveFormsModule
       ],

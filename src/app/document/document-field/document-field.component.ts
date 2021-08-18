@@ -2,44 +2,49 @@ import { Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator } from '@angular/forms';
-import { Question } from 'src/models';
+  ValidationErrors, Validator
+} from '@angular/forms';
+import { QuestionFieldType, Question } from 'src/models';
 
 /**
- * Component for the document template area of a station/document.
+ * Reusable component for every field on a document.
  */
 @Component({
-  selector: 'app-document-template[documentFields][stationInstructions]',
-  templateUrl: './document-template.component.html',
-  styleUrls: ['./document-template.component.scss'],
+  selector: 'app-document-field[field]',
+  templateUrl: './document-field.component.html',
+  styleUrls: ['./document-field.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DocumentTemplateComponent),
+      useExisting: forwardRef(() => DocumentFieldComponent),
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => DocumentTemplateComponent),
+      useExisting: forwardRef(() => DocumentFieldComponent),
       multi: true
     }
   ]
 })
-export class DocumentTemplateComponent implements ControlValueAccessor, Validator {
-  /** The form to add to document. */
-  documentTemplateForm!: FormGroup;
+export class DocumentFieldComponent implements ControlValueAccessor, Validator {
+  /** The form to add to the template.*/
+  documentFieldForm!: FormGroup;
 
-  /** The general instructions to be displayed, if any. */
-  @Input() stationInstructions!: string;
+  /** The document field to display. */
+  @Input() field!: Question;
 
-  /** The document fields in the template area for the station/document. */
-  @Input() documentFields!: Question[];
+  /** The field type. */
+  fieldTypes = QuestionFieldType;
 
   constructor(
     private fb: FormBuilder,
   ) {
-    this.documentTemplateForm = this.fb.group({
-      documentFieldForm: this.fb.control('')
+    this.documentFieldForm = this.fb.group({
+      textFieldForm: this.fb.control(''),
+      numberFieldForm: this.fb.control(''),
+      selectFieldForm: this.fb.control(''),
+      dateFieldForm: this.fb.control(''),
+      checkFieldForm: this.fb.control(''),
     });
   }
 
@@ -56,7 +61,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.documentTemplateForm.setValue(val, { emitEvent: false });
+    val && this.documentFieldForm.setValue(val, { emitEvent: false });
   }
 
   /**
@@ -68,7 +73,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   registerOnChange(fn: any): void {
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.documentTemplateForm.valueChanges.subscribe(fn);
+    this.documentFieldForm.valueChanges.subscribe(fn);
   }
 
   /**
@@ -86,7 +91,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.documentTemplateForm.disable() : this.documentTemplateForm.enable();
+    isDisabled ? this.documentFieldForm.disable() : this.documentFieldForm.enable();
   }
 
   /**
@@ -95,12 +100,11 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.documentTemplateForm.valid ? null : {
+    return this.documentFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
         message: 'User form is invalid'
       }
     };
   }
-
 }

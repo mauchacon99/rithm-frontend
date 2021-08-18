@@ -3,7 +3,7 @@
 <div class="row no-gutters check-field pb-4">
   <div class="checklist">
     <ng-container *ngIf="isChecklistField">
-      <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers">
+      <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString">
         {{ possibleAnswer.text }}
       </mat-checkbox>
 

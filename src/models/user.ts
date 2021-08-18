@@ -26,4 +26,7 @@ export interface User {
 
   /** The date at which this user was created. */
   readonly createdDate: string;
+
+  /** The user's role. */
+  readonly role: 'admin' | null;
 }

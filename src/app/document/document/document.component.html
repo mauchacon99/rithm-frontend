@@ -1,5 +1,5 @@
 <div class="sub-header">
-  <app-sub-header [documentInformation]="documentInformation"></app-sub-header>
+  <app-sub-header [documentInformation]="documentInformation" [title]="'Document'"></app-sub-header>
 </div>
 
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
@@ -18,6 +18,28 @@
               <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
               <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
               <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions[0].questions" formControlName="documentTemplateForm"></app-document-template>
+              <div class="row footer">
+                <div class="col-12 col-lg-8">
+                  <div class="footer-inner">
+                    <div class="save-cancel-buttons">
+                      <span>
+                        <button mat-stroked-button color="accent" >Cancel</button>
+                        <button mat-stroked-button color="accent" class="save" >Save</button>
+                      </span>
+                      <button mat-raised-button color="accent" >Flow</button>
+                    </div>
+                    <div class="escalate">
+                        <svg xmlns="http://www.w3.org/2000/svg">
+                          <g id="escalation_line" data-name="escalation_line" transform="translate(1)">
+                            <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
+                              stroke-linecap="round" stroke-width="2" />
+                          </g>
+                        </svg>
+                      <i class="fas fa-exclamation-circle" matTooltip="Escalate Document"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
           <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
@@ -27,3 +49,4 @@
   </mat-drawer-content>
 
 </mat-drawer-container>
+

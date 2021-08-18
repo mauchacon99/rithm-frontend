@@ -22,7 +22,8 @@ export class MockUserService {
     email: 'test@test.com',
     isEmailVerified: true,
     notificationSettings: null,
-    createdDate: '1/2/34'
+    createdDate: '1/2/34',
+    role: null
   };
 
   /**
