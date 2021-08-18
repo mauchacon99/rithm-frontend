@@ -289,24 +289,6 @@ export class MockDocumentService {
               ]
             },
             {
-              prompt: 'Fake question 11',
-              instructions: 'Fake instructions 11',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.CheckBox,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false,
-              possibleAnswers: [
-                {
-                  text: 'Option 1',
-                  default: false
-                },
-              ]
-            },
-            {
               prompt: 'Fake question 12',
               instructions: 'Fake instructions 12',
               questionType: {
