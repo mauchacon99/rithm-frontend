@@ -1,13 +1,16 @@
 @import 'rithm-light-palettes';
 
-.flex {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+.divider {
   border-right: 1px solid map-get($accent-palette, 100);
 
-  button {
-    align-self: center;
+  .flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    button {
+      align-self: center;
+    }
   }
 }
