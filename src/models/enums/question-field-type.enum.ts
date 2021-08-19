@@ -40,6 +40,6 @@ export enum QuestionFieldType {
   DateTime = 'datetime',
 
   /** Checklist input type. */
-  CheckList = 'multiCheckbox'
+  CheckList = 'checklist'
 
 }

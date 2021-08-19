@@ -1,13 +1,9 @@
-<p *ngIf="isChecklistField" class="pb-1">{{ field.prompt }}</p>
+<p *ngIf="field.prompt" class="pb-1">{{ field.prompt }}</p>
 
 <div class="row no-gutters check-field pb-4">
   <div class="checklist">
-    <ng-container *ngIf="isChecklistField">
-      <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString">
-        {{ possibleAnswer.text }}
-      </mat-checkbox>
-
-    </ng-container>
-    <mat-checkbox *ngIf="!isChecklistField">{{ field.prompt }}</mat-checkbox>
+    <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers; let i = index;" [required]="field.isRequired" formControlName="checkItem{{i}}">
+      {{ possibleAnswer.text }}
+    </mat-checkbox>
   </div>
 </div>
