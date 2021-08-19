@@ -17,11 +17,8 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Is component viewed in station edit mode? */
   @Input() stationEditMode!: boolean;
 
-  /** Document information object passed from parent. */
-  @Input() documentInformation!: DocumentStationInformation;
-
   /** Station information object passed from parent.*/
-  @Input() stationInformation!: StationInformation;
+  @Input() stationInformation!: StationInformation | DocumentStationInformation;
 
   /** Unify info. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,16 +34,16 @@ export class StationInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.type = 'admin';
 
-    this.info = {
-      id: this.documentInformation ? this.documentInformation.stationId : this.stationInformation.rithmId,
-      name: this.documentInformation ? this.documentInformation.stationName : this.stationInformation.name,
-      supervisorRoster: this.documentInformation ? this.documentInformation.supervisorRoster : this.stationInformation.supervisors,
-      supervisorRosterSize: this.documentInformation ?
-        this.documentInformation.supervisorRoster.length :
-        this.stationInformation.supervisors.length,
-      workerRoster: this.documentInformation ? this.documentInformation.workerRoster : this.stationInformation.workers,
-      workerRosterSize: this.documentInformation ? this.documentInformation.workerRoster.length : this.stationInformation.workers.length,
-    };
+    // this.info = {
+    //   id: this.documentInformation ? this.documentInformation.stationId : this.stationInformation.rithmId,
+    //   name: this.documentInformation ? this.documentInformation.stationName : this.stationInformation.name,
+    //   supervisorRoster: this.documentInformation ? this.documentInformation.supervisorRoster : this.stationInformation.supervisors,
+    //   supervisorRosterSize: this.documentInformation ?
+    //     this.documentInformation.supervisorRoster.length :
+    //     this.stationInformation.supervisors.length,
+    //   workerRoster: this.documentInformation ? this.documentInformation.workerRoster : this.stationInformation.workers,
+    //   workerRosterSize: this.documentInformation ? this.documentInformation.workerRoster.length : this.stationInformation.workers.length,
+    // };
 
     this.nameField = {
       prompt: this.info.name,
@@ -60,6 +57,22 @@ export class StationInfoHeaderComponent implements OnInit {
       isRequired: true,
       isPrivate: false
     };
+  }
+
+  /** Get name of station from StationInformation based on type.
+   *
+   * @returns The Station Name.
+   */
+  get stationName(): string {
+    return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
+  }
+
+  /** Get name of station from StationInformation based on type.
+   *
+   * @returns The Station Name.
+   */
+  get stationId(): string {
+    return 'stationId' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
   constructor(
