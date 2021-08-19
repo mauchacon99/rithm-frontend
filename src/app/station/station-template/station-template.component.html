@@ -1,7 +1,6 @@
 <ng-container [formGroup]="stationTemplateForm">
   <div class="mt-2 row">
-    <div class="col-md-1"></div>
-    <app-text-field class="col-md-11" [field]="stationInstructionsField"></app-text-field>
+    <app-text-field class="col-12" [field]="stationInstructionsField"></app-text-field>
   </div>
   <app-station-field *ngFor="let field of stationFields" [field]="field" formControlName="stationFieldForm"></app-station-field>
 
