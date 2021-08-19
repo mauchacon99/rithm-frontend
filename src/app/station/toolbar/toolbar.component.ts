@@ -1,4 +1,5 @@
 import { Component} from '@angular/core';
+import { QuestionFieldType } from 'src/models';
 /**
  * Toolbar component.
  */
@@ -11,65 +12,87 @@ export class ToolbarComponent {
   /** Is the inline toolbar open? */
   isInlineToolbarOpen = false;
 
+  /** The field type of the input. */
+  fieldTypeEnum = QuestionFieldType;
+
   /** Tools in the toolbar. */
   tools = [
     {
       name: 'Short Text',
-      icon: 'fas fa-font'
+      icon: 'fas fa-font',
+      typeString: this.fieldTypeEnum.ShortText
     },
     {
       name: 'Long Text',
-      icon: 'fas fa-paragraph'
+      icon: 'fas fa-paragraph',
+      typeString: this.fieldTypeEnum.LongText
     },
     {
       name: 'URL',
-      icon: 'fas fa-link'
+      icon: 'fas fa-link',
+      typeString: this.fieldTypeEnum.URL
     },
     {
       name: 'Email',
-      icon: 'fas fa-envelope'
+      icon: 'fas fa-envelope',
+      typeString: this.fieldTypeEnum.Email
     },
     {
       name: 'Address',
-      icon: 'far fa-address-card'
+      icon: 'far fa-address-card',
+      typeString: this.fieldTypeEnum.Address
     },
     {
       name: 'Number',
-      icon: 'fas fa-phone'
+      icon: 'fas fa-calculator',
+      typeString: this.fieldTypeEnum.Number
     },
     {
       name: 'Phone Number',
-      icon: 'fas fa-phone'
+      icon: 'fas fa-phone',
+      typeString: this.fieldTypeEnum.Phone
     },
     {
       name: 'Currency',
-      icon: 'fas fa-money-bill-wave'
+      icon: 'fas fa-money-bill-wave',
+      typeString: this.fieldTypeEnum.Currency
     },
     {
       name: 'Date',
-      icon: 'fas fa-calendar-day'
+      icon: 'fas fa-calendar-day',
+      typeString: this.fieldTypeEnum.Date
     },
     {
       name: 'Checkbox',
-      icon: 'far fa-check-square'
+      icon: 'far fa-check-square',
+      typeString: this.fieldTypeEnum.CheckBox
     },
     {
       name: 'Checklist',
-      icon: 'fas fa-list'
+      icon: 'fas fa-list',
+      typeString: this.fieldTypeEnum.CheckList
     },
     {
       name: 'Single Select',
-      icon: 'fas fa-chevron-circle-down'
+      icon: 'fas fa-chevron-circle-down',
+      typeString: this.fieldTypeEnum.Select
     },
     {
       name: 'Multi Select',
-      icon: 'fas fa-chevron-circle-down'
+      icon: 'fas fa-chevron-circle-down',
+      typeString: this.fieldTypeEnum.MultiSelect
     }
   ];
 
   /**
    * Add a given fieldtype to parent.
+   *
+   * @param field The selected field.
    */
+  selectField(field: string): void {
+    console.log(field);
+  }
+
 
   /**
    * Toggle the inline toolbar.
