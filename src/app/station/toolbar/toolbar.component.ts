@@ -11,7 +11,7 @@ import { QuestionFieldType } from 'src/models';
 })
 export class ToolbarComponent {
   /** Send tool.typeString to parent. */
-  @Output() fieldSelected = new EventEmitter<string>();
+  @Output() fieldSelected = new EventEmitter<QuestionFieldType>();
 
   /** Is the inline toolbar open? */
   isInlineToolbarOpen = false;
@@ -93,7 +93,7 @@ export class ToolbarComponent {
    *
    * @param field The selected field.
    */
-  public selectField(field: string): void {
+  public selectField(field: QuestionFieldType): void {
     this.fieldSelected.emit(field);
   }
 

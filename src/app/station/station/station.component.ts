@@ -201,10 +201,21 @@ export class StationComponent implements OnInit {
 
   /** Adds selected fieldType to array.
    *
-   * @param field The field to add.
+   * @param fieldType The field to add.
    */
-  public doSomething(field: string): void {
-    console.log('selected ', field);
+  public addQuestion(fieldType: QuestionFieldType): void {
+    this.fakeFields.push({
+      prompt: 'Label',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: fieldType,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false
+    });
   }
 
   /**
