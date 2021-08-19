@@ -12,8 +12,10 @@ export class StationFieldComponent implements OnInit {
   /** The document field to display. */
   @Input() field!: Question;
 
-  /** Total number of fields in the template. */
+  /** Can the field be moved up. */
   @Input() movableUp!: boolean;
+
+  /** Can the field be moved down? */
   @Input() movableDown!: boolean;
 
   /** The field type. */
