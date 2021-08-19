@@ -26,7 +26,3 @@
 .badge-accent {
   @include circle(15px, fixed-font-size(8), 15px, map-get($accent-palette, 700), $accent-blue, $accent-blue, default);
 }
-
-.circle-25-warning {
-  @include circle(25px, fixed-font-size(12), 25px, map-get($error-palette, 700), map-get($error-palette, 600), map-get($error-palette, 600));
-}

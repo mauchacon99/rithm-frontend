@@ -5,8 +5,8 @@
   <div *ngIf="stationEditMode" class="col-12 col-md-10">
     <form [formGroup]="stationNameForm">
       <mat-form-field appearance="outline">
-        <mat-label>{{ info.name }}</mat-label>
-        <input id="stationName" type="text" matInput matNativeControl [placeholder]="info.name" formControlName="name">
+        <mat-label>Station Name</mat-label>
+        <input id="stationName" type="text" matInput matNativeControl [value]="info.name" formControlName="name">
       </mat-form-field>
     </form>
   </div>
@@ -52,9 +52,9 @@
       [editMode]="stationEditMode"
     ></app-roster>
   </div>
-  <div *ngIf="stationEditMode" class="circle-25-warning priority mat-elevation-z4">
+  <button mat-mini-fab color="warn" *ngIf="stationEditMode" class="priority">
     1
-  </div>
+  </button>
 </section>
 <div class="row">
   <div class="col">

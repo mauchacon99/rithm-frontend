@@ -13,7 +13,7 @@ import { StationService } from 'src/app/core/station.service';
  * Main component for viewing a station.
  */
 @Component({
-  selector: 'app-station',
+  selector: 'app-station[stationInformation]',
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss']
 })
@@ -25,8 +25,8 @@ export class StationComponent implements OnInit {
   @ViewChild('detailDrawer', {static: true})
   detailDrawer!: MatDrawer;
 
-  /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
+  /** The information about the station. */
+  stationInformation!: StationInformation | DocumentStationInformation;
 
   /** Whether the request to get the document info is currently underway. */
   documentLoading = false;
@@ -287,7 +287,4 @@ export class StationComponent implements OnInit {
     //     );
     //   });
   }
-
-  /** The information about the document within a station. */
-  stationInformation!: StationInformation;
 }
