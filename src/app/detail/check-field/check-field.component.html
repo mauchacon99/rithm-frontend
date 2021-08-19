@@ -1,6 +1,6 @@
 <p *ngIf="field.prompt" class="pb-1">{{ field.prompt }}</p>
 
-<div class="row no-gutters check-field pb-4">
+<div [formGroup]="checkFieldForm" class="row no-gutters check-field pb-4">
   <div class="checklist">
     <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers; let i = index;" [required]="field.isRequired" formControlName="checkItem{{i}}">
       {{ possibleAnswer.text }}
