@@ -1,6 +1,7 @@
 <ng-container [formGroup]="stationTemplateForm">
-  <app-text-field [field]="stationInstructionsField"></app-text-field>
-  <hr class="my-3">
+  <div class="mt-2 row">
+    <app-text-field class="col-12" [field]="stationInstructionsField"></app-text-field>
+  </div>
   <app-station-field *ngFor="let field of stationFields; let i = index" [field]="field" [movableUp]="(i === 0 ? false : stationFields.length - 1 === i ? true : true)" [movableDown]="(i === 0 ? true : stationFields.length - 1 === i ? false : true)" formControlName="stationFieldForm"></app-station-field>
 
   <!-- TODO: All items expansion panel here -->
