@@ -22,7 +22,7 @@
                   <ng-template matTabContent>
                     <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
                     <app-station-template [stationFields]="fakeFields"></app-station-template>
-                    <app-toolbar></app-toolbar>
+                    <app-toolbar (fieldSelected)="doSomething($event)"></app-toolbar>
                   </ng-template>
                 </mat-tab>
                 <mat-tab label="Flow Logic">

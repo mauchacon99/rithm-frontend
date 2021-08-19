@@ -199,6 +199,14 @@ export class StationComponent implements OnInit {
       });
   }
 
+  /** Adds selected fieldType to array.
+   *
+   * @param field The field to add.
+   */
+  public doSomething(field: string): void {
+    console.log('selected ', field);
+  }
+
   /**
    * Retrieves a list of the connected stations for the given document.
    *

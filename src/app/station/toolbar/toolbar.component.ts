@@ -1,5 +1,6 @@
-import { Component} from '@angular/core';
+import { Component, EventEmitter, Output} from '@angular/core';
 import { QuestionFieldType } from 'src/models';
+
 /**
  * Toolbar component.
  */
@@ -9,6 +10,9 @@ import { QuestionFieldType } from 'src/models';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
+  /** Send tool.typeString to parent. */
+  @Output() fieldSelected = new EventEmitter<string>();
+
   /** Is the inline toolbar open? */
   isInlineToolbarOpen = false;
 
@@ -89,8 +93,8 @@ export class ToolbarComponent {
    *
    * @param field The selected field.
    */
-  selectField(field: string): void {
-    console.log(field);
+  public selectField(field: string): void {
+    this.fieldSelected.emit(field);
   }
 
 
