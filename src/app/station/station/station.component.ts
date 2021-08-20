@@ -200,6 +200,25 @@ export class StationComponent implements OnInit {
       });
   }
 
+  /** Adds selected fieldType to array.
+   *
+   * @param fieldType The field to add.
+   */
+  addQuestion(fieldType: QuestionFieldType): void {
+    this.fakeFields.push({
+      prompt: 'Label',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: fieldType,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false
+    });
+  }
+
   /**
    * Retrieves a list of the connected stations for the given document.
    *
