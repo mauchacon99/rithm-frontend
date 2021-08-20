@@ -20,6 +20,7 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
+import { QuestionFieldType } from 'src/models';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -66,5 +67,12 @@ describe('StationComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should add a question', () => {
+    const fieldType: QuestionFieldType = QuestionFieldType.ShortText;
+    expect(component.fakeFields.length === 4).toBeFalse();
+    component.addQuestion(fieldType);
+    expect(component.fakeFields.length === 4).toBeTrue();
   });
 });
