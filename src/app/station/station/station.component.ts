@@ -204,7 +204,7 @@ export class StationComponent implements OnInit {
    *
    * @param fieldType The field to add.
    */
-  public addQuestion(fieldType: QuestionFieldType): void {
+  addQuestion(fieldType: QuestionFieldType): void {
     this.fakeFields.push({
       prompt: 'Label',
       instructions: '',
