@@ -67,11 +67,6 @@ export class ToolbarComponent {
       typeString: this.fieldTypeEnum.Date
     },
     {
-      name: 'Checkbox',
-      icon: 'far fa-check-square',
-      typeString: this.fieldTypeEnum.CheckBox
-    },
-    {
       name: 'Checklist',
       icon: 'fas fa-list',
       typeString: this.fieldTypeEnum.CheckList
