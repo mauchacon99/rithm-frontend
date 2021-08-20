@@ -88,7 +88,7 @@ export class ToolbarComponent {
    *
    * @param field The selected field.
    */
-  public selectField(field: QuestionFieldType): void {
+ selectField(field: QuestionFieldType): void {
     this.fieldSelected.emit(field);
   }
 
