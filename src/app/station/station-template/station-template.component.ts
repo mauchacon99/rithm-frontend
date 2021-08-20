@@ -38,4 +38,12 @@ export class StationTemplateComponent {
     });
   }
 
+  canFieldMoveUp(fieldIndex: number): boolean {
+    return fieldIndex === 0 ? false : this.stationFields.length - 1 === fieldIndex ? true : true;
+  }
+
+  canFieldMoveDown(fieldIndex: number): boolean {
+    return fieldIndex === 0 ? true : this.stationFields.length - 1 === fieldIndex ? false : true;
+  }
+
 }
