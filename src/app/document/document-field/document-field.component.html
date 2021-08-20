@@ -7,26 +7,18 @@
   field.questionType.typeString === fieldTypes.ShortText ||
   field.questionType.typeString === fieldTypes.LongText ||
   field.questionType.typeString === fieldTypes.URL ||
-  field.questionType.typeString === fieldTypes.Email"
-  [field]="field" formControlName="textFieldForm"></app-text-field>
+  field.questionType.typeString === fieldTypes.Email" [field]="field" formControlName="textFieldForm"></app-text-field>
   <app-number-field *ngIf="
   field.questionType.typeString === fieldTypes.Number ||
   field.questionType.typeString === fieldTypes.Phone ||
-  field.questionType.typeString === fieldTypes.Currency"
-  [field]="field" formControlName="numberFieldForm"></app-number-field>
+  field.questionType.typeString === fieldTypes.Currency" [field]="field" formControlName="numberFieldForm"></app-number-field>
   <app-date-field *ngIf="
   field.questionType.typeString === fieldTypes.Date ||
-  field.questionType.typeString === fieldTypes.DateTime"
-  [field]="field" formControlName="dateFieldForm"></app-date-field>
+  field.questionType.typeString === fieldTypes.DateTime" [field]="field" formControlName="dateFieldForm"></app-date-field>
   <app-address-field *ngIf="
-  field.questionType.typeString === fieldTypes.Address"
-  [field]="field"></app-address-field>
+  field.questionType.typeString === fieldTypes.Address" [field]="field"></app-address-field>
   <app-select-field *ngIf="
   field.questionType.typeString === fieldTypes.Select ||
-  field.questionType.typeString === fieldTypes.MultiSelect"
-  [field]="field" formControlName="selectFieldForm"></app-select-field>
-  <app-check-field *ngIf="
-  field.questionType.typeString === fieldTypes.CheckBox ||
-  field.questionType.typeString === fieldTypes.CheckList"
-  [field]="field" formControlName="checkFieldForm"></app-check-field>
+  field.questionType.typeString === fieldTypes.MultiSelect" [field]="field" formControlName="selectFieldForm"></app-select-field>
+  <app-check-field *ngIf="field.questionType.typeString === fieldTypes.CheckList" [field]="field" formControlName="checkFieldForm"></app-check-field>
 </ng-container>
