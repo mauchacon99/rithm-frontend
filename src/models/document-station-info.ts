@@ -32,6 +32,9 @@ export interface DocumentStationInformation {
   /** The priority of the station. */
   stationPriority: number;
 
+  /** The general instructions for the whole station, if any. */
+  stationInstruction: string;
+
   /** The number of supervisors on the station for the document. */
   numberOfSupervisors: number;
 

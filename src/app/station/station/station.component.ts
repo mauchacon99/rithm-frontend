@@ -77,10 +77,10 @@ export class StationComponent implements OnInit {
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
-      options: [
+      possibleAnswers: [
         {
-          value: 'Required field',
-          isSelected: true
+          text: 'Required field',
+          default: true
         }]
     },
   ];
@@ -97,6 +97,7 @@ export class StationComponent implements OnInit {
       documentTemplateForm: this.fb.control('')
     });
     this.documentInformation = {
+      stationInstruction: 'Instruction',
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId:'E204F369-386F-4E41',
