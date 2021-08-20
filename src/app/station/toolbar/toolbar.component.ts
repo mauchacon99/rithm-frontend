@@ -50,10 +50,6 @@ export class ToolbarComponent {
       icon: 'fas fa-calendar-day'
     },
     {
-      name: 'Checkbox',
-      icon: 'far fa-check-square'
-    },
-    {
       name: 'Checklist',
       icon: 'fas fa-list'
     },
