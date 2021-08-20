@@ -42,6 +42,10 @@
 
         mat-tab-group ::ng-deep .mat-tab-body-wrapper {
           padding-bottom: 20px;
+
+          mat-tab-body div.mat-tab-body-content {
+            overflow-x: hidden;
+          }
         }
       }
     }

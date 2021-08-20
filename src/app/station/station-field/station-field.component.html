@@ -1,8 +1,19 @@
 <div class="row mb-4">
-  <div class="col-1">
-    <!-- TODO: Add controls -->
+  <div class="col-2 col-sm-1 divider">
+    <!-- Field movement controls -->
+    <div class="flex">
+      <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
+        <i class="fas fa-chevron-up"></i>
+      </button>
+      <button mat-icon-button>
+        <i class="fas fa-times"></i>
+      </button>
+      <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
   </div>
-  <div class="col-11">
+  <div class="col-10 col-sm-11">
     <!-- Instructions -->
     <app-text-field [field]="instructionField"></app-text-field>
     <!-- Label -->
