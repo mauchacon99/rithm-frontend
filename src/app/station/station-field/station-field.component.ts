@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Field Component.
@@ -103,6 +104,15 @@ export class StationFieldComponent implements OnInit {
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
+  }
+
+  /**
+   * Sets the required status of a field.
+   *
+   * @param ob Observes MatCheckbox changes.
+   */
+  setRequired(ob: MatCheckboxChange): void {
+    this.field.isRequired = ob.checked;
   }
 
 }
