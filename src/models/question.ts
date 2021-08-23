@@ -1,4 +1,4 @@
-import { QuestionOption } from './question-option';
+import { PossibleAnswer } from './possible-answer';
 import { QuestionType } from './question-type';
 
 /**
@@ -24,7 +24,7 @@ export interface Question {
   /** Whether the question is private. */
   isPrivate: boolean;
 
-  /** The list of selectable options for the question. */
-  options?: QuestionOption[]; // TODO: get this from the back end
+  /** The list of selectable answers for the question (for a select or checklist). */
+  possibleAnswers?: PossibleAnswer[];
 
 }

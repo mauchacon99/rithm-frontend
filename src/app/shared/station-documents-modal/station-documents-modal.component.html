@@ -40,7 +40,7 @@
         <div class="col-3 col-md-3 col-md-4 col-lg-3">
           <span *ngIf="document?.userAssigned">
             <div class="initials">
-              <app-user-avatar [firstName]="getNamePortion(document.userAssigned, 0)" [lastName]="getNamePortion(document.userAssigned, 1)"></app-user-avatar>
+              <app-user-avatar [firstName]="getNamePortion(document.userAssigned, 0)" [lastName]="getNamePortion(document.userAssigned, 1)" [hideToolTip]="true"></app-user-avatar>
             </div>
             <div class="d-none d-md-block">
               {{ document.userAssigned }}

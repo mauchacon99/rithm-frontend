@@ -77,8 +77,8 @@ export class AppComponent implements OnInit, OnDestroy {
           (path?.toLowerCase().indexOf(REGISTER_URL) === -1) &&
           (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
       }
-    }, err => {
-      console.error(err);
+    }, (error: unknown) => {
+      console.error(error);
     });
   }
 

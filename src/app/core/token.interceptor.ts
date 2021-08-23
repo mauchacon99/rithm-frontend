@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
@@ -100,10 +100,10 @@ export class TokenInterceptor implements HttpInterceptor {
    */
   private passRequest(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      catchError((error) => {
+      catchError((error: unknown) => {
 
         // If unauthorized, sign the user out
-        if (error.status === 401) {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
           this.userService.signOut();
         }
         return throwError(error);

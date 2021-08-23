@@ -6,18 +6,24 @@ import { DocumentRoutingModule } from './document-routing.module';
 import { DetailModule } from '../detail/detail.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DocumentFieldComponent } from './document-field/document-field.component';
+import { DocumentTemplateComponent } from './document-template/document-template.component';
 
 
 @NgModule({
   declarations: [
-    DocumentComponent
+    DocumentComponent,
+    DocumentFieldComponent,
+    DocumentTemplateComponent
   ],
   imports: [
     CommonModule,
     DocumentRoutingModule,
     MatSidenavModule,
     DetailModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class DocumentModule { }

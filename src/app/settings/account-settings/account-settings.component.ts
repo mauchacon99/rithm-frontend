@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -8,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { AccountSettingsService } from 'src/app/core/account-settings.service';
 
 /**
  * Component for all of the account settings.
@@ -37,6 +37,7 @@ export class AccountSettingsComponent {
     private fb: FormBuilder,
     private popupService: PopupService,
     private dialog: MatDialog,
+    private accountSettingsService: AccountSettingsService
     ) {
     this.settingsForm = this.fb.group({
       userForm: this.fb.control('')
@@ -66,7 +67,8 @@ export class AccountSettingsComponent {
         this.isLoading = false;
         this.settingsForm.reset();
         this.popupService.notify('Your account settings are updated.');
-      }, (error: HttpErrorResponse) => {
+        this.accountSettingsService.setUser({ firstName, lastName });
+      }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

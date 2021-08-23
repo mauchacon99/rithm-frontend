@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
@@ -6,8 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
+import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Main component for viewing a document.
@@ -18,6 +18,8 @@ import { ConnectedStationInfo } from 'src/models';
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+  /** Document form. */
+  documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', {static: true})
@@ -41,233 +43,18 @@ export class DocumentComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Fake fields, TODO: remove. */
-  fakeFields: Question[] = [
-    {
-      prompt: 'Fake question 1',
-      instructions: 'Fake instructions 1',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 2',
-      instructions: 'Fake instructions 2',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.LongText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 3',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.URL,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 4',
-      instructions: 'Fake instructions 4',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Email,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 5',
-      instructions: 'Fake question 5',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Number,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 6',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Phone,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 7',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Currency,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 8',
-      instructions: 'Fake question 8',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Date,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 9',
-      instructions: 'Fake instructions 9',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Select,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      options: [
-        {
-          value: 'Option 1',
-          isSelected: false
-        },
-        {
-          value: 'Option 2',
-          isSelected: true
-        },
-        {
-          value: 'Option 3',
-          isSelected: false
-        },
-        {
-          value: 'Option 4',
-          isSelected: false
-        }
-      ]
-    },
-    {
-      prompt: 'Fake question 10',
-      instructions: 'Fake instructions 10',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.MultiSelect,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      options: [
-        {
-          value: 'Option 1',
-          isSelected: false
-        },
-        {
-          value: 'Option 2',
-          isSelected: true
-        },
-        {
-          value: 'Option 3',
-          isSelected: false
-        },
-        {
-          value: 'Option 4',
-          isSelected: false
-        }
-      ]
-    },
-    {
-      prompt: 'Fake question 11',
-      instructions: 'Fake instructions 11',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.CheckBox,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      options: [
-        {
-          value: 'Option 1',
-          isSelected: false
-        },
-      ]
-    },
-    {
-      prompt: 'Fake question 12',
-      instructions: 'Fake instructions 12',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.CheckList,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      options: [
-        {
-          value: 'Option 1',
-          isSelected: false
-        },
-        {
-          value: 'Option 2',
-          isSelected: false
-        },
-        {
-          value: 'Option 3',
-          isSelected: false
-        },
-        {
-          value: 'Option 4',
-          isSelected: false
-        }
-      ]
-    },
-    {
-      prompt: 'Fake question 13',
-      instructions: 'Fake instructions 13',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Address,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false
-    },
-  ];
-
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.documentForm = this.fb.group({
+      documentTemplateForm: this.fb.control('')
+    });
+  }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
@@ -301,7 +88,7 @@ export class DocumentComponent implements OnInit {
           this.getDocumentStationData(params.documentId, params.stationId);
           this.getConnectedStations(params.documentId, params.stationId);
         }
-      }, (error) => {
+      }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -346,7 +133,7 @@ export class DocumentComponent implements OnInit {
           this.documentInformation = document;
         }
         this.documentLoading = false;
-      }, (error: HttpErrorResponse) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.documentLoading = false;
         this.errorService.displayError(
@@ -370,7 +157,7 @@ export class DocumentComponent implements OnInit {
         this.forwardStations = connectedStations.followingStations;
         this.previousStations = connectedStations.previousStations;
         this.connectedStationsLoading = false;
-      }, (error) => {
+      }, (error: unknown) => {
         this.navigateBack();
         this.connectedStationsLoading = false;
         this.errorService.displayError(
