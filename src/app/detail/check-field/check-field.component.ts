@@ -44,9 +44,15 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    this.checkFieldForm = this.fb.group({
-      [this.field.questionType.typeString]: ['', []]
+
+    // eslint-disable-next-line prefer-const
+    let fields: { [key: string]: unknown } = {};
+
+    this.field.possibleAnswers?.forEach((something, index) => {
+      fields[`checkItem${index}`] = ['', this.field.isRequired ? [Validators.required] : []];
     });
+
+    this.checkFieldForm = this.fb.group(fields);
 
     //Logic to determine if a field should be required, and the validators to give it.
     const validators: ValidatorFn[] = [];
@@ -57,7 +63,6 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
     }
 
     this.checkFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
-
   }
 
   /**

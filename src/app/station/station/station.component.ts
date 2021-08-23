@@ -80,10 +80,10 @@ export class StationComponent implements OnInit {
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
-      options: [
+      possibleAnswers: [
         {
-          value: 'Required field',
-          isSelected: true
+          text: 'Required field',
+          default: true
         }]
     },
   ];
@@ -161,6 +161,7 @@ export class StationComponent implements OnInit {
     };
 
     this.documentInformation = {
+      stationInstruction: 'Instruction',
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId:'E204F369-386F-4E41',
@@ -261,6 +262,25 @@ export class StationComponent implements OnInit {
           error
         );
       });
+  }
+
+  /** Adds selected fieldType to array.
+   *
+   * @param fieldType The field to add.
+   */
+  addQuestion(fieldType: QuestionFieldType): void {
+    this.fakeFields.push({
+      prompt: 'Label',
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: fieldType,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false
+    });
   }
 
   /**

@@ -36,6 +36,7 @@ describe('StationInfoHeaderComponent', () => {
       stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
+      stationInstruction: 'This is an instruction',
       numberOfSupervisors: 7,
       supervisorRoster: [],
       numberOfWorkers: 7,

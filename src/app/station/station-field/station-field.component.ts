@@ -1,16 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Field Component.
  */
 @Component({
-  selector: 'app-station-field[field]',
+  selector: 'app-station-field[field][movableUp][movableDown]',
   templateUrl: './station-field.component.html',
   styleUrls: ['./station-field.component.scss']
 })
 export class StationFieldComponent implements OnInit {
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** Can the field be moved up. */
+  @Input() movableUp!: boolean;
+
+  /** Can the field be moved down? */
+  @Input() movableDown!: boolean;
 
   /** The field type. */
   fieldType = QuestionFieldType;
@@ -97,6 +104,15 @@ export class StationFieldComponent implements OnInit {
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
+  }
+
+  /**
+   * Sets the required status of a field.
+   *
+   * @param ob Observes MatCheckbox changes.
+   */
+  setRequired(ob: MatCheckboxChange): void {
+    this.field.isRequired = ob.checked;
   }
 
 }
