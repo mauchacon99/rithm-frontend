@@ -200,7 +200,57 @@ export class StationComponent implements OnInit {
       });
   }
 
-  /** Adds selected fieldType to array.
+  /**
+   * Change field array based on button clicked on station-field child.
+   *
+   * @param buttonClicked The button clicked.
+   * @param index The index of the adjusted field.
+   */
+  changeFieldArray(buttonClicked: string, index: number): void {
+    switch (buttonClicked) {
+      case 'up':
+        this.moveFieldUp(index);
+        break;
+      case 'down':
+        this.moveFieldDown(index);
+        break;
+      case 'delete':
+        this.removeField(index);
+        break;
+    }
+  }
+
+  /**
+   * Move given field up.
+   *
+   * @param index The index of the field.
+   */
+  moveFieldUp(index: number): void {
+    const moved = this.fakeFields.splice(index, 1);
+    this.fakeFields.splice(index-2, 0, moved[0]);
+  }
+
+  /**
+   * Move given field up.
+   *
+   * @param index The index of the field.
+   */
+  moveFieldDown(index: number): void {
+    const moved = this.fakeFields.splice(index, 1);
+    this.fakeFields.splice(index, 0, moved[0]);
+  }
+
+  /**
+   * Move given field up.
+   *
+   * @param index The index of the field.
+   */
+  removeField(index: number): void {
+    this.fakeFields.splice(index, 1);
+  }
+
+  /**
+   * Adds selected fieldType to field array.
    *
    * @param fieldType The field to add.
    */

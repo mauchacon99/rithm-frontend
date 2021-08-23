@@ -51,6 +51,26 @@ export class StationTemplateComponent {
   }
 
   /**
+   * Can the field be moved up.
+   *
+   * @param fieldIndex The index of the field.
+   * @returns True if the field can be moved up.
+   */
+    canFieldMoveUp(fieldIndex: number): boolean {
+    return fieldIndex === 0 ? false : this.stationFields.length - 1 === fieldIndex ? true : true;
+  }
+
+  /**
+   * Can the field be moved down.
+   *
+   * @param fieldIndex The index of the field.
+   * @returns True if the field can be moved down.
+   */
+  canFieldMoveDown(fieldIndex: number): boolean {
+    return fieldIndex === 0 ? true : this.stationFields.length - 1 === fieldIndex ? false : true;
+  }
+
+  /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -108,26 +128,6 @@ export class StationTemplateComponent {
         message: 'User form is invalid'
       }
     };
-  }
-
-  /**
-   * Can the field be moved up.
-   *
-   * @param fieldIndex The index of the field.
-   * @returns True if the field can be moved up.
-   */
-  canFieldMoveUp(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? false : this.stationFields.length - 1 === fieldIndex ? true : true;
-  }
-
-  /**
-   * Can the field be moved down.
-   *
-   * @param fieldIndex The index of the field.
-   * @returns True if the field can be moved down.
-   */
-  canFieldMoveDown(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? true : this.stationFields.length - 1 === fieldIndex ? false : true;
   }
 
 }

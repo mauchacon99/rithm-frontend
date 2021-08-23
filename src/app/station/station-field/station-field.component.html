@@ -2,13 +2,13 @@
   <div class="col-2 col-sm-1 divider">
     <!-- Field movement controls -->
     <div class="flex">
-      <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
+      <button mat-icon-button (click)="fieldControlClick('up')" [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
         <i class="fas fa-chevron-up"></i>
       </button>
-      <button mat-icon-button>
+      <button mat-icon-button (click)="fieldControlClick('delete')">
         <i class="fas fa-times"></i>
       </button>
-      <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
+      <button mat-icon-button (click)="fieldControlClick('down')" [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
         <i class="fas fa-chevron-down"></i>
       </button>
     </div>
@@ -31,7 +31,7 @@
       <br>
     </ng-container>
     <!-- Required Checkbox -->
-    <mat-checkbox [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
+    <mat-checkbox  [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
       Required
     </mat-checkbox>
   </div>

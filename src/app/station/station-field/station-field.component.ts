@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
@@ -18,6 +18,9 @@ export class StationFieldComponent implements OnInit {
 
   /** Can the field be moved down? */
   @Input() movableDown!: boolean;
+
+  /** The field control button clicked. */
+  @Output() clickedFieldControl = new EventEmitter<string>();
 
   /** The field type. */
   fieldType = QuestionFieldType;
@@ -86,6 +89,15 @@ export class StationFieldComponent implements OnInit {
    */
   ngOnInit(): void {
     this.labelField.questionType.typeString = this.field.questionType.typeString;
+  }
+
+  /**
+   * Inform parent how the field should be moved or removed based on the button clicked.
+   *
+   * @param button The field control button click.
+   */
+  fieldControlClick(button: string): void {
+    this.clickedFieldControl.emit(button);
   }
 
   /**
