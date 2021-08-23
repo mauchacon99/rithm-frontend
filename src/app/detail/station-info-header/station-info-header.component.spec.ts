@@ -26,7 +26,7 @@ describe('StationInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoHeaderComponent);
     component = fixture.componentInstance;
-    component.documentInformation = {
+    component.stationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
       documentRithmId:'E204F369-386F-4E41',
@@ -38,9 +38,9 @@ describe('StationInfoHeaderComponent', () => {
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
       numberOfSupervisors: 7,
-      supervisorRoster: [],
+      supervisors: [],
       numberOfWorkers: 7,
-      workerRoster: [],
+      workers: [],
       questions: []
     };
     fixture.detectChanges();

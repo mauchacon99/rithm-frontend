@@ -18,7 +18,7 @@
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
-      {{info.name}}
+      {{stationName}}
     </div>
   </div>
   <div *ngIf="stationEditMode" class="col-md-2"></div>
@@ -28,10 +28,10 @@
   }">
     <p class="overline">supervisor roster</p>
     <app-roster
-      [rosterMembers]="info.supervisorRoster"
-      [rosterSize]="info.supervisorRosterSize"
-      [stationId]="info.id"
-      [stationName]="info.name"
+      [rosterMembers]="stationInformation.supervisors"
+      [rosterSize]="stationInformation.supervisors.length"
+      [stationId]="stationId"
+      [stationName]="stationName"
       [isWorker]="false"
       [editMode]="stationEditMode"
     ></app-roster>
@@ -44,10 +44,10 @@
   }">
     <p class="overline">worker roster</p>
     <app-roster
-      [rosterMembers]="info.workerRoster"
-      [rosterSize]="info.workerRosterSize"
-      [stationId]="info.id"
-      [stationName]="info.name"
+      [rosterMembers]="stationInformation.workers"
+      [rosterSize]="stationInformation.workers.length"
+      [stationId]="stationId"
+      [stationName]="stationName"
       [isWorker]="true"
       [editMode]="stationEditMode"
     ></app-roster>

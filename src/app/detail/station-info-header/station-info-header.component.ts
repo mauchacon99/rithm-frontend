@@ -20,10 +20,6 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Station information object passed from parent.*/
   @Input() stationInformation!: StationInformation | DocumentStationInformation;
 
-  /** Unify info. */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  info: any;
-
   /** Station name form. */
   stationNameForm: FormGroup;
 
@@ -34,19 +30,8 @@ export class StationInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.type = 'admin';
 
-    // this.info = {
-    //   id: this.documentInformation ? this.documentInformation.stationId : this.stationInformation.rithmId,
-    //   name: this.documentInformation ? this.documentInformation.stationName : this.stationInformation.name,
-    //   supervisorRoster: this.documentInformation ? this.documentInformation.supervisorRoster : this.stationInformation.supervisors,
-    //   supervisorRosterSize: this.documentInformation ?
-    //     this.documentInformation.supervisorRoster.length :
-    //     this.stationInformation.supervisors.length,
-    //   workerRoster: this.documentInformation ? this.documentInformation.workerRoster : this.stationInformation.workers,
-    //   workerRosterSize: this.documentInformation ? this.documentInformation.workerRoster.length : this.stationInformation.workers.length,
-    // };
-
     this.nameField = {
-      prompt: this.info.name,
+      prompt: this.stationName,
       instructions: '',
       questionType: {
         rithmId: '',

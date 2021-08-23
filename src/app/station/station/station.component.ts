@@ -172,9 +172,9 @@ export class StationComponent implements OnInit {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: [],
+      supervisors: [],
       numberOfWorkers: 7,
-      workerRoster: [],
+      workers: [],
       questions: []
     };
   }
