@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
+import { UserService } from 'src/app/core/user.service';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MockUserService } from 'src/mocks';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
 
@@ -17,7 +19,8 @@ describe('StationInfoHeaderComponent', () => {
         MockComponent(RosterComponent)
       ],
       providers: [
-        { provide: FormBuilder, useValue: formBuilder }
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: UserService, useValue: MockUserService }
       ]
     })
     .compileComponents();
