@@ -1,6 +1,7 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
@@ -13,6 +14,7 @@ describe('StationFieldComponent', () => {
   let component: StationFieldComponent;
   let fixture: ComponentFixture<StationFieldComponent>;
   let loader: HarnessLoader;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,7 +23,11 @@ describe('StationFieldComponent', () => {
         MockComponent(TextFieldComponent)
       ],
       imports: [
-        MatCheckboxModule
+        MatCheckboxModule,
+        ReactiveFormsModule
+      ],
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder }
       ]
     })
     .compileComponents();
