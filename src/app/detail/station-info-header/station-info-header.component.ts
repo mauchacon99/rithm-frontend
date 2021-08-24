@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
+import { UserService } from 'src/app/core/user.service';
+import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, User } from 'src/models';
 
 /**
  * Reusable component for the station information header.
@@ -11,14 +12,17 @@ import { DocumentStationInformation, Question, QuestionFieldType, StationInforma
   styleUrls: ['./station-info-header.component.scss']
 })
 export class StationInfoHeaderComponent implements OnInit {
-  /** Type of user looking at a document. */
-  @Input() type!: 'admin' | 'super' | 'worker';
-
   /** Is component viewed in station edit mode? */
   @Input() stationEditMode!: boolean;
 
   /** Station information object passed from parent.*/
   @Input() stationInformation!: StationInformation | DocumentStationInformation;
+
+  /** Type of user looking at a document. */
+ type: 'admin' | 'super' | 'worker';
+
+  /** User object. */
+  user: User;
 
   /** Station name form. */
   stationNameForm: FormGroup;
@@ -28,7 +32,6 @@ export class StationInfoHeaderComponent implements OnInit {
 
   /** Set this.info. */
   ngOnInit(): void {
-    this.type = 'admin';
 
     this.nameField = {
       prompt: this.stationName,
@@ -62,7 +65,14 @@ export class StationInfoHeaderComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private userService: UserService,
   ) {
+    this.user = this.userService.user;
+    if (this.user.role === 'admin') {
+      this.type = this.user.role;
+    } else {
+      this.type = 'worker';
+    }
     this.stationNameForm = this.fb.group({
       name: ['']
     });
