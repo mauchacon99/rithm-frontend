@@ -47,9 +47,11 @@ describe('StationInfoHeaderComponent', () => {
       questions: []
     };
     fixture.detectChanges();
+
+    it('should create', () => {
+      expect(component.user).toBeDefined();
+      expect(component).toBeTruthy();
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });
