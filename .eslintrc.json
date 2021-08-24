@@ -32,6 +32,18 @@
         // TODO: remove this and fix lint issues
         "@angular-eslint/template/no-call-expression": "warn"
       }
+    },
+    {
+      "files": [
+        "*.js"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 2017
+      },
+      "env": {
+        "es6": true
+      }
     }
   ]
 }
