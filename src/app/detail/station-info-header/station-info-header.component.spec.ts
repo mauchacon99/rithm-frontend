@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 
@@ -7,12 +8,16 @@ import { StationInfoHeaderComponent } from './station-info-header.component';
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
   let fixture: ComponentFixture<StationInfoHeaderComponent>;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoHeaderComponent,
         MockComponent(RosterComponent)
+      ],
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder }
       ]
     })
     .compileComponents();
@@ -33,9 +38,9 @@ describe('StationInfoHeaderComponent', () => {
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
       numberOfSupervisors: 7,
-      supervisorRoster: [],
+      supervisors: [],
       numberOfWorkers: 7,
-      workerRoster: [],
+      workers: [],
       questions: []
     };
     fixture.detectChanges();

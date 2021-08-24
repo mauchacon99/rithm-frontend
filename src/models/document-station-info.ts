@@ -39,13 +39,13 @@ export interface DocumentStationInformation {
   numberOfSupervisors: number;
 
   /** The list of supervisors. */
-  supervisorRoster: StationRosterMember[];
+  supervisors: StationRosterMember[];
 
   /** The number of workers on the station for the document. */
   numberOfWorkers: number;
 
   /** The list of workers. */
-  workerRoster: StationRosterMember[];
+  workers: StationRosterMember[];
 
   /** The global Rithm ID for the document. */
   documentRithmId: string;

@@ -1,3 +1,5 @@
+@import 'variables', 'functions', 'rithm-light-palettes';
+
 section.row {
   padding: 10px 0;
 
@@ -11,11 +13,34 @@ section.row {
       }
     }
 
+    form {
+      width: 100%;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
     div.name {
       padding: 5px 10px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+  }
+
+  .mat-mini-fab {
+    line-height: 24px !important;
+
+    &.priority {
+      margin-top: 20px;
+      margin-left: 10px;
+      width: 25px;
+      height: 25px;
+
+      &::ng-deep .mat-button-wrapper {
+        padding: 0;
+      }
     }
   }
 }
