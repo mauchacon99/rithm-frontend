@@ -57,7 +57,7 @@ export class TopNavComponent implements OnInit {
       }
     });
 
-    if (this.user.role !== null) {
+    if (this.user.role === 'admin') {
       this.navItems.push('admin');
     }
   }
