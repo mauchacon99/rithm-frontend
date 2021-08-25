@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
 
-    if (this.userService.user.role !== null) {
+    if (this.userService.user.role) {
       this.mobileLinks.splice(2, 0, {
         name: 'admin',
         icon: 'fa-user-cog',
