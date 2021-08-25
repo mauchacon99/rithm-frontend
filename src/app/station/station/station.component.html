@@ -21,7 +21,7 @@
                 <mat-tab label="Document">
                   <ng-template matTabContent>
                     <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-                    <app-station-template [stationFields]="fakeFields" formControlName="stationTemplateForm"></app-station-template>
+                    <app-station-template [stationFields]="fakeFields" formControlName="stationTemplateForm" [toolBar]="true"></app-station-template>
                     <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                   </ng-template>
                 </mat-tab>

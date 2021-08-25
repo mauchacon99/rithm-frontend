@@ -32,6 +32,9 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /** The station fields in the template area. */
   @Input() stationFields!: Question[];
 
+  /** Add new field label from toolbar. */
+  @Input() toolBar!: boolean;
+
   /** The general instructions field. */
   readonly stationInstructionsField = {
     prompt: 'General Instructions',

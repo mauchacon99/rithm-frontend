@@ -1,6 +1,6 @@
 <ng-container [formGroup]="stationFieldForm">
   <div class="row mb-4">
-    <div class="col-2 col-sm-1 divider">
+    <div class="col-2 col-sm-1">
       <!-- Field movement controls -->
       <div class="flex">
         <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
@@ -16,9 +16,9 @@
     </div>
     <div class="col-10 col-sm-11">
       <!-- Instructions -->
-      <app-text-field [field]="instructionField" formControlName="instructionsField"></app-text-field>
+      <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
       <!-- Label -->
-      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString"></app-text-field>
+      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="toolBar"></app-text-field>
       <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
         <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField" [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)"></app-text-field>
         <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
