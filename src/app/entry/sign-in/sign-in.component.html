@@ -1,4 +1,4 @@
-<div class="page">
+<!-- <div class="page">
   <div class="container">
     <div class="row justify-content-center">
       <mat-card class="col-xl-8 col-md-10 col-sm-12 p-0">
@@ -19,36 +19,28 @@
               <div class="row mt-4">
                 <div class="col-12">
                   <h4>Sign in</h4>
-                  <button
-  class="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400">Hello</button>
                 </div>
                 <div class="col-12">
                   <p>Welcome to Rithm.</p>
                 </div>
               </div>
               <p id="invalid" [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
-                <!-- Default form login -->
                   <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
-                    <!-- Email -->
                       <mat-form-field class="col-12" appearance="outline">
                         <mat-label>Email</mat-label>
                         <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
                       </mat-form-field>
-                    <!-- Password -->
                       <mat-form-field class="col-12" appearance="outline">
                         <mat-label>Password</mat-label>
                         <input id="password" type="password" matInput placeholder="Password" formControlName="password" autocomplete="current-password">
                       </mat-form-field>
-                    <!-- Sign in button -->
                     <div class="col-12">
                       <button id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
                     </div>
                   </form>
-                  <!-- Forgot password -->
                  <div class="row">
                   <a id="forgot-password" routerLink="forgot-password" class="col">Forgot password?</a>
                 </div>
-              <!-- Register -->
               <mat-card-footer class="row">
                 <div class="col center-text">
                   <p class="text-center">New here?
@@ -63,4 +55,52 @@
       </mat-card>
     </div>
   </div>
+</div> -->
+<div class="flex h-screen">
+  <mat-card class="w-3/5 m-auto p-0">
+    <div class="grid grid-cols-2">
+      <div class="bg-darkBlue">
+        <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
+        <p class="mb-2 text-white">Seamlessly connecting people and processes</p>
+        <p class="mb-2 text-white">We make business easy.</p>
+      </div>
+      <div>
+        <span *ngIf="!isLoading">
+          <div class="mt-1">
+            <h4>Sign in</h4>
+          </div>
+          <div class="mt-1">
+            <p>Welcome to Rithm.</p>
+          </div>
+          <p id="invalid" [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
+          <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
+            <mat-form-field class="col-12" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
+            </mat-form-field>
+            <mat-form-field class="" appearance="outline">
+              <mat-label>Password</mat-label>
+              <input id="password" type="password" matInput placeholder="Password" formControlName="password"
+                autocomplete="current-password">
+            </mat-form-field>
+            <div class="">
+              <button id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
+            </div>
+          </form>
+          <div class="">
+            <a id="forgot-password" routerLink="forgot-password" class="col">Forgot password?</a>
+          </div>
+          <p class="text-center">New here?
+            <a id="create-account" routerLink="account-create">Create an account</a>
+          </p>
+        </span>
+      </div>
+    </div>
+  </mat-card>
 </div>
+<!-- <div class="flex h-screen">
+  <div class="m-auto">
+    <h3>title</h3>
+    <button mat-button color="accent">button</button>
+  </div>
+</div> -->

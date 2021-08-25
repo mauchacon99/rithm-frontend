@@ -1,107 +1,107 @@
 @import 'variables', 'mixins', 'functions';
 
-.page {
-  @include gradient($secondary-gray, $secondary-blue);
+// .page {
+//   @include gradient($secondary-gray, $secondary-blue);
 
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+//   min-height: 100vh;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
 
 /// Left half of entry card
-.left-entry {
-  padding: 15px;
-  color: #fff;
-  background-color: $primary-blue;
-  border-radius: 4px 0 0 4px;
-  min-height: 576px;
+// .left-entry {
+//   padding: 15px;
+//   color: #fff;
+//   background-color: $primary-blue;
+//   border-radius: 4px 0 0 4px;
+//   min-height: 576px;
   /// Logo
-  div img {
-    width: 122px;
-  }
-}
+//   div img {
+//     width: 122px;
+//   }
+// }
 
 /// Right half of entry card
-.right-entry {
-  padding: 15px;
-  border-radius: 0 4px 4px 0;
-  color: #000;
-  background: #fff;
-  min-height: 576px;
+// .right-entry {
+//   padding: 15px;
+//   border-radius: 0 4px 4px 0;
+//   color: #000;
+//   background: #fff;
+//   min-height: 576px;
 
-  mat-card-subtitle {
-    color: #000;
-    font-weight: 300;
-  }
-}
+//   mat-card-subtitle {
+//     color: #000;
+//     font-weight: 300;
+//   }
+// }
 
-@media screen and (max-width: 1200px) {
-  .container {
-    .left-entry {
-      min-height: 585px;
-    }
+// @media screen and (max-width: 1200px) {
+//   .container {
+//     .left-entry {
+//       min-height: 585px;
+//     }
 
-    .right-entry {
-      min-height: 585px;
-    }
-  }
-}
+//     .right-entry {
+//       min-height: 585px;
+//     }
+//   }
+// }
 
-@media screen and (max-width: 992px) {
-  .container {
-    .left-entry {
-      min-height: 604px;
-    }
+// @media screen and (max-width: 992px) {
+//   .container {
+//     .left-entry {
+//       min-height: 604px;
+//     }
 
-    .right-entry {
-      min-height: 604px;
-    }
-  }
-}
+//     .right-entry {
+//       min-height: 604px;
+//     }
+//   }
+// }
 
-@media screen and (max-width: 767px) {
-  .container {
-    max-width: 100%;
-    position: absolute;
-    top: 0;
+// @media screen and (max-width: 767px) {
+//   .container {
+//     max-width: 100%;
+//     position: absolute;
+//     top: 0;
 
-    div mat-card div.right-entry {
-      min-height: calc(100vh - 84.61px);
-    }
-  }
+//     div mat-card div.right-entry {
+//       min-height: calc(100vh - 84.61px);
+//     }
+//   }
 
-  .left-entry {
-    border-radius: 0;
-    min-height: auto !important;
+//   .left-entry {
+//     border-radius: 0;
+//     min-height: auto !important;
 
-    div img {
-      margin-left: 15px;
-    }
-  }
+//     div img {
+//       margin-left: 15px;
+//     }
+//   }
 
-  .right-entry {
-    border-radius: 0;
+//   .right-entry {
+//     border-radius: 0;
 
-    mat-card-footer {
-      bottom: 20px;
-      width: 100%;
-      min-height: auto;
-    }
-  }
+//     mat-card-footer {
+//       bottom: 20px;
+//       width: 100%;
+//       min-height: auto;
+//     }
+//   }
 
-  .mat-card-content {
-    margin: 0 15px;
-  }
+//   .mat-card-content {
+//     margin: 0 15px;
+//   }
 
-  .mat-card {
-    box-shadow: none;
-  }
-}
+//   .mat-card {
+//     box-shadow: none;
+//   }
+// }
 
-@media screen and (orientation: landscape) and (max-height: 575px) {
-  .container {
-    position: absolute;
-    top: 0;
-  }
-}
+// @media screen and (orientation: landscape) and (max-height: 575px) {
+//   .container {
+//     position: absolute;
+//     top: 0;
+//   }
+// }

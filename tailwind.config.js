@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors');
+const colors = require('./rithm-colors');
 
 module.exports = {
   purge: [],
@@ -18,14 +18,20 @@ module.exports = {
 
       black: colors.black,
       white: colors.white,
-      gray: colors.coolGray,
-      red: colors.red,
-      yellow: colors.amber,
-      green: colors.emerald,
-      blue: colors.blue,
-      indigo: colors.indigo,
-      purple: colors.violet,
-      pink: colors.pink,
+      darkBlue: colors.darkBlue,
+      brightBlue: colors.brightBlue,
+      primary: colors.primary,
+      secondary: colors.secondary,
+      accent: colors.accent,
+      error: colors.error,
+      // gray: colors.coolGray,
+      // red: colors.red,
+      // yellow: colors.amber,
+      // green: colors.emerald,
+      // blue: colors.blue,
+      // indigo: colors.indigo,
+      // purple: colors.violet,
+      // pink: colors.pink,
     },
     spacing: {
       px: '1px',
@@ -176,7 +182,9 @@ module.exports = {
       150: '1.5',
       200: '2',
     },
-    container: {},
+    container: {
+      center: true
+    },
     content: {
       none: 'none',
     },

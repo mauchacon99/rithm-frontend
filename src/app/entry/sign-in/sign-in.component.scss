@@ -1,47 +1,51 @@
-@import '../entry.scss';
-
-.left-entry {
-  div:nth-child(3) {
-    position: absolute;
-    bottom: 20px;
-  }
+mat-card {
+  padding: 0;
+  overflow: hidden;
 }
+// @import '../entry.scss';
 
-.right-entry {
-  mat-card-footer {
-    margin-top: 100px;
-    margin-bottom: 15px;
+// .left-entry {
+//   div:nth-child(3) {
+//     position: absolute;
+//     bottom: 20px;
+//   }
+// }
 
-    div p {
-      font-size: font-calc(14);
-    }
-  }
+// .right-entry {
+//   mat-card-footer {
+//     margin-top: 100px;
+//     margin-bottom: 15px;
 
-  form.row {
-    margin-top: 80px;
+//     div p {
+//       font-size: font-calc(14);
+//     }
+//   }
 
-    div button {
-      width: 100%;
-    }
-  }
+//   form.row {
+//     margin-top: 80px;
 
-  div.row a {
-    margin-top: 15px;
-  }
-}
+//     div button {
+//       width: 100%;
+//     }
+//   }
 
-@media screen and (max-width: 767px) {
-  .right-entry {
-    form.row {
-      margin-top: 10px;
-    }
-  }
-}
+//   div.row a {
+//     margin-top: 15px;
+//   }
+// }
 
-@media screen and (max-height: 575px) {
-  .right-entry {
-    mat-card-footer {
-      margin-bottom: -5px;
-    }
-  }
-}
+// @media screen and (max-width: 767px) {
+//   .right-entry {
+//     form.row {
+//       margin-top: 10px;
+//     }
+//   }
+// }
+
+// @media screen and (max-height: 575px) {
+//   .right-entry {
+//     mat-card-footer {
+//       margin-bottom: -5px;
+//     }
+//   }
+// }
