@@ -7,7 +7,7 @@ import { DocumentStationInformation, Question, QuestionFieldType, StationInforma
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header',
+  selector: 'app-station-info-header[stationInformation][stationEditMode]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss']
 })
@@ -20,9 +20,6 @@ export class StationInfoHeaderComponent implements OnInit {
 
   /** Type of user looking at a document. */
  type: 'admin' | 'super' | 'worker';
-
-  /** User object. */
-  user: User;
 
   /** Station name form. */
   stationNameForm: FormGroup;
@@ -67,12 +64,8 @@ export class StationInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
   ) {
-    this.user = this.userService.user;
-    if (this.user.role === 'admin') {
-      this.type = this.user.role;
-    } else {
-      this.type = 'worker';
-    }
+    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+
     this.stationNameForm = this.fb.group({
       name: ['']
     });
