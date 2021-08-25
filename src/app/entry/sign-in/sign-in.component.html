@@ -57,14 +57,16 @@
   </div>
 </div> -->
 <div class="flex h-screen">
-  <mat-card class="w-3/5 m-auto p-0">
-    <div class="grid grid-cols-2">
-      <div class="bg-darkBlue">
+  <mat-card class="w-full md:w-3/5 h-full md:h-auto m-auto p-0">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <!-- left column -->
+      <div class="bg-darkBlue hidden md:flex md:flex-col">
         <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
         <p class="mb-2 text-white">Seamlessly connecting people and processes</p>
         <p class="mb-2 text-white">We make business easy.</p>
       </div>
-      <div>
+      <!-- right column -->
+      <div class="flex flex-col">
         <span *ngIf="!isLoading">
           <div class="mt-1">
             <h4>Sign in</h4>
