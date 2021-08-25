@@ -98,11 +98,11 @@ describe('DocumentService', () => {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      numberOfSupervisors: 7,
-      supervisorRoster: [],
-      numberOfWorkers: 7,
-      workerRoster: [],
-      questions: []
+      supervisors: [],
+      workers: [],
+      questions: [],
+      rithmId: 'ED6148C9-ABB7',
+      instructions: 'General instructions'
     };
 
     service.getDocumentInfo(stationId, documentId)
