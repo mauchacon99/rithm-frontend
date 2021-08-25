@@ -20,6 +20,11 @@ import { AuthGuard } from './core/auth.guard';
       canActivate: [AuthGuard]
     },
     {
+      path: 'admin',
+      loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+      canActivate: [AuthGuard]
+    },
+    {
       path: 'station',
       loadChildren: () => import('./station/station.module').then(m => m.StationModule),
       canActivate: [AuthGuard]
