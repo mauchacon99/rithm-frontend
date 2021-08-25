@@ -110,6 +110,4 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.closeSidenav();
   }
 
-
-
 }
