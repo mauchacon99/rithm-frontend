@@ -19,7 +19,6 @@ export class MockStationService {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
       instructions: '',
-      dueDate: '2021-08-22T17:26:47.3506612Z',
       nextStations: [{
         stationName: 'Development',
         totalDocuments: 5,
@@ -60,7 +59,8 @@ export class MockStationService {
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: []
+      questions: [],
+      stationPriority: 2
     };
     return of(data).pipe(delay(1000));
   }
