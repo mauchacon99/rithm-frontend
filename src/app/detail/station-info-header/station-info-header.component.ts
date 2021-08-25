@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, User } from 'src/models';
+import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
 
 /**
  * Reusable component for the station information header.
