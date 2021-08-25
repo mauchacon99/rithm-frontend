@@ -1,14 +1,5 @@
 @import 'variables', 'mixins', 'functions';
-
-.page {
-  @include gradient($secondary-gray, $secondary-blue);
-
-  mat-card {
-    padding: 0;
-    overflow: hidden;
-  }
-}
-// @import '../entry.scss';
+@import '../entry.scss';
 
 // .left-entry {
 //   div:nth-child(3) {

@@ -56,7 +56,7 @@
     </div>
   </div>
 </div> -->
-<div class="flex h-screen page">
+<div class="flex h-screen page overflow-y-scroll">
   <mat-card class="w-full md:w-3/5 h-full md:h-3/5 m-auto p-0">
     <div class="grid grid-cols-1 md:grid-cols-2 h-full">
       <!-- left column -->
@@ -68,7 +68,7 @@
         <p class="mb-2 text-white align-baseline">We make business easy.</p>
       </div>
       <!-- right column -->
-      <div class="flex flex-col bg-white">
+      <div class="flex flex-col bg-white overflow-y-scroll">
         <span *ngIf="!isLoading">
           <h4 class="mt-10 ml-5">Sign in</h4>
           <p class="mt-1 ml-5">Welcome to Rithm.</p>
