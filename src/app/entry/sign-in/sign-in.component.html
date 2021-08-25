@@ -57,10 +57,10 @@
   </div>
 </div> -->
 <div class="flex h-screen page">
-  <mat-card class="w-full md:w-3/5 h-full md:h-auto m-auto p-0">
-    <div class="grid grid-cols-1 md:grid-cols-2">
+  <mat-card class="w-full md:w-3/5 h-full md:h-3/5 m-auto p-0">
+    <div class="grid grid-cols-1 md:grid-cols-2 h-full">
       <!-- left column -->
-      <div class="bg-darkBlue hidden md:flex md:flex-col">
+      <div class="bg-darkBlue hidden md:flex md:flex-col p-3">
         <div class="flex-grow">
           <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
           <p class="mb-2 text-white">Seamlessly connecting people and processes</p>
@@ -70,15 +70,11 @@
       <!-- right column -->
       <div class="flex flex-col bg-white">
         <span *ngIf="!isLoading">
-          <div class="mt-1">
-            <h4>Sign in</h4>
-          </div>
-          <div class="mt-1">
-            <p>Welcome to Rithm.</p>
-          </div>
-          <p id="invalid" [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
-          <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
-            <mat-form-field class="col-12" appearance="outline">
+          <h4 class="mt-10 ml-5">Sign in</h4>
+          <p class="mt-1 ml-5">Welcome to Rithm.</p>
+          <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error">Invalid email or password</p>
+          <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="flex flex-col px-5 py-2">
+            <mat-form-field class="" appearance="outline">
               <mat-label>Email</mat-label>
               <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
             </mat-form-field>
@@ -87,24 +83,16 @@
               <input id="password" type="password" matInput placeholder="Password" formControlName="password"
                 autocomplete="current-password">
             </mat-form-field>
-            <div class="">
-              <button id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
-            </div>
+            <button class="w-full" id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
           </form>
-          <div class="">
-            <a id="forgot-password" routerLink="forgot-password" class="col">Forgot password?</a>
-          </div>
-          <p class="text-center">New here?
+          <a id="forgot-password" routerLink="forgot-password" class="ml-5">Forgot password?</a>
+          <p class="text-center mt-5">New here?
             <a id="create-account" routerLink="account-create">Create an account</a>
           </p>
         </span>
+        <!-- TODO: center loading indicator -->
+        <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
       </div>
     </div>
   </mat-card>
 </div>
-<!-- <div class="flex h-screen">
-  <div class="m-auto">
-    <h3>title</h3>
-    <button mat-button color="accent">button</button>
-  </div>
-</div> -->
