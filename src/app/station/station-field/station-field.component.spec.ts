@@ -113,4 +113,61 @@ describe('StationFieldComponent', () => {
     expect(component.field.isRequired).toBeTrue();
 
   });
+
+  describe('label field', () => {
+    beforeEach(() => {
+      component.field = {
+        prompt: 'Label',
+        instructions: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.ShortText,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false
+      };
+      component.ngOnInit();
+      fixture.detectChanges();
+    });
+
+    it('should require a label', () => {
+      const label = component.stationFieldForm.controls[component.field.questionType.typeString];
+      expect(label.valid).toBeFalse();
+      expect(label.hasError('required')).toBeTrue();
+      expect(component.stationFieldForm.valid).toBeFalse();
+    });
+  });
+
+  describe('handle field options', () => {
+    beforeEach(() => {
+      component.field = {
+        prompt: 'Label',
+        instructions: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Select,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: false,
+        isPrivate: false
+      };
+      component.ngOnInit();
+      fixture.detectChanges();
+    });
+
+    it('option should be required', () => {
+      const option = component.stationFieldForm.controls['optionField'];
+      expect(option.valid).toBeFalse();
+      expect(option.hasError('required')).toBeTrue();
+      expect(component.stationFieldForm.valid).toBeFalse();
+    });
+
+    it('should automatically add an option to the array', () => {
+      expect(component.options.length).toBeGreaterThan(0);
+    });
+  });
+
 });

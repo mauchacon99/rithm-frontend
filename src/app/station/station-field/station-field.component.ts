@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, ValidatorFn, Validators
+  ValidationErrors, Validator, Validators
 } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
@@ -110,41 +110,19 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   ngOnInit(): void {
     this.labelField.questionType.typeString = this.field.questionType.typeString;
+    if (this.field.questionType.typeString === this.fieldType.Select
+      || this.field.questionType.typeString === this.fieldType.MultiSelect
+      || this.field.questionType.typeString === this.fieldType.CheckList) {
+      this.addOption(this.field.questionType.typeString);
+    }
+
+
     this.stationFieldForm = this.fb.group({
-      instructionsField: ['',[]],
-      [this.field.questionType.typeString]: ['',[]],
-
+      instructionsField: ['', []],
+      [this.field.questionType.typeString]: ['', [Validators.required]],
+      optionField: ['', [Validators.required]]
     });
-
-    //Logic to determine if a field should be required, and the validators to give it.
-    const validators: ValidatorFn[] = [];
-
-    //The field is required. Validators.required must be included.
-    if (this.field.isRequired) {
-      validators.push(Validators.required);
-    }
-
-    //function to determine if there is at least one option for select and check fields.
-    const hasOneOption = (): ValidatorFn => {
-      return
-    }
-
-    //Need to set validators for label.
-    switch (this.field.questionType.typeString) {
-      case QuestionFieldType.Select:
-      case QuestionFieldType.MultiSelect:
-      case QuestionFieldType.CheckList:
-        validators.push(Validators.required);
-        break;
-      default:
-        validators.push(Validators.required);
-    }
-
-    this.stationFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
-
-    //use option array to determine if select and check fields meet requirements.
   }
-
 
   /**
    * Add an option to the options array.
