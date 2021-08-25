@@ -49,7 +49,6 @@ describe('StationInfoHeaderComponent', () => {
     fixture.detectChanges();
 
     it('should create', () => {
-      expect(component.user).toBeDefined();
       expect(component).toBeTruthy();
     });
   });
