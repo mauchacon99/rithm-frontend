@@ -9,16 +9,16 @@
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
-      {{stationInformation?.stationName}}
+      {{name}}
     </div>
   </div>
   <div class="col-6 col-md-3 col-xl-2">
     <p class="overline">supervisor roster</p>
     <app-roster
-      [rosterMembers]="stationInformation.supervisorRoster"
-      [rosterSize]="stationInformation.numberOfSupervisors"
-      [stationId]="stationInformation.stationId"
-      [stationName]="stationInformation.stationName"
+      [rosterMembers]="stationInformation.supervisors"
+      [rosterSize]="stationInformation.supervisors.length"
+      [stationId]="id"
+      [stationName]="name"
       [isWorker]="false"
     ></app-roster>
   </div>
@@ -29,10 +29,10 @@
   }">
     <p class="overline">worker roster</p>
     <app-roster
-      [rosterMembers]="stationInformation.workerRoster"
-      [rosterSize]="stationInformation.numberOfWorkers"
-      [stationId]="stationInformation.stationId"
-      [stationName]="stationInformation.stationName"
+      [rosterMembers]="stationInformation.workers"
+      [rosterSize]="stationInformation.workers.length"
+      [stationId]="id"
+      [stationName]="name"
       [isWorker]="true"
     ></app-roster>
   </div>

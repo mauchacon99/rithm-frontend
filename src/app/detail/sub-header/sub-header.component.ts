@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
+import { DocumentStationInformation, StationInformation } from 'src/models';
 
 /**
  * Component for the sub header on document/station views that houses the
@@ -14,7 +14,7 @@ import { DocumentStationInformation } from 'src/models';
 export class SubHeaderComponent {
 
   /** Parent document information. */
-  @Input() documentInformation?: DocumentStationInformation;
+  @Input() documentInformation?: DocumentStationInformation | StationInformation;
 
   /** Parent title information. */
   @Input() title?: string;

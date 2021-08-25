@@ -4,7 +4,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
+import { StationInformation, Question, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -22,11 +22,11 @@ export class StationComponent implements OnInit {
   documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', {static: true})
+  @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
+  documentInformation!: StationInformation;
 
   /** Whether the request to get the document info is currently underway. */
   documentLoading = false;
@@ -96,23 +96,6 @@ export class StationComponent implements OnInit {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control('')
     });
-    this.documentInformation = {
-      stationInstruction: 'Instruction',
-      documentName: 'Metroid Dread',
-      documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      stationName: 'Development',
-      stationPriority: 2,
-      numberOfSupervisors: 7,
-      supervisorRoster: [],
-      numberOfWorkers: 7,
-      workerRoster: [],
-      questions: []
-    };
   }
 
   /**
@@ -185,10 +168,10 @@ export class StationComponent implements OnInit {
     this.documentLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe(() => {
-        // if (document) {
-        //   this.documentInformation = document;
-        // }
+      .subscribe((stationInfo) => {
+        if (stationInfo) {
+          this.documentInformation = stationInfo;
+        }
         this.documentLoading = false;
       }, (error: unknown) => {
         this.navigateBack();

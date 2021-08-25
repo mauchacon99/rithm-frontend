@@ -46,7 +46,7 @@ export class StationTemplateComponent {
     private fb: FormBuilder
   ) {
     this.stationTemplateForm = this.fb.group({
-      stationFieldForm: this.fb.control('')
+      // stationFieldForm: this.fb.control('')
     });
   }
 

@@ -1,4 +1,4 @@
-import { QuestionList } from './question-list';
+import { Question } from './question';
 import { ConnectedStationInfo } from './connected-station-info';
 import { StationRosterMember } from './station-roster-member';
 
@@ -16,9 +16,6 @@ export interface StationInformation {
 
   /** The Instructions for the station. */
   instructions: string;
-
-  /** Due Date of ticket after it reaches this task. */
-  dueDate: string;
 
   /** The list of previous stations. */
   nextStations: ConnectedStationInfo[];
@@ -45,5 +42,8 @@ export interface StationInformation {
   updatedDate: string;
 
   /** The list of fields in the template area for the document/station. */
-  questions: QuestionList[];
+  questions: Question[];
+
+  /** The priority of the document. */
+  stationPriority: number;
 }
