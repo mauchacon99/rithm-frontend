@@ -35,11 +35,11 @@ describe('DocumentInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      numberOfSupervisors: 7,
-      supervisorRoster: [],
-      numberOfWorkers: 7,
-      workerRoster: [],
-      questions: []
+      supervisors: [],
+      workers: [],
+      questions: [],
+      instructions: 'General instructions',
+      rithmId: 'CF6148C9-ABB7-408E-A210-784BG445'
     };
     fixture.detectChanges();
   });

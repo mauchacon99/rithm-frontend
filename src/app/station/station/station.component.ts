@@ -4,7 +4,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, Question, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -39,51 +39,6 @@ export class StationComponent implements OnInit {
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
-
-  /** Fake fields, TODO: remove. */
-  fakeFields: Question[] = [
-    {
-      prompt: 'Instructions',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.LongText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Label',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 7',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Select,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      possibleAnswers: [
-        {
-          text: 'Required field',
-          default: true
-        }]
-    },
-  ];
 
   constructor(
     private stationService: StationService,
@@ -188,7 +143,7 @@ export class StationComponent implements OnInit {
    * @param fieldType The field to add.
    */
   addQuestion(fieldType: QuestionFieldType): void {
-    this.fakeFields.push({
+    this.documentInformation.questions.push({
       prompt: 'Label',
       instructions: '',
       questionType: {
