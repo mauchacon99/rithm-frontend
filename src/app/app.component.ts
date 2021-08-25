@@ -80,6 +80,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }, (error: unknown) => {
       console.error(error);
     });
+
+    if (this.userService.user.role !== null) {
+      this.mobileLinks.splice(2, 0, {
+        name: 'admin',
+        icon: 'user-cog',
+        link: 'admin'
+      });
+    }
   }
 
   /**
@@ -101,5 +109,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.sidenavDrawerService.closeSidenav();
   }
+
+
 
 }

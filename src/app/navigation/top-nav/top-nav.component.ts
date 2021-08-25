@@ -56,6 +56,10 @@ export class TopNavComponent implements OnInit {
         this.user.lastName = user?.lastName;
       }
     });
+
+    if (this.user.role !== null) {
+      this.navItems.push('admin');
+    }
   }
 
   /**
