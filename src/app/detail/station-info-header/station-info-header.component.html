@@ -2,40 +2,59 @@
   <div class="col-12 col-md-2">
     <h6>Station Information</h6>
   </div>
-  <div
+  <div *ngIf="stationEditMode" class="col-12 col-md-10">
+    <form [formGroup]="stationNameForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Station Name</mat-label>
+        <input id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name">
+      </mat-form-field>
+    </form>
+  </div>
+  <div *ngIf="!stationEditMode"
   [ngClass]="{
     'col-6 col-md-7 col-xl-8': type === 'worker',
-    'col-12': type === ('super' || 'admin'), 'col-md-4 col-xl-6': type === 'super' || 'admin'
+    'col-12': type === ('super' || 'admin'),
+    'col-md-4 col-xl-6': type === 'super' || 'admin'
   }">
     <div class="name">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent"><i class="fas fa-pen"></i></button>
-      {{stationInformation?.stationName}}
+      {{stationName}}
     </div>
   </div>
-  <div class="col-6 col-md-3 col-xl-2">
+  <div *ngIf="stationEditMode" class="col-md-2"></div>
+  <div [ngClass]="{
+    'ml-3': stationEditMode,
+    'col-6 col-md-3 col-xl-2': !stationEditMode
+  }">
     <p class="overline">supervisor roster</p>
     <app-roster
-      [rosterMembers]="stationInformation.supervisorRoster"
-      [rosterSize]="stationInformation.numberOfSupervisors"
-      [stationId]="stationInformation.stationId"
-      [stationName]="stationInformation.stationName"
+      [rosterMembers]="stationInformation.supervisors"
+      [rosterSize]="stationInformation.supervisors.length"
+      [stationId]="stationId"
+      [stationName]="stationName"
       [isWorker]="false"
+      [editMode]="stationEditMode"
     ></app-roster>
   </div>
-  <div class="col-6"
+  <div
   [ngClass]="{
-    'd-none': type === 'worker',
-    'col-md-3 col-xl-2': type === 'super' || 'admin'
+    'd-none': type === 'worker' && !stationEditMode,
+    'col-6 col-md-3 col-xl-2': type === 'super' || 'admin' && !stationEditMode,
+    'mx-3' : stationEditMode
   }">
     <p class="overline">worker roster</p>
     <app-roster
-      [rosterMembers]="stationInformation.workerRoster"
-      [rosterSize]="stationInformation.numberOfWorkers"
-      [stationId]="stationInformation.stationId"
-      [stationName]="stationInformation.stationName"
+      [rosterMembers]="stationInformation.workers"
+      [rosterSize]="stationInformation.workers.length"
+      [stationId]="stationId"
+      [stationName]="stationName"
       [isWorker]="true"
+      [editMode]="stationEditMode"
     ></app-roster>
   </div>
+  <button mat-mini-fab color="warn" *ngIf="stationEditMode" class="priority">
+    1
+  </button>
 </section>
 <div class="row">
   <div class="col">

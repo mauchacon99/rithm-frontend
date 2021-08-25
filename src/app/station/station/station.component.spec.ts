@@ -31,6 +31,7 @@ describe('StationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationComponent,
+        MockComponent(StationInfoHeaderComponent),
         MockComponent(SubHeaderComponent),
         MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
