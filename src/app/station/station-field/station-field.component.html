@@ -1,38 +1,40 @@
-<div class="row mb-4">
-  <div class="col-2 col-sm-1 divider">
-    <!-- Field movement controls -->
-    <div class="flex">
-      <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
-        <i class="fas fa-chevron-up"></i>
-      </button>
-      <button mat-icon-button>
-        <i class="fas fa-times"></i>
-      </button>
-      <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
-        <i class="fas fa-chevron-down"></i>
-      </button>
+<ng-container [formGroup]="stationFieldForm">
+  <div class="row mb-4">
+    <div class="col-2 col-sm-1">
+      <!-- Field movement controls -->
+      <div class="flex">
+        <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
+          <i class="fas fa-chevron-up"></i>
+        </button>
+        <button mat-icon-button>
+          <i class="fas fa-times"></i>
+        </button>
+        <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-10 col-sm-11">
+      <!-- Instructions -->
+      <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
+      <!-- Label -->
+      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="toolBar"></app-text-field>
+      <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
+        <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField" [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)"></app-text-field>
+        <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
+          <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
+            New Option
+          </span>
+          <span *ngIf="field.questionType.typeString === fieldType.CheckList">
+            New Item
+          </span>
+        </button>
+        <br>
+      </ng-container>
+      <!-- Required Checkbox -->
+      <mat-checkbox [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
+        Required
+      </mat-checkbox>
     </div>
   </div>
-  <div class="col-10 col-sm-11">
-    <!-- Instructions -->
-    <app-text-field [field]="instructionField"></app-text-field>
-    <!-- Label -->
-    <app-text-field [field]="labelField"></app-text-field>
-    <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
-      <app-text-field *ngFor="let field of options; let i = index" [field]="field" [removableField]="true" (removeOptionField)="removeOption(i)"></app-text-field>
-      <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
-        <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
-          New Option
-        </span>
-        <span *ngIf="field.questionType.typeString === fieldType.CheckList">
-          New Item
-        </span>
-      </button>
-      <br>
-    </ng-container>
-    <!-- Required Checkbox -->
-    <mat-checkbox>
-      Required
-    </mat-checkbox>
-  </div>
-</div>
+</ng-container>

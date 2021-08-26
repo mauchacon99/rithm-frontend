@@ -62,6 +62,15 @@ export class AppComponent implements OnInit, OnDestroy {
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
+
+    if (this.userService.user.role) {
+      this.mobileLinks.splice(2, 0, {
+        name: 'admin',
+        icon: 'fa-user-cog',
+        link: 'admin'
+      });
+    }
+
     this.sidenavDrawerService.setSidenav(this.sidenav);
     this.router.events.pipe(
       takeUntil(this.destroyed$)
