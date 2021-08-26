@@ -1,1 +1,15 @@
-// styles here
+@import 'variables';
+
+.container {
+  mat-card {
+    @media screen and (max-width: 575px) {
+      min-height: calc(100vh - 65px);
+      height: 100%;
+      padding-bottom: 65px;
+    }
+
+    h3 {
+      color: $accent-blue;
+    }
+  }
+}
