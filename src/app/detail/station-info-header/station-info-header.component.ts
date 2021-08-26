@@ -54,7 +54,7 @@ export class StationInfoHeaderComponent implements OnInit {
 
   /** Get name of station from StationInformation based on type.
    *
-   * @returns The Station Name.
+   * @returns The Station Id.
    */
   get stationRithmId(): string {
     return 'stationRithmId' in this.stationInformation ? this.stationInformation.stationRithmId : this.stationInformation.rithmId;
