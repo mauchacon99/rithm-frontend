@@ -12,3 +12,8 @@
     }
   }
 }
+
+::ng-deep .mat-form-field-wrapper {
+  /* stylelint-disable-next-line */
+  padding-bottom: 0.5rem;
+}
