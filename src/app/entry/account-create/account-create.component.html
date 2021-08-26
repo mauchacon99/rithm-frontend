@@ -1,5 +1,5 @@
 <div class="flex h-screen page overflow-y-scroll">
-  <mat-card class="w-full md:w-3/5 h-full md:h-3/5 m-auto p-0 overflow-y-scroll">
+  <mat-card class="w-full md:w-9/12 h-full md:h-3/5 m-auto p-0 overflow-y-scroll">
     <div class="grid grid-cols-1 md:grid-cols-2 md:h-full">
       <!-- left column -->
       <div class="bg-darkBlue md:flex md:flex-col p-3 flex-none">
@@ -17,20 +17,18 @@
           <p class="mt-1 ml-5">Enter your info to create your account.</p>
           <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2">
             <app-user-form formControlName="userForm" [accountCreate]="true"></app-user-form>
-
             <div class="w-full mb-5">
               <mat-checkbox formControlName="agreeToTerms">
                 I have read and agree to the&nbsp;
               </mat-checkbox>
               <a class="text-accent-400" id="terms" (click)="openTerms(termsAndConditionsComponent)">terms & conditions</a>
             </div>
-
             <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">
               Create Account
             </button>
-
           </form>
         </span>
+        <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
       </div>
     </div>
   </mat-card>
