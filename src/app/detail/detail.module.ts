@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 
 import { StationInfoHeaderComponent } from './station-info-header/station-info-header.component';
 import { DocumentInfoHeaderComponent } from './document-info-header/document-info-header.component';
@@ -26,6 +25,7 @@ import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -59,7 +59,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
   ],
   exports: [
     SubHeaderComponent,

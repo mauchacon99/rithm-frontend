@@ -99,9 +99,9 @@ describe('DocumentService', () => {
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
       numberOfSupervisors: 7,
-      supervisorRoster: [],
+      supervisors: [],
       numberOfWorkers: 7,
-      workerRoster: [],
+      workers: [],
       questions: []
     };
 

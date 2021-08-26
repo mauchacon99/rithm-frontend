@@ -4,7 +4,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
+import { DocumentStationInformation, StationInformation, Question, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -27,6 +27,9 @@ export class StationComponent implements OnInit {
 
   /** The information about the document within a station. */
   documentInformation!: DocumentStationInformation;
+
+  /** The information about the station. */
+  stationInformation!: StationInformation;
 
   /** Whether the request to get the document info is currently underway. */
   documentLoading = false;
@@ -96,6 +99,67 @@ export class StationComponent implements OnInit {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control('')
     });
+    //TODO: remove temporary mock data.
+    this.stationInformation = {
+      rithmId: '',
+      name: 'Station name',
+      instructions: '',
+      dueDate: '',
+      nextStations: [],
+      previousStations: [],
+      supervisors: [
+        {
+          userRithmId: '',
+          firstName: 'Tyler',
+          lastName: 'H',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Austin',
+          lastName: 'B',
+          email: '',
+          isAssigned: true
+        },
+      ],
+      workers: [
+        {
+          userRithmId: '',
+          firstName: 'Harrison',
+          lastName: 'K',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Adarsh',
+          lastName: 'A',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Harrison',
+          lastName: 'K',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Adarsh',
+          lastName: 'A',
+          email: '',
+          isAssigned: true
+        },
+      ],
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: '',
+      questions: [],
+    };
+
     this.documentInformation = {
       stationInstruction: 'Instruction',
       documentName: 'Metroid Dread',
@@ -108,9 +172,9 @@ export class StationComponent implements OnInit {
       stationName: 'Development',
       stationPriority: 2,
       numberOfSupervisors: 7,
-      supervisorRoster: [],
+      supervisors: [],
       numberOfWorkers: 7,
-      workerRoster: [],
+      workers: [],
       questions: []
     };
   }
@@ -246,5 +310,4 @@ export class StationComponent implements OnInit {
     //     );
     //   });
   }
-
 }

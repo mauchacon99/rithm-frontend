@@ -37,6 +37,9 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** The document field to display. */
   @Input() field!: Question;
 
+  /** Add new field label from toolbar. */
+  @Input() toolBar!: boolean;
+
   /** Does the field need to be removable? */
   @Input() removableField!: boolean;
 
