@@ -52,7 +52,7 @@ export class StationInfoHeaderComponent implements OnInit {
     return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
-  /** Get name of station from StationInformation based on type.
+  /** Get Id of station from StationInformation based on type.
    *
    * @returns The Station Id.
    */
