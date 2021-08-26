@@ -1,5 +1,5 @@
 <div class="flex h-screen page overflow-y-scroll">
-  <mat-card class="w-full md:w-9/12 h-full md:h-3/5 lg:w-3/5 m-auto p-0 overflow-y-scroll">
+  <mat-card class="w-full md:w-10/12 xl:w-3/5 m-auto overflow-y-scroll">
     <div class="grid grid-cols-1 md:grid-cols-2 md:h-full">
       <!-- left column -->
       <div class="bg-darkBlue md:flex md:flex-col p-3 flex-none">
@@ -10,10 +10,10 @@
         <p class="mb-2 text-white hidden md:block">Create workflows. Manage permissions. Manage processes and people with enterprise-level-security.</p>
       </div>
       <!-- right column -->
-      <div class="flex flex-col bg-white overflow-y-scroll">
+      <div class="flex flex-col bg-white overflow-y-scroll pt-1">
         <span *ngIf="!isLoading" class="flex-grow">
           <a class="overline text-accent-400 ml-5" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
-          <h4 class="mt-4 ml-5">Create Account</h4>
+          <h4 class="mt-3 ml-5">Create Account</h4>
           <p class="mt-1 ml-5">Enter your info to create your account.</p>
           <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2">
             <app-user-form formControlName="userForm" [accountCreate]="true"></app-user-form>
