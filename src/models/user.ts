@@ -29,4 +29,7 @@ export interface User {
 
   /** The user's role. */
   readonly role: 'admin' | null;
+
+  /** The organizations user belongs to. */
+  readonly organizations: string[];
 }
