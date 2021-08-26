@@ -25,6 +25,14 @@ const FIELD: Question = {
     },
   ]
 };
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const fn = function() { };
+const errorMessage = {
+  invalidForm: {
+    valid: false,
+    message: 'Check field form is invalid'
+  }
+};
 
 describe('CheckFieldComponent', () => {
   let component: CheckFieldComponent;
@@ -33,7 +41,7 @@ describe('CheckFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CheckFieldComponent ],
+      declarations: [CheckFieldComponent],
       imports: [
         MatFormFieldModule,
         MatCheckboxModule,
@@ -44,7 +52,7 @@ describe('CheckFieldComponent', () => {
         { provide: FormGroup, useValue: formBuilder },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -67,4 +75,22 @@ describe('CheckFieldComponent', () => {
     expect(check.hasError('required')).toBeTrue();
     expect(component.checkFieldForm.valid).toBeFalse();
   });
+
+  it('should register function with the `onTouched` event', () => {
+    component.registerOnTouched(fn);
+    expect(component.onTouched).toEqual(fn);
+  });
+
+  xit('should return null when form is valid', () => {
+    component.checkFieldForm.setErrors({ valid: true });
+    const error = component.validate();
+    expect(error).toEqual(null);
+  });
+
+  it('should return validation errors when form is invalid', () => {
+    component.checkFieldForm.setErrors({ valid: false });
+    const error = component.validate();
+    expect(error).toEqual(errorMessage);
+  });
+
 });

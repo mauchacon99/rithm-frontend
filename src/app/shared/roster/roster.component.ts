@@ -29,6 +29,9 @@ export class RosterComponent implements OnInit {
   /** Determines if roster is a worker or supervisor roster. Needed for openRosterModal. */
   @Input() isWorker!: boolean;
 
+  /** Determines if this is a roster being viewed in edit mode. */
+  @Input() editMode?: boolean;
+
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
