@@ -1,1 +1,14 @@
-<p>organization-management works!</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
+      <div class="row">
+        <h3 class="col-sm-12 col-md-9 mb-4 mb-sm-2">Manage My Organization</h3>
+        <a href="#" class="col-sm-12 col-md-3 mb-sm-2 mt-md-2 d-md-inline-flex justify-content-md-end">
+          <i class="fas fa-link"></i>
+          Invite members
+        </a>
+      </div>
+      <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+    </mat-card>
+  </div>
+</div>
