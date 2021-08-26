@@ -24,7 +24,7 @@ export interface DocumentStationInformation {
   lastUpdatedUTC: string;
 
   /** The global Rithm id for the station. */
-  stationId: string;
+  stationRithmId: string;
 
   /** The name of the station. */
   stationName: string;
