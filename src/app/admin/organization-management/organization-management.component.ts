@@ -13,6 +13,8 @@ export class OrganizationManagementComponent {
   isLoading = false;
 
   /** The current page number. */
+  activeNum = 1;
+
   /** Total number of users in this organization. */
   totalNumUsers = 0;
 
@@ -28,25 +30,30 @@ export class OrganizationManagementComponent {
    *
    * @param pageNum The desired page of user results.
    */
-  //TODO: look into making this more DRY since this method is a near copy of StationDocumentsModalComponent.getDocuments
   getUsers(pageNum: number): void {
     this.activeNum = pageNum;
-    this.isLoading = true;
-    this.documentService.getStationDocuments(this.stationRithmId, pageNum)
-      .pipe(first())
-      .subscribe((documentsResponse) => {
-        if (documentsResponse) {
-          this.documents = documentsResponse.documents;
-          this.totalNumDocs = documentsResponse.totalDocuments;
-          this.userType = documentsResponse.userType;
-        }
-        this.isLoading = false;
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.dialogRef.close();
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+    //temporary functionality below:
+    this.totalNumUsers = pageNum;
+
+  // --the functionality to retrieve users will be similar to the below.--
+    // this.isLoading = true;
+
+    // this.documentService.getStationDocuments(this.stationRithmId, pageNum)
+    //   .pipe(first())
+    //   .subscribe((documentsResponse) => {
+    //     if (documentsResponse) {
+    //       this.documents = documentsResponse.documents;
+    //       this.totalNumDocs = documentsResponse.totalDocuments;
+    //       this.userType = documentsResponse.userType;
+    //     }
+    //     this.isLoading = false;
+    //   }, (error: unknown) => {
+    //     this.isLoading = false;
+    //     this.dialogRef.close();
+    //     this.errorService.displayError(
+    //       'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+    //       error
+    //     );
+    //   });
+  }
 }
