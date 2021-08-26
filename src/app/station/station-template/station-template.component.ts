@@ -1,5 +1,9 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormGroup, FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors } from '@angular/forms';
+import {
+  ControlValueAccessor, FormBuilder, FormGroup,
+  NG_VALUE_ACCESSOR, NG_VALIDATORS,
+  ValidationErrors, Validator
+} from '@angular/forms';
 import { Question, QuestionFieldType } from 'src/models';
 /**
  * Station Template Component.
@@ -21,7 +25,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class StationTemplateComponent {
+export class StationTemplateComponent implements ControlValueAccessor, Validator {
   /** The form to add to station. */
   stationTemplateForm!: FormGroup;
 

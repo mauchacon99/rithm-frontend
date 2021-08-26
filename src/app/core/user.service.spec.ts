@@ -288,8 +288,9 @@ describe('UserService', () => {
   });
 
   it('should return list of users for an organization', () => {
-    const rithmId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
-    service.getAllUsersForOrganization(rithmId)
+    const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    const pageNum = 1;
+    service.getUsersForOrganization(organizationId, pageNum)
       .subscribe((users) => {
         expect(users.length).toBeGreaterThanOrEqual(0);
       });

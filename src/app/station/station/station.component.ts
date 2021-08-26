@@ -18,8 +18,8 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./station.component.scss']
 })
 export class StationComponent implements OnInit {
-  /** Document form. */
-  documentForm: FormGroup;
+  /** Station form. */
+  stationForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', {static: true})
@@ -32,7 +32,7 @@ export class StationComponent implements OnInit {
   stationInformation!: StationInformation;
 
   /** Whether the request to get the document info is currently underway. */
-  documentLoading = false;
+  stationLoading = false;
 
   /** The list of stations that this document could flow to. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -96,8 +96,8 @@ export class StationComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
-    this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control('')
+    this.stationForm = this.fb.group({
+      stationTemplateForm: this.fb.control('')
     });
     //TODO: remove temporary mock data.
     this.stationInformation = {
@@ -246,17 +246,17 @@ export class StationComponent implements OnInit {
    */
   // eslint-disable-next-line
   private getStationInfo(stationId: string): void {
-    this.documentLoading = true;
+    this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
       .subscribe(() => {
         // if (document) {
         //   this.documentInformation = document;
         // }
-        this.documentLoading = false;
+        this.stationLoading = false;
       }, (error: unknown) => {
         this.navigateBack();
-        this.documentLoading = false;
+        this.stationLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error

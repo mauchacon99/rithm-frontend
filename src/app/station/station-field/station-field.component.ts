@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import {
+  ControlValueAccessor, FormBuilder, FormGroup,
+  NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, Validators
+} from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
@@ -7,9 +12,24 @@ import { Question, QuestionFieldType } from 'src/models';
 @Component({
   selector: 'app-station-field[field][movableUp][movableDown]',
   templateUrl: './station-field.component.html',
-  styleUrls: ['./station-field.component.scss']
+  styleUrls: ['./station-field.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => StationFieldComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => StationFieldComponent),
+      multi: true
+    }
+  ]
 })
-export class StationFieldComponent implements OnInit {
+export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator {
+  /** The form to add to the template.*/
+  stationFieldForm!: FormGroup;
+
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -84,11 +104,27 @@ export class StationFieldComponent implements OnInit {
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
+  constructor(
+    private fb: FormBuilder,
+  ) { }
+
   /**
    * On component initialization.
    */
   ngOnInit(): void {
     this.labelField.questionType.typeString = this.field.questionType.typeString;
+    if (this.field.questionType.typeString === this.fieldType.Select
+      || this.field.questionType.typeString === this.fieldType.MultiSelect
+      || this.field.questionType.typeString === this.fieldType.CheckList) {
+      this.addOption(this.field.questionType.typeString);
+    }
+
+
+    this.stationFieldForm = this.fb.group({
+      instructionsField: ['', []],
+      [this.field.questionType.typeString]: ['', [Validators.required]],
+      optionField: ['', [Validators.required]]
+    });
   }
 
   /**
@@ -118,4 +154,63 @@ export class StationFieldComponent implements OnInit {
     this.field.isRequired = ob.checked;
   }
 
+  /**
+   * The `onTouched` function.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouched: () => void = () => { };
+
+  /**
+   * Writes a value to this form.
+   *
+   * @param val The value to be written.
+   */
+  // eslint-disable-next-line
+  writeValue(val: any): void {
+    val && this.stationFieldForm.setValue(val, { emitEvent: false });
+  }
+
+  /**
+   * Registers a function with the `onChange` event.
+   *
+   * @param fn The function to register.
+   */
+  // eslint-disable-next-line
+  registerOnChange(fn: any): void {
+    // TODO: check for memory leak
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.stationFieldForm.valueChanges.subscribe(fn);
+  }
+
+  /**
+   * Registers a function with the `onTouched` event.
+   *
+   * @param fn The function to register.
+   */
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  /**
+   * Sets the disabled state of this form control.
+   *
+   * @param isDisabled The disabled state to set.
+   */
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.stationFieldForm.disable() : this.stationFieldForm.enable();
+  }
+
+  /**
+   * Reports whether this form control is valid.
+   *
+   * @returns Validation errors, if any.
+   */
+  validate(): ValidationErrors | null {
+    return this.stationFieldForm.valid ? null : {
+      invalidForm: {
+        valid: false,
+        message: 'User form is invalid'
+      }
+    };
+  }
 }

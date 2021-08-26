@@ -72,4 +72,31 @@ describe('CommentDrawerComponent', () => {
     tick(1000);
     expect(component.comments.length).toBe(4);
   }));
+
+  it('should add a newly posted comment to the list of comments', () => {
+    const comment = {
+      displayText: 'This is first comment',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      dateCreated: '2021-06-16T17:26:47.3506612Z',
+      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+      archived: false,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+    };
+    component.addNewComment(comment);
+    expect(component.comments.unshift(comment));
+  });
+
+  it('should set the loading status when a comment is loading `true`', () => {
+    const loadingStatus = true;
+    component.setPostingLoading(loadingStatus);
+    expect(component.loadingPostedComment).toBe(loadingStatus);
+  });
+
+  it('should set the loading status when a comment is loading `false`', () => {
+    const loadingStatus = false;
+    component.setPostingLoading(loadingStatus);
+    expect(component.loadingPostedComment).toBe(loadingStatus);
+  });
+
 });

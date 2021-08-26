@@ -264,11 +264,12 @@ export class UserService {
   /**
    * Gets a List of users belongs to an organization.
    *
-   * @param rithmId The id of the organization.
+   * @param organizationId The id of the organization.
+   * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-  getAllUsersForOrganization(rithmId: string): Observable<User[]> {
-    if (!rithmId) {
+   getUsersForOrganization(organizationId: string, pageNum: number): Observable<User[]> {
+    if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
