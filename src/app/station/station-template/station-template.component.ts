@@ -10,7 +10,7 @@ import { Question, QuestionFieldType } from 'src/models';
  * Component for the list of fields on the station template.
  */
 @Component({
-  selector: 'app-station-template[stationFields]',
+  selector: 'app-station-template[fields]',
   templateUrl: './station-template.component.html',
   styleUrls: ['./station-template.component.scss'],
   providers: [
@@ -29,10 +29,10 @@ import { Question, QuestionFieldType } from 'src/models';
 export class StationTemplateComponent implements ControlValueAccessor, Validator {
 
   /** The station fields in the template area. */
-  @Input() stationFields!: Question[];
+  @Input() fields!: Question[];
 
   /** The form to add to station. */
-  stationTemplateForm!: FormGroup;
+  stationTemplateForm: FormGroup;
 
   /** The general instructions field. */
   readonly stationInstructionsField = {
@@ -62,8 +62,8 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @param fieldIndex The index of the field.
    * @returns True if the field can be moved up.
    */
-    canFieldMoveUp(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? false : this.stationFields.length - 1 === fieldIndex ? true : true;
+  canFieldMoveUp(fieldIndex: number): boolean {
+    return fieldIndex === 0 ? false : this.fields.length - 1 === fieldIndex ? true : true;
   }
 
   /**
@@ -73,7 +73,19 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns True if the field can be moved down.
    */
   canFieldMoveDown(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? true : this.stationFields.length - 1 === fieldIndex ? false : true;
+    return fieldIndex === 0 ? true : this.fields.length - 1 === fieldIndex ? false : true;
+  }
+
+  /**
+   * Moves a field up or down within the template.
+   *
+   * @param direction The direction to move the field.
+   * @param index The current index of the field in the list.
+   */
+  move(direction: 'up' | 'down', index: number): void {
+    const questionToMove = this.fields.splice(index, 1);
+    const directionToMove = direction === 'up' ? -1 : 1;
+    this.fields.splice(index + directionToMove, 0, questionToMove[0]);
   }
 
   /**
@@ -131,7 +143,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     return this.stationTemplateForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Station template form is invalid'
       }
     };
   }

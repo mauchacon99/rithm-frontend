@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
@@ -27,8 +27,6 @@ import { Question, QuestionFieldType } from 'src/models';
   ]
 })
 export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator {
-  /** The form to add to the template.*/
-  stationFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -38,6 +36,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Can the field be moved down? */
   @Input() movableDown!: boolean;
+
+  /** Notifies that the field control to remove the field has been selected. */
+  @Output() remove = new EventEmitter();
+
+  /** Notifies that the field control to move the field has been selected. */
+  @Output() move: EventEmitter<'up' | 'down'> = new EventEmitter();
+
+  /** The form to add to the template.*/
+  stationFieldForm!: FormGroup;
 
   /** The field type. */
   fieldType = QuestionFieldType;
@@ -123,16 +130,21 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     });
   }
 
+  /**
+   * Emits a new move event to move the field up.
+   */
   moveFieldUp(): void {
-
+    this.move.emit('up');
   }
 
+  /** Emits a new move event to move the field down. */
   moveFieldDown(): void {
-
+    this.move.emit('down');
   }
 
+  /** Emits a new event to remove the field. */
   removeField(): void {
-
+    this.remove.emit();
   }
 
   /**

@@ -2,7 +2,8 @@
   <div class="mt-2 row">
     <app-text-field class="col-12" [field]="stationInstructionsField"></app-text-field>
   </div>
-  <app-station-field *ngFor="let field of stationFields; let i = index" [field]="field" [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" formControlName="stationFieldForm"></app-station-field>
+  <app-station-field *ngFor="let field of fields; let i = index" formControlName="stationFieldForm" [field]="field"
+    [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" (move)="move($event, i)"></app-station-field>
 
   <!-- TODO: All items expansion panel here -->
 
