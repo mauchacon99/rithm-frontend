@@ -290,10 +290,50 @@ describe('UserService', () => {
   it('should return list of users for an organization', () => {
     const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
     const pageNum = 1;
+
+    const expectedResponse: User[] = [{
+      rithmId: '123',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '1/2/20',
+      role: null,
+      organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+    }, {
+      rithmId: '1234',
+      firstName: 'Rithm',
+      lastName: 'User',
+      email: 'rithmuser@inpivota.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '7/4/21',
+      role: null,
+      organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+    }, {
+      rithmId: '7812',
+      firstName: 'Rithm',
+      lastName: 'Admin',
+      email: 'rithmadmin@inpivota.com',
+      isEmailVerified: true,
+      notificationSettings: null,
+      createdDate: '5/9/21',
+      role: 'admin',
+      organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'POBNJV24-AF01-48AB-A7BB-279CC25B9725']
+    }];
+
     service.getUsersForOrganization(organizationId, pageNum)
       .subscribe((users) => {
         expect(users.length).toBeGreaterThanOrEqual(0);
       });
+
+      // eslint-disable-next-line max-len
+      const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=10`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });
