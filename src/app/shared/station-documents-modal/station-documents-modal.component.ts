@@ -62,6 +62,7 @@ export class StationDocumentsModalComponent implements OnInit {
    *
    * @param pageNum The desired page of document results.
    */
+  //TODO: look into making this reusable since this method is similar to one on organization-management.component.ts
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
