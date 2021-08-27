@@ -9,5 +9,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./organization-management.component.scss']
 })
 export class OrganizationManagementComponent {
+  /** Whether the account settings is loading. */
+  isLoading = false;
+
 
 }
