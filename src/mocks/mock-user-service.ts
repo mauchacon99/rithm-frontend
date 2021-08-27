@@ -285,14 +285,8 @@ export class MockUserService {
    * @param userRithmId The Rithm Id of the user being removed.
    * @returns An empty observable.
    */
-     removeUserFromOrganization(userRithmId: string): Observable<unknown> {
-      return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/removeusersfromorganizations`, {
-        headers: {
-          // eslint-disable-next-line @typescript-eslint/quotes
-          "Content-Type": "application/json"
-        },
-        body: { userRithmId }
-      });
-    }
+  removeUserFromOrganization(userRithmId: string): Observable<unknown> {
+    return of().pipe(delay(1000));
+  }
 
 }
