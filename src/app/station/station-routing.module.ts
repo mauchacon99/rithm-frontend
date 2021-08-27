@@ -4,9 +4,9 @@ import { StationComponent } from './station/station.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':stationId',
     component: StationComponent,
-    pathMatch: 'full'
+    pathMatch: 'prefix'
   },
 ];
 

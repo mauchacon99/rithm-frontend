@@ -4,7 +4,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
 import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
-import { DocumentTemplateComponent } from 'src/app/detail/document-template/document-template.component';
+import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { DocumentComponent } from './document.component';
@@ -16,6 +16,7 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -40,7 +41,8 @@ describe('DocumentComponent', () => {
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),
         MatSidenavModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatTooltipModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },

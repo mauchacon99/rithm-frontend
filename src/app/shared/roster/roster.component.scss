@@ -3,8 +3,39 @@
 .circles {
   margin: 5px 2px;
   float: left;
+  overflow: visible;
 
   &:first-child {
     margin-left: 0;
+  }
+}
+
+.icon {
+  position: relative;
+
+  .plus {
+    position: absolute;
+    font-size: fixed-font-size(8);
+    top: 5px;
+    left: 6px;
+  }
+
+  .slash {
+    position: absolute;
+    top: 9px;
+    left: 7px;
+  }
+
+  .minus {
+    position: absolute;
+    font-size: fixed-font-size(8);
+    top: 16px;
+    left: 14px;
+  }
+
+  .badge-accent {
+    position: absolute;
+    top: -5px;
+    left: 18px;
   }
 }

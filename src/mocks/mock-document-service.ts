@@ -2,7 +2,7 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, StationDocuments, UserType
+  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType
 } from 'src/models';
 /**
  * Mocks methods of the `DocumentService`.
@@ -116,18 +116,217 @@ export class MockDocumentService {
     const documentInfo: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
+      documentRithmId: 'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
-      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
-      numberOfSupervisors: 7,
-      supervisorRoster: [],
-      numberOfWorkers: 7,
-      workerRoster: [],
-      questions: []
+      stationInstruction: 'This is an instruction',
+      supervisors: [],
+      workers: [],
+      questions: [
+        {
+          prompt: 'Fake question 1',
+          instructions: 'Fake instructions 1',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.ShortText,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 2',
+          instructions: 'Fake instructions 2',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.LongText,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 3',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.URL,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 4',
+          instructions: 'Fake instructions 4',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Email,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 5',
+          instructions: 'Fake question 5',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Number,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 6',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Phone,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 7',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Currency,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 8',
+          instructions: 'Fake question 8',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Date,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 9',
+          instructions: 'Fake instructions 9',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Select,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
+            {
+              text: 'Option 1',
+              default: false
+            },
+            {
+              text: 'Option 2',
+              default: true
+            },
+            {
+              text: 'Option 3',
+              default: false
+            },
+            {
+              text: 'Option 4',
+              default: false
+            }
+          ]
+        },
+        {
+          prompt: 'Fake question 10',
+          instructions: 'Fake instructions 10',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.MultiSelect,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
+            {
+              text: 'Option 1',
+              default: false
+            },
+            {
+              text: 'Option 2',
+              default: true
+            },
+            {
+              text: 'Option 3',
+              default: false
+            },
+            {
+              text: 'Option 4',
+              default: false
+            }
+          ]
+        },
+        {
+          prompt: 'Fake question 12',
+          instructions: 'Fake instructions 12',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.CheckList,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
+            {
+              text: 'Option 1',
+              default: false
+            },
+            {
+              text: 'Option 2',
+              default: false
+            },
+            {
+              text: 'Option 3',
+              default: false
+            },
+            {
+              text: 'Option 4',
+              default: false
+            }
+          ]
+        },
+        {
+          prompt: 'Fake question 13',
+          instructions: 'Fake instructions 13',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Address,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+      ],
+      instructions: 'General instructions'
     };
     return of(documentInfo).pipe(delay(1000));
   }

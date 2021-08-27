@@ -1,0 +1,10 @@
+<ng-container [formGroup]="stationTemplateForm">
+  <div class="mt-2 row">
+    <app-text-field class="col-12" [field]="stationInstructionsField"></app-text-field>
+  </div>
+  <app-station-field *ngFor="let field of stationFields; let i = index" [toolBar]="toolBar" [field]="field" [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" formControlName="stationFieldForm"></app-station-field>
+
+  <!-- TODO: All items expansion panel here -->
+
+  <!-- TODO: Hidden items expansion panel here (if admin) -->
+</ng-container>

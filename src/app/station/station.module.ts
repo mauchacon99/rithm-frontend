@@ -6,24 +6,36 @@ import { StationComponent } from './station/station.component';
 import { DetailModule } from '../detail/detail.module';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ClickOutsideModule } from 'ng-click-outside';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
+import { StationFieldComponent } from './station-field/station-field.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { StationTemplateComponent } from './station-template/station-template.component';
 
 @NgModule({
   declarations: [
     StationComponent,
     FlowLogicComponent,
     PowersComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    StationFieldComponent,
+    StationTemplateComponent
   ],
   imports: [
     CommonModule,
     StationRoutingModule,
     DetailModule,
     MatButtonModule,
-    ClickOutsideModule
+    MatSidenavModule,
+    MatTabsModule,
+    ReactiveFormsModule,
+    ClickOutsideModule,
+    SharedModule,
+    FormsModule
   ]
 })
 export class StationModule { }

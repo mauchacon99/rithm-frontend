@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AdminAuthGuard } from './core/admin-auth.guard';
 import { AuthGuard } from './core/auth.guard';
 
 @NgModule({
@@ -18,6 +19,11 @@ import { AuthGuard } from './core/auth.guard';
       path: 'dashboard',
       loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
       canActivate: [AuthGuard]
+    },
+    {
+      path: 'admin',
+      loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+      canActivate: [AdminAuthGuard]
     },
     {
       path: 'station',

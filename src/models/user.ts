@@ -26,4 +26,10 @@ export interface User {
 
   /** The date at which this user was created. */
   readonly createdDate: string;
+
+  /** The user's role. */
+  readonly role: 'admin' | null;
+
+  /** The IDs of the organizations user belongs to. */
+  readonly organizations: string[];
 }

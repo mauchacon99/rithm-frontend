@@ -22,11 +22,6 @@ p {
     height: 30px;
     line-height: 30px;
   }
-
-  &:hover {
-    cursor: pointer;
-    background: map-get($secondary-gray-palette, 100);
-  }
 }
 
 .num-container {

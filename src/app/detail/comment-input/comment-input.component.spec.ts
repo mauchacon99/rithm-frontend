@@ -53,4 +53,10 @@ describe('CommentInputComponent', () => {
     expect(component.commentForm.valid).toBeFalse();
     expect(await buttonHarness.isDisabled()).toBeTrue();
   });
+
+  it('should enable comment form once comment is posted', async () => {
+    component.addComment();
+    expect(component.commentForm.disabled).toBe(true);
+  });
+
 });
