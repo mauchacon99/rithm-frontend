@@ -79,14 +79,14 @@ describe('StationTemplateComponent', () => {
   });
 
   it('should indicate if a field can be moved up', () => {
-    component.stationFields =testStationFields;
+    component.fields = testStationFields;
     expect(component.canFieldMoveUp(0)).toBe(false);
     expect(component.canFieldMoveUp(1)).toBe(true);
     expect(component.canFieldMoveUp(2)).toBe(true);
   });
 
   it('should indicate if a field can be moved down', () => {
-    component.stationFields =testStationFields;
+    component.fields = testStationFields;
     expect(component.canFieldMoveDown(0)).toBe(true);
     expect(component.canFieldMoveDown(1)).toBe(true);
     expect(component.canFieldMoveDown(2)).toBe(false);
