@@ -279,17 +279,16 @@ export class UserService {
   /**
    * Removes a user from the roster of an organization.
    *
-   * @param organizationRithmId The organization the user is being removed from.
    * @param userRithmId The Rithm Id of the user being removed.
    * @returns An empty observable.
    */
-  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
+  removeUserFromOrganization(userRithmId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/removeusersfromorganizations`, {
       headers: {
         // eslint-disable-next-line @typescript-eslint/quotes
         "Content-Type": "application/json"
       },
-      body: { organizationRithmId, userRithmId }
+      body: { userRithmId }
     });
   }
 
