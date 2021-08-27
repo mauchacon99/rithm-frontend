@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
@@ -41,9 +41,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Add new field label from toolbar. */
   @Input() toolBar!: boolean;
-
-  /** The field control button clicked. */
-  @Output() clickedFieldControl = new EventEmitter<string>();
 
   /** The field type. */
   fieldType = QuestionFieldType;
@@ -122,7 +119,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       this.addOption(this.field.questionType.typeString);
     }
 
-
     this.stationFieldForm = this.fb.group({
       instructionsField: ['', []],
       [this.field.questionType.typeString]: ['', [Validators.required]],
@@ -130,13 +126,16 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     });
   }
 
-  /**
-   * Inform parent how the field should be moved or removed based on the button clicked.
-   *
-   * @param button The field control button click.
-   */
-  fieldControlClick(button: string): void {
-    this.clickedFieldControl.emit(button);
+  moveFieldUp(): void {
+
+  }
+
+  moveFieldDown(): void {
+
+  }
+
+  removeField(): void {
+
   }
 
   /**
@@ -221,7 +220,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     return this.stationFieldForm.valid ? null : {
       invalidForm: {
         valid: false,
-        message: 'User form is invalid'
+        message: 'Station field is invalid'
       }
     };
   }

@@ -3,13 +3,13 @@
     <div class="col-2 col-sm-1 divider">
       <!-- Field movement controls -->
       <div class="flex">
-        <button mat-icon-button (click)="fieldControlClick('up')" [ngClass]="{'move' : movableUp}" [disabled]="!movableUp">
+        <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp" (click)="moveFieldUp()">
           <i class="fas fa-chevron-up"></i>
         </button>
-        <button mat-icon-button (click)="fieldControlClick('delete')">
+        <button mat-icon-button (click)="removeField()">
           <i class="fas fa-times"></i>
         </button>
-        <button mat-icon-button (click)="fieldControlClick('down')" [ngClass]="{'move' : movableDown}" [disabled]="!movableDown">
+        <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown" (click)="moveFieldDown()">
           <i class="fas fa-chevron-down"></i>
         </button>
       </div>
