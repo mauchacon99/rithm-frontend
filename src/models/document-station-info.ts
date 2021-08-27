@@ -24,7 +24,7 @@ export interface DocumentStationInformation {
   lastUpdatedUTC: string;
 
   /** The global Rithm id for the station. */
-  stationId: string;
+  stationRithmId: string;
 
   /** The name of the station. */
   stationName: string;
@@ -46,9 +46,6 @@ export interface DocumentStationInformation {
 
   /** The list of fields in the template area for the document/station. */
   questions: Question[];
-
-  /** The global Rithm ID. */
-  rithmId: string;
 
   /** The Instructions for the station. */
   instructions: string;

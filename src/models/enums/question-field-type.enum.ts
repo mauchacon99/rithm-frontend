@@ -40,6 +40,9 @@ export enum QuestionFieldType {
   DateTime = 'datetime',
 
   /** Checklist input type. */
-  CheckList = 'checklist'
+  CheckList = 'checklist',
+
+  /** Text area label for station edit mode. */
+  LongTextLabel = 'LongTextLabel'
 
 }

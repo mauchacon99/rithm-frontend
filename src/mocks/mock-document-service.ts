@@ -120,7 +120,7 @@ export class MockDocumentService {
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
-      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
@@ -326,8 +326,7 @@ export class MockDocumentService {
           isPrivate: false
         },
       ],
-      instructions: 'General instructions',
-      rithmId: '408E-A210-9242B2735B1C'
+      instructions: 'General instructions'
     };
     return of(documentInfo).pipe(delay(1000));
   }

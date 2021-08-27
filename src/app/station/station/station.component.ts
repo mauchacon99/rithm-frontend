@@ -18,8 +18,8 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./station.component.scss']
 })
 export class StationComponent implements OnInit {
-  /** Document form. */
-  documentForm: FormGroup;
+  /** Station form. */
+  stationForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', { static: true })
@@ -28,8 +28,11 @@ export class StationComponent implements OnInit {
   /** The information about the document within a station. */
   documentInformation!: StationInformation;
 
+  /** The information about the station. */
+  stationInformation!: StationInformation;
+
   /** Whether the request to get the document info is currently underway. */
-  documentLoading = false;
+  stationLoading = false;
 
   /** The list of stations that this document could flow to. */
   forwardStations: ConnectedStationInfo[] = [];
@@ -48,9 +51,85 @@ export class StationComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
-    this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control('')
+    this.stationForm = this.fb.group({
+      stationTemplateForm: this.fb.control('')
     });
+    //TODO: remove temporary mock data.
+    this.stationInformation = {
+      stationRithmId: '',
+      stationPriority: 1,
+      name: 'Station 4',
+      instructions: '',
+      nextStations: [],
+      previousStations: [],
+      supervisors: [
+        {
+          userRithmId: '',
+          firstName: 'Tyler',
+          lastName: 'H',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Austin',
+          lastName: 'B',
+          email: '',
+          isAssigned: true
+        },
+      ],
+      workers: [
+        {
+          userRithmId: '',
+          firstName: 'Harrison',
+          lastName: 'K',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Adarsh',
+          lastName: 'A',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Harrison',
+          lastName: 'K',
+          email: '',
+          isAssigned: true
+        },
+        {
+          userRithmId: '',
+          firstName: 'Adarsh',
+          lastName: 'A',
+          email: '',
+          isAssigned: true
+        },
+      ],
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: '',
+      questions: [],
+    };
+
+    this.documentInformation = {
+      stationPriority: 2,
+      supervisors: [],
+      workers: [],
+      questions: [],
+      stationRithmId: '',
+      name: 'Development',
+      nextStations: [],
+      previousStations: [],
+      instructions: 'General instructions',
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: ''
+    };
   }
 
   /**
@@ -120,17 +199,17 @@ export class StationComponent implements OnInit {
    */
   // eslint-disable-next-line
   private getStationInfo(stationId: string): void {
-    this.documentLoading = true;
+    this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
       .subscribe((stationInfo) => {
         if (stationInfo) {
           this.documentInformation = stationInfo;
         }
-        this.documentLoading = false;
+        this.stationLoading = false;
       }, (error: unknown) => {
         this.navigateBack();
-        this.documentLoading = false;
+        this.stationLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -184,5 +263,4 @@ export class StationComponent implements OnInit {
     //     );
     //   });
   }
-
 }

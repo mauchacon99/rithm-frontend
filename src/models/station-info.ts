@@ -9,7 +9,7 @@ import { StationRosterMember } from './station-roster-member';
 export interface StationInformation {
 
   /** The global Rithm ID. */
-  rithmId: string;
+  stationRithmId: string;
 
   /** The name of the task. */
   name: string;

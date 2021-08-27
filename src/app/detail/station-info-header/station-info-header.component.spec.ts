@@ -1,18 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
+import { UserService } from 'src/app/core/user.service';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MockUserService } from 'src/mocks';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
   let fixture: ComponentFixture<StationInfoHeaderComponent>;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoHeaderComponent,
         MockComponent(RosterComponent)
+      ],
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: UserService, useValue: MockUserService }
       ]
     })
     .compileComponents();
@@ -28,7 +36,7 @@ describe('StationInfoHeaderComponent', () => {
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
-      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
@@ -36,12 +44,12 @@ describe('StationInfoHeaderComponent', () => {
       workers: [],
       questions: [],
       instructions: 'General instructions',
-      rithmId: 'CF6148C9-ABB7-408E-A210-784BG445'
     };
     fixture.detectChanges();
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

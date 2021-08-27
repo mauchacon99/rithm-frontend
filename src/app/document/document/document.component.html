@@ -15,7 +15,7 @@
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
             <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
-              <app-station-info-header  [stationInformation]="documentInformation"></app-station-info-header>
+              <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
               <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
               <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
               <div class="row footer">

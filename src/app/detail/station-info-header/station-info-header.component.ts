@@ -1,63 +1,66 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DocumentStationInformation, StationInformation } from 'src/models';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from 'src/app/core/user.service';
+import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
 
 /**
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header[stationInformation]',
+  selector: 'app-station-info-header[stationInformation][stationEditMode]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss']
 })
 export class StationInfoHeaderComponent implements OnInit {
+  /** Is component viewed in station edit mode? */
+  @Input() stationEditMode!: boolean;
+
+  /** Station information object passed from parent.*/
+  @Input() stationInformation!: StationInformation | DocumentStationInformation;
+
   /** Type of user looking at a document. */
-  @Input() type!: 'admin' | 'super' | 'worker';
+  type: 'admin' | 'super' | 'worker';
 
-  /** Document information object passed from parent. */
-  @Input() stationInformation!: DocumentStationInformation | StationInformation;
+  /** Station name form. */
+  stationNameForm: FormGroup;
 
-  /** Name of the header. */
-  name = '';
+  /** Field to change station name. */
+  nameField!: Question;
 
-  /** Station id from document modal. */
-  id = '';
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+  ) {
+    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
-  constructor() {
-    this.type = 'worker';
+    this.stationNameForm = this.fb.group({
+      name: ['']
+    });
   }
 
-  /**
-   * Gets info about the initial values.
-   */
+  /** Set this.info. */
   ngOnInit(): void {
-    this.name = this.getName(this.stationInformation);
-    this.id = this.getStationId(this.stationInformation);
+
+    this.nameField = {
+      prompt: this.stationName,
+      instructions: '',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.ShortText,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false
+    };
   }
 
-  /**
-   * Get name from document and station info modal.
+  /** Get name of station from StationInformation based on type.
    *
-   * @param obj Object set from document or station modal.
-   * @returns Name to display in header.
+   * @returns The Station Name.
    */
-   private getName(obj: DocumentStationInformation | StationInformation): string {
-    if ((obj as DocumentStationInformation)?.documentName) {
-      return (obj as DocumentStationInformation).documentName;
-    }
-    return (obj as StationInformation).name;
-  }
-
-  /**
-   * Get id from document and station info modal.
-   *
-   * @param obj Object set from document or station modal.
-   * @returns Id to pass for roster modal.
-   */
-   private getStationId(obj: DocumentStationInformation | StationInformation): string {
-    if ((obj as DocumentStationInformation).stationId) {
-      return (obj as DocumentStationInformation).stationId;
-    }
-    return (obj as StationInformation).rithmId;
+  get stationName(): string {
+    return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
 }
