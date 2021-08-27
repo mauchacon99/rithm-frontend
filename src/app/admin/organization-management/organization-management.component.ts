@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for managing the users of an organization.
@@ -17,6 +21,12 @@ export class OrganizationManagementComponent {
 
   /** Total number of users in this organization. */
   totalNumUsers = 0;
+
+  constructor(
+    private popupService: PopupService,
+    private userService: UserService,
+    private errorService: ErrorService
+  ) { }
 
   /**
    * Gets the first page of users on load.
@@ -55,5 +65,24 @@ export class OrganizationManagementComponent {
     //       error
     //     );
     //   });
+  }
+
+  /**
+   * Removes a user from the organization.
+   *
+   * @param userRithmId The ID of the selected user to remove.
+   */
+  removeUser(userRithmId: string): void {
+    this.userService.removeUserFromOrganization(userRithmId)
+      .pipe(first())
+      .subscribe(() => {
+        this.popupService.notify('User removed from organization.');
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
   }
 }
