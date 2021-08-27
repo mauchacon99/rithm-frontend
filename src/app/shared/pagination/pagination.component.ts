@@ -12,13 +12,13 @@ const ACTIVE_NUM_LIMIT_RESET_PAGE_NUM = 3;
  * Reusable component for pagination with clickable pages.
  */
 @Component({
-  selector: 'app-pagination[numDocs][activeNum]',
+  selector: 'app-pagination[numItems][activeNum]',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
-  /** Total number of documents. */
-  @Input() numDocs!: number;
+  /** Total number of items. */
+  @Input() numItems!: number;
 
   /** Total number of pages. */
   private numPages = 0;
@@ -52,7 +52,7 @@ export class PaginationComponent implements OnInit {
    * Creates list of document ranges to be displayed.
    */
   ngOnInit(): void {
-    this.numPages = Math.ceil(this.numDocs / NUM_PER_PAGE);
+    this.numPages = Math.ceil(this.numItems / NUM_PER_PAGE);
     this.pagesArr = [];
     this.rangeArr = [];
 
@@ -67,7 +67,7 @@ export class PaginationComponent implements OnInit {
       if (page !== this.numPages - 1) {
         this.rangeArr.push(`${startingNum}-${endingNum}`);
       } else {
-        this.rangeArr.push(`${startingNum}-${this.numDocs}`);
+        this.rangeArr.push(`${startingNum}-${this.numItems}`);
       }
     }
 

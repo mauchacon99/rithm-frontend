@@ -17,7 +17,7 @@
             <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
               <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
               <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-              <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions[0].questions" formControlName="documentTemplateForm"></app-document-template>
+              <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
               <div class="row footer">
                 <div class="col-12 col-lg-8">
                   <div class="footer-inner">

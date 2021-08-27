@@ -4,7 +4,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, StationInformation, Question, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -22,11 +22,11 @@ export class StationComponent implements OnInit {
   stationForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', {static: true})
+  @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
+  documentInformation!: StationInformation;
 
   /** The information about the station. */
   stationInformation!: StationInformation;
@@ -43,51 +43,6 @@ export class StationComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Fake fields, TODO: remove. */
-  fakeFields: Question[] = [
-    {
-      prompt: 'Instructions',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.LongText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Label',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 7',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Select,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      possibleAnswers: [
-        {
-          text: 'Required field',
-          default: true
-        }]
-    },
-  ];
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -101,10 +56,10 @@ export class StationComponent implements OnInit {
     });
     //TODO: remove temporary mock data.
     this.stationInformation = {
-      rithmId: '',
-      name: 'Station name',
+      stationRithmId: '',
+      stationPriority: 1,
+      name: 'Station 4',
       instructions: '',
-      dueDate: '',
       nextStations: [],
       previousStations: [],
       supervisors: [
@@ -161,21 +116,19 @@ export class StationComponent implements OnInit {
     };
 
     this.documentInformation = {
-      stationInstruction: 'Instruction',
-      documentName: 'Metroid Dread',
-      documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      stationName: 'Development',
       stationPriority: 2,
-      numberOfSupervisors: 7,
       supervisors: [],
-      numberOfWorkers: 7,
       workers: [],
-      questions: []
+      questions: [],
+      stationRithmId: '',
+      name: 'Development',
+      nextStations: [],
+      previousStations: [],
+      instructions: 'General instructions',
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: ''
     };
   }
 
@@ -249,10 +202,10 @@ export class StationComponent implements OnInit {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe(() => {
-        // if (document) {
-        //   this.documentInformation = document;
-        // }
+      .subscribe((stationInfo) => {
+        if (stationInfo) {
+          this.documentInformation = stationInfo;
+        }
         this.stationLoading = false;
       }, (error: unknown) => {
         this.navigateBack();
@@ -269,7 +222,7 @@ export class StationComponent implements OnInit {
    * @param fieldType The field to add.
    */
   addQuestion(fieldType: QuestionFieldType): void {
-    this.fakeFields.push({
+    this.documentInformation.questions.push({
       prompt: 'Label',
       instructions: '',
       questionType: {

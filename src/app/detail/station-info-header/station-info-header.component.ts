@@ -19,13 +19,24 @@ export class StationInfoHeaderComponent implements OnInit {
   @Input() stationInformation!: StationInformation | DocumentStationInformation;
 
   /** Type of user looking at a document. */
- type: 'admin' | 'super' | 'worker';
+  type: 'admin' | 'super' | 'worker';
 
   /** Station name form. */
   stationNameForm: FormGroup;
 
   /** Field to change station name. */
   nameField!: Question;
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+  ) {
+    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+
+    this.stationNameForm = this.fb.group({
+      name: ['']
+    });
+  }
 
   /** Set this.info. */
   ngOnInit(): void {
@@ -52,22 +63,4 @@ export class StationInfoHeaderComponent implements OnInit {
     return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
-  /** Get Id of station from StationInformation based on type.
-   *
-   * @returns The Station Id.
-   */
-  get stationRithmId(): string {
-    return 'stationRithmId' in this.stationInformation ? this.stationInformation.stationRithmId : this.stationInformation.rithmId;
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService,
-  ) {
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
-
-    this.stationNameForm = this.fb.group({
-      name: ['']
-    });
-  }
 }

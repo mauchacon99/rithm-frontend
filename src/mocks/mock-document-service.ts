@@ -124,216 +124,209 @@ export class MockDocumentService {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      numberOfSupervisors: 7,
       supervisors: [],
-      numberOfWorkers: 7,
       workers: [],
       questions: [
         {
-          stationRithmId: '',
-          questions: [
+          prompt: 'Fake question 1',
+          instructions: 'Fake instructions 1',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.ShortText,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 2',
+          instructions: 'Fake instructions 2',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.LongText,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 3',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.URL,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 4',
+          instructions: 'Fake instructions 4',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Email,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 5',
+          instructions: 'Fake question 5',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Number,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 6',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Phone,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 7',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Currency,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 8',
+          instructions: 'Fake question 8',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Date,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+        {
+          prompt: 'Fake question 9',
+          instructions: 'Fake instructions 9',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Select,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
             {
-              prompt: 'Fake question 1',
-              instructions: 'Fake instructions 1',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.ShortText,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: false,
-              isPrivate: false
+              text: 'Option 1',
+              default: false
             },
             {
-              prompt: 'Fake question 2',
-              instructions: 'Fake instructions 2',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.LongText,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
+              text: 'Option 2',
+              default: true
             },
             {
-              prompt: 'Fake question 3',
-              instructions: '',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.URL,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
+              text: 'Option 3',
+              default: false
             },
             {
-              prompt: 'Fake question 4',
-              instructions: 'Fake instructions 4',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Email,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
-            {
-              prompt: 'Fake question 5',
-              instructions: 'Fake question 5',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Number,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
-            {
-              prompt: 'Fake question 6',
-              instructions: '',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Phone,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
-            {
-              prompt: 'Fake question 7',
-              instructions: '',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Currency,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
-            {
-              prompt: 'Fake question 8',
-              instructions: 'Fake question 8',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Date,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
-            {
-              prompt: 'Fake question 9',
-              instructions: 'Fake instructions 9',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Select,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false,
-              possibleAnswers: [
-                {
-                  text: 'Option 1',
-                  default: false
-                },
-                {
-                  text: 'Option 2',
-                  default: true
-                },
-                {
-                  text: 'Option 3',
-                  default: false
-                },
-                {
-                  text: 'Option 4',
-                  default: false
-                }
-              ]
-            },
-            {
-              prompt: 'Fake question 10',
-              instructions: 'Fake instructions 10',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.MultiSelect,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false,
-              possibleAnswers: [
-                {
-                  text: 'Option 1',
-                  default: false
-                },
-                {
-                  text: 'Option 2',
-                  default: true
-                },
-                {
-                  text: 'Option 3',
-                  default: false
-                },
-                {
-                  text: 'Option 4',
-                  default: false
-                }
-              ]
-            },
-            {
-              prompt: 'Fake question 12',
-              instructions: 'Fake instructions 12',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.CheckList,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false,
-              possibleAnswers: [
-                {
-                  text: 'Option 1',
-                  default: false
-                },
-                {
-                  text: 'Option 2',
-                  default: false
-                },
-                {
-                  text: 'Option 3',
-                  default: false
-                },
-                {
-                  text: 'Option 4',
-                  default: false
-                }
-              ]
-            },
-            {
-              prompt: 'Fake question 13',
-              instructions: 'Fake instructions 13',
-              questionType: {
-                rithmId: '',
-                typeString: QuestionFieldType.Address,
-                validationExpression: '.+'
-              },
-              isReadOnly: false,
-              isRequired: true,
-              isPrivate: false
-            },
+              text: 'Option 4',
+              default: false
+            }
           ]
-
-        }
-      ]
+        },
+        {
+          prompt: 'Fake question 10',
+          instructions: 'Fake instructions 10',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.MultiSelect,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
+            {
+              text: 'Option 1',
+              default: false
+            },
+            {
+              text: 'Option 2',
+              default: true
+            },
+            {
+              text: 'Option 3',
+              default: false
+            },
+            {
+              text: 'Option 4',
+              default: false
+            }
+          ]
+        },
+        {
+          prompt: 'Fake question 12',
+          instructions: 'Fake instructions 12',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.CheckList,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: [
+            {
+              text: 'Option 1',
+              default: false
+            },
+            {
+              text: 'Option 2',
+              default: false
+            },
+            {
+              text: 'Option 3',
+              default: false
+            },
+            {
+              text: 'Option 4',
+              default: false
+            }
+          ]
+        },
+        {
+          prompt: 'Fake question 13',
+          instructions: 'Fake instructions 13',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Address,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false
+        },
+      ],
+      instructions: 'General instructions'
     };
     return of(documentInfo).pipe(delay(1000));
   }
