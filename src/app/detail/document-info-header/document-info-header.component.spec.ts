@@ -35,11 +35,10 @@ describe('DocumentInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      numberOfSupervisors: 7,
       supervisors: [],
-      numberOfWorkers: 7,
       workers: [],
-      questions: []
+      questions: [],
+      instructions: 'General instructions'
     };
     fixture.detectChanges();
   });
