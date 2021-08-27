@@ -5,11 +5,12 @@ import {
   ValidationErrors, Validator
 } from '@angular/forms';
 import { Question, QuestionFieldType } from 'src/models';
+
 /**
- * Station Template Component.
+ * Component for the list of fields on the station template.
  */
 @Component({
-  selector: 'app-station-template',
+  selector: 'app-station-template[stationFields]',
   templateUrl: './station-template.component.html',
   styleUrls: ['./station-template.component.scss'],
   providers: [
@@ -26,14 +27,12 @@ import { Question, QuestionFieldType } from 'src/models';
   ]
 })
 export class StationTemplateComponent implements ControlValueAccessor, Validator {
-  /** The form to add to station. */
-  stationTemplateForm!: FormGroup;
 
   /** The station fields in the template area. */
   @Input() stationFields!: Question[];
 
-  /** Add new field label from toolbar. */
-  @Input() toolBar!: boolean;
+  /** The form to add to station. */
+  stationTemplateForm!: FormGroup;
 
   /** The general instructions field. */
   readonly stationInstructionsField = {

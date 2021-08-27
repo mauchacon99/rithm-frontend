@@ -39,9 +39,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /** Can the field be moved down? */
   @Input() movableDown!: boolean;
 
-  /** Add new field label from toolbar. */
-  @Input() toolBar!: boolean;
-
   /** The field type. */
   fieldType = QuestionFieldType;
 

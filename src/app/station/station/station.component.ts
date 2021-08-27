@@ -18,12 +18,12 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./station.component.scss']
 })
 export class StationComponent implements OnInit {
-  /** Station form. */
-  stationForm: FormGroup;
-
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
+
+  /** Station form. */
+  stationForm: FormGroup;
 
   /** The information about the station. */
   stationInformation!: StationInformation;

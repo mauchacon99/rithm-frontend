@@ -18,7 +18,7 @@
       <!-- Instructions -->
       <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
       <!-- Label -->
-      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="toolBar"></app-text-field>
+      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="true"></app-text-field>
       <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
         <app-text-field *ngFor="let field of options; let i = index" [field]="field"  formControlName="optionField" [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)"></app-text-field>
         <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
