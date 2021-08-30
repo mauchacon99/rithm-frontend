@@ -71,6 +71,7 @@ describe('StationTemplateComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationTemplateComponent);
     component = fixture.componentInstance;
+    component.fields = [...testStationFields];
     fixture.detectChanges();
   });
 
@@ -79,21 +80,18 @@ describe('StationTemplateComponent', () => {
   });
 
   it('should indicate if a field can be moved up', () => {
-    component.fields = testStationFields;
     expect(component.canFieldMoveUp(0)).toBe(false);
     expect(component.canFieldMoveUp(1)).toBe(true);
     expect(component.canFieldMoveUp(2)).toBe(true);
   });
 
   it('should indicate if a field can be moved down', () => {
-    component.fields = testStationFields;
     expect(component.canFieldMoveDown(0)).toBe(true);
     expect(component.canFieldMoveDown(1)).toBe(true);
     expect(component.canFieldMoveDown(2)).toBe(false);
   });
 
   it('should move a field up and down', () => {
-    component.fields = testStationFields;
     component.move('up', 2);
     expect(component.fields[2].prompt === 'Label').toBeTrue();
 
@@ -102,7 +100,6 @@ describe('StationTemplateComponent', () => {
   });
 
   it('should remove a field', () => {
-    component.fields = testStationFields;
     component.remove(2);
     expect(component.fields.length).toEqual(2);
   });
