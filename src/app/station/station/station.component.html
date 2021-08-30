@@ -14,7 +14,7 @@
           <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="stationLoading"></app-loading-indicator>
-            <form *ngIf="!stationLoading" autocomplete="off">
+            <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off">
               <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
 
               <mat-tab-group mat-align-tabs="center">
