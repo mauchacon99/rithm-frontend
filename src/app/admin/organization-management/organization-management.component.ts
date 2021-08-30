@@ -3,6 +3,7 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
+import { User } from 'src/models';
 
 /**
  * Component for managing the users of an organization.
@@ -18,6 +19,9 @@ export class OrganizationManagementComponent {
 
   /** The current page number. */
   activeNum = 1;
+
+  /** The users of the organization. */
+  users!: User[];
 
   /** Total number of users in this organization. */
   totalNumUsers = 0;
@@ -44,6 +48,16 @@ export class OrganizationManagementComponent {
     this.activeNum = pageNum;
     //temporary functionality below:
     this.totalNumUsers = pageNum;
+
+    // this.userService.getUsersForOrganization('CCAEBE24-AF01-48AB-A7BB-279CC25B0989', pageNum)
+    //   .pipe(first())
+    //   .subscribe((usersResponse) => {
+    //     if (usersResponse) {
+    //       this.users = usersResponse;
+    //       this.totalNumUsers = usersResponse.length;
+    //     }
+    //   })
+
 
   // --the functionality to retrieve users will be similar to the below.--
     // this.isLoading = true;
@@ -73,11 +87,14 @@ export class OrganizationManagementComponent {
    * @param userRithmId The ID of the selected user to remove.
    */
   removeUser(userRithmId: string): void {
+    this.isLoading = true;
     this.userService.removeUserFromOrganization(userRithmId)
       .pipe(first())
       .subscribe(() => {
+        this.isLoading = false;
         this.popupService.notify('User removed from organization.');
       }, (error: unknown) => {
+        this.isLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
