@@ -14,14 +14,15 @@ import { User } from 'src/models';
   styleUrls: ['./organization-management.component.scss']
 })
 export class OrganizationManagementComponent implements OnInit {
-  /** Whether the account settings is loading. */
-  isLoading = false;
+
+ /** The users of the organization. */
+  users: User[] = [];
 
   /** The current page number. */
   activeNum = 1;
 
-  /** The users of the organization. */
-  users!: User[];
+  /** Whether the account settings is loading. */
+  isLoading = false;
 
   /** Total number of users in this organization. */
   totalNumUsers = 0;
@@ -50,9 +51,10 @@ export class OrganizationManagementComponent implements OnInit {
     const organizationId = this.userService.user?.organizations[0];
     this.userService.getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
-      .subscribe((users) => {
-        if (users) {
-          this.users = users;
+      .subscribe((usersResponse) => {
+        if (usersResponse) {
+          this.users = usersResponse.users;
+          this.totalNumUsers = usersResponse.totalOrgUsers;
         }
         this.isLoading = false;
       }, (error: unknown) => {
@@ -71,18 +73,22 @@ export class OrganizationManagementComponent implements OnInit {
    */
   removeUser(userRithmId: string): void {
     this.isLoading = true;
-    this.userService.removeUserFromOrganization(userRithmId)
-      .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.popupService.notify('User removed from organization.');
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-      });
+    if (userRithmId === this.userService.user.rithmId) {
+      this.popupService.notify('Cannot remove self from organization.');
+    } else {
+      this.userService.removeUserFromOrganization(userRithmId)
+        .pipe(first())
+        .subscribe(() => {
+          this.isLoading = false;
+          this.popupService.notify('User removed from organization.');
+        }, (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error,
+            true
+          );
+        });
+    }
   }
 }
