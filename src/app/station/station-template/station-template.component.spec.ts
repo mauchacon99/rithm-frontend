@@ -91,4 +91,19 @@ describe('StationTemplateComponent', () => {
     expect(component.canFieldMoveDown(1)).toBe(true);
     expect(component.canFieldMoveDown(2)).toBe(false);
   });
+
+  it('should move a field up and down', () => {
+    component.fields = testStationFields;
+    component.move('up', 2);
+    expect(component.fields[2].prompt === 'Label').toBeTrue();
+
+    component.move('down', 1);
+    expect(component.fields[2].prompt === 'Fake question 7').toBeTrue();
+  });
+
+  it('should remove a field', () => {
+    component.fields = testStationFields;
+    component.remove(2);
+    expect(component.fields.length).toEqual(2);
+  });
 });
