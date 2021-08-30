@@ -28,9 +28,9 @@ export class OrganizationManagementComponent implements OnInit {
   totalNumUsers = 0;
 
   constructor(
-    private popupService: PopupService,
     private userService: UserService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService,
   ) { }
 
   /**
@@ -72,11 +72,11 @@ export class OrganizationManagementComponent implements OnInit {
    * @param userRithmId The ID of the selected user to remove.
    */
   removeUser(userRithmId: string): void {
-    this.isLoading = true;
     if (userRithmId === this.userService.user.rithmId) {
       this.popupService.notify('Cannot remove self from organization.');
     } else {
-      this.userService.removeUserFromOrganization(userRithmId)
+      this.isLoading = true;
+      this.userService.removeUserFromOrganization(this.userService.user?.organizations[0], userRithmId)
         .pipe(first())
         .subscribe(() => {
           this.isLoading = false;

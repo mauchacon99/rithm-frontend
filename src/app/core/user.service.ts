@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
 import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { OrganizationUsers } from 'src/models/organization-users';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -268,27 +269,33 @@ export class UserService {
    * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-   getUsersForOrganization(organizationId: string, pageNum: number): Observable<User[]> {
+   getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
     const params = new HttpParams()
       .set('rithmid', organizationId)
       .set('pageNum', pageNum)
-      .set('usersPerPage', 10);
-    return this.http.get<User[]>(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization`, { params });
+      .set('usersPerPage', 15);
+    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization`, { params });
   }
 
   /**
    * Removes a user from the roster of an organization.
    *
+   * @param organizationRithmId The Rithm Id of the organization.
    * @param userRithmId The Rithm Id of the user being removed.
    * @returns An empty observable.
    */
-  removeUserFromOrganization(userRithmId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/removeusersfromorganizations`, {
+  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    return this.http.delete<void>(`${environment.baseApiUrl}/userservice/api/Organization/RemoveUsersFromOrganizations`, {
       headers: {
         // eslint-disable-next-line @typescript-eslint/quotes
         "Content-Type": "application/json"
       },
-      body: { userRithmId }
+      body: [
+        {
+         organizationRithmId,
+         userRithmId
+        }
+      ]
     });
   }
 

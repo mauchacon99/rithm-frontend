@@ -10,10 +10,10 @@
       </div>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
-        <p *ngFor="let user of users">{{user.firstName + ' ' + user.lastName}}</p>
-
-        <p class="overline">Remove first user from organization</p>
-        <button (click)="removeUser(users[0].rithmId)">Remove</button>
+        <div *ngFor="let user of users">
+          <p>{{user.firstName + ' ' + user.lastName}}</p>
+          <button (click)="removeUser(user.rithmId)">Remove</button>
+        </div>
       </div>
       <div *ngIf="!isLoading && totalNumUsers > 0" class="row no-gutters justify-content-center">
         <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [activeNum]="activeNum">
