@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -17,7 +17,7 @@ export class DocumentInfoHeaderComponent {
   @Input() userType!: UserType;
 
   /** Document information object passed from parent. */
-  @Input() documentInformation!: DocumentStationInformation;
+  @Input() documentInformation!: DocumentStationInformation | StationInformation;
 
   /** Station or Document looking at a document. */
   @Input() isStation!: boolean;
@@ -49,5 +49,37 @@ export class DocumentInfoHeaderComponent {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
+  }
+
+  /** Get Document Priority of document from DocumentStationInformation based on type.
+   *
+   * @returns The Document Priority.
+   */
+  get documentPriority(): number {
+    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
+  }
+
+  /** Get flowed time UTC of document from DocumentStationInformation based on type.
+   *
+   * @returns The Flowed time UTC.
+   */
+  get flowedTimeUTC(): string {
+    return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
+  }
+
+  /** Get last updated UTC of document from DocumentStationInformation based on type.
+   *
+   * @returns The Last Updated UTC.
+   */
+  get lastUpdatedUTC(): string {
+    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
+  }
+
+  /** Get name of document from DocumentStationInformation based on type.
+   *
+   * @returns The Document Name.
+   */
+  get documentName(): string {
+    return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 }

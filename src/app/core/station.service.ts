@@ -1,9 +1,10 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { StationInformation } from 'src/models';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Station, StationInformation } from 'src/models';
 
-// const MICROSERVICE_PATH = '/stationapi/api/station';
+const MICROSERVICE_PATH = '/stationapi/api/station';
 
 /**
  * Service for all station behavior and business logic.
@@ -13,47 +14,29 @@ import { StationInformation } from 'src/models';
 })
 export class StationService {
 
+  constructor(
+    private http: HttpClient
+  ) { }
+
   /**
    * Gets station information.
    *
    * @param stationId The Specific id of station.
    * @returns Information related to station.
    */
-   getStationInfo(stationId: string): Observable<StationInformation> {
-    const data: StationInformation = {
-      rithmId: stationId,
-      name: 'Dry Goods & Liquids',
-      instructions: 'General instructions',
-      dueDate: '2021-08-22T17:26:47.3506612Z',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }],
-      supervisors: [{
-        userRithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
-      }],
-      workers: [{
-        userRithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: []
-    };
-    return of(data).pipe(delay(1000));
+  getStationInfo(stationId: string): Observable<StationInformation> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationId);
+    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getstationinfo`, { params });
+  }
+
+  /**
+   * Gets all the stations from the API.
+   *
+   * @returns The list of all stations.
+   */
+  getAllStations(): Observable<Station[]> {
+    return this.http.get<Station[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
   }
 
 }

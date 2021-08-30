@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
+import { DocumentStationInformation, StationInformation } from 'src/models';
 
 /**
  * Component for the sub header on document/station views that houses the
@@ -12,18 +12,19 @@ import { DocumentStationInformation } from 'src/models';
   styleUrls: ['./sub-header.component.scss']
 })
 export class SubHeaderComponent {
-  /** DetailItem. */
-  @Input() detailItem!: string;
 
   /** Parent document information. */
-  @Input() documentInformation?: DocumentStationInformation;
+  @Input() documentInformation?: DocumentStationInformation | StationInformation;
+
+  /** Parent title information. */
+  @Input() title?: string;
 
   /** Current active icon. */
   activeItem = 'none';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService
-  ) {}
+  ) { }
 
   /**
    * Toggles the open state detail drawer for comments or history.

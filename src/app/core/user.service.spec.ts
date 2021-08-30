@@ -18,7 +18,9 @@ const testUser: User = {
   isEmailVerified: true,
   createdDate: new Date().toISOString(),
   rithmId: 'kj34k3jkj',
-  notificationSettings: null
+  notificationSettings: null,
+  role: null,
+  organizations: []
 };
 
 describe('UserService', () => {
@@ -283,6 +285,15 @@ describe('UserService', () => {
 
     req.flush(termsAndConditions);
     httpTestingController.verify();
+  });
+
+  it('should return list of users for an organization', () => {
+    const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    const pageNum = 1;
+    service.getUsersForOrganization(organizationId, pageNum)
+      .subscribe((users) => {
+        expect(users.length).toBeGreaterThanOrEqual(0);
+      });
   });
 
 });

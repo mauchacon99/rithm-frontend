@@ -19,6 +19,9 @@ export class UserAvatarComponent {
   /** Whether this avatar is being used to display the signed in user in the top navigation. */
   @Input() navProfile = false;
 
+  /** Whether to hide the tooltip hover effect for this avatar. */
+  @Input() hideToolTip!: boolean;
+
   /**
    * The first + last initials for the user.
    *

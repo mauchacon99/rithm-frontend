@@ -1,0 +1,49 @@
+<div class="sub-header">
+  <app-sub-header [documentInformation]="documentInformation" [title]="'Station'"></app-sub-header>
+</div>
+
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #detailDrawer mode="over" position="end">
+    <app-detail-drawer></app-detail-drawer>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="page textured-bg pb-0">
+      <div class="container-fluid p-0">
+        <div class="row m-0 justify-content-center">
+          <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
+          <div class="col-12 col-lg-8 bg-white">
+            <app-loading-indicator class="loader" *ngIf="stationLoading"></app-loading-indicator>
+            <form *ngIf="!stationLoading" autocomplete="off">
+              <app-station-info-header  [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
+
+              <mat-tab-group mat-align-tabs="center">
+                <mat-tab label="Document">
+                  <ng-template matTabContent>
+                    <app-document-info-header [documentInformation]="documentInformation" [isStation]="true"></app-document-info-header>
+                    <app-station-template [stationFields]="documentInformation.questions"></app-station-template>
+                    <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
+                  </ng-template>
+                </mat-tab>
+                <mat-tab label="Flow Logic">
+                  <ng-template matTabContent>
+                    Flow Logic tab
+                  </ng-template>
+                </mat-tab>
+              </mat-tab-group>
+            </form>
+          </div>
+          <div class="col-12 col-lg-8 footer">
+            <div class="align-button">
+              <button mat-stroked-button color="accent" class="align-middle">Cancel</button>
+              <button mat-raised-button color="accent" class="align-middle">Save</button>
+            </div>
+          </div>
+          <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
+        </div>
+      </div>
+    </div>
+  </mat-drawer-content>
+
+</mat-drawer-container>
+

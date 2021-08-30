@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 
 import { StationInfoHeaderComponent } from './station-info-header/station-info-header.component';
 import { DocumentInfoHeaderComponent } from './document-info-header/document-info-header.component';
 import { ConnectedStationPaneComponent } from './connected-station-pane/connected-station-pane.component';
 import { HistoryDrawerComponent } from './history-drawer/history-drawer.component';
 import { CommentComponent } from './comment/comment.component';
-import { DocumentTemplateComponent } from './document-template/document-template.component';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { ConnectedStationCardComponent } from './connected-station-card/connected-station-card.component';
 import { SharedModule } from '../shared/shared.module';
@@ -19,7 +17,6 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommentInputComponent } from './comment-input/comment-input.component';
-import { DocumentFieldComponent } from './document-field/document-field.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { NumberFieldComponent } from './number-field/number-field.component';
 import { DateFieldComponent } from './date-field/date-field.component';
@@ -28,6 +25,7 @@ import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -38,20 +36,18 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     DocumentInfoHeaderComponent,
     ConnectedStationPaneComponent,
     CommentComponent,
-    DocumentTemplateComponent,
     SubHeaderComponent,
     ConnectedStationCardComponent,
     HistoryDrawerComponent,
     CommentDrawerComponent,
     DetailDrawerComponent,
     CommentInputComponent,
-    DocumentFieldComponent,
     TextFieldComponent,
     NumberFieldComponent,
     DateFieldComponent,
     AddressFieldComponent,
     SelectFieldComponent,
-    CheckFieldComponent,
+    CheckFieldComponent
   ],
   imports: [
     CommonModule,
@@ -63,16 +59,22 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
   ],
   exports: [
     SubHeaderComponent,
-    DocumentTemplateComponent,
     ConnectedStationPaneComponent,
     StationInfoHeaderComponent,
     DocumentInfoHeaderComponent,
     CommentDrawerComponent,
-    DetailDrawerComponent
+    DetailDrawerComponent,
+    TextFieldComponent,
+    NumberFieldComponent,
+    DateFieldComponent,
+    AddressFieldComponent,
+    SelectFieldComponent,
+    CheckFieldComponent
   ]
 })
 export class DetailModule { }

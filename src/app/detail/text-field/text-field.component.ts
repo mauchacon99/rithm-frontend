@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
@@ -28,11 +28,20 @@ import { QuestionFieldType, Question } from 'src/models';
   ]
 })
 export class TextFieldComponent implements OnInit, ControlValueAccessor, Validator {
+  /** Output the value of the field. */
+  @Output() removeOptionField = new EventEmitter<Question>();
+
   /** The form to add this field in the template. */
   textFieldForm!: FormGroup;
 
   /** The document field to display. */
   @Input() field!: Question;
+
+  /** Add new field label from toolbar. */
+  @Input() toolBar!: boolean;
+
+  /** Does the field need to be removable? */
+  @Input() removableField!: boolean;
 
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
@@ -132,6 +141,15 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
         message: 'Text field form is invalid'
       }
     };
+  }
+
+  /**
+   * Emits an event to parent component to remove field from form.
+   *
+   * @param field The field to emit.
+   */
+  removeField(field: Question): void {
+    this.removeOptionField.emit(field);
   }
 
 }

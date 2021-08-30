@@ -29,3 +29,10 @@ section {
     padding-top: 30px;
   }
 }
+
+:host::ng-deep .user-avatar {
+  .circle-30-secondary:hover {
+    cursor: default;
+    background-color: $secondary-gray;
+  }
+}
