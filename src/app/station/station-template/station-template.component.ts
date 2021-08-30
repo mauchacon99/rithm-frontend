@@ -89,6 +89,15 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   }
 
   /**
+   * Removes a field from the template.
+   *
+   * @param index The current index of the field in the list.
+   */
+  remove(index: number): void {
+    this.fields.splice(index, 1);
+  }
+
+  /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function

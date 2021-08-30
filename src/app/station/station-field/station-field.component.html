@@ -6,7 +6,7 @@
         <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp" (click)="moveFieldUp()">
           <i class="fas fa-chevron-up"></i>
         </button>
-        <button mat-icon-button (click)="removeField()">
+        <button mat-icon-button class="move" (click)="removeField()">
           <i class="fas fa-times"></i>
         </button>
         <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown" (click)="moveFieldDown()">
