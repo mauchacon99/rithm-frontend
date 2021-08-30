@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -13,7 +13,7 @@ import { User } from 'src/models';
   templateUrl: './organization-management.component.html',
   styleUrls: ['./organization-management.component.scss']
 })
-export class OrganizationManagementComponent {
+export class OrganizationManagementComponent implements OnInit {
   /** Whether the account settings is loading. */
   isLoading = false;
 
@@ -46,39 +46,22 @@ export class OrganizationManagementComponent {
    */
   getUsers(pageNum: number): void {
     this.activeNum = pageNum;
-    //temporary functionality below:
-    this.totalNumUsers = pageNum;
-
-    // this.userService.getUsersForOrganization('CCAEBE24-AF01-48AB-A7BB-279CC25B0989', pageNum)
-    //   .pipe(first())
-    //   .subscribe((usersResponse) => {
-    //     if (usersResponse) {
-    //       this.users = usersResponse;
-    //       this.totalNumUsers = usersResponse.length;
-    //     }
-    //   })
-
-
-  // --the functionality to retrieve users will be similar to the below.--
-    // this.isLoading = true;
-
-    // this.documentService.getStationDocuments(this.stationRithmId, pageNum)
-    //   .pipe(first())
-    //   .subscribe((documentsResponse) => {
-    //     if (documentsResponse) {
-    //       this.documents = documentsResponse.documents;
-    //       this.totalNumDocs = documentsResponse.totalDocuments;
-    //       this.userType = documentsResponse.userType;
-    //     }
-    //     this.isLoading = false;
-    //   }, (error: unknown) => {
-    //     this.isLoading = false;
-    //     this.dialogRef.close();
-    //     this.errorService.displayError(
-    //       'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-    //       error
-    //     );
-    //   });
+    this.isLoading = true;
+    const organizationId = this.userService.user?.organizations[0];
+    this.userService.getUsersForOrganization(organizationId, pageNum)
+      .pipe(first())
+      .subscribe((users) => {
+        if (users) {
+          this.users = users;
+        }
+        this.isLoading = false;
+      }, (error: unknown) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
