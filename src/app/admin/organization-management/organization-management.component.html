@@ -3,14 +3,46 @@
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
       <div class="row">
         <h3 class="col-sm-12 col-md-9 mb-4 mb-sm-2">Manage My Organization</h3>
-        <a href="#" class="col-sm-12 col-md-3 mb-sm-2 mt-md-2 d-md-inline-flex justify-content-md-end">
+        <a
+          href="#"
+          class="
+            col-sm-12 col-md-3
+            mb-sm-2
+            mt-md-2
+            d-md-inline-flex
+            justify-content-md-end
+          "
+        >
           <i class="fas fa-link"></i>
           Invite members
         </a>
       </div>
-      <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-      <div *ngIf="!isLoading && totalNumUsers > 0" class="row no-gutters justify-content-center">
-        <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [activeNum]="activeNum">
+      <div class="row no-gutters">
+        <div class="row-header col-sm-3">Name</div>
+        <div class="row-header col-sm-6">Email</div>
+        <div class="row-header col-sm-3">Admin</div>
+      </div>
+      <div *ngFor="let user of users" class="row no-gutters">
+        <div class="col-sm-3">{{ user.firstName }} {{ user.lastName }}</div>
+        <div class="col-sm-6">{{ user.email }}</div>
+        <div class="last-row col-sm-3">
+          <mat-checkbox class="mat-checkbox"></mat-checkbox>
+          <button mat-icon-button><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <app-loading-indicator
+        class="loader"
+        *ngIf="isLoading"
+      ></app-loading-indicator>
+      <div
+        *ngIf="!isLoading && totalNumUsers > 0"
+        class="row no-gutters justify-content-center"
+      >
+        <app-pagination
+          (currentPageNum)="getUsers($event)"
+          [numItems]="totalNumUsers"
+          [activeNum]="activeNum"
+        >
         </app-pagination>
       </div>
     </mat-card>

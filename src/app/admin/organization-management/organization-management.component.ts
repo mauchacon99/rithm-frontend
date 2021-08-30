@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { User } from 'src/models';
 
 /**
  * Component for managing the users of an organization.
@@ -9,6 +10,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./organization-management.component.scss']
 })
 export class OrganizationManagementComponent {
+
+  /** The users to show in the modal. */
+  users: User[] = [];
+
   /** Whether the account settings is loading. */
   isLoading = false;
 
@@ -34,8 +39,28 @@ export class OrganizationManagementComponent {
     this.activeNum = pageNum;
     //temporary functionality below:
     this.totalNumUsers = pageNum;
+    this.users = [{
+      firstName: 'Alejandro', lastName: 'Arciniegas', email: 'alejandroarciniegasf@gmail.com',
+      rithmId: '', isEmailVerified:true, isAssigned: false, createdDate:'', notificationSettings: '',
+      organizations:['none', 'none'], role:'admin',
+    },
+    {
+      firstName: 'Alejandro', lastName: 'Arciniegas', email: 'alejandroarciniegasf@gmail.com',
+      rithmId: '', isEmailVerified:true, isAssigned: false, createdDate:'', notificationSettings: '',
+      organizations:['none', 'none'], role:'admin',
+    },
+    {
+      firstName: 'Alejandro', lastName: 'Arciniegas', email: 'alejandroarciniegasf@gmail.com',
+      rithmId: '', isEmailVerified:true, isAssigned: false, createdDate:'', notificationSettings: '',
+      organizations:['none', 'none'], role:'admin',
+    },
+    {
+      firstName: 'Alejandro', lastName: 'Arciniegas', email: 'alejandroarciniegasf@gmail.com',
+      rithmId: '', isEmailVerified:true, isAssigned: false, createdDate:'', notificationSettings: '',
+      organizations:['none', 'none'], role:'admin',
+    }];
 
-  // --the functionality to retrieve users will be similar to the below.--
+    // --the functionality to retrieve users will be similar to the below.--
     // this.isLoading = true;
 
     // this.documentService.getStationDocuments(this.stationRithmId, pageNum)
