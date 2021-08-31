@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-const NUM_PER_PAGE = 10;
 const MIN_NUM_RECORDS = 1;
 const MAX_NUM_RECORDS = 10;
 const INIT_PAGE_NUM = 1;
@@ -12,13 +11,16 @@ const ACTIVE_NUM_LIMIT_RESET_PAGE_NUM = 3;
  * Reusable component for pagination with clickable pages.
  */
 @Component({
-  selector: 'app-pagination[numItems][activeNum]',
+  selector: 'app-pagination[numItems][numPerPage][activeNum]',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
   /** Total number of items. */
   @Input() numItems!: number;
+
+  /** Number of items per page. Should match the api request. */
+  @Input() numPerPage!: number;
 
   /** Total number of pages. */
   private numPages = 0;
@@ -52,7 +54,7 @@ export class PaginationComponent implements OnInit {
    * Creates list of document ranges to be displayed.
    */
   ngOnInit(): void {
-    this.numPages = Math.ceil(this.numItems / NUM_PER_PAGE);
+    this.numPages = Math.ceil(this.numItems / this.numPerPage);
     this.pagesArr = [];
     this.rangeArr = [];
 
@@ -62,8 +64,8 @@ export class PaginationComponent implements OnInit {
     for (let page = 0; page <= this.numPages - 1; page++) {
       startingNum = MIN_NUM_RECORDS;
       endingNum = MAX_NUM_RECORDS;
-      startingNum += NUM_PER_PAGE * page;
-      endingNum += NUM_PER_PAGE * page;
+      startingNum += this.numPerPage * page;
+      endingNum += this.numPerPage * page;
       if (page !== this.numPages - 1) {
         this.rangeArr.push(`${startingNum}-${endingNum}`);
       } else {

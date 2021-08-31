@@ -60,7 +60,7 @@
     <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
   </div>
   <div *ngIf="!isLoading && totalNumDocs > 0" class="row no-gutters justify-content-center">
-    <app-pagination (currentPageNum)="getDocuments($event)" [numItems]="totalNumDocs" [activeNum]="activeNum">
+    <app-pagination (currentPageNum)="getDocuments($event)" [numItems]="totalNumDocs" [numPerPage]="10" [activeNum]="activeNum">
     </app-pagination>
   </div>
 </div>
