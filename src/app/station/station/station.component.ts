@@ -18,26 +18,23 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./station.component.scss']
 })
 export class StationComponent implements OnInit {
-  /** Station form. */
-  stationForm: FormGroup;
-
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
-  /** The information about the document within a station. */
-  documentInformation!: StationInformation;
+  /** Station form. */
+  stationForm: FormGroup;
 
   /** The information about the station. */
   stationInformation!: StationInformation;
 
-  /** Whether the request to get the document info is currently underway. */
+  /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
-  /** The list of stations that this document could flow to. */
+  /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
 
-  /** The list of stations that this document came from. */
+  /** The list of stations that precede this station. */
   previousStations: ConnectedStationInfo[] = [];
 
   /** Whether the request to get connected stations is currently underway. */
@@ -54,82 +51,6 @@ export class StationComponent implements OnInit {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
     });
-    //TODO: remove temporary mock data.
-    this.stationInformation = {
-      stationRithmId: '',
-      stationPriority: 1,
-      name: 'Station 4',
-      instructions: '',
-      nextStations: [],
-      previousStations: [],
-      supervisors: [
-        {
-          userRithmId: '',
-          firstName: 'Tyler',
-          lastName: 'H',
-          email: '',
-          isAssigned: true
-        },
-        {
-          userRithmId: '',
-          firstName: 'Austin',
-          lastName: 'B',
-          email: '',
-          isAssigned: true
-        },
-      ],
-      workers: [
-        {
-          userRithmId: '',
-          firstName: 'Harrison',
-          lastName: 'K',
-          email: '',
-          isAssigned: true
-        },
-        {
-          userRithmId: '',
-          firstName: 'Adarsh',
-          lastName: 'A',
-          email: '',
-          isAssigned: true
-        },
-        {
-          userRithmId: '',
-          firstName: 'Harrison',
-          lastName: 'K',
-          email: '',
-          isAssigned: true
-        },
-        {
-          userRithmId: '',
-          firstName: 'Adarsh',
-          lastName: 'A',
-          email: '',
-          isAssigned: true
-        },
-      ],
-      createdByRithmId: '',
-      createdDate: '',
-      updatedByRithmId: '',
-      updatedDate: '',
-      questions: [],
-    };
-
-    this.documentInformation = {
-      stationPriority: 2,
-      supervisors: [],
-      workers: [],
-      questions: [],
-      stationRithmId: '',
-      name: 'Development',
-      nextStations: [],
-      previousStations: [],
-      instructions: 'General instructions',
-      createdByRithmId: '',
-      createdDate: '',
-      updatedByRithmId: '',
-      updatedDate: ''
-    };
   }
 
   /**
@@ -160,7 +81,6 @@ export class StationComponent implements OnInit {
           this.handleInvalidParams();
         } else {
           this.getStationInfo(params.stationId);
-          // this.getConnectedStations('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -197,14 +117,13 @@ export class StationComponent implements OnInit {
    *
    * @param stationId The id of the station that the document is in.
    */
-  // eslint-disable-next-line
   private getStationInfo(stationId: string): void {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
       .subscribe((stationInfo) => {
         if (stationInfo) {
-          this.documentInformation = stationInfo;
+          this.stationInformation = stationInfo;
         }
         this.stationLoading = false;
       }, (error: unknown) => {
@@ -217,12 +136,13 @@ export class StationComponent implements OnInit {
       });
   }
 
-  /** Adds selected fieldType to array.
+  /**
+   * Adds selected fieldType to field array.
    *
    * @param fieldType The field to add.
    */
   addQuestion(fieldType: QuestionFieldType): void {
-    this.documentInformation.questions.push({
+    this.stationInformation.questions.push({
       prompt: 'Label',
       instructions: '',
       questionType: {
@@ -242,8 +162,7 @@ export class StationComponent implements OnInit {
    * @param documentId The id of the document for which to retrieve previous stations.
    * @param stationId The id of the station for which to retrieve forward stations.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private getConnectedStations(documentId: string, stationId: string): void {
+  // private getConnectedStations(documentId: string, stationId: string): void {
     // TODO: new request for connected stations?
 
     // this.connectedStationsLoading = true;
@@ -262,5 +181,5 @@ export class StationComponent implements OnInit {
     //       false
     //     );
     //   });
-  }
+  // }
 }

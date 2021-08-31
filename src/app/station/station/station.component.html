@@ -1,5 +1,5 @@
 <div class="sub-header">
-  <app-sub-header [documentInformation]="documentInformation" [title]="'Station'"></app-sub-header>
+  <app-sub-header [itemInfo]="stationInformation"></app-sub-header>
 </div>
 
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
@@ -14,14 +14,14 @@
           <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
           <div class="col-12 col-lg-8 bg-white">
             <app-loading-indicator class="loader" *ngIf="stationLoading"></app-loading-indicator>
-            <form *ngIf="!stationLoading" autocomplete="off">
-              <app-station-info-header  [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
+            <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off">
+              <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
 
               <mat-tab-group mat-align-tabs="center">
                 <mat-tab label="Document">
                   <ng-template matTabContent>
-                    <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-                    <app-station-template [stationFields]="documentInformation.questions"></app-station-template>
+                    <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
+                    <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
                     <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                   </ng-template>
                 </mat-tab>
