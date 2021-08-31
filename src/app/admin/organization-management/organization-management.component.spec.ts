@@ -40,4 +40,13 @@ describe('OrganizationManagementComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get users of current page', () => {
+    expect(component.users).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should get total number of users of an organization', () => {
+    expect(component.totalNumUsers).toBeGreaterThanOrEqual(0);
+  });
+
 });
