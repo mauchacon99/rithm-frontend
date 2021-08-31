@@ -4,22 +4,24 @@
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
       <div class="row">
         <h3 class="col-12 col-md-9 pt-1">Manage My Organization</h3>
-        <button mat-button color="accent" class="col-12 col-md-3">
+        <button mat-button color="accent" class="col-3">
           <i class="fas fa-link"></i>
           Invite members
         </button>
       </div>
       <div class="row">
-        <div class="row-header col-sm-3">Name</div>
-        <div class="row-header d-none d-md-block col-md-6">Email</div>
-        <div class="row-header col-sm-3">Admin</div>
+        <div class="row-header col-9 col-md-4">Name</div>
+        <div class="row-header d-none d-md-block col-6">Email</div>
+        <div class="row-header col-3 col-md-2">Admin</div>
       </div>
       <div *ngFor="let user of users" class="row">
-        <div class="col-sm-3">{{ user.firstName }} {{ user.lastName }}</div>
-        <div class="d-none d-md-block col-md-6">{{ user.email }}</div>
-        <div class="last-row col-sm-3">
+        <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
+        <div class="d-none d-md-block col-6">{{ user.email }}</div>
+        <div class="last-row col-3 col-md-2">
           <mat-checkbox class="mat-checkbox"></mat-checkbox>
-          <button mat-icon-button><i class="fas fa-times"></i></button>
+          <button mat-icon-button>
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
       <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
