@@ -287,10 +287,11 @@ export class MockUserService {
   /**
    * Removes a user from the roster of an organization.
    *
+   * @param organizationRithmId The Rithm Id of the organization.
    * @param userRithmId The Rithm Id of the user being removed.
    * @returns An empty observable.
    */
-  removeUserFromOrganization(userRithmId: string): Observable<unknown> {
+  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
     return of().pipe(delay(1000));
   }
 
