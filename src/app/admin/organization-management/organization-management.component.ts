@@ -32,7 +32,7 @@ export class OrganizationManagementComponent implements OnInit {
    * Gets the first page of users on load.
    */
   ngOnInit(): void {
-    this.getUsers(1);
+    this.getUsers(this.activeNum);
   }
 
   /**
@@ -43,12 +43,13 @@ export class OrganizationManagementComponent implements OnInit {
   getUsers(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    const organizationId = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organizations[0];
     this.userService.getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
-      .subscribe((users) => {
-        if (users) {
-          this.users = users;
+      .subscribe((orgUsers) => {
+        if (orgUsers) {
+          this.users = orgUsers.users;
+          this.totalNumUsers = orgUsers.totalOrgUsers;
         }
         this.isLoading = false;
       }, (error: unknown) => {
