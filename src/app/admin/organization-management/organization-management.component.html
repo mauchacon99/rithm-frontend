@@ -11,12 +11,12 @@
       </div>
       <div class="row no-gutters">
         <div class="row-header col-sm-3">Name</div>
-        <div class="row-header col-sm-6">Email</div>
+        <div class="row-header d-none d-md-block col-md-6">Email</div>
         <div class="row-header col-sm-3">Admin</div>
       </div>
       <div *ngFor="let user of users" class="row no-gutters">
         <div class="col-sm-3">{{ user.firstName }} {{ user.lastName }}</div>
-        <div class="col-sm-6">{{ user.email }}</div>
+        <div class="d-none d-md-block col-md-6">{{ user.email }}</div>
         <div class="last-row col-sm-3">
           <mat-checkbox class="mat-checkbox"></mat-checkbox>
           <button mat-icon-button><i class="fas fa-times"></i></button>
