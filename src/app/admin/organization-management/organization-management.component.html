@@ -17,7 +17,7 @@
       </div>
 
       <div *ngIf="!isLoading">
-        <div *ngFor="let user of users" class="row align-items-center">
+        <div *ngFor="let user of users" class="user row align-items-center ">
           <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
           <div class="col-3 col-md-2 p-0">
