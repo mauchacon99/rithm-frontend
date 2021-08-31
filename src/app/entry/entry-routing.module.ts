@@ -37,7 +37,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
     {
       path: 'password-reset',
       component: PasswordResetComponent,
-      // canActivate: [ResetPasswordGuard]
+      canActivate: [ResetPasswordGuard]
     }
   ])],
   exports: [RouterModule]
