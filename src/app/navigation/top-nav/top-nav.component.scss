@@ -5,21 +5,7 @@ nav {
   align-items: center;
   z-index: 2;
 
-  .logo {
-    // padding: 0 30px;
-
-    @media screen and (max-width: 767px) {
-      // flex: 1;
-      text-align: center;
-    }
-
-    img {
-      width: 110px;
-    }
-  }
-
   ul {
-    // flex: 1;
     height: 100%;
 
     li {
@@ -29,11 +15,6 @@ nav {
       padding: 23px 10px;
       text-align: center;
       height: 100%;
-
-      &:hover {
-        cursor: pointer;
-        background: map-get($primary-palette, 400);
-      }
 
       &.active {
         border-bottom: solid 3px #fff;
