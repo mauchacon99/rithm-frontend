@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 
 import { OrganizationManagementComponent } from './organization-management.component';
@@ -18,11 +18,11 @@ describe('OrganizationManagementComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         OrganizationManagementComponent,
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
+        MockComponent(PaginationComponent)
       ],
       imports: [
-        MatCardModule,
-        SharedModule
+        MatCardModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -43,9 +43,14 @@ describe('OrganizationManagementComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get an array of users', () => {
+  it('should get an array of users', fakeAsync(() => {
     component.getUsers(1);
-    console.log(component.getUsers(1));
+
+    tick(1000);
     expect(component.users.length).toEqual(3);
+  }));
+
+  it('should return undefined when making a request to remove a user', () => {
+    expect(component.removeUser('1234')).toBeFalsy();
   });
 });

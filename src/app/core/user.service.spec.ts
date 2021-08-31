@@ -333,7 +333,7 @@ describe('UserService', () => {
       });
 
       // eslint-disable-next-line max-len
-      const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=10`);
+      const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=15`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
