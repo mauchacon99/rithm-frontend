@@ -5,9 +5,9 @@
   <div class="col-12 col-md-10">
     <form [formGroup]="documentNameForm">
       <mat-form-field appearance="outline">
-        <mat-label>{{ isStation ? 'Document Name' : documentName }}</mat-label>
+        <mat-label>Document Name</mat-label>
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
-        <button *ngIf="isStation" matSuffix class="icon icon-top settings">
+        <button *ngIf="isStation" mat-icon-button matSuffix class="icon icon-top settings">
           <i class="fas fa-cog"></i>
         </button>
       </mat-form-field>
