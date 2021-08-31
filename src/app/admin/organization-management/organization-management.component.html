@@ -9,26 +9,32 @@
           Invite members
         </button>
       </div>
+
       <div class="row mb-1">
         <div class="row-header col-9 col-md-4">Name</div>
         <div class="row-header d-none d-md-block col-6">Email</div>
         <div class="row-header col-3 col-md-2 p-0">Admin</div>
       </div>
-      <div *ngFor="let user of users" class="row align-items-center">
-        <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
-        <div class="d-none d-md-block col-6">{{ user.email }}</div>
-        <div class="col-3 col-md-2 p-0">
-          <mat-checkbox class="mat-checkbox"></mat-checkbox>
-          <button mat-icon-button (click)="removeUser(user.rithmId)">
-            <i class="fas fa-times"></i>
-          </button>
+
+      <div *ngIf="!isLoading">
+        <div *ngFor="let user of users" class="row align-items-center">
+          <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
+          <div class="d-none d-md-block col-6">{{ user.email }}</div>
+          <div class="col-3 col-md-2 p-0">
+            <mat-checkbox *ngIf="user.rithmId !== currentUser.rithmId" class="mat-checkbox"></mat-checkbox>
+            <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+
       <div *ngIf="!isLoading && totalNumUsers > 0" class="row no-gutters justify-content-center my-4">
         <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
         </app-pagination>
       </div>
+
+      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     </mat-card>
   </div>
 </div>

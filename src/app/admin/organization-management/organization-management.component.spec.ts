@@ -10,6 +10,30 @@ import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
+const TEST_USERS = [{
+  rithmId: '1234',
+  firstName: 'Testy',
+  lastName: 'Test',
+  email: 'test@test.com',
+  isEmailVerified: true,
+  notificationSettings: null,
+  createdDate: '1/2/34',
+  role: null,
+  organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
+},
+{
+  rithmId: '123',
+  firstName: 'Testy',
+  lastName: 'Test',
+  email: 'test@test.com',
+  isEmailVerified: true,
+  notificationSettings: null,
+  createdDate: '1/2/34',
+  role: null,
+  organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
+},
+];
+
 describe('OrganizationManagementComponent', () => {
   let component: OrganizationManagementComponent;
   let fixture: ComponentFixture<OrganizationManagementComponent>;
@@ -51,19 +75,15 @@ describe('OrganizationManagementComponent', () => {
     expect(component.users.length).toEqual(3);
   }));
 
-  it('', () => {
-    expect(component.removeUser('1234')).toBeFalsy();
-  });
-
-  it('should make a userService call to remove a user', () => {
+  it('should make a userService call to remove a user', async () => {
     removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
-    component.removeUser('1234');
+    await component.removeUser(TEST_USERS[0]);
     expect(removeUserSpy).toHaveBeenCalled();
   });
 
-  it('should not make a userService call when id is same as current user', () => {
+  it('should not make a userService call when id is same as current user', async () => {
     removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
-    component.removeUser('123');
+    await component.removeUser(TEST_USERS[1]);
     expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });
 
