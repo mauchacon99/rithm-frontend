@@ -11,7 +11,7 @@
       </div>
       <!-- right column -->
       <div class="flex flex-col bg-white overflow-y-scroll">
-        <span *ngIf="isLoading" class="flex-grow">
+        <span *ngIf="!isLoading" class="flex-grow">
           <h4 class="mt-10 ml-5">Sign in</h4>
           <p class="mt-1 ml-5">Welcome to Rithm.</p>
           <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error">Invalid email or password</p>
@@ -32,8 +32,7 @@
             <a class="text-accent-400" id="create-account" routerLink="account-create">Create an account</a>
           </p>
         </span>
-        <!-- TODO: center loading indicator -->
-        <app-loading-indicator class="m-auto" *ngIf="!isLoading"></app-loading-indicator>
+        <app-loading-indicator class="m-auto" *ngIf="isLoading"></app-loading-indicator>
       </div>
     </div>
   </mat-card>
