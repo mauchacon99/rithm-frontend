@@ -28,67 +28,8 @@
             </button>
           </form>
         </span>
-        <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+        <app-loading-indicator class="m-auto" *ngIf="isLoading"></app-loading-indicator>
       </div>
     </div>
   </mat-card>
 </div>
-<!-- <div class="page">
-  <div class="container">
-    <div class="row justify-content-center">
-      <mat-card class="col-xl-8 col-md-10 col-sm-12 p-0">
-        <div class="row m-0">
-          <div class="col-md-6 col-sm-12 left-entry">
-            <div>
-              <img src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
-            </div>
-            <div class="mb-2 d-none d-md-block">
-              <p>Get started with a <b>free</b> Rithm account.</p>
-            </div>
-            <div class="mb-2 d-none d-md-block">
-              <p>Create workflows. Manage permissions. Manage processes and people with enterprise-level-security.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-12 right-entry">
-            <span *ngIf="!isLoading">
-              <div class="row mt-1">
-                <div class="col-12">
-                  <a class="overline" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-12">
-                  <h4>Create Account</h4>
-                </div>
-                <div class="col-12">
-                  <p>Enter your info to create your account.</p>
-                </div>
-              </div>
-              <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="row mt-3">
-                <app-user-form formControlName="userForm" [accountCreate]="true"></app-user-form>
-
-
-                <div class="col-12">
-                  <mat-checkbox formControlName="agreeToTerms">
-                    I have read and agree to the&nbsp;
-                  </mat-checkbox>
-                  <a id="terms" (click)="openTerms(termsAndConditionsComponent)">terms & conditions</a>
-                </div>
-
-
-                <div class="col-12 mt-3">
-                  <button type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">Create
-                    Account</button>
-                </div>
-
-              </form>
-            </span>
-
-
-            <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-  </div>
-</div> -->
