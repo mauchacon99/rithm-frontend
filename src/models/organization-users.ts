@@ -1,14 +1,18 @@
 import { User } from './user';
-
 /**
- * Station documents data.
+ * Represents all Users for an organization.
  */
- export interface OrganizationUsers {
+export interface OrganizationUsers {
 
-  /** The list of the documents for the station. */
-  users: User[];
-
-  /** The total number of documents in the station. */
+  /** The total users of an organization. */
   totalOrgUsers: number;
 
+  /** The current page number. */
+  currentPageNum: number;
+
+  /** The number of users per page. */
+  userPerPage: number;
+
+  /** Users list of the current page. */
+  users: User[];
 }

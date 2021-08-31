@@ -4,8 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
-import { OrganizationUsers } from 'src/models/organization-users';
+import { NotificationSettings, OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
@@ -237,7 +236,7 @@ export class MockUserService {
    * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-   getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
+  getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -245,8 +244,10 @@ export class MockUserService {
         }
       })).pipe(delay(1000));
     } else {
-      const mockResponse: OrganizationUsers = {
-        totalOrgUsers: 3,
+      const orgUsers: OrganizationUsers = {
+        totalOrgUsers: 20,
+        currentPageNum: pageNum,
+        userPerPage: 10,
         users: [{
           rithmId: '123',
           firstName: 'Worker',
@@ -279,7 +280,7 @@ export class MockUserService {
           organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'POBNJV24-AF01-48AB-A7BB-279CC25B9725']
         }]
       };
-      return of(mockResponse).pipe(delay(1000));
+      return of(orgUsers).pipe(delay(1000));
     }
   }
 

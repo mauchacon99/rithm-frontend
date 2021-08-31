@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
-import { OrganizationUsers } from 'src/models/organization-users';
+import { OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 import { UserService } from './user.service';
 
@@ -293,7 +292,9 @@ describe('UserService', () => {
     const pageNum = 1;
 
     const expectedResponse: OrganizationUsers = {
-      totalOrgUsers: 3,
+      totalOrgUsers: 20,
+      currentPageNum: pageNum,
+      userPerPage: 10,
       users: [{
         rithmId: '123',
         firstName: 'Worker',
@@ -328,12 +329,12 @@ describe('UserService', () => {
     };
 
     service.getUsersForOrganization(organizationId, pageNum)
-      .subscribe((orgResponse) => {
-        expect(orgResponse.users.length).toBeGreaterThanOrEqual(0);
+      .subscribe((users) => {
+        expect(users).toBeDefined();
       });
 
-      // eslint-disable-next-line max-len
-      const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=15`);
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/organization/getusersforOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=10`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);

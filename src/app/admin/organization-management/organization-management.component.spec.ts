@@ -53,4 +53,13 @@ describe('OrganizationManagementComponent', () => {
   it('should return undefined when making a request to remove a user', () => {
     expect(component.removeUser('1234')).toBeFalsy();
   });
+
+  it('should get users of current page', () => {
+    expect(component.users).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should get total number of users of an organization', () => {
+    expect(component.totalNumUsers).toBeGreaterThanOrEqual(0);
+  });
+
 });

@@ -6,8 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
-import { OrganizationUsers } from 'src/models/organization-users';
+import { OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 

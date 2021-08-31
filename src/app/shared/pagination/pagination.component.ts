@@ -6,6 +6,8 @@ const INIT_PAGE_NUM = 1;
 const LAST_PAGE_NUM = 5;
 const RESET_PAGE_NUM_LIMIT = 5;
 const ACTIVE_NUM_LIMIT_RESET_PAGE_NUM = 3;
+const LAST_BUT_ONE_PAGE_NUM = 2;
+const SET_ENDING_PAGE_NUM = 2;
 
 /**
  * Reusable component for pagination with clickable pages.
@@ -86,7 +88,7 @@ export class PaginationComponent implements OnInit {
   clickPage(pageNum: number): void {
     this.activeNum = pageNum;
 
-    if (this.activeNum >= this.pagesArr.length - 2 && this.pagesArr.length > RESET_PAGE_NUM_LIMIT) {
+    if (this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.pagesArr.length > RESET_PAGE_NUM_LIMIT) {
       this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
       this.endingPageNum = this.pagesArr.length;
     }
@@ -94,9 +96,9 @@ export class PaginationComponent implements OnInit {
       this.startingPageNum = INIT_PAGE_NUM;
       this.endingPageNum = LAST_PAGE_NUM;
     }
-    if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+    if (this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
       this.startingPageNum = this.activeNum - ACTIVE_NUM_LIMIT_RESET_PAGE_NUM;
-      this.endingPageNum = this.activeNum + 2;
+      this.endingPageNum = this.activeNum + SET_ENDING_PAGE_NUM;
     }
     this.emitPageNum(this.activeNum);
   }
@@ -109,7 +111,7 @@ export class PaginationComponent implements OnInit {
   changePage(num: number): void {
     this.activeNum += num;
     if (this.pagesArr.length > RESET_PAGE_NUM_LIMIT && this.activeNum >= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
-      if (this.activeNum >= this.pagesArr.length - 2) {
+      if (this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM) {
         this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
         this.endingPageNum = this.pagesArr.length;
       }
@@ -117,7 +119,7 @@ export class PaginationComponent implements OnInit {
         this.startingPageNum = INIT_PAGE_NUM;
         this.endingPageNum = LAST_PAGE_NUM;
       }
-      if (this.activeNum < this.pagesArr.length - 2 && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+      if (this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
         this.startingPageNum += num;
         this.endingPageNum += num;
       }
