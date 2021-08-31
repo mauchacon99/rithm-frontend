@@ -1,12 +1,12 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -268,47 +268,12 @@ export class UserService {
    * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-   getUsersForOrganization(organizationId: string, pageNum: number): Observable<User[]> {
-    if (!organizationId || !pageNum) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const users: User[] = [{
-        rithmId: '123',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/20',
-        role: null,
-        organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-      }, {
-        rithmId: '1234',
-        firstName: 'Rithm',
-        lastName: 'User',
-        email: 'rithmuser@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '7/4/21',
-        role: null,
-        organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-      }, {
-        rithmId: '7812',
-        firstName: 'Rithm',
-        lastName: 'Admin',
-        email: 'rithmadmin@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '5/9/21',
-        role: 'admin',
-        organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'POBNJV24-AF01-48AB-A7BB-279CC25B9725']
-      }];
-      return of(users).pipe(delay(1000));
-    }
+  getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
+    const params = new HttpParams()
+      .set('rithmid', organizationId)
+      .set('pageNum', pageNum)
+      .set('usersPerPage', 10);
+    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}/userservice/api/organization/getusersforOrganization`, { params });
   }
 
 }
