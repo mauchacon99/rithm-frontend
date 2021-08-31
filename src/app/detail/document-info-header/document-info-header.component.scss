@@ -46,6 +46,11 @@ section.row {
 :host::ng-deep .mat-form-field-suffix {
   display: flex;
 
+  button {
+    border: none;
+    background-color: initial;
+  }
+
   .settings {
     display: flex;
     justify-content: flex-end;

@@ -5,12 +5,12 @@
   <div class="col-12 col-md-10">
     <form [formGroup]="documentNameForm">
       <mat-form-field appearance="outline">
-        <mat-label>{{ documentName }}</mat-label>
+        <mat-label>{{ isStation ? 'Document Name' : documentName }}</mat-label>
         <!-- TODO: Disable input if Station template designates it as not editable by worker -->
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
-        <div *ngIf="isStation" matSuffix class="icon icon-top settings">
+        <button *ngIf="isStation" matSuffix class="icon icon-top settings">
           <i class="fas fa-cog"></i>
-        </div>
+        </button>
       </mat-form-field>
     </form>
   </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
@@ -12,7 +12,7 @@ import { UtcTimeConversion } from 'src/helpers';
   styleUrls: ['./document-info-header.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class DocumentInfoHeaderComponent {
+export class DocumentInfoHeaderComponent implements OnInit {
   /** Type of user looking at a document. */
   @Input() userType!: UserType;
 
@@ -36,6 +36,13 @@ export class DocumentInfoHeaderComponent {
     this.documentNameForm = this.fb.group({
       name: ['']
     });
+  }
+
+  /**
+   * Disable document input element in station edit mode.
+   */
+  ngOnInit(): void {
+    this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
   }
 
   /**
