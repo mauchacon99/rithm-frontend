@@ -13,6 +13,7 @@ import { OrganizationManagementComponent } from './organization-management.compo
 describe('OrganizationManagementComponent', () => {
   let component: OrganizationManagementComponent;
   let fixture: ComponentFixture<OrganizationManagementComponent>;
+  let removeUserSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -50,8 +51,20 @@ describe('OrganizationManagementComponent', () => {
     expect(component.users.length).toEqual(3);
   }));
 
-  it('should return undefined when making a request to remove a user', () => {
+  it('', () => {
     expect(component.removeUser('1234')).toBeFalsy();
+  });
+
+  it('should make a userService call to remove a user', () => {
+    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    component.removeUser('1234');
+    expect(removeUserSpy).toHaveBeenCalled();
+  });
+
+  it('should not make a userService call when id is same as current user', () => {
+    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    component.removeUser('123');
+    expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });
 
   it('should get users of current page', () => {

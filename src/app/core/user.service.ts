@@ -285,10 +285,6 @@ export class UserService {
    */
   removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}/userservice/api/Organization/RemoveUsersFromOrganizations`, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/quotes
-        "Content-Type": "application/json"
-      },
       body: [
         {
          organizationRithmId,
