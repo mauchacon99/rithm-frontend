@@ -25,18 +25,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Document name form. */
   documentNameForm: FormGroup;
 
-  /** Document priority for document info modal. */
-  documentPriority = 0;
-
-  /** The time at which this document was most recently flowed as an ISO string date. */
-  flowedTimeUTC = '';
-
-  /** The time at which this document was last updated as an ISO string date. */
-  lastUpdatedUTC = '';
-
-  /** Name of the header. */
-  name = '';
-
   constructor(
     private fb: FormBuilder,
     private utcTimeConversion: UtcTimeConversion,
@@ -48,13 +36,11 @@ export class DocumentInfoHeaderComponent implements OnInit {
   }
 
   /**
-   * Gets info about the initial values.
+   * Disable document input element in station edit mode.
    */
   ngOnInit(): void {
-    this.documentPriority = this.getDocumentPriority(this.documentInformation);
-    this.flowedTimeUTC = this.getFlowedTimeUTC(this.documentInformation);
-    this.lastUpdatedUTC = this.getLastUpdatedUTC(this.documentInformation);
-    this.name = this.getName(this.documentInformation);
+    this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
+    this.documentNameForm.controls['name'].setValue(this.documentName);
   }
 
   /**
@@ -70,55 +56,43 @@ export class DocumentInfoHeaderComponent implements OnInit {
     );
   }
 
-  /**
-   * Get document priority from document modal and 0 if station modal.
+  /** Station or Document looking at document header.
    *
-   * @param obj Object set from document or station modal.
-   * @returns Priority of the document.
+   * @returns Station edit mode or document mode. TRUE if station mode and FALSE if document mode.
    */
-  private getDocumentPriority(obj: DocumentStationInformation | StationInformation): number {
-    if ((obj as DocumentStationInformation).documentPriority) {
-      return (obj as DocumentStationInformation).documentPriority;
-    }
-    return 0;
+  get isStation(): boolean {
+    return !('documentName' in this.documentInformation);
   }
 
-  /**
-   * Get FlowedTime in UTC from document modal.
+  /** Get Document Priority of document from DocumentStationInformation based on type.
    *
-   * @param obj Object set from document or station modal.
-   * @returns FlowedTime to display.
+   * @returns The Document Priority.
    */
-   private getFlowedTimeUTC(obj: DocumentStationInformation | StationInformation): string {
-    if ((obj as DocumentStationInformation).flowedTimeUTC) {
-      return (obj as DocumentStationInformation).flowedTimeUTC;
-    }
-    return '';
+  get documentPriority(): number {
+    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
   }
 
-  /**
-   * Get lastUpdated time in UTC from document modal.
+  /** Get flowed time UTC of document from DocumentStationInformation based on type.
    *
-   * @param obj Object set from document or station modal.
-   * @returns FlowedTime to display.
+   * @returns The Flowed time UTC.
    */
-   private getLastUpdatedUTC(obj: DocumentStationInformation | StationInformation): string {
-    if ((obj as DocumentStationInformation).lastUpdatedUTC) {
-      return (obj as DocumentStationInformation).lastUpdatedUTC;
-    }
-    return '';
+  get flowedTimeUTC(): string {
+    return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
   }
 
-  /**
-   * Get name from document and station info modal.
+  /** Get last updated UTC of document from DocumentStationInformation based on type.
    *
-   * @param obj Object set from document or station modal.
-   * @returns Name to display in header.
+   * @returns The Last Updated UTC.
    */
-   private getName(obj: DocumentStationInformation | StationInformation): string {
-    if ((obj as DocumentStationInformation).documentName) {
-      return (obj as DocumentStationInformation).documentName;
-    }
-    return '';
+  get lastUpdatedUTC(): string {
+    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
+  }
+
+  /** Get name of document from DocumentStationInformation based on type.
+   *
+   * @returns The Document Name.
+   */
+  get documentName(): string {
+    return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 }
