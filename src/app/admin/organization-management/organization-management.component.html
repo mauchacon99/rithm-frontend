@@ -1,21 +1,13 @@
 <div class="container">
   <div class="row justify-content-center">
+
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
       <div class="row">
-        <h3 class="col-sm-12 col-md-9 mb-4 mb-sm-2">Manage My Organization</h3>
-        <a
-          href="#"
-          class="
-            col-sm-12 col-md-3
-            mb-sm-2
-            mt-md-2
-            d-md-inline-flex
-            justify-content-md-end
-          "
-        >
+        <h3 class="col-12 col-md-9 pl-0 pt-1">Manage My Organization</h3>
+        <button mat-button color="accent" class="col-12 col-md-3 p-0">
           <i class="fas fa-link"></i>
           Invite members
-        </a>
+        </button>
       </div>
       <div class="row no-gutters">
         <div class="row-header col-sm-3">Name</div>
@@ -30,20 +22,9 @@
           <button mat-icon-button><i class="fas fa-times"></i></button>
         </div>
       </div>
-      <app-loading-indicator
-        class="loader"
-        *ngIf="isLoading"
-      ></app-loading-indicator>
-      <div
-        *ngIf="!isLoading && totalNumUsers > 0"
-        class="row no-gutters justify-content-center"
-      >
-        <app-pagination
-          (currentPageNum)="getUsers($event)"
-          [numItems]="totalNumUsers"
-          [activeNum]="activeNum"
-        >
-        </app-pagination>
+      <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+      <div *ngIf="!isLoading && totalNumUsers > 0" class="row no-gutters justify-content-center">
+        <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [activeNum]="activeNum"></app-pagination>
       </div>
     </mat-card>
   </div>
