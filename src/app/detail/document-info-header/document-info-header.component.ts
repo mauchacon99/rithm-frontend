@@ -19,9 +19,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Document information object passed from parent. */
   @Input() documentInformation!: DocumentStationInformation | StationInformation;
 
-  /** Station or Document looking at a document. */
-  @Input() isStation!: boolean;
-
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
@@ -57,6 +54,14 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
+  }
+
+  /** Station or Document looking at document header.
+   *
+   * @returns Station edit mode or document mode. TRUE if station mode and FALSE if document mode.
+   */
+  get isStation(): boolean {
+    return !('documentName' in this.documentInformation);
   }
 
   /** Get Document Priority of document from DocumentStationInformation based on type.

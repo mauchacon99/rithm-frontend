@@ -20,7 +20,7 @@
               <mat-tab-group mat-align-tabs="center">
                 <mat-tab label="Document">
                   <ng-template matTabContent>
-                    <app-document-info-header [documentInformation]="documentInformation" [isStation]="true"></app-document-info-header>
+                    <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
                     <app-station-template [stationFields]="documentInformation.questions"></app-station-template>
                     <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                   </ng-template>
