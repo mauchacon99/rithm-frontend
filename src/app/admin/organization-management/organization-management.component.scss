@@ -11,9 +11,23 @@
     h3 {
       color: $accent-blue;
     }
-  }
-}
 
-.row-header {
-  color: $accent-blue;
+    div.row {
+      div.row-header {
+        color: $accent-blue;
+      }
+
+      div button {
+        color: $secondary-gray;
+
+        i {
+          font-size: 1.25rem;
+        }
+
+        &:hover {
+          color: $warning-red;
+        }
+      }
+    }
+  }
 }
