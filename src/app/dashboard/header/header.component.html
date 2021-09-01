@@ -1,4 +1,21 @@
-<div class="row px-3 px-lg-0">
+<mat-card class="w-full">
+  <div class="flex flex-wrap lg:justify-between">
+    <div>
+      <h4>
+        Welcome, {{user?.firstName}} {{user?.lastName}}
+      </h4>
+      <p class="welcome-status">
+        You currently have <strong>{{numPrevDocs}} previously started document<span *ngIf="numPrevDocs !== 1">s</span></strong> and you're a member of
+        <strong>{{numStations}} station<span *ngIf="numStations !== 1">s</span></strong>.
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-2 buttons lg:self-center">
+      <button mat-stroked-button color="accent" class="mx-2">New Document</button>
+      <button mat-raised-button color="accent" class="mx-2">Start Working</button>
+    </div>
+  </div>
+</mat-card>
+<!-- <div class="row px-3 px-lg-0">
   <mat-card [class.load-spin]="isLoading" class="col-12">
     <div *ngIf="!isLoading" class="row no-gutters m-0">
       <div class="col-lg-8 col-md-12">
@@ -17,4 +34,4 @@
     </div>
     <app-loading-indicator [diameter]="46" class="loader" *ngIf="isLoading"></app-loading-indicator>
   </mat-card>
-</div>
+</div> -->
