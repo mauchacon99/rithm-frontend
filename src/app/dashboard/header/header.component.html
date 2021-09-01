@@ -1,5 +1,5 @@
-<mat-card class="w-full">
-  <div class="flex flex-wrap lg:justify-between">
+<mat-card class="w-full relative">
+  <div [ngClass]="{'invisible': !isLoading}" class="flex flex-wrap lg:justify-between">
     <div>
       <h4>
         Welcome, {{user?.firstName}} {{user?.lastName}}
@@ -13,6 +13,9 @@
       <button mat-stroked-button color="accent" class="mx-2">New Document</button>
       <button mat-raised-button color="accent" class="mx-2">Start Working</button>
     </div>
+  </div>
+  <div class="w-full h-full absolute top-0 left-0 flex">
+    <app-loading-indicator [diameter]="46" class="m-auto self-center" *ngIf="!isLoading"></app-loading-indicator>
   </div>
 </mat-card>
 <!-- <div class="row px-3 px-lg-0">
