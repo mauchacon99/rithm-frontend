@@ -1,21 +1,21 @@
-.page {
-  height: 100%;
+// .page {
+//   height: 100%;
 
-  .container {
-    .row {
-      margin-top: 30px;
+//   .container {
+//     .row {
+//       margin-top: 30px;
 
-      app-previously-started-documents,
-      app-priority-queue {
-        @media screen and (max-width: 991px) {
-          padding-left: 0;
-          padding-right: 0;
+//       app-previously-started-documents,
+//       app-priority-queue {
+//         @media screen and (max-width: 991px) {
+//           padding-left: 0;
+//           padding-right: 0;
 
-          &:last-child {
-            margin-top: 30px;
-          }
-        }
-      }
-    }
-  }
-}
+//           &:last-child {
+//             margin-top: 30px;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
