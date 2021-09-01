@@ -15,7 +15,7 @@
   <button id="notification-button" (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button class="group mr-4">
     <i class="fas fa-bell text-white group-hover:text-secondary-100"></i>
   </button>
-  <div [matMenuTriggerFor]="userMenu" class="userMenu hidden md:block bg-white">
+  <div [matMenuTriggerFor]="userMenu" class="userMenu hidden md:block bg-white rounded-full mr-6">
     <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [navProfile]="true" [hideToolTip]="true"></app-user-avatar>
   </div>
 </nav>
