@@ -24,14 +24,28 @@ export class AuthGuard implements CanActivate {
   async canActivate(): Promise<boolean> {
     // If logged in, return true
     if (await this.userService.isSignedIn()) {
+      if (!this.userService.user) {
+        this.signOut('User object destroyed');
+        return false;
+      }
       return true;
     } else {
-      this.userService.signOut();
-      this.popupService.alert({
-        title: 'Session Expired',
-        message: 'You\'ll need to sign in again before you can view that page.'
-      });
+      this.signOut('Session Expired');
       return false;
     }
   }
+
+  /**
+   * User should sign out and display error message in popup alert.
+   *
+   * @param title Title for popup alert.
+   */
+  signOut(title: string): void {
+    this.userService.signOut();
+    this.popupService.alert({
+      title: title,
+      message: 'You\'ll need to sign in again before you can view that page.'
+    });
+  }
+
 }
