@@ -2,51 +2,25 @@
 
 nav {
   height: 65px;
-  align-items: center;
   z-index: 2;
 
   ul {
-    height: 100%;
-
     li {
-      list-style: none;
       float: left;
       min-width: 100px;
-      padding: 23px 10px;
       text-align: center;
-      height: 100%;
 
       &.active {
         border-bottom: solid 3px #fff;
         padding-bottom: 20px;
         font-weight: 600;
       }
-
-      a {
-        color: #fff;
-        text-decoration: none;
-        text-transform: capitalize;
-      }
     }
   }
 
   button {
-    width: 40px;
-    text-align: center;
-
-    @media screen and (max-width: 767px) {
-      margin: 0 10px;
-    }
-
     i {
-      color: #fff;
       font-size: fixed-font-size(24);
-    }
-
-    &:hover {
-      i {
-        color: map-get($secondary-gray-palette, 100);
-      }
     }
   }
 
