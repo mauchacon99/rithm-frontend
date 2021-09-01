@@ -13,6 +13,7 @@ import { StationModule } from './station/station.module';
 import { SettingsModule } from './settings/settings.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     EntryModule,
     DashboardModule,
     MapModule,
+    AdminModule,
     DocumentModule,
     StationModule,
     SettingsModule,

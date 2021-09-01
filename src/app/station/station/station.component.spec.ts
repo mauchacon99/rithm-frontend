@@ -31,6 +31,7 @@ describe('StationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationComponent,
+        MockComponent(StationInfoHeaderComponent),
         MockComponent(SubHeaderComponent),
         MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
@@ -62,6 +63,53 @@ describe('StationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationComponent);
     component = fixture.componentInstance;
+    component.stationInformation = {
+      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'Dry Goods & Liquids',
+      instructions: '',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        stationName: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      stationPriority: 2
+    };
     fixture.detectChanges();
   });
 
@@ -69,10 +117,10 @@ describe('StationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add a question', () => {
+  xit('should add a question', () => {
     const fieldType: QuestionFieldType = QuestionFieldType.ShortText;
-    expect(component.fakeFields.length === 4).toBeFalse();
+    expect(component.stationInformation.questions.length === 4).toBeFalse();
     component.addQuestion(fieldType);
-    expect(component.fakeFields.length === 4).toBeTrue();
+    expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 });

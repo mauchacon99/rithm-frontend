@@ -59,7 +59,7 @@ export class CommentDrawerComponent implements OnInit {
       .subscribe((drawerData) => {
         const info = drawerData as DocumentStationInformation;
         if (info) {
-          this.stationId = info.stationId;
+          this.stationId = info.stationRithmId;
           this.documentId = info.documentRithmId;
           this.getDocumentComments(true);
         }
