@@ -294,7 +294,7 @@ describe('UserService', () => {
     const expectedResponse: OrganizationUsers = {
       totalOrgUsers: 20,
       currentPageNum: pageNum,
-      userPerPage: 10,
+      userPerPage: 15,
       users: [{
         rithmId: '123',
         firstName: 'Worker',
@@ -334,7 +334,7 @@ describe('UserService', () => {
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/organization/getusersforOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=10`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=${expectedResponse.userPerPage}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);

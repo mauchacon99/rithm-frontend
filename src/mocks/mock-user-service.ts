@@ -24,7 +24,7 @@ export class MockUserService {
     notificationSettings: null,
     createdDate: '1/2/34',
     role: null,
-    organizations: []
+    organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
   };
 
   /**
@@ -282,6 +282,17 @@ export class MockUserService {
       };
       return of(orgUsers).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Removes a user from the roster of an organization.
+   *
+   * @param organizationRithmId The Rithm Id of the organization.
+   * @param userRithmId The Rithm Id of the user being removed.
+   * @returns An empty observable.
+   */
+  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    return of().pipe(delay(1000));
   }
 
 }

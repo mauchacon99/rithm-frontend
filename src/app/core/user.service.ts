@@ -268,12 +268,30 @@ export class UserService {
    * @param pageNum The desired page number of result.
    * @returns An Users list observable.
    */
-  getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
+   getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
     const params = new HttpParams()
       .set('rithmid', organizationId)
       .set('pageNum', pageNum)
-      .set('usersPerPage', 10);
-    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}/userservice/api/organization/getusersforOrganization`, { params });
+      .set('usersPerPage', 15);
+    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization`, { params });
+  }
+
+  /**
+   * Removes a user from the roster of an organization.
+   *
+   * @param organizationRithmId The Rithm Id of the organization.
+   * @param userRithmId The Rithm Id of the user being removed.
+   * @returns An empty observable.
+   */
+  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    return this.http.delete<void>(`${environment.baseApiUrl}/userservice/api/Organization/RemoveUsersFromOrganizations`, {
+      body: [
+        {
+         organizationRithmId,
+         userRithmId
+        }
+      ]
+    });
   }
 
 }

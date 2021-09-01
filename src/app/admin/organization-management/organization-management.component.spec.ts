@@ -1,31 +1,34 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { MockErrorService, MockUserService } from 'src/mocks';
+import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
+import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
 describe('OrganizationManagementComponent', () => {
   let component: OrganizationManagementComponent;
   let fixture: ComponentFixture<OrganizationManagementComponent>;
+  let removeUserSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         OrganizationManagementComponent,
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
+        MockComponent(PaginationComponent)
       ],
       imports: [
-        MatCardModule,
-        SharedModule
+        MatCardModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();
@@ -39,6 +42,29 @@ describe('OrganizationManagementComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get an array of users', fakeAsync(() => {
+    component.getUsers(1);
+
+    tick(1000);
+    expect(component.users.length).toEqual(3);
+  }));
+
+  it('', () => {
+    expect(component.removeUser('1234')).toBeFalsy();
+  });
+
+  it('should make a userService call to remove a user', () => {
+    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    component.removeUser('1234');
+    expect(removeUserSpy).toHaveBeenCalled();
+  });
+
+  it('should not make a userService call when id is same as current user', () => {
+    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    component.removeUser('123');
+    expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });
 
   it('should get users of current page', () => {
