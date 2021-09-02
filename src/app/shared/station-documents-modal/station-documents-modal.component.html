@@ -2,12 +2,12 @@
   <h4 class="text-center">{{ modalData.stationName }}</h4>
   <div class="doc-container">
     <span *ngIf="!isLoading && totalNumDocs === 0">
-      <div class="no-documents">
+      <div class="flex content-start justify-around items-center h-full">
         There are no documents in this station
       </div>
     </span>
     <span *ngIf="!isLoading && totalNumDocs > 0">
-      <p class="warn-text text-center" *ngIf="userType === userTypeEnum.None">You are not a part of this station.</p>
+      <p class="text-error-700 text-center" *ngIf="userType === userTypeEnum.None">You are not a part of this station.</p>
       <div class="row no-gutters">
         <div class="col-9 col-md-5 col-lg-4 col-xl-5 pl-5">
           <strong>Document</strong>
