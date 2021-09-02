@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { OrganizationUsers } from 'src/models';
 
 /**
- * Mocks methods of the `StationService`.
+ * Mocks methods of the `OrganizationService`.
  */
 export class MockOrganizationService {
 
