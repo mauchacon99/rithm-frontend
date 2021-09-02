@@ -19,6 +19,9 @@ export class OrganizationManagementComponent implements OnInit {
   /** The users of the organization. */
   users: User[] = [];
 
+  /** The current signed in user. */
+  currentUser!: User;
+
   /** The current page number. */
   activeNum = 1;
 
@@ -39,6 +42,7 @@ export class OrganizationManagementComponent implements OnInit {
    * Gets the first page of users on load.
    */
   ngOnInit(): void {
+    this.currentUser = this.userService.user;
     this.getUsers(this.activeNum);
   }
 
@@ -71,26 +75,33 @@ export class OrganizationManagementComponent implements OnInit {
   /**
    * Removes a user from the organization.
    *
-   * @param userRithmId The ID of the selected user to remove.
+   * @param user The selected user to remove.
    */
-  removeUser(userRithmId: string): void {
-    if (userRithmId === this.userService.user.rithmId) {
+  async removeUser(user: User): Promise<void> {
+    if (user.rithmId === this.currentUser.rithmId) {
       this.popupService.notify('Cannot remove self from organization.');
     } else {
-      this.isLoading = true;
-      this.organizationService.removeUserFromOrganization(this.userService.user?.organizations[0], userRithmId)
-        .pipe(first())
-        .subscribe(() => {
-          this.isLoading = false;
-          this.popupService.notify('User removed from organization.');
-        }, (error: unknown) => {
-          this.isLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
-          );
-        });
+      const confirm = await this.popupService.confirm({
+        title: 'Remove User',
+        message: `Remove ${user.firstName} ${user.lastName} from the organization?`,
+        okButtonText: 'Remove',
+      });
+      if (confirm) {
+        this.isLoading = true;
+        this.organizationService.removeUserFromOrganization(this.userService.user?.organizations[0], user.rithmId)
+          .pipe(first())
+          .subscribe(() => {
+            this.popupService.notify('User removed from organization.');
+            this.getUsers(this.activeNum);
+          }, (error: unknown) => {
+            this.isLoading = false;
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error,
+              true
+            );
+          });
+      }
     }
   }
 }
