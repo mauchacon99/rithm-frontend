@@ -1,4 +1,27 @@
-<mat-card>
+<mat-card class="w-full mt-5">
+  <div class="grid grid-cols-4">
+    <ng-container *ngFor="let document of documents">
+      <div>
+        <div class="priority rounded-full bg-accent-400 text-white">
+          {{ document?.priority }}
+        </div>
+        {{ document?.documentName }}
+      </div>
+      <div>
+        {{ document?.stationName }}
+      </div>
+      <div>
+        {{ ((getElapsedTime(document.flowedTimeUTC) === 'Unknown')) ? '' : getElapsedTime(document.flowedTimeUTC)  + ' in station'}}
+      </div>
+      <div>
+        <button mat-stroked-button color="accent">
+          Continue
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</mat-card>
+<!-- <mat-card>
   <span *ngIf="!isLoading">
     <div *ngFor="let document of documents" class="row no-gutters">
       <div
@@ -29,4 +52,4 @@
     </span>
   </span>
   <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-</mat-card>
+</mat-card> -->
