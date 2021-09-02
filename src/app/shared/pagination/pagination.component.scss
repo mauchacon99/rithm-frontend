@@ -38,15 +38,6 @@ p {
 
     &.active {
       background: map-get($secondary-gray-palette, 100);
-
-      &:hover {
-        background: map-get($secondary-gray-palette, 200);
-      }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background: map-get($secondary-gray-palette, 50);
     }
   }
 }
