@@ -1,5 +1,5 @@
 <mat-card class="w-full mt-5">
-  <div class="grid grid-cols-4">
+  <div class="grid" [ngClass]="{'grid-cols-4': !isPriority, 'grid-cols-3': isPriority}">
     <ng-container *ngFor="let document of documents">
       <div class="flex items-center my-3">
         <div class="priority rounded-full bg-accent-400 text-white text-center float-left pt-1 mr-2">
@@ -13,7 +13,7 @@
       <div class="flex items-center">
         {{ ((getElapsedTime(document.flowedTimeUTC) === 'Unknown')) ? '' : getElapsedTime(document.flowedTimeUTC)  + ' in station'}}
       </div>
-      <div class="flex items-center justify-end">
+      <div class="flex items-center justify-end" [ngClass]="{'hidden': isPriority}">
         <button mat-stroked-button color="accent">
           Continue
         </button>
