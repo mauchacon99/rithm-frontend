@@ -1,13 +1,13 @@
 @import 'variables';
 
-.priority {
-  width: 30px;
-  height: 30px;
-}
+mat-card {
+  height: 252px;
 
-// mat-card {
-//   margin-top: 10px;
-//   height: 252px;
+  .priority {
+    width: 30px;
+    height: 30px;
+  }
+}
 
 //   div.row {
 //     margin-top: 10px;
