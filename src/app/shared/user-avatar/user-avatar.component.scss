@@ -1,1 +1,8 @@
 // styles here
+.navIcon {
+  @apply rounded-full h-10 w-10 text-center text-base font-semibold leading-10 text-white bg-secondary-500 border border-secondary-200 hover:bg-secondary-700;
+}
+
+.otherIcon {
+  @apply rounded-full h-7 w-7 text-center text-xs font-semibold leading-7 text-white bg-secondary-500 border hover:bg-secondary-700;
+}
