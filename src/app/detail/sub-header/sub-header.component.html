@@ -1,4 +1,17 @@
-<div>
+<div class="grid grid-cols-3 bg-secondary-400 py-1">
+  <div class="col-start-2 text-center text-white">
+    <h3>{{ title }}</h3>
+  </div>
+  <div class="justify-self-end px-5">
+    <button class="group" [ngClass]="{'active': activeItem === 'comments'}" id="comment-button" mat-icon-button (click)="toggleDrawer('comments')">
+      <i class="far fa-comment-alt text-white group-hover:text-accent-100"></i>
+    </button>
+    <button class="group" [ngClass]="{'active': activeItem === 'history'}" id="history-button" mat-icon-button (click)="toggleDrawer('history')">
+      <i class="fas fa-history text-white group-hover:text-accent-100"></i>
+    </button>
+  </div>
+</div>
+<!-- <div>
   <div class="items"></div>
   <div class="items title">
     <h3 class="d-block">
@@ -13,4 +26,4 @@
       <i class="fas fa-history"></i>
     </button>
   </div>
-</div>
+</div> -->
