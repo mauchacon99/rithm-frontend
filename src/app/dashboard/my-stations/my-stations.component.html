@@ -1,5 +1,13 @@
 <section>
   <h4>My Stations</h4>
+  <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+    <app-station-card *ngFor="let station of stations" [station]="station" class=""></app-station-card>
+  </div>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+</section>
+
+<!-- <section>
+  <h4>My Stations</h4>
   <div *ngIf="!isLoading" class="row p-0">
     <app-station-card *ngFor="let station of stations" [station]="station"
       class="col-xl-2 col-lg-3 col-md-4 col-sm-12"></app-station-card>
@@ -10,4 +18,4 @@
     </span>
   </div>
   <app-loading-indicator class="loader mt-5" *ngIf="isLoading"></app-loading-indicator>
-</section>
+</section> -->
