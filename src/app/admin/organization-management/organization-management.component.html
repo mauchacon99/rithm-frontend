@@ -10,7 +10,7 @@
         </button>
       </div>
 
-      <div class="row mb-1">
+      <div *ngIf="!isLoading" class="row mb-1">
         <div class="row-header col-9 col-md-4">Name</div>
         <div class="row-header d-none d-md-block col-6">Email</div>
         <div class="row-header col-3 col-md-2 p-0">Admin</div>
