@@ -23,15 +23,7 @@ module.exports = {
       primary: colors.primary,
       secondary: colors.secondary,
       accent: colors.accent,
-      error: colors.error,
-      // gray: colors.coolGray,
-      // red: colors.red,
-      // yellow: colors.amber,
-      // green: colors.emerald,
-      // blue: colors.blue,
-      // indigo: colors.indigo,
-      // purple: colors.violet,
-      // pink: colors.pink,
+      error: colors.error
     },
     spacing: {
       px: '1px',
