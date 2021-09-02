@@ -7,23 +7,27 @@
 /// Used on Worker Roster, Documents, the Documents modal, and Notifications.
 /// 30px circle in our secondary color.
 .circle-30-secondary {
+  /* stylelint-ignore-next-line */
   @apply rounded-full h-7 w-7 text-center text-xs font-semibold leading-7 text-white bg-secondary-500 hover:bg-secondary-700;
 }
 
 /// Used on Priority.
 /// 30px circle in our accent color.
 .circle-30-accent {
+  /* stylelint-ignore-next-line */
   @apply rounded-full h-7 w-7 text-center text-sm font-semibold leading-7 text-white bg-accent-500;
 }
 
 /// Used as the User Avatar and on the Worker Roster Modal
 /// 40px circle in our secondary color.
 .circle-40-secondary {
+  /* stylelint-ignore-next-line */
   @apply rounded-full h-10 w-10 text-center text-base font-semibold leading-10 text-white bg-secondary-500 border border-secondary-200 hover:bg-secondary-700;
 }
 
 /// Badges in the accent color, commonly used on the user avatar/profile icon.
 .badge-accent {
+  /* stylelint-ignore-next-line */
   @apply rounded-full h-4 w-4 text-center leading-4 text-white bg-accent-500;
 
   font-size: fixed-font-size(8);
