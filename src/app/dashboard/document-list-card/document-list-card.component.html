@@ -1,5 +1,5 @@
 <mat-card class="w-full mt-5">
-  <div class="grid lg:grid-cols-3" [ngClass]="{'grid-cols-2 xl:grid-cols-4': !isPriority, 'grid-cols-1 md:grid-cols-2': isPriority}">
+  <div *ngIf="!isLoading" class="grid lg:grid-cols-3" [ngClass]="{'grid-cols-2 xl:grid-cols-4': !isPriority, 'grid-cols-1 md:grid-cols-2': isPriority}">
     <ng-container *ngFor="let document of documents">
       <div class="flex items-center my-3">
         <div class="priority rounded-full bg-accent-400 text-white text-center float-left pt-1 mr-2">
@@ -19,6 +19,9 @@
         </button>
       </div>
     </ng-container>
+  </div>
+  <div class="w-full h-full absolute top-0 left-0 flex">
+    <app-loading-indicator class="m-auto self-center" *ngIf="isLoading"></app-loading-indicator>
   </div>
 </mat-card>
 <!-- <mat-card>
