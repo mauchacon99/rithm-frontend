@@ -44,6 +44,15 @@ p {
       }
     }
 
+    &.de-active {
+      background: map-get($secondary-gray-palette, 100);
+
+      &:hover {
+        cursor: initial;
+        background: map-get($secondary-gray-palette, 100);
+      }
+    }
+
     &:hover {
       cursor: pointer;
       background: map-get($secondary-gray-palette, 50);
