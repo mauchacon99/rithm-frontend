@@ -2,11 +2,13 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { OrganizationService } from 'src/app/core/organization.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
+import { MockOrganizationService } from 'src/mocks/mock-organization-service';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
@@ -52,7 +54,8 @@ describe('OrganizationManagementComponent', () => {
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: OrganizationService, useClass: MockOrganizationService }
       ]
     })
       .compileComponents();
@@ -76,13 +79,13 @@ describe('OrganizationManagementComponent', () => {
   }));
 
   it('should make a userService call to remove a user', async () => {
-    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
     await component.removeUser(TEST_USERS[0]);
     expect(removeUserSpy).toHaveBeenCalled();
   });
 
   it('should not make a userService call when id is same as current user', async () => {
-    removeUserSpy = spyOn(TestBed.inject(UserService), 'removeUserFromOrganization').and.callThrough();
+    removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
     await component.removeUser(TEST_USERS[1]);
     expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });

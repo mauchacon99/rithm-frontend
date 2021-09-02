@@ -4,6 +4,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
 import { User } from 'src/models';
+import { OrganizationService } from 'src/app/core/organization.service';
 
 /**
  * Component for managing the users of an organization.
@@ -15,7 +16,7 @@ import { User } from 'src/models';
 })
 export class OrganizationManagementComponent implements OnInit {
 
- /** The users of the organization. */
+  /** The users of the organization. */
   users: User[] = [];
 
   /** The current signed in user. */
@@ -34,6 +35,7 @@ export class OrganizationManagementComponent implements OnInit {
     private userService: UserService,
     private errorService: ErrorService,
     private popupService: PopupService,
+    private organizationService: OrganizationService
   ) { }
 
   /**
@@ -53,7 +55,7 @@ export class OrganizationManagementComponent implements OnInit {
     this.activeNum = pageNum;
     this.isLoading = true;
     const organizationId: string = this.userService.user?.organizations[0];
-    this.userService.getUsersForOrganization(organizationId, pageNum)
+    this.organizationService.getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
       .subscribe((orgUsers) => {
         if (orgUsers) {
@@ -86,7 +88,7 @@ export class OrganizationManagementComponent implements OnInit {
       });
       if (confirm) {
         this.isLoading = true;
-        this.userService.removeUserFromOrganization(this.userService.user?.organizations[0], user.rithmId)
+        this.organizationService.removeUserFromOrganization(this.userService.user?.organizations[0], user.rithmId)
           .pipe(first())
           .subscribe(() => {
             this.popupService.notify('User removed from organization.');
