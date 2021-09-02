@@ -6,7 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -261,37 +261,5 @@ export class UserService {
   //     notificationSettings);
   // }
 
-  /**
-   * Gets a List of users belongs to an organization.
-   *
-   * @param organizationId The id of the organization.
-   * @param pageNum The desired page number of result.
-   * @returns An Users list observable.
-   */
-   getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
-    const params = new HttpParams()
-      .set('rithmid', organizationId)
-      .set('pageNum', pageNum)
-      .set('usersPerPage', 15);
-    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}/userservice/api/Organization/GetUsersForOrganization`, { params });
-  }
-
-  /**
-   * Removes a user from the roster of an organization.
-   *
-   * @param organizationRithmId The Rithm Id of the organization.
-   * @param userRithmId The Rithm Id of the user being removed.
-   * @returns An empty observable.
-   */
-  removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}/userservice/api/Organization/RemoveUsersFromOrganizations`, {
-      body: [
-        {
-         organizationRithmId,
-         userRithmId
-        }
-      ]
-    });
-  }
 
 }

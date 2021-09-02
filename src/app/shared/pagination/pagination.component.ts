@@ -86,9 +86,6 @@ export class PaginationComponent implements OnInit {
    * @param pageNum The page to go to.
    */
   clickPage(pageNum: number): void {
-    if (this.pagesArr.length === 1 || (pageNum === this.activeNum)) {
-      return;
-    }
     this.activeNum = pageNum;
 
     if (this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.pagesArr.length > RESET_PAGE_NUM_LIMIT) {
