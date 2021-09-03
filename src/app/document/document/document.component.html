@@ -7,11 +7,22 @@
   <mat-drawer-content>
     <div class="grid grid-cols-12">
       <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="col-span-2"></app-connected-station-pane>
-      <div class="col-span-8 bg-white px-5 pt-12">
+      <div class="col-span-8 bg-white px-5 py-12">
         <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
           <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
           <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
           <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
+          <div class="w-full fixed z-10 bottom-0 left-0">
+            <div class="grid grid-cols-12">
+              <div class="col-start-3 col-span-8 flex bg-white px-5">
+                <div class="flex-grow">
+                  <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                  <button mat-stroked-button color="accent" class="mx-2">Save</button>
+                </div>
+                <button mat-raised-button color="accent" class="">Flow</button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
       <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="col-span-2"></app-connected-station-pane>
