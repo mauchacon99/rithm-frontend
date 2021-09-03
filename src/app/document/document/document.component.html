@@ -14,12 +14,21 @@
           <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
-              <div class="col-start-3 col-span-8 flex bg-white px-5">
+              <div class="col-start-3 col-span-8 flex bg-white px-5 py-2 mat-elevation-z4">
                 <div class="flex-grow">
                   <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
                   <button mat-stroked-button color="accent" class="mx-2">Save</button>
                 </div>
                 <button mat-raised-button color="accent" class="">Flow</button>
+              </div>
+              <div class="relative">
+                <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
+                  <g id="escalation_line" data-name="escalation_line" transform="translate(1)">
+                    <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
+                      stroke-linecap="round" stroke-width="2" />
+                  </g>
+                </svg>
+                <i class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500" matTooltip="Escalate Document"></i>
               </div>
             </div>
           </div>
