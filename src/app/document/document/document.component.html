@@ -1,8 +1,26 @@
-<!-- <div class="sub-header"> -->
-  <app-sub-header class="fixed z-10 w-full" [itemInfo]="documentInformation"></app-sub-header>
-<!-- </div> -->
-
+<app-sub-header class="fixed z-10 w-full" [itemInfo]="documentInformation"></app-sub-header>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #detailDrawer mode="over" position="end">
+    <app-detail-drawer></app-detail-drawer>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="grid grid-cols-12">
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="col-span-2"></app-connected-station-pane>
+      <div class="col-span-8">
+        <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
+          <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
+          <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
+          <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
+        </form>
+      </div>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="col-span-2"></app-connected-station-pane>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+
+<!-- <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
   <mat-drawer #detailDrawer mode="over" position="end">
     <app-detail-drawer></app-detail-drawer>
   </mat-drawer>
@@ -48,5 +66,5 @@
     </div>
   </mat-drawer-content>
 
-</mat-drawer-container>
+</mat-drawer-container> -->
 
