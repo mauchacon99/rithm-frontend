@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -20,6 +20,9 @@ export class UserService {
 
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
+
+  /** Data of signed-in user. */
+  userData$: ReplaySubject<unknown> = new ReplaySubject(1);
 
   constructor(
     private http: HttpClient,
@@ -53,6 +56,7 @@ export class UserService {
         this.accessToken = new AccessToken(response.accessToken);
         localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
         localStorage.setItem('user', JSON.stringify(response.user));
+        this.userData$.next(response.user);
         return response;
       })
     );
