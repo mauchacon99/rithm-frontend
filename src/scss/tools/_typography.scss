@@ -1,5 +1,5 @@
 /// Set global styles across the application
-
+/* stylelint-disable */
 @use '~@angular/material' as mat;
 
 @import '../helpers/functions';
@@ -276,51 +276,44 @@ html {
 
 /// Heading 1 font styles
 h1 {
-  font-size: font-calc(48);
-  font-weight: 300;
+  @apply font-light text-5xl;
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 2 font styles
 h2 {
-  font-size: font-calc(34);
-  font-weight: 300;
+  @apply font-light text-4xl;
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 3 font styles
 h3 {
-  font-size: font-calc(24);
-  font-weight: 400;
+  @apply font-normal text-2xl;
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 4 font styles
 h4 {
-  font-size: font-calc(20);
-  font-weight: 400;
+  @apply font-normal text-xl;
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 5 font styles
 h5 {
-  font-size: font-calc(18);
-  font-weight: 600;
+  @apply font-semibold text-lg;
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 6 font styles
 h6 {
-  font-size: font-calc(16);
-  font-weight: 600;
+  @apply font-semibold text-base;
   font-family: Montserrat, sans-serif;
 }
 
 /// Paragraph, span and div font styles
 p,
 div {
-  font-size: font-calc(16);
-  font-weight: 400;
+  @apply font-normal text-base;
   font-family: Montserrat, sans-serif;
 }
 
@@ -330,32 +323,27 @@ button {
 
 /// Add utility class for aligning text to center
 .text-center {
-  text-align: center !important;
+  @apply text-center !important;
 }
 
 /// Overline font styling.
 /// All caps 10px regular Montserrat.
 .overline {
+  @apply font-normal leading-none tracking-normal uppercase;
   font-size: font-calc(10) !important;
-  font-weight: 400;
   font-family: Montserrat, sans-serif;
-  text-transform: uppercase;
 }
 
 /// Subtitle Medium
 /// 14px Medium Montserrat
 .subtitle-medium {
-  font-size: font-calc(14);
-  font-weight: 600;
+  @apply font-semibold text-sm;
   font-family: Montserrat, sans-serif;
 }
 
 /// Body Small
 /// Regular 14px
 .body-small {
+  @apply font-normal text-sm leading-none tracking-normal
   font-family: Montserrat, sans-serif;
-  font-weight: 400;
-  font-size: font-calc(14);
-  line-height: 1;
-  letter-spacing: normal;
 }
