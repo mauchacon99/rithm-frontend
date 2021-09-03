@@ -10,7 +10,7 @@
   </div>
   <div class="col-span-12 lg:col-span-5 xl:col-span-4 lg:justify-self-end">
     <div class="flex">
-      <div class="mr-3">
+      <div *ngIf="type === 'worker'" class="mr-3">
         <p class="overline">supervisor roster</p>
         <app-roster
           [rosterMembers]="stationInformation.supervisors"
@@ -29,6 +29,11 @@
           [stationName]="stationName"
           [isWorker]="true"
           [editMode]="stationEditMode"></app-roster>
+      </div>
+      <div class="py-3 ml-3">
+        <button mat-mini-fab color="warn" *ngIf="!stationEditMode">
+          1
+        </button>
       </div>
     </div>
   </div>
