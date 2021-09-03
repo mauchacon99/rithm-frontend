@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { NotificationSettings, OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 
 /**
  * Mocks methods of the `UserService`.
@@ -23,7 +23,8 @@ export class MockUserService {
     isEmailVerified: true,
     notificationSettings: null,
     createdDate: '1/2/34',
-    role: null
+    role: null,
+    organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
   };
 
   /**

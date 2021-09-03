@@ -5,20 +5,22 @@
   <div class="col-12 col-md-10">
     <form [formGroup]="documentNameForm">
       <mat-form-field appearance="outline">
-        <mat-label>{{ documentInformation.documentName }}</mat-label>
-        <!-- TODO: Disable input if Station template designates it as not editable by worker -->
+        <mat-label>Document Name</mat-label>
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
+        <button *ngIf="isStation" mat-icon-button matSuffix class="icon icon-top settings">
+          <i class="fas fa-cog"></i>
+        </button>
       </mat-form-field>
     </form>
   </div>
-  <div class="offset-md-2"
+  <div *ngIf="!isStation" class="offset-md-2"
   [ngClass]="{
     'col-2': userType === userTypeEnum.Worker,
     'col-4 col-md-2': userType === userTypeEnum.Supervisor || userTypeEnum.Admin
   }">
   <!-- TODO: Admin and Supers need to be able to open the modal -->
     <div class="circle-30-accent priority" [ngClass]="{'mat-elevation-z4': userType === (userTypeEnum.Supervisor || userTypeEnum.Admin)}">
-      {{documentInformation.documentPriority}}
+      {{documentPriority}}
     </div>
     <button *ngIf="userType === userTypeEnum.Admin || userType === userTypeEnum.Supervisor" mat-icon-button>
       <!-- TODO: Display if not locked -->
@@ -27,21 +29,21 @@
       <!-- <i class="fas fa-lock"></i> -->
     </button>
   </div>
-  <div class="col-md-4 text-center meta-data"
+  <div *ngIf="!isStation" class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': userType === userTypeEnum.Worker,
     'col-8': userTypeEnum.Supervisor || userTypeEnum.Admin
   }">
     Time in station<br>
-    <span>{{ getElapsedTime(documentInformation.flowedTimeUTC) }}</span>
+    <span>{{ getElapsedTime(flowedTimeUTC) }}</span>
   </div>
-  <div class="col-md-4 text-center meta-data"
+  <div *ngIf="!isStation" class="col-md-4 text-center meta-data"
   [ngClass]="{
     'col-5': userType === userTypeEnum.Worker,
     'd-none d-md-block': userTypeEnum.Supervisor || userTypeEnum.Admin
   }">
     Last updated<br>
-    <span>{{ ((getElapsedTime(documentInformation.lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(documentInformation.lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(documentInformation.lastUpdatedUTC)) : getElapsedTime(documentInformation.lastUpdatedUTC)  + ' ago'}}</span>
+    <span>{{ ((getElapsedTime(lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(lastUpdatedUTC)) : getElapsedTime(lastUpdatedUTC)  + ' ago'}}</span>
   </div>
 </section>
 <div class="row no-gutters">

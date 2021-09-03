@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
+import { User } from 'src/models';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
 
@@ -62,6 +63,23 @@ export class AppComponent implements OnInit, OnDestroy {
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
+
+    this.userService.userData$
+      .pipe(first())
+      .subscribe((user) => {
+        console.log(user);
+        const info = user as User;
+        if (info && info.role) {
+          this.mobileLinks.splice(2, 0, {
+            name: 'admin',
+            icon: 'fa-user-cog',
+            link: 'admin'
+          });
+        }
+      }, (error: unknown) => {
+        console.error(error);
+      });
+
     this.sidenavDrawerService.setSidenav(this.sidenav);
     this.router.events.pipe(
       takeUntil(this.destroyed$)

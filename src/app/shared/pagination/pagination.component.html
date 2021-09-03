@@ -1,16 +1,17 @@
 <p class="d-none d-sm-none d-md-inline-block">
-  {{rangeArr[activeNum -1]}} of {{numDocs}}
+  {{rangeArr[activeNum -1]}} of {{numItems}}
 </p>
-<button [disabled]="pagesArr[0] === activeNum" class="left" (click)="changePage(prevPage)">
+<button mat-icon-button [disabled]="pagesArr[0] === activeNum" class="left" (click)="changePage(prevPage)">
   <i class="fas fa-chevron-left"></i>
 </button>
-<div *ngFor="let num of pagesArr | slice:startingPageNum:endingPageNum" (click)="clickPage(num)" class="num-container">
-  <button [ngClass]="{'active': activeNum === num}" class="page-num">
+<div *ngFor="let num of pagesArr | slice:startingPageNum:endingPageNum" class="num-container">
+  <button mat-icon-button [disabled]="pagesArr.length === 1 || num === activeNum" [ngClass]="{'active': activeNum === num}" class="page-num"
+    (click)="clickPage(num)">
     <span>
       {{ num }}
     </span>
   </button>
 </div>
-<button [disabled]="pagesArr[pagesArr.length -1] === activeNum" class="right" (click)="changePage(nextPage)">
+<button mat-icon-button [disabled]="pagesArr[pagesArr.length -1] === activeNum" class="right" (click)="changePage(nextPage)">
   <i class="fas fa-chevron-right"></i>
 </button>

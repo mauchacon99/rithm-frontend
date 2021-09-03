@@ -1,4 +1,4 @@
-import { QuestionList } from './question-list';
+import { Question } from './question';
 import { StationRosterMember } from './station-roster-member';
 
 /**
@@ -24,7 +24,7 @@ export interface DocumentStationInformation {
   lastUpdatedUTC: string;
 
   /** The global Rithm id for the station. */
-  stationId: string;
+  stationRithmId: string;
 
   /** The name of the station. */
   stationName: string;
@@ -35,21 +35,18 @@ export interface DocumentStationInformation {
   /** The general instructions for the whole station, if any. */
   stationInstruction: string;
 
-  /** The number of supervisors on the station for the document. */
-  numberOfSupervisors: number;
-
   /** The list of supervisors. */
-  supervisorRoster: StationRosterMember[];
-
-  /** The number of workers on the station for the document. */
-  numberOfWorkers: number;
+  supervisors: StationRosterMember[];
 
   /** The list of workers. */
-  workerRoster: StationRosterMember[];
+  workers: StationRosterMember[];
 
   /** The global Rithm ID for the document. */
   documentRithmId: string;
 
   /** The list of fields in the template area for the document/station. */
-  questions: QuestionList[];
+  questions: Question[];
+
+  /** The Instructions for the station. */
+  instructions: string;
 }

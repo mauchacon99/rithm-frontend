@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
@@ -34,7 +34,8 @@ import { StationTemplateComponent } from './station-template/station-template.co
     MatTabsModule,
     ReactiveFormsModule,
     ClickOutsideModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class StationModule { }

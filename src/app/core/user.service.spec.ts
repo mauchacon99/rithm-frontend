@@ -19,7 +19,8 @@ const testUser: User = {
   createdDate: new Date().toISOString(),
   rithmId: 'kj34k3jkj',
   notificationSettings: null,
-  role: null
+  role: null,
+  organizations: []
 };
 
 describe('UserService', () => {

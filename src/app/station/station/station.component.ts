@@ -4,7 +4,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation, Question, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -18,72 +18,27 @@ import { StationService } from 'src/app/core/station.service';
   styleUrls: ['./station.component.scss']
 })
 export class StationComponent implements OnInit {
-  /** Document form. */
-  documentForm: FormGroup;
-
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', {static: true})
+  @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
-  /** The information about the document within a station. */
-  documentInformation!: DocumentStationInformation;
+  /** Station form. */
+  stationForm: FormGroup;
 
-  /** Whether the request to get the document info is currently underway. */
-  documentLoading = false;
+  /** The information about the station. */
+  stationInformation!: StationInformation;
 
-  /** The list of stations that this document could flow to. */
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = false;
+
+  /** The list of stations that follow this station. */
   forwardStations: ConnectedStationInfo[] = [];
 
-  /** The list of stations that this document came from. */
+  /** The list of stations that precede this station. */
   previousStations: ConnectedStationInfo[] = [];
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
-
-  /** Fake fields, TODO: remove. */
-  fakeFields: Question[] = [
-    {
-      prompt: 'Instructions',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.LongText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Label',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false
-    },
-    {
-      prompt: 'Fake question 7',
-      instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Select,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      possibleAnswers: [
-        {
-          text: 'Required field',
-          default: true
-        }]
-    },
-  ];
 
   constructor(
     private stationService: StationService,
@@ -93,26 +48,9 @@ export class StationComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
-    this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control('')
+    this.stationForm = this.fb.group({
+      stationTemplateForm: this.fb.control('')
     });
-    this.documentInformation = {
-      stationInstruction: 'Instruction',
-      documentName: 'Metroid Dread',
-      documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      stationName: 'Development',
-      stationPriority: 2,
-      numberOfSupervisors: 7,
-      supervisorRoster: [],
-      numberOfWorkers: 7,
-      workerRoster: [],
-      questions: []
-    };
   }
 
   /**
@@ -143,7 +81,6 @@ export class StationComponent implements OnInit {
           this.handleInvalidParams();
         } else {
           this.getStationInfo(params.stationId);
-          // this.getConnectedStations('FCB90EFE-5188-43A9-8C42-2D74D9E81AB1', 'e5db902c-926f-428e-a89e-fbab43097f6c');
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -180,19 +117,18 @@ export class StationComponent implements OnInit {
    *
    * @param stationId The id of the station that the document is in.
    */
-  // eslint-disable-next-line
   private getStationInfo(stationId: string): void {
-    this.documentLoading = true;
+    this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe(() => {
-        // if (document) {
-        //   this.documentInformation = document;
-        // }
-        this.documentLoading = false;
+      .subscribe((stationInfo) => {
+        if (stationInfo) {
+          this.stationInformation = stationInfo;
+        }
+        this.stationLoading = false;
       }, (error: unknown) => {
         this.navigateBack();
-        this.documentLoading = false;
+        this.stationLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -200,12 +136,13 @@ export class StationComponent implements OnInit {
       });
   }
 
-  /** Adds selected fieldType to array.
+  /**
+   * Adds selected fieldType to field array.
    *
    * @param fieldType The field to add.
    */
   addQuestion(fieldType: QuestionFieldType): void {
-    this.fakeFields.push({
+    this.stationInformation.questions.push({
       prompt: 'Label',
       instructions: '',
       questionType: {
@@ -225,8 +162,7 @@ export class StationComponent implements OnInit {
    * @param documentId The id of the document for which to retrieve previous stations.
    * @param stationId The id of the station for which to retrieve forward stations.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private getConnectedStations(documentId: string, stationId: string): void {
+  // private getConnectedStations(documentId: string, stationId: string): void {
     // TODO: new request for connected stations?
 
     // this.connectedStationsLoading = true;
@@ -245,6 +181,5 @@ export class StationComponent implements OnInit {
     //       false
     //     );
     //   });
-  }
-
+  // }
 }
