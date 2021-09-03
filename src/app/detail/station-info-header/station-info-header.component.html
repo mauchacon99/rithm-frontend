@@ -3,14 +3,22 @@
     <h6>Station Information</h6>
   </div>
   <div class="col-span-12 lg:col-span-5 xl:col-span-6">
-    <span>{{stationName}}</span>
-    <button *ngIf="type === 'admin'" mat-icon-button color="accent">
-      <i class="fas fa-pen"></i>
-    </button>
+    <span *ngIf="!stationEditMode">
+      <span>{{stationName}}</span>
+      <button *ngIf="type === 'admin'" mat-icon-button color="accent">
+        <i class="fas fa-pen"></i>
+      </button>
+    </span>
+    <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Station Name</mat-label>
+        <input id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name" autocomplete="off">
+      </mat-form-field>
+    </form>
   </div>
   <div class="col-span-12 lg:col-span-5 xl:col-span-4 lg:justify-self-end">
     <div class="flex">
-      <div *ngIf="type === 'worker'" class="mr-3">
+      <div *ngIf="type !== 'worker'" class="mr-3">
         <p class="overline">supervisor roster</p>
         <app-roster
           [rosterMembers]="stationInformation.supervisors"
@@ -31,7 +39,7 @@
           [editMode]="stationEditMode"></app-roster>
       </div>
       <div class="py-3 ml-3">
-        <button mat-mini-fab color="warn" *ngIf="!stationEditMode">
+        <button mat-mini-fab color="warn" *ngIf="stationEditMode">
           1
         </button>
       </div>
