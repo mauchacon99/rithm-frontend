@@ -1,63 +1,63 @@
-@import 'variables', 'functions', 'rithm-light-palettes';
+// @import 'variables', 'functions', 'rithm-light-palettes';
 
-section.row {
-  padding: 10px 0;
+// section.row {
+//   padding: 10px 0;
 
-  div {
-    h6 {
-      padding: 0 5px;
+//   div {
+//     h6 {
+//       padding: 0 5px;
 
-      @media screen and (max-width: 767px) {
-        text-align: center;
-        padding-bottom: 10px;
-      }
-    }
+//       @media screen and (max-width: 767px) {
+//         text-align: center;
+//         padding-bottom: 10px;
+//       }
+//     }
 
-    form {
-      width: 100%;
+//     form {
+//       width: 100%;
 
-      mat-form-field {
-        width: 100%;
-      }
-    }
+//       mat-form-field {
+//         width: 100%;
+//       }
+//     }
 
-    .priority {
-      background: $warning-red;
-      border-color: transparent;
-      float: left;
-      margin-top: 5px;
-    }
+//     .priority {
+//       background: $warning-red;
+//       border-color: transparent;
+//       float: left;
+//       margin-top: 5px;
+//     }
 
-    button {
-      float: left;
-      color: map-get($secondary-gray-palette, 300);
-    }
-  }
+//     button {
+//       float: left;
+//       color: map-get($secondary-gray-palette, 300);
+//     }
+//   }
 
-  .meta-data {
-    font-size: font-calc(12);
+//   .meta-data {
+//     font-size: font-calc(12);
 
-    span {
-      color: $accent-blue;
-    }
-  }
-}
+//     span {
+//       color: $accent-blue;
+//     }
+//   }
+// }
 
-:host::ng-deep .mat-form-field-suffix {
-  display: flex;
+// :host::ng-deep .mat-form-field-suffix {
+//   display: flex;
 
-  button {
-    border: none;
-    background-color: initial;
-  }
+//   button {
+//     border: none;
+//     background-color: initial;
+//   }
 
-  .settings {
-    display: flex;
-    justify-content: flex-end;
+//   .settings {
+//     display: flex;
+//     justify-content: flex-end;
 
-    i {
-      font-size: x-large;
-      color: map-get($primary-palette, 400);
-    }
-  }
-}
+//     i {
+//       font-size: x-large;
+//       color: map-get($primary-palette, 400);
+//     }
+//   }
+// }
