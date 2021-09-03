@@ -53,7 +53,6 @@ $rithm-theme: mat.define-light-theme(
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-@import './scss/tools/typography';
 
 // Global Styles Below
 /// Global page Styles
@@ -96,3 +95,89 @@ body {
 .mat-form-field-appearance-outline .mat-form-field-suffix {
   place-self: center;
 }
+
+/// Set font family for everything
+html {
+  font-family: Montserrat, sans-serif;
+}
+
+/* stylelint-disable */
+/// Heading 1 font styles
+h1 {
+  @apply font-light text-5xl;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 2 font styles
+h2 {
+  @apply font-light text-4xl;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 3 font styles
+h3 {
+  @apply font-normal text-2xl;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 4 font styles
+h4 {
+  @apply font-normal text-xl;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 5 font styles
+h5 {
+  @apply font-semibold text-lg;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Heading 6 font styles
+h6 {
+  @apply font-semibold text-base;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Paragraph, span and div font styles
+p,
+div {
+  @apply font-normal text-base;
+
+  font-family: Montserrat, sans-serif;
+}
+
+button {
+  font-family: Montserrat, sans-serif;
+}
+
+/// Overline font styling.
+/// All caps 10px regular Montserrat.
+.overline {
+  @apply font-normal leading-none tracking-normal uppercase;
+
+  font-size: font-calc(10) !important;
+  font-family: Montserrat, sans-serif;
+}
+
+/// Subtitle Medium
+/// 14px Medium Montserrat
+.subtitle-medium {
+  @apply font-semibold text-sm;
+
+  font-family: Montserrat, sans-serif;
+}
+
+/// Body Small
+/// Regular 14px
+.body-small {
+  @apply font-normal text-sm leading-none tracking-normal;
+
+  font-family: Montserrat, sans-serif;
+}
+
