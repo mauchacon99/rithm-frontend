@@ -22,7 +22,7 @@ export class UserService {
   accessToken: AccessToken | undefined;
 
   /** Data of signed-in user. */
-  userData$: ReplaySubject<unknown> = new ReplaySubject(1);
+  userData$: ReplaySubject<User> = new ReplaySubject(1);
 
   constructor(
     private http: HttpClient,
