@@ -1,8 +1,51 @@
-<div class="sub-header">
-  <app-sub-header [itemInfo]="documentInformation"></app-sub-header>
-</div>
-
+<app-sub-header class="fixed z-10 w-full" [itemInfo]="documentInformation"></app-sub-header>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #detailDrawer mode="over" position="end">
+    <app-detail-drawer></app-detail-drawer>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="grid grid-cols-12">
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+      <div class="col-span-12 md:col-span-8 bg-white px-5 py-12">
+        <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
+          <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
+          <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
+          <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
+          <div class="w-full fixed z-10 bottom-0 left-0">
+            <div class="grid grid-cols-12">
+              <div class="md:col-start-3 col-span-12 md:col-span-8 flex bg-white px-5 py-2 footer">
+                <div class="flex-grow">
+                  <span class="mr-3 inline-block md:hidden">
+                    <button mat-icon-button color="primary">
+                      <i class="fas fa-exclamation-circle text-3xl text-primary-500" matTooltip="Escalate Document"></i>
+                    </button>
+                  </span>
+                  <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                  <button mat-stroked-button color="accent" class="mx-2">Save</button>
+                </div>
+                <button mat-raised-button color="accent" class="">Flow</button>
+              </div>
+              <div class="relative hidden md:block">
+                <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
+                  <g id="escalation_line" data-name="escalation_line" transform="translate(1)">
+                    <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
+                      stroke-linecap="round" stroke-width="2" />
+                  </g>
+                </svg>
+                <i class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500" matTooltip="Escalate Document"></i>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+
+<!-- <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
   <mat-drawer #detailDrawer mode="over" position="end">
     <app-detail-drawer></app-detail-drawer>
   </mat-drawer>
@@ -48,5 +91,5 @@
     </div>
   </mat-drawer-content>
 
-</mat-drawer-container>
+</mat-drawer-container> -->
 
