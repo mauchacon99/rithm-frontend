@@ -1,4 +1,39 @@
-<section class="row">
+<section class="grid grid-cols-12 py-5 border-b border-secondary-400">
+  <div class="col-span-12 lg:col-span-2">
+    <h6>Station Information</h6>
+  </div>
+  <div class="col-span-12 lg:col-span-5 xl:col-span-6">
+    <span>{{stationName}}</span>
+    <button *ngIf="type === 'admin'" mat-icon-button color="accent">
+      <i class="fas fa-pen"></i>
+    </button>
+  </div>
+  <div class="col-span-12 lg:col-span-5 xl:col-span-4 lg:justify-self-end">
+    <div class="flex">
+      <div class="mr-3">
+        <p class="overline">supervisor roster</p>
+        <app-roster
+          [rosterMembers]="stationInformation.supervisors"
+          [rosterSize]="stationInformation.supervisors.length"
+          [stationId]="stationInformation.stationRithmId"
+          [stationName]="stationName"
+          [isWorker]="false"
+          [editMode]="stationEditMode"></app-roster>
+      </div>
+      <div>
+        <p class="overline">worker roster</p>
+        <app-roster
+          [rosterMembers]="stationInformation.workers"
+          [rosterSize]="stationInformation.workers.length"
+          [stationId]="stationInformation.stationRithmId"
+          [stationName]="stationName"
+          [isWorker]="true"
+          [editMode]="stationEditMode"></app-roster>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <section class="row">
   <div class="col-12 col-md-2">
     <h6>Station Information</h6>
   </div>
@@ -60,4 +95,4 @@
   <div class="col">
     <hr>
   </div>
-</div>
+</div> -->
