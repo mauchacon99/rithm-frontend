@@ -49,4 +49,21 @@ export class OrganizationService {
     });
   }
 
+  /**
+   * Updates the role of users.
+   *
+   * @param role The new user role - 'admin'|null.
+   * @param organizationRithmId The organization id for which user belongs to.
+   * @param userRithmId The user's id.
+   * @returns An empty observable.
+   */
+  updateUserRole(role: string | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    return this.http.put<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`,
+      {
+        role,
+        organizationRithmId,
+        userRithmId
+      });
+  }
+
 }
