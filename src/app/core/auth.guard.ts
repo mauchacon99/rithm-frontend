@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
   signOut(title: string): void {
     this.userService.signOut();
     this.popupService.alert({
-      title: title,
+      title,
       message: 'You\'ll need to sign in again before you can view that page.'
     });
   }
