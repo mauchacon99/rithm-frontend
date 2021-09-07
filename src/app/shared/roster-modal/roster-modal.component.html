@@ -1,15 +1,15 @@
 <section>
   <h4 class="text-center">{{ isWorker ? 'Worker' : 'Supervisor' }} Roster</h4>
-  <div *ngIf="!isLoading" class="users">
-    <div class="row" *ngFor="let member of members">
-      <div class="col-2 user-avatar">
+  <div *ngIf="!isLoading" class="h-60 overflow-y-scroll overflow-x-hidden">
+    <div class="flex mt-2" *ngFor="let member of members">
+      <div class="">
         <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true"></app-user-avatar>
       </div>
-      <div class="col-10">
-        <p>
+      <div class="">
+        <p class="leading-none pt-1">
           {{member.firstName}} {{member.lastName}}
           <br>
-          <span class="overline">{{member.email}}</span>
+          <span class="overline text-secondary-500">{{member.email}}</span>
         </p>
       </div>
     </div>
