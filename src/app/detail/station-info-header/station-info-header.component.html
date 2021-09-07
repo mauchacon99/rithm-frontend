@@ -2,7 +2,7 @@
   <div class="col-span-12 lg:col-span-2">
     <h6>Station Information</h6>
   </div>
-  <div class="col-span-12 lg:col-span-5 xl:col-span-6">
+  <div class="col-span-12" [ngClass]="{'lg:col-span-10': stationEditMode, 'lg:col-span-5 xl:col-span-6': !stationEditMode}">
     <span *ngIf="!stationEditMode">
       <span>{{stationName}}</span>
       <button *ngIf="type === 'admin'" mat-icon-button color="accent">
@@ -16,7 +16,7 @@
       </mat-form-field>
     </form>
   </div>
-  <div class="col-span-12 lg:col-span-5 xl:col-span-4 lg:justify-self-end">
+  <div class="col-span-12 lg:col-span-5" [ngClass]="{'lg:col-start-3': stationEditMode, 'xl:col-span-4 lg:justify-self-end': !stationEditMode}">
     <div class="flex">
       <div *ngIf="type !== 'worker'" class="mr-3">
         <p class="overline">supervisor roster</p>

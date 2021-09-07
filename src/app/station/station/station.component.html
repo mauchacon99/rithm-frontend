@@ -10,12 +10,34 @@
       <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 md:col-span-8 bg-white px-5 py-12 relative">
-        <div class="w-full h-full absolute top-0 left-0 flex">
-          <app-loading-indicator class="m-auto self-center" *ngIf="stationLoading"></app-loading-indicator>
+        <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="stationLoading">
+          <app-loading-indicator class="m-auto self-center"></app-loading-indicator>
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
           <!-- Tabs -->
+          <mat-tab-group mat-align-tabs="center" class="mt-2 w-full">
+            <mat-tab label="Document">
+              <ng-template matTabContent>
+                <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
+                <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
+                <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
+              </ng-template>
+            </mat-tab>
+            <mat-tab label="Flow Logic">
+              <ng-template matTabContent>
+                Flow Logic tab
+              </ng-template>
+            </mat-tab>
+          </mat-tab-group>
+          <div class="w-full fixed z-10 bottom-0 left-0">
+            <div class="grid grid-cols-12">
+              <div class="md:col-start-3 col-span-12 md:col-span-8 flex bg-white px-5 py-2 footer justify-between">
+                  <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                  <button mat-raised-button color="accent" class="mx-2">Save</button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
       <!-- Right column -->

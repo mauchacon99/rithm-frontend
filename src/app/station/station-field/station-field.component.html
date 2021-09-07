@@ -1,7 +1,43 @@
 <ng-container [formGroup]="stationFieldForm">
+  <div class="flex my-5">
+    <!-- Controls -->
+    <div class="flex flex-col border-r border-accent-100 justify-between pr-2">
+      <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp" (click)="moveFieldUp()">
+        <i class="fas fa-chevron-up text-accent-100"></i>
+      </button>
+      <button mat-icon-button (click)="removeField()">
+        <i class="fas fa-times text-accent-50"></i>
+      </button>
+      <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown" (click)="moveFieldDown()">
+        <i class="fas fa-chevron-down text-accent-100"></i>
+      </button>
+    </div>
+    <!-- Field -->
+    <div class="flex-grow pl-2">
+      <!-- Instructions -->
+      <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
+      <!-- Label -->
+      <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="true"></app-text-field>
+      <!-- Options/Items -->
+      <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
+        <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField" [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)"></app-text-field>
+        <button mat-stroked-button color="accent" (click)="addOption(field.questionType.typeString)" class="mb-3">
+          <span *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect">
+            New Option
+          </span>
+          <span *ngIf="field.questionType.typeString === fieldType.CheckList">
+            New Item
+          </span>
+        </button>
+        <br>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+<!-- <ng-container [formGroup]="stationFieldForm">
   <div class="row mb-4">
     <div class="col-2 col-sm-1 divider">
-      <!-- Field movement controls -->
+
       <div class="flex">
         <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp" (click)="moveFieldUp()">
           <i class="fas fa-chevron-up"></i>
@@ -15,9 +51,9 @@
       </div>
     </div>
     <div class="col-10 col-sm-11">
-      <!-- Instructions -->
+
       <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
-      <!-- Label -->
+
       <app-text-field [field]="labelField" [formControlName]="field.questionType.typeString" [toolBar]="true"></app-text-field>
       <ng-container *ngIf="field.questionType.typeString === fieldType.Select || field.questionType.typeString === fieldType.MultiSelect || field.questionType.typeString === fieldType.CheckList">
         <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField" [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)"></app-text-field>
@@ -31,10 +67,10 @@
         </button>
         <br>
       </ng-container>
-      <!-- Required Checkbox -->
+
       <mat-checkbox [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
         Required
       </mat-checkbox>
     </div>
   </div>
-</ng-container>
+</ng-container> -->
