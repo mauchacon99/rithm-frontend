@@ -8,28 +8,35 @@
     </span>
     <span *ngIf="!isLoading && totalNumDocs > 0">
       <p class="text-error-700 text-center" *ngIf="userType === userTypeEnum.None">You are not a part of this station.</p>
-      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        <div class="pl-7 lg:col-span-2">
-          <strong>Document</strong>
+      <div class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-2">
+        <div class="pl-9 col-span-2 md:col-span-1 xl:col-span-2">
+          <strong class="font-semibold">Document</strong>
         </div>
         <div class="">
-          <strong>Assigned</strong>
+          <strong class="font-semibold">Assigned</strong>
         </div>
         <div class="hidden md:block">
-          <strong>Time in Station</strong>
+          <strong class="font-semibold">Time in Station</strong>
         </div>
-        <div class="hidden md:block">
-          <strong>Last Updated</strong>
+        <div class="hidden lg:block">
+          <strong class="font-semibold">Last Updated</strong>
         </div>
       </div>
-      <div *ngFor="let document of documents" (click)="checkDocPermission(document.documentRithmId)" [ngClass]="{'link-permission' : userType !== userTypeEnum.None}" class="doc-link grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div
+        *ngFor="let document of documents"
+        (click)="checkDocPermission(document.documentRithmId)"
+        [ngClass]="{'cursor-pointer' : userType !== userTypeEnum.None}"
+        class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
+        rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200
+        mb-4"
+      >
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!document.isEscalated" class="flex lg:col-span-2">
+          [matTooltipDisabled]="!document.isEscalated" class="flex col-span-2 md:col-span-1 xl:col-span-2">
           <!-- Priority -->
-          <div class="priority circle-30-accent">
+          <div class="circle-30-accent mr-3">
             {{ document.priority }}
           </div>
-          <p [ngClass]="{'warn-text' : document.isEscalated }">
+          <p [ngClass]="{'warn-text' : document.isEscalated }" class="leading-7 truncate whitespace-nowrap">
             <!-- Escalated icon -->
             <i *ngIf="document.isEscalated" class="fas fa-exclamation-circle"></i>
             <!-- Document name -->
@@ -39,30 +46,30 @@
         <!-- Assigned -->
         <div>
           <span *ngIf="document?.userAssigned" class="flex">
-            <div class="initials">
+            <div class="mr-3">
               <app-user-avatar [firstName]="getNamePortion(document.userAssigned, 0)" [lastName]="getNamePortion(document.userAssigned, 1)" [hideToolTip]="true"></app-user-avatar>
             </div>
-            <div class="hidden md:block">
+            <div class="hidden leading-7 truncate whitespace-nowrap md:block">
               {{ document.userAssigned }}
             </div>
           </span>
         </div>
         <!-- Time in station -->
-        <div class="hidden md:block">
+        <div class="hidden leading-7 whitespace-nowrap md:block">
           {{ getElapsedTime(document.flowedTimeUTC) }}
         </div>
         <!-- Last updated -->
-        <div class="hidden md:block">
+        <div class="hidden leading-7 whitespace-nowrap lg:block">
           {{ ((getElapsedTime(document.updatedTimeUTC) === '1 day') || (getElapsedTime(document.updatedTimeUTC) === 'Unknown')) ? (getElapsedTime(document.updatedTimeUTC) === '1 day' ? 'Yesterday' : getElapsedTime(document.updatedTimeUTC)) : getElapsedTime(document.updatedTimeUTC)  + ' ago'}}
         </div>
       </div>
     </span>
-    <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+    <app-loading-indicator class="h-full flex justify-center items-center" *ngIf="isLoading"></app-loading-indicator>
   </div>
-  <div *ngIf="!isLoading && totalNumDocs > 0" class="row no-gutters justify-content-center">
-    <app-pagination (currentPageNum)="getDocuments($event)" [numItems]="totalNumDocs" [numPerPage]="10" [activeNum]="activeNum">
-    </app-pagination>
-  </div>
+</div>
+<div *ngIf="!isLoading && totalNumDocs > 0" class="flex justify-center">
+  <app-pagination (currentPageNum)="getDocuments($event)" [numItems]="totalNumDocs" [numPerPage]="10" [activeNum]="activeNum">
+  </app-pagination>
 </div>
 
 <!-- Buttons -->
