@@ -16,7 +16,7 @@
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
           <!-- Tabs -->
-          <mat-tab-group mat-align-tabs="center">
+          <mat-tab-group mat-align-tabs="center" class="mt-2">
             <mat-tab label="Document">
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
