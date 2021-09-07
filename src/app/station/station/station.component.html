@@ -1,4 +1,30 @@
-<div class="sub-header">
+<app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation"></app-sub-header>
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+  <mat-drawer #detailDrawer mode="over" position="end">
+    <app-detail-drawer></app-detail-drawer>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="grid grid-cols-12">
+      <!-- Left column -->
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+      <!-- Center column -->
+      <div class="col-span-12 md:col-span-8 bg-white px-5 py-12 relative">
+        <div class="w-full h-full absolute top-0 left-0 flex">
+          <app-loading-indicator class="m-auto self-center" *ngIf="stationLoading"></app-loading-indicator>
+        </div>
+        <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off">
+          <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
+          <!-- Tabs -->
+        </form>
+      </div>
+      <!-- Right column -->
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+<!-- <div class="sub-header">
   <app-sub-header [itemInfo]="stationInformation"></app-sub-header>
 </div>
 
@@ -45,5 +71,5 @@
     </div>
   </mat-drawer-content>
 
-</mat-drawer-container>
+</mat-drawer-container> -->
 

@@ -5,9 +5,14 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="grid grid-cols-12">
+    <div class="grid grid-cols-12 mt-12">
+      <!-- Left column -->
       <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
-      <div class="col-span-12 md:col-span-8 bg-white px-5 py-12">
+      <!-- Center column -->
+      <div class="col-span-12 md:col-span-8 bg-white px-5 pb-12 relative">
+        <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="documentLoading">
+          <app-loading-indicator class="m-auto self-center"></app-loading-indicator>
+        </div>
         <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
           <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
           <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
@@ -39,57 +44,9 @@
           </div>
         </form>
       </div>
+      <!-- Right column -->
       <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
-
-
-<!-- <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
-  <mat-drawer #detailDrawer mode="over" position="end">
-    <app-detail-drawer></app-detail-drawer>
-  </mat-drawer>
-
-  <mat-drawer-content>
-    <div class="page textured-bg pb-0">
-      <div class="container-fluid p-0">
-        <div class="row m-0">
-          <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
-          <div class="col-12 col-lg-8 bg-white">
-            <app-loading-indicator class="loader" *ngIf="documentLoading"></app-loading-indicator>
-            <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
-              <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
-              <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-              <app-document-template [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
-              <div class="row footer">
-                <div class="col-12 col-lg-8">
-                  <div class="footer-inner">
-                    <div class="save-cancel-buttons">
-                      <span>
-                        <button mat-stroked-button color="accent" >Cancel</button>
-                        <button mat-stroked-button color="accent" class="save" >Save</button>
-                      </span>
-                      <button mat-raised-button color="accent" >Flow</button>
-                    </div>
-                    <div class="escalate">
-                        <svg xmlns="http://www.w3.org/2000/svg">
-                          <g id="escalation_line" data-name="escalation_line" transform="translate(1)">
-                            <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
-                              stroke-linecap="round" stroke-width="2" />
-                          </g>
-                        </svg>
-                      <i class="fas fa-exclamation-circle" matTooltip="Escalate Document"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="d-none d-lg-block col-2"></app-connected-station-pane>
-        </div>
-      </div>
-    </div>
-  </mat-drawer-content>
-
-</mat-drawer-container> -->
 
