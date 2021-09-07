@@ -1,16 +1,2 @@
 @import '../custom-fields.scss';
-@import 'variables';
 
-p {
-  font-style: italic;
-}
-
-.check-field {
-  line-height: 30px;
-  color: $secondary-gray;
-
-  .checklist {
-    display: flex;
-    flex-direction: column;
-  }
-}
