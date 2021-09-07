@@ -26,11 +26,11 @@
       </button>
     </div>
   </div>
-  <div class="col-span-4 text-center text-sm">
+  <div class="col-span-5 lg:col-span-4 text-center text-sm">
     <span class="text-accent-400">Time in station</span><br>
     <span>{{ getElapsedTime(flowedTimeUTC) }}</span>
   </div>
-  <div class="col-span-4 text-center text-sm">
+  <div class="col-span-5 lg:col-span-4 text-center text-sm">
     <span class="text-accent-400">Last updated</span><br>
     <span>{{ ((getElapsedTime(lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(lastUpdatedUTC)) : getElapsedTime(lastUpdatedUTC)  + ' ago'}}</span>
   </div>
