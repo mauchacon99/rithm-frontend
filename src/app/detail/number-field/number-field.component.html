@@ -1,5 +1,5 @@
-<div [formGroup]="numberFieldForm" class="row no-gutters template-fields">
-  <mat-form-field class="col-12" appearance="outline">
+<div [formGroup]="numberFieldForm" class="">
+  <mat-form-field class="w-full" appearance="outline">
     <mat-label>{{field.prompt}}</mat-label>
     <div matPrefix class="icon">
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Number || field.questionType.typeString === fieldTypeEnum.Address" class="fas fa-calculator"></i>
