@@ -5,7 +5,7 @@
   <div class="grid grid-cols-3 md:grid-cols-4 gap-2 absolute -top-60 md:-top-48 left-0 p-2 bg-white shadow-lg rounded border border-secondary-50" *ngIf="isInlineToolbarOpen">
     <button mat-button class="text-center" *ngFor="let tool of tools" (click)="selectField(tool.typeString)" color="primary">
       <i class="{{tool.icon}}"></i>
-      <p class="text-xs">{{tool.name}}</p>
+      <p class="text-xs pb-1">{{tool.name}}</p>
     </button>
   </div>
 </div>
