@@ -9,35 +9,15 @@ div.station {
     width: 130px;
   }
 
-  height: 110px;
-  border-radius: 4px;
-  background: #fff;
-  padding: 5px 10px;
-  margin: 10px 10px;
-  display: block;
-  position: relative;
+  .left {
+    margin-left: 150px;
 
-  svg {
-    position: absolute;
-
-    &.left {
-      margin-left: 150px;
-      top: 50px;
-
-      @media screen and (max-width: 1130px) {
-        margin-left: 130px;
-        top: 50px;
-      }
-
-      @media screen and (max-width: 1030px) {
-        margin-left: 120px;
-        top: 50px;
-      }
+    @media screen and (max-width: 1130px) {
+      margin-left: 130px;
     }
 
-    &.right {
-      margin-left: -35px;
-      top: 50px;
+    @media screen and (max-width: 1030px) {
+      margin-left: 120px;
     }
   }
 }
