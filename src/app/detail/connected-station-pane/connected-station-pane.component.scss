@@ -1,14 +1,16 @@
 aside {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* stylelint-disable-next-line */
+  @apply flex flex-col justify-center;
+
   height: calc(100vh - 110px);
 
   &.left {
-    align-items: flex-end;
+    /* stylelint-disable-next-line */
+    @apply items-end;
   }
 
   &.right {
-    align-items: flex-start;
+    /* stylelint-disable-next-line */
+    @apply items-start;
   }
 }
