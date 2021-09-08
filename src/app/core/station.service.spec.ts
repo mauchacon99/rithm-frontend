@@ -67,7 +67,7 @@ describe('StationService', () => {
         expect(response).toBeDefined();
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getstationinfo?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
