@@ -28,6 +28,10 @@
           color: $warning-red;
         }
       }
+
+      &.user {
+        min-height: 40px;
+      }
     }
   }
 }
