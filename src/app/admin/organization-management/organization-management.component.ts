@@ -104,4 +104,31 @@ export class OrganizationManagementComponent implements OnInit {
       }
     }
   }
+
+  /**
+   * Promote or demote user from admin role.
+   *
+   * @param status If user has to be promoted or demoted.
+   * @param userId The id of user for which role has to update.
+   */
+  // eslint-disable-next-line
+  updateUserRole(status: any, userId: string): void {
+    let role = null;
+    const organizationId: string = this.userService.user?.organizations[0];
+    status.checked ? role = 'admin' : role = null;
+    this.organizationService.updateUserRole(role, organizationId, userId)
+      .pipe(first())
+      .subscribe(() => {
+        status.checked ? this.popupService.notify('User has been promoted to admin role.') :
+        this.popupService.notify('User has been de-promoted from admin role.');
+      }, (error: unknown) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
 }
