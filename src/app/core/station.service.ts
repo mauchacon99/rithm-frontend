@@ -27,7 +27,7 @@ export class StationService {
   getStationInfo(stationId: string): Observable<StationInformation> {
     const params = new HttpParams()
       .set('stationRithmId', stationId);
-    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getstationinfo`, { params });
+    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info`, { params });
   }
 
   /**
