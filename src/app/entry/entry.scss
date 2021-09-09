@@ -2,8 +2,13 @@
 
 .page {
   @include gradient($secondary-gray, $secondary-blue);
+  /* stylelint-disable-next-line */
+  @apply flex h-screen overflow-y-auto;
 
   mat-card {
+    /* stylelint-disable-next-line */
+    @apply w-full md:w-10/12 xl:w-3/5 m-auto;
+
     padding: 0;
     height: 575px;
 
