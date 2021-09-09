@@ -28,7 +28,7 @@ export class OrganizationService {
       .set('rithmid', organizationId)
       .set('pageNum', pageNum)
       .set('usersPerPage', 15);
-    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getusersforOrganization`, { params });
+    return this.http.get<OrganizationUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`, { params });
   }
 
   /**
@@ -39,7 +39,7 @@ export class OrganizationService {
    * @returns An empty observable.
    */
   removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/RemoveUsersFromOrganizations`, {
+    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`, {
       body: [
         {
           organizationRithmId,
@@ -57,7 +57,7 @@ export class OrganizationService {
    * @param userRithmId The user's id.
    * @returns An empty observable.
    */
-  updateUserRole(role: string | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
+  updateUserRole(role: 'admin' | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
     return this.http.put<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`,
       {
         role,

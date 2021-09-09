@@ -113,14 +113,15 @@ export class OrganizationManagementComponent implements OnInit {
    */
   // eslint-disable-next-line
   updateUserRole(status: any, userId: string): void {
-    let role = null;
+    // eslint-disable-next-line
+    let role: any = null;
     const organizationId: string = this.userService.user?.organizations[0];
     status.checked ? role = 'admin' : role = null;
     this.organizationService.updateUserRole(role, organizationId, userId)
       .pipe(first())
       .subscribe(() => {
         status.checked ? this.popupService.notify('User has been promoted to admin role.') :
-        this.popupService.notify('User has been de-promoted from admin role.');
+          this.popupService.notify('User has been de-promoted from admin role.');
       }, (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
