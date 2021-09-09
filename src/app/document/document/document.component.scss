@@ -1,3 +1,5 @@
+@import 'functions', 'variables';
+
 .footer {
   box-shadow: 1px -2px 2px #e5e4e7;
 }
@@ -7,7 +9,9 @@
     /* stylelint-disable-next-line */
     @apply w-72 mt-11;
 
-    height: calc(100vh - 110px);
+    position: fixed !important;
+    margin-top: 112px;
+    height: calc(100vh - 107px);
 
     .mat-tab-label {
       /* stylelint-disable-next-line */
@@ -16,4 +20,8 @@
       min-width: 140px !important;
     }
   }
+}
+
+::ng-deep mat-ink-bar.mat-ink-bar {
+  background: $accent-blue !important;
 }
