@@ -2,6 +2,7 @@
 
 .page {
   @include gradient($secondary-gray, $secondary-blue);
+
   @apply flex h-screen overflow-y-auto;
 
   mat-card {
