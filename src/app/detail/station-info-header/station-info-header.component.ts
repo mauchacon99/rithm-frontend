@@ -68,7 +68,6 @@ export class StationInfoHeaderComponent implements OnInit {
    * @returns The Priority of station.
    */
   get priority(): number | null {
-    console.log(this.stationInformation,  'priority' in this.stationInformation ? this.stationInformation.priority : null);
     return 'priority' in this.stationInformation ? this.stationInformation.priority : null;
   }
 

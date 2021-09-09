@@ -55,7 +55,7 @@ describe('TokenInterceptor', () => {
   it('should pass the request on regular routes', () => {
     userService.getTermsConditions().subscribe();
 
-    const httpRequest = httpTestingController.expectOne(`${environment.baseApiUrl}${USER_SERVICE_PATH}/gettermsandconditions`);
+    const httpRequest = httpTestingController.expectOne(`${environment.baseApiUrl}${USER_SERVICE_PATH}/terms-and-conditions`);
     expect(httpRequest.request.headers.has('Authorization')).toEqual(false);
   });
 

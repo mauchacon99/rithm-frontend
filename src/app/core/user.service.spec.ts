@@ -131,7 +131,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refreshtoken?refreshTokenGuid=thisisaguid`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token?refreshTokenGuid=thisisaguid`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
     expect(req.request.params).toBeTruthy();
@@ -177,7 +177,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validateemail`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email });
 
@@ -194,7 +194,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgotpassword`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ email });
 
@@ -213,7 +213,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/resetpassword`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ guid, email, password });
 
@@ -280,7 +280,7 @@ describe('UserService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(termsAndConditions);
