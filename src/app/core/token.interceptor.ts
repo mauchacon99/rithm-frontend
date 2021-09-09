@@ -3,18 +3,17 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { AccessToken } from 'src/helpers';
 import { PopupService } from './popup.service';
 
 /** API routes that don't require an access token. */
 const NO_AUTH_ROUTES = [
   '/register',
   '/login',
-  '/refreshtoken',
-  '/validateemail',
-  '/forgotpassword',
-  '/resetpassword',
-  '/gettermsandconditions'
+  '/refresh-token',
+  '/validate-email',
+  '/forgot-password',
+  '/reset-password',
+  '/terms-and-conditions'
 ];
 
 /**
@@ -52,11 +51,7 @@ export class TokenInterceptor implements HttpInterceptor {
             });
             return EMPTY;
           } else {
-
-            // Add token to request
-            const accessToken = this.userService.accessToken as AccessToken;
-            const newRequest = this.addToken(accessToken, request.clone());
-
+            const newRequest = this.addToken(request.clone());
             return this.passRequest(newRequest, next);
           }
         })
@@ -70,14 +65,14 @@ export class TokenInterceptor implements HttpInterceptor {
   /**
    * Adds the access token to the provided request.
    *
-   * @param accessToken The access token to add.
    * @param request The request to add the access token.
    * @returns A new request with the access token.
    */
-  private addToken(accessToken: AccessToken, request: HttpRequest<unknown>): HttpRequest<unknown> {
+  private addToken(request: HttpRequest<unknown>): HttpRequest<unknown> {
+    const accessToken = this.userService.accessToken;
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken.token}`
+        Authorization: `Bearer ${accessToken?.token}`
       }
     });
   }
