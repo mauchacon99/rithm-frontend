@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .container {
   mat-card {
@@ -27,27 +27,40 @@
         &:hover {
           color: $warning-red;
         }
+
+        &.mat-button-disabled {
+          opacity: 0.4;
+        }
+
+        &.mat-icon-button.admin {
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          background-color: map-get($accent-palette, 500);
+          color: #fff !important;
+          transition: 0.3s;
+          
+          &:hover {
+            background-color: map-get($accent-palette, 700);
+          }
+
+          &.non-admin {
+            background-color: map-get($primary-palette, 200);
+            
+            &:hover {
+              background-color: map-get($primary-palette, 400);
+            }
+          }
+        }
+      }
+
+      .link-btn {
+        height: 45px;
       }
 
       &.user {
         min-height: 40px;
       }
-    }
-
-    button.mat-icon-button.admin {
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      background-color: map-get($accent-palette, 500);
-      color: #fff !important;
-
-      &.non-admin {
-        background-color: map-get($primary-palette, 200);
-      }
-    }
-
-    .link-btn {
-      height: 45px;
     }
   }
 }
