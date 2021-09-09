@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .container {
   mat-card {
@@ -44,6 +44,9 @@
       &.non-admin {
         background-color: map-get($primary-palette, 200);
       }
+    }
+    .link-btn {
+      height: 45px;
     }
   }
 }
