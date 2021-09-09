@@ -74,7 +74,7 @@ describe('OrganizationService', () => {
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getusersforOrganization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=${expectedResponse.userPerPage}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=${expectedResponse.userPerPage}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -112,6 +112,23 @@ describe('OrganizationService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual({ role, organizationRithmId, userRithmId });
+
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should remove a user from an organization', () => {
+    const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    const userId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+
+    service.removeUserFromOrganization(organizationId, userId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`);
+    expect(req.request.method).toEqual('DELETE');
 
     req.flush(null);
     httpTestingController.verify();
