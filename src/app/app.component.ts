@@ -67,7 +67,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userService.userData$
       .pipe(first())
       .subscribe((user) => {
-        console.log(user);
         const info = user as User;
         if (info && info.role) {
           this.mobileLinks.splice(2, 0, {
