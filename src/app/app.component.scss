@@ -5,43 +5,21 @@
 }
 
 mat-sidenav-container {
-  margin-top: 65px;
-  height: calc(100vh - 65px);
+  height: calc(100vh - 64px);
 
-  mat-sidenav {
-    padding-top: 15px;
-    width: 230px;
-
-    a {
-      font-size: font-calc(16);
-      text-transform: capitalize;
-
-      .row {
-        padding: 20px 0 20px 15px;
-        width: 100%;
-      }
-
-      &:nth-child(3) {
-        .row {
-          border-top: 1px solid $accent-blue;
-        }
+  a {
+    &:nth-child(3) {
+      .flex {
+        border-top: 1px solid $accent-blue;
       }
     }
   }
 
   mat-sidenav-content {
-    // height: calc(100vh + 65px);
-    flex: 1 1 auto;
-
     @media screen and (max-width: 991px) {
       &.non-entry {
-        height: calc(100vh - 65px);
+        height: calc(100vh - 64px);
       }
     }
-  }
-
-  &.sign-in {
-    margin-top: 0;
-    height: 100vh;
   }
 }

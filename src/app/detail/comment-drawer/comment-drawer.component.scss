@@ -1,13 +1,5 @@
-@import 'variables', 'functions';
+@import 'functions';
 
-.sidebar-container {
-  height: calc(100vh - 247px);
-
-  .no-comments {
-    height: calc(100vh - 247px);
-  }
-}
-
-.loader {
-  height: calc(100vh - 247px);
+.comment-h {
+  height: calc(100vh - 248px);
 }
