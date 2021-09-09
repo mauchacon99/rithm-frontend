@@ -1,17 +1,11 @@
-<div class="row no-gutters" [ngClass]="{'pb-3': isInlineToolbarOpen}">
-  <div class="col-12">
-    <button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
-      <i class="fas fa-plus"></i> Add field to document
+<div class="relative w-full">
+  <button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
+    <i class="fas fa-plus"></i> Add field to document
+  </button>
+  <div class="grid grid-cols-3 md:grid-cols-4 gap-2 absolute -top-60 md:-top-48 left-0 p-2 bg-white shadow-lg rounded border border-secondary-50" *ngIf="isInlineToolbarOpen">
+    <button mat-button class="text-center group" *ngFor="let tool of tools" (click)="selectField(tool.typeString)" color="primary">
+      <i class="{{tool.icon}} group-hover:text-accent-500"></i>
+      <p class="text-xs pb-1 group-hover:text-accent-500">{{tool.name}}</p>
     </button>
-  </div>
-  <div class="col-12 pl-1">
-    <div class="toolbar-container mat-elevation-z4" *ngIf="isInlineToolbarOpen">
-      <div class="row no-gutters">
-        <button mat-button class="col-3" *ngFor="let tool of tools" (click)="selectField(tool.typeString)">
-          <i class="{{tool.icon}}"></i>
-          <p>{{tool.name}}</p>
-        </button>
-      </div>
-    </div>
   </div>
 </div>
