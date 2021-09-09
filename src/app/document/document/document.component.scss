@@ -4,13 +4,13 @@
 
 ::ng-deep mat-drawer-container {
   mat-drawer {
-    /* stylelint-disable-next-line */
     @apply w-72 mt-11;
 
+    position: fixed !important;
+    margin-top: 113px;
     height: calc(100vh - 110px);
 
     .mat-tab-label {
-      /* stylelint-disable-next-line */
       @apply opacity-100 text-accent-500 text-sm;
 
       min-width: 140px !important;

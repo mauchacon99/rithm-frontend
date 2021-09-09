@@ -1,16 +1,13 @@
 aside {
-  /* stylelint-disable-next-line */
   @apply flex flex-col justify-center;
 
   height: calc(100vh - 110px);
 
   &.left {
-    /* stylelint-disable-next-line */
     @apply items-end;
   }
 
   &.right {
-    /* stylelint-disable-next-line */
     @apply items-start;
   }
 }
