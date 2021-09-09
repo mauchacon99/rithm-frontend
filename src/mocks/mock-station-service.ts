@@ -60,7 +60,7 @@ export class MockStationService {
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      stationPriority: 2
+      priority: 2
     };
     return of(data).pipe(delay(1000));
   }

@@ -53,7 +53,7 @@
     ></app-roster>
   </div>
   <button mat-mini-fab color="warn" *ngIf="stationEditMode" class="priority">
-    1
+    {{ priority !== null ? priority : '' }}
   </button>
 </section>
 <div class="row">
