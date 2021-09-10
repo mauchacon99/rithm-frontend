@@ -1,8 +1,8 @@
 <section class="grid grid-cols-12 py-5 border-b border-secondary-400">
-  <div class="col-span-12 lg:col-span-2">
+  <div class="col-span-12 md:col-span-2">
     <h6>Document Information</h6>
   </div>
-  <form [formGroup]="documentNameForm" class="col-span-12 lg:col-span-10">
+  <form [formGroup]="documentNameForm" class="col-span-12 md:col-span-10">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Document Name</mat-label>
       <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
@@ -11,7 +11,7 @@
       </button>
     </mat-form-field>
   </form>
-  <div *ngIf="!isStation" class="col-span-2 lg:col-start-3 flex">
+  <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
     <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn">
       1
     </button>
@@ -24,11 +24,11 @@
       </button>
     </div>
   </div>
-  <div *ngIf="!isStation" class="col-span-5 lg:col-span-4 text-center text-xs md:text-sm">
+  <div *ngIf="!isStation" class="col-span-5 md:col-span-4 text-center text-xs md:text-sm">
     <span class="text-accent-400">Time in station</span><br>
     <span>{{ getElapsedTime(flowedTimeUTC) }}</span>
   </div>
-  <div *ngIf="!isStation" class="col-span-5 lg:col-span-4 text-center text-xs md:text-sm">
+  <div *ngIf="!isStation" class="col-span-5 md:col-span-4 text-center text-xs md:text-sm">
     <span class="text-accent-400">Last updated</span><br>
     <span>{{ ((getElapsedTime(lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(lastUpdatedUTC)) : getElapsedTime(lastUpdatedUTC)  + ' ago'}}</span>
   </div>
