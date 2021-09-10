@@ -65,15 +65,6 @@ body {
   background: $primary-blue;
 }
 
-/// Set the height of the page
-/// Apply page specific styles within the component
-// .page {
-//   width: 100vw;
-//   position: relative;
-//   overflow: auto;
-//   padding-bottom: 20px;
-// }
-
 /// Overrides the default accent color for the snackbar action
 .snackbar {
   .mat-simple-snackbar-action {
@@ -96,86 +87,19 @@ body {
   place-self: center;
 }
 
-/// Set font family for everything
-html {
-  font-family: Montserrat, sans-serif;
+.textured-bg {
+  background-image: url('./assets/images/patterns/dust_scratches.png');
+  background-repeat: repeat;
 }
 
-/// Heading 1 font styles
-h1 {
-  @apply font-light text-5xl;
+/// Styling of links globally
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  // font-size: font-calc(14);
+  cursor: pointer;
 
-  font-family: Montserrat, sans-serif;
-}
-
-/// Heading 2 font styles
-h2 {
-  @apply font-light text-4xl;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Heading 3 font styles
-h3 {
-  @apply font-normal text-2xl;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Heading 4 font styles
-h4 {
-  @apply font-normal text-xl;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Heading 5 font styles
-h5 {
-  @apply font-semibold text-lg;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Heading 6 font styles
-h6 {
-  @apply font-semibold text-base;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Paragraph, span and div font styles
-p,
-div {
-  @apply font-normal text-base;
-
-  font-family: Montserrat, sans-serif;
-}
-
-button {
-  font-family: Montserrat, sans-serif;
-}
-
-/// Overline font styling.
-/// All caps 10px regular Montserrat.
-.overline {
-  @apply font-normal leading-none tracking-normal uppercase;
-
-  font-size: font-calc(10) !important;
-  font-family: Montserrat, sans-serif;
-}
-
-/// Subtitle Medium
-/// 14px Medium Montserrat
-.subtitle-medium {
-  @apply font-semibold text-sm;
-
-  font-family: Montserrat, sans-serif;
-}
-
-/// Body Small
-/// Regular 14px
-.body-small {
-  @apply font-normal text-sm leading-none tracking-normal;
-
-  font-family: Montserrat, sans-serif;
+  &:hover {
+    text-decoration: underline;
+  }
 }
