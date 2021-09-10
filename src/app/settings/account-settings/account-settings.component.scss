@@ -1,0 +1,11 @@
+@import 'variables';
+
+.page {
+  .container {
+    mat-card {
+      h3 {
+        color: $accent-blue;
+      }
+    }
+  }
+}

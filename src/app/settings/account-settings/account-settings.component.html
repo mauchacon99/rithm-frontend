@@ -1,4 +1,4 @@
-<div class="textured-bg">
+<div class="page textured-bg">
   <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
   <div class="container" *ngIf="!isLoading">
     <div class="flex justify-content-center">
@@ -19,7 +19,7 @@
             <button type="submit" mat-raised-button color="accent"
               [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
           </div>
-          <div class="text-center text-xs mt-10">{{ appVersionNumber }}</div>
+          <div class="text-center text-xs mt-10 uppercase">{{ appVersionNumber }}</div>
         </form>
 
       </mat-card>
