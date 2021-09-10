@@ -23,7 +23,7 @@ jobs:
         run: cat ./package.json
 
       - name: 'Fetch dev branch'
-        run: git fetch origin other-branch
+        run: git fetch origin dev
 
       - name: 'Bump version number on dev'
         uses: 'phips28/gh-action-bump-version@master'
