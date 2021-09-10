@@ -27,7 +27,7 @@ export class DocumentService {
     const params = new HttpParams()
       .set('stationId', stationId)
       .set('pageNum', pageNum);
-    return this.http.get<StationDocuments>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationdocuments`, { params });
+    return this.http.get<StationDocuments>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents`, { params });
   }
 
   /**
@@ -41,7 +41,8 @@ export class DocumentService {
     const params = new HttpParams()
       .set('documentId', documentId)
       .set('stationId', stationId);
-    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connectedstationinfo`, { params });
+    // eslint-disable-next-line max-len
+    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info`, { params });
   }
 
   /**
@@ -52,7 +53,7 @@ export class DocumentService {
    * @returns A list of forward and previous stations for a specific document.
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
-    return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo`,
+    return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
       { params: { documentId, stationId }}
     );
   }
