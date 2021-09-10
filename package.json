@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "build-test": "ng build --configuration test",
+    "build-test": "NODE_ENV=test ng build --configuration test",
     "test": "ng test",
     "test-ci": "npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",

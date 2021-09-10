@@ -2,7 +2,7 @@ const colors = require('./rithm-colors');
 
 module.exports = {
   purge: {
-    enabled: true,
+    enabled: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test',
     content: [
       './src/**/*.{html,ts}'
     ]
