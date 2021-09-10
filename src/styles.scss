@@ -7,10 +7,6 @@
 // Import all helpers
 @import './scss/helpers/index';
 
-/// Import Tools from tools file
-/// Contains global styles for buttons, forms and typography
-@import './scss/tools/index';
-
 // Rithm light Theme
 @import './scss/themes/index';
 
@@ -53,6 +49,11 @@ $rithm-theme: mat.define-light-theme(
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/// Import Tools from tools file
+/// Contains global styles for circles and typography
+/// This import needs to stay after the tailwind imports.
+@import './scss/tools/index';
 
 // Global Styles Below
 /// Global page Styles

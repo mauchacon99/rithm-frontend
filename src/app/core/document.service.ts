@@ -41,8 +41,9 @@ export class DocumentService {
     const params = new HttpParams()
       .set('documentId', documentId)
       .set('stationId', stationId);
-    // eslint-disable-next-line max-len
-    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info`, { params });
+    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info`, {
+      params
+    });
   }
 
   /**
