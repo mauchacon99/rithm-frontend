@@ -26,7 +26,9 @@
           <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
           <div class="col-3 col-md-2 p-0">
-            <mat-checkbox *ngIf="user.rithmId !== currentUser.rithmId" class="mat-checkbox"></mat-checkbox>
+            <button mat-icon-button class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId">
+              <i class="fas fa-check"></i>
+            </button>
             <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
               <i class="fas fa-times"></i>
             </button>
