@@ -4,10 +4,10 @@
   </div>
   <div class="col-span-12" [ngClass]="{'md:col-span-10': stationEditMode, 'md:col-span-5 xl:col-span-6': !stationEditMode}">
     <span *ngIf="!stationEditMode">
-      <span>{{stationName}}</span>
       <button *ngIf="type === 'admin'" mat-icon-button color="accent">
         <i class="fas fa-pen"></i>
       </button>
+      <span>{{stationName}}</span>
     </span>
     <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
       <mat-form-field appearance="outline" class="w-full">
