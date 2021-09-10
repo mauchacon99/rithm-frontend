@@ -1,7 +1,12 @@
 const colors = require('./rithm-colors');
 
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: true,
+    content: [
+      './src/**/*.{html,ts}'
+    ]
+  },
   presets: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
