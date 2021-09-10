@@ -112,6 +112,12 @@ export class SignInComponent implements OnInit {
             title: 'Unverified Email',
             message: 'You will need to verify your email before you can sign in. Please check your email for instructions.'
           });
+        } else if (errorMessage.includes('Must be apart of an Organization.')) {
+          this.popupService.alert({
+            title: 'No Organization for Account',
+            message:
+              'Your account does not belong to any organizations. In order to get access, have somebody invite you to their organization.',
+          });
         } else {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
