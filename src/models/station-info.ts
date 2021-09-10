@@ -45,5 +45,5 @@ export interface StationInformation {
   questions: Question[];
 
   /** The priority of the document. */
-  stationPriority: number;
+  priority: number;
 }
