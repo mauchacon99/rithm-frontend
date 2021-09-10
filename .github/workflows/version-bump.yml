@@ -13,14 +13,17 @@ jobs:
 
     steps:
       - uses: 'actions/checkout@v2'
-        with:
-          token: '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'
+        # with:
+        #   token: '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'
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
 
       - name: 'Concatenate package.json'
         run: cat ./package.json
+
+      - name: 'Fetch dev branch'
+        run: git fetch origin other-branch
 
       - name: 'Bump version number on dev'
         uses: 'phips28/gh-action-bump-version@master'
@@ -30,7 +33,7 @@ jobs:
           tag-prefix: 'v'
           target-branch: 'dev'
         env:
-          GITHUB_TOKEN: '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'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Concatenate package.json'
         run: cat ./package.json
