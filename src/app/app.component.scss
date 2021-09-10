@@ -4,6 +4,10 @@
   @include gradient($secondary-gray, $secondary-blue);
 }
 
+.h-calc {
+  height: calc(100vh - 64px);
+}
+
 mat-sidenav-container {
   a {
     &:nth-child(3) {

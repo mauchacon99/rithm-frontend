@@ -4,7 +4,7 @@
 <!-- Top nav -->
 <app-top-nav *ngIf="showTopNav"></app-top-nav>
 
-<mat-sidenav-container class="h-screen" [ngClass]="{'mt-0': !showTopNav, 'mt-16': showTopNav}" hasBackdrop="true">
+<mat-sidenav-container [ngClass]="{'mt-0 h-screen': !showTopNav, 'mt-16 h-calc': showTopNav}" hasBackdrop="true">
 
   <!-- Side nav -->
   <mat-sidenav #sidenav mode="over" class="pt-4 w-56">
