@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { User } from 'src/models';
+import { User, OrganizationInfo } from 'src/models';
 import { OrganizationService } from 'src/app/core/organization.service';
 
 /**
@@ -35,8 +35,14 @@ export class OrganizationManagementComponent implements OnInit {
   /** While edit button using the save & edit. */
   editName = false;
 
-    /** Organization name form. */
-    orgNameForm: FormGroup;
+  /** Organization name form. */
+  orgNameForm: FormGroup;
+
+  /** The organization information object. */
+  orgInfo?: OrganizationInfo;
+
+  /** Whether the organization information is loading. */
+  orgLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +54,7 @@ export class OrganizationManagementComponent implements OnInit {
     this.orgNameForm = this.fb.group({
       name: ['', Validators.required]
     });
-   }
+  }
 
   /**
    * Gets the first page of users on load.
@@ -56,6 +62,7 @@ export class OrganizationManagementComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.userService.user;
     this.getUsers(this.activeNum);
+    this.getOrganizationInfo();
   }
 
   /**
@@ -118,6 +125,28 @@ export class OrganizationManagementComponent implements OnInit {
   }
 
   /**
+   * Gets organization information.
+   */
+  getOrganizationInfo(): void {
+    this.orgLoading = true;
+    const organizationId: string = this.userService.user?.organizations[0];
+    this.organizationService.getOrganizationInfo(organizationId)
+      .pipe(first())
+      .subscribe((organization) => {
+        if (organization) {
+          this.orgInfo = organization;
+        }
+        this.orgLoading = false;
+      }, (error: unknown) => {
+        this.orgLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
    * Promote or demote user from admin role.
    *
    * @param user User who has to be promoted or demoted.
@@ -169,7 +198,7 @@ export class OrganizationManagementComponent implements OnInit {
   /**
    *Edit the organization name from view to edit.
    */
-    editOrgName(): void {
+  editOrgName(): void {
     this.editName = true;
   }
 }

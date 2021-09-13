@@ -6,7 +6,7 @@
         <div class="col-12 col-md-9 pt-1">
           <div class="row mb-2">
             <h3 class="col-12 col-md-9 pt-1 mb-3 accent-text">Manage My Organization</h3>
-            <h4  *ngIf="!editName" class="col-12 col-md-9 pt-1 accent-text">{{'Rithm'}}
+            <h4  *ngIf="!editName" class="col-12 col-md-9 pt-1 accent-text">{{orgInfo?.name}}
               <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt"></i></button></h4>
               <form [formGroup]="orgNameForm" *ngIf="editName" class="col-12 col-md-9" >
               <input matInput required class="nameEdit pb-1" type="text" id="name" formControlName="name" autocomplete="name" />
@@ -20,13 +20,13 @@
         </button>
       </div>
 
-      <div *ngIf="!isLoading" class="row mb-1">
+      <div *ngIf="!isLoading || !orgLoading" class="row mb-1">
         <div class="row-header col-9 col-md-4">Name</div>
         <div class="row-header d-none d-md-block col-6">Email</div>
         <div class="row-header col-3 col-md-2 p-0">Admin</div>
       </div>
 
-      <div *ngIf="!isLoading">
+      <div *ngIf="!isLoading || !orgLoading">
         <div *ngFor="let user of users" class="user row align-items-center ">
           <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
@@ -47,7 +47,7 @@
         </app-pagination>
       </div>
 
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+      <app-loading-indicator *ngIf="isLoading || orgLoading"></app-loading-indicator>
     </mat-card>
   </div>
 </div>
