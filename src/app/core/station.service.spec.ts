@@ -6,7 +6,7 @@ import { Station } from 'src/models';
 
 import { StationService } from './station.service';
 
-const MICROSERVICE_PATH = '/stationapi/api/station';
+const MICROSERVICE_PATH = '/stationservice/api/station';
 
 describe('StationService', () => {
   let service: StationService;
