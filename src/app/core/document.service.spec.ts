@@ -52,7 +52,7 @@ describe('DocumentService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stationdocuments?stationId=${stationId}&pageNum=${pageNum}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents?stationId=${stationId}&pageNum=${pageNum}`
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
@@ -75,7 +75,7 @@ describe('DocumentService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/connectedstationinfo?documentId=${documentId}&stationId=${stationId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info?documentId=${documentId}&stationId=${stationId}`
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
@@ -111,7 +111,7 @@ describe('DocumentService', () => {
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/documentinfo?documentId=${documentId}&stationId=${stationId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info?documentId=${documentId}&stationId=${stationId}`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toEqual(null);
 

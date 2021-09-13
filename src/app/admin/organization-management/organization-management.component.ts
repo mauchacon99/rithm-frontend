@@ -108,19 +108,21 @@ export class OrganizationManagementComponent implements OnInit {
   /**
    * Promote or demote user from admin role.
    *
-   * @param status If user has to be promoted or demoted.
+   * @param user If user has to be promoted or demoted.
    * @param userId The id of user for which role has to update.
    */
-  // eslint-disable-next-line
-  updateUserRole(status: any, userId: string): void {
-    // eslint-disable-next-line
-    let role: any = null;
+  async updateUserRole(user: User, userId: string): Promise<void> {
+    this.isLoading = true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let role: any;
+    !user.role ? role = 'admin' : role = null;
     const organizationId: string = this.userService.user?.organizations[0];
-    status.checked ? role = 'admin' : role = null;
     this.organizationService.updateUserRole(role, organizationId, userId)
       .pipe(first())
       .subscribe(() => {
-        status.checked ? this.popupService.notify('User has been promoted to admin role.') :
+        this.isLoading = false;
+        !user.role ? user.role = 'admin' : user.role = null;
+        user.role ? this.popupService.notify('User has been promoted to admin role.') :
           this.popupService.notify('User has been de-promoted from admin role.');
       }, (error: unknown) => {
         this.isLoading = false;

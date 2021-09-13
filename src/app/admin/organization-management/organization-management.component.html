@@ -2,9 +2,14 @@
   <div class="row justify-content-center">
 
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
-      <div class="row mb-4">
-        <h3 class="col-12 col-md-9 pt-1">Manage My Organization</h3>
-        <button mat-button color="accent" class="col-3">
+      <div class="row mb-3">
+        <div class="col-12 col-md-9 pt-1">
+          <div class="row mb-2">
+            <h3 class="col-12 col-md-9 pt-1 mb-3 accent-text">Manage My Organization</h3>
+            <h4 class="col-12 col-md-9 pt-1 accent-text">Rithm</h4>
+          </div>
+        </div>
+        <button mat-button color="accent" class="col-3 link-btn">
           <i class="fas fa-link"></i>
           Invite members
         </button>
@@ -21,7 +26,10 @@
           <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
           <div class="col-3 col-md-2 p-0">
-            <mat-checkbox *ngIf="user.rithmId !== currentUser.rithmId" class="mat-checkbox" (change)="updateUserRole($event, user.rithmId)"></mat-checkbox>
+            <button mat-icon-button class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId"
+              (click)="updateUserRole(user, user.rithmId)">
+              <i class="fas fa-check"></i>
+            </button>
             <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
               <i class="fas fa-times"></i>
             </button>
