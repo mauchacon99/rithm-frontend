@@ -17,7 +17,7 @@
     </form>
   </div>
   <div class="col-span-6 md:col-span-6" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-5': !stationEditMode}">
-    <div class="flex" [ngClass]="{'justify-between': type !== 'worker', 'justify-end md:mr-28': type === 'worker'}">
+    <div class="flex" [ngClass]="{'justify-between': type !== 'worker', 'justify-end md:mr-20': type === 'worker'}">
       <div>
         <p class="overline">supervisor roster</p>
         <app-roster
