@@ -7,9 +7,9 @@
   <mat-drawer-content>
     <div class="grid grid-cols-12">
       <!-- Left column -->
-      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
-      <div class="col-span-12 md:col-span-8 bg-white px-5 py-12 relative">
+      <div class="col-span-12 lg:col-span-8 bg-white px-5 py-12 relative">
         <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="stationLoading">
           <app-loading-indicator class="m-auto self-center"></app-loading-indicator>
         </div>
@@ -32,7 +32,7 @@
           </mat-tab-group>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
-              <div class="md:col-start-3 col-span-12 md:col-span-8 flex bg-white px-5 py-2 footer justify-between">
+              <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
                   <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
                   <button mat-raised-button color="accent" class="mx-2">Save</button>
               </div>
@@ -41,7 +41,7 @@
         </form>
       </div>
       <!-- Right column -->
-      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden md:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

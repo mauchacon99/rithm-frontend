@@ -2,7 +2,7 @@
   <div class="col-span-12 md:col-span-2">
     <h6>Station Information</h6>
   </div>
-  <div class="col-span-12" [ngClass]="{'md:col-span-10': stationEditMode, 'md:col-span-5 xl:col-span-6': !stationEditMode}">
+  <div class="col-span-12" [ngClass]="{'md:col-span-10': stationEditMode, 'md:col-span-4 xl:col-span-5': !stationEditMode}">
     <span *ngIf="!stationEditMode">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent">
         <i class="fas fa-pen"></i>
@@ -16,8 +16,8 @@
       </mat-form-field>
     </form>
   </div>
-  <div class="col-span-12 md:col-span-8" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-4': !stationEditMode}">
-    <div class="flex md:justify-evenly">
+  <div class="col-span-12 md:col-span-6" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-5': !stationEditMode}">
+    <div class="flex justify-between">
       <div *ngIf="type !== 'worker'">
         <p class="overline">supervisor roster</p>
         <app-roster
@@ -38,7 +38,7 @@
           [isWorker]="true"
           [editMode]="stationEditMode"></app-roster>
       </div>
-      <div class="ml-3">
+      <div>
         <button mat-mini-fab color="warn" class="priority" *ngIf="stationEditMode">
           1
         </button>
