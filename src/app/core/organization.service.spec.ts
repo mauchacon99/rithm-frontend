@@ -3,7 +3,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { OrganizationUsers } from 'src/models';
+import { OrganizationUsers, OrganizationInfo } from 'src/models';
 import { OrganizationService } from './organization.service';
 
 const MICROSERVICE_PATH = '/userservice/api/organization';
@@ -75,6 +75,28 @@ describe('OrganizationService', () => {
 
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=${expectedResponse.userPerPage}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return information about organization', () => {
+    const organizationId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
+
+    const expectedResponse: OrganizationInfo = {
+      name: 'Strut',
+      mainContactPhoneNumber: '555-123-4567',
+      mainContactEmail: 'Fudge@Ministry.Magic',
+      timeZone: 'MW'
+    };
+
+    service.getOrganizationInfo(organizationId)
+      .subscribe((orgInfo) => {
+        expect(orgInfo).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { OrganizationUsers } from 'src/models';
+import { OrganizationUsers, OrganizationInfo } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/userservice/api/organization';
@@ -47,6 +47,18 @@ export class OrganizationService {
         }
       ]
     });
+  }
+
+  /**
+   * Gets information about organization.
+   *
+   * @param organizationId The id of the organization.
+   * @returns An organization observable.
+   */
+  getOrganizationInfo(organizationId: string): Observable<OrganizationInfo> {
+    const params = new HttpParams()
+      .set('orgRithmId', organizationId);
+    return this.http.get<OrganizationInfo>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info`, { params });
   }
 
   /**
