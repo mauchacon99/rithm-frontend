@@ -43,7 +43,7 @@ export class DashboardService {
    */
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${stationId}`);
   }
 
   /**
@@ -54,7 +54,7 @@ export class DashboardService {
    */
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${stationId}`);
   }
 
   /**
@@ -63,7 +63,7 @@ export class DashboardService {
    * @returns A list of top priority queue documents.
    */
   getPriorityQueueDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`);
   }
 
   /**
@@ -72,7 +72,7 @@ export class DashboardService {
    * @returns A list of previously started documents.
    */
   getPreviouslyStartedDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previouslystarteddocuments`);
+    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`);
   }
 
 }
