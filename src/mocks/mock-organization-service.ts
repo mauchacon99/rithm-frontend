@@ -106,4 +106,24 @@ export class MockOrganizationService {
     }
   }
 
+  /**
+   * Updates the role of users.
+   *
+   * @param role The new user role - 'admin'|null.
+   * @param organizationRithmId The organization id for which user belongs to.
+   * @param userRithmId The user's id.
+   * @returns An empty observable.
+   */
+  updateUserRole(role: 'admin' | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    if (!organizationRithmId || !userRithmId || !role) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
 }
