@@ -108,12 +108,11 @@ export class OrganizationManagementComponent implements OnInit {
   /**
    * Promote or demote user from admin role.
    *
-   * @param user If user has to be promoted or demoted.
+   * @param user User who has to be promoted or demoted.
    * @param userId The id of user for which role has to update.
    */
   async updateUserRole(user: User, userId: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let role: any;
+    let role: 'admin' | null;
     let message, title, buttonText = '';
     if (!user.role) {
       role = 'admin';
