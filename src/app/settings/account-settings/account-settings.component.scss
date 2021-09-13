@@ -1,8 +1,8 @@
 mat-card {
   @media screen and (max-width: 575px) {
-    min-height: calc(100vh - 64px);
-
     @apply h-full pb-16;
+
+    min-height: calc(100vh - 64px);
   }
 }
 
