@@ -1,29 +1,11 @@
 @import 'rithm-light-palettes', 'variables', 'functions';
 
-nav {
-  height: 65px;
-  z-index: 2;
+li {
+  min-width: 100px;
 
-  ul {
-    li {
-      min-width: 100px;
+  &.active {
+    @apply font-semibold pb-5;
 
-      &.active {
-        border-bottom: solid 3px #fff;
-        padding-bottom: 20px;
-        font-weight: 600;
-      }
-    }
-  }
-
-  button {
-    i {
-      font-size: fixed-font-size(24);
-    }
-  }
-
-  .userMenu {
-    width: 40px;
-    height: 40px;
+    border-bottom: solid 3px #fff;
   }
 }
