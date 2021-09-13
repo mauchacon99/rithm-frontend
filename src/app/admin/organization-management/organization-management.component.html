@@ -6,7 +6,12 @@
         <div class="col-12 col-md-9 pt-1">
           <div class="row mb-2">
             <h3 class="col-12 col-md-9 pt-1 mb-3 accent-text">Manage My Organization</h3>
-            <h4 class="col-12 col-md-9 pt-1 accent-text">Rithm</h4>
+            <h4  *ngIf="!editName" class="col-12 col-md-9 pt-1 accent-text">{{'Rithm'}}
+              <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt"></i></button></h4>
+              <form [formGroup]="orgNameForm" *ngIf="editName" class="col-12 col-md-9" >
+              <input matInput required class="nameEdit pb-1" type="text" id="name" formControlName="name" autocomplete="name" />
+              <button mat-icon-button class="edit-btn ml-2" [disabled]="!orgNameForm.valid" (click)="editOrgName()" ><i class="fas fa-save fa-lg"></i></button>
+              </form>
           </div>
         </div>
         <button mat-button color="accent" class="col-3 link-btn">
@@ -14,7 +19,7 @@
           Invite members
         </button>
       </div>
-     
+
       <div *ngIf="!isLoading" class="row mb-1">
         <div class="row-header col-9 col-md-4">Name</div>
         <div class="row-header d-none d-md-block col-6">Email</div>
@@ -27,10 +32,10 @@
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
           <div class="col-3 col-md-2 p-0">
             <button mat-icon-button class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId">
-              <i class="fas fa-check"></i>
+              <i class="fas fa-check fa-lg"></i>
             </button>
             <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
-              <i class="fas fa-times"></i>
+              <i class="fas fa-times fa-2x"></i>
             </button>
           </div>
         </div>
