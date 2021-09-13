@@ -4,7 +4,7 @@
     <div class="flex justify-content-center">
 
       <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto mt-4">
-        <h3 class="mb-4">Account Settings</h3>
+        <h3 class="mb-4 text-accent-500">Account Settings</h3>
 
         <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
           <h4 class="pb-3">General Account Settings</h4>
@@ -12,14 +12,14 @@
           <app-user-form formControlName="userForm" class="w-full"></app-user-form>
 
           <div class="w-full">
-            <a (click)="viewTermsAndConditions()" class="my-3">View the terms & conditions</a>
+            <a (click)="viewTermsAndConditions()" class="my-3 cursor-pointer text-sm text-accent-500 hover:underline">View the terms & conditions</a>
           </div>
 
           <div class="mt-4 flex justify-end">
             <button type="submit" mat-raised-button color="accent"
               [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
           </div>
-          <div class="text-center text-xs mt-10 uppercase">{{ appVersionNumber }}</div>
+          <div class="text-center overline uppercase">{{ appVersionNumber }}</div>
         </form>
 
       </mat-card>
