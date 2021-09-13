@@ -3,3 +3,15 @@ h6 {
     text-align: center;
   }
 }
+
+.mat-mini-fab {
+  line-height: 24px !important;
+
+  &.priority {
+    &::ng-deep .mat-button-wrapper {
+      padding: 0;
+    }
+
+    @apply mt-4 ml-2 w-7 h-7;
+  }
+}
