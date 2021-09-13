@@ -168,8 +168,8 @@ export class OrganizationManagementComponent implements OnInit {
 
   /**
    *Edit the organization name from view to edit.
-  */
- editOrgName(): void {
+   */
+    editOrgName(): void {
     this.editName = true;
   }
 }
