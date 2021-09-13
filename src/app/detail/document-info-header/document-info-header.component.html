@@ -7,12 +7,12 @@
       <mat-label>Document Name</mat-label>
       <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
       <button *ngIf="isStation" mat-icon-button matSuffix class="icon icon-top settings">
-        <i class="fas fa-cog"></i>
+        <i class="fas fa-cog text-2xl"></i>
       </button>
     </mat-form-field>
   </form>
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
-    <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn">
+    <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn" class="priority">
       1
     </button>
     <div *ngIf="userType === userTypeEnum.Admin || userType === userTypeEnum.Supervisor">
@@ -24,12 +24,12 @@
       </button>
     </div>
   </div>
-  <div *ngIf="!isStation" class="col-span-5 md:col-span-4 text-center text-xs md:text-sm">
-    <span class="text-accent-400">Time in station</span><br>
-    <span>{{ getElapsedTime(flowedTimeUTC) }}</span>
+  <div *ngIf="!isStation" class="col-span-8 md:col-span-4 text-center text-xs">
+    <span>Time in station</span><br>
+    <span class="text-accent-300">{{ getElapsedTime(flowedTimeUTC) }}</span>
   </div>
-  <div *ngIf="!isStation" class="col-span-5 md:col-span-4 text-center text-xs md:text-sm">
-    <span class="text-accent-400">Last updated</span><br>
-    <span>{{ ((getElapsedTime(lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(lastUpdatedUTC)) : getElapsedTime(lastUpdatedUTC)  + ' ago'}}</span>
+  <div *ngIf="!isStation" class="hidden md:block md:col-span-4 text-center text-xs">
+    <span>Last updated</span><br>
+    <span class="text-accent-300">{{ ((getElapsedTime(lastUpdatedUTC) === 'Yesterday') || (getElapsedTime(lastUpdatedUTC) === 'Unknown')) ? (getElapsedTime(lastUpdatedUTC)) : getElapsedTime(lastUpdatedUTC)  + ' ago'}}</span>
   </div>
 </section>

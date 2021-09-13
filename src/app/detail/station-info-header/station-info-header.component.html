@@ -2,7 +2,7 @@
   <div class="col-span-12 md:col-span-2">
     <h6>Station Information</h6>
   </div>
-  <div class="col-span-12" [ngClass]="{'md:col-span-10': stationEditMode, 'md:col-span-4 xl:col-span-5': !stationEditMode}">
+  <div class="col-span-6" [ngClass]="{'md:col-span-10': stationEditMode, 'md:ml-2 md:col-span-4 xl:col-span-5': !stationEditMode}">
     <span *ngIf="!stationEditMode">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent">
         <i class="fas fa-pen"></i>
@@ -16,9 +16,9 @@
       </mat-form-field>
     </form>
   </div>
-  <div class="col-span-12 md:col-span-6" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-5': !stationEditMode}">
-    <div class="flex justify-between">
-      <div *ngIf="type !== 'worker'">
+  <div class="col-span-6 md:col-span-6" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-5': !stationEditMode}">
+    <div class="flex" [ngClass]="{'justify-between': type !== 'worker', 'justify-end md:mr-28': type === 'worker'}">
+      <div>
         <p class="overline">supervisor roster</p>
         <app-roster
           [rosterMembers]="stationInformation.supervisors"
@@ -28,7 +28,7 @@
           [isWorker]="false"
           [editMode]="stationEditMode"></app-roster>
       </div>
-      <div>
+      <div *ngIf="type !== 'worker'">
         <p class="overline">worker roster</p>
         <app-roster
           [rosterMembers]="stationInformation.workers"
