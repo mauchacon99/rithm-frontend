@@ -89,10 +89,45 @@ describe('OrganizationService', () => {
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
-
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization`);
     expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should promote user with admin role', () => {
+    const role = 'admin';
+    const organizationRithmId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
+    const userRithmId = 'POBNJV24-AF01-48AB-A7BB-279CC25B9725';
+
+    service.updateUserRole(role, organizationRithmId, userRithmId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual({ role, organizationRithmId, userRithmId });
+
+    req.flush(null);
+    httpTestingController.verify();
+
+  });
+
+  it('should demote user by removing admin role', () => {
+    const role = null;
+    const organizationRithmId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
+    const userRithmId = 'POBNJV24-AF01-48AB-A7BB-279CC25B9725';
+
+    service.updateUserRole(role, organizationRithmId, userRithmId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/user-organization-role`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual({ role, organizationRithmId, userRithmId });
 
     req.flush(null);
     httpTestingController.verify();

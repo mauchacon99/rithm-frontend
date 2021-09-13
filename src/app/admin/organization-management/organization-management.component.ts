@@ -104,4 +104,54 @@ export class OrganizationManagementComponent implements OnInit {
       }
     }
   }
+
+  /**
+   * Promote or demote user from admin role.
+   *
+   * @param user User who has to be promoted or demoted.
+   * @param userId The id of user for which role has to update.
+   */
+  async updateUserRole(user: User, userId: string): Promise<void> {
+    let role: 'admin' | null;
+    let message, title, buttonText = '';
+    if (!user.role) {
+      role = 'admin';
+      // eslint-disable-next-line max-len
+      message = `Promoting ${user.firstName} ${user.lastName} to an admin will give this user additional privileges. Are you sure you want to do this?`;
+      title = 'Promote to Admin';
+      buttonText = 'Promote';
+    } else {
+      role = null;
+      // eslint-disable-next-line max-len
+      message = `${user.firstName} ${user.lastName} will lose their admin privileges and be restricted in certain functionality. Are you sure you want to do this?`;
+      title = 'Remove Admin Privileges';
+      buttonText = 'Remove';
+    }
+    const organizationId: string = this.userService.user?.organizations[0];
+    const confirm = await this.popupService.confirm({
+      title: title,
+      message: message,
+      okButtonText: buttonText,
+    });
+
+    if (confirm) {
+      this.isLoading = true;
+      this.organizationService.updateUserRole(role, organizationId, userId)
+        .pipe(first())
+        .subscribe(() => {
+          this.isLoading = false;
+          !user.role ? user.role = 'admin' : user.role = null;
+          user.role ? this.popupService.notify('User has been promoted to admin role.') :
+            this.popupService.notify('User has been de-promoted from admin role.');
+        }, (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error,
+            true
+          );
+        });
+    }
+  }
+
 }
