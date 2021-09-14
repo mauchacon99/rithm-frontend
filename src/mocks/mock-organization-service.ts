@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { OrganizationUsers } from 'src/models';
+import { OrganizationInfo, OrganizationUsers } from 'src/models';
 
 /**
  * Mocks methods of the `OrganizationService`.
@@ -72,6 +72,50 @@ export class MockOrganizationService {
    */
   removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
     if (!organizationRithmId || !userRithmId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Gets information about organization.
+   *
+   * @param organizationId The id of the organization.
+   * @returns An organization observable.
+   */
+  getOrganizationInfo(organizationId: string): Observable<OrganizationInfo> {
+    if (!organizationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgInfo: OrganizationInfo = {
+        name: 'Strut',
+        mainContactPhoneNumber: '555-123-4567',
+        mainContactEmail: 'Fudge@Ministry.Magic',
+        timeZone: 'MW'
+      };
+      return of(orgInfo).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Updates the role of users.
+   *
+   * @param role The new user role - 'admin'|null.
+   * @param organizationRithmId The organization id for which user belongs to.
+   * @param userRithmId The user's id.
+   * @returns An empty observable.
+   */
+  updateUserRole(role: 'admin' | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
+    if (!organizationRithmId || !userRithmId || !role) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'

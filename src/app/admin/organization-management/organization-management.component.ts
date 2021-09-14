@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { User } from 'src/models';
+import { User, OrganizationInfo } from 'src/models';
 import { OrganizationService } from 'src/app/core/organization.service';
 
 /**
@@ -31,6 +31,12 @@ export class OrganizationManagementComponent implements OnInit {
   /** Total number of users in this organization. */
   totalNumUsers = 0;
 
+  /** The organization information object. */
+  orgInfo?: OrganizationInfo;
+
+  /** Whether the organization information is loading. */
+  orgLoading = false;
+
   constructor(
     private userService: UserService,
     private errorService: ErrorService,
@@ -44,6 +50,7 @@ export class OrganizationManagementComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.userService.user;
     this.getUsers(this.activeNum);
+    this.getOrganizationInfo();
   }
 
   /**
@@ -104,4 +111,76 @@ export class OrganizationManagementComponent implements OnInit {
       }
     }
   }
+
+  /**
+   * Gets organization information.
+   */
+  getOrganizationInfo(): void {
+    this.orgLoading = true;
+    const organizationId: string = this.userService.user?.organizations[0];
+    this.organizationService.getOrganizationInfo(organizationId)
+      .pipe(first())
+      .subscribe((organization) => {
+        if (organization) {
+          this.orgInfo = organization;
+        }
+        this.orgLoading = false;
+      }, (error: unknown) => {
+        this.orgLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
+   * Promote or demote user from admin role.
+   *
+   * @param user User who has to be promoted or demoted.
+   * @param userId The id of user for which role has to update.
+   */
+  async updateUserRole(user: User, userId: string): Promise<void> {
+    let role: 'admin' | null;
+    let message, title, buttonText = '';
+    if (!user.role) {
+      role = 'admin';
+      // eslint-disable-next-line max-len
+      message = `Promoting ${user.firstName} ${user.lastName} to an admin will give this user additional privileges. Are you sure you want to do this?`;
+      title = 'Promote to Admin';
+      buttonText = 'Promote';
+    } else {
+      role = null;
+      // eslint-disable-next-line max-len
+      message = `${user.firstName} ${user.lastName} will lose their admin privileges and be restricted in certain functionality. Are you sure you want to do this?`;
+      title = 'Remove Admin Privileges';
+      buttonText = 'Remove';
+    }
+    const organizationId: string = this.userService.user?.organizations[0];
+    const confirm = await this.popupService.confirm({
+      title: title,
+      message: message,
+      okButtonText: buttonText,
+    });
+
+    if (confirm) {
+      this.isLoading = true;
+      this.organizationService.updateUserRole(role, organizationId, userId)
+        .pipe(first())
+        .subscribe(() => {
+          this.isLoading = false;
+          !user.role ? user.role = 'admin' : user.role = null;
+          user.role ? this.popupService.notify('User has been promoted to admin role.') :
+            this.popupService.notify('User has been de-promoted from admin role.');
+        }, (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error,
+            true
+          );
+        });
+    }
+  }
+
 }
