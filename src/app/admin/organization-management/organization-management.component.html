@@ -1,4 +1,44 @@
-<div class="container">
+<div class="container h-full">
+  <!-- <div class="flex justify-content-center"> -->
+    <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div>
+          <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
+          <h4 class="text-accent-500">{{orgInfo?.name}}</h4>
+        </div>
+        <div class="sm:justify-self-end">
+          <button mat-button color="accent">
+            <i class="fas fa-link"></i>
+            Invite members
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 mt-5">
+        <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
+        <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
+        <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
+        <ng-container *ngFor="let user of users">
+          <div class="col-span-8 md:col-span-5">
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
+          <div class="hidden md:block md:col-span-5">
+            {{ user.email }}
+          </div>
+          <div class="col-span-4 md:col-span-2">
+            <button mat-icon-button class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId"
+              (click)="updateUserRole(user, user.rithmId)">
+              <i class="fas fa-check-circle fa-2x"></i>
+            </button>
+            <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </mat-card>
+  <!-- </div> -->
+</div>
+<!-- <div class="container">
   <div class="row justify-content-center">
 
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
@@ -45,4 +85,4 @@
       <app-loading-indicator *ngIf="isLoading || orgLoading"></app-loading-indicator>
     </mat-card>
   </div>
-</div>
+</div> -->
