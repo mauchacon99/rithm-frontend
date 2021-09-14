@@ -19,7 +19,7 @@
       <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
       <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
       <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
-      <ng-container *ngFor="let user of users">
+      <ng-container *ngFor="let user of users; let i = index">
         <div class="col-span-8 md:col-span-5">
           {{ user.firstName }} {{ user.lastName }}
         </div>
@@ -27,10 +27,11 @@
           {{ user.email }}
         </div>
         <div class="col-span-4 md:col-span-2">
-          <button mat-icon-button class="admin-btn" [class.isAdmin]="user.role" [disabled]="user.rithmId === currentUser.rithmId"
-            (click)="updateUserRole(user, user.rithmId)">
+          <button mat-icon-button *ngIf="!roleLoading[i]" class="admin-btn" [class.isAdmin]="user.role" [disabled]="user.rithmId === currentUser.rithmId"
+            (click)="updateUserRole(user, user.rithmId, i)">
             <i class="fas fa-check-circle fa-2x"></i>
           </button>
+          <app-loading-indicator *ngIf="roleLoading[i]" class="relative inline-block top-2" [diameter]="24"></app-loading-indicator>
           <button class="group" mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
             <i class="fas fa-times fa-2x group-hover:text-error-500 text-secondary-500"></i>
           </button>
