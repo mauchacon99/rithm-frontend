@@ -1,6 +1,7 @@
 <div class="container h-full">
   <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2">
+    <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+    <div class="grid grid-cols-1 sm:grid-cols-2" *ngIf="!isLoading || !orgLoading">
       <div>
         <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
         <h4 class="text-accent-500">{{orgInfo?.name}}</h4>
@@ -12,7 +13,7 @@
         </button>
       </div>
     </div>
-    <div class="grid grid-cols-12 mt-5 gap-2 items-center">
+    <div class="grid grid-cols-12 mt-5 gap-2 items-center" *ngIf="!isLoading || !orgLoading">
       <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
       <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
       <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
