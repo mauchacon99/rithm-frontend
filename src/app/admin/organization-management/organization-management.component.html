@@ -22,17 +22,18 @@
       </div>
 
       <div *ngIf="!isLoading || !orgLoading">
-        <div *ngFor="let user of users" class="user row align-items-center ">
+        <div *ngFor="let user of users; let i = index" class="user row align-items-center ">
           <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
           <div class="d-none d-md-block col-6">{{ user.email }}</div>
           <div class="col-3 col-md-2 p-0">
             <button mat-icon-button class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId"
-              (click)="updateUserRole(user, user.rithmId)">
+              (click)="updateUserRole(user, user.rithmId, i)">
               <i class="fas fa-check"></i>
             </button>
             <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
               <i class="fas fa-times"></i>
             </button>
+            <app-loading-indicator *ngIf="roleLoading[i]" class="role-loading mt-1" [diameter]="27"></app-loading-indicator>
           </div>
         </div>
       </div>
