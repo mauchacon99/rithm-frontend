@@ -20,6 +20,12 @@
   }
 }
 
+.loading {
+  @apply flex;
+
+  height: calc(100vh - 162px);
+}
+
 ::ng-deep mat-ink-bar.mat-ink-bar {
   background: $accent-blue !important;
 }
