@@ -10,8 +10,8 @@
       <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white px-5 pb-12 relative">
-        <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="documentLoading">
-          <app-loading-indicator class="m-auto self-center"></app-loading-indicator>
+        <div class="loading" *ngIf="documentLoading">
+          <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
         </div>
         <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm">
           <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
