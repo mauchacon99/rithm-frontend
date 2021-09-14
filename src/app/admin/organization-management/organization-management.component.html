@@ -34,6 +34,10 @@
         </div>
       </ng-container>
     </div>
+    <div *ngIf="!isLoading && totalNumUsers > 0" class="flex justify-center mt-5">
+      <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
+      </app-pagination>
+    </div>
   </mat-card>
 </div>
 <!-- <div class="container">
