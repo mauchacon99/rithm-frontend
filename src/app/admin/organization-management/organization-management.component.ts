@@ -37,6 +37,9 @@ export class OrganizationManagementComponent implements OnInit {
   /** Whether the organization information is loading. */
   orgLoading = false;
 
+  /** Admin promote or demote loading indicator. */
+  roleLoading: boolean[] = [];
+
   constructor(
     private userService: UserService,
     private errorService: ErrorService,
@@ -139,8 +142,9 @@ export class OrganizationManagementComponent implements OnInit {
    *
    * @param user User who has to be promoted or demoted.
    * @param userId The id of user for which role has to update.
+   * @param index The index of the user in page.
    */
-  async updateUserRole(user: User, userId: string): Promise<void> {
+  async updateUserRole(user: User, userId: string, index: number): Promise<void> {
     let role: 'admin' | null;
     let message, title, buttonText = '';
     if (!user.role) {
@@ -164,16 +168,16 @@ export class OrganizationManagementComponent implements OnInit {
     });
 
     if (confirm) {
-      this.isLoading = true;
+      this.roleLoading[index] = true;
       this.organizationService.updateUserRole(role, organizationId, userId)
         .pipe(first())
         .subscribe(() => {
-          this.isLoading = false;
+          this.roleLoading[index] = false;
           !user.role ? user.role = 'admin' : user.role = null;
           user.role ? this.popupService.notify('User has been promoted to admin role.') :
             this.popupService.notify('User has been de-promoted from admin role.');
         }, (error: unknown) => {
-          this.isLoading = false;
+          this.roleLoading[index] = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error,
