@@ -1,6 +1,23 @@
-@import 'variables';
+@import 'variables', 'rithm-light-palettes';
 
 mat-card {
+  .admin-btn {
+    i {
+      color: $secondary-gray;
+    }
+
+    &:disabled {
+      i {
+        color: map-get($accent-palette, 200) !important;
+      }
+    }
+
+    &.isAdmin {
+      i {
+        color: $accent-blue;
+      }
+    }
+  }
   // @media screen and (max-width: 575px) {
   //   @apply h-full pb-16;
 
