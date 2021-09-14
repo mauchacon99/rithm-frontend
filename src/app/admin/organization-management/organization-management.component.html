@@ -1,42 +1,40 @@
 <div class="container h-full">
-  <!-- <div class="flex justify-content-center"> -->
-    <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2">
-        <div>
-          <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
-          <h4 class="text-accent-500">{{orgInfo?.name}}</h4>
+  <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2">
+      <div>
+        <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
+        <h4 class="text-accent-500">{{orgInfo?.name}}</h4>
+      </div>
+      <div class="sm:justify-self-end">
+        <button mat-button color="accent">
+          <i class="fas fa-link"></i>
+          Invite members
+        </button>
+      </div>
+    </div>
+    <div class="grid grid-cols-12 mt-5 py-3">
+      <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
+      <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
+      <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
+      <ng-container *ngFor="let user of users">
+        <div class="col-span-8 md:col-span-5">
+          {{ user.firstName }} {{ user.lastName }}
         </div>
-        <div class="sm:justify-self-end">
-          <button mat-button color="accent">
-            <i class="fas fa-link"></i>
-            Invite members
+        <div class="hidden md:block md:col-span-5">
+          {{ user.email }}
+        </div>
+        <div class="col-span-4 md:col-span-2">
+          <button mat-icon-button class="admin-btn" [class.isAdmin]="user.role" [disabled]="user.rithmId === currentUser.rithmId"
+            (click)="updateUserRole(user, user.rithmId)">
+            <i class="fas fa-check-circle fa-2x"></i>
+          </button>
+          <button class="group" mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
+            <i class="fas fa-times fa-2x group-hover:text-error-500 text-secondary-500"></i>
           </button>
         </div>
-      </div>
-      <div class="grid grid-cols-12 mt-5 py-3">
-        <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
-        <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
-        <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
-        <ng-container *ngFor="let user of users">
-          <div class="col-span-8 md:col-span-5">
-            {{ user.firstName }} {{ user.lastName }}
-          </div>
-          <div class="hidden md:block md:col-span-5">
-            {{ user.email }}
-          </div>
-          <div class="col-span-4 md:col-span-2">
-            <button mat-icon-button class="admin-btn" [class.isAdmin]="user.role" [disabled]="user.rithmId === currentUser.rithmId"
-              (click)="updateUserRole(user, user.rithmId)">
-              <i class="fas fa-check-circle fa-2x"></i>
-            </button>
-            <button class="group" mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
-              <i class="fas fa-times fa-2x group-hover:text-error-500 text-secondary-500"></i>
-            </button>
-          </div>
-        </ng-container>
-      </div>
-    </mat-card>
-  <!-- </div> -->
+      </ng-container>
+    </div>
+  </mat-card>
 </div>
 <!-- <div class="container">
   <div class="row justify-content-center">
