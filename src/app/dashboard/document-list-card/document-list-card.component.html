@@ -21,6 +21,11 @@
     </ng-container>
   </div>
   <div class="w-full h-full absolute top-0 left-0 flex">
+    <div class="m-auto self-center" *ngIf="!documents || documents.length === 0">
+      No documents
+    </div>
+  </div>
+  <div class="w-full h-full absolute top-0 left-0 flex">
     <app-loading-indicator class="m-auto self-center" *ngIf="isLoading"></app-loading-indicator>
   </div>
 </mat-card>
