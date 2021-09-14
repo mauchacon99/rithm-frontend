@@ -1,15 +1,14 @@
 mat-card {
-  @media screen and (max-width: 575px) {
-    @apply h-full pb-16;
+  // @media screen and (max-width: 575px) {
+  //   @apply h-full pb-16;
 
-    min-height: calc(100vh - 64px);
-  }
+  //   min-height: calc(100vh - 64px);
+  // }
 }
 
 .mobile-save {
-  @media screen and (max-width: 575px) {
-    @apply fixed bottom-0 left-0 w-full bg-white p-2;
-
+  @media screen and (max-width: 639px) {
+    @apply fixed md:relative bottom-0 left-0 w-full bg-white p-2;
     box-shadow: 0 -1px 6px #ccc;
   }
 }
