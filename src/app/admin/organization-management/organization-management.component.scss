@@ -18,14 +18,12 @@
       }
 
       div button {
-        color: $secondary-gray;
+        &.mat-icon-button {
+          color: $secondary-gray;
 
-        i {
-          font-size: 1.25rem;
-        }
-
-        &:hover {
-          color: $warning-red;
+          &:hover {
+            color: $warning-red;
+          }
         }
 
         &.mat-button-disabled {
@@ -68,6 +66,25 @@
 
       &.user {
         min-height: 40px;
+      }
+
+      .edit-btn {
+        font-size: 1.25rem;
+        color: $secondary-gray;
+        transition: 0.3s;
+        line-height: 0.3;
+        height: 30px;
+        width: 25px;
+
+        &:hover {
+          color: $secondary-black !important;
+        }
+      }
+
+      .v-align-button {
+        display: flex;
+        align-content: center;
+        align-items: center;
       }
     }
   }

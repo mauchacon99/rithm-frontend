@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -31,6 +32,12 @@ export class OrganizationManagementComponent implements OnInit {
   /** Total number of users in this organization. */
   totalNumUsers = 0;
 
+  /** While edit button using the save & edit. */
+  editName = false;
+
+  /** Organization name form. */
+  orgNameForm: FormGroup;
+
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
@@ -40,12 +47,20 @@ export class OrganizationManagementComponent implements OnInit {
   /** Admin promote or demote loading indicator. */
   roleLoading: boolean[] = [];
 
+  /** Whether the organization name is loading. */
+  orgNameLoading = false;
+
   constructor(
+    private fb: FormBuilder,
     private userService: UserService,
     private errorService: ErrorService,
     private popupService: PopupService,
     private organizationService: OrganizationService
-  ) { }
+  ) {
+    this.orgNameForm = this.fb.group({
+      name: ['', Validators.required]
+    });
+  }
 
   /**
    * Gets the first page of users on load.
@@ -191,14 +206,26 @@ export class OrganizationManagementComponent implements OnInit {
    * Updates Organization details.
    */
   updateOrganization(): void {
-    this.isLoading = true;
+    this.orgNameLoading = true;
+    this.editName = !this.editName;
     const organizationId: string = this.userService.user?.organizations[0];
-    this.organizationService.updateOrganizationInfo(<OrganizationInfo>(this.orgInfo), organizationId)
+    const orgData: OrganizationInfo = {
+      name: this.orgNameForm.get('name')?.value,
+      mainContactEmail: <string>(this.orgInfo?.mainContactEmail),
+      mainContactPhoneNumber: <string>(this.orgInfo?.mainContactPhoneNumber),
+      timeZone: <string>(this.orgInfo?.timeZone)
+    };
+    this.organizationService.updateOrganizationInfo(orgData, organizationId)
       .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
+      .subscribe((organization) => {
+        if (organization) {
+          this.orgInfo = organization;
+        }
+        this.orgNameLoading = false;
+        this.popupService.notify('Organization name has been updated.');
       }, (error: unknown) => {
-        this.isLoading = false;
+        this.orgNameLoading = false;
+        this.editName = !this.editName;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
@@ -207,5 +234,12 @@ export class OrganizationManagementComponent implements OnInit {
       });
   }
 
-
+  /**
+   *Edit the organization name from view to edit.
+   */
+  editOrgName(): void {
+    this.orgNameForm.get('name')?.setValue(this.orgInfo?.name);
+    this.orgNameForm.markAsPristine();
+    this.editName = !this.editName;
+  }
 }
