@@ -18,10 +18,12 @@
       }
 
       div button {
-        color: $secondary-gray;
+        &.mat-icon-button {
+          color: $secondary-gray;
 
-        &:hover {
-          color: $warning-red;
+          &:hover {
+            color: $warning-red;
+          }
         }
 
         &.mat-button-disabled {
@@ -79,12 +81,10 @@
         }
       }
 
-      .nameEdit {
-        font-size: 1.25rem;
-        border: none;
-        border-bottom: 1px solid #000;
-        width: calc(100% - 45px);
-        outline: none;
+      .v-align-button {
+        display: flex;
+        align-content: center;
+        align-items: center;
       }
     }
   }

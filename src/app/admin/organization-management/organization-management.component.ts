@@ -203,6 +203,7 @@ export class OrganizationManagementComponent implements OnInit {
    *Edit the organization name from view to edit.
    */
   editOrgName(): void {
-    this.editName = true;
+    this.orgNameForm.get('name')?.setValue(this.orgInfo?.name);
+    this.editName = !this.editName;
   }
 }
