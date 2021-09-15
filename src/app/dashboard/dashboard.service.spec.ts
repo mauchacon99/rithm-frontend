@@ -109,7 +109,7 @@ describe('DashboardService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stationroster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${rithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -140,7 +140,7 @@ describe('DashboardService', () => {
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/SupervisorRoster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${rithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -166,7 +166,7 @@ describe('DashboardService', () => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getprioritydocuments`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -192,7 +192,7 @@ describe('DashboardService', () => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previouslystarteddocuments`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
