@@ -1,21 +1,3 @@
-@import 'variables', 'rithm-light-palettes';
-
-mat-card {
-  .admin-btn {
-    i {
-      color: $secondary-gray;
-    }
-
-    &:disabled {
-      i {
-        color: map-get($accent-palette, 200) !important;
-      }
-    }
-
-    &.isAdmin {
-      i {
-        color: $accent-blue;
-      }
-    }
-  }
+.mat-button {
+  padding: 0;
 }

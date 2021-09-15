@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
@@ -49,7 +50,8 @@ describe('OrganizationManagementComponent', () => {
         MockComponent(PaginationComponent)
       ],
       imports: [
-        MatCardModule
+        MatCardModule,
+        ReactiveFormsModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
