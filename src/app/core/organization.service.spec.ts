@@ -165,7 +165,7 @@ describe('OrganizationService', () => {
       timeZone: 'MW'
     };
 
-    service.getOrganizationInfo(organizationId)
+    service.updateOrganizationInfo(expectedResponse, organizationId)
       .subscribe((orgInfo) => {
         expect(orgInfo).toBeDefined();
       });
