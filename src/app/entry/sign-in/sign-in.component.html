@@ -16,11 +16,11 @@
           <p class="mt-1 ml-5">Welcome to Rithm.</p>
           <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error">Invalid email or password</p>
           <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="flex flex-col px-5 py-2">
-            <mat-form-field class="" appearance="outline">
+            <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
             </mat-form-field>
-            <mat-form-field class="" appearance="outline">
+            <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input id="password" type="password" matInput placeholder="Password" formControlName="password"
                 autocomplete="current-password">

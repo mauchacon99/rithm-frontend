@@ -1,9 +1,8 @@
-@import 'rithm-light-palettes';
 
 button {
   &.move {
     i {
-      color: map-get($accent-palette, 300);
+      @apply text-accent-300;
     }
   }
 }
