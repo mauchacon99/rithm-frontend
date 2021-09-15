@@ -187,4 +187,25 @@ export class OrganizationManagementComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates Organization details.
+   */
+  updateOrganization(): void {
+    this.isLoading = true;
+    const organizationId: string = this.userService.user?.organizations[0];
+    this.organizationService.updateOrganizationInfo(<OrganizationInfo>(this.orgInfo), organizationId)
+      .pipe(first())
+      .subscribe(() => {
+        this.isLoading = false;
+      }, (error: unknown) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+      });
+  }
+
+
 }
