@@ -22,6 +22,10 @@ nav {
     img {
       width: 110px;
     }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   ul {
