@@ -3,11 +3,28 @@
     <app-loading-indicator class="flex-grow"></app-loading-indicator>
   </div>
   <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto" *ngIf="!isLoading || !orgLoading">
+
     <div class="grid grid-cols-1 sm:grid-cols-2">
       <div>
         <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
-        <h4 class="text-accent-500">{{orgInfo?.name}}</h4>
+        <h4 class="text-accent-500">
+          {{orgInfo?.name}}
+          <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt"></i></button>
+        </h4>
+        <form [formGroup]="orgNameForm" *ngIf="editName" class="col-12 pr-1">
+          <div class="row">
+          <mat-form-field appearance="outline" class="col-10 col-md-7 col-sm-10 pr-0">
+            <mat-label>Organization name</mat-label>
+            <input matInput type="text" id="name" formControlName="name"  autocomplete="name" />
+          </mat-form-field>
+          <div class="col-10 col-md-5 col-sm-10 pr-0 pb-3 v-align-button">
+          <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid" class="align-middle mr-2">Save</button>
+          <button mat-stroked-button color="accent" (click)="editOrgName()" class="align-middle">Cancel</button>
+          </div>
+        </div>
+        </form>
       </div>
+
       <div class="sm:justify-self-end">
         <button mat-button color="accent">
           <i class="fas fa-link"></i>
@@ -16,9 +33,13 @@
       </div>
     </div>
     <div class="grid grid-cols-12 mt-5 gap-2 items-center">
-      <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
-      <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
-      <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
+
+      <div *ngIf="!isLoading || !orgLoading">
+        <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
+        <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
+        <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
+      </div>
+
       <ng-container *ngFor="let user of users; let i = index">
         <div class="col-span-8 md:col-span-5">
           {{ user.firstName }} {{ user.lastName }}
@@ -37,10 +58,13 @@
           </button>
         </div>
       </ng-container>
+
     </div>
+
     <div *ngIf="totalNumUsers > 0" class="flex justify-center mt-5">
       <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
       </app-pagination>
     </div>
+
   </mat-card>
 </div>
