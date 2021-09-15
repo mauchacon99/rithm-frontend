@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -31,6 +32,12 @@ export class OrganizationManagementComponent implements OnInit {
   /** Total number of users in this organization. */
   totalNumUsers = 0;
 
+  /** While edit button using the save & edit. */
+  editName = false;
+
+  /** Organization name form. */
+  orgNameForm: FormGroup;
+
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
@@ -41,11 +48,16 @@ export class OrganizationManagementComponent implements OnInit {
   roleLoading: boolean[] = [];
 
   constructor(
+    private fb: FormBuilder,
     private userService: UserService,
     private errorService: ErrorService,
     private popupService: PopupService,
     private organizationService: OrganizationService
-  ) { }
+  ) {
+    this.orgNameForm = this.fb.group({
+      name: ['', Validators.required]
+    });
+  }
 
   /**
    * Gets the first page of users on load.
@@ -187,4 +199,11 @@ export class OrganizationManagementComponent implements OnInit {
     }
   }
 
+  /**
+   *Edit the organization name from view to edit.
+   */
+  editOrgName(): void {
+    this.orgNameForm.get('name')?.setValue(this.orgInfo?.name);
+    this.editName = !this.editName;
+  }
 }

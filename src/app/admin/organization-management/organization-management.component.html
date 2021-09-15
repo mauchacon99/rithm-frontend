@@ -3,13 +3,26 @@
 
     <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
       <div class="row mb-3">
-        <div class="col-12 col-md-9 pt-1">
+        <div class="col-12 col-md-9 pt-1 pr-1">
           <div class="row mb-2">
-            <h3 class="col-12 col-md-9 pt-1 mb-3 accent-text">Manage My Organization</h3>
-            <h4 class="col-12 col-md-9 pt-1 accent-text">{{orgInfo?.name}}</h4>
+            <h3 class="col-12 col-md-10 pt-1 mb-3 accent-text">Manage My Organization</h3>
+            <h4  *ngIf="!editName" class="col-12 col-md-9 pt-1 accent-text">{{orgInfo?.name}}
+              <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt"></i></button></h4>
+              <form [formGroup]="orgNameForm" *ngIf="editName" class="col-12 pr-1">
+                <div class="row">
+                <mat-form-field appearance="outline" class="col-10 col-md-7 col-sm-10 pr-0">
+                  <mat-label>Organization name</mat-label>
+                  <input matInput type="text" id="name" formControlName="name"  autocomplete="name" />
+                </mat-form-field>
+                <div class="col-10 col-md-5 col-sm-10 pr-0 pb-3 v-align-button">
+                <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid" class="align-middle mr-2">Save</button>
+                <button mat-stroked-button color="accent" (click)="editOrgName()" class="align-middle">Cancel</button>
+                </div>
+              </div>
+              </form>
           </div>
         </div>
-        <button mat-button color="accent" class="col-3 link-btn">
+        <button mat-button color="accent" class="col-5 col-md-3 px-3 link-btn">
           <i class="fas fa-link"></i>
           Invite members
         </button>
@@ -32,7 +45,7 @@
             </button>
             <app-loading-indicator *ngIf="roleLoading[i]" class="role-loading" [diameter]="24"></app-loading-indicator>
             <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
-              <i class="fas fa-times"></i>
+              <i class="fas fa-times fa-2x"></i>
             </button>
           </div>
         </div>
