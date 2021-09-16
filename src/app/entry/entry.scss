@@ -1,12 +1,8 @@
-@import 'variables', 'mixins', 'functions';
-
 .page {
-  @include gradient($secondary-gray, $secondary-blue);
-
-  @apply flex h-screen overflow-y-auto;
+  @apply flex h-screen overflow-y-auto bg-gradient-to-r from-secondary-500 to-blueGray;
 
   mat-card {
-    @apply w-full md:w-10/12 xl:w-3/5 m-auto;
+    @apply w-full md:w-10/12 xl:w-3/5 m-auto rounded;
 
     padding: 0;
     height: 575px;
