@@ -25,3 +25,4 @@ export * from './possible-answer';
 export * from './station-info';
 export * from './organization-users';
 export * from './organization-info';
+export * from './point';
