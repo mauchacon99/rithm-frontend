@@ -1,17 +1,9 @@
-h6 {
-  @media screen and (max-width: 767px) {
-    text-align: center;
-  }
-}
-
 .mat-mini-fab {
-  line-height: 24px !important;
-
   &.priority {
     &::ng-deep .mat-button-wrapper {
       padding: 0;
     }
 
-    @apply w-7 h-7;
+    @apply w-7 h-7 leading-6;
   }
 }
