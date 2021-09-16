@@ -12,7 +12,7 @@ import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 export class MapService {
 
   /** The rendering context for the canvas element for the map. */
-  private canvasContext?: CanvasRenderingContext2D;
+  canvasContext?: CanvasRenderingContext2D;
 
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.build);
