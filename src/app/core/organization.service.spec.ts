@@ -167,7 +167,7 @@ describe('OrganizationService', () => {
 
     service.updateOrganizationInfo(expectedResponse, organizationId)
       .subscribe((orgInfo) => {
-        expect(orgInfo).toBeDefined();
+        expect(orgInfo).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`);
