@@ -1,4 +1,3 @@
-
 import { Point } from 'src/models';
 
 // TODO: refine this file; this is polluting the global namespace a little
