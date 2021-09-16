@@ -8,17 +8,17 @@
     </span>
     <span *ngIf="!isLoading && totalNumDocs > 0">
       <p class="text-error-700 text-center" *ngIf="userType === userTypeEnum.None">You are not a part of this station.</p>
-      <div class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-2">
-        <div class="pl-9 col-span-2 md:col-span-1 xl:col-span-2">
+      <div class="grid grid-cols-12 xl:grid-cols-10 pb-2">
+        <div class="pl-9 col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4">
           <strong class="font-semibold">Document</strong>
         </div>
-        <div>
+        <div class="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2">
           <strong class="font-semibold">Assigned</strong>
         </div>
-        <div class="hidden md:block">
+        <div class="hidden md:block md:col-span-4 lg:col-span-3 xl:col-span-2">
           <strong class="font-semibold">Time in Station</strong>
         </div>
-        <div class="hidden lg:block">
+        <div class="hidden lg:block lg:col-span-3 xl:col-span-2">
           <strong class="font-semibold">Last Updated</strong>
         </div>
       </div>
@@ -26,12 +26,11 @@
         *ngFor="let document of documents"
         (click)="checkDocPermission(document.documentRithmId)"
         [ngClass]="{'cursor-pointer' : userType !== userTypeEnum.None}"
-        class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
-        rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200
-        mb-4"
+        class="grid grid-cols-12 xl:grid-cols-10 mb-4
+        rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
       >
         <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!document.isEscalated" class="flex col-span-2 md:col-span-1 xl:col-span-2">
+          [matTooltipDisabled]="!document.isEscalated" class="flex col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4">
           <!-- Priority -->
           <div class="circle-30-accent mr-3">
             {{ document.priority }}
@@ -44,7 +43,7 @@
           </p>
         </div>
         <!-- Assigned -->
-        <div>
+        <div class="md:col-span-4 col-span-6 lg:col-span-3 xl:col-span-2">
           <span *ngIf="document?.userAssigned" class="flex">
             <div class="mr-3">
               <app-user-avatar [firstName]="getNamePortion(document.userAssigned, 0)" [lastName]="getNamePortion(document.userAssigned, 1)" [hideToolTip]="true"></app-user-avatar>
@@ -55,11 +54,11 @@
           </span>
         </div>
         <!-- Time in station -->
-        <div class="hidden leading-7 whitespace-nowrap md:block">
+        <div class="hidden leading-7 whitespace-nowrap md:block md:col-span-4 lg:col-span-3 xl:col-span-2">
           {{ getElapsedTime(document.flowedTimeUTC) }}
         </div>
         <!-- Last updated -->
-        <div class="hidden leading-7 whitespace-nowrap lg:block">
+        <div class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2">
           {{ ((getElapsedTime(document.updatedTimeUTC) === '1 day') || (getElapsedTime(document.updatedTimeUTC) === 'Unknown')) ? (getElapsedTime(document.updatedTimeUTC) === '1 day' ? 'Yesterday' : getElapsedTime(document.updatedTimeUTC)) : getElapsedTime(document.updatedTimeUTC)  + ' ago'}}
         </div>
       </div>
