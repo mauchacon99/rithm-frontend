@@ -1,15 +1,5 @@
-@import 'functions';
 
 ::ng-deep .mat-tab-body-content {
-  mat-form-field {
-    margin: 10px;
-  }
-
-  .mat-icon-button {
-    font-size: font-calc(21);
-    top: -4px;
-  }
-
   .mat-form-field-wrapper {
     padding-bottom: 0 !important;
   }

@@ -1,24 +1,4 @@
-@import 'variables', 'functions', 'rithm-light-palettes';
-
-.row {
-  width: 100%;
-
-  &.read {
-    opacity: 0.7;
-  }
-
-  .body-small {
-    line-height: 18px;
-  }
-
-  .subtitle-medium {
-    color: $accent-blue;
-  }
-
-  .overline {
-    color: map-get($secondary-gray-palette, 400);
-  }
-}
+@import 'variables';
 
 :host::ng-deep .user-avatar {
   .circle-30-secondary:hover {

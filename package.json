@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "build-test": "ng build --configuration test",
+    "build-test": "NODE_ENV=test ng build --configuration test",
     "test": "ng test",
     "test-ci": "npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
@@ -72,6 +72,7 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-scss": "^3.21.0",
+    "tailwindcss": "^2.2.7",
     "ts-node": "~10.2.1",
     "typescript": "~4.3.5"
   }
