@@ -1,25 +1,3 @@
-section {
-  @media screen and (max-width: 575px) {
-    div.row {
-      &:first-child {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-      }
-    }
-  }
-}
-
 mat-card {
-  padding: 8px;
-  margin-top: 10px;
-  height: 102px;
-
-  .center {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: nowrap;
-  }
+  @apply h-28;
 }

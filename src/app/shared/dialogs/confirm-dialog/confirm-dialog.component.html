@@ -2,10 +2,10 @@
 <h4 id="title" class="text-center">{{title}}</h4>
 
 <!-- Message -->
-<p id="message">{{message}}</p>
+<p id="message" class="py-4 whitespace-pre-wrap overflow-y-auto">{{message}}</p>
 
 <!-- Buttons -->
-<div mat-dialog-actions class="row justify-content-end">
+<div mat-dialog-actions class="flex justify-end">
   <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button>
   <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">{{okButtonText}}</button>
 </div>

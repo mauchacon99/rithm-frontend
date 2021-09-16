@@ -49,7 +49,7 @@ describe('TopNavComponent', () => {
   });
 
   it('should display logo', () => {
-    const logo = fixture.debugElement.query(By.css('.logo'));
+    const logo = fixture.debugElement.query(By.css('img'));
     expect(logo).toBeTruthy();
   });
 
