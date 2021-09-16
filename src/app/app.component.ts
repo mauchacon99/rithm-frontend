@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
-
+    this.userService.setUserData();
     this.userService.userData$
       .pipe(takeUntil(this.user$))
       .subscribe((user) => {
