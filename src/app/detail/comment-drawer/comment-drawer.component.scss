@@ -1,36 +1,4 @@
-@import 'variables', 'functions';
 
-.sidebar-container {
-  height: calc(100vh - 247px);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column-reverse;
-
-  .comment-container {
-    display: flex;
-    flex-direction: column-reverse;
-
-    .comments-top {
-      height: 36px;
-
-      .no-more {
-        padding: 14px;
-        color: $accent-blue;
-        text-align: center;
-      }
-    }
-  }
-
-  .no-comments {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: $accent-blue;
-    text-align: center;
-    height: calc(100vh - 247px);
-  }
-}
-
-.loader {
-  height: calc(100vh - 247px);
+.comment-h {
+  height: calc(100vh - 248px);
 }

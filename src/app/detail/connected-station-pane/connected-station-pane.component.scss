@@ -1,14 +1,13 @@
 aside {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  @apply flex flex-col justify-center;
+
   height: calc(100vh - 110px);
 
   &.left {
-    align-items: flex-end;
+    @apply items-end;
   }
 
   &.right {
-    align-items: flex-start;
+    @apply items-start;
   }
 }

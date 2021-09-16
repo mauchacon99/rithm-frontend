@@ -1,274 +1,3 @@
-/// Set global styles across the application
-
-@use '~@angular/material' as mat;
-
-@import '../helpers/functions';
-
-$custom-font-family: 'Montserrat, Open Sans, Helvetica';
-
-/// Rithm Typography Level: Display 4
-$rithm-display-4: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(112),
-  $line-height: 1,
-  $letter-spacing: normal
-);
-
-/// Rithm Typography Level: Display 3
-$rithm-display-3: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(56),
-  $line-height: 1,
-  $letter-spacing: normal
-);
-
-/// Rithm Typography Level: Display 2
-$rithm-display-2: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(45),
-  $line-height: 1,
-  $letter-spacing: normal
-);
-
-/// Rithm Typography Level: Display 1
-$rithm-display-1: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(34),
-  $line-height: 1,
-  $letter-spacing: normal
-);
-
-/// Rithm Typography Level: Headline
-$rithm-headline: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 300,
-  $font-size: font-calc(48),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Title
-$rithm-title: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 300,
-  $font-size: font-calc(34),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Subheading 2
-$rithm-subheading-2: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(24),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Subheading 1
-$rithm-subheading-1: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(20),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Body 1
-$rithm-body-1: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(16),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Body 2
-$rithm-body-2: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 500,
-  $font-size: font-calc(16),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Caption
-$rithm-caption: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(12),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Button
-$rithm-button: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 500,
-  $font-size: font-calc(14),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Rithm Typography Level: Input
-$rithm-input: mat.define-typography-level(
-  $font-family: $custom-font-family,
-  $font-weight: 400,
-  $font-size: font-calc(16),
-  $line-height: 1,
-  $letter-spacing: normal,
-);
-
-/// Custom Typography Configuration
-$custom-typography: mat.define-typography-config(
-  $font-family: $custom-font-family,
-  $display-4: $rithm-display-4,
-  $display-3: $rithm-display-3,
-  $display-2: $rithm-display-2,
-  $display-1: $rithm-display-1,
-  $headline:  $rithm-headline,
-  $title:  $rithm-title,
-  $subheading-2:  $rithm-subheading-2,
-  $subheading-1:  $rithm-subheading-1,
-  $body-1:  $rithm-body-1,
-  $body-2:  $rithm-body-2,
-  $caption:  $rithm-caption,
-  $button:  $rithm-button,
-  $input:  $rithm-input,
-);
-
-/// Montserrat Thin 100
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Thin.ttf');
-  font-weight: 100;
-  font-style: normal;
-}
-
-/// Montserrat Thin 100 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ThinItalic.ttf');
-  font-weight: 100;
-  font-style: italic;
-}
-
-/// Montserrat Extra Light 200
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraLight.ttf');
-  font-weight: 200;
-  font-style: normal;
-}
-
-/// Montserrat Extra Light 200 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf');
-  font-weight: 200;
-  font-style: italic;
-}
-
-/// Montserrat Light 300
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Light.ttf');
-  font-weight: 300;
-  font-style: normal;
-}
-
-/// Montserrat Light 300 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-LightItalic.ttf');
-  font-weight: 300;
-  font-style: italic;
-}
-
-/// Montserrat Regular 400
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Regular.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-
-/// Montserrat Regular 400 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Italic.ttf');
-  font-weight: 400;
-  font-style: italic;
-}
-
-/// Montserrat Semi-Bold 600
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
-  font-weight: 600;
-  font-style: normal;
-}
-
-/// Montserrat Semi-Bold 600 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf');
-  font-weight: 600;
-  font-style: italic;
-}
-
-/// Montserrat Bold 700
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Bold.ttf');
-  font-weight: 700;
-  font-style: normal;
-}
-
-/// Montserrat Bold 700 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-BoldItalic.ttf');
-  font-weight: 700;
-  font-style: italic;
-}
-
-/// Montserrat Extra Bold 800
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
-  font-weight: 800;
-  font-style: normal;
-}
-
-/// Montserrat Extra Bold 800 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf');
-  font-weight: 800;
-  font-style: italic;
-}
-
-/// Montserrat Black 900
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Black.ttf');
-  font-weight: 900;
-  font-style: normal;
-}
-
-/// Montserrat Black 900 Italic
-@font-face {
-  font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-BlackItalic.ttf');
-  font-weight: 900;
-  font-style: italic;
-}
-
 /// Set font family for everything
 html {
   font-family: Montserrat, sans-serif;
@@ -276,51 +5,51 @@ html {
 
 /// Heading 1 font styles
 h1 {
-  font-size: font-calc(48);
-  font-weight: 300;
+  @apply font-light text-5xl;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 2 font styles
 h2 {
-  font-size: font-calc(34);
-  font-weight: 300;
+  @apply font-light text-4xl;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 3 font styles
 h3 {
-  font-size: font-calc(24);
-  font-weight: 400;
+  @apply font-normal text-2xl;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 4 font styles
 h4 {
-  font-size: font-calc(20);
-  font-weight: 400;
+  @apply font-normal text-xl;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 5 font styles
 h5 {
-  font-size: font-calc(18);
-  font-weight: 600;
+  @apply font-semibold text-lg;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Heading 6 font styles
 h6 {
-  font-size: font-calc(16);
-  font-weight: 600;
+  @apply font-semibold text-base;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Paragraph, span and div font styles
 p,
 div {
-  font-size: font-calc(16);
-  font-weight: 400;
+  @apply font-normal text-base;
+
   font-family: Montserrat, sans-serif;
 }
 
@@ -328,34 +57,27 @@ button {
   font-family: Montserrat, sans-serif;
 }
 
-/// Add utility class for aligning text to center
-.text-center {
-  text-align: center !important;
-}
-
 /// Overline font styling.
 /// All caps 10px regular Montserrat.
 .overline {
+  @apply font-normal leading-none tracking-normal uppercase;
+
   font-size: font-calc(10) !important;
-  font-weight: 400;
   font-family: Montserrat, sans-serif;
-  text-transform: uppercase;
 }
 
 /// Subtitle Medium
 /// 14px Medium Montserrat
 .subtitle-medium {
-  font-size: font-calc(14);
-  font-weight: 600;
+  @apply font-semibold text-sm;
+
   font-family: Montserrat, sans-serif;
 }
 
 /// Body Small
 /// Regular 14px
 .body-small {
+  @apply font-normal text-sm leading-none tracking-normal;
+
   font-family: Montserrat, sans-serif;
-  font-weight: 400;
-  font-size: font-calc(14);
-  line-height: 1;
-  letter-spacing: normal;
 }

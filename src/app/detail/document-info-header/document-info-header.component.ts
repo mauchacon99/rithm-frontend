@@ -29,7 +29,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private utcTimeConversion: UtcTimeConversion,
   ) {
-    this.userType = UserType.Worker;
     this.documentNameForm = this.fb.group({
       name: ['']
     });

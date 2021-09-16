@@ -1,46 +1,9 @@
-@import 'variables', 'functions', 'rithm-light-palettes';
-
-section.row {
-  padding: 10px 0;
-
-  div {
-    h6 {
-      padding: 0 5px;
-
-      @media screen and (max-width: 767px) {
-        text-align: center;
-        padding-bottom: 10px;
-      }
+.mat-mini-fab {
+  &.priority {
+    &::ng-deep .mat-button-wrapper {
+      padding: 0;
     }
 
-    form {
-      width: 100%;
-
-      mat-form-field {
-        width: 100%;
-      }
-    }
-
-    div.name {
-      padding: 5px 10px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-
-  .mat-mini-fab {
-    line-height: 24px !important;
-
-    &.priority {
-      margin-top: 17px;
-      margin-left: 10px;
-      width: 30px;
-      height: 30px;
-
-      &::ng-deep .mat-button-wrapper {
-        padding: 0;
-      }
-    }
+    @apply mt-4 ml-2 w-7 h-7 leading-6;
   }
 }

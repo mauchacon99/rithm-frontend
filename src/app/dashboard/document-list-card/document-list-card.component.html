@@ -1,32 +1,31 @@
-<mat-card>
-  <span *ngIf="!isLoading">
-    <div *ngFor="let document of documents" class="row no-gutters">
-      <div
-        [ngClass]="!isPriority ? 'col-8 col-sm-9 col-md-5 col-lg-9 col-xl-4' : 'col-12 col-sm-6 col-md-5 col-lg-6 col-xl-5'"
-        class="d-inline-block">
-        <div class="priority circle-30-accent">
+<mat-card class="w-full mt-5">
+  <div *ngIf="!isLoading" class="grid lg:grid-cols-3" [ngClass]="{'grid-cols-2 xl:grid-cols-4': !isPriority, 'grid-cols-1 md:grid-cols-2': isPriority}">
+    <ng-container *ngFor="let document of documents">
+      <div class="flex items-center my-3">
+        <div class="circle-30-accent float-left mr-2">
           {{ document?.priority }}
         </div>
         {{ document?.documentName }}
       </div>
-      <div [ngClass]="!isPriority ? 'col-3 d-lg-none col-xl-3' : 'col-4 col-sm-6 d-sm-block col-lg-6 col-xl-4'"
-        class="d-none d-md-block d-xl-block col-md-4">
+      <div class="flex items-center hidden" [ngClass]="{'md:flex': isPriority, 'lg:flex': !isPriority}">
         {{ document?.stationName }}
       </div>
-      <div [ngClass]="!isPriority ? 'col-3' : 'd-md-block col-md-3'" class="col-3 d-none d-lg-none d-xl-block">
+      <div class="flex items-center hidden" [ngClass]="{'lg:flex': isPriority, 'xl:flex': !isPriority}">
         {{ ((getElapsedTime(document.flowedTimeUTC) === 'Unknown')) ? '' : getElapsedTime(document.flowedTimeUTC)  + ' in station'}}
       </div>
-      <div *ngIf="!isPriority" class="col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2 d-block">
+      <div class="flex items-center justify-end" [ngClass]="{'hidden': isPriority, 'flex': !isPriority}">
         <button mat-stroked-button color="accent">
           Continue
         </button>
       </div>
+    </ng-container>
+  </div>
+  <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="(!documents || documents.length === 0) && !isLoading">
+    <div class="m-auto self-center">
+      No documents
     </div>
-    <span class="center" *ngIf="!documents || documents.length === 0">
-      <div>
-        No documents
-      </div>
-    </span>
-  </span>
-  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+  </div>
+  <div class="w-full h-full absolute top-0 left-0 flex">
+    <app-loading-indicator class="m-auto self-center" *ngIf="isLoading"></app-loading-indicator>
+  </div>
 </mat-card>

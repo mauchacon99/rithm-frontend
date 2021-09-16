@@ -1,62 +1,71 @@
-<div class="container">
-  <div class="row justify-content-center">
-
-    <mat-card class="col-12 col-lg-8 col-xl-7 mt-0 mt-sm-4">
-      <div class="row mb-3">
-        <div class="col-12 col-md-9 pt-1 pr-1">
-          <div class="row mb-2">
-            <h3 class="col-12 col-md-10 pt-1 mb-3 accent-text">Manage My Organization</h3>
-            <h4  *ngIf="!editName" class="col-12 col-md-9 pt-1 accent-text">{{orgInfo?.name}}
-              <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt"></i></button></h4>
-              <form [formGroup]="orgNameForm" *ngIf="editName" class="col-12 pr-1">
-                <div class="row">
-                <mat-form-field appearance="outline" class="col-10 col-md-7 col-sm-10 pr-0">
-                  <mat-label>Organization name</mat-label>
-                  <input matInput type="text" id="name" formControlName="name"  autocomplete="name" />
-                </mat-form-field>
-                <div class="col-10 col-md-5 col-sm-10 pr-0 pb-3 v-align-button">
-                <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid" class="align-middle mr-2">Save</button>
-                <button mat-stroked-button color="accent" (click)="editOrgName()" class="align-middle">Cancel</button>
-                </div>
-              </div>
-              </form>
-          </div>
-        </div>
-        <button mat-button color="accent" class="col-5 col-md-3 px-3 link-btn">
-          <i class="fas fa-link"></i>
-          Invite members
-        </button>
-      </div>
-
-      <div *ngIf="!isLoading || !orgLoading" class="row mb-1">
-        <div class="row-header col-9 col-md-4">Name</div>
-        <div class="row-header d-none d-md-block col-6">Email</div>
-        <div class="row-header col-3 col-md-2 p-0">Admin</div>
-      </div>
-
-      <div *ngIf="!isLoading || !orgLoading">
-        <div *ngFor="let user of users; let i = index" class="user row align-items-center ">
-          <div class="col-9 col-md-4">{{ user.firstName }} {{ user.lastName }}</div>
-          <div class="d-none d-md-block col-6">{{ user.email }}</div>
-          <div class="col-3 col-md-2 p-0">
-            <button mat-icon-button *ngIf="!roleLoading[i]" class="admin" [class.non-admin]="!user.role" [disabled]="user.rithmId === currentUser.rithmId"
-              (click)="updateUserRole(user, user.rithmId, i)">
-              <i class="fas fa-check"></i>
-            </button>
-            <app-loading-indicator *ngIf="roleLoading[i]" class="role-loading" [diameter]="24"></app-loading-indicator>
-            <button mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
-              <i class="fas fa-times fa-2x"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="!isLoading && totalNumUsers > 0" class="row no-gutters justify-content-center my-4">
-        <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
-        </app-pagination>
-      </div>
-
-      <app-loading-indicator *ngIf="isLoading || orgLoading"></app-loading-indicator>
-    </mat-card>
+<div class="container h-full">
+  <div class="flex w-full h-full items-center" *ngIf="isLoading || orgLoading">
+    <app-loading-indicator class="flex-grow"></app-loading-indicator>
   </div>
+  <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto" *ngIf="!isLoading || !orgLoading">
+
+    <div class="flex flex-col sm:flex-row justify-between">
+      <div>
+        <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
+        <div class="pt-2">
+          <h4 class="text-accent-500" *ngIf="!editName" >
+            {{orgInfo?.name}}
+            <button mat-icon-button class="edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt text-xl text-secondary-500 hover:text-secondary-900"></i></button>
+          </h4>
+          <form [formGroup]="orgNameForm" *ngIf="editName" class="grid grid-cols-12 gap-x-2">
+            <mat-form-field appearance="outline" class="col-span-12 sm:col-span-8">
+              <mat-label>Organization name</mat-label>
+              <input matInput type="text" id="name" formControlName="name"  autocomplete="name" />
+            </mat-form-field>
+            <div class="col-span-12 sm:col-span-4 flex items-start sm:mt-4 gap-2">
+              <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid">Save</button>
+              <button mat-stroked-button color="accent" (click)="editOrgName()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <button mat-button color="accent" class="self-start">
+        <i class="fas fa-link"></i>
+        Invite members
+      </button>
+    </div>
+
+    <div class="grid grid-cols-12 mt-5 gap-2 items-center" *ngIf="!isLoading || !orgLoading">
+
+      <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
+      <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
+      <div class="text-accent-500 col-span-4 md:col-span-2">Admin</div>
+
+      <ng-container *ngFor="let user of users; let i = index">
+        <div class="col-span-8 md:col-span-5">
+          {{ user.firstName }} {{ user.lastName }}
+        </div>
+        <div class="hidden md:block md:col-span-5">
+          {{ user.email }}
+        </div>
+        <div class="col-span-4 md:col-span-2">
+          <button mat-icon-button *ngIf="!roleLoading[i]" [ngClass]="{'group': user.rithmId !== currentUser.rithmId}" [disabled]="user.rithmId === currentUser.rithmId"
+            (click)="updateUserRole(user, user.rithmId, i)">
+            <i class="fas fa-check-circle fa-2x " [ngClass]="{
+              'text-accent-100': user.rithmId === currentUser.rithmId,
+              'text-secondary-500 group-hover:text-secondary-900': user.rithmId !== currentUser.rithmId,
+              'text-accent-500': user.role === 'admin' && user.rithmId !== currentUser.rithmId
+            }"></i>
+          </button>
+          <app-loading-indicator *ngIf="roleLoading[i]" class="relative inline-block left-2 pr-4 top-2" [diameter]="24"></app-loading-indicator>
+          <button class="group" mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
+            <i class="fas fa-times fa-2x group-hover:text-error-500 text-secondary-500"></i>
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <div *ngIf="totalNumUsers > 0" class="flex justify-center mt-5">
+      <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
+      </app-pagination>
+    </div>
+
+  </mat-card>
 </div>

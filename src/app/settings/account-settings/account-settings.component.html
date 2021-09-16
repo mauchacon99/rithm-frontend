@@ -1,28 +1,24 @@
-<div class="page textured-bg">
-  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-  <div class="container" *ngIf="!isLoading">
-    <div class="row justify-content-center">
-
-      <mat-card class="col-12 col-lg-10 col-xl-7 mt-0 mt-sm-4">
-        <h3 class="mb-4">Account Settings</h3>
-
-        <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
-          <h4 class="pb-3">General Account Settings</h4>
-
-          <app-user-form formControlName="userForm" class="row"></app-user-form>
-
-          <div class="row">
-            <a (click)="viewTermsAndConditions()" class="col my-3">View the terms & conditions</a>
-          </div>
-
-          <div class="buttons mt-4">
-            <button type="submit" mat-raised-button color="accent"
-              [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
-          </div>
-          <div class="text-center overline">{{ appVersionNumber }}</div>
-        </form>
-
-      </mat-card>
-    </div>
+<div class="container h-full">
+  <div class="flex w-full h-full items-center" *ngIf="isLoading">
+    <app-loading-indicator class="flex-grow"></app-loading-indicator>
   </div>
+  <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto" *ngIf="!isLoading">
+    <h3 class="mb-4 text-accent-500">Account Settings</h3>
+
+    <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+      <h4 class="pb-3">General Account Settings</h4>
+
+      <app-user-form formControlName="userForm" class="w-full"></app-user-form>
+
+      <div class="w-full">
+        <a (click)="viewTermsAndConditions()" class="my-3 cursor-pointer text-sm text-accent-500 hover:underline">View the terms & conditions</a>
+      </div>
+
+      <div class="mobile-save mt-4 flex justify-end">
+        <button type="submit" mat-raised-button color="accent"
+          [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
+      </div>
+      <div class="mt-4 sm:mt-0 text-center overline uppercase pb-12 sm:pb-0">{{ appVersionNumber }}</div>
+    </form>
+  </mat-card>
 </div>

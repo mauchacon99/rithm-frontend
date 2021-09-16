@@ -265,5 +265,12 @@ export class UserService {
   //     notificationSettings);
   // }
 
+  /**
+   * Sets user data to an observable.
+   */
+  setUserData(): void {
+    const user = localStorage.getItem('user');
+    this.userData$.next(JSON.parse(<string>user));
+  }
 
 }
