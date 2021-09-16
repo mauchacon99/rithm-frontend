@@ -10,4 +10,23 @@ import { Component } from '@angular/core';
 })
 export class MapToolbarComponent {
 
+  /**
+   * Sets the map to add flow mode in preparation for a flow to be selected.
+   */
+   addFlow(): void {
+    // TODO: Implement add flow
+  }
+
+  /**
+   * Sets the map to add station mode in preparation for a station to be selected.
+   */
+   addStation(): void {
+    // TODO: Implement add station
+  }
+
+  // MVP +1 below
+
+  // undo(): void {}
+  // redo(): void {}
+  // search(): void {}
 }
