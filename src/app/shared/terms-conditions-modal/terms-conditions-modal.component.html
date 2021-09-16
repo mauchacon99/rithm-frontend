@@ -6,7 +6,9 @@
     {{message}}
   </p>
   <!-- Loader -->
-  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
+  <div class="loader flex w-96" *ngIf="isLoading">
+    <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+  </div>
 </div>
 
 
