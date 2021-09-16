@@ -4,6 +4,8 @@ import { MapRoutingModule } from './map-routing.module';
 import { MapComponent } from './map/map.component';
 import { MapSearchComponent } from './map-search/map-search.component';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
+import { MapCanvasComponent } from './map-canvas/map-canvas.component';
+import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 
 
 
@@ -11,7 +13,9 @@ import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
   declarations: [
     MapComponent,
     MapSearchComponent,
-    MapToolbarComponent
+    MapToolbarComponent,
+    MapCanvasComponent,
+    MapOverlayComponent
   ],
   imports: [
     CommonModule,
