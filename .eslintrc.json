@@ -28,10 +28,7 @@
       "extends": [
         "@strut-software/eslint-config/angular-html"
       ],
-      "rules": {
-        // TODO: remove this and fix lint issues
-        "@angular-eslint/template/no-call-expression": "warn"
-      }
+      "rules": {}
     },
     {
       "files": [
