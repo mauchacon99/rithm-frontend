@@ -8,9 +8,10 @@
       <div>
         <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
         <div class="pt-2">
-          <h4 class="text-accent-500" *ngIf="!editName" >
+          <h4 class="text-accent-500 flex items-center content-center h-10" *ngIf="!editName" >
             {{orgInfo?.name}}
             <button *ngIf="!orgNameLoading && !orgLoading" mat-icon-button class="group edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt text-xl text-secondary-500 group-hover:text-secondary-900"></i></button>
+            <app-loading-indicator *ngIf="orgNameLoading" class="inline-block px-2" [diameter]="24"></app-loading-indicator>
           </h4>
           <form [formGroup]="orgNameForm" *ngIf="editName" class="grid grid-cols-12 gap-x-2">
             <mat-form-field appearance="outline" class="col-span-12 sm:col-span-8">
