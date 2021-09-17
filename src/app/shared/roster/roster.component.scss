@@ -1,15 +1,6 @@
-@import 'rithm-light-palettes', 'variables', 'functions';
+@import 'functions';
 
-.circles {
-  margin: 5px 2px;
-  float: left;
-  overflow: visible;
-
-  &:first-child {
-    margin-left: 0;
-  }
-}
-
+//This is required to correctly display the custom add/remove user icon.
 .icon {
   position: relative;
 

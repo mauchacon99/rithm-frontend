@@ -1,64 +1,39 @@
 <div class="page">
-  <div class="container">
-    <div class="row justify-content-center">
-      <mat-card class="col-xl-8 col-md-10 col-sm-12 p-0">
-        <div class="row m-0">
-          <div class="col-md-6 col-sm-12 left-entry">
-            <div>
-              <img src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
-            </div>
-            <div class="mb-2 d-none d-md-block">
-              <p>Seamlessly connecting people and processes</p>
-            </div>
-            <div class="mb-2 d-none d-md-block">
-              <p>We make business easy.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-12 right-entry">
-            <span *ngIf="!isLoading">
-              <div class="row mt-4">
-                <div class="col-12">
-                  <h4>Sign in</h4>
-                </div>
-                <div class="col-12">
-                  <p>Welcome to Rithm.</p>
-                </div>
-              </div>
-              <p id="invalid" [ngClass]="{'transparent': !invalidCredentials}" class="mat-error">Invalid email or password</p>
-                <!-- Default form login -->
-                  <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="row">
-                    <!-- Email -->
-                      <mat-form-field class="col-12" appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-                      </mat-form-field>
-                    <!-- Password -->
-                      <mat-form-field class="col-12" appearance="outline">
-                        <mat-label>Password</mat-label>
-                        <input id="password" type="password" matInput placeholder="Password" formControlName="password" autocomplete="current-password">
-                      </mat-form-field>
-                    <!-- Sign in button -->
-                    <div class="col-12">
-                      <button id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
-                    </div>
-                  </form>
-                  <!-- Forgot password -->
-                 <div class="row">
-                  <a id="forgot-password" routerLink="forgot-password" class="col">Forgot password?</a>
-                </div>
-              <!-- Register -->
-              <mat-card-footer class="row">
-                <div class="col center-text">
-                  <p class="text-center">New here?
-                    <a id="create-account" routerLink="account-create">Create an account</a>
-                  </p>
-                </div>
-              </mat-card-footer>
-            </span>
-            <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-          </div>
+  <mat-card>
+    <div class="grid grid-cols-1 md:grid-cols-2 md:h-full">
+      <!-- left column -->
+      <div class="bg-darkBlue md:flex md:flex-col p-3 flex-none md:rounded-l">
+        <div class="flex-grow">
+          <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
+          <p class="mb-2 text-white hidden md:block">Seamlessly connecting people and processes</p>
         </div>
-      </mat-card>
+        <p class="mb-2 text-white hidden md:block">We make business easy.</p>
+      </div>
+      <!-- right column -->
+      <div class="flex flex-col bg-white md:rounded-r">
+        <span *ngIf="!isLoading" class="flex-grow">
+          <h4 class="mt-10 ml-5">Sign in</h4>
+          <p class="mt-1 ml-5">Welcome to Rithm.</p>
+          <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error">Invalid email or password</p>
+          <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="flex flex-col px-5 py-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input id="password" type="password" matInput placeholder="Password" formControlName="password"
+                autocomplete="current-password">
+            </mat-form-field>
+            <button class="w-full" id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
+          </form>
+          <a id="forgot-password" routerLink="forgot-password" class="ml-5 text-accent-400">Forgot password?</a>
+          <p class="text-center mt-5">New here?
+            <a class="text-accent-400" id="create-account" routerLink="account-create">Create an account</a>
+          </p>
+        </span>
+        <app-loading-indicator class="m-auto" *ngIf="isLoading"></app-loading-indicator>
+      </div>
     </div>
-  </div>
+  </mat-card>
 </div>

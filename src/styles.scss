@@ -7,10 +7,6 @@
 // Import all helpers
 @import './scss/helpers/index';
 
-/// Import Tools from tools file
-/// Contains global styles for buttons, forms and typography
-@import './scss/tools/index';
-
 // Rithm light Theme
 @import './scss/themes/index';
 
@@ -50,6 +46,15 @@ $rithm-theme: mat.define-light-theme(
 // Apply Rithm light theme
 @include mat.all-component-themes($rithm-light);
 
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/// Import Tools from tools file
+/// Contains global styles for circles and typography
+/// This import needs to stay after the tailwind imports.
+@import './scss/tools/index';
+
 // Global Styles Below
 /// Global page Styles
 * {
@@ -59,15 +64,6 @@ $rithm-theme: mat.define-light-theme(
 
 body {
   background: $primary-blue;
-}
-
-/// Set the height of the page
-/// Apply page specific styles within the component
-.page {
-  width: 100vw;
-  position: relative;
-  overflow: auto;
-  padding-bottom: 20px;
 }
 
 /// Overrides the default accent color for the snackbar action
@@ -90,4 +86,20 @@ body {
 .mat-form-field-appearance-outline .mat-form-field-prefix,
 .mat-form-field-appearance-outline .mat-form-field-suffix {
   place-self: center;
+}
+
+.textured-bg {
+  background-image: url('./assets/images/patterns/dust_scratches.png');
+  background-repeat: repeat;
+}
+
+/// Styling of links globally
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
