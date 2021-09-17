@@ -100,4 +100,16 @@ describe('OrganizationManagementComponent', () => {
     expect(component.totalNumUsers).toBeGreaterThanOrEqual(0);
   });
 
+  it('should show organization name input when edit button is clicked', () => {
+    component.editName = false;
+    component.editOrgName();
+    expect(component.editName).toBe(true);
+  });
+
+  it('should show organization name label when changes are cancelled', () => {
+    component.editName = true;
+    component.editOrgName();
+    expect(component.editName).toBe(false);
+  });
+
 });
