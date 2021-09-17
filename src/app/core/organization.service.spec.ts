@@ -155,4 +155,27 @@ describe('OrganizationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update information about organization', () => {
+    const organizationId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
+
+    const expectedResponse: OrganizationInfo = {
+      name: 'Strut',
+      mainContactPhoneNumber: '555-123-4567',
+      mainContactEmail: 'Fudge@Ministry.Magic',
+      timeZone: 'MW'
+    };
+
+    service.updateOrganizationInfo(expectedResponse, organizationId)
+      .subscribe((orgInfo) => {
+        expect(orgInfo).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(expectedResponse);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
 });
