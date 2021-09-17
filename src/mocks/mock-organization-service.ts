@@ -126,4 +126,29 @@ export class MockOrganizationService {
     }
   }
 
+  /**
+   * Updates the organization information.
+   *
+   * @param organizationInfo The OrganizationInfo.
+   * @param organizationId The id of the Organization.
+   * @returns An organization information observable.
+   */
+  updateOrganizationInfo(organizationInfo: OrganizationInfo, organizationId: string): Observable<OrganizationInfo> {
+    if (!organizationId || !organizationInfo) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgInfo: OrganizationInfo = {
+        name: 'Strut',
+        mainContactPhoneNumber: '555-123-4567',
+        mainContactEmail: 'Fudge@Ministry.Magic',
+        timeZone: 'MW'
+      };
+      return of(orgInfo).pipe(delay(1000));
+    }
+  }
+
 }

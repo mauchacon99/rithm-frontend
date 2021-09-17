@@ -78,4 +78,17 @@ export class OrganizationService {
       });
   }
 
+  /**
+   * Updates the organization information.
+   *
+   * @param organizationInfo The OrganizationInfo.
+   * @param organizationId The id of the Organization.
+   * @returns An organization information observable.
+   */
+  updateOrganizationInfo(organizationInfo: OrganizationInfo, organizationId: string): Observable<OrganizationInfo> {
+    return this.http.put<OrganizationInfo>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`,
+      organizationInfo
+    );
+  }
+
 }
