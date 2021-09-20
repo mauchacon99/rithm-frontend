@@ -62,7 +62,7 @@ describe('SignInComponent', () => {
   it('should display invalid credentials message', () => {
     const message = fixture.debugElement.query(By.css('#invalid'));
     expect(component.invalidCredentials).toBeFalse();
-    expect(message.classes['transparent']).toBeTrue();
+    expect(message.classes['invisible']).toBeTrue();
 
     component.signInForm.controls['email'].setValue('incorrect@email.com');
     component.signInForm.controls['password'].setValue('password1234');
@@ -72,7 +72,7 @@ describe('SignInComponent', () => {
     fixture.detectChanges();
 
     expect(component.invalidCredentials).toBeTrue();
-    expect(message.classes['transparent']).toBeFalsy();
+    expect(message.classes['invisible']).toBeFalsy();
   });
 
   xit('should display loading indicator during request', async () => {

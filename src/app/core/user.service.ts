@@ -110,7 +110,7 @@ export class UserService {
 
     const params = new HttpParams().set('refreshTokenGuid', refreshTokenGuid);
 
-    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refreshtoken`,
+    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token`,
       { withCredentials: true, params }).pipe(
         map((tokenResponse) => {
           this.accessToken = new AccessToken(tokenResponse.accessToken);
@@ -161,7 +161,7 @@ export class UserService {
    * @returns An empty observable.
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validateemail`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`,
       {
         guid,
         email
@@ -175,7 +175,7 @@ export class UserService {
    * @returns An empty observable.
    */
   sendPasswordResetEmail(email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgotpassword`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`,
       { email });
   }
 
@@ -188,7 +188,7 @@ export class UserService {
    * @returns An empty observable.
    */
   resetPassword(guid: string, email: string, password: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/resetpassword`,
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`,
       {
         guid,
         email,
@@ -250,7 +250,7 @@ export class UserService {
    * @returns A terms and conditions observable.
    */
   getTermsConditions(): Observable<string> {
-    return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/gettermsandconditions`, { responseType: 'text' });
+    return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`, { responseType: 'text' });
   }
 
   // TODO: Re-enable when addressing notification settings
@@ -265,5 +265,12 @@ export class UserService {
   //     notificationSettings);
   // }
 
+  /**
+   * Sets user data to an observable.
+   */
+  setUserData(): void {
+    const user = localStorage.getItem('user');
+    this.userData$.next(JSON.parse(<string>user));
+  }
 
 }

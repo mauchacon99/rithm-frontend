@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Station, StationInformation } from 'src/models';
 
-const MICROSERVICE_PATH = '/stationapi/api/station';
+const MICROSERVICE_PATH = '/stationservice/api/station';
 
 /**
  * Service for all station behavior and business logic.
@@ -27,7 +27,7 @@ export class StationService {
   getStationInfo(stationId: string): Observable<StationInformation> {
     const params = new HttpParams()
       .set('stationRithmId', stationId);
-    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getstationinfo`, { params });
+    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info`, { params });
   }
 
   /**

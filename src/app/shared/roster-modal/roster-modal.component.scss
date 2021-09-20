@@ -1,35 +1,5 @@
 @import 'variables';
 
-section {
-  h4 {
-    margin-bottom: 20px;
-  }
-
-  .users {
-    height: 240px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-
-    .row {
-      margin-top: 10px;
-
-      div p {
-        line-height: 1;
-        padding-top: 4px;
-
-        span {
-          color: $secondary-gray;
-        }
-      }
-    }
-  }
-
-  .loading {
-    height: 240px;
-    padding-top: 30px;
-  }
-}
-
 :host::ng-deep .user-avatar {
   .circle-30-secondary:hover {
     cursor: default;

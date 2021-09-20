@@ -6,7 +6,7 @@ import { Station } from 'src/models';
 
 import { StationService } from './station.service';
 
-const MICROSERVICE_PATH = '/stationapi/api/station';
+const MICROSERVICE_PATH = '/stationservice/api/station';
 
 describe('StationService', () => {
   let service: StationService;
@@ -67,7 +67,7 @@ describe('StationService', () => {
         expect(response).toBeDefined();
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/getstationinfo?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);

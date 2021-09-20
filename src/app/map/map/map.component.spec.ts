@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
+import { MapOverlayComponent } from '../map-overlay/map-overlay.component';
+import { MapToolbarComponent } from '../map-toolbar/map-toolbar.component';
 
 import { MapComponent } from './map.component';
 
@@ -8,7 +12,12 @@ describe('MapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapComponent ]
+      declarations: [
+        MapComponent,
+        MockComponent(MapToolbarComponent),
+        MockComponent(MapOverlayComponent),
+        MockComponent(MapCanvasComponent)
+      ]
     })
     .compileComponents();
   });

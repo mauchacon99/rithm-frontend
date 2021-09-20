@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
@@ -49,7 +50,8 @@ describe('OrganizationManagementComponent', () => {
         MockComponent(PaginationComponent)
       ],
       imports: [
-        MatCardModule
+        MatCardModule,
+        ReactiveFormsModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -96,6 +98,18 @@ describe('OrganizationManagementComponent', () => {
 
   it('should get total number of users of an organization', () => {
     expect(component.totalNumUsers).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should show organization name input when edit button is clicked', () => {
+    component.editName = false;
+    component.editOrgName();
+    expect(component.editName).toBe(true);
+  });
+
+  it('should show organization name label when changes are cancelled', () => {
+    component.editName = true;
+    component.editOrgName();
+    expect(component.editName).toBe(false);
   });
 
 });

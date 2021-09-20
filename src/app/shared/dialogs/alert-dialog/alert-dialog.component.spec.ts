@@ -69,7 +69,7 @@ describe('AlertDialogComponent', () => {
     it('should have error color when error', () => {
       component.title = 'Error';
       fixture.detectChanges();
-      expect(titleElement).toHaveClass('error-title');
+      expect(titleElement).toHaveClass('text-error-500');
     });
   });
 

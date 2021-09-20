@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { first, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { User } from 'src/models';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
 import { UserService } from './core/user.service';
@@ -29,6 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Used to show top nav. */
   showTopNav = false;
+
+  /** User data to hide/show admin menu. */
+  private user$: ReplaySubject<unknown> = new ReplaySubject(1);
 
   /** Mobile links. */
   mobileLinks = [
@@ -63,18 +66,22 @@ export class AppComponent implements OnInit, OnDestroy {
    * Check the url path and show/hide the navigation.
    */
   ngOnInit(): void {
-
+    this.userService.setUserData();
     this.userService.userData$
-      .pipe(first())
+      .pipe(takeUntil(this.user$))
       .subscribe((user) => {
-        console.log(user);
         const info = user as User;
         if (info && info.role) {
-          this.mobileLinks.splice(2, 0, {
-            name: 'admin',
-            icon: 'fa-user-cog',
-            link: 'admin'
-          });
+          const found = this.mobileLinks.findIndex(link => link.name === 'admin');
+          if (found === -1) {
+            this.mobileLinks.splice(2, 0, {
+              name: 'admin',
+              icon: 'fa-user-cog',
+              link: 'admin'
+            });
+          }
+        } else {
+          this.mobileLinks = this.mobileLinks.filter(e => e.name !== 'admin');
         }
       }, (error: unknown) => {
         console.error(error);

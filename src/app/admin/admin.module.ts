@@ -5,6 +5,11 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { OrganizationManagementComponent } from './organization-management/organization-management.component';
 import { SharedModule } from '../shared/shared.module';
 
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -15,7 +20,11 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

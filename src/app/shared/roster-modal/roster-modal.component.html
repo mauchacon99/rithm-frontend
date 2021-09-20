@@ -1,21 +1,21 @@
 <section>
-  <h4 class="text-center">{{ isWorker ? 'Worker' : 'Supervisor' }} Roster</h4>
-  <div *ngIf="!isLoading" class="users">
-    <div class="row" *ngFor="let member of members">
-      <div class="col-2 user-avatar">
+  <h4 class="text-center mb-5">{{ isWorker ? 'Worker' : 'Supervisor' }} Roster</h4>
+  <div *ngIf="!isLoading" class="h-60 overflow-y-auto overflow-x-hidden">
+    <div class="flex mt-2" *ngFor="let member of members">
+      <div class="user-avatar">
         <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true"></app-user-avatar>
       </div>
-      <div class="col-10">
-        <p>
+      <div>
+        <p class="leading-none pt-1 px-4">
           {{member.firstName}} {{member.lastName}}
           <br>
-          <span class="overline">{{member.email}}</span>
+          <span class="overline text-secondary-500">{{member.email}}</span>
         </p>
       </div>
     </div>
   </div>
-  <app-loading-indicator class="loader" *ngIf="isLoading"></app-loading-indicator>
-  <div mat-dialog-actions class="row justify-content-end">
+  <app-loading-indicator class="h-60 pt-7" *ngIf="isLoading"></app-loading-indicator>
+  <div mat-dialog-actions class="flex justify-end">
     <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">Close</button>
   </div>
 </section>
