@@ -23,7 +23,8 @@ const FIELD: Question = {
       text: 'Option 1',
       default: false
     },
-  ]
+  ],
+  children: [],
 };
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const fn = function() { };

@@ -18,7 +18,8 @@ const testStationFields = [
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       },
       {
         prompt: 'Label',
@@ -30,7 +31,8 @@ const testStationFields = [
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       },
       {
         prompt: 'Fake question 7',
@@ -42,7 +44,8 @@ const testStationFields = [
         },
         isReadOnly: false,
         isRequired: true,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       }
     ];
 

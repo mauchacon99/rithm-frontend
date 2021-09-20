@@ -15,10 +15,9 @@
   <app-date-field *ngIf="
   field.questionType.typeString === fieldTypes.Date ||
   field.questionType.typeString === fieldTypes.DateTime" [field]="field" formControlName="dateFieldForm"></app-date-field>
-  <app-address-field *ngIf="
-  field.questionType.typeString === fieldTypes.Address" [field]="field"></app-address-field>
   <app-select-field *ngIf="
   field.questionType.typeString === fieldTypes.Select ||
   field.questionType.typeString === fieldTypes.MultiSelect" [field]="field" formControlName="selectFieldForm"></app-select-field>
   <app-check-field *ngIf="field.questionType.typeString === fieldTypes.CheckList" [field]="field" formControlName="checkFieldForm"></app-check-field>
+  <app-nested-field *ngIf="field.questionType.typeString === fieldTypes.Nested" [field]="field" formControlName="nestedFieldForm"></app-nested-field>
 </ng-container>

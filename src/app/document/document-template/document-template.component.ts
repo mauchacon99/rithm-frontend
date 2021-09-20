@@ -1,10 +1,11 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator
 } from '@angular/forms';
-import { Question } from 'src/models';
+import { STATES } from 'src/helpers';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Component for the document template area of a station/document.
@@ -26,7 +27,7 @@ import { Question } from 'src/models';
     }
   ]
 })
-export class DocumentTemplateComponent implements ControlValueAccessor, Validator {
+export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, Validator {
   /** The form to add to document. */
   documentTemplateForm!: FormGroup;
 
@@ -36,11 +37,97 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
+
+
   constructor(
     private fb: FormBuilder,
   ) {
     this.documentTemplateForm = this.fb.group({
       documentFieldForm: this.fb.control('')
+    });
+  }
+
+  /** Mock nested address field. */
+  ngOnInit(): void {
+    this.documentFields.push({
+      prompt: 'Fake question 13',
+      instructions: 'Fake instructions 13',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Nested,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [
+        {
+          prompt: 'Address Line 1',
+          instructions: 'Address Line 1',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.AddressLine,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Address Line 2',
+          instructions: 'Address Line 2',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.AddressLine,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 1',
+          instructions: 'Fake instructions 1',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.City,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 12',
+          instructions: 'Fake instructions 12',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.State,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: STATES,
+          children: [],
+        },
+        {
+          prompt: 'Zip',
+          instructions: 'Zip',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Zip,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ],
     });
   }
 

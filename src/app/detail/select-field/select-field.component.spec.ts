@@ -35,7 +35,8 @@ const FIELD: Question = {
       text: 'Option 4',
       default: false
     }
-  ]
+  ],
+  children: [],
 };
 
 describe('SelectFieldComponent', () => {

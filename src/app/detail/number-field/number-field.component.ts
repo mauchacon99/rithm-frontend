@@ -62,7 +62,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
 
     //Need to set zip, currency and phone validation.
     switch (this.field.questionType.typeString) {
-      case QuestionFieldType.Address:
+      case QuestionFieldType.Zip:
         validators.push(this.fieldValidation.zipValidation());
         break;
       case QuestionFieldType.Currency:
