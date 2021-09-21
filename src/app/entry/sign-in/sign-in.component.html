@@ -14,7 +14,7 @@
         <span *ngIf="!isLoading" class="flex-grow">
           <h4 class="mt-10 ml-5">Sign in</h4>
           <p class="mt-1 ml-5">Welcome to Rithm.</p>
-          <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error">Invalid email or password</p>
+          <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error ml-5">Invalid email or password</p>
           <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="flex flex-col px-5 py-2">
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
