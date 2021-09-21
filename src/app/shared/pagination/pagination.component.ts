@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 const MIN_NUM_RECORDS = 1;
-const MAX_NUM_RECORDS = 10;
 const INIT_PAGE_NUM = 1;
 const LAST_PAGE_NUM = 5;
 const RESET_PAGE_NUM_LIMIT = 5;
@@ -61,11 +60,11 @@ export class PaginationComponent implements OnInit {
     this.rangeArr = [];
 
     let startingNum = MIN_NUM_RECORDS;
-    let endingNum = MAX_NUM_RECORDS;
+    let endingNum = this.numPerPage;
 
     for (let page = 0; page <= this.numPages - 1; page++) {
       startingNum = MIN_NUM_RECORDS;
-      endingNum = MAX_NUM_RECORDS;
+      endingNum = this.numPerPage;
       startingNum += this.numPerPage * page;
       endingNum += this.numPerPage * page;
       if (page !== this.numPages - 1) {

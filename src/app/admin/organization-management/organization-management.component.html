@@ -2,9 +2,9 @@
   <div class="flex w-full h-full items-center" *ngIf="isLoading || orgLoading">
     <app-loading-indicator class="flex-grow"></app-loading-indicator>
   </div>
-  <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-auto" *ngIf="!isLoading || !orgLoading">
+  <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-auto" [style.display]="(!isLoading && !orgLoading) ? 'block' : 'none'">
 
-    <div class="flex flex-col sm:flex-row justify-between">
+    <div class="flex flex-col sm:flex-row justify-between" *ngIf="!isLoading && !orgLoading">
       <div>
         <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
         <div class="pt-2">
@@ -32,7 +32,7 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-12 mt-5 gap-2 items-center" *ngIf="!isLoading || !orgLoading">
+    <div class="grid grid-cols-12 mt-5 gap-2 items-center" *ngIf="!isLoading && !orgLoading">
 
       <div class="text-accent-500 col-span-8 md:col-span-5">Name</div>
       <div class="text-accent-500 hidden md:block md:col-span-5">Email</div>
