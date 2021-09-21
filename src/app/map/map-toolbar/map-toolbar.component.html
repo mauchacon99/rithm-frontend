@@ -1,12 +1,17 @@
 <div class="h-12 bg-white flex justify-end shadow">
 <div class="w-32 flex justify-center text-secondary-500">
-  <button mat-icon-button color="accent" class="w-14 flex flex-col items-center hover:text-secondary-300">
+  <button class="w-14 flex flex-col items-center hover:text-secondary-300">
     <i class="far fa-plus-square text-2xl"></i>
     <span class="text-sm leading-3 font-semibold">Flow</span>
   </button>
-  <button mat-icon-button color="accent" class="w-14 flex flex-col items-center hover:text-secondary-300">
+  <button class="w-14 flex flex-col items-center hover:text-secondary-300">
     <i class="far fa-plus-square text-2xl"></i>
     <span class="text-sm leading-3 font-semibold">Station</span>
   </button>
 </div>
+</div>
+<div class="h-12 flex justify-end items-center space-x-2.5 mx-2">
+  <button mat-raised-button color="primary" *ngIf="!adminRole" (click)="publishMode()" class="h-9">Build</button>
+  <button mat-raised-button color="basic" *ngIf="publishEnable" (click)="publishMode()" class="h-9">Cancel</button>
+  <button mat-raised-button color="primary" *ngIf="publishEnable" class="h-9">Publish</button>
 </div>

@@ -9,6 +9,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-toolbar.component.scss']
 })
 export class MapToolbarComponent {
+  /** Build button for admin. */
+  adminRole = false;
+
+  /** Build button for admin. */
+   publishEnable = false;
+
 
   /**
    * Sets the map to add flow mode in preparation for a flow to be selected.
@@ -23,6 +29,14 @@ export class MapToolbarComponent {
    addStation(): void {
     // TODO: Implement add station
   }
+
+  /**
+   * Sets the map to publish mode from build.
+   */
+   publishMode(): void {
+    this.adminRole = !this.adminRole;
+    this.publishEnable = !this.publishEnable;
+    }
 
   // MVP +1 below
 
