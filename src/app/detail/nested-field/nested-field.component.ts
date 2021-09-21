@@ -110,3 +110,87 @@ export class NestedFieldComponent implements OnInit{
     };
   }
 }
+
+//TODO: figure out how to correctly format the nested field upon creation.
+
+/* Nested field should be formatted like this: */
+/* {
+      prompt: '',
+      instructions: 'Enter the shipping address',
+      questionType: {
+        rithmId: '',
+        typeString: QuestionFieldType.Nested,
+        validationExpression: '.+'
+      },
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [
+        {
+          prompt: 'Address Line 1',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.AddressLine,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Address Line 2',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.AddressLine,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: false,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'City',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.City,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'State',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.State,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          possibleAnswers: STATES,
+          children: [],
+        },
+        {
+          prompt: 'Zip',
+          instructions: '',
+          questionType: {
+            rithmId: '',
+            typeString: QuestionFieldType.Zip,
+            validationExpression: '.+'
+          },
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ],
+    } */

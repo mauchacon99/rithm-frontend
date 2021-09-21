@@ -50,8 +50,8 @@ export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, 
   /** Mock nested address field. */
   ngOnInit(): void {
     this.documentFields.push({
-      prompt: 'Fake question 13',
-      instructions: 'Fake instructions 13',
+      prompt: '',
+      instructions: 'Enter the shipping address',
       questionType: {
         rithmId: '',
         typeString: QuestionFieldType.Nested,
@@ -63,20 +63,20 @@ export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, 
       children: [
         {
           prompt: 'Address Line 1',
-          instructions: 'Address Line 1',
+          instructions: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.AddressLine,
             validationExpression: '.+'
           },
           isReadOnly: false,
-          isRequired: false,
+          isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
           prompt: 'Address Line 2',
-          instructions: 'Address Line 2',
+          instructions: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.AddressLine,
@@ -88,21 +88,21 @@ export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, 
           children: [],
         },
         {
-          prompt: 'Fake question 1',
-          instructions: 'Fake instructions 1',
+          prompt: 'City',
+          instructions: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.City,
             validationExpression: '.+'
           },
           isReadOnly: false,
-          isRequired: false,
+          isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
-          prompt: 'Fake question 12',
-          instructions: 'Fake instructions 12',
+          prompt: 'State',
+          instructions: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.State,
@@ -116,7 +116,7 @@ export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, 
         },
         {
           prompt: 'Zip',
-          instructions: 'Zip',
+          instructions: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Zip,

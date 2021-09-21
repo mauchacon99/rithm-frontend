@@ -41,6 +41,7 @@ export class ToolbarComponent {
       icon: 'fas fa-envelope',
       typeString: this.fieldTypeEnum.Email
     },
+    //TODO: figure out how to correctly format the nested field upon creation.
     {
       name: 'Address',
       icon: 'far fa-address-card',
