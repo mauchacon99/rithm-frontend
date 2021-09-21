@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
+import { NestedFieldComponent } from 'src/app/detail/nested-field/nested-field.component';
 import { QuestionFieldType } from 'src/models';
-import { AddressFieldComponent } from '../../detail/address-field/address-field.component';
 import { CheckFieldComponent } from '../../detail/check-field/check-field.component';
 import { DateFieldComponent } from '../../detail/date-field/date-field.component';
 import { NumberFieldComponent } from '../../detail/number-field/number-field.component';
@@ -31,9 +31,9 @@ describe('DocumentFieldComponent', () => {
         MockComponent(TextFieldComponent),
         MockComponent(NumberFieldComponent),
         MockComponent(DateFieldComponent),
-        MockComponent(AddressFieldComponent),
         MockComponent(SelectFieldComponent),
         MockComponent(CheckFieldComponent),
+        MockComponent(NestedFieldComponent),
       ],
       imports: [
         ReactiveFormsModule
@@ -58,7 +58,8 @@ describe('DocumentFieldComponent', () => {
       },
       isReadOnly: false,
       isRequired: true,
-      isPrivate: false
+      isPrivate: false,
+      children: [],
     };
     fixture.detectChanges();
   });
