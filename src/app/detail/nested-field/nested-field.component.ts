@@ -41,7 +41,13 @@ export class NestedFieldComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-  ) { }
+  ) {
+    this.nestedFieldForm = this.fb.group({
+      textFieldForm: this.fb.control(''),
+      numberFieldForm: this.fb.control(''),
+      selectFieldForm: this.fb.control(''),
+    });
+  }
 
   /**
    * Sets this.childrenFields.

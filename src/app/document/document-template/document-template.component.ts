@@ -1,11 +1,10 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator
 } from '@angular/forms';
-import { STATES } from 'src/helpers';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
 
 /**
  * Component for the document template area of a station/document.
@@ -27,7 +26,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, Validator {
+export class DocumentTemplateComponent implements ControlValueAccessor, Validator {
   /** The form to add to document. */
   documentTemplateForm!: FormGroup;
 
@@ -44,90 +43,6 @@ export class DocumentTemplateComponent implements OnInit, ControlValueAccessor, 
   ) {
     this.documentTemplateForm = this.fb.group({
       documentFieldForm: this.fb.control('')
-    });
-  }
-
-  /** Mock nested address field. */
-  ngOnInit(): void {
-    this.documentFields.push({
-      prompt: '',
-      instructions: 'Enter the shipping address',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Nested,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [
-        {
-          prompt: 'Address Line 1',
-          instructions: '',
-          questionType: {
-            rithmId: '',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'Address Line 2',
-          instructions: '',
-          questionType: {
-            rithmId: '',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: false,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'City',
-          instructions: '',
-          questionType: {
-            rithmId: '',
-            typeString: QuestionFieldType.City,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'State',
-          instructions: '',
-          questionType: {
-            rithmId: '',
-            typeString: QuestionFieldType.State,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          possibleAnswers: STATES,
-          children: [],
-        },
-        {
-          prompt: 'Zip',
-          instructions: '',
-          questionType: {
-            rithmId: '',
-            typeString: QuestionFieldType.Zip,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ],
     });
   }
 
