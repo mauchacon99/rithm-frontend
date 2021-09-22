@@ -3,10 +3,10 @@
     <h3 class="leading-10">{{ title }}</h3>
   </div>
   <div class="justify-self-end px-3 md:px-5">
-    <button class="group" [ngClass]="{'active': activeItem === 'comments'}" id="comment-button" mat-icon-button (click)="toggleDrawer('comments')">
+    <button *ngIf="title !== 'Station'" class="group" [ngClass]="{'active': activeItem === 'comments'}" id="comment-button" mat-icon-button (click)="toggleDrawer('comments')">
       <i class="far fa-comment-alt text-white group-hover:text-accent-100 text-lg"></i>
     </button>
-    <button class="group" [ngClass]="{'active': activeItem === 'history'}" id="history-button" mat-icon-button (click)="toggleDrawer('history')">
+    <button *ngIf="title !== 'Station'" class="group" [ngClass]="{'active': activeItem === 'history'}" id="history-button" mat-icon-button (click)="toggleDrawer('history')">
       <i class="fas fa-history text-white group-hover:text-accent-100 text-lg"></i>
     </button>
   </div>
