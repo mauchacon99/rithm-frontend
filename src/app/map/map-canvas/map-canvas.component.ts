@@ -115,8 +115,15 @@ export class MapCanvasComponent implements OnInit {
   /**
    * Draws all the elements on the canvas.
    */
-   private drawElements(): void {
+  private drawElements(): void {
     requestAnimationFrame(() => {
+      /* important! for alignment, you should make things
+       * relative to the canvas' current width/height.
+       * You can't simply resize the canvas through css.
+       */
+      this.context.canvas.width = window.innerWidth;
+      this.context.canvas.height = window.innerHeight;
+
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
@@ -125,6 +132,7 @@ export class MapCanvasComponent implements OnInit {
       // Draw the connections
 
       // Draw the stations
+      // this.stationElementService.drawStation();
 
       // Draw the flows
     });
