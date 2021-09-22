@@ -137,7 +137,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: false,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 2',
@@ -149,7 +150,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 3',
@@ -161,7 +163,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 4',
@@ -173,7 +176,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 5',
@@ -185,7 +189,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 6',
@@ -197,7 +202,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 7',
@@ -209,7 +215,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 8',
@@ -221,7 +228,8 @@ export class MockDocumentService {
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
+          isPrivate: false,
+          children: [],
         },
         {
           prompt: 'Fake question 9',
@@ -251,7 +259,8 @@ export class MockDocumentService {
               text: 'Option 4',
               default: false
             }
-          ]
+          ],
+          children: [],
         },
         {
           prompt: 'Fake question 10',
@@ -281,7 +290,8 @@ export class MockDocumentService {
               text: 'Option 4',
               default: false
             }
-          ]
+          ],
+          children: [],
         },
         {
           prompt: 'Fake question 12',
@@ -311,20 +321,106 @@ export class MockDocumentService {
               text: 'Option 4',
               default: false
             }
-          ]
+          ],
+          children: [],
         },
         {
           prompt: 'Fake question 13',
           instructions: 'Fake instructions 13',
           questionType: {
             rithmId: '',
-            typeString: QuestionFieldType.Address,
+            typeString: QuestionFieldType.Nested,
             validationExpression: '.+'
           },
           isReadOnly: false,
           isRequired: true,
-          isPrivate: false
-        },
+          isPrivate: false,
+          children: [
+            {
+              prompt: 'Address Line 1',
+              instructions: 'Address Line 1',
+              questionType: {
+                rithmId: '',
+                typeString: QuestionFieldType.AddressLine,
+                validationExpression: '.+'
+              },
+              isReadOnly: false,
+              isRequired: false,
+              isPrivate: false,
+              children: [],
+            },
+            {
+              prompt: 'Address Line 2',
+              instructions: 'Address Line 2',
+              questionType: {
+                rithmId: '',
+                typeString: QuestionFieldType.AddressLine,
+                validationExpression: '.+'
+              },
+              isReadOnly: false,
+              isRequired: false,
+              isPrivate: false,
+              children: [],
+            },
+            {
+              prompt: 'Fake question 1',
+              instructions: 'Fake instructions 1',
+              questionType: {
+                rithmId: '',
+                typeString: QuestionFieldType.City,
+                validationExpression: '.+'
+              },
+              isReadOnly: false,
+              isRequired: false,
+              isPrivate: false,
+              children: [],
+            },
+            {
+              prompt: 'Fake question 12',
+              instructions: 'Fake instructions 12',
+              questionType: {
+                rithmId: '',
+                typeString: QuestionFieldType.State,
+                validationExpression: '.+'
+              },
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              possibleAnswers: [
+                {
+                  text: 'Option 1',
+                  default: false
+                },
+                {
+                  text: 'Option 2',
+                  default: false
+                },
+                {
+                  text: 'Option 3',
+                  default: false
+                },
+                {
+                  text: 'Option 4',
+                  default: false
+                }
+              ],
+              children: [],
+            },
+            {
+              prompt: 'Zip',
+              instructions: 'Zip',
+              questionType: {
+                rithmId: '',
+                typeString: QuestionFieldType.Zip,
+                validationExpression: '.+'
+              },
+              isReadOnly: false,
+              isRequired: true,
+              isPrivate: false,
+              children: [],
+            },
+          ],
+        }
       ],
       instructions: 'General instructions'
     };

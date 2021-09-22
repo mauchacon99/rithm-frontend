@@ -19,7 +19,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
   {
     prompt: 'Fake question 6',
@@ -31,7 +32,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: false,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
   {
     prompt: 'Fake question 7',
@@ -43,7 +45,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
 ];
 
@@ -157,15 +160,16 @@ describe('NumberFieldComponent', () => {
         instructions: '',
         questionType: {
           rithmId: '',
-          typeString: QuestionFieldType.Address,
+          typeString: QuestionFieldType.Zip,
           validationExpression: '.+'
         },
         isReadOnly: false,
         isRequired: true,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       };
       component.ngOnInit();
-      zipField = component.numberFieldForm.controls['address'];
+      zipField = component.numberFieldForm.controls['zip'];
       fixture.detectChanges();
     });
 

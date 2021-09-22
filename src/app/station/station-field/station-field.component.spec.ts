@@ -47,7 +47,8 @@ describe('StationFieldComponent', () => {
       },
       isReadOnly: false,
       isRequired: false,
-      isPrivate: false
+      isPrivate: false,
+      children: [],
     };
     fixture.detectChanges();
   });
@@ -68,7 +69,8 @@ describe('StationFieldComponent', () => {
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       },
       {
         prompt: 'Prompt 2',
@@ -80,7 +82,8 @@ describe('StationFieldComponent', () => {
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       }
     ];
     expect(component.options.length).toBe(2);
@@ -126,7 +129,8 @@ describe('StationFieldComponent', () => {
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       };
       component.ngOnInit();
       fixture.detectChanges();
@@ -152,7 +156,8 @@ describe('StationFieldComponent', () => {
         },
         isReadOnly: false,
         isRequired: false,
-        isPrivate: false
+        isPrivate: false,
+        children: [],
       };
       component.ngOnInit();
       fixture.detectChanges();
