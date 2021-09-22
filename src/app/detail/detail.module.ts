@@ -20,12 +20,12 @@ import { CommentInputComponent } from './comment-input/comment-input.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { NumberFieldComponent } from './number-field/number-field.component';
 import { DateFieldComponent } from './date-field/date-field.component';
-import { AddressFieldComponent } from './address-field/address-field.component';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { NestedFieldComponent } from './nested-field/nested-field.component';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -45,9 +45,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     TextFieldComponent,
     NumberFieldComponent,
     DateFieldComponent,
-    AddressFieldComponent,
     SelectFieldComponent,
-    CheckFieldComponent
+    CheckFieldComponent,
+    NestedFieldComponent
   ],
   imports: [
     CommonModule,
@@ -72,9 +72,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     TextFieldComponent,
     NumberFieldComponent,
     DateFieldComponent,
-    AddressFieldComponent,
     SelectFieldComponent,
-    CheckFieldComponent
+    CheckFieldComponent,
+    NestedFieldComponent
   ]
 })
 export class DetailModule { }

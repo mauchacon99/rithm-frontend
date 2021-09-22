@@ -60,7 +60,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     },
     isReadOnly: false,
     isRequired: false,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   };
 
   /** Label field to display. */
@@ -74,7 +75,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   };
 
   /** The field for adding an option to a select field. */
@@ -88,7 +90,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   };
 
   /** The field for adding an item to a checklist field. */
@@ -102,7 +105,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   };
 
   /** Array of options for a select/multi-select/checklist field. */

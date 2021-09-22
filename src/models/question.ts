@@ -27,4 +27,7 @@ export interface Question {
   /** The list of selectable answers for the question (for a select or checklist). */
   possibleAnswers?: PossibleAnswer[];
 
+  /** The children for nested questions. */
+  children: Question[];
+
 }

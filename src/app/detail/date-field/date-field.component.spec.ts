@@ -19,7 +19,8 @@ const FIELD: Question = {
   },
   isReadOnly: false,
   isRequired: true,
-  isPrivate: false
+  isPrivate: false,
+  children: [],
 };
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const fn = function() { };

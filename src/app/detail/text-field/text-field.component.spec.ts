@@ -18,7 +18,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
   {
     prompt: 'Fake question 2',
@@ -30,7 +31,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: false,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
   {
     prompt: 'Fake question 3',
@@ -42,7 +44,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: false,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
   {
     prompt: 'Fake question 4',
@@ -54,7 +57,8 @@ const FIELDS: Question[] = [
     },
     isReadOnly: false,
     isRequired: true,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   },
 ];
 
