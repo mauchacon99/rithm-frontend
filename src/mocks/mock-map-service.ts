@@ -1,23 +1,19 @@
-/* eslint-disable rxjs/no-ignored-error */
-import { TestBed } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { MapData } from 'src/models';
 
-import { MapService } from './map.service';
+/**
+ * Mocks methods of the `MapService`.
+ */
+export class MockMapService {
 
-describe('MapService', () => {
-  let service: MapService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(MapService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  it('should return all map elements for a given organization', () => {
-    const expectedResponse: MapData = {
+  /**
+   * Gets all map elements for a given organization.
+   *
+   * @returns Retrieves all map elements for a given organization.
+   */
+  getMapElements(): Observable<MapData> {
+    const data: MapData = {
       stations: [
         {
           id: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -43,10 +39,6 @@ describe('MapService', () => {
         }
       ], flows: []
     };
-
-    service.getMapElements()
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
-  });
-});
+    return of(data).pipe(delay(1000));
+  }
+}
