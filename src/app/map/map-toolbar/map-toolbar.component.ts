@@ -66,10 +66,10 @@ export class MapToolbarComponent implements OnInit {
   getOrganizationInfo(): void {
     //console.log(this.userService.user?.organization)
     this.orgLoading = true;
-    //const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     //const organizationId: string = localStorage.getItem('user');
     this.organizationService
-      .getOrganizationInfo('CCAEBE24-AF01-48AB-A7BB-279CC25B0989')
+      .getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe(
         (organization) => {
