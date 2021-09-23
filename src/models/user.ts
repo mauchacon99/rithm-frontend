@@ -31,5 +31,5 @@ export interface User {
   role: 'admin' | null;
 
   /** The IDs of the organizations user belongs to. */
-  readonly organizations: string[];
+  readonly organization: string;
 }
