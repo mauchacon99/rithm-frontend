@@ -35,6 +35,9 @@ export class MapCanvasComponent implements OnInit {
     this.drawElements();
   }
 
+  /**
+   * Responds to changing window size by setting a new canvas size and re-drawing the elements.
+   */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
     this.setCanvasSize();
