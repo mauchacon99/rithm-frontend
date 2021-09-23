@@ -31,7 +31,7 @@ export class MapCanvasComponent implements OnInit {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.scaleCanvasForDPI();
+    this.setCanvasSize();
     this.drawElements();
   }
 
@@ -139,9 +139,9 @@ export class MapCanvasComponent implements OnInit {
   }
 
   /**
-   * Scales the canvas for accurate display on HiDPI/Retina displays.
+   * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
-  private scaleCanvasForDPI(): void {
+  private setCanvasSize(): void {
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
