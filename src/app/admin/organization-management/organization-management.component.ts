@@ -79,7 +79,7 @@ export class OrganizationManagementComponent implements OnInit {
   getUsers(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     this.organizationService.getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
       .subscribe((orgUsers) => {
@@ -113,7 +113,7 @@ export class OrganizationManagementComponent implements OnInit {
       });
       if (confirm) {
         this.isLoading = true;
-        this.organizationService.removeUserFromOrganization(this.userService.user?.organizations[0], user.rithmId)
+        this.organizationService.removeUserFromOrganization(this.userService.user?.organization, user.rithmId)
           .pipe(first())
           .subscribe(() => {
             this.popupService.notify('User removed from organization.');
@@ -135,7 +135,7 @@ export class OrganizationManagementComponent implements OnInit {
    */
   getOrganizationInfo(): void {
     this.orgLoading = true;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     this.organizationService.getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe((organization) => {
@@ -175,7 +175,7 @@ export class OrganizationManagementComponent implements OnInit {
       title = 'Remove Admin Privileges';
       buttonText = 'Remove';
     }
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     const confirm = await this.popupService.confirm({
       title: title,
       message: message,
@@ -208,7 +208,7 @@ export class OrganizationManagementComponent implements OnInit {
   updateOrganization(): void {
     this.orgNameLoading = true;
     this.editName = !this.editName;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     const orgData: OrganizationInfo = {
       name: this.orgNameForm.get('name')?.value,
       mainContactEmail: <string>(this.orgInfo?.mainContactEmail),

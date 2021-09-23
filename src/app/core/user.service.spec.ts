@@ -20,7 +20,7 @@ const testUser: User = {
   rithmId: 'kj34k3jkj',
   notificationSettings: null,
   role: null,
-  organizations: []
+  organization: ''
 };
 
 describe('UserService', () => {
