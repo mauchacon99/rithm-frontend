@@ -36,7 +36,7 @@ export class MockOrganizationService {
           notificationSettings: null,
           createdDate: '1/2/20',
           role: null,
-          organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
         }, {
           rithmId: '1234',
           firstName: 'Rithm',
@@ -46,7 +46,7 @@ export class MockOrganizationService {
           notificationSettings: null,
           createdDate: '7/4/21',
           role: null,
-          organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
         }, {
           rithmId: '7812',
           firstName: 'Rithm',
@@ -56,7 +56,7 @@ export class MockOrganizationService {
           notificationSettings: null,
           createdDate: '5/9/21',
           role: 'admin',
-          organizations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'POBNJV24-AF01-48AB-A7BB-279CC25B9725']
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
         }]
       };
       return of(orgUsers).pipe(delay(1000));
