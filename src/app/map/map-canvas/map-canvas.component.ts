@@ -35,6 +35,12 @@ export class MapCanvasComponent implements OnInit {
     this.drawElements();
   }
 
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    this.setCanvasSize();
+    this.drawElements();
+  }
+
   /**
    * Handles user input when a mouse button is pressed. Used for initiating dragging.
    *
