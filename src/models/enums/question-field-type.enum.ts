@@ -15,8 +15,14 @@ export enum QuestionFieldType {
   /** Email input type. */
   Email = 'email',
 
-  /** Address input type. */
-  Address = 'address',
+  /** Address Line input type. */
+  AddressLine = 'addressLine',
+
+  /** City input type. */
+  City = 'city',
+
+  /** Generic Nested type. */
+  Nested = 'nested',
 
   /** Number input type. */
   Number = 'number',
@@ -27,11 +33,20 @@ export enum QuestionFieldType {
   /** Currency input type. */
   Currency = 'currency',
 
+  /** Payment input type. */
+  CreditCard = 'creditcard',
+
+  /** Zip code input type. */
+  Zip = 'zip',
+
   /** Select input type. */
   Select = 'singleDropdown',
 
   /** Multi select input type. */
   MultiSelect = 'multiDropdown',
+
+  /** State input type. */
+  State = 'state',
 
   /** Date input type. */
   Date = 'date',

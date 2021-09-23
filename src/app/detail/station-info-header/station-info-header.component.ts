@@ -51,7 +51,8 @@ export class StationInfoHeaderComponent implements OnInit {
       },
       isReadOnly: false,
       isRequired: true,
-      isPrivate: false
+      isPrivate: false,
+      children: [],
     };
   }
 

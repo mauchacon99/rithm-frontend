@@ -35,7 +35,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   stationTemplateForm: FormGroup;
 
   /** The general instructions field. */
-  readonly stationInstructionsField = {
+  readonly stationInstructionsField: Question = {
     prompt: 'General Instructions',
     instructions: '',
     questionType: {
@@ -45,7 +45,8 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     },
     isReadOnly: false,
     isRequired: false,
-    isPrivate: false
+    isPrivate: false,
+    children: [],
   };
 
   constructor(

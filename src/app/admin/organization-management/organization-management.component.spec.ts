@@ -22,7 +22,7 @@ const TEST_USERS = [{
   notificationSettings: null,
   createdDate: '1/2/34',
   role: null,
-  organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
+  organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
 },
 {
   rithmId: '123',
@@ -33,7 +33,7 @@ const TEST_USERS = [{
   notificationSettings: null,
   createdDate: '1/2/34',
   role: null,
-  organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
+  organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
 },
 ];
 

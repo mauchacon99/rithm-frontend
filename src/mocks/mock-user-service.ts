@@ -24,7 +24,7 @@ export class MockUserService {
     notificationSettings: null,
     createdDate: '1/2/34',
     role: null,
-    organizations: ['kdjfkd-kjdkfjd-jkjdfkdjk']
+    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
   };
 
   /**
