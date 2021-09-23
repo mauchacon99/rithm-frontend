@@ -17,12 +17,6 @@ export class MapToolbarComponent implements OnInit {
   /** The users of the organization. */
   users: User[] = [];
 
-  /** The current signed in user. */
-  currentUser!: User;
-
-  /** Whether the organization information is loading. */
-  orgLoading = false;
-
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
@@ -36,7 +30,6 @@ export class MapToolbarComponent implements OnInit {
    * Gets the first page of users on load.
    */
   ngOnInit(): void {
-    this.currentUser = this.userService.user;
     this.getOrganizationInfo();
   }
 
@@ -64,10 +57,7 @@ export class MapToolbarComponent implements OnInit {
    * Gets organization information.
    */
   getOrganizationInfo(): void {
-    //console.log(this.userService.user?.organization)
-    this.orgLoading = true;
     const organizationId: string = this.userService.user?.organization;
-    //const organizationId: string = localStorage.getItem('user');
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
@@ -76,10 +66,8 @@ export class MapToolbarComponent implements OnInit {
           if (organization) {
             this.orgInfo = organization;
           }
-          this.orgLoading = false;
         },
         (error: unknown) => {
-          this.orgLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
