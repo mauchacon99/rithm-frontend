@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
+import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -10,6 +11,8 @@ import { MapService } from './map.service';
   providedIn: 'root'
 })
 export class StationElementService {
+  /** The default scale value for the station card. */
+  private mapScale = DEFAULT_SCALE;
 
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
@@ -28,7 +31,7 @@ export class StationElementService {
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
-    this.drawStationCard(station);
+    this.drawStationCard(station, <CanvasRenderingContext2D>(this.canvasContext));
     this.drawStationName(station);
     this.drawDocumentBadge(station);
   }
@@ -37,10 +40,37 @@ export class StationElementService {
    * Draws the station card on the map for a station.
    *
    * @param station The station for which to draw the card.
+   * @param context The context for station card element.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private drawStationCard(station: StationMapElement): void {
-    // TODO: Draw station card
+  private drawStationCard(station: StationMapElement, context: CanvasRenderingContext2D) {
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledStationRadius = STATION_RADIUS * this.mapScale;
+    const scaledStationHeight = STATION_HEIGHT * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    context.shadowColor = '#ccc';
+    context.shadowBlur = 6;
+    context.shadowOffsetX = 3;
+    context.shadowOffsetY = 3;
+
+    context.beginPath();
+    context.moveTo(startingX + scaledStationRadius, startingY);
+    context.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
+    context.quadraticCurveTo(startingX + scaledStationWidth, startingY, startingX + scaledStationWidth, startingY + scaledStationRadius);
+    context.lineTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledStationRadius);// line going to bottom right
+    // eslint-disable-next-line max-len
+    context.quadraticCurveTo(startingX + scaledStationWidth, startingY + scaledStationHeight, startingX + scaledStationWidth - scaledStationRadius, startingY + scaledStationHeight);// bottom right curve to line going to bottom left
+    context.lineTo(startingX + scaledStationRadius, startingY + scaledStationHeight);// line going to bottom left
+    // eslint-disable-next-line max-len
+    context.quadraticCurveTo(startingX, startingY + scaledStationHeight, startingX, startingY + scaledStationHeight - scaledStationRadius); // bottom left curve to line going to top left
+    context.lineTo(startingX, startingY + scaledStationRadius);// line going to top left
+    context.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);// top left curve to line going top right
+    context.closePath();
+    context.fillStyle = '#fff';
+    context.fill();
   }
 
   /**
@@ -58,8 +88,8 @@ export class StationElementService {
    *
    * @param station The station for which to draw the badge.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   private drawDocumentBadge(station: StationMapElement): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private drawDocumentBadge(station: StationMapElement): void {
     // TODO: Draw the document badge
   }
 
@@ -78,18 +108,18 @@ export class StationElementService {
    *
    * @param station The station for which to draw the connection node.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   private drawConnectionNode(station: StationMapElement): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private drawConnectionNode(station: StationMapElement): void {
     // TODO: Draw the connection node
-   }
+  }
 
   /**
    * Resets the shadow on the this.canvasContext.
    */
-   private resetShadow(): void {
-     if (!this.canvasContext) {
-       throw new Error('Cannot reset the shadow if context is not defined');
-     }
+  private resetShadow(): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot reset the shadow if context is not defined');
+    }
     this.canvasContext.shadowColor = 'transparent';
     this.canvasContext.shadowBlur = 0;
   }
@@ -97,7 +127,7 @@ export class StationElementService {
   /**
    * Resets the stroke on the this.canvasContext.
    */
-   private resetStroke(): void {
+  private resetStroke(): void {
     if (!this.canvasContext) {
       throw new Error('Cannot reset the stroke if context is not defined');
     }

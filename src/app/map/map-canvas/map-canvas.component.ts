@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Point } from 'src/models';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, StationElementHoverType } from 'src/models';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -12,17 +13,40 @@ import { StationElementService } from '../station-element.service';
   styleUrls: ['./map-canvas.component.scss']
 })
 export class MapCanvasComponent implements OnInit {
+  /** Reference to the main canvas element used for the map. */
+  @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** Reference to the main canvas element used for the map. */
-  @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
+  /** Modes for canvas element used for the map. */
+  private mapMode = MapMode.view;
+
+  /** Data for station card used in the map. */
+  private stations: StationMapElement[] = [
+    {
+      id: '1',
+      name: 'Station 1',
+      mapPoint: {
+        x: 110,
+        y: 50
+      },
+      canvasPoint: {
+        x: 410,
+        y: 50
+      },
+      numberOfDocuments: 5,
+      dragging: false,
+      incomingStationIds: [],
+      outgoingStationIds: [],
+      hoverActive: StationElementHoverType.none
+    }
+  ];
 
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
-  ) {}
+  ) { }
 
   /**
    * Scales the canvas and does initial draw for elements.
@@ -118,9 +142,9 @@ export class MapCanvasComponent implements OnInit {
   private drawElements(): void {
     requestAnimationFrame(() => {
       /* important! for alignment, you should make things
-       * relative to the canvas' current width/height.
-       * You can't simply resize the canvas through css.
-       */
+      * relative to the canvas' current width/height.
+      * You can't simply resize the canvas through css.
+      */
       this.context.canvas.width = window.innerWidth;
       this.context.canvas.height = window.innerHeight;
 
@@ -128,11 +152,16 @@ export class MapCanvasComponent implements OnInit {
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
       // Calculate the station canvas points
+      this.stations.forEach((station) => {
+        station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
+      });
 
       // Draw the connections
 
       // Draw the stations
-      // this.stationElementService.drawStation();
+      this.stations.forEach((station) => {
+        this.stationElementService.drawStation(station, this.mapMode);
+      });
 
       // Draw the flows
     });
@@ -156,7 +185,7 @@ export class MapCanvasComponent implements OnInit {
    * @param event The mouse event for the cursor information.
    * @returns An accurate point for the mouse position on the canvas.
    */
-   private getMouseCanvasPoint(event: MouseEvent): Point {
+  private getMouseCanvasPoint(event: MouseEvent): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,
