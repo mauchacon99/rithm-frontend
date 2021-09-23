@@ -9,22 +9,22 @@ import { User, OrganizationInfo } from 'src/models';
  * Component for managing the toolbar on the map.
  */
 @Component({
-  selector: 'app-map-toolbar',
-  templateUrl: './map-toolbar.component.html',
-  styleUrls: ['./map-toolbar.component.scss'],
+	selector: 'app-map-toolbar',
+	templateUrl: './map-toolbar.component.html',
+	styleUrls: ['./map-toolbar.component.scss'],
 })
 export class MapToolbarComponent implements OnInit {
-  /** The users of the organization. */
-  users: User[] = [];
+	/** The users of the organization. */
+	users: User[] = [];
 
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
-  constructor(
-    private userService: UserService,
-    private organizationService: OrganizationService,
-    private errorService: ErrorService
-  ) { }
+	constructor(
+		private userService: UserService,
+		private organizationService: OrganizationService,
+		private errorService: ErrorService
+	) { }
 
   /**
    * Gets the first page of users on load.
@@ -33,25 +33,25 @@ export class MapToolbarComponent implements OnInit {
     this.getOrganizationInfo();
   }
 
-  /**
-   * Sets the map to add flow mode in preparation for a flow to be selected.
-   */
-  addFlow(): void {
-    // TODO: Implement add flow
-  }
+	/**
+	 * Sets the map to add flow mode in preparation for a flow to be selected.
+	 */
+	addFlow(): void {
+		// TODO: Implement add flow
+	}
 
-  /**
-   * Sets the map to add station mode in preparation for a station to be selected.
-   */
-  addStation(): void {
-    // TODO: Implement add station
-  }
+	/**
+	 * Sets the map to add station mode in preparation for a station to be selected.
+	 */
+	addStation(): void {
+		// TODO: Implement add station
+	}
 
-  // MVP +1 below
+	// MVP +1 below
 
-  // undo(): void {}
-  // redo(): void {}
-  // search(): void {}
+	// undo(): void {}
+	// redo(): void {}
+	// search(): void {}
 
   /**
    * Gets organization information.
