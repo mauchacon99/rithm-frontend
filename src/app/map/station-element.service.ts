@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
-import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE } from './map-constants';
+import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -82,9 +82,43 @@ export class StationElementService {
    *
    * @param station The station for which to draw the station name.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationName(station: StationMapElement): void {
-    // TODO: Render the station text
+    if (!this.canvasContext) {
+      throw new Error('Cannot reset the stroke if context is not defined');
+    }
+    const scaledStationPadding = STATION_PADDING * this.mapScale;
+
+    this.canvasContext.shadowBlur = 0;
+    this.canvasContext.shadowColor = 'transparent';
+    this.canvasContext.textAlign = 'left';
+    this.canvasContext.fillStyle = 'black';
+    this.canvasContext.font = 'normal 16px Montserrat';
+
+    const sn = station.name.split(' ');
+    const firstLineArray: string[] = [];
+    const secondLineArray: string[] = [];
+
+    for (const word of sn) {
+      // eslint-disable-next-line max-len
+      if (word.length <= 10 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
+        firstLineArray.push(word);
+      } else {
+        // eslint-disable-next-line max-len
+        if (word.length <= 10 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
+          secondLineArray.push(word);
+        } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
+          secondLineArray.push('...');
+          break;
+        }
+      }
+    }
+
+    // eslint-disable-next-line max-len
+    this.canvasContext.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 12 + scaledStationPadding, 114 * this.mapScale);
+    if (secondLineArray.join(' ').length > 0) {
+      // eslint-disable-next-line max-len
+      this.canvasContext.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 32 + scaledStationPadding, 114 * this.mapScale);
+    }
   }
 
   /**
