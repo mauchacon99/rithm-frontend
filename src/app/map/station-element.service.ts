@@ -106,7 +106,7 @@ export class StationElementService {
    */
   private drawDocumentBadge(station: StationMapElement): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot get center point of canvas when canvas context is not set');
+      throw new Error('Cannot draw the document badge when canvas context is not set');
     }
     const ctx = this.canvasContext;
 
