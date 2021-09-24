@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MapMode } from 'src/models';
+import { MapService } from '../map.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -9,28 +11,40 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent {
-    /** Build button for admin. */
-    mapMode = false;
+  /** Build button for admin. */
+  mapMode = false;
+
+  /** The different modes of the map. */
+  mode = MapMode;
+
+  /** The current mode of the map. */
+  currentMode = MapMode.view;
+
+  constructor(private mapService: MapService) {
+    this.mapService.mapMode$
+      .subscribe((mapMode) => {
+        this.currentMode = mapMode;
+      });
+  }
 
   /**
    * Enters build mode for the map.
    */
-   build(): void {
-    this.mapMode = !this.mapMode;
-    // TODO: Implement build
+  build(): void {
+    this.mapService.buildMap();
   }
 
   /**
    * Publishes map changes.
    */
-   publish(): void {
+  publish(): void {
     // TODO: Implement publish
   }
 
   /**
    * Cancels the map changes and returns to view mode.
    */
-   cancel(): void {
+  cancel(): void {
     this.mapMode = !this.mapMode;
     // TODO: Implement cancel
   }
@@ -38,7 +52,7 @@ export class MapOverlayComponent {
   /**
    * Zooms the map in to center.
    */
-   zoomIn(): void {
+  zoomIn(): void {
     // TODO: Implement zoom in
   }
 
