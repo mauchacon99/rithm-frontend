@@ -6,6 +6,7 @@ import { MapSearchComponent } from './map-search/map-search.component';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { MapCanvasComponent } from './map-canvas/map-canvas.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -19,7 +20,8 @@ import { MapOverlayComponent } from './map-overlay/map-overlay.component';
   ],
   imports: [
     CommonModule,
-    MapRoutingModule
+    MapRoutingModule,
+    SharedModule
   ]
 })
 export class MapModule { }

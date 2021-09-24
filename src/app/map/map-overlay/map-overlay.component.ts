@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent {
+  /** Admin promote or demote loading indicator. */
+  mapDataLoading = false;
 
   /**
    * Enters build mode for the map.
