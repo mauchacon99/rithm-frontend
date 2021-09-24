@@ -43,7 +43,7 @@ export class StationElementService {
    */
   private drawStationCard(station: StationMapElement): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot reset the stroke if context is not defined');
+      throw new Error('Cannot draw the station card if context is not defined');
     }
     const startingX = station.canvasPoint.x;
     const startingY = station.canvasPoint.y;
