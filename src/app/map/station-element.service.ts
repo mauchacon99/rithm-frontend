@@ -106,7 +106,10 @@ export class StationElementService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawDocumentBadge(station: StationMapElement): void {
-    const ctx = <CanvasRenderingContext2D> this.canvasContext;
+    if (!this.canvasContext) {
+      throw new Error('Cannot get center point of canvas when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
     const startingY = station.canvasPoint.y;
