@@ -12,10 +12,14 @@ export class MapOverlayComponent {
   /** Map data request loading indicator. */
   mapDataLoading = false;
 
+  /** Build button for admin. */
+  mapMode = false;
+
   /**
    * Enters build mode for the map.
    */
    build(): void {
+    this.mapMode = !this.mapMode;
     // TODO: Implement build
   }
 
@@ -30,6 +34,7 @@ export class MapOverlayComponent {
    * Cancels the map changes and returns to view mode.
    */
    cancel(): void {
+    this.mapMode = !this.mapMode;
     // TODO: Implement cancel
   }
 
