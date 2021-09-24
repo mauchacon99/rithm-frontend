@@ -43,6 +43,7 @@ export class StationElementService {
     f.load().then((font) => {
       document.fonts.add(font);
       this.drawDocumentBadge(station);
+      document.fonts.delete(font);
     });
 
   }
