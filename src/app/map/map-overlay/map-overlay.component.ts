@@ -20,11 +20,17 @@ export class MapOverlayComponent implements OnDestroy {
   /** Build button for admin. */
   mapMode = false;
 
-  /** The different modes of the map. */
-  mode = MapMode;
-
   /** The current mode of the map. */
   currentMode = MapMode.view;
+
+  /**
+   * Whether the map is in any building mode.
+   *
+   * @returns True if the map is in any building mode, false otherwise.
+   */
+  get isBuilding(): boolean {
+    return this.currentMode === MapMode.build || this.currentMode === MapMode.stationAdd || this.currentMode === MapMode.flowAdd;
+  }
 
   constructor(private mapService: MapService) {
     this.mapService.mapMode$

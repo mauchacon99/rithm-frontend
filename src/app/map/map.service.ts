@@ -16,7 +16,7 @@ export class MapService {
   canvasContext?: CanvasRenderingContext2D;
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.build);
+  mapMode$ = new BehaviorSubject(MapMode.view);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
