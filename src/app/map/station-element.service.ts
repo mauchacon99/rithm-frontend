@@ -103,7 +103,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the badge.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawDocumentBadge(station: StationMapElement): void {
     const ctx = <CanvasRenderingContext2D> this.canvasContext;
 
