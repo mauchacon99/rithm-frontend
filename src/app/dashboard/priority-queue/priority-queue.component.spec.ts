@@ -36,6 +36,9 @@ describe('PriorityQueueComponent', () => {
   });
 
   it('should return priority queue documents', () => {
+    const organizationSpy = spyOn(TestBed.inject(DashboardService), 'getPriorityQueueDocuments').and.callThrough();
+    expect(organizationSpy).toHaveBeenCalledTimes(0);
     expect(component.priorityQueueDocuments.length).toBeGreaterThanOrEqual(0);
   });
+
 });

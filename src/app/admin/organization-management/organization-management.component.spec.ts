@@ -10,10 +10,11 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { PaginationComponent } from 'src/app/shared/pagination/pagination.component';
 import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 import { MockOrganizationService } from 'src/mocks/mock-organization-service';
+import { User } from 'src/models';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
-const TEST_USERS = [{
+const TEST_USERS: User[] = [{
   rithmId: '1234',
   firstName: 'Testy',
   lastName: 'Test',
@@ -32,7 +33,7 @@ const TEST_USERS = [{
   isEmailVerified: true,
   notificationSettings: null,
   createdDate: '1/2/34',
-  role: null,
+  role: 'admin',
   organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
 },
 ];
@@ -110,6 +111,25 @@ describe('OrganizationManagementComponent', () => {
     component.editName = true;
     component.editOrgName();
     expect(component.editName).toBe(false);
+  });
+
+  it('should get organization information', async () => {
+    const organizationSpy = spyOn(TestBed.inject(OrganizationService), 'getOrganizationInfo').and.callThrough();
+    await component.getOrganizationInfo();
+    const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
+    expect(organizationSpy).toHaveBeenCalledWith(organizationId);
+  });
+
+  it('should promote user to admin role.', async () => {
+    const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
+    await component.updateUserRole(TEST_USERS[0], 'kdjfkd-kjdkfjd-jkjdfkdjk', 1);
+    expect(adminSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should demote user from admin role.', async () => {
+    const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
+    await component.updateUserRole(TEST_USERS[1], 'kdjfkd-kjdkfjd-jkjdfkdjk', 1);
+    expect(adminSpy).toHaveBeenCalledTimes(1);
   });
 
 });

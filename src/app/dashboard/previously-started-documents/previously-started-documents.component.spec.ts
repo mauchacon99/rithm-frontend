@@ -36,6 +36,8 @@ describe('PreviouslyStartedDocumentsComponent', () => {
   });
 
   it('should return previously started documents', () => {
+    const organizationSpy = spyOn(TestBed.inject(DashboardService), 'getPreviouslyStartedDocuments').and.callThrough();
+    expect(organizationSpy).toHaveBeenCalledTimes(0);
     expect(component.previouslyStartedDocuments.length).toBeGreaterThanOrEqual(0);
   });
 
