@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
@@ -10,7 +12,11 @@ import { MapService } from '../map.service';
   templateUrl: './map-overlay.component.html',
   styleUrls: ['./map-overlay.component.scss']
 })
-export class MapOverlayComponent {
+export class MapOverlayComponent implements OnDestroy {
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject();
+
   /** Build button for admin. */
   mapMode = false;
 
@@ -22,9 +28,20 @@ export class MapOverlayComponent {
 
   constructor(private mapService: MapService) {
     this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
         this.currentMode = mapMode;
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
       });
+  }
+
+  /**
+   * Cleans up subscription.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /**
