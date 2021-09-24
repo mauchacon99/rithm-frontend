@@ -38,7 +38,6 @@ export class StationElementService {
     const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
     f.load().then((font) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       document.fonts.add(font);
 
       this.drawStationCard(station);
@@ -104,7 +103,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the badge.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawDocumentBadge(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot get center point of canvas when canvas context is not set');
