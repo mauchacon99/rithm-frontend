@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
-import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE } from './map-constants';
+import {
+  STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE,
+  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR
+} from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -90,7 +93,30 @@ export class StationElementService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawDocumentBadge(station: StationMapElement): void {
-    // TODO: Draw the document badge
+    const ctx = <CanvasRenderingContext2D> this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledBadgeRadius = BADGE_RADIUS * this.mapScale;
+    const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    const badgeColor = BADGE_DEFAULT_COLOR;
+    // const badgeColorHover = BADGE_HOVER_COLOR;
+
+    ctx.beginPath();
+    ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = badgeColor;
+    ctx.fill();
+    ctx.font = '700 20px Montserrat';
+    ctx.fillStyle = '#fff';
+    ctx.fillText('7', startingX + scaledStationWidth - (scaledBadgeMargin + 5), startingY + (scaledBadgeMargin + 7), scaledBadgeRadius);
   }
 
   /**
