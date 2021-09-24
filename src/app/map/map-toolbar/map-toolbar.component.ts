@@ -3,7 +3,8 @@ import { first } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { User, OrganizationInfo } from 'src/models';
+import { User, OrganizationInfo, MapMode } from 'src/models';
+import { MapService } from '../map.service';
 
 /**
  * Component for managing the toolbar on the map.
@@ -21,10 +22,14 @@ export class MapToolbarComponent implements OnInit {
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
+  /** Add station mode active. */
+  stationAddActive = false;
+
 	constructor(
 		private userService: UserService,
 		private organizationService: OrganizationService,
-		private errorService: ErrorService
+		private errorService: ErrorService,
+    private mapService: MapService,
 	) { }
 
   /**
@@ -45,6 +50,13 @@ export class MapToolbarComponent implements OnInit {
 	 * Sets the map to add station mode in preparation for a station to be selected.
 	 */
 	addStation(): void {
+    if (!this.stationAddActive) {
+      this.stationAddActive = true;
+      this.mapService.mapMode$.next(MapMode.stationAdd);
+    } else {
+      this.stationAddActive = false;
+      this.mapService.mapMode$.next(MapMode.view);
+    }
 		// TODO: Implement add station
 	}
 
