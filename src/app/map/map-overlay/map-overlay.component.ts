@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent {
-  /** Admin promote or demote loading indicator. */
+  /** Map data request loading indicator. */
   mapDataLoading = false;
 
   /**
