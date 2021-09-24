@@ -13,6 +13,7 @@ import { User, OrganizationInfo } from 'src/models';
 	templateUrl: './map-toolbar.component.html',
 	styleUrls: ['./map-toolbar.component.scss'],
 })
+
 export class MapToolbarComponent implements OnInit {
 	/** The users of the organization. */
 	users: User[] = [];
@@ -25,7 +26,7 @@ export class MapToolbarComponent implements OnInit {
 		private organizationService: OrganizationService,
 		private errorService: ErrorService
 	) { }
-
+  
   /**
    * Gets the first page of users on load.
    */

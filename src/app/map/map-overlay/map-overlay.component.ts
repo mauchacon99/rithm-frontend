@@ -9,11 +9,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent {
+    /** Build button for admin. */
+    mapMode = false;
 
   /**
    * Enters build mode for the map.
    */
    build(): void {
+    this.mapMode = !this.mapMode;
     // TODO: Implement build
   }
 
@@ -28,6 +31,7 @@ export class MapOverlayComponent {
    * Cancels the map changes and returns to view mode.
    */
    cancel(): void {
+    this.mapMode = !this.mapMode;
     // TODO: Implement cancel
   }
 
