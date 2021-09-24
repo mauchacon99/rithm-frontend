@@ -10,17 +10,13 @@ import { Component } from '@angular/core';
 })
 export class MapOverlayComponent {
     /** Build button for admin. */
-    isBuildMode = false;
-
-    /** Build button for admin. */
-     publishEnable = false;
+    mapMode = false;
 
   /**
    * Enters build mode for the map.
    */
    build(): void {
-    this.isBuildMode = !this.isBuildMode;
-    this.publishEnable = !this.publishEnable;
+    this.mapMode = !this.mapMode;
     // TODO: Implement build
   }
 
@@ -35,8 +31,7 @@ export class MapOverlayComponent {
    * Cancels the map changes and returns to view mode.
    */
    cancel(): void {
-    this.isBuildMode = !this.isBuildMode;
-    this.publishEnable = !this.publishEnable;
+    this.mapMode = !this.mapMode;
     // TODO: Implement cancel
   }
 
