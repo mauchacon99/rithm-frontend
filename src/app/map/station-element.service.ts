@@ -126,7 +126,7 @@ export class StationElementService {
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = badgeColor;
     ctx.fill();
-    ctx.font = '600 15px Montserrat';
+    ctx.font = '600 16px Montserrat';
     ctx.fillStyle = '#fff';
     ctx.fillText(station.numberOfDocuments.toString(),
     startingX + scaledStationWidth - (scaledBadgeMargin + 4),
