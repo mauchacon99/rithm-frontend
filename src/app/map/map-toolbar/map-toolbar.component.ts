@@ -26,7 +26,7 @@ export class MapToolbarComponent implements OnInit {
 		private organizationService: OrganizationService,
 		private errorService: ErrorService
 	) { }
-  
+
   /**
    * Gets the first page of users on load.
    */
