@@ -34,7 +34,7 @@ export class StationElementService {
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
-    this.drawStationCard(station, <CanvasRenderingContext2D>(this.canvasContext));
+    this.drawStationCard(station);
     this.drawStationName(station);
     this.drawDocumentBadge(station);
   }
@@ -43,10 +43,11 @@ export class StationElementService {
    * Draws the station card on the map for a station.
    *
    * @param station The station for which to draw the card.
-   * @param context The context for station card element.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private drawStationCard(station: StationMapElement, context: CanvasRenderingContext2D) {
+  private drawStationCard(station: StationMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the station card if context is not defined');
+    }
     const startingX = station.canvasPoint.x;
     const startingY = station.canvasPoint.y;
 
@@ -54,26 +55,29 @@ export class StationElementService {
     const scaledStationHeight = STATION_HEIGHT * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
-    context.shadowColor = '#ccc';
-    context.shadowBlur = 6;
-    context.shadowOffsetX = 3;
-    context.shadowOffsetY = 3;
+    this.canvasContext.shadowColor = '#ccc';
+    this.canvasContext.shadowBlur = 6;
+    this.canvasContext.shadowOffsetX = 3;
+    this.canvasContext.shadowOffsetY = 3;
 
-    context.beginPath();
-    context.moveTo(startingX + scaledStationRadius, startingY);
-    context.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
-    context.quadraticCurveTo(startingX + scaledStationWidth, startingY, startingX + scaledStationWidth, startingY + scaledStationRadius);
-    context.lineTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledStationRadius);// line going to bottom right
+    this.canvasContext.beginPath();
+    this.canvasContext.moveTo(startingX + scaledStationRadius, startingY);
+    this.canvasContext.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
     // eslint-disable-next-line max-len
-    context.quadraticCurveTo(startingX + scaledStationWidth, startingY + scaledStationHeight, startingX + scaledStationWidth - scaledStationRadius, startingY + scaledStationHeight);// bottom right curve to line going to bottom left
-    context.lineTo(startingX + scaledStationRadius, startingY + scaledStationHeight);// line going to bottom left
+    this.canvasContext.quadraticCurveTo(startingX + scaledStationWidth, startingY, startingX + scaledStationWidth, startingY + scaledStationRadius);
     // eslint-disable-next-line max-len
-    context.quadraticCurveTo(startingX, startingY + scaledStationHeight, startingX, startingY + scaledStationHeight - scaledStationRadius); // bottom left curve to line going to top left
-    context.lineTo(startingX, startingY + scaledStationRadius);// line going to top left
-    context.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);// top left curve to line going top right
-    context.closePath();
-    context.fillStyle = '#fff';
-    context.fill();
+    this.canvasContext.lineTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledStationRadius);// line going to bottom right
+    // eslint-disable-next-line max-len
+    this.canvasContext.quadraticCurveTo(startingX + scaledStationWidth, startingY + scaledStationHeight, startingX + scaledStationWidth - scaledStationRadius, startingY + scaledStationHeight);// bottom right curve to line going to bottom left
+    this.canvasContext.lineTo(startingX + scaledStationRadius, startingY + scaledStationHeight);// line going to bottom left
+    // eslint-disable-next-line max-len
+    this.canvasContext.quadraticCurveTo(startingX, startingY + scaledStationHeight, startingX, startingY + scaledStationHeight - scaledStationRadius); // bottom left curve to line going to top left
+    this.canvasContext.lineTo(startingX, startingY + scaledStationRadius);// line going to top left
+    this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
+    // top left curve to line going top right
+    this.canvasContext.closePath();
+    this.canvasContext.fillStyle = '#fff';
+    this.canvasContext.fill();
   }
 
   /**
