@@ -9,7 +9,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-toolbar.component.scss']
 })
 export class MapToolbarComponent {
-
   /**
    * Sets the map to add flow mode in preparation for a flow to be selected.
    */
