@@ -31,7 +31,16 @@ export class MapCanvasComponent implements OnInit {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.scaleCanvasForDPI();
+    this.setCanvasSize();
+    this.drawElements();
+  }
+
+  /**
+   * Responds to changing window size by setting a new canvas size and re-drawing the elements.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    this.setCanvasSize();
     this.drawElements();
   }
 
@@ -117,13 +126,6 @@ export class MapCanvasComponent implements OnInit {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
-      /* important! for alignment, you should make things
-       * relative to the canvas' current width/height.
-       * You can't simply resize the canvas through css.
-       */
-      this.context.canvas.width = window.innerWidth;
-      this.context.canvas.height = window.innerHeight;
-
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
@@ -139,9 +141,9 @@ export class MapCanvasComponent implements OnInit {
   }
 
   /**
-   * Scales the canvas for accurate display on HiDPI/Retina displays.
+   * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
-  private scaleCanvasForDPI(): void {
+  private setCanvasSize(): void {
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
