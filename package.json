@@ -47,6 +47,7 @@
     "@compodoc/compodoc": "^1.1.15",
     "@strut-software/eslint-config": "^1.2.1",
     "@strut-software/stylelint-config": "^1.1.1",
+    "@types/css-font-loading-module": "0.0.6",
     "@types/jasmine": "^3.9.1",
     "@types/node": "^16.9.6",
     "@typescript-eslint/eslint-plugin": "4.31.2",

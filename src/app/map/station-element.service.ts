@@ -3,9 +3,10 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE,
-  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR
+  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
+import type { } from 'css-font-loading-module';
 
 /**
  * Service for rendering and other behavior for a station on the map.
@@ -34,9 +35,17 @@ export class StationElementService {
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
-    this.drawStationCard(station);
-    this.drawStationName(station);
-    this.drawDocumentBadge(station);
+    const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+
+    f.load().then((font) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      document.fonts.add(font);
+
+      this.drawStationCard(station);
+      this.drawStationName(station);
+      this.drawDocumentBadge(station);
+    });
+
   }
 
   /**
@@ -112,15 +121,17 @@ export class StationElementService {
     ctx.shadowOffsetY = 0;
 
     const badgeColor = BADGE_DEFAULT_COLOR;
-    // const badgeColorHover = BADGE_HOVER_COLOR;
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = badgeColor;
     ctx.fill();
-    ctx.font = '700 20px Montserrat';
+    ctx.font = '600 15px Montserrat';
     ctx.fillStyle = '#fff';
-    ctx.fillText('7', startingX + scaledStationWidth - (scaledBadgeMargin + 5), startingY + (scaledBadgeMargin + 7), scaledBadgeRadius);
+    ctx.fillText(station.numberOfDocuments.toString(),
+    startingX + scaledStationWidth - (scaledBadgeMargin + 4),
+    startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
+    ctx.closePath();
   }
 
   /**
