@@ -72,7 +72,7 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
-    // TODO: Enter build mode
+    this.mapMode$.next(MapMode.build);
   }
 
   /**
