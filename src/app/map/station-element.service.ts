@@ -38,7 +38,6 @@ export class StationElementService {
     const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
     f.load().then((font) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       document.fonts.add(font);
 
       this.drawStationCard(station);
