@@ -35,13 +35,13 @@ export class StationElementService {
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
+    this.drawStationCard(station);
+    this.drawStationName(station);
+    //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
     f.load().then((font) => {
       document.fonts.add(font);
-
-      this.drawStationCard(station);
-      this.drawStationName(station);
       this.drawDocumentBadge(station);
     });
 
