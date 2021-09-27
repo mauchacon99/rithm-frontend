@@ -3,6 +3,10 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { MapMode, Point, MapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+
+const MICROSERVICE_PATH = '/stationservice/api/station';
 
 /**
  * Service for all general map behavior.
@@ -23,6 +27,8 @@ export class MapService {
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+
+  constructor(private http: HttpClient) { }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -84,9 +90,12 @@ export class MapService {
 
   /**
    * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of publish data.
    */
-  publishMap(): void {
-    // TODO: HTTP request to push saved map changes to server
+  publishMap(mapData: MapData): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/map`, { mapData });
   }
 
   /**
