@@ -3,7 +3,8 @@ import { first } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { User, OrganizationInfo } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
+import { User, OrganizationInfo, DialogData } from 'src/models';
 
 /**
  * Component for managing the toolbar on the map.
@@ -24,7 +25,8 @@ export class MapToolbarComponent implements OnInit {
 	constructor(
 		private userService: UserService,
 		private organizationService: OrganizationService,
-		private errorService: ErrorService
+		private errorService: ErrorService,
+    private popupService: PopupService
 	) { }
 
   /**
@@ -45,7 +47,16 @@ export class MapToolbarComponent implements OnInit {
 	 * Sets the map to add station mode in preparation for a station to be selected.
 	 */
 	addStation(): void {
-		// TODO: Implement add station
+    const dialogData: DialogData = {
+      title: 'New station',
+      message: 'Select a location for this new station',
+      okButtonText: 'Add',
+      cancelButtonText: 'Cancel',
+      promptLabel: 'Station name'
+    };
+    this.popupService.prompt(dialogData).then((data: unknown) => {
+    }).catch((err: unknown)=>{
+    })
 	}
 
 	// MVP +1 below
