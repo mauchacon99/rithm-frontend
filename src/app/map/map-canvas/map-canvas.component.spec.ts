@@ -30,6 +30,7 @@ describe('MapCanvasComponent', () => {
   });
 
   xit('should add a new station to the stations array', () => {
+    //TODO: get this test working.
     const stationsLength = component.stations.length;
 
     //nothing should happen.
