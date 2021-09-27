@@ -28,6 +28,18 @@ export class MapCanvasComponent implements OnInit {
   /** Destroyed. */
   private destroyed$ = new Subject();
 
+  /**
+   * Add station mode active.
+   *
+   * @returns Boolean.
+   */
+  get stationAddActive(): boolean {
+    if (this.mapMode === MapMode.stationAdd) {
+      return true;
+    }
+    return false;
+  }
+
   /** Data for station card used in the map. */
   private stations: StationMapElement[] = [
     {
