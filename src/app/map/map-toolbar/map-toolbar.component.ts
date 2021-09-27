@@ -54,9 +54,7 @@ export class MapToolbarComponent implements OnInit {
       cancelButtonText: 'Cancel',
       promptLabel: 'Station name'
     };
-    this.popupService.prompt(dialogData).then((data: unknown) => {
-    }).catch((err: unknown)=>{
-    })
+    this.popupService.prompt(dialogData);
 	}
 
 	// MVP +1 below
