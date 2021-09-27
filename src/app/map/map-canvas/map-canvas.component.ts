@@ -23,7 +23,7 @@ export class MapCanvasComponent implements OnInit {
   private context!: CanvasRenderingContext2D;
 
   /** Modes for canvas element used for the map. */
-  private mapMode = MapMode.view;
+  mapMode = MapMode.view;
 
   /** Destroyed. */
   private destroyed$ = new Subject();
@@ -41,7 +41,7 @@ export class MapCanvasComponent implements OnInit {
   }
 
   /** Data for station card used in the map. */
-  private stations: StationMapElement[] = [
+  stations: StationMapElement[] = [
     {
       id: '1',
       name: 'Station 1',
@@ -133,7 +133,6 @@ export class MapCanvasComponent implements OnInit {
    * @param event The click event that was triggered.
    */
   @HostListener('click', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   click(event: MouseEvent): void {
     if (this.mapMode === MapMode.stationAdd) {
       //Create new station object using coordinates from the click.
@@ -160,7 +159,6 @@ export class MapCanvasComponent implements OnInit {
       //After clicking, turn off add station mode.
       this.mapService.mapMode$.next(MapMode.view);
     }
-    // TODO: Handle behavior when mouse is clicked
   }
 
   /**

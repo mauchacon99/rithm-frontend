@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
+import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
 import { MapCanvasComponent } from './map-canvas.component';
@@ -28,7 +29,16 @@ describe('MapCanvasComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should create a new station', () => {
-    expect(component).toBeTruthy();
+  xit('should add a new station to the stations array', () => {
+    const stationsLength = component.stations.length;
+
+    //nothing should happen.
+    window.dispatchEvent(new Event('click'));
+    expect(component.stations.length).toEqual(stationsLength);
+
+    //should add a station.
+    component.mapMode = MapMode.stationAdd;
+    window.dispatchEvent(new Event('click'));
+    expect(component.stations.length).toEqual(stationsLength + 1);
   });
 });
