@@ -1,4 +1,6 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, StationElementHoverType } from 'src/models';
 import { MapService } from '../map.service';
@@ -12,12 +14,15 @@ import { StationElementService } from '../station-element.service';
   templateUrl: './map-canvas.component.html',
   styleUrls: ['./map-canvas.component.scss']
 })
-export class MapCanvasComponent implements OnInit {
+export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject();
 
   /** Modes for canvas element used for the map. */
   private mapMode = MapMode.view;
@@ -46,7 +51,16 @@ export class MapCanvasComponent implements OnInit {
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
-  ) { }
+  ) {
+    this.mapService.mapMode$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((mapMode) => {
+      this.mapMode = mapMode;
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map overlay subscription error: ${error}`);
+    });
+  }
 
   /**
    * Scales the canvas and does initial draw for elements.
@@ -193,5 +207,13 @@ export class MapCanvasComponent implements OnInit {
       x: event.clientX - canvasRect.left,
       y: event.clientY - canvasRect.top
     };
+  }
+
+  /**
+   * Cleans up subscription.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
