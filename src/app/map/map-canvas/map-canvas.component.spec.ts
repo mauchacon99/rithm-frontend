@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockMapService } from 'src/mocks';
+import { MapService } from '../map.service';
 
 import { MapCanvasComponent } from './map-canvas.component';
 
@@ -8,7 +10,10 @@ describe('MapCanvasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapCanvasComponent ]
+      declarations: [ MapCanvasComponent ],
+      providers: [
+        { provide: MapService, useClass: MockMapService }
+      ]
     })
     .compileComponents();
   });
@@ -20,6 +25,10 @@ describe('MapCanvasComponent', () => {
   });
 
   it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  xit('should create a new station', () => {
     expect(component).toBeTruthy();
   });
 });
