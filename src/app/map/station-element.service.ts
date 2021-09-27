@@ -48,6 +48,7 @@ export class StationElementService {
 
     if (mapMode === MapMode.build) {
       this.drawConnectionNode(station);
+      this.drawStationButton(station);
     }
 
   }
@@ -100,7 +101,15 @@ export class StationElementService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationName(station: StationMapElement): void {
-    // TODO: Render the station text
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the document badge when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+
   }
 
   /**
