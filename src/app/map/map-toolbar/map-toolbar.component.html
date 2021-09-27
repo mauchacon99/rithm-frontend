@@ -1,12 +1,16 @@
-<div class="h-12 bg-white flex justify-end shadow">
-<div class="w-32 flex justify-center text-secondary-500">
-  <button mat-icon-button color="accent" class="w-14 flex flex-col items-center hover:text-secondary-300">
-    <i class="far fa-plus-square text-2xl"></i>
-    <span class="text-sm leading-3 font-semibold">Flow</span>
-  </button>
-  <button mat-icon-button color="accent" class="w-14 flex flex-col items-center hover:text-secondary-300">
-    <i class="far fa-plus-square text-2xl"></i>
-    <span class="text-sm leading-3 font-semibold">Station</span>
-  </button>
-</div>
+<div class="py-2 bg-white flex justify-between items-center shadow">
+  <div class="flex flex-col pl-5">
+    <span class="font-bold">Current Organization</span>
+    <h6 class="text-accent-500">{{orgInfo?.name}}</h6>
+  </div>
+  <div class="flex justify-between items-center px-2 mr-1">
+    <button mat-button color="accent" class="w-16 flex flex-col items-center group">
+      <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
+      <span class="block text-sm leading-3 font-semibold text-secondary-500 group-hover:text-secondary-300">Flow</span>
+    </button>
+    <button mat-button color="accent" class="w-16 flex flex-col items-center group">
+      <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
+      <span class="block text-sm leading-3 font-semibold text-secondary-500 group-hover:text-secondary-300">Station</span>
+    </button>
+  </div>
 </div>

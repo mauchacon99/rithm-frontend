@@ -36,8 +36,6 @@ describe('MyStationsComponent', () => {
   });
 
   it('should have stations', () => {
-    const organizationSpy = spyOn(TestBed.inject(DashboardService), 'getDashboardStations').and.callThrough();
-    expect(organizationSpy).toHaveBeenCalledTimes(0);
     expect(component.stations.length).toBeGreaterThanOrEqual(0);
   });
 
