@@ -17,11 +17,8 @@ export class MapOverlayComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
 
-  /** Build button for admin. */
-  mapMode = false;
-
   /** The current mode of the map. */
-  currentMode = MapMode.view;
+  private currentMode = MapMode.view;
 
   /**
    * Whether the map is in any building mode.
@@ -68,7 +65,6 @@ export class MapOverlayComponent implements OnDestroy {
    * Cancels the map changes and returns to view mode.
    */
   cancel(): void {
-    this.mapMode = !this.mapMode;
     // TODO: Implement cancel
   }
 
