@@ -7,7 +7,8 @@
     "atlassian.atlascode",
     "dbaeumer.vscode-eslint",
     "sibiraj-s.vscode-scss-formatter",
-    "stylelint.vscode-stylelint"
+    "stylelint.vscode-stylelint",
+    "bradlc.vscode-tailwindcss"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-typescript-tslint-plugin",

@@ -94,20 +94,28 @@ export class StationElementService {
     this.canvasContext.fillStyle = 'black';
     this.canvasContext.font = 'normal 16px Montserrat';
 
-    const sn = station.name.split(' ');
+    const sn = station.name.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
     for (const word of sn) {
       // eslint-disable-next-line max-len
-      if (word.length <= 10 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
+      if (word.length <= 12 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
         firstLineArray.push(word);
       } else {
         // eslint-disable-next-line max-len
-        if (word.length <= 10 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
+        if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
           secondLineArray.push(word);
         } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
-          secondLineArray.push('...');
+          if (sn.length === 1 && word.length > 10) {
+            firstLineArray.push(word.substring(0, 10));
+            secondLineArray.push(word.substring(10, 20));
+            if (sn.length === 1 && word.length > 20) {
+              secondLineArray.push('...');
+            }
+          } else if (sn.length > 1) {
+            secondLineArray.push('...');
+          }
           break;
         }
       }
