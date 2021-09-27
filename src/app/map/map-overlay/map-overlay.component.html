@@ -1,5 +1,5 @@
 <div class="h-12 flex justify-end items-center space-x-2.5 mx-2 py-2">
-  <button mat-raised-button color="accent" *ngIf="!mapMode" (click)="build()" class="h-9">Build</button>
+  <button mat-raised-button color="accent" *ngIf="!isBuilding" (click)="build()" class="h-9">Build</button>
   <button mat-raised-button color="basic" *ngIf="isBuilding" (click)="cancel()" class="h-9">Cancel</button>
   <button mat-raised-button color="accent" *ngIf="isBuilding" class="h-9">Publish</button>
 </div>
