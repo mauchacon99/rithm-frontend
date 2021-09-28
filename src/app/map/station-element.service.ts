@@ -193,7 +193,7 @@ export class StationElementService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationButton(station: StationMapElement): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot draw the document badge when canvas context is not set');
+      throw new Error('Cannot draw the station button when canvas context is not set');
     }
     const ctx = this.canvasContext;
 
