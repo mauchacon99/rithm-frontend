@@ -20,6 +20,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** The current mode of the map. */
   private currentMode = MapMode.view;
 
+  /** Map data request loading indicator. */
+  mapDataLoading = false;
+
   /**
    * Whether the map is in any building mode.
    *
