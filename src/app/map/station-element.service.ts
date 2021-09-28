@@ -179,9 +179,10 @@ export class StationElementService {
     ctx.fill();
     ctx.font = '600 16px Montserrat';
     ctx.fillStyle = '#fff';
+    ctx.textAlign =  'center';
     ctx.fillText(station.numberOfDocuments.toString(),
-    startingX + scaledStationWidth - (scaledBadgeMargin + 4),
-    startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
+    startingX + scaledStationWidth - scaledBadgeMargin,
+    startingY + scaledBadgeMargin + 6 * this.mapScale);
     ctx.closePath();
   }
 

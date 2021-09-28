@@ -40,7 +40,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         x: 410,
         y: 50
       },
-      numberOfDocuments: 5,
+      numberOfDocuments: 12,
       dragging: false,
       incomingStationIds: [],
       outgoingStationIds: [],
