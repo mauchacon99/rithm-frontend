@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { UserService } from 'src/app/core/user.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService, MockMapService, MockOrganizationService, MockUserService } from 'src/mocks';
 import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
@@ -14,7 +16,10 @@ describe('MapToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapToolbarComponent ],
+      declarations: [
+        MapToolbarComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
