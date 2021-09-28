@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
@@ -15,7 +15,7 @@ import { StationElementService } from '../station-element.service';
   templateUrl: './map-canvas.component.html',
   styleUrls: ['./map-canvas.component.scss']
 })
-export class MapCanvasComponent implements OnInit {
+export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
@@ -67,10 +67,11 @@ export class MapCanvasComponent implements OnInit {
   ) {
     this.mapService.mapMode$
     .pipe(takeUntil(this.destroyed$))
-    .subscribe((mode) => {
-      this.mapMode = mode;
+    .subscribe((mapMode) => {
+      this.mapMode = mapMode;
+      this.drawElements();
     }, (error: unknown) => {
-      console.error(error);
+      throw new Error(`Map overlay subscription error: ${error}`);
     });
   }
 
@@ -245,10 +246,10 @@ export class MapCanvasComponent implements OnInit {
   }
 
   /**
-   * Cleanup method.
+   * Cleans up subscription.
    */
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 }
