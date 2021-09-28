@@ -21,6 +21,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** The current mode of the map. */
   private currentMode = MapMode.view;
 
+  /** Map data request loading indicator. */
+  mapDataLoading = false;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -64,6 +67,7 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Cancels the map changes and returns to view mode.
+   *
    */
   async cancel(): Promise<void> {
     const confirm = await this.popupService.confirm({

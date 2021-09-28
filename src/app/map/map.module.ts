@@ -6,6 +6,7 @@ import { MapSearchComponent } from './map-search/map-search.component';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { MapCanvasComponent } from './map-canvas/map-canvas.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
+import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 
 
@@ -21,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     MapRoutingModule,
+    SharedModule,
     MatButtonModule
   ]
 })
