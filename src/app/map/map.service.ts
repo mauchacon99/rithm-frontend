@@ -15,7 +15,7 @@ export class MapService {
   mapElements!: MapData;
 
   /** An object that stores a backup of mapElements when buildMap is called. */
-  private storedMapElements!: MapData;
+  storedMapElements!: MapData;
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
