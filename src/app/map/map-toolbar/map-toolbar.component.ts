@@ -3,10 +3,9 @@ import { first, takeUntil } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { User, OrganizationInfo, MapMode, DialogData } from 'src/models';
+import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
-import { PopupService } from '../../core/popup.service';
 
 /**
  * Component for managing the toolbar on the map.
@@ -46,8 +45,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		private userService: UserService,
 		private organizationService: OrganizationService,
 		private errorService: ErrorService,
-    private mapService: MapService,
-    private popupService: PopupService
+    private mapService: MapService
 	) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -76,14 +74,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	 * Sets the map to add station mode in preparation for a station to be selected.
 	 */
 	addStation(): void {
-    const dialogData: DialogData = {
-      title: 'New station',
-      message: 'Select a location for this new station',
-      okButtonText: 'Add',
-      cancelButtonText: 'Cancel',
-      promptLabel: 'Station name'
-    };
-    this.popupService.prompt(dialogData);
     if (!this.stationAddActive) {
       this.mapService.mapMode$.next(MapMode.stationAdd);
     } else {

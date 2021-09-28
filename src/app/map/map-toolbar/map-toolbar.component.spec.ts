@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
-import { PopupService } from 'src/app/core/popup.service';
 import { UserService } from 'src/app/core/user.service';
-import { MockErrorService, MockMapService, MockOrganizationService, MockPopupService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockMapService, MockOrganizationService, MockUserService } from 'src/mocks';
 import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
@@ -18,7 +17,6 @@ describe('MapToolbarComponent', () => {
       declarations: [ MapToolbarComponent ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
         { provide: MapService, useClass: MockMapService }
