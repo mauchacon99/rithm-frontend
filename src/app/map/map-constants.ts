@@ -13,7 +13,7 @@ export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;
 
 // Station
-export const STATION_PADDING = 6; // TODO: Figure out correlation between this and BADGE_MARGIN
+export const STATION_PADDING = 10;
 export const STATION_HEIGHT = 110;
 export const STATION_WIDTH = 160;
 export const STATION_RADIUS = 10;
