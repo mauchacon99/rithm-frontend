@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
-import { UserService } from 'src/app/core/user.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockErrorService, MockOrganizationService, MockPopupService, MockUserService } from 'src/mocks';
+import { UserService } from 'src/app/core/user.service';
+import { MockErrorService, MockMapService, MockOrganizationService, MockPopupService, MockUserService } from 'src/mocks';
+import { MapMode } from 'src/models';
+import { MapService } from '../map.service';
 
 import { MapToolbarComponent } from './map-toolbar.component';
 
@@ -18,7 +20,8 @@ describe('MapToolbarComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: OrganizationService, useClass: MockOrganizationService }
+        { provide: OrganizationService, useClass: MockOrganizationService },
+        { provide: MapService, useClass: MockMapService }
       ]
     }).compileComponents();
   });
@@ -31,5 +34,14 @@ describe('MapToolbarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should toggle mapMode', () => {
+    component.addStation();
+    expect(component.stationAddActive).toBeTrue();
+    expect(component.mapMode).toEqual(MapMode.stationAdd);
+    component.addStation();
+    expect(component.stationAddActive).toBeFalse();
+    expect(component.mapMode).toEqual(MapMode.view);
   });
 });

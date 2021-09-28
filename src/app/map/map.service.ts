@@ -16,7 +16,7 @@ export class MapService {
   canvasContext?: CanvasRenderingContext2D;
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.build);
+  mapMode$ = new BehaviorSubject(MapMode.view);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
@@ -57,8 +57,30 @@ export class MapService {
           name: 'Step 1',
           numberOfDocuments: 5,
           mapPoint: {
-            x: 12,
-            y: 15
+            x: 200,
+            y: 80
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+        {
+          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          numberOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+        {
+          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 3',
+          numberOfDocuments: 5,
+          mapPoint: {
+            x: 50,
+            y: 240
           },
           incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
@@ -72,7 +94,7 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
-    // TODO: Enter build mode
+    this.mapMode$.next(MapMode.build);
   }
 
   /**

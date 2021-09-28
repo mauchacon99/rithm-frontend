@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { first, takeUntil } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { PopupService } from 'src/app/core/popup.service';
-import { User, OrganizationInfo, DialogData } from 'src/models';
+import { User, OrganizationInfo, MapMode, DialogData } from 'src/models';
+import { MapService } from '../map.service';
+import { Subject } from 'rxjs';
+import { PopupService } from '../../core/popup.service';
 
 /**
  * Component for managing the toolbar on the map.
@@ -15,19 +17,46 @@ import { User, OrganizationInfo, DialogData } from 'src/models';
 	styleUrls: ['./map-toolbar.component.scss'],
 })
 
-export class MapToolbarComponent implements OnInit {
+export class MapToolbarComponent implements OnInit, OnDestroy {
 	/** The users of the organization. */
 	users: User[] = [];
 
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
+  /** Variable to store current map mode. */
+  mapMode = MapMode.view;
+
+  /** Destroyed. */
+  private destroyed$ = new Subject();
+
+  /**
+   * Add station mode active.
+   *
+   * @returns Boolean.
+   */
+  get stationAddActive(): boolean {
+    if (this.mapMode === MapMode.stationAdd) {
+      return true;
+    }
+    return false;
+  }
+
 	constructor(
 		private userService: UserService,
 		private organizationService: OrganizationService,
 		private errorService: ErrorService,
+    private mapService: MapService,
     private popupService: PopupService
-	) { }
+	) {
+    this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mode) => {
+        this.mapMode = mode;
+      }, (error: unknown) => {
+        console.error(error);
+      });
+  }
 
   /**
    * Gets the first page of users on load.
@@ -55,6 +84,12 @@ export class MapToolbarComponent implements OnInit {
       promptLabel: 'Station name'
     };
     this.popupService.prompt(dialogData);
+    if (!this.stationAddActive) {
+      this.mapService.mapMode$.next(MapMode.stationAdd);
+    } else {
+      this.mapService.mapMode$.next(MapMode.view);
+    }
+		// TODO: Implement add station
 	}
 
 	// MVP +1 below
@@ -85,4 +120,13 @@ export class MapToolbarComponent implements OnInit {
         }
       );
   }
+
+  /**
+   * Cleanup method.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
 }

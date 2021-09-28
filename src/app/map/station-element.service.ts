@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
-import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE } from './map-constants';
+import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
+  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR } from './map-constants';
 import { MapService } from './map.service';
+import type { } from 'css-font-loading-module';
 
 /**
  * Service for rendering and other behavior for a station on the map.
@@ -33,7 +35,15 @@ export class StationElementService {
 
     this.drawStationCard(station);
     this.drawStationName(station);
-    this.drawDocumentBadge(station);
+    //Needed to get the correct font loaded before it gets drawn.
+    const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+
+    f.load().then((font) => {
+      document.fonts.add(font);
+      this.drawDocumentBadge(station);
+      document.fonts.delete(font);
+    });
+
   }
 
   /**
@@ -82,9 +92,51 @@ export class StationElementService {
    *
    * @param station The station for which to draw the station name.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationName(station: StationMapElement): void {
-    // TODO: Render the station text
+    if (!this.canvasContext) {
+      throw new Error('Cannot reset the stroke if context is not defined');
+    }
+    const scaledStationPadding = STATION_PADDING * this.mapScale;
+
+    this.canvasContext.shadowBlur = 0;
+    this.canvasContext.shadowColor = 'transparent';
+    this.canvasContext.textAlign = 'left';
+    this.canvasContext.fillStyle = 'black';
+    this.canvasContext.font = 'normal 16px Montserrat';
+
+    const sn = station.name.trim().split(' ');
+    const firstLineArray: string[] = [];
+    const secondLineArray: string[] = [];
+
+    for (const word of sn) {
+      // eslint-disable-next-line max-len
+      if (word.length <= 12 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
+        firstLineArray.push(word);
+      } else {
+        // eslint-disable-next-line max-len
+        if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
+          secondLineArray.push(word);
+        } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
+          if (sn.length === 1 && word.length > 10) {
+            firstLineArray.push(word.substring(0, 10));
+            secondLineArray.push(word.substring(10, 20));
+            if (sn.length === 1 && word.length > 20) {
+              secondLineArray.push('...');
+            }
+          } else if (sn.length > 1) {
+            secondLineArray.push('...');
+          }
+          break;
+        }
+      }
+    }
+
+    // eslint-disable-next-line max-len
+    this.canvasContext.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 12 + scaledStationPadding, 114 * this.mapScale);
+    if (secondLineArray.join(' ').length > 0) {
+      // eslint-disable-next-line max-len
+      this.canvasContext.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 32 + scaledStationPadding, 114 * this.mapScale);
+    }
   }
 
   /**
@@ -92,9 +144,36 @@ export class StationElementService {
    *
    * @param station The station for which to draw the badge.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawDocumentBadge(station: StationMapElement): void {
-    // TODO: Draw the document badge
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the document badge when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledBadgeRadius = BADGE_RADIUS * this.mapScale;
+    const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    const badgeColor = BADGE_DEFAULT_COLOR;
+
+    ctx.beginPath();
+    ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = badgeColor;
+    ctx.fill();
+    ctx.font = '600 16px Montserrat';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(station.numberOfDocuments.toString(),
+    startingX + scaledStationWidth - (scaledBadgeMargin + 4),
+    startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
+    ctx.closePath();
   }
 
   /**
