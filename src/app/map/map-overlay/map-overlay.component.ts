@@ -63,9 +63,10 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Cancels the map changes and returns to view mode.
+   *
    */
   cancel(): void {
-    // TODO: Implement cancel
+    this.mapService.mapMode$.next(MapMode.view);
   }
 
   /**
