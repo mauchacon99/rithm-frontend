@@ -34,10 +34,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationAddActive(): boolean {
-    if (this.mapMode === MapMode.stationAdd) {
-      return true;
-    }
-    return false;
+    return this.mapMode === MapMode.stationAdd
   }
 
   /** Data for station card used in the map. */
