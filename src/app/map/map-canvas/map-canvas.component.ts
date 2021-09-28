@@ -34,7 +34,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationAddActive(): boolean {
-    return this.mapMode === MapMode.stationAdd
+    return this.mapMode === MapMode.stationAdd;
   }
 
   /** Data for station card used in the map. */
@@ -137,25 +137,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const coords = this.getMouseCanvasPoint(event);
       coords.x = coords.x - STATION_WIDTH/2;
       coords.y = coords.y - STATION_HEIGHT/2;
-      const mapCoords = this.mapService.getMapPoint(coords);
-      const newStation: StationMapElement = {
-        id: '0',
-        name: 'Untitled Station',
-        mapPoint: mapCoords,
-        canvasPoint: coords,
-        numberOfDocuments: 0,
-        dragging: false,
-        incomingStationIds: [],
-        outgoingStationIds: [],
-        hoverActive: StationElementHoverType.none
-      };
+
+      //create a new station at click.
+      const newStation = this.mapService.createNewStation(coords);
 
       //Put new station in the stations array so it can be drawn.
       this.stations.push(newStation);
       this.drawElements();
 
-      //After clicking, turn off add station mode.
-      this.mapService.mapMode$.next(MapMode.view);
+      //After clicking, set to build mode.
+      this.mapService.mapMode$.next(MapMode.build);
     }
   }
 
