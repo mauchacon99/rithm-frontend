@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MapData, MapMode } from 'src/models';
+import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
 /**
