@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MapMode } from 'src/models';
+import { MapData, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
 /**
@@ -65,7 +65,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Cancels the map changes and returns to view mode.
    */
   cancel(): void {
-    // TODO: Implement cancel
+    this.mapService.cancelMapChanges();
   }
 
   /**

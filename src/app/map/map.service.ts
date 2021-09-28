@@ -11,6 +11,11 @@ import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
   providedIn: 'root'
 })
 export class MapService {
+  /** An object that stores the data from getMapElements.*/
+  mapElements!: MapData;
+
+  /** An object that stores a backup of mapElements when buildMap is called. */
+  private storedMapElements!: MapData;
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -87,13 +92,20 @@ export class MapService {
         }
       ], flows: []
     };
+    this.mapElements = data;
     return of(data).pipe(delay(1000));
+  }
+
+  constructor() {
+    this.getMapElements();
   }
 
   /**
    * Enters build mode for the map.
    */
   buildMap(): void {
+    //This makes a deep copy of data instead of referencing it.
+    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements));
     this.mapMode$.next(MapMode.build);
   }
 
@@ -101,7 +113,10 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    // TODO: Remove all local map changes
+    if (this.storedMapElements) {
+      this.mapElements = JSON.parse(JSON.stringify(this.storedMapElements));
+    }
+    this.mapMode$.next(MapMode.view);
   }
 
   /**
