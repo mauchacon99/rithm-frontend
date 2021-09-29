@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData, MapMode, StationMapData } from 'src/models';
+import { MapMode, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
