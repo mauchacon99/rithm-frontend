@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MapOverlayComponent } from './map-overlay.component';
 
@@ -8,7 +10,8 @@ describe('MapOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapOverlayComponent ]
+      declarations: [ MapOverlayComponent ],
+      imports: [ MatDialogModule, MatSnackBarModule ]
     })
     .compileComponents();
   });
