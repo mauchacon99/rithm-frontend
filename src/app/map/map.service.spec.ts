@@ -89,22 +89,24 @@ describe('MapService', () => {
 
   it('should restore previous data when cancelled', () => {
     service.buildMap();
-    expect(service.storedMapElements).toEqual(service.mapElements);
-    service.mapElements.stations.push(
-      {
-        id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-        name: 'Step 2',
-        numberOfDocuments: 5,
-        mapPoint: {
-          x: 500,
-          y: 400
+    expect(service.storedMapElements$.value).toEqual(service.mapElements$.value);
+    service.mapElements$.next(
+      [
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
-        incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-        outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-      },
+      ]
     );
-    expect(service.mapElements).not.toEqual(service.storedMapElements);
+    expect(service.mapElements$.value).not.toEqual(service.storedMapElements$.value);
     service.cancelMapChanges();
-    expect(service.storedMapElements).toEqual(service.mapElements);
+    expect(service.storedMapElements$.value).toEqual(service.mapElements$.value);
   });
 });

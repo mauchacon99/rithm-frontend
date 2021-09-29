@@ -5,6 +5,7 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, StationElementHoverType, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
+import { first } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
@@ -16,15 +17,22 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
 })
 export class MapService {
   constructor(
-    private http: HttpClient) {
-      this.getMapElements();
+    private http: HttpClient
+    ) {
+    this.getMapElements()
+    .pipe(first())
+    .subscribe((data) => {
+      this.mapElements$.next(data);
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
     }
 
   /** An object that stores the data from getMapElements.*/
-  mapElements!: StationMapData[];
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** An object that stores a backup of mapElements when buildMap is called. */
-  storedMapElements!: StationMapData[];
+  storedMapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -82,7 +90,7 @@ export class MapService {
    */
   buildMap(): void {
     //This makes a deep copy of data instead of referencing it.
-    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements));
+    this.storedMapElements$.next(JSON.parse(JSON.stringify(this.mapElements$.value)));
     this.mapMode$.next(MapMode.build);
   }
 
@@ -90,8 +98,8 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    if (this.storedMapElements) {
-      this.mapElements = JSON.parse(JSON.stringify(this.storedMapElements));
+    if (this.storedMapElements$.value.length > 0) {
+      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements$.value)));
     }
     this.mapMode$.next(MapMode.view);
   }
