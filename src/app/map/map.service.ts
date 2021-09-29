@@ -123,7 +123,7 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    // TODO: Remove all local map changes
+    this.mapMode$.next(MapMode.view);
   }
 
   /**
