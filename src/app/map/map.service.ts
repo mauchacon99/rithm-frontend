@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapMode, Point, MapData } from 'src/models';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, MapData, StationElementHoverType } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 
 /**
@@ -88,6 +89,27 @@ export class MapService {
       ], flows: []
     };
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Create a new Station.
+   *
+   * @param coords The coordinates where the station will be placed.
+   * @returns The new station.
+   */
+  createNewStation(coords: Point): StationMapElement {
+    const mapCoords = this.getMapPoint(coords);
+    return {
+      id: '0',
+      name: 'Untitled Station',
+      mapPoint: mapCoords,
+      canvasPoint: coords,
+      numberOfDocuments: 0,
+      dragging: false,
+      incomingStationIds: [],
+      outgoingStationIds: [],
+      hoverActive: StationElementHoverType.none
+    };
   }
 
   /**

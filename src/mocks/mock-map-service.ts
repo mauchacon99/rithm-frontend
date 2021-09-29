@@ -1,11 +1,25 @@
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData } from 'src/models';
+import { MapData, MapMode } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
  */
 export class MockMapService {
+  /** The rendering context for the canvas element for the map. */
+  canvasContext?: CanvasRenderingContext2D;
+
+  /** The current mode of interaction on the map. */
+  mapMode$ = new BehaviorSubject(MapMode.build);
+
+  /**
+   * Registers the canvas rendering context from the component for use elsewhere.
+   *
+   * @param canvasContext The rendering context for the canvas element.
+   */
+   registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
+    this.canvasContext = canvasContext;
+  }
 
   /**
    * Gets all map elements for a given organization.

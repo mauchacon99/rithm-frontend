@@ -8,9 +8,13 @@
       <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
       <span class="block text-sm leading-3 font-semibold text-secondary-500 group-hover:text-secondary-300">Flow</span>
     </button>
-    <button mat-button color="accent" class="w-16 flex flex-col items-center group">
-      <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
-      <span class="block text-sm leading-3 font-semibold text-secondary-500 group-hover:text-secondary-300">Station</span>
+    <button mat-button color="accent"
+    [ngClass]="{'bg-secondary-50 group-hover:bg-secondary-100': stationAddActive}"
+    class="w-16 flex flex-col items-center group" (click)="addStation()">
+      <i [ngClass]="{'text-secondary-500 group-hover:text-secondary-300': !stationAddActive, 'text-accent-500 group-hover:text-accent-600': stationAddActive}"
+      class="block far fa-plus-square text-2xl"></i>
+      <span [ngClass]="{'text-secondary-500 group-hover:text-secondary-300': !stationAddActive, 'text-accent-500 group-hover:text-accent-600': stationAddActive}"
+      class="block text-sm leading-3 font-semibold">Station</span>
     </button>
   </div>
 </div>
