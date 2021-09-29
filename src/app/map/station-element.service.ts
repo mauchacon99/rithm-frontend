@@ -7,7 +7,6 @@ import {
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
-import type { } from 'css-font-loading-module';
 
 /**
  * Service for rendering and other behavior for a station on the map.
@@ -38,14 +37,7 @@ export class StationElementService {
 
     this.drawStationCard(station);
     this.drawStationName(station);
-    //Needed to get the correct font loaded before it gets drawn.
-    const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
-
-    f.load().then((font) => {
-      document.fonts.add(font);
-      this.drawDocumentBadge(station);
-      document.fonts.delete(font);
-    });
+    this.drawDocumentBadge(station);
 
     if (mapMode === MapMode.build) {
       this.drawConnectionNode(station);
@@ -175,7 +167,7 @@ export class StationElementService {
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = badgeColor;
     ctx.fill();
-    ctx.font = '600 16px Montserrat';
+    ctx.font = '600 16px Montserrat-SemiBold';
     ctx.fillStyle = '#fff';
     ctx.fillText(station.numberOfDocuments.toString(),
     startingX + scaledStationWidth - (scaledBadgeMargin + 4),

@@ -3,7 +3,7 @@
     <span class="font-bold">Current Organization</span>
     <h6 class="text-accent-500">{{orgInfo?.name}}</h6>
   </div>
-  <div class="flex justify-between items-center px-2 mr-1">
+  <div *ngIf="isBuilding" class="flex justify-between items-center px-2 mr-1">
     <button mat-button color="accent" class="w-16 flex flex-col items-center group">
       <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
       <span class="block text-sm leading-3 font-semibold text-secondary-500 group-hover:text-secondary-300">Flow</span>

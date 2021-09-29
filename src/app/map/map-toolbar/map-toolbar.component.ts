@@ -6,6 +6,7 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
+import type { } from 'css-font-loading-module';
 
 /**
  * Component for managing the toolbar on the map.
@@ -28,6 +29,15 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
   /** Destroyed. */
   private destroyed$ = new Subject();
+
+  /**
+   * Whether the map is in any building mode.
+   *
+   * @returns True if the map is in any building mode, false otherwise.
+   */
+   get isBuilding(): boolean {
+    return this.mapMode === MapMode.build || this.mapMode === MapMode.stationAdd || this.mapMode === MapMode.flowAdd;
+  }
 
   /**
    * Add station mode active.
