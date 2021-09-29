@@ -39,7 +39,7 @@ export class StationElementService {
     this.drawStationCard(station);
     this.drawStationName(station);
     //Needed to get the correct font loaded before it gets drawn.
-    const f = new FontFace('Montserrat','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+    const f = new FontFace('Montserrat', 'url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
     f.load().then((font) => {
       document.fonts.add(font);
@@ -124,11 +124,20 @@ export class StationElementService {
         if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
           secondLineArray.push(word);
         } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
-          if (sn.length === 1 && word.length > 10) {
-            firstLineArray.push(word.substring(0, 10));
-            secondLineArray.push(word.substring(10, 20));
-            if (sn.length === 1 && word.length > 20) {
+          if (word.length > 12) {
+            if (firstLineArray.length === 0) {
+              firstLineArray.push(word.substring(0, 10));
+              secondLineArray.push(word.substring(10, 20));
+            } else if (firstLineArray.length > 0) {
+              secondLineArray.push(word.substring(0, 10));
+              if (word.length > 20) {
+                secondLineArray.push('...');
+                break;
+              }
+            }
+            if (word.length > 20) {
               secondLineArray.push('...');
+              break;
             }
           } else if (sn.length > 1) {
             secondLineArray.push('...');
@@ -178,8 +187,8 @@ export class StationElementService {
     ctx.font = '600 16px Montserrat';
     ctx.fillStyle = '#fff';
     ctx.fillText(station.numberOfDocuments.toString(),
-    startingX + scaledStationWidth - (scaledBadgeMargin + 4),
-    startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
+      startingX + scaledStationWidth - (scaledBadgeMargin + 4),
+      startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
     ctx.closePath();
   }
 
