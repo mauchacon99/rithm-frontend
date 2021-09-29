@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
 import { MapService } from '../map.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PopupService } from 'src/app/core/popup.service';
 
 import { MapOverlayComponent } from './map-overlay.component';
 
@@ -10,12 +13,13 @@ describe('MapOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapOverlayComponent ],
+      declarations: [MapOverlayComponent],
+      imports: [MatDialogModule, MatSnackBarModule],
       providers: [
         { provide: MapService, useClass: MockMapService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -26,5 +30,11 @@ describe('MapOverlayComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display confirmation prompt when cancel', () => {
+    const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
+    component.cancel();
+    expect(dialogSpy).toHaveBeenCalledTimes(1);
   });
 });
