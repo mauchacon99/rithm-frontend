@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { MapMode, Point, MapData } from 'src/models';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, StationElementHoverType, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
+import { environment } from 'src/environments/environment';
+
+const MICROSERVICE_PATH = '/mapservice/api/map';
 
 /**
  * Service for all general map behavior.
@@ -11,11 +15,16 @@ import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
   providedIn: 'root'
 })
 export class MapService {
+  constructor(
+    private http: HttpClient) {
+      this.getMapElements();
+    }
+
   /** An object that stores the data from getMapElements.*/
-  mapElements!: MapData;
+  mapElements!: StationMapData[];
 
   /** An object that stores a backup of mapElements when buildMap is called. */
-  storedMapElements!: MapData;
+  storedMapElements!: StationMapData[];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -43,61 +52,29 @@ export class MapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
-    const data: MapData = {
-      stations: [
-        {
-          id: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 12,
-            y: 15
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 1',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 200,
-            y: 80
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 500,
-            y: 400
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 3',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 50,
-            y: 240
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        }
-      ], flows: []
-    };
-    this.mapElements = data;
-    return of(data).pipe(delay(1000));
+  getMapElements(): Observable<StationMapData[]> {
+    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
   }
 
-  constructor() {
-    this.getMapElements();
+  /**
+   * Create a new Station.
+   *
+   * @param coords The coordinates where the station will be placed.
+   * @returns The new station.
+   */
+  createNewStation(coords: Point): StationMapElement {
+    const mapCoords = this.getMapPoint(coords);
+    return {
+      rithmId: '0',
+      name: 'Untitled Station',
+      mapPoint: mapCoords,
+      canvasPoint: coords,
+      noOfDocuments: 0,
+      dragging: false,
+      incomingStationIds: [],
+      outgoingStationIds: [],
+      hoverActive: StationElementHoverType.none
+    };
   }
 
   /**

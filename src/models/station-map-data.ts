@@ -5,13 +5,13 @@ import { Point } from './point';
  */
 export interface StationMapData {
   /** The global Rithm id for the station. */
-  id?: string;
+  rithmId?: string;
 
   /** The name of the station. */
   name: string;
 
   /** The number of documents in the station. */
-  numberOfDocuments: number;
+  noOfDocuments: number;
 
   /** The coordinates for the location of the station on the overall map. */
   mapPoint: Point;

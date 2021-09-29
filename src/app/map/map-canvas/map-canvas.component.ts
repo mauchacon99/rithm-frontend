@@ -1,8 +1,9 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType } from 'src/models';
+import { MapMode, Point, } from 'src/models';
+import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -21,37 +22,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** Subject for when the component is destroyed. */
+  /** Modes for canvas element used for the map. */
+  mapMode = MapMode.view;
+
+  /** Destroyed. */
   private destroyed$ = new Subject();
 
-  /** Modes for canvas element used for the map. */
-  private mapMode = MapMode.view;
+  /**
+   * Add station mode active.
+   *
+   * @returns Boolean.
+   */
+  get stationAddActive(): boolean {
+    return this.mapMode === MapMode.stationAdd;
+  }
 
   /** Data for station card used in the map. */
-  private stations: StationMapElement[] = [
-    {
-      id: '1',
-      name: 'Station 1',
-      mapPoint: {
-        x: 110,
-        y: 50
-      },
-      canvasPoint: {
-        x: 410,
-        y: 50
-      },
-      numberOfDocuments: 12,
-      dragging: false,
-      incomingStationIds: [],
-      outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
-    }
-  ];
+  stations: StationMapElement[] = [];
 
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
   ) {
+
     this.mapService.mapMode$
     .pipe(takeUntil(this.destroyed$))
     .subscribe((mapMode) => {
@@ -69,8 +62,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.setCanvasSize();
-    this.drawElements();
+    this.mapService.getMapElements()
+    .pipe(first())
+    .subscribe((data) => {
+      this.stations = data.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
@@ -121,9 +121,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The click event that was triggered.
    */
   @HostListener('click', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   click(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse is clicked
+    if (this.mapMode === MapMode.stationAdd) {
+      //Create new station object using coordinates from the click.
+      const coords = this.getMouseCanvasPoint(event);
+      coords.x = coords.x - STATION_WIDTH/2;
+      coords.y = coords.y - STATION_HEIGHT/2;
+
+      //create a new station at click.
+      const newStation = this.mapService.createNewStation(coords);
+
+      //Put new station in the stations array so it can be drawn.
+      this.stations.push(newStation);
+      this.drawElements();
+
+      //After clicking, set to build mode.
+      this.mapService.mapMode$.next(MapMode.build);
+    }
   }
 
   /**

@@ -180,7 +180,7 @@ export class StationElementService {
     ctx.font = '600 16px Montserrat';
     ctx.fillStyle = '#fff';
     ctx.textAlign =  'center';
-    ctx.fillText(station.numberOfDocuments.toString(),
+    ctx.fillText(station.noOfDocuments.toString(),
     startingX + scaledStationWidth - scaledBadgeMargin,
     startingY + scaledBadgeMargin + 6 * this.mapScale);
     ctx.closePath();
