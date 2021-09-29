@@ -8,18 +8,22 @@
       <div>
         <h3 class="text-accent-500 mb-1">Manage My Organization</h3>
         <div class="pt-2">
-          <h4 class="text-accent-500 flex items-center content-center h-10" *ngIf="!editName" >
+          <h4 class="text-accent-500 flex items-center content-center h-10" *ngIf="!editName">
             {{orgInfo?.name}}
-            <button *ngIf="!orgNameLoading && !orgLoading" mat-icon-button class="group edit-btn ml-2" (click)="editOrgName()" ><i class="fas fa-pencil-alt text-xl text-secondary-500 group-hover:text-secondary-900"></i></button>
-            <app-loading-indicator *ngIf="orgNameLoading" class="inline-block px-2" [diameter]="24"></app-loading-indicator>
+            <button *ngIf="!orgNameLoading && !orgLoading" mat-icon-button class="group edit-btn ml-2"
+              (click)="editOrgName()"><i
+                class="fas fa-pencil-alt text-xl text-secondary-500 group-hover:text-secondary-900"></i></button>
+            <app-loading-indicator *ngIf="orgNameLoading" class="inline-block px-2" [diameter]="24">
+            </app-loading-indicator>
           </h4>
           <form [formGroup]="orgNameForm" *ngIf="editName" class="grid grid-cols-12 gap-x-2">
             <mat-form-field appearance="outline" class="col-span-12 sm:col-span-8">
               <mat-label>Organization name</mat-label>
-              <input matInput type="text" id="name" formControlName="name"  autocomplete="name" />
+              <input matInput type="text" id="name" formControlName="name" autocomplete="name" />
             </mat-form-field>
             <div class="col-span-12 sm:col-span-4 flex items-start sm:mt-4 gap-2">
-              <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid || !orgNameForm.dirty" (click)="updateOrganization()">Save</button>
+              <button mat-raised-button color="accent" [disabled]="!orgNameForm.valid || !orgNameForm.dirty"
+                (click)="updateOrganization()">Save</button>
               <button mat-stroked-button color="accent" (click)="editOrgName()">Cancel</button>
             </div>
           </form>
@@ -46,15 +50,16 @@
           {{ user.email }}
         </div>
         <div class="col-span-4 md:col-span-2">
-          <button mat-icon-button *ngIf="!roleLoading[i]" [ngClass]="{'group': user.rithmId !== currentUser.rithmId}" [disabled]="user.rithmId === currentUser.rithmId"
-            (click)="updateUserRole(user, user.rithmId, i)">
+          <button mat-icon-button *ngIf="!roleLoading[i]" [ngClass]="{'group': user.rithmId !== currentUser.rithmId}"
+            [disabled]="user.rithmId === currentUser.rithmId" (click)="updateUserRole(user, user.rithmId, i)">
             <i class="fas fa-check-circle fa-2x " [ngClass]="{
               'text-accent-100': user.rithmId === currentUser.rithmId,
-              'text-secondary-500 group-hover:text-secondary-900': user.rithmId !== currentUser.rithmId,
+              'text-secondary-500 group-hover:text-secondary-900': user.role!=='admin' && user.rithmId !== currentUser.rithmId,
               'text-accent-500': user.role === 'admin' && user.rithmId !== currentUser.rithmId
             }"></i>
           </button>
-          <app-loading-indicator *ngIf="roleLoading[i]" class="relative inline-block left-2 pr-4 top-2" [diameter]="24"></app-loading-indicator>
+          <app-loading-indicator *ngIf="roleLoading[i]" class="relative inline-block left-2 pr-4 top-2" [diameter]="24">
+          </app-loading-indicator>
           <button class="group" mat-icon-button *ngIf="user.rithmId !== currentUser.rithmId" (click)="removeUser(user)">
             <i class="fas fa-times fa-2x group-hover:text-error-500 text-secondary-500"></i>
           </button>
@@ -64,7 +69,8 @@
     </div>
 
     <div *ngIf="totalNumUsers > 0" class="flex justify-center mt-5">
-      <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15" [activeNum]="activeNum">
+      <app-pagination (currentPageNum)="getUsers($event)" [numItems]="totalNumUsers" [numPerPage]="15"
+        [activeNum]="activeNum">
       </app-pagination>
     </div>
 
