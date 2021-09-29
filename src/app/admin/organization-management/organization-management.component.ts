@@ -162,6 +162,7 @@ export class OrganizationManagementComponent implements OnInit {
   async updateUserRole(user: User, userId: string, index: number): Promise<void> {
     let role: 'admin' | null;
     let message, title, buttonText = '';
+    console.log(user.role);
     if (!user.role || user.role!=='admin') {
       role = 'admin';
       // eslint-disable-next-line max-len
@@ -188,8 +189,8 @@ export class OrganizationManagementComponent implements OnInit {
         .pipe(first())
         .subscribe(() => {
           this.roleLoading[index] = false;
-          !user.role ? user.role = 'admin' : user.role = null;
-          user.role ? this.popupService.notify('User has been promoted to admin role.') :
+          !user.role || user.role!=='admin' ? user.role = 'admin' : user.role = null;
+          user.role && user.role!=='admin' ? this.popupService.notify('User has been promoted to admin role.') :
             this.popupService.notify('User has been de-promoted from admin role.');
         }, (error: unknown) => {
           this.roleLoading[index] = false;
