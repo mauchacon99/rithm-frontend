@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockMapService } from 'src/mocks';
+import { MapService } from '../map.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PopupService } from 'src/app/core/popup.service';
@@ -12,7 +14,10 @@ describe('MapOverlayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MapOverlayComponent],
-      imports: [MatDialogModule, MatSnackBarModule]
+      imports: [MatDialogModule, MatSnackBarModule],
+      providers: [
+        { provide: MapService, useClass: MockMapService }
+      ]
     })
       .compileComponents();
   });
