@@ -169,7 +169,7 @@ export class StationElementService {
     ctx.fill();
     ctx.font = '600 16px Montserrat-SemiBold';
     ctx.fillStyle = '#fff';
-    ctx.fillText(station.numberOfDocuments.toString(),
+    ctx.fillText(station.noOfDocuments.toString(),
     startingX + scaledStationWidth - (scaledBadgeMargin + 4),
     startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
     ctx.closePath();

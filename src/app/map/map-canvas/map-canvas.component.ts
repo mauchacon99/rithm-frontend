@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType } from 'src/models';
+import { MapMode, Point, } from 'src/models';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -38,25 +38,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /** Data for station card used in the map. */
-  stations: StationMapElement[] = [
-    {
-      id: '1',
-      name: 'Station 1',
-      mapPoint: {
-        x: 110,
-        y: 50
-      },
-      canvasPoint: {
-        x: 410,
-        y: 50
-      },
-      numberOfDocuments: 5,
-      dragging: false,
-      incomingStationIds: [],
-      outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
-    }
-  ];
+  stations: StationMapElement[] = [];
 
   constructor(
     private mapService: MapService,
@@ -85,8 +67,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.setCanvasSize();
-    this.drawElements();
+    this.mapService.getMapElements()
+    .pipe(first())
+    .subscribe((data) => {
+      this.stations = data.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
