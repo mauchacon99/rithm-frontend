@@ -29,12 +29,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject();
 
   /**
-   * Add station mode active.
+   * Whether the map is in any building mode.
    *
-   * @returns Boolean.
+   * @returns True if the map is in any building mode, false otherwise.
    */
-  get stationAddActive(): boolean {
-    return this.mapMode === MapMode.stationAdd;
+   get isBuilding(): boolean {
+    return this.mapMode === MapMode.build || this.mapMode === MapMode.stationAdd || this.mapMode === MapMode.flowAdd;
   }
 
   /** Data for station card used in the map. */

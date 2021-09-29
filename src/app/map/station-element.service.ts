@@ -39,7 +39,7 @@ export class StationElementService {
     this.drawStationName(station);
     this.drawDocumentBadge(station);
 
-    if (mapMode === MapMode.build) {
+    if (mapMode === MapMode.build || mapMode === MapMode.stationAdd || mapMode === MapMode.flowAdd) {
       this.drawConnectionNode(station);
     }
 
