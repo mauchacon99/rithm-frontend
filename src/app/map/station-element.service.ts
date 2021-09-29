@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapMode } from 'src/models';
-import { STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
-  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR } from './map-constants';
+import {
+  STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
+  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
+  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR
+} from './map-constants';
 import { MapService } from './map.service';
 import type { } from 'css-font-loading-module';
 
@@ -43,6 +46,10 @@ export class StationElementService {
       this.drawDocumentBadge(station);
       document.fonts.delete(font);
     });
+
+    if (mapMode === MapMode.build) {
+      this.drawConnectionNode(station);
+    }
 
   }
 
@@ -193,7 +200,33 @@ export class StationElementService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawConnectionNode(station: StationMapElement): void {
-    // TODO: Draw the connection node
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the connection node when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledNodeRadius = NODE_RADIUS * this.mapScale;
+    const scaledStationHeight = STATION_HEIGHT * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+    const scaledNodeYMargin = NODE_Y_MARGIN * this.mapScale;
+
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    const nodeColor = NODE_DEFAULT_COLOR;
+
+    ctx.beginPath();
+    ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = nodeColor;
+    ctx.fill();
+    ctx.strokeStyle = '#ccc';
+    ctx.stroke();
+    ctx.closePath();
   }
 
   /**
