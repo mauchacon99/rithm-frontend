@@ -5,7 +5,7 @@
   <mat-card class="w-full md:w-11/12 lg:w-4/5 mx-auto sm:mt-6 h-full sm:h-auto" *ngIf="!isLoading">
     <h3 class="mb-4 text-accent-500">Account Settings</h3>
 
-    <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+    <form (ngSubmit)="updateSettings()" class="relative" [formGroup]="settingsForm">
       <h4 class="pb-3">General Account Settings</h4>
 
       <app-user-form formControlName="userForm" class="w-full"></app-user-form>
