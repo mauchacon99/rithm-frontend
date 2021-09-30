@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { MockMapService } from 'src/mocks';
+import { MapService } from './map.service';
 
 import { StationElementService } from './station-element.service';
 
@@ -6,7 +8,11 @@ describe('StationElementService', () => {
   let service: StationElementService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: MapService, useClass: MockMapService }
+      ]
+    });
     service = TestBed.inject(StationElementService);
   });
 
