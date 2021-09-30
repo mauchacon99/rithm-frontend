@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { MapMode, Point, MapData } from 'src/models';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, StationElementHoverType, StationMapData, MapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
 
-const MICROSERVICE_PATH = '/stationservice/api/station';
+const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
+
+const MICROSERVICE_PATH = '/mapservice/api/map';
 
 /**
  * Service for all general map behavior.
@@ -44,56 +46,29 @@ export class MapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
-    const data: MapData = {
-      stations: [
-        {
-          id: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 12,
-            y: 15
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 1',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 200,
-            y: 80
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 500,
-            y: 400
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        },
-        {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 3',
-          numberOfDocuments: 5,
-          mapPoint: {
-            x: 50,
-            y: 240
-          },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
-        }
-      ], flows: []
+  getMapElements(): Observable<StationMapData[]> {
+    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+  }
+
+  /**
+   * Create a new Station.
+   *
+   * @param coords The coordinates where the station will be placed.
+   * @returns The new station.
+   */
+  createNewStation(coords: Point): StationMapElement {
+    const mapCoords = this.getMapPoint(coords);
+    return {
+      rithmId: '0',
+      name: 'Untitled Station',
+      mapPoint: mapCoords,
+      canvasPoint: coords,
+      noOfDocuments: 0,
+      dragging: false,
+      incomingStationIds: [],
+      outgoingStationIds: [],
+      hoverActive: StationElementHoverType.none
     };
-    return of(data).pipe(delay(1000));
   }
 
   /**
@@ -107,7 +82,7 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    // TODO: Remove all local map changes
+    this.mapMode$.next(MapMode.view);
   }
 
   /**
@@ -117,7 +92,7 @@ export class MapService {
    * @returns Observable of publish data.
    */
   publishMap(mapData: MapData): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/map`, { mapData });
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STSATION}/map`, { mapData });
   }
 
   /**

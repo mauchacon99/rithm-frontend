@@ -5,6 +5,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockErrorService, MockPopupService } from 'src/mocks';
+import { MockMapService } from 'src/mocks';
+import { MapService } from '../map.service';
 
 import { MapOverlayComponent } from './map-overlay.component';
 
@@ -22,7 +24,8 @@ describe('MapOverlayComponent', () => {
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: MapService, useClass: MockMapService }
       ]
     })
       .compileComponents();
@@ -36,5 +39,11 @@ describe('MapOverlayComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display confirmation prompt when cancel', () => {
+    const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
+    component.cancel();
+    expect(dialogSpy).toHaveBeenCalledTimes(1);
   });
 });

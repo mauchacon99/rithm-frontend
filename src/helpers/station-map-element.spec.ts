@@ -6,7 +6,7 @@ const TEST_STATION_MAP_DATA: StationMapData = {
   mapPoint: { x: 0, y: 0 },
   outgoingStationIds: [],
   incomingStationIds: [],
-  numberOfDocuments: 5
+  noOfDocuments: 5
 };
 
 describe('StationMapElement', () => {

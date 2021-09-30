@@ -2,9 +2,9 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { PopupService } from 'src/app/core/popup.service';
 import { MapData, MapMode } from 'src/models';
-import { MapService } from '../map.service';
+import { MapService } from 'src/app/map/map.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -31,6 +31,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** Whether the publish data is loading. */
   isLoading = false;
 
+  /** Map data request loading indicator. */
+  mapDataLoading = false;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -41,8 +44,8 @@ export class MapOverlayComponent implements OnDestroy {
   }
 
   constructor(private mapService: MapService,
-    private errorService: ErrorService,
-    private popupService: PopupService) {
+    private popupService: PopupService,
+    private errorService: ErrorService) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
@@ -99,9 +102,17 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Cancels the map changes and returns to view mode.
+   *
    */
-  cancel(): void {
-    // TODO: Implement cancel
+  async cancel(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Confirmation',
+      message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+      okButtonText: 'Confirm',
+    });
+    if (confirm) {
+      this.mapService.cancelMapChanges();
+    }
   }
 
   /**

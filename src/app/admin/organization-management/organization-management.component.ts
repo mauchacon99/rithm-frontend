@@ -162,7 +162,7 @@ export class OrganizationManagementComponent implements OnInit {
   async updateUserRole(user: User, userId: string, index: number): Promise<void> {
     let role: 'admin' | null;
     let message, title, buttonText = '';
-    if (!user.role) {
+    if (!user.role || user.role!=='admin') {
       role = 'admin';
       // eslint-disable-next-line max-len
       message = `Promoting ${user.firstName} ${user.lastName} to an admin will give this user additional privileges. Are you sure you want to do this?`;
