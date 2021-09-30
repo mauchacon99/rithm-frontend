@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
-import { first, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
