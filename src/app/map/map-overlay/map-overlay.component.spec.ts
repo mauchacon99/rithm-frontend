@@ -1,9 +1,12 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockMapService } from 'src/mocks';
-import { MapService } from '../map.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { MockErrorService, MockPopupService } from 'src/mocks';
+import { MockMapService } from 'src/mocks';
+import { MapService } from '../map.service';
 
 import { MapOverlayComponent } from './map-overlay.component';
 
@@ -14,8 +17,14 @@ describe('MapOverlayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MapOverlayComponent],
-      imports: [MatDialogModule, MatSnackBarModule],
+      imports: [
+        HttpClientTestingModule,
+        MatDialogModule,
+        MatSnackBarModule
+      ],
       providers: [
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
         { provide: MapService, useClass: MockMapService }
       ]
     })
