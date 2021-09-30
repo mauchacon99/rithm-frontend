@@ -76,6 +76,7 @@ describe('MapService', () => {
 
     service.getMapElements()
       .subscribe((response) => {
+        console.log(response);
         expect(response).toEqual(expectedResponse);
       });
 
@@ -85,5 +86,53 @@ describe('MapService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should restore previous data when cancelled', () => {
+    const test = [
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        name: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400
+        },
+        incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+      },
+    ];
+    service.mapElements$.next(test);
+    service.buildMap();
+    expect(service.mapElements$.value).toEqual(service.storedMapElements);
+    service.mapElements$.next(
+      [
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+      ]
+    );
+    expect(service.mapElements$.value).not.toEqual(service.storedMapElements);
+    service.cancelMapChanges();
+    expect(service.mapElements$.value).toEqual(test);
   });
 });

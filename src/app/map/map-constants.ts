@@ -34,3 +34,10 @@ export const NODE_Y_MARGIN = 55;
 export const NODE_RADIUS = 7;
 export const NODE_HOVER_COLOR = '#ccc';
 export const NODE_DEFAULT_COLOR = '#fff';
+
+// Station Button
+export const BUTTON_X_MARGIN = 150;
+export const BUTTON_Y_MARGIN = 90;
+export const BUTTON_RADIUS = 4;
+export const BUTTON_DEFAULT_COLOR = '#667080';
+export const BUTTON_HOVER_COLOR = '#7D8593';

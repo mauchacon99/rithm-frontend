@@ -4,7 +4,8 @@ import { MapMode } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
-  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR
+  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -41,6 +42,7 @@ export class StationElementService {
 
     if (mapMode === MapMode.build || mapMode === MapMode.stationAdd || mapMode === MapMode.flowAdd) {
       this.drawConnectionNode(station);
+      this.drawStationButton(station);
     }
 
   }
@@ -169,9 +171,10 @@ export class StationElementService {
     ctx.fill();
     ctx.font = '600 16px Montserrat-SemiBold';
     ctx.fillStyle = '#fff';
+    ctx.textAlign =  'center';
     ctx.fillText(station.noOfDocuments.toString(),
-    startingX + scaledStationWidth - (scaledBadgeMargin + 4),
-    startingY + (scaledBadgeMargin + 6), scaledBadgeRadius);
+    startingX + scaledStationWidth - scaledBadgeMargin,
+    startingY + scaledBadgeMargin + 6 * this.mapScale);
     ctx.closePath();
   }
 
@@ -182,7 +185,43 @@ export class StationElementService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationButton(station: StationMapElement): void {
-    // TODO: Render station button
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the station button when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledButtonRadius = BUTTON_RADIUS * this.mapScale;
+    const scaledButtonXMargin = BUTTON_X_MARGIN * this.mapScale;
+    const scaledButtonYMargin = BUTTON_Y_MARGIN * this.mapScale;
+
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    const buttonColor = BUTTON_DEFAULT_COLOR;
+
+    ctx.beginPath();
+    ctx.arc(
+      startingX + scaledButtonXMargin,
+      startingY + scaledButtonYMargin,
+      scaledButtonRadius, 0, 2 * Math.PI);
+    ctx.moveTo(startingX + scaledButtonXMargin - 1, startingY + scaledButtonYMargin,);
+    ctx.arc(
+      startingX + scaledButtonXMargin - 2 - 2 * scaledButtonRadius,
+      startingY + scaledButtonYMargin,
+      scaledButtonRadius, 0, 2 * Math.PI);
+    ctx.moveTo(startingX + scaledButtonXMargin - scaledButtonRadius - 2, startingY + scaledButtonYMargin,);
+    ctx.arc(
+      startingX + scaledButtonXMargin - 2 * 2 - 4 * scaledButtonRadius,
+      startingY + scaledButtonYMargin,
+      scaledButtonRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = buttonColor;
+    ctx.fill();
+    ctx.closePath();
   }
 
   /**
