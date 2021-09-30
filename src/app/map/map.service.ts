@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType, StationMapData } from 'src/models';
+import { MapMode, Point, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
@@ -26,13 +25,13 @@ export class MapService {
     }, (error: unknown) => {
       throw new Error(`Map service error: ${error}`);
     });
-    }
+  }
 
-  /** An object that stores the data from getMapElements.*/
+ /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
-  /** An object that stores a backup of mapElements when buildMap is called. */
-  storedMapElements$ = new BehaviorSubject<StationMapData[]>([]);
+  /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
+  storedMapElements: StationMapData[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -70,18 +69,15 @@ export class MapService {
    * @param coords The coordinates where the station will be placed.
    * @returns The new station.
    */
-  createNewStation(coords: Point): StationMapElement {
+  createNewStation(coords: Point): StationMapData {
     const mapCoords = this.getMapPoint(coords);
     return {
       rithmId: '0',
       name: 'Untitled Station',
       mapPoint: mapCoords,
-      canvasPoint: coords,
       noOfDocuments: 0,
-      dragging: false,
       incomingStationIds: [],
       outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
     };
   }
 
@@ -89,17 +85,24 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
+    this.mapElements$
+    .pipe(first())
+    .subscribe((stations) => {
     //This makes a deep copy of data instead of referencing it.
-    this.storedMapElements$.next(JSON.parse(JSON.stringify(this.mapElements$.value)));
-    this.mapMode$.next(MapMode.build);
+      this.storedMapElements = JSON.parse(JSON.stringify(stations));
+      this.mapMode$.next(MapMode.build);
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    if (this.storedMapElements$.value.length > 0) {
-      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements$.value)));
+    if (this.storedMapElements.length > 0) {
+      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
+      this.storedMapElements = [];
     }
     this.mapMode$.next(MapMode.view);
   }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, } from 'src/models';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
@@ -62,15 +62,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.mapService.mapElements$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((stations) => {
-      this.stations = stations.map((e) => new StationMapElement(e));
-      this.setCanvasSize();
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map service error: ${error}`);
-    });
+    this.setStationArray();
 
   }
 
@@ -132,12 +124,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //create a new station at click.
       const newStation = this.mapService.createNewStation(coords);
 
-      //Put new station in the stations array so it can be drawn.
-      this.stations.push(newStation);
-      this.drawElements();
-
-      //After clicking, set to build mode.
-      this.mapService.mapMode$.next(MapMode.build);
+      this.mapService.mapElements$
+      .pipe(first())
+      .subscribe((stations) => {
+        //Add new station to mapElements behavior subject.
+        this.mapService.mapElements$.next([...stations, newStation]);
+        //After clicking, set to build mode.
+        this.mapService.mapMode$.next(MapMode.build);
+      }, (error: unknown) => {
+        throw new Error(`Map service error: ${error}`);
+      });
     }
   }
 
@@ -172,6 +168,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
     // TODO: Handle behavior when mouse wheel is scrolled
+  }
+
+  /**
+   * Converts station data so it can be drawn on the canvas.
+   */
+  private setStationArray(): void {
+    this.mapService.mapElements$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((stations) => {
+      this.stations = stations.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
