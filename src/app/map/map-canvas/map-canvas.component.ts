@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { first, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, } from 'src/models';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
