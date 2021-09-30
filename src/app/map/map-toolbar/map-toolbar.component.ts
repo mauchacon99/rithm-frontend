@@ -21,6 +21,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	/** The users of the organization. */
 	users: User[] = [];
 
+  /** Whether the organization is being loaded. */
+  isLoading = true;
+
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
@@ -105,11 +108,13 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         (organization) => {
+          this.isLoading = false;
           if (organization) {
             this.orgInfo = organization;
           }
         },
         (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
