@@ -76,7 +76,6 @@ describe('MapService', () => {
 
     service.getMapElements()
       .subscribe((response) => {
-        console.log(response);
         expect(response).toEqual(expectedResponse);
       });
 
