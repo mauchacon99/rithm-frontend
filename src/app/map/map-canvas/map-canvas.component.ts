@@ -71,6 +71,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Cleans up subscription.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
    * Responds to changing window size by setting a new canvas size and re-drawing the elements.
    */
   @HostListener('window:resize', ['$event'])
@@ -231,13 +239,5 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       x: event.clientX - canvasRect.left,
       y: event.clientY - canvasRect.top
     };
-  }
-
-  /**
-   * Cleans up subscription.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
