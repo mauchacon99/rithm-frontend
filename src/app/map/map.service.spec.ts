@@ -1,15 +1,25 @@
 /* eslint-disable rxjs/no-ignored-error */
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MapData } from 'src/models';
+import { environment } from 'src/environments/environment';
+import { StationMapData } from 'src/models';
 
 import { MapService } from './map.service';
 
+const MICROSERVICE_PATH = '/mapservice/api/map';
+
 describe('MapService', () => {
   let service: MapService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ]
+    });
     service = TestBed.inject(MapService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
@@ -17,12 +27,11 @@ describe('MapService', () => {
   });
 
   it('should return all map elements for a given organization', () => {
-    const expectedResponse: MapData = {
-      stations: [
+    const expectedResponse: StationMapData[] = [
         {
-          id: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           name: 'Development',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 12,
             y: 15
@@ -31,9 +40,9 @@ describe('MapService', () => {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 1',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 200,
             y: 80
@@ -42,9 +51,9 @@ describe('MapService', () => {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 2',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 500,
             y: 400
@@ -53,9 +62,9 @@ describe('MapService', () => {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 3',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 50,
             y: 240
@@ -63,23 +72,28 @@ describe('MapService', () => {
           incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         }
-      ], flows: []
-    };
+      ];
 
     service.getMapElements()
       .subscribe((response) => {
+        console.log(response);
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toBeFalsy();
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should restore previous data when cancelled', () => {
-    service.buildMap();
-    expect(service.storedMapElements).toEqual(service.mapElements);
-    service.mapElements.stations.push(
+    const test = [
       {
-        id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
         name: 'Step 2',
-        numberOfDocuments: 5,
+        noOfDocuments: 5,
         mapPoint: {
           x: 500,
           y: 400
@@ -87,9 +101,38 @@ describe('MapService', () => {
         incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
         outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
       },
+    ];
+    service.mapElements$.next(test);
+    service.buildMap();
+    expect(service.mapElements$.value).toEqual(service.storedMapElements);
+    service.mapElements$.next(
+      [
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        },
+      ]
     );
-    expect(service.mapElements).not.toEqual(service.storedMapElements);
+    expect(service.mapElements$.value).not.toEqual(service.storedMapElements);
     service.cancelMapChanges();
-    expect(service.storedMapElements).toEqual(service.mapElements);
+    expect(service.mapElements$.value).toEqual(test);
   });
 });

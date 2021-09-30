@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType } from 'src/models';
+import { MapMode, Point, } from 'src/models';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -38,37 +38,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /** Data for station card used in the map. */
-  stations: StationMapElement[] = [
-    {
-      id: '1',
-      name: 'Station 1',
-      mapPoint: {
-        x: 110,
-        y: 50
-      },
-      canvasPoint: {
-        x: 410,
-        y: 50
-      },
-      numberOfDocuments: 12,
-      dragging: false,
-      incomingStationIds: [],
-      outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
-    }
-  ];
+  stations: StationMapElement[] = [];
 
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
   ) {
-    this.mapService.mapMode$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((mapMode) => {
-      this.mapMode = mapMode;
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map overlay subscription error: ${error}`);
+    //Needed to get the correct font loaded before it gets drawn.
+    const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+
+    f.load().then((font) => {
+      document.fonts.add(font);
+      this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
     });
   }
 
@@ -79,8 +67,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.setCanvasSize();
-    this.drawElements();
+    this.useStationData();
   }
 
   /**
@@ -141,12 +128,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //create a new station at click.
       const newStation = this.mapService.createNewStation(coords);
 
-      //Put new station in the stations array so it can be drawn.
-      this.stations.push(newStation);
-      this.drawElements();
-
-      //After clicking, set to build mode.
-      this.mapService.mapMode$.next(MapMode.build);
+      this.mapService.mapElements$
+      .pipe(first())
+      .subscribe((stations) => {
+        //Add new station to mapElements behavior subject.
+        this.mapService.mapElements$.next([...stations, newStation]);
+        //After clicking, set to build mode.
+        this.mapService.mapMode$.next(MapMode.build);
+      }, (error: unknown) => {
+        throw new Error(`Map service error: ${error}`);
+      });
     }
   }
 
@@ -181,6 +172,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
     // TODO: Handle behavior when mouse wheel is scrolled
+  }
+
+  /**
+   * Converts station data so it can be drawn on the canvas.
+   */
+  private useStationData(): void {
+    this.mapService.mapElements$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((stations) => {
+      this.stations = stations.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
