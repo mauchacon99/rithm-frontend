@@ -33,6 +33,15 @@ export class MapOverlayComponent implements OnDestroy {
     return this.currentMode === MapMode.build || this.currentMode === MapMode.stationAdd || this.currentMode === MapMode.flowAdd;
   }
 
+  /**
+   * Station the map is in stationAdd mode.
+   *
+   * @returns True if the map is in stationAdd mode, false otherwise.
+   */
+  get isStationAdd(): boolean {
+    return this.currentMode === MapMode.stationAdd;
+  }
+
   constructor(private mapService: MapService, private popupService: PopupService) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
