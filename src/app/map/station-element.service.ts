@@ -183,7 +183,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the button.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawStationButton(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station button when canvas context is not set');

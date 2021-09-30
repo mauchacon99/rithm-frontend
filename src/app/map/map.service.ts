@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, StationMapData } from 'src/models';
+import { MapMode, Point, StationMapData, MapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
+
+const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
@@ -16,10 +18,6 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
-  constructor(
-    private http: HttpClient
-    ) { }
-
  /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
@@ -37,6 +35,8 @@ export class MapService {
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+
+  constructor(private http: HttpClient) { }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -99,9 +99,12 @@ export class MapService {
 
   /**
    * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of publish data.
    */
-  publishMap(): void {
-    // TODO: HTTP request to push saved map changes to server
+  publishMap(mapData: MapData): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STSATION}/map`, { mapData });
   }
 
   /**

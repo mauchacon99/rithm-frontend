@@ -12,6 +12,8 @@ import { DialogData } from 'src/models';
 })
 export class AlertDialogComponent {
 
+
+
   /** The title to be displayed on the alert. */
   title: string;
 
