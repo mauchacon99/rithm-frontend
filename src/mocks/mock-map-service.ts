@@ -9,6 +9,9 @@ export class MockMapService {
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
 
+  /** This behavior subject will track the array of stations. */
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
+
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.build);
 

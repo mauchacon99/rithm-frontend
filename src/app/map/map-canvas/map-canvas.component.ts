@@ -67,8 +67,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.setStationArray();
-
+    this.useStationData();
   }
 
   /**
@@ -178,7 +177,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Converts station data so it can be drawn on the canvas.
    */
-  private setStationArray(): void {
+  private useStationData(): void {
     this.mapService.mapElements$
     .pipe(takeUntil(this.destroyed$))
     .subscribe((stations) => {

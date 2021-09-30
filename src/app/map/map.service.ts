@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
@@ -17,15 +17,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
 export class MapService {
   constructor(
     private http: HttpClient
-    ) {
-    this.getMapElements()
-    .pipe(first())
-    .subscribe((data) => {
-      this.mapElements$.next(data);
-    }, (error: unknown) => {
-      throw new Error(`Map service error: ${error}`);
-    });
-  }
+    ) { }
 
  /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
@@ -60,7 +52,11 @@ export class MapService {
    * @returns Retrieves all map elements for a given organization.
    */
   getMapElements(): Observable<StationMapData[]> {
-    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
+    .pipe(map((data) => {
+      this.mapElements$.next(data);
+      return data;
+    }));
   }
 
   /**
@@ -85,15 +81,8 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
-    this.mapElements$
-    .pipe(first())
-    .subscribe((stations) => {
-    //This makes a deep copy of data instead of referencing it.
-      this.storedMapElements = JSON.parse(JSON.stringify(stations));
-      this.mapMode$.next(MapMode.build);
-    }, (error: unknown) => {
-      throw new Error(`Map service error: ${error}`);
-    });
+    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements$.value));
+    this.mapMode$.next(MapMode.build);
   }
 
   /**
