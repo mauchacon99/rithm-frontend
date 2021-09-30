@@ -19,14 +19,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
+  /** Subject for whether the component was destroyed. */
+  private destroyed$ = new Subject();
+
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.view;
 
-  /** Destroyed. */
-  private destroyed$ = new Subject();
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
 
   /**
    * Add station mode active.
@@ -36,9 +39,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   get stationAddActive(): boolean {
     return this.mapMode === MapMode.stationAdd;
   }
-
-  /** Data for station card used in the map. */
-  stations: StationMapElement[] = [];
 
   constructor(
     private mapService: MapService,
