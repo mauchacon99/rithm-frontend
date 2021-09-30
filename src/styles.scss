@@ -107,6 +107,6 @@ a {
 /// Entry folder forms
 .entry-form {
   mat-label {
-    background-color: map-get($primary-palette, 0);
+    background-color: map-get($fixed-form-palette, 50);
   }
 }

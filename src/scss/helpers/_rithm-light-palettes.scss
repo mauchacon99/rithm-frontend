@@ -1,6 +1,5 @@
 /// Primary Color Palette
 $primary-palette: (
-  0: #fff,
   50: #e1e2e5,
   100: #b3b7bd,
   200: #818891,
@@ -129,5 +128,12 @@ $secondary-gray-palette: (
     A200 : #000,
     A400 : #fff,
     A700 : #fff,
+  ),
+);
+/// Fixed Colors Form Palette
+$fixed-form-palette: (
+  50: #fff,
+  contrast: (
+    50: #000,
   ),
 );
