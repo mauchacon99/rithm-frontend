@@ -116,7 +116,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
         (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            'The user does not have rights to access at map',
             error
           );
         }
