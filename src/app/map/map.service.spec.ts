@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
 import { StationMapData } from 'src/models';
 
-const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
+const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
 describe('MapService', () => {
@@ -159,7 +159,7 @@ describe('MapService', () => {
       });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH_STSATION}/map`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`);
     console.log(req);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(postData);
