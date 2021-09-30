@@ -5,6 +5,7 @@ import { MapMode, Point, StationMapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
@@ -68,8 +69,8 @@ export class MapService {
   createNewStation(coords: Point): StationMapData {
     const mapCoords = this.getMapPoint(coords);
     return {
-      rithmId: '0',
-      name: 'Untitled Station',
+      rithmId: uuidv4().toUpperCase(),
+      name: uuidv4().toUpperCase(),
       mapPoint: mapCoords,
       noOfDocuments: 0,
       incomingStationIds: [],
