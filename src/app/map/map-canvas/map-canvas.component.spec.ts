@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
 import { MapMode } from 'src/models';
@@ -12,6 +13,7 @@ describe('MapCanvasComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ MapCanvasComponent ],
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: MapService, useClass: MockMapService }
       ]

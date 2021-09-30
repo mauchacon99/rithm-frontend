@@ -1,6 +1,7 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapMode, StationMapData } from 'src/models';
+import { MapData, MapMode, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -74,5 +75,23 @@ export class MockMapService {
         }
       ];
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of Comment.
+   */
+  publishMap(mapData: MapData): Observable<unknown> {
+    if (!mapData) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }
