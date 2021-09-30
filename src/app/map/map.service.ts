@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType, StationMapData, MapData } from 'src/models';
+import { MapMode, Point, StationMapData, MapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 
 const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
 
@@ -17,6 +17,11 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
+ /** This behavior subject will track the array of stations. */
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
+
+  /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
+  storedMapElements: StationMapData[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -47,7 +52,11 @@ export class MapService {
    * @returns Retrieves all map elements for a given organization.
    */
   getMapElements(): Observable<StationMapData[]> {
-    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
+    .pipe(map((data) => {
+      this.mapElements$.next(data);
+      return data;
+    }));
   }
 
   /**
@@ -56,18 +65,15 @@ export class MapService {
    * @param coords The coordinates where the station will be placed.
    * @returns The new station.
    */
-  createNewStation(coords: Point): StationMapElement {
+  createNewStation(coords: Point): StationMapData {
     const mapCoords = this.getMapPoint(coords);
     return {
       rithmId: '0',
       name: 'Untitled Station',
       mapPoint: mapCoords,
-      canvasPoint: coords,
       noOfDocuments: 0,
-      dragging: false,
       incomingStationIds: [],
       outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
     };
   }
 
@@ -75,6 +81,7 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
+    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements$.value));
     this.mapMode$.next(MapMode.build);
   }
 
@@ -82,6 +89,10 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
+    if (this.storedMapElements.length > 0) {
+      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
+      this.storedMapElements = [];
+    }
     this.mapMode$.next(MapMode.view);
   }
 
