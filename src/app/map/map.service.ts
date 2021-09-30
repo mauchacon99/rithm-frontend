@@ -70,7 +70,7 @@ export class MapService {
     const mapCoords = this.getMapPoint(coords);
     return {
       rithmId: uuidv4().toUpperCase(),
-      name: uuidv4().toUpperCase(),
+      name: 'Untitled Station',
       mapPoint: mapCoords,
       noOfDocuments: 0,
       incomingStationIds: [],
