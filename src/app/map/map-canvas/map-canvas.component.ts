@@ -44,14 +44,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService
   ) {
+    //Needed to get the correct font loaded before it gets drawn.
+    const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
-    this.mapService.mapMode$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((mapMode) => {
-      this.mapMode = mapMode;
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map overlay subscription error: ${error}`);
+    f.load().then((font) => {
+      document.fonts.add(font);
+      this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
     });
   }
 
