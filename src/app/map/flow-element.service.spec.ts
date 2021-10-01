@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
 
@@ -9,6 +10,9 @@ describe('FlowElementService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
         { provide: MapService, useClass: MockMapService }
       ]

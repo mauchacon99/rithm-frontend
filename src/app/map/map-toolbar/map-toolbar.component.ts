@@ -55,7 +55,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		private userService: UserService,
 		private organizationService: OrganizationService,
 		private errorService: ErrorService,
-    private mapService: MapService,
+    private mapService: MapService
 	) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
