@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { MapService } from '../map.service';
 
 /**
  * Main component for the map.
@@ -8,4 +10,12 @@ import { Component } from '@angular/core';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent { }
+export class MapComponent {
+  constructor(private mapService: MapService) {
+    this.mapService.getMapElements()
+    .pipe(first())
+    .subscribe(() => null, (error: unknown) => {
+      throw new Error(`Unable to get map data: ${error}`);
+    });
+  }
+}
