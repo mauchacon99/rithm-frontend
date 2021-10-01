@@ -1,6 +1,7 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData, MapMode } from 'src/models';
+import { MapData, MapMode, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -8,6 +9,9 @@ import { MapData, MapMode } from 'src/models';
 export class MockMapService {
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
+
+  /** This behavior subject will track the array of stations. */
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.build);
@@ -26,13 +30,12 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
-    const data: MapData = {
-      stations: [
+  getMapElements(): Observable<StationMapData[]> {
+    const data: StationMapData[] = [
         {
-          id: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           name: 'Development',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 12,
             y: 15
@@ -41,9 +44,9 @@ export class MockMapService {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 1',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 200,
             y: 80
@@ -52,9 +55,9 @@ export class MockMapService {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 2',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 500,
             y: 400
@@ -63,9 +66,9 @@ export class MockMapService {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
-          id: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
           name: 'Step 3',
-          numberOfDocuments: 5,
+          noOfDocuments: 5,
           mapPoint: {
             x: 50,
             y: 240
@@ -73,8 +76,25 @@ export class MockMapService {
           incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         }
-      ], flows: []
-    };
+      ];
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of Comment.
+   */
+  publishMap(mapData: MapData): Observable<unknown> {
+    if (!mapData) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }

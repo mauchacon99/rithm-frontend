@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType } from 'src/models';
+import { MapMode, Point, } from 'src/models';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -19,14 +19,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
+  /** Subject for whether the component was destroyed. */
+  private destroyed$ = new Subject();
+
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.view;
 
-  /** Destroyed. */
-  private destroyed$ = new Subject();
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
 
   /**
    * Add station mode active.
@@ -37,38 +40,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     return this.mapMode === MapMode.stationAdd;
   }
 
-  /** Data for station card used in the map. */
-  stations: StationMapElement[] = [
-    {
-      id: '1',
-      name: 'Station 1',
-      mapPoint: {
-        x: 110,
-        y: 50
-      },
-      canvasPoint: {
-        x: 410,
-        y: 50
-      },
-      numberOfDocuments: 5,
-      dragging: false,
-      incomingStationIds: [],
-      outgoingStationIds: [],
-      hoverActive: StationElementHoverType.none
-    }
-  ];
-
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
   ) {
-    this.mapService.mapMode$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((mapMode) => {
-      this.mapMode = mapMode;
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map overlay subscription error: ${error}`);
+    //Needed to get the correct font loaded before it gets drawn.
+    const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+
+    f.load().then((font) => {
+      document.fonts.add(font);
+      this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
     });
   }
 
@@ -79,8 +67,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.setCanvasSize();
-    this.drawElements();
+    this.useStationData();
+  }
+
+  /**
+   * Cleans up subscription.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /**
@@ -141,10 +136,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //create a new station at click.
       const newStation = this.mapService.createNewStation(coords);
 
-      //Put new station in the stations array so it can be drawn.
-      this.stations.push(newStation);
-      this.drawElements();
-
+      //Add new station to mapElements behavior subject.
+      this.mapService.mapElements$.next([...this.stations, newStation]);
       //After clicking, set to build mode.
       this.mapService.mapMode$.next(MapMode.build);
     }
@@ -181,6 +174,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
     // TODO: Handle behavior when mouse wheel is scrolled
+  }
+
+  /**
+   * Converts station data so it can be drawn on the canvas.
+   */
+  private useStationData(): void {
+    this.mapService.mapElements$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((stations) => {
+      this.stations = stations.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
   }
 
   /**
@@ -231,13 +239,5 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       x: event.clientX - canvasRect.left,
       y: event.clientY - canvasRect.top
     };
-  }
-
-  /**
-   * Cleans up subscription.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

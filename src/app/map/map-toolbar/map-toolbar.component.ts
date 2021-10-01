@@ -6,6 +6,7 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
+import type { } from 'css-font-loading-module';
 
 /**
  * Component for managing the toolbar on the map.
@@ -20,6 +21,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	/** The users of the organization. */
 	users: User[] = [];
 
+  /** Whether the organization is being loaded. */
+  isLoading = true;
+
   /** The organization information object. */
   orgInfo?: OrganizationInfo;
 
@@ -28,6 +32,15 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
   /** Destroyed. */
   private destroyed$ = new Subject();
+
+  /**
+   * Whether the map is in any building mode.
+   *
+   * @returns True if the map is in any building mode, false otherwise.
+   */
+   get isBuilding(): boolean {
+    return this.mapMode === MapMode.build || this.mapMode === MapMode.stationAdd || this.mapMode === MapMode.flowAdd;
+  }
 
   /**
    * Add station mode active.
@@ -42,7 +55,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		private userService: UserService,
 		private organizationService: OrganizationService,
 		private errorService: ErrorService,
-    private mapService: MapService,
+    private mapService: MapService
 	) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -95,11 +108,13 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         (organization) => {
+          this.isLoading = false;
           if (organization) {
             this.orgInfo = organization;
           }
         },
         (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
