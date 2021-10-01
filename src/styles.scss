@@ -88,6 +88,13 @@ body {
   place-self: center;
 }
 
+/// Documents mat-label input alignment to icon baseline.
+.document-base-form {
+  mat-label {
+    line-height: 2rem !important;
+  }
+}
+
 .textured-bg {
   background-image: url('./assets/images/patterns/dust_scratches.png');
   background-repeat: repeat;
