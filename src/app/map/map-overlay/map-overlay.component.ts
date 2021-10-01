@@ -70,6 +70,7 @@ export class MapOverlayComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.cancelMapChanges();
   }
 
   /**
