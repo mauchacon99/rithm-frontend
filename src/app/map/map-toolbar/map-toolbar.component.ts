@@ -118,7 +118,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
           if (error instanceof HttpErrorResponse) {
             switch (error.status) {
               case 401:
-                errorMessage = 'The user does not have rights to access at map';
+                errorMessage = 'The user does not have rights to access the map.';
             }
           }
           this.isLoading = false;
