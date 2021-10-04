@@ -66,7 +66,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Label field to display. */
   labelField: Question = {
-    prompt: 'Label',
+    prompt: 'Name your field',
     instructions: '',
     questionType: {
       rithmId: '',
