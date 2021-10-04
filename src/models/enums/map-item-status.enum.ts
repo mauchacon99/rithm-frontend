@@ -11,4 +11,7 @@ export enum MapItemStatus {
 
   /** The item on the map has been deleted from a previously published state. */
   deleted,
+
+  /** The item on the map has not been changed or modified. */
+  normal,
 }
