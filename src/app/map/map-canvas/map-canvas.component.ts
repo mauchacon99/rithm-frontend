@@ -1,5 +1,9 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Point } from 'src/models';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, } from 'src/models';
+import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -11,18 +15,50 @@ import { StationElementService } from '../station-element.service';
   templateUrl: './map-canvas.component.html',
   styleUrls: ['./map-canvas.component.scss']
 })
-export class MapCanvasComponent implements OnInit {
+export class MapCanvasComponent implements OnInit, OnDestroy {
+  /** Reference to the main canvas element used for the map. */
+  @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
+
+  /** Subject for whether the component was destroyed. */
+  private destroyed$ = new Subject();
 
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** Reference to the main canvas element used for the map. */
-  @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
+  /** Modes for canvas element used for the map. */
+  mapMode = MapMode.view;
+
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
+
+  /**
+   * Add station mode active.
+   *
+   * @returns Boolean.
+   */
+  get stationAddActive(): boolean {
+    return this.mapMode === MapMode.stationAdd;
+  }
 
   constructor(
     private mapService: MapService,
     private stationElementService: StationElementService
-  ) {}
+  ) {
+    //Needed to get the correct font loaded before it gets drawn.
+    const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+
+    f.load().then((font) => {
+      document.fonts.add(font);
+      this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+    });
+  }
 
   /**
    * Scales the canvas and does initial draw for elements.
@@ -31,7 +67,23 @@ export class MapCanvasComponent implements OnInit {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
 
-    this.scaleCanvasForDPI();
+    this.useStationData();
+  }
+
+  /**
+   * Cleans up subscription.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
+   * Responds to changing window size by setting a new canvas size and re-drawing the elements.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    this.setCanvasSize();
     this.drawElements();
   }
 
@@ -74,9 +126,21 @@ export class MapCanvasComponent implements OnInit {
    * @param event The click event that was triggered.
    */
   @HostListener('click', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   click(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse is clicked
+    if (this.mapMode === MapMode.stationAdd) {
+      //Create new station object using coordinates from the click.
+      const coords = this.getMouseCanvasPoint(event);
+      coords.x = coords.x - STATION_WIDTH/2;
+      coords.y = coords.y - STATION_HEIGHT/2;
+
+      //create a new station at click.
+      const newStation = this.mapService.createNewStation(coords);
+
+      //Add new station to mapElements behavior subject.
+      this.mapService.mapElements$.next([...this.stations, newStation]);
+      //After clicking, set to build mode.
+      this.mapService.mapMode$.next(MapMode.build);
+    }
   }
 
   /**
@@ -113,27 +177,48 @@ export class MapCanvasComponent implements OnInit {
   }
 
   /**
+   * Converts station data so it can be drawn on the canvas.
+   */
+  private useStationData(): void {
+    this.mapService.mapElements$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((stations) => {
+      this.stations = stations.map((e) => new StationMapElement(e));
+      this.setCanvasSize();
+      this.drawElements();
+    }, (error: unknown) => {
+      throw new Error(`Map service error: ${error}`);
+    });
+  }
+
+  /**
    * Draws all the elements on the canvas.
    */
-   private drawElements(): void {
+  private drawElements(): void {
     requestAnimationFrame(() => {
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
       // Calculate the station canvas points
+      this.stations.forEach((station) => {
+        station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
+      });
 
       // Draw the connections
 
       // Draw the stations
+      this.stations.forEach((station) => {
+        this.stationElementService.drawStation(station, this.mapMode);
+      });
 
       // Draw the flows
     });
   }
 
   /**
-   * Scales the canvas for accurate display on HiDPI/Retina displays.
+   * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
-  private scaleCanvasForDPI(): void {
+  private setCanvasSize(): void {
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
@@ -148,7 +233,7 @@ export class MapCanvasComponent implements OnInit {
    * @param event The mouse event for the cursor information.
    * @returns An accurate point for the mouse position on the canvas.
    */
-   private getMouseCanvasPoint(event: MouseEvent): Point {
+  private getMouseCanvasPoint(event: MouseEvent): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,

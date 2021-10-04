@@ -152,7 +152,8 @@ export class StationComponent implements OnInit {
       },
       isReadOnly: false,
       isRequired: false,
-      isPrivate: false
+      isPrivate: false,
+      children: [],
     });
   }
 

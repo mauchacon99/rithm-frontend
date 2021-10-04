@@ -13,7 +13,7 @@ export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;
 
 // Station
-export const STATION_PADDING = 6; // TODO: Figure out correlation between this and BADGE_MARGIN
+export const STATION_PADDING = 10;
 export const STATION_HEIGHT = 110;
 export const STATION_WIDTH = 160;
 export const STATION_RADIUS = 10;
@@ -34,3 +34,10 @@ export const NODE_Y_MARGIN = 55;
 export const NODE_RADIUS = 7;
 export const NODE_HOVER_COLOR = '#ccc';
 export const NODE_DEFAULT_COLOR = '#fff';
+
+// Station Button
+export const BUTTON_X_MARGIN = 150;
+export const BUTTON_Y_MARGIN = 90;
+export const BUTTON_RADIUS = 4;
+export const BUTTON_DEFAULT_COLOR = '#667080';
+export const BUTTON_HOVER_COLOR = '#7D8593';

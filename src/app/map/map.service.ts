@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { MapMode, Point } from 'src/models';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { MapMode, Point, StationMapData, MapData } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
+import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
+
+const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
+
+const MICROSERVICE_PATH = '/mapservice/api/map';
 
 /**
  * Service for all general map behavior.
@@ -10,18 +18,25 @@ import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
   providedIn: 'root'
 })
 export class MapService {
+ /** This behavior subject will track the array of stations. */
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
+
+  /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
+  storedMapElements: StationMapData[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.build);
+  mapMode$ = new BehaviorSubject(MapMode.view);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+
+  constructor(private http: HttpClient) { }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -33,31 +48,63 @@ export class MapService {
   }
 
   /**
-   * Retrieves all map elements for a given organization.
+   * Gets all map elements for a given organization.
+   *
+   * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): void {
-    // TODO: HTTP request to get all elements on the map
+  getMapElements(): Observable<StationMapData[]> {
+    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
+    .pipe(map((data) => {
+      this.mapElements$.next(data);
+      return data;
+    }));
+  }
+
+  /**
+   * Create a new Station.
+   *
+   * @param coords The coordinates where the station will be placed.
+   * @returns The new station.
+   */
+  createNewStation(coords: Point): StationMapData {
+    const mapCoords = this.getMapPoint(coords);
+    return {
+      rithmId: uuidv4().toUpperCase(),
+      name: 'Untitled Station',
+      mapPoint: mapCoords,
+      noOfDocuments: 0,
+      incomingStationIds: [],
+      outgoingStationIds: [],
+    };
   }
 
   /**
    * Enters build mode for the map.
    */
   buildMap(): void {
-    // TODO: Enter build mode
+    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements$.value));
+    this.mapMode$.next(MapMode.build);
   }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    // TODO: Remove all local map changes
+    if (this.storedMapElements.length > 0) {
+      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
+      this.storedMapElements = [];
+    }
+    this.mapMode$.next(MapMode.view);
   }
 
   /**
    * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of publish data.
    */
-  publishMap(): void {
-    // TODO: HTTP request to push saved map changes to server
+  publishMap(mapData: MapData): Observable<unknown> {
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STSATION}/map`, { mapData });
   }
 
   /**

@@ -79,7 +79,7 @@ export class OrganizationManagementComponent implements OnInit {
   getUsers(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     this.organizationService.getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
       .subscribe((orgUsers) => {
@@ -113,7 +113,7 @@ export class OrganizationManagementComponent implements OnInit {
       });
       if (confirm) {
         this.isLoading = true;
-        this.organizationService.removeUserFromOrganization(this.userService.user?.organizations[0], user.rithmId)
+        this.organizationService.removeUserFromOrganization(this.userService.user?.organization, user.rithmId)
           .pipe(first())
           .subscribe(() => {
             this.popupService.notify('User removed from organization.');
@@ -135,7 +135,7 @@ export class OrganizationManagementComponent implements OnInit {
    */
   getOrganizationInfo(): void {
     this.orgLoading = true;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     this.organizationService.getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe((organization) => {
@@ -162,7 +162,7 @@ export class OrganizationManagementComponent implements OnInit {
   async updateUserRole(user: User, userId: string, index: number): Promise<void> {
     let role: 'admin' | null;
     let message, title, buttonText = '';
-    if (!user.role) {
+    if (!user.role || user.role.length === 0) {
       role = 'admin';
       // eslint-disable-next-line max-len
       message = `Promoting ${user.firstName} ${user.lastName} to an admin will give this user additional privileges. Are you sure you want to do this?`;
@@ -175,7 +175,7 @@ export class OrganizationManagementComponent implements OnInit {
       title = 'Remove Admin Privileges';
       buttonText = 'Remove';
     }
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     const confirm = await this.popupService.confirm({
       title: title,
       message: message,
@@ -188,8 +188,8 @@ export class OrganizationManagementComponent implements OnInit {
         .pipe(first())
         .subscribe(() => {
           this.roleLoading[index] = false;
-          !user.role ? user.role = 'admin' : user.role = null;
-          user.role ? this.popupService.notify('User has been promoted to admin role.') :
+          !user.role || user.role.length === 0 ? user.role = 'admin' : user.role = null;
+          user.role && user.role.length > 0 ? this.popupService.notify('User has been promoted to admin role.') :
             this.popupService.notify('User has been de-promoted from admin role.');
         }, (error: unknown) => {
           this.roleLoading[index] = false;
@@ -208,7 +208,7 @@ export class OrganizationManagementComponent implements OnInit {
   updateOrganization(): void {
     this.orgNameLoading = true;
     this.editName = !this.editName;
-    const organizationId: string = this.userService.user?.organizations[0];
+    const organizationId: string = this.userService.user?.organization;
     const orgData: OrganizationInfo = {
       name: this.orgNameForm.get('name')?.value,
       mainContactEmail: <string>(this.orgInfo?.mainContactEmail),
