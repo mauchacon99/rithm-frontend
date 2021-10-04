@@ -17,3 +17,10 @@
   /* stylelint-disable-next-line */
   padding-bottom: 0.5rem;
 }
+
+/// Entry folder forms
+.entry-form {
+  mat-label {
+    background-color: #fff;
+  }
+}
