@@ -118,16 +118,25 @@ export class StationElementService {
         if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
           secondLineArray.push(word);
         } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
-          if (sn.length === 1 && word.length > 10) {
-            firstLineArray.push(word.substring(0, 10));
-            secondLineArray.push(word.substring(10, 20));
-            if (sn.length === 1 && word.length > 20) {
+          if (word.length > 12) {
+            if (firstLineArray.length === 0) {
+              firstLineArray.push(word.substring(0, 10));
+              secondLineArray.push(word.substring(10, 20));
+            } else if (firstLineArray.length > 0) {
+              secondLineArray.push(word.substring(0, 10));
+              if (word.length > 20) {
+                secondLineArray.push('...');
+                break;
+              }
+            }
+            if (word.length > 20) {
               secondLineArray.push('...');
+              break;
             }
           } else if (sn.length > 1) {
             secondLineArray.push('...');
+            break;
           }
-          break;
         }
       }
     }
