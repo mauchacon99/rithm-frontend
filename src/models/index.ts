@@ -28,3 +28,4 @@ export * from './organization-info';
 export * from './point';
 export * from './station-map-data';
 export * from './map-data';
+export * from './flow-map-data';
