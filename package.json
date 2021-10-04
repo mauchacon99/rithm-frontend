@@ -1,6 +1,6 @@
 {
   "name": "rithm",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
@@ -19,7 +19,7 @@
     "@angular/animations": "^12.2.8",
     "@angular/cdk": "^12.2.0",
     "@angular/common": "^12.2.7",
-    "@angular/compiler": "^12.2.0",
+    "@angular/compiler": "^12.2.8",
     "@angular/core": "^12.2.0",
     "@angular/forms": "^12.2.8",
     "@angular/material": "^12.2.8",
@@ -36,14 +36,14 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1202.7",
-    "@angular-devkit/build-angular": "~12.2.7",
+    "@angular-devkit/architect": "^0.1202.8",
+    "@angular-devkit/build-angular": "~12.2.8",
     "@angular-eslint/builder": "^12.5.0",
     "@angular-eslint/eslint-plugin": "^12.5.0",
     "@angular-eslint/eslint-plugin-template": "^12.5.0",
     "@angular-eslint/schematics": "^12.5.0",
     "@angular-eslint/template-parser": "^12.5.0",
-    "@angular/cli": "^12.2.7",
+    "@angular/cli": "^12.2.8",
     "@angular/compiler-cli": "^12.2.8",
     "@compodoc/compodoc": "^1.1.15",
     "@strut-software/eslint-config": "^1.2.1",
