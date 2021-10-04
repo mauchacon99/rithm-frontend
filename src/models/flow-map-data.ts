@@ -1,3 +1,6 @@
+/**
+ * Represents all info about a flow as returned from the API.
+ */
 export interface FlowMapData {
   /** The global Rithm id for the flow. */
   rithmId: string;
