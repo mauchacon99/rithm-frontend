@@ -20,7 +20,9 @@
 
 /// Entry folder forms
 .entry-form {
-  mat-label {
-    background-color: #fff;
+  ::ng-deep mat-label {
+    background-color: #fff !important;
+    
+    @apply px-2;
   }
 }
