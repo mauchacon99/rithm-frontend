@@ -4,9 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, } from 'src/models';
 import { MapDragItem } from 'src/models/enums/map-drag-item.enum';
-import {
-  DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
-  STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -29,13 +27,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private context!: CanvasRenderingContext2D;
 
   /** The scale of the map. */
-  private scale = DEFAULT_SCALE;
+  scale = 1;
 
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.view;
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
-  private currentCanvasPoint: Point = DEFAULT_CANVAS_POINT;
+  currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.default;
@@ -61,10 +59,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     f.load().then((font) => {
       document.fonts.add(font);
+
       this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.mapScale$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((scale) => {
+        this.scale = scale;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.currentCanvasPoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentCanvasPoint = point;
         this.drawElements();
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
