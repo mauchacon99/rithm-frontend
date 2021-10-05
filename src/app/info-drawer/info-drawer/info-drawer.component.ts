@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class InfoDrawerComponent implements OnInit {
 
   constructor() {
-    // TODO: IMPORTS MODULES
+    // TODO: import modules
   }
 
   /**
