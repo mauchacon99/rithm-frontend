@@ -40,7 +40,6 @@ export class MapOverlayComponent implements OnDestroy {
     return this.currentMode === MapMode.build || this.currentMode === MapMode.stationAdd || this.currentMode === MapMode.flowAdd;
   }
 
-
   /**
    * Station the map is in stationAdd mode.
    *
@@ -68,6 +67,7 @@ export class MapOverlayComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.mapMode$.next(MapMode.view);
   }
 
   /**
