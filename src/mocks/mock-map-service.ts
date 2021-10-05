@@ -1,6 +1,7 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapMode, StationMapData } from 'src/models';
+import { MapData, MapMode, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -8,6 +9,9 @@ import { MapMode, StationMapData } from 'src/models';
 export class MockMapService {
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
+
+  /** This behavior subject will track the array of stations. */
+  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.build);
@@ -74,5 +78,23 @@ export class MockMapService {
         }
       ];
     return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Publishes local map changes to the server.
+   *
+   * @param mapData Data sending to the API.
+   * @returns Observable of Comment.
+   */
+  publishMap(mapData: MapData): Observable<unknown> {
+    if (!mapData) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }

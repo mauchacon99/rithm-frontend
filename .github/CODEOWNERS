@@ -14,3 +14,17 @@ rithm/src/assets/**/* @belugasanity
 
 
 .browserslistrc @belugasanity
+
+# Map module rules
+rithm/src/app/map/*.scss @Gobsmack90
+rithm/src/app/map/**/*.scss @Gobsmack90
+rithm/src/app/map/**/*.html @Gobsmack90
+
+# Document and Station rules
+rithm/src/app/detail/**/*.ts @cqmdeveloper
+rithm/src/app/document/**/*.ts @cqmdeveloper
+rithm/src/app/station/**/*.ts @cqmdeveloper
+
+rithm/src/app/detail/**/*.html @cqmdeveloper
+rithm/src/app/document/**/*.html @cqmdeveloper
+rithm/src/app/station/**/*.html @cqmdeveloper

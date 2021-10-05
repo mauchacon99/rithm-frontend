@@ -7,7 +7,7 @@ import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
 import type { } from 'css-font-loading-module';
-
+import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for managing the toolbar on the map.
  */
@@ -55,7 +55,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		private userService: UserService,
 		private organizationService: OrganizationService,
 		private errorService: ErrorService,
-    private mapService: MapService,
+    private mapService: MapService
 	) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -114,9 +114,16 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
           }
         },
         (error: unknown) => {
+          let errorMessage = 'Something went wrong on our end and we\'re looking into it. Please try again in a little while.';
+          if (error instanceof HttpErrorResponse) {
+            switch (error.status) {
+              case 401:
+                errorMessage = 'The user does not have rights to access the map.';
+            }
+          }
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            errorMessage,
             error
           );
         }

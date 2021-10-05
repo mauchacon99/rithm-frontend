@@ -15,8 +15,8 @@
           <a class="overline text-accent-400 ml-5" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
           <h4 class="mt-3 ml-5">Create Account</h4>
           <p class="mt-1 ml-5">Enter your info to create your account.</p>
-          <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2">
-            <app-user-form formControlName="userForm" [accountCreate]="true"></app-user-form>
+          <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2 entry-form">
+            <app-user-form formControlName="userForm" class="relative" [accountCreate]="true"></app-user-form>
             <div class="w-full mb-5">
               <mat-checkbox id="agreeToTerms" formControlName="agreeToTerms">
                 I have read and agree to the&nbsp;
