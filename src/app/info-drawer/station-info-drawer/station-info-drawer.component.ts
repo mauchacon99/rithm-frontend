@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 /**
- *
+ * Component for info station.
  */
 @Component({
   selector: 'app-station-info-drawer',
@@ -10,12 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StationInfoDrawerComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    // TODO: IMPORTS MODULES
+   }
 
   /**
-   *
+   * Initial action.
    */
   ngOnInit(): void {
+    // TODO: implements life cycle.
+    console.log('StationInfoDrawerComponent');
   }
 
 }
