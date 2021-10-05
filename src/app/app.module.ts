@@ -14,6 +14,7 @@ import { SettingsModule } from './settings/settings.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AdminModule } from './admin/admin.module';
+import { InfoDrawerModule } from './info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AdminModule } from './admin/admin.module';
     NavigationModule,
     CoreModule,
     EntryModule,
+    InfoDrawerModule,
     DashboardModule,
     MapModule,
     AdminModule,

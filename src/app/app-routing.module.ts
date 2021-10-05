@@ -39,7 +39,12 @@ import { AuthGuard } from './core/auth.guard';
       path: 'settings',
       loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
       canActivate: [AuthGuard]
-    }
+    },
+    {
+      path: 'info-drawer',
+      loadChildren: () => import('./info-drawer/info-drawer.module').then(m => m.InfoDrawerModule),
+      canActivate: [AuthGuard]
+    },
   ])],
   exports: [RouterModule]
 })
