@@ -96,6 +96,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
+    val='';
     val && this.textFieldForm.setValue(val, { emitEvent: false });
   }
 

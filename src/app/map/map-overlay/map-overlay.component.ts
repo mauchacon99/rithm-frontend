@@ -28,9 +28,6 @@ export class MapOverlayComponent implements OnDestroy {
     flows: []
   };
 
-  /** Whether the publish data is loading. */
-  isLoading = false;
-
   /** Map data request loading indicator. */
   mapDataLoading = false;
 
@@ -42,7 +39,6 @@ export class MapOverlayComponent implements OnDestroy {
   get isBuilding(): boolean {
     return this.currentMode === MapMode.build || this.currentMode === MapMode.stationAdd || this.currentMode === MapMode.flowAdd;
   }
-
 
   /**
    * Station the map is in stationAdd mode.
@@ -71,6 +67,7 @@ export class MapOverlayComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.mapMode$.next(MapMode.view);
   }
 
   /**
@@ -93,14 +90,14 @@ export class MapOverlayComponent implements OnDestroy {
       okButtonText: 'Okay',
     });
     if (confirm) {
-      this.isLoading = true;
+      this.mapDataLoading = true;
       this.mapService.publishMap(mapData)
         .pipe(first())
         .subscribe(() => {
-          this.isLoading = false;
+          this.mapDataLoading = false;
           this.popupService.notify('Map data published successfully.');
         }, (error: unknown) => {
-          this.isLoading = false;
+          this.mapDataLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error,
