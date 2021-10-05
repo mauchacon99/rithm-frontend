@@ -44,4 +44,12 @@ describe('MapCanvasComponent', () => {
     window.dispatchEvent(new Event('click'));
     expect(component.stations.length).toEqual(stationsLength + 1);
   });
+
+  xit('should move the map', () => {
+    //TODO: get this working.
+  });
+
+  xit('should move a station', () => {
+    //TODO: get this working.
+  });
 });
