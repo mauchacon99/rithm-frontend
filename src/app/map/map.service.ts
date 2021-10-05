@@ -73,8 +73,8 @@ export class MapService {
       name: 'Untitled Station',
       mapPoint: mapCoords,
       noOfDocuments: 0,
-      incomingStationIds: [],
-      outgoingStationIds: [],
+      previousStations: [],
+      nextStations: [],
     };
   }
 

@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { ConnectionElementService } from './connection-element.service';
@@ -6,7 +7,11 @@ describe('ConnectionElementService', () => {
   let service: ConnectionElementService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ]
+    });
     service = TestBed.inject(ConnectionElementService);
   });
 

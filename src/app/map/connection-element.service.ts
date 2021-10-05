@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_LINE_WIDTH } from './map-constants';
+import { MapService } from './map.service';
 
 /**
  * Service for rendering and other behavior for a connection on the map.
@@ -12,13 +14,16 @@ export class ConnectionElementService {
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
+  constructor(private mapService: MapService) {}
+
   /**
    * Draws a connection on the map.
    *
    * @param startPoint The start point for the connection.
    * @param endPoint The end point for the connection.
    */
-  private drawConnection(startPoint: Point, endPoint: Point): void {
+  drawConnection(startPoint: Point, endPoint: Point): void {
+    this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection if context is not defined');
     }
@@ -36,10 +41,50 @@ export class ConnectionElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection line if context is not defined');
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
 
     // TODO: Draw connection line
+    this.canvasContext.setLineDash([0, 0]);
+
+    // Line
+    this.canvasContext.beginPath();
+    this.canvasContext.moveTo(startPoint.x, startPoint.y);
+    this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    const ex = endPoint.x; // get end point
+    const ey = endPoint.y;
+    const norm = this.pointsToNormalizedVec(controlPoint2, endPoint);
+    this.canvasContext.lineWidth = CONNECTION_LINE_WIDTH;
+
+    // Arrow
+    const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
+    let x, y;
+    x = arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
+    y = arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    this.canvasContext.moveTo(ex + x, ey + y);
+    this.canvasContext.lineTo(ex, ey);
+    x = arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
+    y = arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    this.canvasContext.lineTo(ex + x, ey + y);
+
+    this.canvasContext.stroke();
+  }
+
+    /**
+     * Draws the line for a connection.
+     *
+     * @param p The value of vector x.
+     * @param pp The value of vector x.
+     * @returns Normalized vector.
+     */
+  private pointsToNormalizedVec(p: Point, pp: Point): Point {
+    const norm = { x: 0, y: 0 };
+    norm.y = pp.x - p.x;
+    norm.x = -(pp.y - p.y);
+    const len = Math.sqrt(norm.x * norm.x + norm.y * norm.y);
+    norm.x /= len;
+    norm.y /= len;
+    return norm;
   }
 
   /**
