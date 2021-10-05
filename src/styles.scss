@@ -93,6 +93,10 @@ body {
   background-repeat: repeat;
 }
 
+.addStationCur {
+  cursor: url('./assets/images/cursors/addStation.png'), auto;
+}
+
 /// Styling of links globally
 a {
   color: $accent-blue;
