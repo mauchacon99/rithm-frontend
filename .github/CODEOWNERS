@@ -10,21 +10,21 @@
 
 *.html @HendricksonTyler @belugasanity
 
-rithm/src/assets/**/* @belugasanity
+src/assets/**/* @belugasanity
 
 
 .browserslistrc @belugasanity
 
 # Map module rules
-rithm/src/app/map/*.scss @Gobsmack90
-rithm/src/app/map/**/*.scss @Gobsmack90
-rithm/src/app/map/**/*.html @Gobsmack90
+src/app/map/*.scss @Gobsmack90
+src/app/map/**/*.scss @Gobsmack90
+src/app/map/**/*.html @Gobsmack90
 
 # Document and Station rules
-rithm/src/app/detail/**/*.ts @cqmdeveloper
-rithm/src/app/document/**/*.ts @cqmdeveloper
-rithm/src/app/station/**/*.ts @cqmdeveloper
+src/app/detail/**/*.ts @cqmdeveloper
+src/app/document/**/*.ts @cqmdeveloper
+src/app/station/**/*.ts @cqmdeveloper
 
-rithm/src/app/detail/**/*.html @cqmdeveloper
-rithm/src/app/document/**/*.html @cqmdeveloper
-rithm/src/app/station/**/*.html @cqmdeveloper
+src/app/detail/**/*.html @cqmdeveloper
+src/app/document/**/*.html @cqmdeveloper
+src/app/station/**/*.html @cqmdeveloper
