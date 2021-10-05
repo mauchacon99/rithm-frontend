@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, } from 'src/models';
+import { MapDragItem } from 'src/models/enums/map-drag-item.enum';
 import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -25,8 +26,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
+  /** The scale of the map. */
+  scale = 1;
+
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.view;
+
+  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  currentCanvasPoint: Point = { x: 0, y: 0 };
+
+  /** What type of thing is being dragged? */
+  private dragItem = MapDragItem.default;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
@@ -49,10 +59,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     f.load().then((font) => {
       document.fonts.add(font);
+
       this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.mapScale$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((scale) => {
+        this.scale = scale;
+        this.drawElements();
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.currentCanvasPoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentCanvasPoint = point;
         this.drawElements();
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
@@ -68,6 +97,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.registerCanvasContext(this.context);
 
     this.useStationData();
+    this.drawElements();
   }
 
   /**
@@ -93,9 +123,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mousedown event that was triggered.
    */
   @HostListener('mousedown', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseDown(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse is pressed
+
+    if (this.mapMode === MapMode.build) {
+      const mousePos = this.getMouseCanvasPoint(event);
+      // Check for drag start on station
+      for (const station of this.stations) {
+        if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
+          mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+          station.dragging = true;
+          this.dragItem = MapDragItem.station;
+          break;
+        }
+      }
+    }
+
+    if (this.dragItem !== MapDragItem.station) {
+      // Assume map for now
+      this.dragItem = MapDragItem.map;
+    }
   }
 
   /**
@@ -106,7 +152,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseUp(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse button is released
+    this.dragItem = MapDragItem.default;
+    this.mapCanvas.nativeElement.style.cursor = 'default';
+    this.stations.forEach((station) => {
+      if (station.dragging) {
+        station.dragging = false;
+        this.drawElements();
+      }
+    });
   }
 
   /**
@@ -117,7 +170,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseMove(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse is moved
+    if (this.dragItem === MapDragItem.map) {
+      this.mapCanvas.nativeElement.style.cursor = 'move';
+      this.currentCanvasPoint.x -= event.movementX / this.scale;
+      this.currentCanvasPoint.y -= event.movementY / this.scale;
+      this.drawElements();
+    } else if (this.dragItem === MapDragItem.station) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+          station.mapPoint.x += event.movementX / this.scale;
+          station.mapPoint.y += event.movementY / this.scale;
+          this.drawElements();
+        }
+      }
+    }
   }
 
   /**
