@@ -36,8 +36,9 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<StationMapData[]> {
-    const data: StationMapData[] = [
+  getMapElements(): Observable<MapData> {
+    const data: MapData = {
+      stations: [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           name: 'Development',
@@ -50,7 +51,7 @@ export class MockMapService {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
           name: 'Step 1',
           noOfDocuments: 5,
           mapPoint: {
@@ -72,7 +73,7 @@ export class MockMapService {
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
           name: 'Step 3',
           noOfDocuments: 5,
           mapPoint: {
@@ -82,7 +83,21 @@ export class MockMapService {
           incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         }
-      ];
+      ],
+      flows: [
+        {
+          rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+          name: 'Flow 1',
+          stationIds: [
+            'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          ],
+          flowIds: [],
+        }
+      ]
+    };
     return of(data).pipe(delay(1000));
   }
 
