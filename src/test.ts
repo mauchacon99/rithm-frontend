@@ -26,5 +26,5 @@ const context = require.context('./', true, /\.spec\.ts$/);
 context.keys().map(context);
 
 // TODO: Update when fixed: https://github.com/angular/angular/issues/36430
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-console.error = (data: any) => fail(data);
+// eslint-disable-next-line no-console
+console.error = (data: unknown) => fail(data);
