@@ -37,7 +37,7 @@
         <!-- <br> -->
       </ng-container>
       <!-- Required Checkbox -->
-      <mat-checkbox [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
+      <mat-checkbox *ngIf="field.questionType.typeString !== 'Instructions'" [name]="field.questionType.rithmId" [checked]="field.isRequired" (change)="setRequired($event)">
         Required
       </mat-checkbox>
     </div>
