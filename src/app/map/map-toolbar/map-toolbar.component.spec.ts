@@ -45,6 +45,6 @@ describe('MapToolbarComponent', () => {
     expect(component.mapMode).toEqual(MapMode.stationAdd);
     component.addStation();
     expect(component.stationAddActive).toBeFalse();
-    expect(component.mapMode).toEqual(MapMode.view);
+    expect(component.mapMode).toEqual(MapMode.build);
   });
 });
