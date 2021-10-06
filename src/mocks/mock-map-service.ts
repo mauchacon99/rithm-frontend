@@ -47,8 +47,8 @@ export class MockMapService {
             x: 12,
             y: 15
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -58,8 +58,8 @@ export class MockMapService {
             x: 200,
             y: 80
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -69,8 +69,8 @@ export class MockMapService {
             x: 500,
             y: 400
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
@@ -80,8 +80,8 @@ export class MockMapService {
             x: 50,
             y: 240
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
         }
       ],
       flows: [

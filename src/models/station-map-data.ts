@@ -17,8 +17,8 @@ export interface StationMapData {
   mapPoint: Point;
 
   /** The ids of the stations that connect TO this station. */
-  incomingStationIds: string[];
+  previousStations: string[];
 
   /** The ids of the stations that connect FROM this station. */
-  outgoingStationIds: string[];
+  nextStations: string[];
 }
