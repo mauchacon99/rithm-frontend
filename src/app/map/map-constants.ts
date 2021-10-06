@@ -27,6 +27,7 @@ export const BADGE_HOVER_COLOR = '#7D8593';
 // Connection
 export const CONNECTION_LINE_WIDTH = 2;
 export const CONNECTION_ARROW_LENGTH = 6;
+export const CONNECTION_DEFAULT_COLOR = '#7a8699';
 
 // Connection node
 export const NODE_X_MARGIN = 0;
