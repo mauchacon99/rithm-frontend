@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH } from './map-constants';
+import { MapService } from './map.service';
 
 /**
  * Service for rendering and other behavior for a connection on the map.
@@ -12,18 +14,21 @@ export class ConnectionElementService {
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
+  constructor(private mapService: MapService) {}
+
   /**
    * Draws a connection on the map.
    *
    * @param startPoint The start point for the connection.
    * @param endPoint The end point for the connection.
    */
-  private drawConnection(startPoint: Point, endPoint: Point): void {
+  drawConnection(startPoint: Point, endPoint: Point): void {
+    this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection if context is not defined');
     }
     this.drawConnectionLine(startPoint, endPoint);
-    this.drawConnectionArrow(endPoint);
+    this.drawConnectionArrow(startPoint, endPoint);
   }
 
   /**
@@ -36,24 +41,50 @@ export class ConnectionElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection line if context is not defined');
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
 
-    // TODO: Draw connection line
+    // Draw connection line
+    this.canvasContext.setLineDash([0, 0]);
+
+    // Line
+    this.canvasContext.beginPath();
+    this.canvasContext.moveTo(startPoint.x, startPoint.y);
+    this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    this.canvasContext.lineWidth = CONNECTION_LINE_WIDTH;
+    this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
+    this.canvasContext.stroke();
   }
 
   /**
    * Draws the arrow on the end of a connection.
    *
+   * @param startPoint The Start Point for the connection line from where the arrow should be drawn.
    * @param endPoint The endpoint for the connection line where the arrow should be drawn.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private drawConnectionArrow(endPoint: Point): void {
+  private drawConnectionArrow(startPoint: Point, endPoint: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection arrow if context is not defined');
     }
+    const controlPoints = this.getConnectionLineControlPoints(startPoint, endPoint);
 
-    // TODO: Draw connection arrow
+    const ex = endPoint.x;
+    const ey = endPoint.y;
+    const norm = this.getNormalizedVectorPoint(controlPoints[1], endPoint);
+
+    const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
+    let x, y;
+    x = arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
+    y = arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    this.canvasContext.beginPath();
+    this.canvasContext.moveTo(ex + x, ey + y);
+    this.canvasContext.lineTo(ex, ey);
+    x = arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
+    y = arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    this.canvasContext.lineTo(ex + x, ey + y);
+    this.canvasContext.fillStyle = CONNECTION_DEFAULT_COLOR;
+    this.canvasContext.stroke();
+    this.canvasContext.fill();
   }
 
   /**

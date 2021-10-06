@@ -28,3 +28,10 @@
 ::ng-deep mat-ink-bar.mat-ink-bar {
   background: $accent-blue !important;
 }
+
+/// Station mat-label input alignment to icon baseline.
+.station-base-form {
+  &::ng-deep mat-label {
+    line-height: 2rem !important;
+  }
+}
