@@ -3,8 +3,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, } from 'src/models';
+import { ConnectionElementService } from '../connection-element.service';
+import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapDragItem } from 'src/models/enums/map-drag-item.enum';
-import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -26,9 +27,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** The scale of the map. */
-  scale = 1;
-
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.view;
 
@@ -41,6 +39,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
 
+  /** Scale to calculate canvas points. */
+  private scale = DEFAULT_SCALE;
+
   /**
    * Add station mode active.
    *
@@ -52,7 +53,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
-    private stationElementService: StationElementService
+    private stationElementService: StationElementService,
+    private connectionElementService: ConnectionElementService,
   ) {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
@@ -97,7 +99,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.registerCanvasContext(this.context);
 
     this.useStationData();
-    this.drawElements();
+
   }
 
   /**
@@ -263,6 +265,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
@@ -272,6 +275,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the connections
+      for (const station of this.stations) {
+        for (const connection of station.nextStations) {
+          const outgoingStation = this.stations.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
+          const startPoint = {
+            x: station.canvasPoint.x + STATION_WIDTH * this.scale,
+            y: station.canvasPoint.y + STATION_HEIGHT * this.scale / 2
+          };
+          const endPoint = {
+            x: outgoingStation?.canvasPoint.x,
+            y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
+          };
+          this.connectionElementService.drawConnection(startPoint, endPoint);
+        }
+      }
 
       // Draw the stations
       this.stations.forEach((station) => {
