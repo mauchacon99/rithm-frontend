@@ -160,7 +160,6 @@ describe('MapService', () => {
 
     // outgoing request
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`);
-    console.log(req);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(postData);
 
