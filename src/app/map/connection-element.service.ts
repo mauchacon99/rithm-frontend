@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
-import { BADGE_DEFAULT_COLOR, CONNECTION_ARROW_LENGTH, CONNECTION_LINE_WIDTH } from './map-constants';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -52,7 +52,7 @@ export class ConnectionElementService {
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
     this.canvasContext.lineWidth = CONNECTION_LINE_WIDTH;
-    this.canvasContext.strokeStyle = BADGE_DEFAULT_COLOR;
+    this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
   }
 
@@ -82,7 +82,8 @@ export class ConnectionElementService {
     x = arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
     y = arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x;
     this.canvasContext.lineTo(ex + x, ey + y);
-    this.canvasContext.fillStyle = BADGE_DEFAULT_COLOR;
+    this.canvasContext.fillStyle = CONNECTION_DEFAULT_COLOR;
+    this.canvasContext.stroke();
     this.canvasContext.fill();
   }
 
