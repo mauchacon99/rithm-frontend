@@ -4,8 +4,8 @@ import { StationMapElement } from './station-map-element';
 const TEST_STATION_MAP_DATA: StationMapData = {
   name: 'Test Station',
   mapPoint: { x: 0, y: 0 },
-  outgoingStationIds: [],
-  incomingStationIds: [],
+  nextStations: [],
+  previousStations: [],
   noOfDocuments: 5
 };
 

@@ -1,7 +1,7 @@
 <div [formGroup]="textFieldForm">
   <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType.typeString === fieldTypeEnum.LongText}">
     <mat-label>{{field?.prompt}}</mat-label>
-    <div matPrefix class="icon" [ngClass]="{'icon-top': field.questionType.typeString === fieldTypeEnum.LongText}">
+    <div matPrefix class="icon">
       <!-- Text Icons -->
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.ShortText" class="fas fa-font"></i>
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.LongText || field.questionType.typeString === fieldTypeEnum.LongTextLabel" class="fas fa-paragraph"></i>
