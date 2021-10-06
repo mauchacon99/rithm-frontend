@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData, MapMode, StationMapData } from 'src/models';
+import { MapData, MapMode, Point, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -15,6 +15,12 @@ export class MockMapService {
 
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.build);
+
+  /** The current scale of the map. */
+  mapScale$ = new BehaviorSubject(1);
+
+  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.

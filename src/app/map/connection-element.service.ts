@@ -28,7 +28,7 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection if context is not defined');
     }
     this.drawConnectionLine(startPoint, endPoint);
-    this.drawConnectionArrow(endPoint);
+    this.drawConnectionArrow(startPoint, endPoint);
   }
 
   /**
@@ -44,19 +44,33 @@ export class ConnectionElementService {
 
     const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
 
-    // TODO: Draw connection line
+    // Draw connection line
     this.canvasContext.setLineDash([0, 0]);
 
     // Line
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
-    const ex = endPoint.x; // get end point
-    const ey = endPoint.y;
-    const norm = this.pointsToNormalizedVec(controlPoint2, endPoint);
     this.canvasContext.lineWidth = CONNECTION_LINE_WIDTH;
+    this.canvasContext.stroke();
+  }
 
-    // Arrow
+  /**
+   * Draws the arrow on the end of a connection.
+   *
+   * @param startPoint The Start Point for the connection line from where the arrow should be drawn.
+   * @param endPoint The endpoint for the connection line where the arrow should be drawn.
+   */
+  private drawConnectionArrow(startPoint: Point, endPoint: Point): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw connection arrow if context is not defined');
+    }
+    const controlPoints = this.getConnectionLineControlPoints(startPoint, endPoint);
+
+    const ex = endPoint.x;
+    const ey = endPoint.y;
+    const norm = this.getNormalizedVectorPoint(controlPoints[1], endPoint);
+
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
     let x, y;
     x = arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
@@ -66,39 +80,7 @@ export class ConnectionElementService {
     x = arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
     y = arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x;
     this.canvasContext.lineTo(ex + x, ey + y);
-
     this.canvasContext.stroke();
-  }
-
-    /**
-     * Draws the line for a connection.
-     *
-     * @param p The value of vector x.
-     * @param pp The value of vector x.
-     * @returns Normalized vector.
-     */
-  private pointsToNormalizedVec(p: Point, pp: Point): Point {
-    const norm = { x: 0, y: 0 };
-    norm.y = pp.x - p.x;
-    norm.x = -(pp.y - p.y);
-    const len = Math.sqrt(norm.x * norm.x + norm.y * norm.y);
-    norm.x /= len;
-    norm.y /= len;
-    return norm;
-  }
-
-  /**
-   * Draws the arrow on the end of a connection.
-   *
-   * @param endPoint The endpoint for the connection line where the arrow should be drawn.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private drawConnectionArrow(endPoint: Point): void {
-    if (!this.canvasContext) {
-      throw new Error('Cannot draw connection arrow if context is not defined');
-    }
-
-    // TODO: Draw connection arrow
   }
 
   /**
