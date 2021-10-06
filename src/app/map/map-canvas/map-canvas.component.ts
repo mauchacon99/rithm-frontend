@@ -2,10 +2,9 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, } from 'src/models';
+import { MapMode, Point, MapDragItem } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
-import { MapDragItem } from 'src/models/enums/map-drag-item.enum';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -28,13 +27,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private context!: CanvasRenderingContext2D;
 
   /** Modes for canvas element used for the map. */
-  mapMode = MapMode.view;
+  mapMode = MapMode.View;
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** What type of thing is being dragged? */
-  private dragItem = MapDragItem.default;
+  private dragItem = MapDragItem.Default;
 
   /** Used to track map movement on a touchscreen. */
   private lastTouchX = -1;
@@ -54,7 +53,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationAddActive(): boolean {
-    return this.mapMode === MapMode.stationAdd;
+    return this.mapMode === MapMode.StationAdd;
   }
 
   constructor(
@@ -133,22 +132,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
 
-    if (this.mapMode === MapMode.build) {
+    if (this.mapMode === MapMode.Build) {
       const mousePos = this.getMouseCanvasPoint(event);
       // Check for drag start on station
       for (const station of this.stations) {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
           station.dragging = true;
-          this.dragItem = MapDragItem.station;
+          this.dragItem = MapDragItem.Station;
           break;
         }
       }
     }
 
-    if (this.dragItem !== MapDragItem.station) {
+    if (this.dragItem !== MapDragItem.Station) {
       // Assume map for now
-      this.dragItem = MapDragItem.map;
+      this.dragItem = MapDragItem.Map;
     }
   }
 
@@ -160,7 +159,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseUp(event: MouseEvent): void {
-    this.dragItem = MapDragItem.default;
+    this.dragItem = MapDragItem.Default;
     this.mapCanvas.nativeElement.style.cursor = 'default';
     this.stations.forEach((station) => {
       if (station.dragging) {
@@ -178,12 +177,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseMove(event: MouseEvent): void {
-    if (this.dragItem === MapDragItem.map) {
+    if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x -= event.movementX / this.scale;
       this.currentCanvasPoint.y -= event.movementY / this.scale;
       this.drawElements();
-    } else if (this.dragItem === MapDragItem.station) {
+    } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
@@ -290,7 +289,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('click', ['$event'])
   click(event: MouseEvent): void {
-    if (this.mapMode === MapMode.stationAdd) {
+    if (this.mapMode === MapMode.StationAdd) {
       //Create new station object using coordinates from the click.
       const coords = this.getMouseCanvasPoint(event);
       coords.x = coords.x - STATION_WIDTH/2;
@@ -302,7 +301,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Add new station to mapElements behavior subject.
       this.mapService.mapElements$.next([...this.stations, newStation]);
       //After clicking, set to build mode.
-      this.mapService.mapMode$.next(MapMode.build);
+      this.mapService.mapMode$.next(MapMode.Build);
     }
   }
 

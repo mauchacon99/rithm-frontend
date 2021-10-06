@@ -28,7 +28,7 @@ export class MapService {
   canvasContext?: CanvasRenderingContext2D;
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.view);
+  mapMode$ = new BehaviorSubject(MapMode.View);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
@@ -83,7 +83,7 @@ export class MapService {
    */
   buildMap(): void {
     this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements$.value));
-    this.mapMode$.next(MapMode.build);
+    this.mapMode$.next(MapMode.Build);
   }
 
   /**
@@ -94,7 +94,7 @@ export class MapService {
       this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
       this.storedMapElements = [];
     }
-    this.mapMode$.next(MapMode.view);
+    this.mapMode$.next(MapMode.View);
   }
 
   /**

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { PopupService } from './popup.service';
 
 /**
@@ -19,7 +20,10 @@ export class ErrorService {
    * @param error The error that was encountered.
    */
   logError(error: Error | unknown): void {
-    console.error(error);
+    if (!environment.production) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
     // TODO: [RIT-680] Add error log reporting using some logging service
   }
 
