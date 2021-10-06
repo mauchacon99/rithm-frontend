@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * Component for info drawer.
@@ -8,18 +8,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './info-drawer.component.html',
   styleUrls: ['./info-drawer.component.scss']
 })
-export class InfoDrawerComponent implements OnInit {
-
-  constructor() {
-    // TODO: import modules
-  }
-
-  /**
-   * Initial action.
-   */
-  ngOnInit(): void {
-    // TODO: implements life cycle.
-    console.log('InfoDrawerComponent');
-  }
+export class InfoDrawerComponent {
 
 }
