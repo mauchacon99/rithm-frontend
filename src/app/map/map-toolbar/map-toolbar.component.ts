@@ -28,7 +28,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   orgInfo?: OrganizationInfo;
 
   /** Variable to store current map mode. */
-  mapMode = MapMode.view;
+  mapMode = MapMode.View;
 
   /** Destroyed. */
   private destroyed$ = new Subject();
@@ -39,7 +39,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
    get isBuilding(): boolean {
-    return this.mapMode === MapMode.build || this.mapMode === MapMode.stationAdd || this.mapMode === MapMode.flowAdd;
+    return this.mapMode === MapMode.Build || this.mapMode === MapMode.StationAdd || this.mapMode === MapMode.FlowAdd;
   }
 
   /**
@@ -48,7 +48,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationAddActive(): boolean {
-    return this.mapMode === MapMode.stationAdd;
+    return this.mapMode === MapMode.StationAdd;
   }
 
 	constructor(
@@ -85,9 +85,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	 */
 	addStation(): void {
     if (!this.stationAddActive) {
-      this.mapService.mapMode$.next(MapMode.stationAdd);
+      this.mapService.mapMode$.next(MapMode.StationAdd);
     } else {
-      this.mapService.mapMode$.next(MapMode.build);
+      this.mapService.mapMode$.next(MapMode.Build);
     }
 		// TODO: Implement add station
 	}
