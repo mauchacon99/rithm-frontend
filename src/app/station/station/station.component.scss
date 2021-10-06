@@ -29,8 +29,8 @@
   background: $accent-blue !important;
 }
 
-/// Documents mat-label input alignment to icon baseline.
-.document-base-form {
+/// Station mat-label input alignment to icon baseline.
+.station-base-form {
   &::ng-deep mat-label {
     line-height: 2rem !important;
   }
