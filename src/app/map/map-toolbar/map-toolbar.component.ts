@@ -61,6 +61,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mode) => {
         this.mapMode = mode;
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
       });
   }
 

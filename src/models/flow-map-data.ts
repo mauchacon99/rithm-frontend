@@ -22,5 +22,5 @@ export interface FlowMapData {
   flowIds: string[];
 
   /** The status of the flow (what should happen to this flow). */
-  status?: MapItemStatus;
+  status: MapItemStatus;
 }

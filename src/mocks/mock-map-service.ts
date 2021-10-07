@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData, MapMode, Point, StationMapData } from 'src/models';
+import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -48,7 +48,8 @@ export class MockMapService {
             y: 15
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -59,7 +60,8 @@ export class MockMapService {
             y: 80
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -70,7 +72,8 @@ export class MockMapService {
             y: 400
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
@@ -81,7 +84,8 @@ export class MockMapService {
             y: 240
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         }
       ],
       flows: [
@@ -95,6 +99,7 @@ export class MockMapService {
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
           ],
           flowIds: [],
+          status: MapItemStatus.Normal
         }
       ]
     };
