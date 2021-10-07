@@ -39,4 +39,19 @@ export class StationService {
     return this.http.get<Station[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
   }
 
+  /**
+   * Updates station name.
+   *
+   * @param stationId Target station Id.
+   * @param newName The new name for target Station.
+   * @returns Updated Station Object.
+   */
+  updateStationName(stationId: string, newName: string ): Observable<StationInformation>{
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`,
+      {
+        stationId,
+        newName,
+      });
+  }
+
 }

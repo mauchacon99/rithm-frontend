@@ -1,4 +1,5 @@
-import { Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Station, StationInformation } from 'src/models';
 
@@ -79,6 +80,30 @@ export class MockStationService {
       }
     ];
     return of(mockStationData).pipe(delay(1000));
+  }
+
+  /**
+   * Update station name.
+   *
+   * @returns The list of all stations.
+   * @param stationId The target station id.
+   * @param newName The new name for the station.
+   */
+   updateStationName(stationId: string, newName: string ): Observable<unknown> {
+     if (!stationId || !newName) {
+       return throwError(new HttpErrorResponse({
+         error: {
+           error: 'Some error message'
+          }
+        })).pipe(delay(1000));
+      } else {
+        const data =
+          {
+            rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+            name: 'New Station Name',
+          };
+        return of(data).pipe(delay(1000));
+      }
   }
 
 }
