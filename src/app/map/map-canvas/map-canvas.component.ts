@@ -137,17 +137,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
-          // Show that the location of the station has changed so backend can update.
-          const updateElements = this.mapService.mapElements$.value;
-          for (const data of updateElements.stations) {
-            if (station.rithmId === data.rithmId) {
-              if (data.status === MapItemStatus.Normal) {
-                data.status = MapItemStatus.Updated;
-                //update the mapElements behavior subject.
-                this.mapService.mapElements$.next(updateElements);
-              }
-            }
-          }
           station.dragging = true;
           this.dragItem = MapDragItem.Station;
           break;
@@ -174,6 +163,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.stations.forEach((station) => {
       if (station.dragging) {
         station.dragging = false;
+        if (station.status === MapItemStatus.Normal) {
+          station.status = MapItemStatus.Updated;
+        }
         this.drawElements();
       }
     });
@@ -254,6 +246,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.stations.forEach((station) => {
       if (station.dragging) {
         station.dragging = false;
+        if (station.status === MapItemStatus.Normal) {
+          station.status = MapItemStatus.Updated;
+        }
         this.drawElements();
       }
     });

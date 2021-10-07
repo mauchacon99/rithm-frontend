@@ -18,7 +18,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
- /** This behavior subject will track the array of stations. */
+ /** This behavior subject will track the array of stations and flows. */
   mapElements$ = new BehaviorSubject<MapData>({stations: [], flows: []});
 
   /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
