@@ -81,4 +81,14 @@ export class MockStationService {
     return of(mockStationData).pipe(delay(1000));
   }
 
+  /**
+   * Get station information updated date.
+   *
+   * @returns Formatted Updated Date.
+   */
+  getUpdatedFormattedDate(): Observable<string> {
+    const updatedFormattedDate = '4 days ago';
+    return of(updatedFormattedDate).pipe(delay(1000));
+  }
+
 }

@@ -8,6 +8,7 @@ import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Main component for viewing a station.
@@ -15,7 +16,8 @@ import { StationService } from 'src/app/core/station.service';
 @Component({
   selector: 'app-station',
   templateUrl: './station.component.html',
-  styleUrls: ['./station.component.scss']
+  styleUrls: ['./station.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class StationComponent implements OnInit {
   /** The component for the drawer that houses comments and history. */
@@ -40,13 +42,17 @@ export class StationComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** The Last Updated Date. */
+  lastUpdatedDate = '';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private utcTimeConversion: UtcTimeConversion,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -134,6 +140,18 @@ export class StationComponent implements OnInit {
           error
         );
       });
+  }
+
+  /**
+   * Uses the helper: UtcTimeConversion.
+   * Format The updatedDate related to station.
+   *
+   * @param timeEntered The date without format.
+   */
+  private getUpdatedFormattedDate(timeEntered: string){
+    this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+    );
   }
 
   /**
