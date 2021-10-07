@@ -55,7 +55,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     instructions: '',
     questionType: {
       rithmId: '',
-      typeString: QuestionFieldType.LongText,
+      typeString: QuestionFieldType.Instructions,
       validationExpression: '.+'
     },
     isReadOnly: false,
