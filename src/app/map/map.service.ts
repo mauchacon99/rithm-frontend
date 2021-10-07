@@ -55,6 +55,11 @@ export class MapService {
   getMapElements(): Observable<StationMapData[]> {
     return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
     .pipe(map((data) => {
+      data.map((e) => {
+        if (!e.status) {
+          e.status = MapItemStatus.Normal;
+        }
+      });
       const tempMapDataObject: MapData = {stations: data, flows: []};
       this.mapElements$.next(tempMapDataObject);
       return data;
@@ -106,7 +111,7 @@ export class MapService {
    * @returns Observable of publish data.
    */
   publishMap(mapData: MapData): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, { mapData });
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, mapData );
   }
 
   /**

@@ -131,7 +131,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
-
     if (this.mapMode === MapMode.Build) {
       const mousePos = this.getMouseCanvasPoint(event);
       // Check for drag start on station
@@ -139,8 +138,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
           // Show that the location of the station has changed so backend can update.
-          if (station.status === MapItemStatus.Normal) {
-            station.status = MapItemStatus.Updated;
+          const updateElements = this.mapService.mapElements$.value;
+          for (const data of updateElements.stations) {
+            if (station.rithmId === data.rithmId) {
+              if (data.status === MapItemStatus.Normal) {
+                data.status = MapItemStatus.Updated;
+                //update the mapElements behavior subject.
+                this.mapService.mapElements$.next(updateElements);
+              }
+            }
           }
           station.dragging = true;
           this.dragItem = MapDragItem.Station;
@@ -308,6 +314,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //update the mapElements behavior subject.
       this.mapService.mapElements$.next(updateElements);
+
       //After clicking, set to build mode.
       this.mapService.mapMode$.next(MapMode.Build);
     }
