@@ -81,6 +81,11 @@ export class ToolbarComponent {
       name: 'Multi Select',
       icon: 'fas fa-chevron-circle-down',
       typeString: this.fieldTypeEnum.MultiSelect
+    },
+    {
+      name:'Instructions',
+      icon: 'fas fa-sticky-note',
+      typeString: this.fieldTypeEnum.Instructions
     }
   ];
 
