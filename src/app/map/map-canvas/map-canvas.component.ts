@@ -35,6 +35,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
 
+  /** Used to track map movement on a touchscreen. */
+  private lastTouchX = -1;
+
+  /** Used to track map movement on a touchscreen. */
+  private lastTouchY = -1;
+
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
 
@@ -189,6 +195,94 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles input when a user presses a touchscreen. Used for initiating dragging.
+   *
+   * @param event The touchstart event that was triggered.
+   */
+  @HostListener('touchstart', ['$event'])
+  touchStart(event: TouchEvent): void {
+    event.preventDefault();
+    //TODO: support multitouch.
+    const touchPoint = event.touches[0];
+    if (this.lastTouchX === -1) {
+      this.lastTouchX = touchPoint.pageX;
+      this.lastTouchY = touchPoint.pageY;
+    }
+    if (this.mapMode === MapMode.Build) {
+      const touchPos = this.getTouchCanvasPoint(touchPoint);
+      // Check for drag start on station
+      for (const station of this.stations) {
+        if (touchPos.x >= station.canvasPoint.x && touchPos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
+          touchPos.y >= station.canvasPoint.y && touchPos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+          station.dragging = true;
+          this.dragItem = MapDragItem.Station;
+          break;
+        }
+      }
+    }
+
+    if (this.dragItem !== MapDragItem.Station) {
+      // Assume map for now
+      this.dragItem = MapDragItem.Map;
+    }
+  }
+
+  /**
+   * Handles user input when a user lifts their finger. Used for placing dragged elements.
+   *
+   * @param event The touchend event that was triggered.
+   */
+  @HostListener('touchend', ['$event'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  touchEnd(event: TouchEvent): void {
+    event.preventDefault();
+    this.lastTouchX = -1;
+    this.lastTouchY = -1;
+    this.dragItem = MapDragItem.Default;
+    this.mapCanvas.nativeElement.style.cursor = 'default';
+    this.stations.forEach((station) => {
+      if (station.dragging) {
+        station.dragging = false;
+        this.drawElements();
+      }
+    });
+  }
+
+  /**
+   * Handles input when a user drags their finger across the screen. Used for calculating dragged element movement, or map pan drag.
+   *
+   * @param event The touchmove event that was triggered.
+   */
+  @HostListener('touchmove', ['$event'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  touchMove(event: TouchEvent): void {
+    event.preventDefault();
+    //TODO: support multitouch.
+    const touchPoint = event.changedTouches[0];
+    const moveAmountX = this.lastTouchX - touchPoint.pageX;
+    const moveAmountY = this.lastTouchY - touchPoint.pageY;
+    if (this.dragItem === MapDragItem.Map) {
+      this.mapCanvas.nativeElement.style.cursor = 'move';
+      this.currentCanvasPoint.x += moveAmountX / this.scale;
+      this.lastTouchX = touchPoint.pageX;
+      this.currentCanvasPoint.y += moveAmountY / this.scale;
+      this.lastTouchY = touchPoint.pageY;
+      this.drawElements();
+    } else if (this.dragItem === MapDragItem.Station) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+          station.mapPoint.x -= moveAmountX / this.scale;
+          this.lastTouchX = touchPoint.pageX;
+          station.mapPoint.y -= moveAmountY / this.scale;
+          this.lastTouchY = touchPoint.pageY;
+          this.drawElements();
+        }
+      }
+    }
+  }
+
+  /**
    * Handles user input when a mouse button is clicked. Used for clicking on elements.
    *
    * @param event The click event that was triggered.
@@ -317,6 +411,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns An accurate point for the mouse position on the canvas.
    */
   private getMouseCanvasPoint(event: MouseEvent): Point {
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+    return {
+      x: event.clientX - canvasRect.left,
+      y: event.clientY - canvasRect.top
+    };
+  }
+
+  /**
+   * Determines the point on the canvas that a finger is positioned.
+   *
+   * @param event The touch event for the cursor information.
+   * @returns An accurate point for the touch position on the canvas.
+   */
+  private getTouchCanvasPoint(event: Touch): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,
