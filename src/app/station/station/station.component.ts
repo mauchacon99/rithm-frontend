@@ -148,7 +148,7 @@ export class StationComponent implements OnInit {
    *
    * @param timeEntered The date without format.
    */
-  private getUpdatedFormattedDate(timeEntered: string){
+  getUpdatedFormattedDate(timeEntered: string): void{
     this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
       this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
     );
