@@ -60,7 +60,7 @@ export enum QuestionFieldType {
   /** Text area label for station edit mode. */
   LongTextLabel = 'LongTextLabel',
 
-  /** Text area label for station edit mode. */
+  /** Instruction input type. */
   Instructions = 'Instructions',
 
 }

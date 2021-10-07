@@ -59,7 +59,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       validationExpression: '.+'
     },
     isReadOnly: false,
-    isRequired: false,
+    isRequired: true,
     isPrivate: false,
     children: [],
   };
