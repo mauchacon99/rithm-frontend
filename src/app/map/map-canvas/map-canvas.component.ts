@@ -2,9 +2,9 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, } from 'src/models';
-import { MapDragItem } from 'src/models/enums/map-drag-item.enum';
-import { STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+import { MapMode, Point, MapDragItem } from 'src/models';
+import { ConnectionElementService } from '../connection-element.service';
+import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -26,20 +26,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** The scale of the map. */
-  scale = 1;
-
   /** Modes for canvas element used for the map. */
-  mapMode = MapMode.view;
+  mapMode = MapMode.View;
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** What type of thing is being dragged? */
-  private dragItem = MapDragItem.default;
+  private dragItem = MapDragItem.Default;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
+
+  /** Scale to calculate canvas points. */
+  private scale = DEFAULT_SCALE;
 
   /**
    * Add station mode active.
@@ -47,12 +47,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get stationAddActive(): boolean {
-    return this.mapMode === MapMode.stationAdd;
+    return this.mapMode === MapMode.StationAdd;
   }
 
   constructor(
     private mapService: MapService,
-    private stationElementService: StationElementService
+    private stationElementService: StationElementService,
+    private connectionElementService: ConnectionElementService,
   ) {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
@@ -97,7 +98,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.registerCanvasContext(this.context);
 
     this.useStationData();
-    this.drawElements();
+
   }
 
   /**
@@ -125,22 +126,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
 
-    if (this.mapMode === MapMode.build) {
+    if (this.mapMode === MapMode.Build) {
       const mousePos = this.getMouseCanvasPoint(event);
       // Check for drag start on station
       for (const station of this.stations) {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
           station.dragging = true;
-          this.dragItem = MapDragItem.station;
+          this.dragItem = MapDragItem.Station;
           break;
         }
       }
     }
 
-    if (this.dragItem !== MapDragItem.station) {
+    if (this.dragItem !== MapDragItem.Station) {
       // Assume map for now
-      this.dragItem = MapDragItem.map;
+      this.dragItem = MapDragItem.Map;
     }
   }
 
@@ -152,7 +153,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseUp(event: MouseEvent): void {
-    this.dragItem = MapDragItem.default;
+    this.dragItem = MapDragItem.Default;
     this.mapCanvas.nativeElement.style.cursor = 'default';
     this.stations.forEach((station) => {
       if (station.dragging) {
@@ -170,12 +171,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseMove(event: MouseEvent): void {
-    if (this.dragItem === MapDragItem.map) {
+    if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x -= event.movementX / this.scale;
       this.currentCanvasPoint.y -= event.movementY / this.scale;
       this.drawElements();
-    } else if (this.dragItem === MapDragItem.station) {
+    } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
@@ -194,7 +195,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('click', ['$event'])
   click(event: MouseEvent): void {
-    if (this.mapMode === MapMode.stationAdd) {
+    if (this.mapMode === MapMode.StationAdd) {
       //Create new station object using coordinates from the click.
       const coords = this.getMouseCanvasPoint(event);
       coords.x = coords.x - STATION_WIDTH/2;
@@ -206,7 +207,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Add new station to mapElements behavior subject.
       this.mapService.mapElements$.next([...this.stations, newStation]);
       //After clicking, set to build mode.
-      this.mapService.mapMode$.next(MapMode.build);
+      this.mapService.mapMode$.next(MapMode.Build);
     }
   }
 
@@ -263,6 +264,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
@@ -272,6 +274,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the connections
+      for (const station of this.stations) {
+        for (const connection of station.nextStations) {
+          const outgoingStation = this.stations.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
+          const startPoint = {
+            x: station.canvasPoint.x + STATION_WIDTH * this.scale,
+            y: station.canvasPoint.y + STATION_HEIGHT * this.scale / 2
+          };
+          const endPoint = {
+            x: outgoingStation?.canvasPoint.x,
+            y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
+          };
+          this.connectionElementService.drawConnection(startPoint, endPoint);
+        }
+      }
 
       // Draw the stations
       this.stations.forEach((station) => {

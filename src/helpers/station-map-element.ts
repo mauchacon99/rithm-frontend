@@ -25,7 +25,7 @@ export class StationMapElement {
   constructor(stationMapData: StationMapData) {
     this.canvasPoint = DEFAULT_CANVAS_POINT;
     this.dragging = false;
-    this.hoverActive = StationElementHoverType.none;
+    this.hoverActive = StationElementHoverType.None;
     Object.assign(this, stationMapData);
   }
 }

@@ -4,17 +4,17 @@
  export enum StationElementHoverType {
 
   /** The map cursor is currently hovering over a station. */
-  station = 'station',
+  Station = 'station',
 
   /** The map cursor is currently hovering over a station button. */
-  button = 'button',
+  Button = 'button',
 
   /** The map cursor is currently hovering over a station badge. */
-  badge = 'badge',
+  Badge = 'badge',
 
   /** The map cursor is currently hovering over a station connection node. */
-  node = 'node',
+  Node = 'node',
 
   /** The map cursor is not hovering over anything specific. */
-  none = 'none'
+  None = 'none'
 }

@@ -4,14 +4,14 @@
  export enum MapMode {
 
   /** The map is only allowed to be viewed without changes. */
-  'view',
+  View,
 
   /** The map is in the process of being modified. */
-  'build',
+  Build,
 
   /** The map is waiting for a location to be selected for a new station. */
-  'stationAdd',
+  StationAdd,
 
   /** The map is waiting for a location to be selected for a new flow. */
-  'flowAdd'
+  FlowAdd
 }
