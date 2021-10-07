@@ -181,10 +181,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /**
    * Sets the private status of a field.
    *
-   * @param ob Observes MatCheckbox changes.
+   * @param checkboxEvent Observes MatCheckbox changes.
    */
-   setPrivate(ob: MatCheckboxChange): void {
-    this.field.isPrivate = ob.checked;
+   setPrivate(checkboxEvent: MatCheckboxChange): void {
+    this.field.isPrivate = checkboxEvent.checked;
   }
 
   /**
