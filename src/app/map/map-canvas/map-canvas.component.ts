@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
@@ -138,6 +138,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+          // Show that the location of the station has changed so backend can update.
+          if (station.status === MapItemStatus.Normal) {
+            station.status = MapItemStatus.Updated;
+          }
           station.dragging = true;
           this.dragItem = MapDragItem.Station;
           break;
