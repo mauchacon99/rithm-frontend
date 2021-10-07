@@ -4,11 +4,11 @@
  export enum MapDragItem {
 
   /** Nothing is currently being dragged. */
-  'default',
+  Default,
 
   /** The map is being dragged. */
-  'map',
+  Map,
 
   /** A station is being dragged. */
-  'station'
+  Station
 }

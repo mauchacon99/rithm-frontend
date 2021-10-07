@@ -14,7 +14,7 @@ export class MockMapService {
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.build);
+  mapMode$ = new BehaviorSubject(MapMode.Build);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(1);
