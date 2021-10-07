@@ -179,6 +179,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   /**
+   * Sets the private status of a field.
+   *
+   * @param checkboxEvent Observes MatCheckbox changes.
+   */
+   setPrivate(checkboxEvent: MatCheckboxChange): void {
+    this.field.isPrivate = checkboxEvent.checked;
+  }
+
+  /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
