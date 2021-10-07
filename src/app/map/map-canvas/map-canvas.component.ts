@@ -208,22 +208,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.lastTouchX = touchPoint.pageX;
       this.lastTouchY = touchPoint.pageY;
     }
-    if (this.mapMode === MapMode.build) {
+    if (this.mapMode === MapMode.Build) {
       const touchPos = this.getTouchCanvasPoint(touchPoint);
       // Check for drag start on station
       for (const station of this.stations) {
         if (touchPos.x >= station.canvasPoint.x && touchPos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           touchPos.y >= station.canvasPoint.y && touchPos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
           station.dragging = true;
-          this.dragItem = MapDragItem.station;
+          this.dragItem = MapDragItem.Station;
           break;
         }
       }
     }
 
-    if (this.dragItem !== MapDragItem.station) {
+    if (this.dragItem !== MapDragItem.Station) {
       // Assume map for now
-      this.dragItem = MapDragItem.map;
+      this.dragItem = MapDragItem.Map;
     }
   }
 
@@ -238,7 +238,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.lastTouchX = -1;
     this.lastTouchY = -1;
-    this.dragItem = MapDragItem.default;
+    this.dragItem = MapDragItem.Default;
     this.mapCanvas.nativeElement.style.cursor = 'default';
     this.stations.forEach((station) => {
       if (station.dragging) {
@@ -261,14 +261,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const touchPoint = event.changedTouches[0];
     const moveAmountX = this.lastTouchX - touchPoint.pageX;
     const moveAmountY = this.lastTouchY - touchPoint.pageY;
-    if (this.dragItem === MapDragItem.map) {
+    if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.lastTouchX = touchPoint.pageX;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchY = touchPoint.pageY;
       this.drawElements();
-    } else if (this.dragItem === MapDragItem.station) {
+    } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
