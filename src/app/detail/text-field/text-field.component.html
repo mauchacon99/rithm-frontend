@@ -1,5 +1,5 @@
 <div [formGroup]="textFieldForm">
-  <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType.typeString === fieldTypeEnum.LongText}">
+  <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType.typeString === fieldTypeEnum.LongText,'information-field': field.questionType.typeString === fieldTypeEnum.Instructions}">
     <mat-label>{{field?.prompt}}</mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
@@ -21,6 +21,8 @@
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.AddressLine" class="far fa-address-card"></i>
       <!-- City icon -->
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.City" class="fas fa-city"></i>
+      <i *ngIf="field.questionType.typeString === fieldTypeEnum.Instructions" class="fas fa-sticky-note"></i>
+
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button mat-icon-button (click)="removeField(field)">
@@ -28,6 +30,6 @@
       </button>
     </div>
     <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText" matInput type="{{ toolBar ? 'text' : field.questionType.typeString }}" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString" autocomplete="off">
-    <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" formControlName="longText"></textarea>
+    <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText || field.questionType.typeString === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" formControlName="longText"></textarea>
   </mat-form-field>
 </div>
