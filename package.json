@@ -36,15 +36,15 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1202.8",
-    "@angular-devkit/build-angular": "~12.2.8",
+    "@angular-devkit/architect": "^0.1202.9",
+    "@angular-devkit/build-angular": "~12.2.9",
     "@angular-eslint/builder": "^12.5.0",
     "@angular-eslint/eslint-plugin": "^12.5.0",
     "@angular-eslint/eslint-plugin-template": "^12.5.0",
     "@angular-eslint/schematics": "^12.5.0",
     "@angular-eslint/template-parser": "^12.5.0",
     "@angular/cli": "^12.2.9",
-    "@angular/compiler-cli": "^12.2.8",
+    "@angular/compiler-cli": "^12.2.9",
     "@compodoc/compodoc": "^1.1.15",
     "@strut-software/eslint-config": "^1.4.0",
     "@strut-software/stylelint-config": "^1.1.1",
