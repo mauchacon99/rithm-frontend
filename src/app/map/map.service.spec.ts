@@ -93,50 +93,105 @@ describe('MapService', () => {
   });
 
   it('should restore previous data when cancelled', () => {
-    const test = [
-      {
-        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-        name: 'Step 2',
-        noOfDocuments: 5,
-        mapPoint: {
-          x: 500,
-          y: 400
+    const test = {
+      stations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+          name: 'Development',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 12,
+            y: 15
+          },
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          status: MapItemStatus.Normal
         },
-        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-        status: MapItemStatus.Normal
-      },
-    ];
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+          name: 'Step 1',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 200,
+            y: 80
+          },
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
+        },
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          name: 'Step 2',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 500,
+            y: 400
+          },
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
+        },
+        {
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          name: 'Step 3',
+          noOfDocuments: 5,
+          mapPoint: {
+            x: 50,
+            y: 240
+          },
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
+        }
+      ],
+      flows: [
+        {
+          rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+          name: 'Flow 1',
+          stationIds: [
+            'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          ],
+          flowIds: [],
+          status: MapItemStatus.Normal
+        }
+      ]
+    };
     service.mapElements$.next(test);
     service.buildMap();
     expect(service.mapElements$.value).toEqual(service.storedMapElements);
     service.mapElements$.next(
-      [
-        {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 500,
-            y: 400
+      {
+        stations: [
+          {
+            rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            name: 'Step 2',
+            noOfDocuments: 5,
+            mapPoint: {
+              x: 500,
+              y: 400
+            },
+            previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+            nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+            status: MapItemStatus.Normal
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-          status: MapItemStatus.Normal
-        },
-        {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 500,
-            y: 400
+          {
+            rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            name: 'Step 2',
+            noOfDocuments: 5,
+            mapPoint: {
+              x: 500,
+              y: 400
+            },
+            previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+            nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+            status: MapItemStatus.Normal
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-          status: MapItemStatus.Normal
-        },
-      ]
+        ],
+        flows: []
+      }
     );
     expect(service.mapElements$.value).not.toEqual(service.storedMapElements);
     service.cancelMapChanges();

@@ -302,8 +302,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //create a new station at click.
       const newStation = this.mapService.createNewStation(coords);
 
-      //Add new station to mapElements behavior subject.
-      this.mapService.mapElements$.next([...this.stations, newStation]);
+      //get current mapElements$ data.
+      const updateElements = this.mapService.mapElements$.value;
+      updateElements.stations.push(newStation);
+
+      //update the mapElements behavior subject.
+      this.mapService.mapElements$.next(updateElements);
       //After clicking, set to build mode.
       this.mapService.mapMode$.next(MapMode.Build);
     }
@@ -348,8 +352,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private useStationData(): void {
     this.mapService.mapElements$
     .pipe(takeUntil(this.destroyed$))
-    .subscribe((stations) => {
-      this.stations = stations.map((e) => new StationMapElement(e));
+    .subscribe((data) => {
+      this.stations = data.stations.map((e) => new StationMapElement(e));
       this.setCanvasSize();
       this.drawElements();
     }, (error: unknown) => {

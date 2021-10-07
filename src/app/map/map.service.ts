@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 
-const MICROSERVICE_PATH_STSATION = '/stationservice/api/station';
+const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
 const MICROSERVICE_PATH = '/mapservice/api/map';
 
@@ -19,10 +19,10 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
 })
 export class MapService {
  /** This behavior subject will track the array of stations. */
-  mapElements$ = new BehaviorSubject<StationMapData[]>([]);
+  mapElements$ = new BehaviorSubject<MapData>({stations: [], flows: []});
 
   /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
-  storedMapElements: StationMapData[] = [];
+  storedMapElements: MapData= {stations: [], flows: []};
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -55,7 +55,8 @@ export class MapService {
   getMapElements(): Observable<StationMapData[]> {
     return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
     .pipe(map((data) => {
-      this.mapElements$.next(data);
+      const tempMapDataObject: MapData = {stations: data, flows: []};
+      this.mapElements$.next(tempMapDataObject);
       return data;
     }));
   }
@@ -91,9 +92,9 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    if (this.storedMapElements.length > 0) {
+    if (this.storedMapElements.stations.length > 0) {
       this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
-      this.storedMapElements = [];
+      this.storedMapElements = {stations: [], flows: []};
     }
     this.mapMode$.next(MapMode.View);
   }
@@ -105,7 +106,7 @@ export class MapService {
    * @returns Observable of publish data.
    */
   publishMap(mapData: MapData): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STSATION}/map`, { mapData });
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, { mapData });
   }
 
   /**
