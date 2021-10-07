@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapData, MapMode } from 'src/models';
+import { MapData, MapItemStatus, MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 
@@ -22,8 +22,8 @@ export class MapOverlayComponent implements OnDestroy {
   /** The current mode of the map. */
   private currentMode = MapMode.View;
 
-  /** Build button for admin. Need to remove once object reference has been set. */
-  mapData: MapData = {
+  /** The data that will be published. */
+  publishMapData: MapData = {
     stations: [],
     flows: []
   };
@@ -59,6 +59,18 @@ export class MapOverlayComponent implements OnDestroy {
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
+
+    this.mapService.mapElements$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const updatedData: MapData = {
+          stations: data.stations.filter((e) => e.status !== MapItemStatus.Normal),
+          flows: data.flows.filter((e) => e.status !== MapItemStatus.Normal)
+        };
+        this.publishMapData = updatedData;
+      }, (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      });
   }
 
   /**
@@ -80,7 +92,7 @@ export class MapOverlayComponent implements OnDestroy {
   /**
    * Publishes map changes.
    *
-   * @param mapData The selected user to remove.
+   * @param mapData The updated map data to return.
    */
   async publish(mapData: MapData): Promise<void> {
     const confirm = await this.popupService.confirm({
