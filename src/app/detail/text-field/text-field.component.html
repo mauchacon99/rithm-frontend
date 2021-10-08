@@ -29,7 +29,7 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText" matInput type="{{ toolBar ? 'text' : field.questionType.typeString }}" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString" autocomplete="off">
+    <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText && field.questionType.typeString !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType.typeString }}" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString" autocomplete="off">
     <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText || field.questionType.typeString === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" formControlName="longText"></textarea>
   </mat-form-field>
 </div>
