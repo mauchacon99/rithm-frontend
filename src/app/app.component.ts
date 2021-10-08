@@ -83,9 +83,6 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           this.mobileLinks = this.mobileLinks.filter(e => e.name !== 'admin');
         }
-      },
-      (error: unknown) => {
-        throw new Error(`User data subscription error: ${error}`);
       });
 
     this.sidenavDrawerService.setSidenav(this.sidenav);
@@ -103,9 +100,6 @@ export class AppComponent implements OnInit, OnDestroy {
           (path?.toLowerCase().indexOf(REGISTER_URL) === -1) &&
           (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
       }
-    },
-    (error: unknown) => {
-      throw new Error(`Router subscription error: ${error}`);
     });
   }
 

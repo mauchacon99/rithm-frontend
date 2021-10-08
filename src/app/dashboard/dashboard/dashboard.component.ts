@@ -29,9 +29,6 @@ export class DashboardComponent {
         .pipe(first())
         .subscribe((stations) => {
           this.stations = stations;
-        },
-        (error: unknown) => {
-          throw new Error(`Get stations subscription error: ${error}`);
         });
     }
   }
