@@ -34,6 +34,9 @@ export class DetailDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.itemType = context;
+      },
+      (error: unknown) => {
+        throw new Error(`Drawer context subscription error: ${error}`);
       });
 
     this.sidenavDrawerService.drawerData$
@@ -46,6 +49,9 @@ export class DetailDrawerComponent implements OnDestroy {
           this.stationId = context.stationId;
           this.documentId = context.documentRithmId;
         }
+      },
+      (error: unknown) => {
+        throw new Error(`Drawer data subscription error: ${error}`);
       });
   }
 

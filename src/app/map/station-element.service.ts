@@ -24,7 +24,14 @@ export class StationElementService {
 
   constructor(
     private mapService: MapService
-  ) { }
+  ) {
+    this.mapService.mapScale$.subscribe((scale) => {
+      this.mapScale = scale;
+    },
+    (error: unknown) => {
+      throw new Error(`Map scale subscription error: ${error}`);
+    });
+   }
 
   /**
    * Draws a station on the map.
