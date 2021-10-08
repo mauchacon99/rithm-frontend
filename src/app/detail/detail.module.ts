@@ -52,7 +52,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
   ],
   imports: [
     CommonModule,
-    InfoDrawerModule,
     MatButtonModule,
     SharedModule,
     MatInputModule,
