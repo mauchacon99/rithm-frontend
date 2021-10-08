@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
+import { StationInfoDrawerComponent } from '../station-info-drawer/station-info-drawer.component';
 
 import { InfoDrawerComponent } from './info-drawer.component';
 
@@ -8,7 +10,10 @@ describe('InfoDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InfoDrawerComponent ]
+      declarations: [
+        InfoDrawerComponent,
+        MockComponent(StationInfoDrawerComponent)
+      ]
     })
     .compileComponents();
   });
