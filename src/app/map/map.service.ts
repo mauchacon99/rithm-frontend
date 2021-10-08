@@ -111,6 +111,7 @@ export class MapService {
 
     //update the stationElements array.
     this.stationElements.push(newStation);
+    this.mapDataRecieved$.next(true);
   }
 
   /**
@@ -135,6 +136,7 @@ export class MapService {
       this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
+    this.mapDataRecieved$.next(true);
   }
 
   /**

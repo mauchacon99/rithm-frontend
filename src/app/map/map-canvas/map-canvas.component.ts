@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { first, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
@@ -92,8 +92,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       this.mapService.mapDataRecieved$
-      .pipe(first())
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+        this.flows = this.mapService.flowElements;
         this.drawElements();
       });
     });
@@ -105,8 +107,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
-    this.stations = this.mapService.stationElements;
-    this.flows = this.mapService.flowElements;
     this.setCanvasSize();
     this.drawElements();
   }
