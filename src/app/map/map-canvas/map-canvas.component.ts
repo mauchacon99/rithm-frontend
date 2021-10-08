@@ -7,6 +7,7 @@ import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
+import { FlowElementService } from '../flow-element.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -60,6 +61,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
+    private flowElementService: FlowElementService
   ) {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
@@ -393,6 +395,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
+        this.flowElementService.drawFlow(this.stations);
     });
   }
 

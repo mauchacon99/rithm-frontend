@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { StationMapElement } from 'src/helpers';
 import { Point } from 'src/models';
+import { FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -19,13 +21,45 @@ export class FlowElementService {
 
   /**
    * Draws a flow on the map.
+   *
+   * @param stations The station for which to draw the card.
    */
-  drawFlow(): void {
+  drawFlow(stations: StationMapElement[]): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw flow if context is not defined');
     }
-    // TODO: Draw flow
+    const flowPoints: Point[] = [];
+
+    // Get the stations within this flow
+    const flowStations = stations; // TODO: dynamically get this
+
+    // Get all the points within this flow
+    for (const station of flowStations) {
+      const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
+      const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
+      const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
+
+      flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
+      flowPoints.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
+      flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
+      flowPoints.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+    }
+
+    // Determine the bounding box points
+    let boundaryPoints = this.getConvexHull(flowPoints);
+
+    // Draw the bounding box
+    this.canvasContext.setLineDash([7, 7]);
+    this.canvasContext.beginPath();
+
+    this.canvasContext.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
+    boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
+
+    for (const point of boundaryPoints)
+    // eslint-disable-next-line curly
+    this.canvasContext.lineTo(point.x, point.y);
+    this.canvasContext.stroke();
   }
 
   /**
