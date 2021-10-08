@@ -47,8 +47,6 @@ export class StationInfoDrawerComponent {
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
-    console.log(this.type);
-
   }
 
 }
