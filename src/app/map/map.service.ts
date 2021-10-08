@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, StationMapData, MapData, MapItemStatus } from 'src/models';
+import { MapMode, Point, StationMapData, MapData, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
+import { StationMapElement } from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
@@ -19,10 +20,19 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
 })
 export class MapService {
  /** This behavior subject will track the array of stations and flows. */
-  mapElements$ = new BehaviorSubject<MapData>({stations: [], flows: []});
+  mapData: MapData = {stations: [], flows: []};
 
-  /** An array that stores a backup of the array of stations tracked in mapElements$ when buildMap is called. */
-  storedMapElements: MapData= {stations: [], flows: []};
+  /** The station elements displayed on the map. */
+  stationElements: StationMapElement[] = [];
+
+  /** An array that stores a backup of stationElements when buildMap is called. */
+  storedStationElements: StationMapElement[] = [];
+
+  /** The flow elements displayed on the map. */
+  flowElements: FlowMapElement[] = [];
+
+  /** An array that stores a backup of flowElements when buildMap is called. */
+  storedFlowElements: FlowMapElement[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -61,35 +71,50 @@ export class MapService {
         }
       });
       const tempMapDataObject: MapData = {stations: data, flows: []};
-      this.mapElements$.next(tempMapDataObject);
+      this.mapData = tempMapDataObject;
+      this.useStationData();
       return data;
     }));
+  }
+
+  /**
+   * Converts station data so it can be drawn on the canvas.
+   */
+  private useStationData(): void {
+    this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
+    this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
   }
 
   /**
    * Create a new Station.
    *
    * @param coords The coordinates where the station will be placed.
-   * @returns The new station.
    */
-  createNewStation(coords: Point): StationMapData {
+  createNewStation(coords: Point): void {
     const mapCoords = this.getMapPoint(coords);
-    return {
+    const newStation = {
       rithmId: uuidv4(),
       name: 'Untitled Station',
       mapPoint: mapCoords,
+      canvasPoint: coords,
       noOfDocuments: 0,
       previousStations: [],
       nextStations: [],
+      dragging: false,
+      hoverActive: StationElementHoverType.None,
       status: MapItemStatus.Created
     };
+
+    //update the stationElements array.
+    this.stationElements.push(newStation);
   }
 
   /**
    * Enters build mode for the map.
    */
   buildMap(): void {
-    this.storedMapElements = JSON.parse(JSON.stringify(this.mapElements$.value));
+    this.storedStationElements = JSON.parse(JSON.stringify(this.stationElements));
+    this.storedFlowElements = JSON.parse(JSON.stringify(this.flowElements));
     this.mapMode$.next(MapMode.Build);
   }
 
@@ -97,9 +122,13 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
-    if (this.storedMapElements.stations.length > 0) {
-      this.mapElements$.next(JSON.parse(JSON.stringify(this.storedMapElements)));
-      this.storedMapElements = {stations: [], flows: []};
+    if (this.storedStationElements.length > 0) {
+      this.stationElements = JSON.parse(JSON.stringify(this.storedStationElements));
+      this.storedStationElements = [];
+    }
+    if (this.storedFlowElements.length > 0) {
+      this.flowElements = JSON.parse(JSON.stringify(this.storedFlowElements));
+      this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
   }
@@ -107,11 +136,15 @@ export class MapService {
   /**
    * Publishes local map changes to the server.
    *
-   * @param mapData Data sending to the API.
    * @returns Observable of publish data.
    */
-  publishMap(mapData: MapData): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, mapData );
+  publishMap(): Observable<unknown> {
+    const filteredData: MapData = {
+      stations: this.stationElements.filter((e) => e.status !== MapItemStatus.Normal),
+      flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal)
+    };
+
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData );
   }
 
   /**

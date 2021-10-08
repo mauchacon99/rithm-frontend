@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
@@ -43,6 +43,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
+
+  /** Data for flow used in the map. */
+  flows: FlowMapElement[] = [];
 
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
@@ -102,9 +105,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
-
-    this.useStationData();
-
+    this.stations = this.mapService.stationElements;
+    this.flows = this.mapService.flowElements;
+    this.setCanvasSize();
+    this.drawElements();
   }
 
   /**
@@ -301,14 +305,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       coords.y = coords.y - STATION_HEIGHT/2;
 
       //create a new station at click.
-      const newStation = this.mapService.createNewStation(coords);
-
-      //get current mapElements$ data.
-      const updateElements = this.mapService.mapElements$.value;
-      updateElements.stations.push(newStation);
-
-      //update the mapElements behavior subject.
-      this.mapService.mapElements$.next(updateElements);
+      this.mapService.createNewStation(coords);
 
       //After clicking, set to build mode.
       this.mapService.mapMode$.next(MapMode.Build);
@@ -346,21 +343,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
     // TODO: Handle behavior when mouse wheel is scrolled
-  }
-
-  /**
-   * Converts station data so it can be drawn on the canvas.
-   */
-  private useStationData(): void {
-    this.mapService.mapElements$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((data) => {
-      this.stations = data.stations.map((e) => new StationMapElement(e));
-      this.setCanvasSize();
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map service error: ${error}`);
-    });
   }
 
   /**

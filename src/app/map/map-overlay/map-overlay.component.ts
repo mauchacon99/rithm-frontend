@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapData, MapItemStatus, MapMode } from 'src/models';
+import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 
@@ -21,12 +21,6 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** The current mode of the map. */
   private currentMode = MapMode.View;
-
-  /** The data that will be published. */
-  publishMapData: MapData = {
-    stations: [],
-    flows: []
-  };
 
   /** Map data request loading indicator. */
   mapDataLoading = false;
@@ -59,18 +53,6 @@ export class MapOverlayComponent implements OnDestroy {
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
-
-    this.mapService.mapElements$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const updatedData: MapData = {
-          stations: data.stations.filter((e) => e.status !== MapItemStatus.Normal),
-          flows: data.flows.filter((e) => e.status !== MapItemStatus.Normal)
-        };
-        this.publishMapData = updatedData;
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
-      });
   }
 
   /**
@@ -91,10 +73,8 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Publishes map changes.
-   *
-   * @param mapData The updated map data to return.
    */
-  async publish(mapData: MapData): Promise<void> {
+  async publish(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -103,7 +83,7 @@ export class MapOverlayComponent implements OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
-      this.mapService.publishMap(mapData)
+      this.mapService.publishMap()
         .pipe(first())
         .subscribe(() => {
           this.mapDataLoading = false;
