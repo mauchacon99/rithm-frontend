@@ -11,6 +11,9 @@ import { StationInfoDrawerComponent } from './station-info-drawer/station-info-d
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    InfoDrawerComponent
   ]
 })
 export class InfoDrawerModule { }
