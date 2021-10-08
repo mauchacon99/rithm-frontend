@@ -84,7 +84,7 @@ export class MapService {
   /**
    * Converts station data so it can be drawn on the canvas.
    */
-  private useStationData(): void {
+  useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
   }

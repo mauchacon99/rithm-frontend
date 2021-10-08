@@ -1,7 +1,7 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MapData, MapItemStatus } from 'src/models';
+import { MapData, MapItemStatus, StationElementHoverType } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
 import { StationMapData } from 'src/models';
@@ -93,78 +93,84 @@ describe('MapService', () => {
   });
 
   it('should restore previous data when cancelled', () => {
-    const test = {
-      stations: [
-        {
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 12,
-            y: 15
-          },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
-          status: MapItemStatus.Normal
-        },
-        {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
-          name: 'Step 1',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 200,
-            y: 80
-          },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-          status: MapItemStatus.Normal
-        },
-        {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 500,
-            y: 400
-          },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-          status: MapItemStatus.Normal
-        },
-        {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
-          name: 'Step 3',
-          noOfDocuments: 5,
-          mapPoint: {
-            x: 50,
-            y: 240
-          },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-          status: MapItemStatus.Normal
-        }
-      ],
-      flows: [
-        {
-          rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
-          name: 'Flow 1',
-          stationIds: [
-            'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-            'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
-            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-            'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
-          ],
-          flowIds: [],
-          status: MapItemStatus.Normal
-        }
-      ]
-    };
-    service.mapElements$.next(test);
-    service.buildMap();
-    expect(service.mapElements$.value).toEqual(service.storedMapElements);
-    service.mapElements$.next(
+    const test = [
       {
-        stations: [
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        name: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400
+        },
+        canvasPoint: {
+          x: 500,
+          y: 400
+        },
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        dragging: false,
+        hoverActive: StationElementHoverType.None,
+        status: MapItemStatus.Normal,
+      },
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        name: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400
+        },
+        canvasPoint: {
+          x: 500,
+          y: 400
+        },
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        dragging: false,
+        hoverActive: StationElementHoverType.None,
+        status: MapItemStatus.Normal,
+      },
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        name: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400
+        },
+        canvasPoint: {
+          x: 500,
+          y: 400
+        },
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        dragging: false,
+        hoverActive: StationElementHoverType.None,
+        status: MapItemStatus.Normal,
+      },
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        name: 'Step 2',
+        noOfDocuments: 5,
+        mapPoint: {
+          x: 500,
+          y: 400
+        },
+        canvasPoint: {
+          x: 500,
+          y: 400
+        },
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        dragging: false,
+        hoverActive: StationElementHoverType.None,
+        status: MapItemStatus.Normal,
+      },
+    ];
+    service.stationElements = test;
+    service.buildMap();
+    expect(service.stationElements).toEqual(service.storedStationElements);
+    service.stationElements = [
           {
             rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
             name: 'Step 2',
@@ -173,9 +179,15 @@ describe('MapService', () => {
               x: 500,
               y: 400
             },
+            canvasPoint: {
+              x: 500,
+              y: 400
+            },
             previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
             nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-            status: MapItemStatus.Normal
+            dragging: false,
+            hoverActive: StationElementHoverType.None,
+            status: MapItemStatus.Normal,
           },
           {
             rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -185,17 +197,20 @@ describe('MapService', () => {
               x: 500,
               y: 400
             },
+            canvasPoint: {
+              x: 500,
+              y: 400
+            },
             previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
             nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-            status: MapItemStatus.Normal
+            dragging: false,
+            hoverActive: StationElementHoverType.None,
+            status: MapItemStatus.Normal,
           },
-        ],
-        flows: []
-      }
-    );
-    expect(service.mapElements$.value).not.toEqual(service.storedMapElements);
+        ];
+    expect(service.stationElements).not.toEqual(service.storedStationElements);
     service.cancelMapChanges();
-    expect(service.mapElements$.value).toEqual(test);
+    expect(service.stationElements).toEqual(test);
   });
 
   xit('should publish map data', () => {
@@ -216,7 +231,7 @@ describe('MapService', () => {
       ], flows: []
     };
 
-    service.publishMap(postData)
+    service.publishMap()
       .subscribe((response) => {
         expect(response).toBeDefined();
       });
