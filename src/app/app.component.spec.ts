@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +20,9 @@ describe('AppComponent', () => {
       ],
       providers: [
         { provide: UserService, useValue: MockUserService },
+      ],
+      schemas:[
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     }).compileComponents();
   });
