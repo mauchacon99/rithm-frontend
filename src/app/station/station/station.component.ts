@@ -40,7 +40,7 @@ export class StationComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Show Hidden accordion field private */
+  /** Show Hidden accordion field private. */
   accordionFieldPrivate = false;
 
   constructor(
