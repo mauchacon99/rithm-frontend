@@ -20,6 +20,7 @@ src/app/map/**/*.html @Gobsmack90
 src/app/detail/**/*.ts @HendricksonTyler @cqmdeveloper
 src/app/document/**/*.ts @HendricksonTyler @cqmdeveloper
 src/app/station/**/*.ts @HendricksonTyler @cqmdeveloper
+src/app/info-drawer/**/*.ts @HendricksonTyler @cqmdeveloper
 
 src/app/detail/**/*.html @strut-software/team-lion-style-reviewers
 src/app/document/**/*.html @strut-software/team-lion-style-reviewers
