@@ -16,6 +16,7 @@ import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     SharedModule,
     FormsModule,
     MatExpansionModule,
+    InfoDrawerModule
   ]
 })
 export class StationModule { }
