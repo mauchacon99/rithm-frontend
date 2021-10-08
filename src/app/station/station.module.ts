@@ -15,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { StationTemplateComponent } from './station-template/station-template.co
     ReactiveFormsModule,
     ClickOutsideModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    MatExpansionModule,
   ]
 })
 export class StationModule { }
