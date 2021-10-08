@@ -1,7 +1,7 @@
 /* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MapData } from 'src/models';
+import { MapData, MapItemStatus } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
 import { StationMapData } from 'src/models';
@@ -37,8 +37,9 @@ describe('MapService', () => {
             x: 12,
             y: 15
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -48,8 +49,9 @@ describe('MapService', () => {
             x: 200,
             y: 80
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -59,8 +61,9 @@ describe('MapService', () => {
             x: 500,
             y: 400
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -70,8 +73,9 @@ describe('MapService', () => {
             x: 50,
             y: 240
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         }
       ];
 
@@ -98,8 +102,9 @@ describe('MapService', () => {
           x: 500,
           y: 400
         },
-        incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-        outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+        previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+        nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+        status: MapItemStatus.Normal
       },
     ];
     service.mapElements$.next(test);
@@ -115,8 +120,9 @@ describe('MapService', () => {
             x: 500,
             y: 400
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -126,8 +132,9 @@ describe('MapService', () => {
             x: 500,
             y: 400
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
       ]
     );
@@ -147,8 +154,9 @@ describe('MapService', () => {
             x: 12,
             y: 15
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          status: MapItemStatus.Normal
         }
       ], flows: []
     };

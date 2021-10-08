@@ -42,9 +42,9 @@ describe('MapToolbarComponent', () => {
   it('should toggle mapMode', () => {
     component.addStation();
     expect(component.stationAddActive).toBeTrue();
-    expect(component.mapMode).toEqual(MapMode.stationAdd);
+    expect(component.mapMode).toEqual(MapMode.StationAdd);
     component.addStation();
     expect(component.stationAddActive).toBeFalse();
-    expect(component.mapMode).toEqual(MapMode.build);
+    expect(component.mapMode).toEqual(MapMode.Build);
   });
 });

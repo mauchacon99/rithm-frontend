@@ -55,11 +55,11 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     instructions: '',
     questionType: {
       rithmId: '',
-      typeString: QuestionFieldType.LongText,
+      typeString: QuestionFieldType.Instructions,
       validationExpression: '.+'
     },
     isReadOnly: false,
-    isRequired: false,
+    isRequired: true,
     isPrivate: false,
     children: [],
   };
@@ -176,6 +176,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setRequired(ob: MatCheckboxChange): void {
     this.field.isRequired = ob.checked;
+  }
+
+  /**
+   * Sets the private status of a field.
+   *
+   * @param checkboxEvent Observes MatCheckbox changes.
+   */
+   setPrivate(checkboxEvent: MatCheckboxChange): void {
+    this.field.isPrivate = checkboxEvent.checked;
   }
 
   /**

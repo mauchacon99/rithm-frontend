@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { MapData, MapMode, Point, StationMapData } from 'src/models';
+import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/models';
 
 /**
  * Mocks methods of the `MapService`.
@@ -14,7 +14,7 @@ export class MockMapService {
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
   /** The current mode of interaction on the map. */
-  mapMode$ = new BehaviorSubject(MapMode.build);
+  mapMode$ = new BehaviorSubject(MapMode.Build);
 
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(1);
@@ -36,8 +36,9 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<StationMapData[]> {
-    const data: StationMapData[] = [
+  getMapElements(): Observable<MapData> {
+    const data: MapData = {
+      stations: [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           name: 'Development',
@@ -46,19 +47,21 @@ export class MockMapService {
             x: 12,
             y: 15
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          status: MapItemStatus.Normal
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
           name: 'Step 1',
           noOfDocuments: 5,
           mapPoint: {
             x: 200,
             y: 80
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -68,21 +71,38 @@ export class MockMapService {
             x: 500,
             y: 400
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
           name: 'Step 3',
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
             y: 240
           },
-          incomingStationIds: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          outgoingStationIds: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989']
+          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          status: MapItemStatus.Normal
         }
-      ];
+      ],
+      flows: [
+        {
+          rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+          name: 'Flow 1',
+          stationIds: [
+            'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          ],
+          flowIds: [],
+          status: MapItemStatus.Normal
+        }
+      ]
+    };
     return of(data).pipe(delay(1000));
   }
 

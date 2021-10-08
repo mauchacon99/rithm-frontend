@@ -20,7 +20,7 @@ export class MapOverlayComponent implements OnDestroy {
   private destroyed$ = new Subject();
 
   /** The current mode of the map. */
-  private currentMode = MapMode.view;
+  private currentMode = MapMode.View;
 
   /** Build button for admin. Need to remove once object reference has been set. */
   mapData: MapData = {
@@ -37,7 +37,7 @@ export class MapOverlayComponent implements OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
   get isBuilding(): boolean {
-    return this.currentMode === MapMode.build || this.currentMode === MapMode.stationAdd || this.currentMode === MapMode.flowAdd;
+    return this.currentMode === MapMode.Build || this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
   }
 
   /**
@@ -46,7 +46,7 @@ export class MapOverlayComponent implements OnDestroy {
    * @returns True if the map is in stationAdd mode, false otherwise.
    */
   get isStationAdd(): boolean {
-    return this.currentMode === MapMode.stationAdd;
+    return this.currentMode === MapMode.StationAdd;
   }
 
   constructor(private mapService: MapService,
@@ -67,7 +67,7 @@ export class MapOverlayComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    this.mapService.mapMode$.next(MapMode.view);
+    this.mapService.mapMode$.next(MapMode.View);
   }
 
   /**

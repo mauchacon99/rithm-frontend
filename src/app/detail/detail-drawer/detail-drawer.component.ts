@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
@@ -29,15 +28,12 @@ export class DetailDrawerComponent implements OnDestroy {
   documentId = '';
 
   constructor(
-    private sidenavDrawerService: SidenavDrawerService,
-    private errorService: ErrorService
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.itemType = context;
-      }, (error: unknown) => {
-        this.errorService.logError(error);
       });
 
     this.sidenavDrawerService.drawerData$
@@ -50,8 +46,6 @@ export class DetailDrawerComponent implements OnDestroy {
           this.stationId = context.stationId;
           this.documentId = context.documentRithmId;
         }
-      }, (error: unknown) => {
-        this.errorService.logError(error);
       });
   }
 

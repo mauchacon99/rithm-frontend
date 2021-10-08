@@ -40,7 +40,7 @@ describe('MapCanvasComponent', () => {
     expect(component.stations.length).toEqual(stationsLength);
 
     //should add a station.
-    component.mapMode = MapMode.stationAdd;
+    component.mapMode = MapMode.StationAdd;
     window.dispatchEvent(new Event('click'));
     expect(component.stations.length).toEqual(stationsLength + 1);
   });
