@@ -22,6 +22,9 @@ export class MapService {
  /** This behavior subject will track the array of stations and flows. */
   mapData: MapData = {stations: [], flows: []};
 
+  /** Notifies when the map data has been received. */
+  mapDataRecieved$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -73,6 +76,7 @@ export class MapService {
       const tempMapDataObject: MapData = {stations: data, flows: []};
       this.mapData = tempMapDataObject;
       this.useStationData();
+      this.mapDataRecieved$.next(true);
       return data;
     }));
   }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
@@ -75,8 +75,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
       });
 
       this.mapService.mapScale$
@@ -84,8 +82,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((scale) => {
         this.scale = scale;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
       });
 
       this.mapService.currentCanvasPoint$
@@ -93,8 +89,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((point) => {
         this.currentCanvasPoint = point;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.mapDataRecieved$
+      .pipe(first())
+      .subscribe(() => {
+        this.drawElements();
       });
     });
   }
