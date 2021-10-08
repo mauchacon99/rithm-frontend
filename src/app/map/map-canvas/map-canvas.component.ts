@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 
@@ -337,9 +337,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The wheel event that was triggered.
    */
   @HostListener('wheel', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
-    // TODO: Handle behavior when mouse wheel is scrolled
+    const mousePoint = this.getMouseCanvasPoint(event);
+
+    if (event.deltaY < 0) {
+      // Zoom in
+      this.mapService.zoom(ZOOM_VELOCITY, mousePoint);
+    } else {
+      // Zoom out
+      this.mapService.zoom(1 / ZOOM_VELOCITY, mousePoint);
+    }
+
+    this.drawElements();
+    event.preventDefault();
   }
 
   /**
