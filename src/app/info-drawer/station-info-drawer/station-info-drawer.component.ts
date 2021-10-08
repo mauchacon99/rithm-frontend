@@ -35,7 +35,6 @@ export class StationInfoDrawerComponent {
 
   constructor(private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService) {
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,6 +46,9 @@ export class StationInfoDrawerComponent {
           this.isWorker = context.isWorker;
         }
       });
+    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+    console.log(this.type);
+
   }
 
 }
