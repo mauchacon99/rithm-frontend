@@ -45,7 +45,7 @@ export class ToolbarComponent {
     {
       name: 'Address',
       icon: 'far fa-address-card',
-      typeString: this.fieldTypeEnum.AddressLine
+      typeString: this.fieldTypeEnum.Nested
     },
     {
       name: 'Number',
