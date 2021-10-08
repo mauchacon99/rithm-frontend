@@ -19,33 +19,4 @@
       </mat-form-field>
     </form>
   </div>
-  <div class="col-span-12 md:col-span-6" [ngClass]="{'md:col-start-3': stationEditMode, 'xl:col-span-5': !stationEditMode}">
-    <div class="flex" [ngClass]="{'justify-between flex-wrap': type !== 'worker', 'justify-end md:mr-20': type === 'worker'}">
-      <div>
-        <p class="overline">supervisor roster</p>
-        <app-roster
-          [rosterMembers]="stationInformation.supervisors"
-          [rosterSize]="stationInformation.supervisors.length"
-          [stationId]="stationInformation.stationRithmId"
-          [stationName]="stationName"
-          [isWorker]="false"
-          [editMode]="stationEditMode"></app-roster>
-      </div>
-      <div *ngIf="type !== 'worker'">
-        <p class="overline">worker roster</p>
-        <app-roster
-          [rosterMembers]="stationInformation.workers"
-          [rosterSize]="stationInformation.workers.length"
-          [stationId]="stationInformation.stationRithmId"
-          [stationName]="stationName"
-          [isWorker]="true"
-          [editMode]="stationEditMode"></app-roster>
-      </div>
-      <div>
-        <button mat-mini-fab color="warn" class="priority" *ngIf="stationEditMode">
-          1
-        </button>
-      </div>
-    </div>
-  </div>
 </section>

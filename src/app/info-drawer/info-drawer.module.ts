@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfoDrawerComponent } from './info-drawer/info-drawer.component';
 import { StationInfoDrawerComponent } from './station-info-drawer/station-info-drawer.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { StationInfoDrawerComponent } from './station-info-drawer/station-info-d
     StationInfoDrawerComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   exports: [
     InfoDrawerComponent
