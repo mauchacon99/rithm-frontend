@@ -143,18 +143,6 @@ export class StationComponent implements OnInit {
   }
 
   /**
-   * Uses the helper: UtcTimeConversion.
-   * Format The updatedDate related to station.
-   *
-   * @param timeEntered The date without format.
-   */
-  getUpdatedFormattedDate(timeEntered: string): void{
-    this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
-    );
-  }
-
-  /**
    * Adds selected fieldType to field array.
    *
    * @param fieldType The field to add.
@@ -173,6 +161,30 @@ export class StationComponent implements OnInit {
       isPrivate: false,
       children: [],
     });
+  }
+
+  /**
+   * Get the last updated date for a specific station.
+   *
+   * @param stationId The id of the station that the document is in.
+   */
+  getLastUpdated(stationId: string): void {
+    this.stationLoading = true;
+    this.stationService.getLastUpdated(stationId)
+      .pipe(first())
+      .subscribe((updatedDate) => {
+        if (updatedDate) {
+          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
