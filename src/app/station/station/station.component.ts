@@ -158,6 +158,29 @@ export class StationComponent implements OnInit {
   }
 
   /**
+   * Update the Station Name.
+   *
+   * @param newStationName The new name for the station.
+   */
+  updateStationName(newStationName: string): void{
+    this.stationLoading = true;
+    this.stationService.updateStationName(this.stationInformation.stationRithmId, newStationName)
+    .pipe(first())
+    .subscribe((station)=>{
+      if (station){
+        this.stationInformation = station;
+      }
+      this.stationLoading = false;
+    }, (error: unknown) => {
+      this.stationLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
+    });
+  }
+
+  /**
    * Retrieves a list of the connected stations for the given document.
    *
    * @param documentId The id of the document for which to retrieve previous stations.

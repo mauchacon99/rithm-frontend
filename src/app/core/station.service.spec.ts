@@ -136,11 +136,11 @@ describe('StationService', () => {
         expect(response).toBeDefined();
       });
 
-    // const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
-    // expect(req.request.method).toEqual('PUT');
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
+    expect(req.request.method).toEqual('PUT');
 
-    // req.flush(expectedResponse);
-    // httpTestingController.verify();
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });
