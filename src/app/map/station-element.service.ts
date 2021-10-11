@@ -27,9 +27,6 @@ export class StationElementService {
   ) {
     this.mapService.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
-    },
-    (error: unknown) => {
-      throw new Error(`Map scale subscription error: ${error}`);
     });
    }
 
@@ -188,7 +185,8 @@ export class StationElementService {
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = badgeColor;
     ctx.fill();
-    ctx.font = '600 16px Montserrat-SemiBold';
+    ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
+     : '400 10px Montserrat-SemiBold';
     ctx.fillStyle = '#fff';
     ctx.textAlign =  'center';
     ctx.fillText(station.noOfDocuments.toString(),
