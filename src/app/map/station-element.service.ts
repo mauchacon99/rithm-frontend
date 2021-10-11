@@ -45,11 +45,14 @@ export class StationElementService {
 
     this.drawStationCard(station);
     this.drawStationName(station);
-    this.drawDocumentBadge(station);
 
-    if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-      this.drawConnectionNode(station);
-      this.drawStationButton(station);
+    if (this.mapScale > 0.25) {
+      this.drawDocumentBadge(station);
+
+      if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
+        this.drawConnectionNode(station);
+        this.drawStationButton(station);
+      }
     }
 
   }
