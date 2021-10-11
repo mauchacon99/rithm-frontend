@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -9,6 +9,7 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
+import { Subject } from 'rxjs';
 
 /**
  * Main component for viewing a station.
@@ -19,7 +20,11 @@ import { UtcTimeConversion } from 'src/helpers';
   styleUrls: ['./station.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class StationComponent implements OnInit {
+export class StationComponent implements OnInit, OnDestroy {
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject();
+
   /** The component for the drawer that houses comments and history. */
   @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
@@ -171,6 +176,7 @@ export class StationComponent implements OnInit {
   getLastUpdated(stationId: string): void {
     this.stationLoading = true;
     this.stationService.getLastUpdated(stationId)
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((updatedDate) => {
         if (updatedDate) {
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
@@ -184,6 +190,14 @@ export class StationComponent implements OnInit {
           error
         );
       });
+  }
+
+  /**
+   * Cleanup method.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   /**
