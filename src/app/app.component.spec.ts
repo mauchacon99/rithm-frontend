@@ -5,7 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockUserService } from 'src/mocks';
 import { AppComponent } from './app.component';
 import { UserService } from './core/user.service';
-import { NavigationModule } from './navigation/navigation.module';
+import { MockComponent } from 'ng-mocks';
+import { NotificationToastsContainerComponent } from './navigation/notification-toasts-container/notification-toasts-container.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -13,11 +14,11 @@ describe('AppComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule,
-        MatSidenavModule,
-        NavigationModule
+        MatSidenavModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        MockComponent(NotificationToastsContainerComponent)
       ],
       providers: [
         { provide: UserService, useValue: MockUserService },
