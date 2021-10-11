@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 /**
  * Container for the toast notifications.
  */
@@ -7,45 +7,18 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './notification-toasts-container.component.html',
   styleUrls: ['./notification-toasts-container.component.scss']
 })
-export class NotificationToastsContainerComponent implements OnInit {
+export class NotificationToastsContainerComponent {
   /** Array of Notifications. */
-  notifications = [
-    {
-      title: 'Steve Rogers tagged you in a comment',
-      photo: '',
-      type: 'comment',
-      message: '@Tony Stark please double check the SKU on this new product. Test for 2 lines of text'
-    }
-  ];
-
-  /** Additional notification. */
-  comment1 = {
-    title: 'Tony Stark tagged you in a comment',
-    photo: '',
-    type: 'comment',
-    message: 'My comment.'
-  };
-
-  /** Additional notification. */
-  comment2 = {
-    title: 'Rick Grimes tagged you in a comment',
-    photo: '',
-    type: 'comment',
-    message: 'My comment.'
-  };
-
-  /**
-   * Delay adding two additional notifications.
-   */
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.notifications.push(this.comment1);
-    }, 1000);
-
-    setTimeout(() => {
-      this.notifications.push(this.comment2);
-    }, 2000);
-  }
+  notifications: {
+    /** Tittle toast. */
+    title: string;
+    /** Photo toast. */
+    photo: string;
+    /** Type toast. */
+    type: string;
+    /** Message toast. */
+    message: string;
+  }[] | [] = [];
 
   /**
    * Remove a notification from the array.

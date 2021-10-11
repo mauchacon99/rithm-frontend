@@ -114,7 +114,6 @@ export class MapService {
    * @param scaleFactor The multiplier by which to scale the size of elements on the map.
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   zoom(scaleFactor: number, zoomOrigin = this.getCanvasCenterPoint()): void {
 
     const zoomingIn = scaleFactor > 1;
