@@ -47,6 +47,7 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** The Lastest station updated date. */
   lastUpdatedDate = '';
 
   /** The context of what is open in the drawer. */
