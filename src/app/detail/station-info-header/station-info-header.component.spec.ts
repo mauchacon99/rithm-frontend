@@ -16,7 +16,6 @@ describe('StationInfoHeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoHeaderComponent,
-        MockComponent(RosterComponent)
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -29,22 +28,6 @@ describe('StationInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoHeaderComponent);
     component = fixture.componentInstance;
-    component.stationInformation = {
-      documentName: 'Metroid Dread',
-      documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      stationName: 'Development',
-      stationPriority: 2,
-      stationInstruction: 'This is an instruction',
-      supervisors: [],
-      workers: [],
-      questions: [],
-      instructions: 'General instructions',
-    };
     fixture.detectChanges();
 
     it('should create', () => {
