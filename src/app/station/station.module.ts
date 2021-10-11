@@ -15,9 +15,8 @@ import { SharedModule } from '../shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
-import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 @NgModule({
   declarations: [
     StationComponent,
@@ -38,8 +37,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ClickOutsideModule,
     SharedModule,
     FormsModule,
-    InfoDrawerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    InfoDrawerModule
   ]
 })
 export class StationModule { }
