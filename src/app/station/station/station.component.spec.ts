@@ -56,10 +56,7 @@ describe('StationComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
-      ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ],
+      ]
     })
     .compileComponents();
   });

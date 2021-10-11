@@ -45,7 +45,7 @@ export class StationComponent implements OnInit, OnDestroy {
   connectedStationsLoading = true;
 
   /** Show Hidden accordion field private. */
-  accordionFieldPrivate = false;
+  accordionFieldPrivateExpanded = false;
 
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';

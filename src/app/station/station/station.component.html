@@ -24,7 +24,7 @@
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <mat-accordion>
-                  <mat-expansion-panel (opened)="accordionFieldPrivate = true" (closed)="accordionFieldPrivate = false">
+                  <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
                     <mat-expansion-panel-header class="text-base">
                       <mat-panel-title>
                         Private
