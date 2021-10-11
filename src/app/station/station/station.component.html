@@ -23,25 +23,23 @@
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
-                <mat-accordion>
-                  <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
-                    <mat-expansion-panel-header class="text-base">
-                      <mat-panel-title>
-                        Private
-                      </mat-panel-title>
-                      <mat-panel-description>
-                          View all private items on this document
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <ng-template matExpansionPanelContent>
-                      <div class="flex flex-wrap overflow-hidden">
-                        <div class="w-full overflow-hidden lg:w-1/4">
-                          <div class="shadow-md bg-white rounded-lg w-48 px-2 m-4 text-center font-medium">Cards fields private</div>
-                        </div>
-                      </div>
-                    </ng-template>
-                  </mat-expansion-panel>
-                </mat-accordion>
+                <div class="py-5">
+                  <mat-accordion>
+                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
+                      <mat-expansion-panel-header class="text-base">
+                        <mat-panel-title>
+                          Private
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            View all private items on this document
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <ng-template matExpansionPanelContent>
+
+                      </ng-template>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
               </ng-template>
             </mat-tab>
             <mat-tab label="Flow Logic">
