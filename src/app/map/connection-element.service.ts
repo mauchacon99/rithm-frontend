@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
-import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH } from './map-constants';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR,
+  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_SCALE } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -14,7 +15,14 @@ export class ConnectionElementService {
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
-  constructor(private mapService: MapService) {}
+  /** The default scale value for the station card. */
+  private mapScale = DEFAULT_SCALE;
+
+  constructor(private mapService: MapService) {
+    this.mapService.mapScale$.subscribe((scale) => {
+      this.mapScale = scale;
+    });
+  }
 
   /**
    * Draws a connection on the map.
@@ -51,7 +59,7 @@ export class ConnectionElementService {
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
-    this.canvasContext.lineWidth = CONNECTION_LINE_WIDTH;
+    this.canvasContext.lineWidth = this.mapScale > 0.25 ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
   }

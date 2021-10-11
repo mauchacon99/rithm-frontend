@@ -44,6 +44,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Show Hidden accordion field private. */
+  accordionFieldPrivateExpanded = false;
+
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 

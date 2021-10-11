@@ -5,6 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockUserService } from 'src/mocks';
 import { AppComponent } from './app.component';
 import { UserService } from './core/user.service';
+import { MockComponent } from 'ng-mocks';
+import { NotificationToastsContainerComponent } from './navigation/notification-toasts-container/notification-toasts-container.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -15,7 +17,8 @@ describe('AppComponent', () => {
         MatSidenavModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        MockComponent(NotificationToastsContainerComponent)
       ],
       providers: [
         { provide: UserService, useValue: MockUserService },
