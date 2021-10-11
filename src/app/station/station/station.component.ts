@@ -10,10 +10,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { Subject } from 'rxjs';
-<<<<<<< HEAD
-=======
-
->>>>>>> 734183f5d044fd4848952ac439bdb1d776831555
 
 /**
  * Main component for viewing a station.
@@ -50,18 +46,12 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-<<<<<<< HEAD
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
-=======
-  /** The Lastest station updated date. */
-  lastUpdatedDate = '';
-
->>>>>>> 734183f5d044fd4848952ac439bdb1d776831555
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
@@ -214,12 +204,12 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cleanup method.
+   * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+     ngOnDestroy(): void {
+      this.destroyed$.next();
+      this.destroyed$.complete();
+    }
 
   /**
    * Retrieves a list of the connected stations for the given document.
