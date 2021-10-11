@@ -24,6 +24,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { TermsConditionsModalComponent } from './terms-conditions-modal/terms-conditions-modal.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     UserFormComponent,
     TermsConditionsModalComponent,
     UserRemovalComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
