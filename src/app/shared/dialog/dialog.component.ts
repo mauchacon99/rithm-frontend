@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from 'src/models';
+import { DialogData, DialogType } from 'src/models';
 
 /**
  * Reusable component used for displaying a prompt dialog.
@@ -12,6 +12,9 @@ import { DialogData } from 'src/models';
 })
 export class DialogComponent {
 
+  /** The type of dialog to display. */
+  type: DialogType;
+
   /** The title to display for the prompt dialog. */
   title: string;
 
@@ -19,23 +22,39 @@ export class DialogComponent {
   message: string;
 
   /** The label to display on the input for the prompt. */
-  promptLabel: string | undefined;
+  promptLabel?: string;
 
   /** The entered value of the prompt input. */
-  promptInput: string;
+  promptInput?: string;
 
   /** The text to display for the okay button. */
   okButtonText: string;
 
   /** The text to display for the cancel button. */
-  cancelButtonText: string;
+  cancelButtonText?: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    this.type = data.type!;
     this.title = data.title;
     this.message = data.message;
-    this.promptLabel = data.promptLabel;
-    this.promptInput = data.promptInput ? data.promptInput : '';
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
-    this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
+
+    if (this.type === DialogType.Confirm || this.type === DialogType.Prompt) {
+      this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
+    }
+
+    if (this.type === DialogType.Prompt) {
+      this.promptLabel = data.promptLabel;
+      this.promptInput = data.promptInput ? data.promptInput : '';
+    }
+  }
+
+  /**
+   * The material color to display for the alert.
+   *
+   * @returns The material color.
+   */
+  get materialColor(): 'accent' | 'error' {
+    return this.title === 'Error' ? 'error' : 'accent';
   }
 }

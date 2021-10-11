@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogData } from 'src/models';
-import { AlertDialogComponent } from '../shared/dialogs/alert-dialog/alert-dialog.component';
-import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
-import { PromptDialogComponent } from '../shared/dialogs/prompt-dialog/prompt-dialog.component';
+import { DialogData, DialogType } from 'src/models';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 
 const DIALOG_WIDTH = '500px';
 const MAX_WIDTH = '1200px';
@@ -29,9 +27,12 @@ export class PopupService {
    * @returns A promise upon alert closing.
    */
   async alert(dialogData: DialogData): Promise<void> {
-    const dialogRef = this.dialog.open(AlertDialogComponent, {
+    const alertData = dialogData;
+    alertData.type = DialogType.Alert;
+
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: DIALOG_WIDTH,
-      data: dialogData
+      data: alertData
     });
 
     return await dialogRef.afterClosed().toPromise();
@@ -44,10 +45,13 @@ export class PopupService {
    * @returns True if the user confirmed, false otherwise.
    */
   async confirm(dialogData: DialogData): Promise<boolean> {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    const confirmData = dialogData;
+    confirmData.type = DialogType.Confirm;
+
+    const dialogRef = this.dialog.open(DialogComponent, {
       maxWidth: MAX_WIDTH,
       width: dialogData.width ? dialogData.width : DIALOG_WIDTH,
-      data: dialogData
+      data: confirmData
     });
 
     return await dialogRef.afterClosed().toPromise();
@@ -60,9 +64,12 @@ export class PopupService {
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
   async prompt(dialogData: DialogData): Promise<string> {
-    const dialogRef = this.dialog.open(PromptDialogComponent, {
+    const promptData = dialogData;
+    promptData.type = DialogType.Prompt;
+
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: DIALOG_WIDTH,
-      data: dialogData
+      data: promptData
     });
 
     return await dialogRef.afterClosed().toPromise();

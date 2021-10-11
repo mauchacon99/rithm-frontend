@@ -1,7 +1,11 @@
 <!-- Title -->
-<h4 id="title">{{title}}</h4>
+<h4 id="title" class="text-center" [ngClass]="{'text-error-500': title === 'Error'}">{{title}}</h4>
 
-<div class="grid grid-cols-1"><!-- TODO: Adjust padding when we start using this -->
+<!-- Message if not a prompt dialog. -->
+<p *ngIf="type !== 2" id="message" class="py-4 whitespace-pre-wrap overflow-y-auto">{{message}}</p>
+
+<!-- Input if a prompt dialog. -->
+<div *ngIf="type === 2" class="grid grid-cols-1"><!-- TODO: Adjust padding when we start using this -->
 
   <!-- Message -->
   <p id="message">{{message}}</p>
@@ -16,6 +20,6 @@
 
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
-  <button id="cancel" mat-button [mat-dialog-close]="undefined">{{cancelButtonText}}</button>
-  <button id="confirm" mat-button color="accent" [mat-dialog-close]="promptInput">{{okButtonText}}</button>
+  <button *ngIf="type !== 0" id="cancel" mat-button [mat-dialog-close]="type === 2 ? undefined : false">{{cancelButtonText}}</button>
+  <button id="confirm" mat-button [color]="materialColor" [mat-dialog-close]="promptInput ? promptInput : true">{{okButtonText}}</button>
 </div>
