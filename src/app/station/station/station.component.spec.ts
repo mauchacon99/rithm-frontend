@@ -21,7 +21,7 @@ import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -50,16 +50,14 @@ describe('StationComponent', () => {
         ),
         MatSidenavModule,
         ReactiveFormsModule,
-        MatTabsModule
+        MatTabsModule,
+        MatExpansionModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
-      ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ],
+      ]
     })
     .compileComponents();
   });
