@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,13 +21,12 @@ import { Subject } from 'rxjs';
   providers: [UtcTimeConversion]
 })
 export class StationComponent implements OnInit, OnDestroy {
-
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
-
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', { static: true })
-  detailDrawer!: MatDrawer;
+  @ViewChild('drawer', { static: true })
+  drawer!: MatDrawer;
+
+  /** Observable for when the component is destroyed. */
+  destroyed$ = new Subject();
 
   /** Station form. */
   stationForm: FormGroup;
@@ -50,6 +49,12 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Show Hidden accordion field private. */
+  accordionFieldPrivateExpanded = false;
+
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -62,13 +67,19 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
     });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.drawerContext = context;
+      });
   }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.setDrawer(this.detailDrawer);
+    this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
   }
 

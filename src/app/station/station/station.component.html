@@ -1,7 +1,8 @@
 <app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation"></app-sub-header>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
-  <mat-drawer #detailDrawer mode="over" position="end">
-    <app-detail-drawer></app-detail-drawer>
+  <mat-drawer #drawer mode="over" position="end">
+    <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
+    <app-info-drawer *ngIf="drawerContext === 'stationInfo' || drawerContext === 'documentInfo'"></app-info-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
@@ -22,6 +23,23 @@
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
+                <div class="py-5 px-px">
+                  <mat-accordion>
+                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
+                      <mat-expansion-panel-header class="text-base">
+                        <mat-panel-title>
+                          Private
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            View all private items on this document
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <ng-template matExpansionPanelContent>
+
+                      </ng-template>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
               </ng-template>
             </mat-tab>
             <mat-tab label="Flow Logic">

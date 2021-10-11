@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, StationMapData, MapData, MapItemStatus } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE } from './map-constants';
+import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -114,9 +114,26 @@ export class MapService {
    * @param scaleFactor The multiplier by which to scale the size of elements on the map.
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   zoom(scaleFactor: number, zoomOrigin = this.getCanvasCenterPoint()): void {
-    // TODO: Implement map zoom
+
+    const zoomingIn = scaleFactor > 1;
+
+    // Don't zoom if limits are reached
+    if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+      return;
+    }
+
+    const translateDirection = zoomingIn ? -1 : 1;
+
+    // translate current viewport position
+    const newScale = this.mapScale$.value * scaleFactor;
+
+    // TODO: Find a cleaner way to refactor the specific scale; also isn't working for non 2x .5x?
+    this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
+    this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
+
+    // scale
+    this.mapScale$.next(zoomingIn ? Math.min(MAX_SCALE, newScale) : Math.max(MIN_SCALE, newScale));
   }
 
   /**
