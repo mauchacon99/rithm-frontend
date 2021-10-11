@@ -8,7 +8,6 @@ import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
-import { UtcTimeConversion } from 'src/helpers';
 import { Subject } from 'rxjs';
 
 /**
@@ -18,7 +17,6 @@ import { Subject } from 'rxjs';
   selector: 'app-station',
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss'],
-  providers: [UtcTimeConversion]
 })
 export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
@@ -46,9 +44,6 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** The Last Updated Date. */
-  lastUpdatedDate = '';
-
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
@@ -62,7 +57,6 @@ export class StationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private utcTimeConversion: UtcTimeConversion,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -129,7 +123,6 @@ export class StationComponent implements OnInit, OnDestroy {
   private navigateBack(): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
-
     // If no previous page, go to dashboard
     this.router.navigateByUrl('dashboard');
   }
@@ -177,30 +170,6 @@ export class StationComponent implements OnInit, OnDestroy {
       isPrivate: false,
       children: [],
     });
-  }
-
-  /**
-   * Get the last updated date for a specific station.
-   *
-   * @param stationId The id of the station that the document is in.
-   */
-  getLastUpdated(stationId: string): void {
-    this.stationLoading = true;
-    this.stationService.getLastUpdated(stationId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((updatedDate) => {
-        if (updatedDate) {
-          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-        }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
   }
 
   /**
