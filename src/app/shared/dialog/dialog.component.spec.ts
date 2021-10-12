@@ -41,7 +41,7 @@ const DIALOG_TEST_DATA: DialogData[] =
 ];
 
 // component
-describe('DialogComponent', () => {
+describe('DialogComponent Type Prompt', () => {
   let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
   let loader: HarnessLoader;
@@ -174,10 +174,9 @@ describe('DialogComponent', () => {
 });
 
 // component
-describe('Type confirm', () => {
+describe('DialogComponent Type Confirm', () => {
   let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
-  let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -196,93 +195,16 @@ describe('Type confirm', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogComponent);
     component = fixture.componentInstance;
-    loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  // title
-  describe('title', () => {
-    let titleElement: HTMLElement;
-
-    beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
-    });
-
-    it('should exist', () => {
-      expect(titleElement).toBeTruthy();
-    });
-
-    it('should have custom text', () => {
-      const titleText = component.title;
-      expect(titleElement.textContent).toEqual(titleText);
-      expect(titleText).toEqual(DIALOG_TEST_DATA[1].title);
-    });
-  });
-
-  // message
-  describe('message', () => {
-    let messageElement: HTMLParagraphElement;
-
-    beforeEach(() => {
-      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
-    });
-
-    it('should exist', () => {
-      expect(messageElement).toBeTruthy();
-    });
-
-    it('should have custom text', () => {
-      const messageText = component.message;
-      expect(messageElement.textContent).toEqual(messageText);
-      expect(messageText).toEqual(DIALOG_TEST_DATA[1].message);
-    });
-  });
-
-  // okay button
-  describe('okay button', () => {
-    let buttonHarness: MatButtonHarness;
-
-    beforeEach(async () => {
-      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#confirm'}));
-    });
-
-    it('should exist', async () => {
-      expect(buttonHarness).toBeTruthy();
-    });
-
-    it('should have custom text', async () => {
-      const okButtonText = component.okButtonText;
-      expect(await buttonHarness.getText()).toEqual(okButtonText);
-      expect(okButtonText).toEqual(DIALOG_TEST_DATA[1].okButtonText as string);
-    });
-  });
-
-  // cancel button
-  describe('okay button', () => {
-    let buttonHarness: MatButtonHarness;
-
-    beforeEach(async () => {
-      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({selector: '#cancel'}));
-    });
-
-    it('should exist', async () => {
-      expect(buttonHarness).toBeTruthy();
-    });
-
-    it('should have custom text', async () => {
-      const cancelButtonText = component.cancelButtonText;
-      expect(await buttonHarness.getText()).toEqual(cancelButtonText as string);
-      expect(cancelButtonText).toEqual(DIALOG_TEST_DATA[1].cancelButtonText as string);
-    });
-  });
 });
 
 // component
-describe('Type Alert', () => {
+describe('DialogComponent Type Alert', () => {
   let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
   let loader: HarnessLoader;
@@ -320,39 +242,10 @@ describe('Type Alert', () => {
       titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
     });
 
-    it('should exist', () => {
-      expect(titleElement).toBeTruthy();
-    });
-
-    it('should have custom text', () => {
-      const titleText = component.title;
-      expect(titleElement.textContent).toEqual(titleText);
-      expect(titleText).toEqual(DIALOG_TEST_DATA[0].title);
-    });
-
     it('should have error color when error', () => {
       component.title = 'Error';
       fixture.detectChanges();
       expect(titleElement).toHaveClass('text-error-500');
-    });
-  });
-
-  // message
-  describe('message', () => {
-    let messageElement: HTMLParagraphElement;
-
-    beforeEach(() => {
-      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
-    });
-
-    it('should exist', () => {
-      expect(messageElement).toBeTruthy();
-    });
-
-    it('should have custom text', () => {
-      const messageText = component.message;
-      expect(messageElement.textContent).toEqual(messageText);
-      expect(messageText).toEqual(DIALOG_TEST_DATA[0].message);
     });
   });
 
@@ -362,16 +255,6 @@ describe('Type Alert', () => {
 
     beforeEach(async () => {
       buttonHarness = await loader.getHarness(MatButtonHarness);
-    });
-
-    it('should exist', async () => {
-      expect(buttonHarness).toBeTruthy();
-    });
-
-    it('should have custom text', async () => {
-      const okButtonText = component.okButtonText;
-      expect(await buttonHarness.getText()).toEqual(okButtonText);
-      expect(okButtonText).toEqual(DIALOG_TEST_DATA[0].okButtonText as string);
     });
 
     it('should have error color when error', async () => {
@@ -390,5 +273,4 @@ describe('Type Alert', () => {
       // expect(DIALOG_MOCK.close()).toHaveBeenCalled();
     });
   });
-
 });
