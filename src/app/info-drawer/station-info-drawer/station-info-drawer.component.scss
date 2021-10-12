@@ -1,5 +1,15 @@
 @import 'rithm-light-palettes';
 
+.mat-mini-fab {
+  &.priority {
+    &::ng-deep .mat-button-wrapper {
+      padding: 0;
+    }
+
+    @apply mt-1 w-7 h-7 leading-6;
+  }
+}
+
 .mat-stroked-button {
   &.priority {
     &::ng-deep .mat-button-wrapper {
