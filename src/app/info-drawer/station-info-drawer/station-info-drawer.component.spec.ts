@@ -5,6 +5,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockUserService } from 'src/mocks';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -19,6 +20,9 @@ describe('StationInfoDrawerComponent', () => {
       providers: [
         { provide: UserService, useClass: MockUserService },
       ],
+      imports: [
+        MatButtonModule
+      ]
     })
       .compileComponents();
   });
