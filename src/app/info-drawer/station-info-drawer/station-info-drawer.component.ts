@@ -33,7 +33,7 @@ stationLoading = false;
   ){}
 
   /**
-   * Gets info about the station as well as forward and previous stations for a specific station.
+   * Gets info about the station.
    */
    ngOnInit(): void {
     this.getParams();
@@ -89,7 +89,7 @@ stationLoading = false;
    private handleInvalidParams(): void {
     this.errorService.displayError(
       'Unable to retrieve the last updated time.',
-      new Error('Invalid params for document')
+      new Error('Invalid params for station')
     );
   }
 
