@@ -1,0 +1,9 @@
+.mat-mini-fab {
+  &.priority {
+    &::ng-deep .mat-button-wrapper {
+      padding: 0;
+    }
+
+    @apply mt-4 ml-2 w-7 h-7 leading-6;
+  }
+}

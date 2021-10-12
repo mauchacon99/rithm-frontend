@@ -1,7 +1,3 @@
-<div>
-  <button mat-mini-fab color="warn" class="priority">
-    1
-  </button>
 <div class="grid grid-cols-1">
   <div class="w-full py-2">
     <p class="overline font-bold">supervisor roster</p>
@@ -10,11 +6,17 @@
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
         [isWorker]="isWorker" [editMode]="editMode"></app-roster>
   </div>
-  <div class="w-full py-2" *ngIf="type !== 'worker'">
+  <div class="w-full py-2" *ngIf="type !== 'worker'" >
     <p class="overline">worker roster</p>
       <app-roster [rosterMembers]="stationInformation.workers"
         [rosterSize]="stationInformation.workers.length"
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
         [isWorker]="isWorker" [editMode]="editMode"></app-roster>
+  </div>
+  <div class="w-full py-2" >
+    <p class="overline font-bold">station priority</p>
+    <button mat-mini-fab color="warn" class="priority">
+      1
+    </button>
   </div>
 </div>
