@@ -6,7 +6,7 @@
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
         [isWorker]="isWorker" [editMode]="editMode"></app-roster>
   </div>
-  <div class="w-full py-2" *ngIf="type !== 'worker'" >
+  <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline">worker roster</p>
       <app-roster [rosterMembers]="stationInformation.workers"
         [rosterSize]="stationInformation.workers.length"
