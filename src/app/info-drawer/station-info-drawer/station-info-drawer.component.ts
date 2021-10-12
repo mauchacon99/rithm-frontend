@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -33,6 +33,9 @@ export class StationInfoDrawerComponent implements OnDestroy {
   /** Worker. */
   isWorker = true;
 
+  /** Is component viewed in station edit mode? */
+  @Input() stationEditMode!: boolean;
+
   constructor(private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService) {
     this.sidenavDrawerService.drawerData$
@@ -55,6 +58,21 @@ export class StationInfoDrawerComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Toggles the open state of the drawer for station info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+   toggleDrawer(drawerItem: 'stationInfo'): void {
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationInformation: this.stationInformation as StationInformation,
+      stationName: this.stationName,
+      isWorker: false,
+      editMode: this.stationEditMode
+    };
+    this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
   }
 
 }
