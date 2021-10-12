@@ -5,6 +5,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockUserService } from 'src/mocks';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -19,6 +20,9 @@ describe('StationInfoDrawerComponent', () => {
       providers: [
         { provide: UserService, useClass: MockUserService },
       ],
+      imports: [
+        MatRadioModule
+      ]
     })
       .compileComponents();
   });
