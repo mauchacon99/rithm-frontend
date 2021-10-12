@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, StationMapData, MapData, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
@@ -65,16 +65,16 @@ export class MapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<StationMapData[]> {
-    return this.http.get<StationMapData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`)
+  getMapElements(): Observable<MapData> {
+    return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
     .pipe(map((data) => {
-      data.map((e) => {
-        if (!e.status) {
-          e.status = MapItemStatus.Normal;
-        }
+      data.stations.map((e) => {
+        e.status = MapItemStatus.Normal;
       });
-      const tempMapDataObject: MapData = {stations: data, flows: []};
-      this.mapData = tempMapDataObject;
+      data.flows.map((e) => {
+        e.status = MapItemStatus.Normal;
+      });
+      this.mapData = data;
       this.useStationData();
       this.mapDataRecieved$.next(true);
       return data;
