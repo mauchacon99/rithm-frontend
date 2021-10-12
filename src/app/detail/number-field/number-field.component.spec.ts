@@ -12,6 +12,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 5',
     instructions: 'Fake question 5',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.Number,
@@ -25,6 +26,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 6',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.Phone,
@@ -38,6 +40,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 7',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.Currency,
@@ -158,7 +161,8 @@ describe('NumberFieldComponent', () => {
       component.field = {
         prompt: 'Postal code',
         instructions: '',
-        questionType: {
+        rithmId: '',
+    questionType: {
           rithmId: '',
           typeString: QuestionFieldType.Zip,
           validationExpression: '.+'

@@ -11,6 +11,7 @@ const testStationFields = [
       {
         prompt: 'Instructions',
         instructions: '',
+        rithmId: '',
         questionType: {
           rithmId: '',
           typeString: QuestionFieldType.LongText,
@@ -24,6 +25,7 @@ const testStationFields = [
       {
         prompt: 'Label',
         instructions: '',
+        rithmId: '',
         questionType: {
           rithmId: '',
           typeString: QuestionFieldType.ShortText,
@@ -37,6 +39,7 @@ const testStationFields = [
       {
         prompt: 'Fake question 7',
         instructions: '',
+        rithmId: '',
         questionType: {
           rithmId: '',
           typeString: QuestionFieldType.Number,

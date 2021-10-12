@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -79,6 +79,46 @@ export class MockStationService {
       }
     ];
     return of(mockStationData).pipe(delay(1000));
+  }
+
+  /**
+   * Get all stations private items.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Station private items Array.
+   */
+  getStationPrivateItems(stationId: string): Observable<Question[]>{
+    const mockPrivateItems: Question[]= [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(mockPrivateItems).pipe(delay(1000));
   }
 
 }
