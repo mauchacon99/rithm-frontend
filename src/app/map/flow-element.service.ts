@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { Point } from 'src/models';
-import { FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
+import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -49,16 +49,19 @@ export class FlowElementService {
     // Determine the bounding box points
     let boundaryPoints = this.getConvexHull(flowPoints);
 
+    const strokeColor = CONNECTION_DEFAULT_COLOR;
+
     // Draw the bounding box
     this.canvasContext.setLineDash([7, 7]);
     this.canvasContext.beginPath();
+    this.canvasContext.strokeStyle = strokeColor;
 
     this.canvasContext.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
     boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
 
-    for (const point of boundaryPoints)
-    // eslint-disable-next-line curly
+    for (const point of boundaryPoints) {
     this.canvasContext.lineTo(point.x, point.y);
+    }
     this.canvasContext.stroke();
   }
 
