@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
@@ -6,14 +5,9 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute } from '@angular/router';
-=======
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationInfoDrawerData, StationInformation } from 'src/models';
->>>>>>> dev
 
 /**
  * Component for info station.
@@ -24,15 +18,13 @@ import { StationInfoDrawerData, StationInformation } from 'src/models';
   styleUrls: ['./station-info-drawer.component.scss'],
   providers: [UtcTimeConversion]
 })
-<<<<<<< HEAD
-export class StationInfoDrawerComponent implements OnInit, OnDestroy {
-/** Whether the request to get the station info is currently underway. */
-stationLoading = false;
-=======
-export class StationInfoDrawerComponent implements OnDestroy {
 
+export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
+
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
@@ -49,8 +41,17 @@ export class StationInfoDrawerComponent implements OnDestroy {
   /** Worker. */
   isWorker = true;
 
-  constructor(private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService) {
+  /** The Last Updated Date. */
+  lastUpdatedDate = '';
+
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService,
+    private stationService: StationService,
+    private utcTimeConversion: UtcTimeConversion,
+    private errorService: ErrorService,
+    private route: ActivatedRoute
+  ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -66,29 +67,7 @@ export class StationInfoDrawerComponent implements OnDestroy {
   }
 
   /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
->>>>>>> dev
-
-  /** Observable for when the component is destroyed. */
-  destroyed$ = new Subject();
-
-  /** The Last Updated Date. */
-  lastUpdatedDate = '';
-
-  constructor(
-    private stationService: StationService,
-    private utcTimeConversion: UtcTimeConversion,
-    private errorService: ErrorService,
-    private route: ActivatedRoute
-  ){}
-
-  /**
-   * Gets info about the station.
+   * Gets info about the station as well as forward and previous stations for a specific station.
    */
    ngOnInit(): void {
     this.getParams();
@@ -144,14 +123,15 @@ export class StationInfoDrawerComponent implements OnDestroy {
    private handleInvalidParams(): void {
     this.errorService.displayError(
       'Unable to retrieve the last updated time.',
-      new Error('Invalid params for station')
+      new Error('Invalid params for document')
     );
   }
 
   /**
    * Completes all subscriptions.
    */
-       ngOnDestroy(): void {
-        this.destroyed$.next();
-      }
+   ngOnDestroy(): void {
+      this.destroyed$.next();
+      this.destroyed$.complete();
+    }
 }
