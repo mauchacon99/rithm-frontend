@@ -111,8 +111,7 @@ export class AccountSettingsComponent {
         await this.popupService.terms({
           title: 'Terms and Conditions',
           message: message,
-          okButtonText: 'Agree',
-          showAgreeButton: true
+          showAgreeButton: false
         });
       }
     }, (error: unknown) => {

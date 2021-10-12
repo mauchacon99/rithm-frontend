@@ -21,5 +21,5 @@
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
   <button *ngIf="type !== 0" id="cancel" mat-button [mat-dialog-close]="type === 2 ? undefined : false">{{cancelButtonText}}</button>
-  <button id="confirm" mat-button [color]="materialColor" [mat-dialog-close]="promptInput ? promptInput : true">{{okButtonText}}</button>
+  <button *ngIf="type !== 3 || showAgreeButton" id="confirm" mat-button [color]="materialColor" [mat-dialog-close]="promptInput ? promptInput : true">{{okButtonText}}</button>
 </div>
