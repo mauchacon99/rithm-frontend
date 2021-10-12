@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
+import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
 
 /**
  * Reusable component for the station information header.
@@ -80,8 +81,8 @@ export class StationInfoHeaderComponent implements OnInit {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationInfo'): void {
-    const dataInformationDrawer: unknown = {
-      stationInformation: this.stationInformation,
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationInformation: this.stationInformation as StationInformation,
       stationName: this.stationName,
       isWorker: false,
       editMode: this.stationEditMode

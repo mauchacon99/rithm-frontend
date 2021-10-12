@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { StationInformation } from 'src/models';
+import { StationInfoDrawerData, StationInformation } from 'src/models';
 
 /**
  * Component for info station.
@@ -22,7 +22,7 @@ export class StationInfoDrawerComponent {
   type: 'admin' | 'super' | 'worker';
 
   /** Is component viewed in station edit mode. */
-  editMode!: boolean;
+  editMode = false;
 
   /** Station information object passed from parent. */
   stationInformation!: StationInformation;
@@ -37,13 +37,13 @@ export class StationInfoDrawerComponent {
     private userService: UserService) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .subscribe((context: any) => {
-        if (context) {
-          this.editMode = context.editMode;
-          this.stationInformation = context.stationInformation;
-          this.stationName = context.stationName;
-          this.isWorker = context.isWorker;
+      .subscribe((data) => {
+        const dataDrawer = data as StationInfoDrawerData;
+        if (dataDrawer) {
+          this.editMode = dataDrawer.editMode;
+          this.stationInformation = dataDrawer.stationInformation as StationInformation;
+          this.stationName = dataDrawer.stationName;
+          this.isWorker = dataDrawer.isWorker;
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
