@@ -114,6 +114,7 @@ export class AccountCreateComponent implements OnInit {
             okButtonText: 'Agree',
             showAgreeButton: true
           });
+          this.termsConditionsService.setAgreed(agreeTerms);
         }
       }, (error: unknown) => {
         this.isLoading = false;
@@ -122,8 +123,6 @@ export class AccountCreateComponent implements OnInit {
           error
         );
       });
-
-      this.termsConditionsService.setAgreed(agreeTerms);
   }
 
   /**
