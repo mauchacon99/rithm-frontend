@@ -11,4 +11,7 @@
 
   /** A pop-up that requires input from a user. */
   Prompt,
+
+  /** The Terms and Conditions modal. */
+  Terms,
 }

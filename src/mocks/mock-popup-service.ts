@@ -37,6 +37,16 @@ export class MockPopupService {
   }
 
   /**
+   * Displays the Terms and Conditions modal.
+   *
+   * @param dialogData The dialog information to display.
+   * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
+   */
+  async terms(dialogData: DialogData): Promise<boolean> {
+    return true;
+  }
+
+  /**
    * Displays a snackbar popup at the bottom of the window.
    *
    * @param message The message to display to the user.

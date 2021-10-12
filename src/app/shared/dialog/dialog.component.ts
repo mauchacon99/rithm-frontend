@@ -33,19 +33,26 @@ export class DialogComponent {
   /** The text to display for the cancel button. */
   cancelButtonText?: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  /** Show or hide, Agree and cancel button. */
+  showAgreeButton?: boolean;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,) {
     this.type = data.type!;
     this.title = data.title;
     this.message = data.message;
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
 
-    if (this.type === DialogType.Confirm || this.type === DialogType.Prompt) {
+    if (this.type !== DialogType.Alert) {
       this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
     }
 
     if (this.type === DialogType.Prompt) {
       this.promptLabel = data.promptLabel;
       this.promptInput = data.promptInput ? data.promptInput : '';
+    }
+
+    if (this.type === DialogType.Terms) {
+      this.showAgreeButton = data.showAgreeButton ? data.showAgreeButton : false;
     }
   }
 

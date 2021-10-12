@@ -76,6 +76,24 @@ export class PopupService {
   }
 
   /**
+   * Displays the Terms and Conditions modal.
+   *
+   * @param dialogData The dialog information to display.
+   * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
+   */
+  async terms(dialogData: DialogData): Promise<boolean> {
+    const termsData = dialogData;
+    termsData.type = DialogType.Terms;
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '90%',
+      data: termsData
+    });
+
+    return await dialogRef.afterClosed().toPromise();
+  }
+
+  /**
    * Displays a snackbar popup at the bottom of the window.
    *
    * @param message The message to display to the user.
