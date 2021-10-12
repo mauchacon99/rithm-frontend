@@ -1,4 +1,3 @@
-/* eslint-disable rxjs/no-ignored-error */
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { WorkerDashboardHeader, Document } from 'src/models';

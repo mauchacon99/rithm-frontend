@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { convertToParamMap, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { ResetPasswordGuard } from './reset-password.guard';
@@ -28,32 +28,29 @@ describe('ResetPasswordGuard', () => {
   });
 
   it('should navigate back to sign in if params are invalid', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const invalidParams: any = {
+    const invalidParams = {
       queryParamMap: convertToParamMap(
         { guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
     };
-    guard.canActivate(invalidParams);
+    guard.canActivate(invalidParams as ActivatedRouteSnapshot);
     expect(routerSpy).toHaveBeenCalledWith('');
   });
 
   it('should navigate back to sign in if params are valid, but type is not reset', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const validParams: any = {
+    const validParams = {
       queryParamMap: convertToParamMap(
         { type: 'register', guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
     };
-    guard.canActivate(validParams);
+    guard.canActivate(validParams as ActivatedRouteSnapshot);
     expect(routerSpy).toHaveBeenCalledWith('');
   });
 
   it('should allow navigation if params are valid and type is reset', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const paramsToReset: any = {
+    const paramsToReset = {
       queryParamMap: convertToParamMap(
         { type: 'reset', guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
     };
-    const allowNavigation = guard.canActivate(paramsToReset);
+    const allowNavigation = guard.canActivate(paramsToReset as ActivatedRouteSnapshot);
     expect(allowNavigation).toBe(true);
   });
 

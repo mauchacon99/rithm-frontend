@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
@@ -96,6 +94,7 @@ describe('OrganizationService', () => {
         expect(orgInfo).toEqual(expectedResponse);
       });
 
+    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`);
     expect(req.request.method).toEqual('GET');
 
@@ -170,6 +169,7 @@ describe('OrganizationService', () => {
         expect(orgInfo).toEqual(expectedResponse);
       });
 
+    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?orgRithmId=${organizationId}`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(expectedResponse);
