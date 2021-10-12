@@ -179,7 +179,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mousemove event that was triggered.
    */
   @HostListener('mousemove', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseMove(event: MouseEvent): void {
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
@@ -238,7 +237,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The touchend event that was triggered.
    */
   @HostListener('touchend', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchEnd(event: TouchEvent): void {
     event.preventDefault();
     this.lastTouchX = -1;
@@ -259,7 +257,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The touchmove event that was triggered.
    */
   @HostListener('touchmove', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchMove(event: TouchEvent): void {
     event.preventDefault();
     //TODO: support multitouch.

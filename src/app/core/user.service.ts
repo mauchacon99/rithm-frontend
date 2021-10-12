@@ -146,8 +146,7 @@ export class UserService {
   delete(email: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`, {
       headers: {
-        // eslint-disable-next-line @typescript-eslint/quotes
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: { email }
     });

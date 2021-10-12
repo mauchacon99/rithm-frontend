@@ -86,6 +86,7 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /**
