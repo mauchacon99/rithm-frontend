@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -33,8 +34,14 @@ export class StationInfoDrawerComponent implements OnDestroy {
   /** Worker. */
   isWorker = true;
 
-  constructor(private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService) {
+  /** Station name form. */
+  stationNameForm: FormGroup;
+
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService,
+    private fb: FormBuilder,
+    ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -47,6 +54,9 @@ export class StationInfoDrawerComponent implements OnDestroy {
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+    this.stationNameForm = this.fb.group({
+      name: ['']
+    });
   }
 
   /**
