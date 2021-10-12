@@ -98,7 +98,7 @@ export class MapService {
     const mapCoords = this.getMapPoint(coords);
     const newStation = {
       rithmId: uuidv4(),
-      name: 'Untitled Station',
+      stationName: 'Untitled Station',
       mapPoint: mapCoords,
       canvasPoint: coords,
       noOfDocuments: 0,
