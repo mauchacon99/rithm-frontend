@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { DialogData } from 'src/models';
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `PopupService`.
@@ -14,7 +13,9 @@ export class MockPopupService {
    * @param dialogData The dialog information to display.
    * @returns A promise upon alert closing.
    */
-  async alert(dialogData: DialogData): Promise<void> {}
+  async alert(dialogData: DialogData): Promise<void> {
+    return;
+  }
 
   /**
    * Displays a confirmation dialog to the user.
@@ -42,5 +43,7 @@ export class MockPopupService {
    * @param message The message to display to the user.
    * @param error Whether the snackbar is for an error message. Optional; defaults to `false`, non-error.
    */
-  notify(message: string, error = false): void {}
+  notify(message: string, error = false): void {
+    return;
+  }
 }

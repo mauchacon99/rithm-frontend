@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, OrganizationUsers, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `UserService`.
@@ -68,7 +67,9 @@ export class MockUserService {
   /**
    * Signs the user out of the system and clears stored data.
    */
-  signOut(): void { }
+  signOut(): void {
+    return;
+  }
 
   /**
    * Checks if the user is signed in and attempts to get a new refresh token.
