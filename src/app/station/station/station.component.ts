@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType, Question } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -53,6 +53,8 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** The list of station private items. */
+  stationAllItems: Question[] = [];
 
   constructor(
     private stationService: StationService,
@@ -184,6 +186,26 @@ export class StationComponent implements OnInit, OnDestroy {
       children: [],
     });
   }
+
+  /**
+   * Get data about public items of the station.
+   *
+   * @param stationId The id of the station.
+   */
+     getStationAllItems(stationId: string): void{
+      this.stationService.getStationAllItems(stationId)
+      .pipe(first())
+      .subscribe((items) => {
+        if (items) {
+          this.stationAllItems = items;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+    }
 
   /**
    * Retrieves a list of the connected stations for the given document.

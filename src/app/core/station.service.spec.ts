@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { Station } from 'src/models';
+import { Question, QuestionFieldType, Station } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -91,6 +91,45 @@ describe('StationService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  xit('should return a list of stations all items', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse: Question[]= [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service.getStationAllItems(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 
 });
