@@ -50,6 +50,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -77,7 +81,6 @@ export class StationComponent implements OnInit, OnDestroy {
     this.getParams();
   }
 
-  /**
    * Whether to show the backdrop for the comment and history drawers.
    *
    * @returns Whether to show the backdrop.

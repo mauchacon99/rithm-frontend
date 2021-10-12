@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { WorkerDashboardHeader, DashboardStationData, StationRosterMember } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `DashboardService`.
@@ -62,7 +62,6 @@ export class MockDashboardService {
    * @param stationId The id of the station for which to get the roster.
    * @returns A list of worker roster of a station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: StationRosterMember[] = [
       {

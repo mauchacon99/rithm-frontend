@@ -2,6 +2,7 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Station, StationInformation } from 'src/models';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `StationService`.
@@ -14,7 +15,6 @@ export class MockStationService {
    * @param stationId The Specific id of station.
    * @returns Information related to station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
