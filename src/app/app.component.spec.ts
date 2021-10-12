@@ -21,7 +21,7 @@ describe('AppComponent', () => {
         MockComponent(NotificationToastsContainerComponent)
       ],
       providers: [
-        { provide: UserService, useValue: MockUserService },
+        { provide: UserService, useClass: MockUserService },
       ]
     }).compileComponents();
   });
