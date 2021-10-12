@@ -103,25 +103,24 @@ export class AccountSettingsComponent {
 
     this.isLoading = true;
     this.userService.getTermsConditions()
-      .pipe(first())
-      .subscribe((termsConditions) => {
-        if (termsConditions) {
-          message = termsConditions;
-          this.isLoading = false;
-        }
-      }, (error: unknown) => {
+    .toPromise()
+    .then(async (termsConditions) => {
+      if (termsConditions) {
+        message = termsConditions;
         this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-
-    await this.popupService.terms({
-      title: 'Terms and Conditions',
-      message: message,
-      okButtonText: 'Agree',
-      showAgreeButton: false
+        await this.popupService.terms({
+          title: 'Terms and Conditions',
+          message: message,
+          okButtonText: 'Agree',
+          showAgreeButton: true
+        });
+      }
+    }, (error: unknown) => {
+      this.isLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
     });
   }
 

@@ -2,7 +2,7 @@
 <h4 id="title" class="text-center" [ngClass]="{'text-error-500': title === 'Error'}">{{title}}</h4>
 
 <!-- Message if not a prompt dialog. -->
-<p *ngIf="type !== 2" id="message" class="py-4 whitespace-pre-wrap overflow-y-auto">{{message}}</p>
+<mat-dialog-content *ngIf="type !== 2" id="message" class="py-4 whitespace-pre-wrap overflow-y-auto">{{message}}</mat-dialog-content>
 
 <!-- Input if a prompt dialog. -->
 <div *ngIf="type === 2" class="grid grid-cols-1"><!-- TODO: Adjust padding when we start using this -->

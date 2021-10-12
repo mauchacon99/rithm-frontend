@@ -99,14 +99,21 @@ export class AccountCreateComponent implements OnInit {
    */
   async openTerms(): Promise<void> {
     let message = '';
+    let agreeTerms = false;
 
     this.isLoading = true;
     this.userService.getTermsConditions()
-      .pipe(first())
-      .subscribe((termsConditions) => {
+      .toPromise()
+      .then(async (termsConditions) => {
         if (termsConditions) {
           message = termsConditions;
           this.isLoading = false;
+          agreeTerms = await this.popupService.terms({
+            title: 'Terms and Conditions',
+            message: message,
+            okButtonText: 'Agree',
+            showAgreeButton: true
+          });
         }
       }, (error: unknown) => {
         this.isLoading = false;
@@ -116,14 +123,7 @@ export class AccountCreateComponent implements OnInit {
         );
       });
 
-    const agreeTerms = await this.popupService.terms({
-      title: 'Terms and Conditions',
-      message: message,
-      okButtonText: 'Agree',
-      showAgreeButton: true
-    });
-
-    this.termsConditionsService.setAgreed(agreeTerms);
+      this.termsConditionsService.setAgreed(agreeTerms);
   }
 
   /**

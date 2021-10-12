@@ -86,7 +86,8 @@ export class PopupService {
     termsData.type = DialogType.Terms;
 
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '90%',
+      minWidth: '300px',
+      width: '70%',
       data: termsData
     });
 
