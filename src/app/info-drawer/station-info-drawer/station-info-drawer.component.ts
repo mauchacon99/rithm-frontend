@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -14,7 +14,7 @@ import { UtcTimeConversion } from 'src/helpers';
   styleUrls: ['./station-info-drawer.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class StationInfoDrawerComponent {
+export class StationInfoDrawerComponent implements OnDestroy {
 /** Whether the request to get the station info is currently underway. */
 stationLoading = false;
 
@@ -54,4 +54,11 @@ destroyed$ = new Subject();
         });
     }
 
+  /**
+   * Completes all subscriptions.
+   */
+       ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+      }
 }
