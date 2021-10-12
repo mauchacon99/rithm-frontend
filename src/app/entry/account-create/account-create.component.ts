@@ -63,7 +63,6 @@ export class AccountCreateComponent implements OnInit {
    *
    */
   ngOnInit(): void {
-    // eslint-disable-next-line rxjs/no-ignored-error
     this.termsConditionsService.currentAgreed$.pipe(takeUntil(this.sub$)).subscribe((agreed) => {
       this.signUpForm.get('agreeToTerms')?.setValue(agreed);
     });

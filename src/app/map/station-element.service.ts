@@ -36,7 +36,6 @@ export class StationElementService {
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
@@ -245,7 +244,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the connection node.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawConnectionNode(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
