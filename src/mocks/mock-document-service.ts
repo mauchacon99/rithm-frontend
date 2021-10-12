@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType
 } from 'src/models';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * Mocks methods of the `DocumentService`.
  */
@@ -82,7 +83,6 @@ export class MockDocumentService {
    * @param stationId The Specific id of station.
    * @returns A list of forward and previous stations for a specific document.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
     const previousStations: Array<ConnectedStationInfo> = [{
       stationName: 'Development',

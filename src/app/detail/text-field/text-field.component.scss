@@ -7,3 +7,7 @@ textarea {
 .long-text ::ng-deep .mat-form-field-prefix {
   align-self: center;
 }
+
+.information-field ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
