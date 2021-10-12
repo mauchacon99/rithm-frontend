@@ -110,7 +110,8 @@ export class StationElementService {
     this.canvasContext.shadowColor = 'transparent';
     this.canvasContext.textAlign = 'left';
     this.canvasContext.fillStyle = 'black';
-    this.canvasContext.font = 'normal 16px Montserrat';
+    this.canvasContext.font = this.mapScale > 0.5 ? (this.mapScale > 1 ? 'normal 30px Montserrat' : 'normal 16px Montserrat')
+     : 'normal 8px Montserrat';
 
     const sn = station.name.trim().split(' ');
     const firstLineArray: string[] = [];
