@@ -20,7 +20,7 @@ describe('StationInfoHeaderComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        { provide: UserService, useValue: MockUserService }
+        { provide: UserService, useClass: MockUserService }
       ]
     })
     .compileComponents();
