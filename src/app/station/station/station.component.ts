@@ -50,6 +50,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
