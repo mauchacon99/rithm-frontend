@@ -50,8 +50,8 @@ export class StationInfoDrawerComponent implements OnDestroy {
   }
 
   /**
-  * Completes all subscriptions.
-  */
+   * Completes all subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
