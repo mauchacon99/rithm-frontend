@@ -8,21 +8,21 @@ on:
 jobs:
 
   # Checks that the Angular app conforms to standards
-  lint-app:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+  # lint-app:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 5
 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Linting Angular app
-      run: npm run lint
+  #   - name: Linting Angular app
+  #     run: npm run lint
 
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
@@ -42,37 +42,37 @@ jobs:
       run: npm run lint-style
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
-  build:
-    runs-on: ubuntu-latest
-    needs: [lint-app, lint-stylesheets]
-    timeout-minutes: 10
+  # build:
+  #   runs-on: ubuntu-latest
+  #   needs: [lint-app, lint-stylesheets]
+  #   timeout-minutes: 10
 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Building Angular web project
-      run: npm run build
+  #   - name: Building Angular web project
+  #     run: npm run build
 
   # Checks that the Angular app passes all defined unit and integration tests
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    timeout-minutes: 5
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   timeout-minutes: 5
 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
 
-    - name: Installing dependencies
-      run: npm ci
+  #   - name: Installing dependencies
+  #     run: npm ci
 
-    - name: Running all unit and integration tests
-      run: npm run test-ci
+  #   - name: Running all unit and integration tests
+  #     run: npm run test-ci
