@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -13,7 +13,7 @@ import { StationInfoDrawerData, StationInformation } from 'src/models';
   templateUrl: './station-info-drawer.component.html',
   styleUrls: ['./station-info-drawer.component.scss']
 })
-export class StationInfoDrawerComponent {
+export class StationInfoDrawerComponent implements OnDestroy {
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
@@ -47,6 +47,14 @@ export class StationInfoDrawerComponent {
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+  }
+
+  /**
+  * Completes all subscriptions.
+  */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }
