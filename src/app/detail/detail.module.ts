@@ -27,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { NestedFieldComponent } from './nested-field/nested-field.component';
 import { AllFieldsComponent } from './all-fields/all-fields.component';
+import { PrivateFieldsComponent } from './private-fields/private-fields.component';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -49,7 +50,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     SelectFieldComponent,
     CheckFieldComponent,
     NestedFieldComponent,
-    AllFieldsComponent
+    AllFieldsComponent,
+    PrivateFieldsComponent
   ],
   imports: [
     CommonModule,
@@ -78,7 +80,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     SelectFieldComponent,
     CheckFieldComponent,
     NestedFieldComponent,
-    AllFieldsComponent
+    AllFieldsComponent,
+    PrivateFieldsComponent,
   ]
 })
 export class DetailModule { }
