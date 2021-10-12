@@ -29,6 +29,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  /**TODO : fix. */
   xit('should get station last updated date', async () => {
     const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const updatedDateSpy: jasmine.Spy = spyOn(TestBed.inject(StationService), 'getLastUpdated');
