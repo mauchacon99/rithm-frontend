@@ -101,7 +101,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
      getLastUpdated(stationId: string): void {
       this.stationLoading = true;
       this.stationService.getLastUpdated(stationId)
-        .pipe(takeUntil(this.destroyed$))
+        .pipe(first())
         .subscribe((updatedDate) => {
           if (updatedDate) {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
