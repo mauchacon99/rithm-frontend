@@ -4,9 +4,10 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
+import { FlowElementService } from '../flow-element.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -63,6 +64,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
+    private flowElementService: FlowElementService
   ) {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
@@ -181,7 +183,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mousemove event that was triggered.
    */
   @HostListener('mousemove', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseMove(event: MouseEvent): void {
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
@@ -240,7 +241,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The touchend event that was triggered.
    */
   @HostListener('touchend', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchEnd(event: TouchEvent): void {
     event.preventDefault();
     this.lastTouchX = -1;
@@ -264,7 +264,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The touchmove event that was triggered.
    */
   @HostListener('touchmove', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchMove(event: TouchEvent): void {
     event.preventDefault();
     //TODO: support multitouch.
@@ -340,9 +339,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The wheel event that was triggered.
    */
   @HostListener('wheel', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wheel(event: WheelEvent): void {
-    // TODO: Handle behavior when mouse wheel is scrolled
+    const mousePoint = this.getMouseCanvasPoint(event);
+
+    if (event.deltaY < 0) {
+      // Zoom in
+      this.mapService.zoom(ZOOM_VELOCITY, mousePoint);
+    } else {
+      // Zoom out
+      this.mapService.zoom(1 / ZOOM_VELOCITY, mousePoint);
+    }
+
+    this.drawElements();
+    event.preventDefault();
   }
 
   /**
@@ -381,6 +390,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
+        this.flowElementService.drawFlow(this.stations);
     });
   }
 

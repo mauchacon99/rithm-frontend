@@ -24,7 +24,11 @@ export class StationElementService {
 
   constructor(
     private mapService: MapService
-  ) { }
+  ) {
+    this.mapService.mapScale$.subscribe((scale) => {
+      this.mapScale = scale;
+    });
+   }
 
   /**
    * Draws a station on the map.
@@ -32,17 +36,19 @@ export class StationElementService {
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
     this.drawStationName(station);
-    this.drawDocumentBadge(station);
 
-    if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-      this.drawConnectionNode(station);
-      this.drawStationButton(station);
+    if (this.mapScale > 0.25) {
+      this.drawDocumentBadge(station);
+
+      if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
+        this.drawConnectionNode(station);
+        this.drawStationButton(station);
+      }
     }
 
   }
@@ -178,7 +184,8 @@ export class StationElementService {
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = badgeColor;
     ctx.fill();
-    ctx.font = '600 16px Montserrat-SemiBold';
+    ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
+     : '400 10px Montserrat-SemiBold';
     ctx.fillStyle = '#fff';
     ctx.textAlign =  'center';
     ctx.fillText(station.noOfDocuments.toString(),
@@ -237,7 +244,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the connection node.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawConnectionNode(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
