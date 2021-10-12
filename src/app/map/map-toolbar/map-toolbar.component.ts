@@ -132,7 +132,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * Cleanup method.
    */
    ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 
