@@ -58,14 +58,10 @@ export class MapOverlayComponent implements OnDestroy {
    */
      enableZoom(zoom: number): boolean {
        if (zoom === 1){
-         if (this.mapService.mapScale$.value >= MAX_SCALE) {
-           return true;
-         }
+         return this.mapService.mapScale$.value >= MAX_SCALE;
        }
        if (zoom === 0){
-        if (this.mapService.mapScale$.value <= MIN_SCALE) {
-          return true;
-        }
+        return this.mapService.mapScale$.value <= MIN_SCALE;
       }
       return false;
     }
