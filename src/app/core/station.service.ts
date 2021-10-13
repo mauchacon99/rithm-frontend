@@ -1,8 +1,7 @@
 /* eslint-disable jsdoc/require-returns-check */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Station, StationInformation } from 'src/models';
 
@@ -49,7 +48,8 @@ export class StationService {
    */
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    getLastUpdated(stationId: string): Observable<string> {
-    const mockDate = '2021-06-16T17:26:47.3506612Z';
-    return of(mockDate).pipe(delay(1000));
+    const params = new HttpParams()
+    .set('rithmId', stationId);
+    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params });
   }
 }
