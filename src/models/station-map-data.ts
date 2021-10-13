@@ -9,7 +9,7 @@ export interface StationMapData {
   rithmId: string;
 
   /** The name of the station. */
-  name: string;
+  stationName: string;
 
   /** The number of documents in the station. */
   noOfDocuments: number;

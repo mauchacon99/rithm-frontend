@@ -9,6 +9,7 @@
   </div>
   <div class="w-full py-2">
     <p class="overline font-bold">supervisor roster</p>
+    <p class="overline">supervisor roster</p>
       <app-roster [rosterMembers]="stationInformation.supervisors"
         [rosterSize]="stationInformation.supervisors.length"
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
@@ -20,5 +21,11 @@
         [rosterSize]="stationInformation.workers.length"
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
         [isWorker]="isWorker" [editMode]="editMode"></app-roster>
+  </div>
+  <div class="w-full py-2">
+    <p class="overline">station priority</p>
+    <button mat-mini-fab color="warn" class="priority">
+      1
+    </button>
   </div>
 </div>

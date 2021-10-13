@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
+import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
-import { MockUserService } from 'src/mocks';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MatInputModule } from '@angular/material/input';
@@ -22,11 +25,14 @@ describe('StationInfoDrawerComponent', () => {
       imports:[
         MatInputModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        RouterTestingModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService }
       ],
     })
       .compileComponents();
@@ -55,5 +61,13 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  /**TODO : fix. */
+  xit('should get station last updated date', async () => {
+    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const updatedDateSpy: jasmine.Spy = spyOn(TestBed.inject(StationService), 'getLastUpdated');
+    await component.getLastUpdated(stationId);
+    expect(updatedDateSpy).toHaveBeenCalled();
   });
 });
