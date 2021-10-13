@@ -21,15 +21,15 @@
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Nested" class="far fa-address-card"></i>
       <!-- City icon -->
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.City" class="fas fa-city"></i>
+      <!-- Instructions icon -->
       <i *ngIf="field.questionType.typeString === fieldTypeEnum.Instructions" class="fas fa-sticky-note"></i>
-
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button mat-icon-button (click)="removeField(field)">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText" matInput type="{{ toolBar ? 'text' : field.questionType.typeString }}" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString" autocomplete="off">
-    <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText || field.questionType.typeString === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" formControlName="longText"></textarea>
+    <input *ngIf="field.questionType.typeString !== fieldTypeEnum.LongText && field.questionType.typeString !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType.typeString }}" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString" autocomplete="off">
+    <textarea *ngIf="field.questionType.typeString === fieldTypeEnum.LongText || field.questionType.typeString === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="this.field.questionType.typeString"></textarea>
   </mat-form-field>
 </div>

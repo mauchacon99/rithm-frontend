@@ -1,4 +1,3 @@
-/* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MapData, MapItemStatus } from 'src/models';
@@ -31,7 +30,7 @@ describe('MapService', () => {
     const expectedResponse: StationMapData[] = [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
+          stationName: 'Development',
           noOfDocuments: 5,
           mapPoint: {
             x: 12,
@@ -43,7 +42,7 @@ describe('MapService', () => {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 1',
+          stationName: 'Step 1',
           noOfDocuments: 5,
           mapPoint: {
             x: 200,
@@ -55,7 +54,7 @@ describe('MapService', () => {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
+          stationName: 'Step 2',
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
@@ -67,7 +66,7 @@ describe('MapService', () => {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 3',
+          stationName: 'Step 3',
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
@@ -96,7 +95,7 @@ describe('MapService', () => {
     const test = [
       {
         rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-        name: 'Step 2',
+        stationName: 'Step 2',
         noOfDocuments: 5,
         mapPoint: {
           x: 500,
@@ -114,7 +113,7 @@ describe('MapService', () => {
       [
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
+          stationName: 'Step 2',
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
@@ -126,7 +125,7 @@ describe('MapService', () => {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
+          stationName: 'Step 2',
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
@@ -148,7 +147,7 @@ describe('MapService', () => {
       stations: [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
+          stationName: 'Development',
           noOfDocuments: 5,
           mapPoint: {
             x: 12,

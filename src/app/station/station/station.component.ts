@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -8,6 +8,7 @@ import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
+import { Subject } from 'rxjs';
 
 /**
  * Main component for viewing a station.
@@ -15,12 +16,15 @@ import { StationService } from 'src/app/core/station.service';
 @Component({
   selector: 'app-station',
   templateUrl: './station.component.html',
-  styleUrls: ['./station.component.scss']
+  styleUrls: ['./station.component.scss'],
 })
-export class StationComponent implements OnInit {
+export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', { static: true })
-  detailDrawer!: MatDrawer;
+  @ViewChild('drawer', { static: true })
+  drawer!: MatDrawer;
+
+  /** Observable for when the component is destroyed. */
+  destroyed$ = new Subject();
 
   /** Station form. */
   stationForm: FormGroup;
@@ -40,24 +44,40 @@ export class StationComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** Show Hidden accordion field private. */
+  accordionFieldPrivateExpanded = false;
+
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
     });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.drawerContext = context;
+      });
   }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.setDrawer(this.detailDrawer);
+    this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
   }
 
@@ -107,7 +127,6 @@ export class StationComponent implements OnInit {
   private navigateBack(): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
-
     // If no previous page, go to dashboard
     this.router.navigateByUrl('dashboard');
   }
@@ -156,6 +175,14 @@ export class StationComponent implements OnInit {
       children: [],
     });
   }
+
+  /**
+   * Completes all subscriptions.
+   */
+     ngOnDestroy(): void {
+      this.destroyed$.next();
+      this.destroyed$.complete();
+    }
 
   /**
    * Retrieves a list of the connected stations for the given document.

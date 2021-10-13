@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
+import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
 
 /**
  * Reusable component for the station information header.
@@ -30,6 +32,7 @@ export class StationInfoHeaderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
@@ -70,6 +73,21 @@ export class StationInfoHeaderComponent implements OnInit {
    */
   get priority(): number | null {
     return 'priority' in this.stationInformation ? this.stationInformation.priority : null;
+  }
+
+  /**
+   * Toggles the open state of the drawer for station info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawer(drawerItem: 'stationInfo'): void {
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationInformation: this.stationInformation as StationInformation,
+      stationName: this.stationName,
+      isWorker: false,
+      editMode: this.stationEditMode
+    };
+    this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
   }
 
 }
