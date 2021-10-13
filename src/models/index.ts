@@ -30,3 +30,4 @@ export * from './station-map-data';
 export * from './map-data';
 export * from './flow-map-data';
 export * from './flow-map-element';
+export * from './station-info-drawer-data';
