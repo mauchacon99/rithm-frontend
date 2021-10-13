@@ -21,14 +21,12 @@ describe('StationInfoDrawerComponent', () => {
       ],
       imports: [
         RouterTestingModule,
+        MatButtonModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
-      ],
-      imports: [
-        MatButtonModule
       ]
     })
       .compileComponents();
