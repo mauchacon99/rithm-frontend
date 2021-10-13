@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { delay } from 'rxjs/operators';
 import { Station, StationInformation } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -89,63 +90,73 @@ export class MockStationService {
    * @param stationId The target station id.
    * @param newName The new name for the station.
    */
-   updateStationName(stationId: string, newName: string ): Observable<StationInformation> {
-     if (!stationId || !newName) {
-       return throwError(new HttpErrorResponse({
-         error: {
-           error: 'Some error message'
-          }
-        })).pipe(delay(1000));
-      } else {
-        const data: StationInformation = {
-          stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'New Station Name',
-          instructions: '',
-          nextStations: [{
-            stationName: 'Development',
-            totalDocuments: 5,
-            isGenerator: true
-          }],
-          previousStations: [{
-            stationName: 'Station-1',
-            totalDocuments: 2,
-            isGenerator: true
-          }, {
-            stationName: 'Station-2',
-            totalDocuments: 0,
-            isGenerator: false
-          }],
-          supervisors: [{
-            userRithmId: '',
-            firstName: 'Marry',
-            lastName: 'Poppins',
-            email: 'marrypoppins@inpivota.com'
-          }, {
-            userRithmId: '',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com'
-          }],
-          workers: [{
-            userRithmId: '',
-            firstName: 'Harry',
-            lastName: 'Potter',
-            email: 'harrypotter@inpivota.com'
-          }, {
-            userRithmId: '',
-            firstName: 'Supervisor',
-            lastName: 'User',
-            email: 'supervisoruser@inpivota.com'
-          }],
-          createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-          createdDate: '2021-07-16T17:26:47.3506612Z',
-          updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-          updatedDate: '2021-07-18T17:26:47.3506612Z',
-          questions: [],
-          priority: 2
-        };
-        return of(data).pipe(delay(1000));
-      }
+  updateStationName(stationId: string, newName: string): Observable<StationInformation> {
+    if (!stationId || !newName) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StationInformation = {
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'New Station Name',
+        instructions: '',
+        nextStations: [{
+          stationName: 'Development',
+          totalDocuments: 5,
+          isGenerator: true
+        }],
+        previousStations: [{
+          stationName: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true
+        }, {
+          stationName: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false
+        }],
+        supervisors: [{
+          userRithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com'
+        }, {
+          userRithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com'
+        }],
+        workers: [{
+          userRithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com'
+        }, {
+          userRithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com'
+        }],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2
+      };
+      return of(data).pipe(delay(1000));
+    }
   }
 
+  /**
+   * Get station information updated date.
+   *
+   * @param stationId The id of the station for witch to get the last updated date.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(stationId: string): Observable<string> {
+    const mockDate = '2021-07-18T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
+  }
 }
