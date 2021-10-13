@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-returns-check */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -46,7 +45,6 @@ export class StationService {
    * @param stationId The id for the specific station for which to get the latest updated date.
    * @returns The last updated date for this station.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    getLastUpdated(stationId: string): Observable<string> {
     const params = new HttpParams()
     .set('rithmId', stationId);
