@@ -125,4 +125,5 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
+
 });

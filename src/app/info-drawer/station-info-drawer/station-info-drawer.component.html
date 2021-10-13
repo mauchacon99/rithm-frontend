@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1">
   <div class="w-full py-2">
-    <p class="overline font-bold">supervisor roster</p>
+    <p class="overline">supervisor roster</p>
       <app-roster [rosterMembers]="stationInformation.supervisors"
         [rosterSize]="stationInformation.supervisors.length"
         [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
@@ -18,4 +18,9 @@
     <div  class="col-span-8 md:col-span-4 text-left text-xs py-2" >
       <span class="text-accent-300">1 hour ago</span>
     </div>
+    <p class="overline">station priority</p>
+    <button mat-mini-fab color="warn" class="priority">
+      1
+    </button>
+  </div>
 </div>
