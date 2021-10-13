@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 
 describe('StationInfoDrawerComponent', () => {
@@ -21,13 +22,14 @@ describe('StationInfoDrawerComponent', () => {
       ],
       imports: [
         RouterTestingModule,
+        MatButtonModule,
         MatRadioModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
-      ],
+      ]
     })
       .compileComponents();
   });
