@@ -111,7 +111,7 @@ export class StationElementService {
     this.canvasContext.fillStyle = 'black';
     this.canvasContext.font = 'normal 16px Montserrat';
 
-    const sn = station.name.trim().split(' ');
+    const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
