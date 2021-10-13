@@ -4,7 +4,7 @@ import { InfoDrawerComponent } from './info-drawer/info-drawer.component';
 import { StationInfoDrawerComponent } from './station-info-drawer/station-info-drawer.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentInfoDrawerComponent } from './document-info-drawer/document-info-drawer.component';
-
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,8 @@ import { DocumentInfoDrawerComponent } from './document-info-drawer/document-inf
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    MatRadioModule
   ],
   exports: [
     InfoDrawerComponent
