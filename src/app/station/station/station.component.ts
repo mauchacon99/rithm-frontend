@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-station',
   templateUrl: './station.component.html',
-  styleUrls: ['./station.component.scss']
+  styleUrls: ['./station.component.scss'],
 })
 export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
@@ -50,13 +50,17 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The context of what is open in the drawer. */
   drawerContext = 'comments';
 
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -75,13 +79,6 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-  }
-
-  /**
-   * Cleans up subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
   }
 
   /**
@@ -130,7 +127,6 @@ export class StationComponent implements OnInit, OnDestroy {
   private navigateBack(): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
-
     // If no previous page, go to dashboard
     this.router.navigateByUrl('dashboard');
   }
@@ -179,6 +175,14 @@ export class StationComponent implements OnInit, OnDestroy {
       children: [],
     });
   }
+
+  /**
+   * Completes all subscriptions.
+   */
+     ngOnDestroy(): void {
+      this.destroyed$.next();
+      this.destroyed$.complete();
+    }
 
   /**
    * Retrieves a list of the connected stations for the given document.

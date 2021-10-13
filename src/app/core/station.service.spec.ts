@@ -1,4 +1,3 @@
-/* eslint-disable rxjs/no-ignored-error */
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
@@ -92,6 +91,23 @@ describe('StationService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  xit('should return updated date from a specific station', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse = '2021-07-18T17:26:47.3506612Z';
+
+    service.getLastUpdated(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    // // outgoing request
+    // const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
+    // expect(req.request.method).toEqual('GET');
+
+    // req.flush(expectedResponse);
+    // httpTestingController.verify();
   });
 
 });

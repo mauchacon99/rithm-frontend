@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Station, StationInformation } from 'src/models';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `StationService`.
@@ -13,7 +15,6 @@ export class MockStationService {
    * @param stationId The Specific id of station.
    * @returns Information related to station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -79,6 +80,17 @@ export class MockStationService {
       }
     ];
     return of(mockStationData).pipe(delay(1000));
+  }
+
+  /**
+   * Get station information updated date.
+   *
+   * @param stationId The id of the station for witch to get the last updated date.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(stationId: string): Observable<string> {
+    const mockDate = '2021-07-18T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
   }
 
 }

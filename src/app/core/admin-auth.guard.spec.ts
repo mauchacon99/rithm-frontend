@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -41,6 +40,7 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should allow navigation to admin pages if the user is admin', () => {
+    // eslint-disable-next-line max-len
     const user = { id: 3021, rithmId: '69B5A6C1-D380-40DD-BA6D-AABF86E98C4A', firstName: 'Admin', lastName: 'User', email: 'rithmadmin@inpivota.com', role: 'admin', createdDate: '2021-08-23T15:35:42.2234693', objectPermissions: [], globalPermission: null, isEmailVerified: true, notificationSettings: null, organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989' };
     localStorage.setItem('user', JSON.stringify(user));
     guard.canActivate().then((result) => {
@@ -49,6 +49,7 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should prevent navigation to admin pages if the user is not admin', () => {
+    // eslint-disable-next-line max-len
     const user = { id: 3021, rithmId: '69B5A6C1-D380-40DD-BA6D-CCBF86E98C4A', firstName: 'Worker', lastName: 'User', email: 'rithmadmin@inpivota.com', role: null, createdDate: '2021-08-23T15:35:42.2234693', objectPermissions: [], globalPermission: null, isEmailVerified: true, notificationSettings: null, organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989' };
     localStorage.setItem('user', JSON.stringify(user));
     guard.canActivate().then((result) => {

@@ -49,7 +49,6 @@ export class TopNavComponent implements OnInit {
    *
    */
   ngOnInit(): void {
-    // eslint-disable-next-line rxjs/no-ignored-error
     this.accountSettingsService.currentUser$.pipe(takeUntil(this.sub$)).subscribe((user) => {
       if (user && user.firstName && user.lastName) {
         this.user.firstName = user?.firstName;

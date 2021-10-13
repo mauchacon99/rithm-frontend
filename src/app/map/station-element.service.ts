@@ -36,15 +36,14 @@ export class StationElementService {
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
-    this.drawStationName(station);
 
     if (this.mapScale > 0.25) {
       this.drawDocumentBadge(station);
+      this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station);
@@ -113,7 +112,7 @@ export class StationElementService {
     this.canvasContext.font = this.mapScale > 0.5 ? (this.mapScale > 1 ? 'normal 30px Montserrat' : 'normal 16px Montserrat')
      : 'normal 8px Montserrat';
 
-    const sn = station.name.trim().split(' ');
+    const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
@@ -246,7 +245,6 @@ export class StationElementService {
    *
    * @param station The station for which to draw the connection node.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private drawConnectionNode(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
