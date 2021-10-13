@@ -10,6 +10,7 @@ import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatRadioModule } from '@angular/material/radio';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -27,6 +28,7 @@ describe('StationInfoDrawerComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
         RouterTestingModule,
+        MatRadioModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
