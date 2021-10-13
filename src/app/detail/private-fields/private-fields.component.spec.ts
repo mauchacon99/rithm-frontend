@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrivateFieldsComponent } from './private-fields.component';
+import { MatCardModule } from '@angular/material/card';
 
 describe('PrivateFieldsComponent', () => {
   let component: PrivateFieldsComponent;
@@ -8,9 +9,12 @@ describe('PrivateFieldsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivateFieldsComponent ]
+      declarations: [PrivateFieldsComponent],
+      imports: [
+        MatCardModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
