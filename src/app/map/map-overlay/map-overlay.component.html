@@ -1,9 +1,9 @@
 <app-loading-indicator *ngIf="mapDataLoading" class="fixed right-0 left-0 top-2/4 text-center"></app-loading-indicator>
 <div class="absolute right-0 left-0 bottom-0 md:left-auto md:bottom-auto z-40">
   <div class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2">
-    <button mat-raised-button color="accent" *ngIf="!isBuilding" (click)="build()" class="h-9 md:w-auto w-full">Build</button>
-    <button mat-raised-button color="basic" *ngIf="isBuilding" (click)="cancel()" class="h-9 w-1/2 md:w-auto">Cancel</button>
-    <button mat-raised-button color="accent" *ngIf="isBuilding" (click)="publish(mapData)"  class="h-9 w-1/2 md:w-auto">Publish</button>
+    <button mat-raised-button color="accent" *ngIf="!isBuilding" (click)="build()" data-testid="build" class="h-9 md:w-auto w-full">Build</button>
+    <button mat-raised-button color="basic" *ngIf="isBuilding" (click)="cancel()" data-testid="cancel" class="h-9 w-1/2 md:w-auto">Cancel</button>
+    <button mat-raised-button color="accent" *ngIf="isBuilding" (click)="publish(mapData)" data-testid="publish" class="h-9 w-1/2 md:w-auto">Publish</button>
   </div>
 </div>
 <div *ngIf="isStationAdd" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
@@ -12,6 +12,6 @@
   </div>
 </div>
 <div class="bg-white absolute shadow-md rounded border border-solid flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
-  <button class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300" (click)="zoomIn()"> <i class="fas fa-search-plus"></i></button>
-  <button class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300" (click)="zoomOut()"> <i class="fas fa-search-minus"></i></button>
+  <button class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300" data-testid="zoomin" (click)="zoomIn()"> <i class="fas fa-search-plus"></i></button>
+  <button class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300" data-testid="zoomout" (click)="zoomOut()"> <i class="fas fa-search-minus"></i></button>
 </div>
