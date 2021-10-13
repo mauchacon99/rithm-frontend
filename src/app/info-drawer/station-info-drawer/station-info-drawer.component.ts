@@ -65,14 +65,7 @@ export class StationInfoDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-   toggleDrawer(drawerItem: 'stationInfo'): void {
-    const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: this.stationInformation as StationInformation,
-      stationName: this.stationName,
-      isWorker: false,
-      editMode: this.stationEditMode
-    };
-    this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
+  toggleDrawer(drawerItem: 'stationInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
-
 }
