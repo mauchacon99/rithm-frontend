@@ -11,6 +11,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 1',
     instructions: 'Fake instructions 1',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.ShortText,
@@ -24,6 +25,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 2',
     instructions: 'Fake instructions 2',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.LongText,
@@ -37,6 +39,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 3',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.URL,
@@ -50,6 +53,7 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 4',
     instructions: 'Fake instructions 4',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.Email,

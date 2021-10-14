@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -109,4 +109,45 @@ export class StationService {
     .set('rithmId', stationId);
     return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params });
   }
+
+  /**
+   * Get all stations private items.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Station private items Array.
+   */
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   getStationPrivateItems(stationId: string): Observable<Question[]>{
+    const mockPrivateItems: Question[]= [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+     return of(mockPrivateItems).pipe(delay(1000));
+   }
 }
