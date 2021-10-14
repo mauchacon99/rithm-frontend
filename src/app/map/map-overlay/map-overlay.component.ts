@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { MAX_SCALE, MIN_SCALE } from '../map-constants';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -42,6 +43,22 @@ export class MapOverlayComponent implements OnDestroy {
   get isStationAdd(): boolean {
     return this.currentMode === MapMode.StationAdd;
   }
+
+  /**
+   * Zoom in/out button state Enable and disable when limits has been reached.
+   *
+   * @param zoom Zoom in/out buttons.
+   * @returns Disable zoom button state if limits are reached.
+   */
+     enableZoom(zoom: number): boolean {
+       if (zoom === 1){
+         return this.mapService.mapScale$.value >= MAX_SCALE;
+       }
+       if (zoom === 0){
+        return this.mapService.mapScale$.value <= MIN_SCALE;
+      }
+      return false;
+    }
 
   constructor(private mapService: MapService,
     private popupService: PopupService,
