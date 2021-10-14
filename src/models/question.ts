@@ -18,7 +18,7 @@ export interface Question {
   /** Type of the question. */
   questionType: QuestionType;
 
-  /** */
+  /** Whether the question is encrypted or not. */
   isEncrypted?: boolean;
 
   /** Whether the question is read only and only for reference. */
