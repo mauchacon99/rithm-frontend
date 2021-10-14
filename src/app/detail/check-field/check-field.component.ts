@@ -62,7 +62,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
       validators.push(Validators.required);
     }
 
-    this.checkFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+    this.checkFieldForm.get(this.field.questionType)?.setValidators(validators);
   }
 
   /**
