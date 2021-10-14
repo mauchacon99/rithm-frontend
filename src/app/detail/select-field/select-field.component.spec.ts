@@ -8,14 +8,10 @@ import { Question, QuestionFieldType } from 'src/models';
 import { SelectFieldComponent } from './select-field.component';
 
 const FIELD: Question = {
+  rithmId: '',
   prompt: 'Fake question 9',
   instructions: 'Fake instructions 9',
-  rithmId: '',
-  questionType: {
-    rithmId: '',
-    typeString: QuestionFieldType.Select,
-    validationExpression: '.+'
-  },
+  questionType: QuestionFieldType.Select,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,

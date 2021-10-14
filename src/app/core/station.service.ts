@@ -123,11 +123,7 @@ export class StationService {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
         rithmId: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
@@ -137,11 +133,7 @@ export class StationService {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
         rithmId: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
