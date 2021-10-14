@@ -120,15 +120,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Update the Station Name.
    *
-   * @param newStationName The new name for the station.
+   * @param station The new station information to be updated.
    */
-   updateStationName(newStationName: string): void{
+   updateStation(station: StationInformation): void{
      this.stationLoading = true;
-     this.stationService.updateStationName(this.stationInformation.stationRithmId, newStationName)
+     this.stationService.updateStation(station)
      .pipe(first())
-     .subscribe((station)=>{
-       if (station){
-         this.stationInformation = station;
+     .subscribe((stationUpdated)=>{
+       if (stationUpdated){
+         this.stationInformation = stationUpdated;
        }
        this.stationLoading = false;
      }, (error: unknown) => {

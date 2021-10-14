@@ -45,11 +45,10 @@ export class StationService {
    * Update station name.
    *
    * @returns The list of all stations.
-   * @param stationId The target station id.
-   * @param newName The new name for the station.
+   * @param station The station information that will be update.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateStationName(stationId: string, newName: string): Observable<StationInformation> {
+  updateStation(station: StationInformation): Observable<StationInformation> {
     const data: StationInformation = {
       stationRithmId: 'E204F369-386F-4E41',
       name: 'New Station Name',

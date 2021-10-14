@@ -87,11 +87,10 @@ export class MockStationService {
    * Update station name.
    *
    * @returns The list of all stations.
-   * @param stationId The target station id.
-   * @param newName The new name for the station.
+   * @param station The station information that will be update.
    */
-  updateStationName(stationId: string, newName: string): Observable<StationInformation> {
-    if (!stationId || !newName) {
+  updateStation(station: StationInformation): Observable<StationInformation> {
+    if (!station) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
