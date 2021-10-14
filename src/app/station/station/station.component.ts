@@ -204,9 +204,9 @@ export class StationComponent implements OnInit, OnDestroy {
     }
 
   /**
-   * Get data about the document and station the document is in.
+   * Get data about the station private-items.
    *
-   * @param stationId The id of the station that the document is in.
+   * @param stationId The id of the target station private-items.
    */
   getStationPrivateItems(stationId: string): void{
     this.stationService.getStationPrivateItems(stationId)

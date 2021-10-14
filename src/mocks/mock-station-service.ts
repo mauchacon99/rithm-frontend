@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `StationService`.
@@ -84,18 +83,9 @@ export class MockStationService {
   }
 
   /**
-<<<<<<< HEAD
-   * Get all stations all items.
+   * Update station information.
    *
-   * @param stationId The Specific id of station.
-   * @returns Station all items Array.
-   */
-   getStationAllItems(stationId: string): Observable<Question[]>{
-    const mockAllItems: Question[]= [
-=======
-   * Update station name.
-   *
-   * @returns The list of all stations.
+   * @returns The station information updated.
    * @param station The station information that will be update.
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
@@ -174,9 +164,8 @@ export class MockStationService {
    * @param stationId The Specific id of station.
    * @returns Station private items Array.
    */
-   getStationPrivateItems(stationId: string): Observable<Question[]>{
-    const mockPrivateItems: Question[]= [
->>>>>>> dev
+  getStationPrivateItems(stationId: string): Observable<Question[]> {
+    const mockPrivateItems: Question[] = [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
@@ -206,12 +195,46 @@ export class MockStationService {
         children: [],
       },
     ];
-<<<<<<< HEAD
-    return of(mockAllItems).pipe(delay(1000));
-  }
-
-=======
     return of(mockPrivateItems).pipe(delay(1000));
   }
->>>>>>> dev
+
+  /**
+   * Get all stations all items.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Station all items Array.
+   */
+  getStationAllItems(stationId: string): Observable<Question[]> {
+    const mockAllItems: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(mockAllItems).pipe(delay(1000));
+  }
 }
