@@ -9,42 +9,30 @@ import { StationTemplateComponent } from './station-template.component';
 
 const testStationFields = [
       {
+        rithmId: '',
         prompt: 'Instructions',
         instructions: '',
-        rithmId: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.LongText,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
         children: [],
       },
       {
+        rithmId: '',
         prompt: 'Label',
         instructions: '',
-        rithmId: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.ShortText,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.ShortText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
         children: [],
       },
       {
+        rithmId: '',
         prompt: 'Fake question 7',
         instructions: '',
-        rithmId: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,

@@ -10,69 +10,49 @@ import { TextFieldComponent } from '../text-field/text-field.component';
 import { NestedFieldComponent } from './nested-field.component';
 
 const ADDRESS: Question = {
+  rithmId: '',
   prompt: '',
   instructions: 'Enter the shipping address',
-  rithmId: '',
-  questionType: {
-    rithmId: '',
-    typeString: QuestionFieldType.Nested,
-    validationExpression: '.+'
-  },
+  questionType: QuestionFieldType.Nested,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,
   children: [
     {
+      rithmId: '',
       prompt: 'Address Line 1',
       instructions: '',
-      rithmId: '',
-        questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.AddressLine,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '',
       prompt: 'Address Line 2',
       instructions: '',
-      rithmId: '',
-        questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.AddressLine,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '',
       prompt: 'City',
       instructions: '',
-      rithmId: '',
-        questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.City,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.City,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '',
       prompt: 'State',
       instructions: '',
-      rithmId: '',
-        questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.State,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.State,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
@@ -80,14 +60,10 @@ const ADDRESS: Question = {
       children: [],
     },
     {
+      rithmId: '',
       prompt: 'Zip',
       instructions: '',
-      rithmId: '',
-        questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.Zip,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.Zip,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
