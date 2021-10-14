@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { MapData, MapItemStatus } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
-import { StationMapData } from 'src/models';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 const MICROSERVICE_PATH = '/mapservice/api/map';
@@ -27,7 +26,8 @@ describe('MapService', () => {
   });
 
   it('should return all map elements for a given organization', () => {
-    const expectedResponse: StationMapData[] = [
+    const expectedResponse: MapData = {
+      stations: [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
           stationName: 'Development',
@@ -76,14 +76,16 @@ describe('MapService', () => {
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
           status: MapItemStatus.Normal
         }
-      ];
+      ],
+      flows: []
+    };
 
     service.getMapElements()
-      .subscribe(() => {
-        // expect(response).toEqual(expectedResponse);
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
 
