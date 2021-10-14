@@ -9,4 +9,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./private-fields.component.scss']
 })
 export class PrivateFieldsComponent {
+
+  /**
+   * Provisional for Repeat data cards field private.
+   *
+   * @returns Fields private for Cards provisional.
+   */
+  get fieldsPrivatesProvisional(): Array<[]> {
+    return Array(5);
+  }
 }
