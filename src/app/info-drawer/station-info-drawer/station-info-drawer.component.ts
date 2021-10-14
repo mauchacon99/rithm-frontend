@@ -113,7 +113,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe((updatedDate) => {
           if (updatedDate) {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
           }
           this.stationLoading = false;
         }, (error: unknown) => {
