@@ -40,6 +40,7 @@ describe('StationFieldComponent', () => {
     component.field = {
       prompt: 'prompt',
       instructions: 'instructions',
+      rithmId: '',
       questionType: {
         rithmId: '',
         typeString: QuestionFieldType.Number,
@@ -62,7 +63,8 @@ describe('StationFieldComponent', () => {
       {
         prompt: 'prompt 1',
         instructions: '',
-        questionType: {
+        rithmId: '',
+      questionType: {
           rithmId: '',
           typeString: QuestionFieldType.LongText,
           validationExpression: '.+'
@@ -75,7 +77,8 @@ describe('StationFieldComponent', () => {
       {
         prompt: 'Prompt 2',
         instructions: '',
-        questionType: {
+        rithmId: '',
+      questionType: {
           rithmId: '',
           typeString: QuestionFieldType.LongText,
           validationExpression: '.+'
@@ -122,7 +125,8 @@ describe('StationFieldComponent', () => {
       component.field = {
         prompt: 'Label',
         instructions: '',
-        questionType: {
+        rithmId: '',
+      questionType: {
           rithmId: '',
           typeString: QuestionFieldType.ShortText,
           validationExpression: '.+'
@@ -149,7 +153,8 @@ describe('StationFieldComponent', () => {
       component.field = {
         prompt: 'Label',
         instructions: '',
-        questionType: {
+        rithmId: '',
+      questionType: {
           rithmId: '',
           typeString: QuestionFieldType.Select,
           validationExpression: '.+'

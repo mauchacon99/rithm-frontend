@@ -53,6 +53,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   instructionField: Question = {
     prompt: 'Instructions',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.Instructions,
@@ -68,6 +69,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   labelField: Question = {
     prompt: 'Name your field',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.ShortText,
@@ -83,6 +85,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   selectOptionField: Question = {
     prompt: 'Add Option',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.ShortText,
@@ -98,6 +101,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   checklistOptionField: Question = {
     prompt: 'Add Item',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.ShortText,
