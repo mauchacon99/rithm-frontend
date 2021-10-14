@@ -14,7 +14,7 @@ src/assets/**/* @belugasanity
 # Team Falcon rules
 src/app/map/*.scss @Gobsmack90
 src/app/map/**/*.scss @Gobsmack90
-src/app/map/**/*.html @Gobsmack90
+src/app/map/**/*.html @HendricksonTyler @Gobsmack90
 
 # Team Lion rules
 src/app/detail/**/*.ts @HendricksonTyler @cqmdeveloper
