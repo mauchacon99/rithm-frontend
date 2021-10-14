@@ -2,9 +2,10 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapData, MapMode } from 'src/models';
+import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { MAX_SCALE, MIN_SCALE } from '../map-constants';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -21,12 +22,6 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** The current mode of the map. */
   private currentMode = MapMode.View;
-
-  /** Build button for admin. Need to remove once object reference has been set. */
-  mapData: MapData = {
-    stations: [],
-    flows: []
-  };
 
   /** Map data request loading indicator. */
   mapDataLoading = false;
@@ -48,6 +43,22 @@ export class MapOverlayComponent implements OnDestroy {
   get isStationAdd(): boolean {
     return this.currentMode === MapMode.StationAdd;
   }
+
+  /**
+   * Zoom in/out button state Enable and disable when limits has been reached.
+   *
+   * @param zoom Zoom in/out buttons.
+   * @returns Disable zoom button state if limits are reached.
+   */
+     enableZoom(zoom: number): boolean {
+       if (zoom === 1){
+         return this.mapService.mapScale$.value >= MAX_SCALE;
+       }
+       if (zoom === 0){
+        return this.mapService.mapScale$.value <= MIN_SCALE;
+      }
+      return false;
+    }
 
   constructor(private mapService: MapService,
     private popupService: PopupService,
@@ -79,10 +90,8 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Publishes map changes.
-   *
-   * @param mapData The selected user to remove.
    */
-  async publish(mapData: MapData): Promise<void> {
+  async publish(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -91,10 +100,11 @@ export class MapOverlayComponent implements OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
-      this.mapService.publishMap(mapData)
+      this.mapService.publishMap()
         .pipe(first())
         .subscribe(() => {
           this.mapDataLoading = false;
+          this.mapService.mapMode$.next(MapMode.View);
           this.popupService.notify('Map data published successfully.');
         }, (error: unknown) => {
           this.mapDataLoading = false;

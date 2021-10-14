@@ -38,6 +38,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   readonly stationInstructionsField: Question = {
     prompt: 'General Instructions',
     instructions: '',
+    rithmId: '',
     questionType: {
       rithmId: '',
       typeString: QuestionFieldType.LongText,
