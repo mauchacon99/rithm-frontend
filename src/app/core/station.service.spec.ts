@@ -190,8 +190,9 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private items', () => {
+  it('should return a list of stations private items', () => {
     const stationId = 'E204F369-386F-4E41';
+    const isPrivate = false;
     const expectedResponse: Question[]= [
       {
         prompt: 'Fake question 1',
@@ -215,10 +216,17 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationPrivateItems(stationId)
+    service.getStationPreviousQuestions(stationId, isPrivate)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });

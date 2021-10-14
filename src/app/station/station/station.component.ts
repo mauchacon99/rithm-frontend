@@ -179,14 +179,15 @@ export class StationComponent implements OnInit, OnDestroy {
   /**
    * Get data about the document and station the document is in.
    *
-   * @param stationId The id of the station that the document is in.
+   * @param stationId The Specific id of station.
+   * @param isPrivate True returns private questions - False returns all questions.
    */
-  getStationPrivateItems(stationId: string): void{
-    this.stationService.getStationPrivateItems(stationId)
+  getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
+    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
     .pipe(first())
-    .subscribe((items) => {
-      if (items) {
-        this.stationPrivateItems = items;
+    .subscribe((questions) => {
+      if (questions) {
+        this.stationPrivateItems = questions;
       }
     }, (error: unknown) => {
       this.errorService.displayError(
