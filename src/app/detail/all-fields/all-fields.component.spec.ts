@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AllFieldsComponent } from './all-fields.component';
+import { MatCardModule } from '@angular/material/card';
 
 describe('AllFieldsComponent', () => {
   let component: AllFieldsComponent;
@@ -8,7 +9,10 @@ describe('AllFieldsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AllFieldsComponent ]
+      declarations: [ AllFieldsComponent ],
+      imports: [
+        MatCardModule
+      ]
     })
     .compileComponents();
   });
