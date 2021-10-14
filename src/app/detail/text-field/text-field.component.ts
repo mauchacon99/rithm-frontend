@@ -58,7 +58,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   ngOnInit(): void {
     this.textFieldForm = this.fb.group({
-      [this.field.questionType.typeString]: ['', []]
+      [this.field.questionType]: ['', []]
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -70,7 +70,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     }
 
     //Need to set email and url.
-    switch (this.field.questionType.typeString) {
+    switch (this.field.questionType) {
       case QuestionFieldType.Email:
         validators.push(Validators.email);
         break;
@@ -79,7 +79,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
         break;
     }
 
-    this.textFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+    this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
 
   }
 

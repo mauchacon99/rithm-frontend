@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { QuestionFieldType } from 'src/models';
 
 /**
@@ -45,7 +45,7 @@ export class ToolbarComponent {
     {
       name: 'Address',
       icon: 'far fa-address-card',
-      typeString: this.fieldTypeEnum.Nested
+      typeString: this.fieldTypeEnum.AddressLine
     },
     {
       name: 'Number',
@@ -83,7 +83,7 @@ export class ToolbarComponent {
       typeString: this.fieldTypeEnum.MultiSelect
     },
     {
-      name:'Instructions',
+      name: 'Instructions',
       icon: 'fas fa-sticky-note',
       typeString: this.fieldTypeEnum.Instructions
     }
@@ -94,7 +94,7 @@ export class ToolbarComponent {
    *
    * @param field The selected field.
    */
- selectField(field: QuestionFieldType): void {
+  selectField(field: QuestionFieldType): void {
     this.fieldSelected.emit(field);
   }
 

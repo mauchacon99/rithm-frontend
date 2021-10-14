@@ -9,56 +9,40 @@ import { TextFieldComponent } from './text-field.component';
 
 const FIELDS: Question[] = [
   {
+    rithmId: '',
     prompt: 'Fake question 1',
     instructions: 'Fake instructions 1',
-    rithmId: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.ShortText,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
   },
   {
+    rithmId: '',
     prompt: 'Fake question 2',
     instructions: 'Fake instructions 2',
-    rithmId: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.LongText,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.LongText,
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
     children: [],
   },
   {
+    rithmId: '',
     prompt: 'Fake question 3',
     instructions: '',
-    rithmId: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.URL,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.URL,
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
     children: [],
   },
   {
+    rithmId: '',
     prompt: 'Fake question 4',
     instructions: 'Fake instructions 4',
-    rithmId: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.Email,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.Email,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -108,7 +92,7 @@ describe('TextFieldComponent', () => {
 
     it('should require an input in short text field', () => {
       const shortText = component.textFieldForm.controls['shortText'];
-      expect(component.field.questionType.typeString).toBeTruthy();
+      expect(component.field.questionType).toBeTruthy();
       expect(shortText.valid).toBeFalse();
       expect(shortText.hasError('required')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
