@@ -1,10 +1,13 @@
+import { QuestionFieldType } from '.';
 import { PossibleAnswer } from './possible-answer';
-import { QuestionType } from './question-type';
+// import { QuestionType } from './question-type';
 
 /**
  * Represents a question/field on a station or document.
  */
 export interface Question {
+  /** Rithm ID. */
+  rithmId: string;
 
   /** The name/label of the question. */
   prompt: string;
@@ -13,7 +16,8 @@ export interface Question {
   instructions?: string; // TODO: get this from the back end
 
   /** Type of the question. */
-  questionType: QuestionType;
+  // questionType: QuestionType;
+  questionType: QuestionFieldType;
 
   /** Whether the question is read only and only for reference. */
   isReadOnly: boolean;

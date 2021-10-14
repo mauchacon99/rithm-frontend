@@ -49,13 +49,10 @@ describe('DocumentFieldComponent', () => {
     fixture = TestBed.createComponent(DocumentFieldComponent);
     component = fixture.componentInstance;
     component.field = {
+      rithmId: '',
       prompt: 'Address line 1',
       instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,

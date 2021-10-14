@@ -51,13 +51,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Instruction field to display. */
   instructionField: Question = {
+    rithmId: '',
     prompt: 'Instructions',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.Instructions,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.Instructions,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -66,13 +63,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Label field to display. */
   labelField: Question = {
+    rithmId: '',
     prompt: 'Name your field',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.ShortText,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -81,13 +75,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** The field for adding an option to a select field. */
   selectOptionField: Question = {
+    rithmId: '',
     prompt: 'Add Option',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.ShortText,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -96,13 +87,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** The field for adding an item to a checklist field. */
   checklistOptionField: Question = {
+    rithmId: '',
     prompt: 'Add Item',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.ShortText,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -120,16 +108,16 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * On component initialization.
    */
   ngOnInit(): void {
-    this.labelField.questionType.typeString = this.field.questionType.typeString;
-    if (this.field.questionType.typeString === this.fieldType.Select
-      || this.field.questionType.typeString === this.fieldType.MultiSelect
-      || this.field.questionType.typeString === this.fieldType.CheckList) {
-      this.addOption(this.field.questionType.typeString);
+    this.labelField.questionType = this.field.questionType;
+    if (this.field.questionType === this.fieldType.Select
+      || this.field.questionType === this.fieldType.MultiSelect
+      || this.field.questionType === this.fieldType.CheckList) {
+      this.addOption(this.field.questionType);
     }
 
     this.stationFieldForm = this.fb.group({
       instructionsField: ['', []],
-      [this.field.questionType.typeString]: ['', [Validators.required]],
+      [this.field.questionType]: ['', [Validators.required]],
       optionField: ['', [Validators.required]]
     });
   }
