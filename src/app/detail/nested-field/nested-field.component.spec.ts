@@ -10,69 +10,49 @@ import { TextFieldComponent } from '../text-field/text-field.component';
 import { NestedFieldComponent } from './nested-field.component';
 
 const ADDRESS: Question = {
+  rithmId: '3j4k-3h2j-hj4j',
   prompt: '',
   instructions: 'Enter the shipping address',
-  rithmId: '3j4k-3h2j-hj4j',
-  questionType: {
-    rithmId: '3j4k-3h2j-hj4j',
-    typeString: QuestionFieldType.Nested,
-    validationExpression: '.+'
-  },
+  questionType: QuestionFieldType.Nested,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,
   children: [
     {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 1',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.AddressLine,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 2',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.AddressLine,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'City',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.City,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.City,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
       children: [],
     },
     {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'State',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.State,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.State,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
@@ -80,14 +60,10 @@ const ADDRESS: Question = {
       children: [],
     },
     {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Zip',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.Zip,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.Zip,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,

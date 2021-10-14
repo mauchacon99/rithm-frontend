@@ -8,14 +8,10 @@ import { Question, QuestionFieldType } from 'src/models';
 import { CheckFieldComponent } from './check-field.component';
 
 const FIELD: Question = {
+  rithmId: '3j4k-3h2j-hj4j',
   prompt: 'Fake question 11',
   instructions: 'Fake instructions 11',
-  rithmId: '3j4k-3h2j-hj4j',
-  questionType: {
-    rithmId: '3j4k-3h2j-hj4j',
-    typeString: QuestionFieldType.CheckList,
-    validationExpression: '.+'
-  },
+  questionType: QuestionFieldType.CheckList,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,
@@ -72,7 +68,7 @@ describe('CheckFieldComponent', () => {
   xit('should require an input in check field', () => {
     // TODO: figure out why this is failing
     const check = component.checkFieldForm.controls['singleCheckbox'];
-    expect(component.field.questionType.typeString).toBeTruthy();
+    expect(component.field.questionType).toBeTruthy();
     expect(check.valid).toBeFalse();
     expect(check.hasError('required')).toBeTrue();
     expect(component.checkFieldForm.valid).toBeFalse();

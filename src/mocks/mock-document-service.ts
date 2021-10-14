@@ -128,126 +128,90 @@ export class MockDocumentService {
       workers: [],
       questions: [
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 1',
           instructions: 'Fake instructions 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.ShortText,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.ShortText,
           isReadOnly: false,
           isRequired: false,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 2',
           instructions: 'Fake instructions 2',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.LongText,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.LongText,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 3',
           instructions: '',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.URL,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.URL,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 4',
           instructions: 'Fake instructions 4',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Email,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Email,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 5',
           instructions: 'Fake question 5',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Number,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Number,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 6',
           instructions: '',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Phone,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Phone,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 7',
           instructions: '',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Currency,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Currency,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 8',
           instructions: 'Fake question 8',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Date,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Date,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 9',
           instructions: 'Fake instructions 9',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Select,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Select,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
@@ -272,14 +236,10 @@ export class MockDocumentService {
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 10',
           instructions: 'Fake instructions 10',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.MultiSelect,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.MultiSelect,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
@@ -304,14 +264,10 @@ export class MockDocumentService {
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 12',
           instructions: 'Fake instructions 12',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.CheckList,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.CheckList,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
@@ -336,69 +292,49 @@ export class MockDocumentService {
           children: [],
         },
         {
+          rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 13',
           instructions: 'Fake instructions 13',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Nested,
-            validationExpression: '.+'
-          },
+          questionType: QuestionFieldType.Nested,
           isReadOnly: false,
           isRequired: true,
           isPrivate: false,
           children: [
             {
+              rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Address Line 1',
               instructions: 'Address Line 1',
-              rithmId: '3j4k-3h2j-hj4j',
-              questionType: {
-                rithmId: '3j4k-3h2j-hj4j',
-                typeString: QuestionFieldType.AddressLine,
-                validationExpression: '.+'
-              },
+              questionType: QuestionFieldType.AddressLine,
               isReadOnly: false,
               isRequired: false,
               isPrivate: false,
               children: [],
             },
             {
+              rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Address Line 2',
               instructions: 'Address Line 2',
-              rithmId: '3j4k-3h2j-hj4j',
-              questionType: {
-                rithmId: '3j4k-3h2j-hj4j',
-                typeString: QuestionFieldType.AddressLine,
-                validationExpression: '.+'
-              },
+              questionType: QuestionFieldType.AddressLine,
               isReadOnly: false,
               isRequired: false,
               isPrivate: false,
               children: [],
             },
             {
+              rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Fake question 1',
               instructions: 'Fake instructions 1',
-              rithmId: '3j4k-3h2j-hj4j',
-              questionType: {
-                rithmId: '3j4k-3h2j-hj4j',
-                typeString: QuestionFieldType.City,
-                validationExpression: '.+'
-              },
+              questionType: QuestionFieldType.City,
               isReadOnly: false,
               isRequired: false,
               isPrivate: false,
               children: [],
             },
             {
+              rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Fake question 12',
               instructions: 'Fake instructions 12',
-              rithmId: '3j4k-3h2j-hj4j',
-              questionType: {
-                rithmId: '3j4k-3h2j-hj4j',
-                typeString: QuestionFieldType.State,
-                validationExpression: '.+'
-              },
+              questionType: QuestionFieldType.State,
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,
@@ -423,14 +359,10 @@ export class MockDocumentService {
               children: [],
             },
             {
+              rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Zip',
               instructions: 'Zip',
-              rithmId: '3j4k-3h2j-hj4j',
-              questionType: {
-                rithmId: '3j4k-3h2j-hj4j',
-                typeString: QuestionFieldType.Zip,
-                validationExpression: '.+'
-              },
+              questionType: QuestionFieldType.Zip,
               isReadOnly: false,
               isRequired: true,
               isPrivate: false,

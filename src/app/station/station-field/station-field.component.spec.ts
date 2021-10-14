@@ -38,14 +38,10 @@ describe('StationFieldComponent', () => {
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     component.field = {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'prompt',
       instructions: 'instructions',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.Number,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
@@ -61,28 +57,20 @@ describe('StationFieldComponent', () => {
   it('should remove a field from the array of options', () => {
     component.options = [
       {
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'prompt 1',
         instructions: '',
-        rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.LongText,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
         children: [],
       },
       {
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Prompt 2',
         instructions: '',
-        rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.LongText,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
@@ -102,7 +90,7 @@ describe('StationFieldComponent', () => {
 
   it('should set isRequired', async () => {
     const checkbox = await loader.getHarness<MatCheckboxHarness>(MatCheckboxHarness.with({
-      name: component.field.questionType.rithmId
+      name: component.field.rithmId
     }));
 
     component.field.isRequired = true;
@@ -123,14 +111,10 @@ describe('StationFieldComponent', () => {
   describe('label field', () => {
     beforeEach(() => {
       component.field = {
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
         instructions: '',
-        rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.ShortText,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.ShortText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
@@ -141,7 +125,7 @@ describe('StationFieldComponent', () => {
     });
 
     it('should require a label', () => {
-      const label = component.stationFieldForm.controls[component.field.questionType.typeString];
+      const label = component.stationFieldForm.controls[component.field.questionType];
       expect(label.valid).toBeFalse();
       expect(label.hasError('required')).toBeTrue();
       expect(component.stationFieldForm.valid).toBeFalse();
@@ -151,14 +135,10 @@ describe('StationFieldComponent', () => {
   describe('handle field options', () => {
     beforeEach(() => {
       component.field = {
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
         instructions: '',
-        rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Select,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Select,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,

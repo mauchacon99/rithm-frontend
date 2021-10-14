@@ -190,18 +190,15 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private items', () => {
+  xit('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
+    const isPrivate = true;
     const expectedResponse: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
@@ -211,11 +208,7 @@ describe('StationService', () => {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
@@ -223,46 +216,7 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationPrivateItems(stationId)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
-  });
-
-  xit('should return a list of stations all items', () => {
-    const stationId = 'E204F369-386F-4E41';
-    const expectedResponse: Question[]= [
-      {
-        prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-
-    service.getStationAllItems(stationId)
+    service.getStationPreviousQuestions(stationId, isPrivate)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });

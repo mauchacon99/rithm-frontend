@@ -111,23 +111,20 @@ export class StationService {
   }
 
   /**
-   * Get all stations private items.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
+   * @param isPrivate True returns private questions - False returns all questions.
    * @returns Station private items Array.
    */
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   getStationPrivateItems(stationId: string): Observable<Question[]>{
-    const mockPrivateItems: Question[]= [
+   getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
+    const mockPrevQuestions: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
@@ -137,58 +134,13 @@ export class StationService {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
         children: [],
       },
     ];
-     return of(mockPrivateItems).pipe(delay(1000));
-   }
-
-  /**
-   * Get all stations all items.
-   *
-   * @param stationId The Specific id of station.
-   * @returns Station all items Array.
-   */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   getStationAllItems(stationId: string): Observable<Question[]>{
-    const mockAllItems: Question[]= [
-      {
-        prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: {
-          rithmId: '3j4k-3h2j-hj4j',
-          typeString: QuestionFieldType.Number,
-          validationExpression: '.+'
-        },
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-     return of(mockAllItems).pipe(delay(1000));
+     return of(mockPrevQuestions).pipe(delay(1000));
    }
 }

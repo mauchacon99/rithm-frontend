@@ -168,14 +168,10 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Label',
       instructions: '',
-      rithmId: '3j4k-3h2j-hj4j',
-      questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: fieldType,
-        validationExpression: '.+'
-      },
+      questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
@@ -184,16 +180,17 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get data about public items of the station.
+   * Get all station previous private/all questions.
    *
-   * @param stationId The id of the station.
+   * @param stationId The Specific id of station.
+   * @param isPrivate True returns private questions - False returns all questions.
    */
-     getStationAllItems(stationId: string): void{
-      this.stationService.getStationAllItems(stationId)
+     getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
+      this.stationService.getStationPreviousQuestions(stationId, isPrivate)
       .pipe(first())
-      .subscribe((items) => {
-        if (items) {
-          this.stationAllItems = items;
+      .subscribe((questions) => {
+        if (questions) {
+          this.stationAllItems = questions;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -202,26 +199,6 @@ export class StationComponent implements OnInit, OnDestroy {
         );
       });
     }
-
-  /**
-   * Get data about the station private-items.
-   *
-   * @param stationId The id of the target station private-items.
-   */
-  getStationPrivateItems(stationId: string): void{
-    this.stationService.getStationPrivateItems(stationId)
-    .pipe(first())
-    .subscribe((items) => {
-      if (items) {
-        this.stationPrivateItems = items;
-      }
-    }, (error: unknown) => {
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error
-      );
-    });
-  }
 
   /**
    * Completes all subscriptions.
