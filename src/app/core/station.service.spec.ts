@@ -93,7 +93,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return updated date from a specific station', () => {
+  it('should return updated date from a specific station', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
@@ -102,12 +102,11 @@ describe('StationService', () => {
       expect(response).toEqual(expectedResponse);
     });
 
-    // // outgoing request
-    // const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
-    // expect(req.request.method).toEqual('GET');
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
 
-    // req.flush(expectedResponse);
-    // httpTestingController.verify();
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });
