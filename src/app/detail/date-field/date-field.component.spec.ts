@@ -12,8 +12,9 @@ import { DateFieldComponent } from './date-field.component';
 const FIELD: Question = {
   prompt: 'Fake question 8',
   instructions: 'Fake question 8',
+  rithmId: '3j4k-3h2j-hj4j',
   questionType: {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     typeString: QuestionFieldType.Date,
     validationExpression: '.+'
   },

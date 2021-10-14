@@ -40,8 +40,9 @@ describe('StationFieldComponent', () => {
     component.field = {
       prompt: 'prompt',
       instructions: 'instructions',
+      rithmId: '3j4k-3h2j-hj4j',
       questionType: {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.Number,
         validationExpression: '.+'
       },
@@ -62,8 +63,9 @@ describe('StationFieldComponent', () => {
       {
         prompt: 'prompt 1',
         instructions: '',
-        questionType: {
-          rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
+      questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.LongText,
           validationExpression: '.+'
         },
@@ -75,8 +77,9 @@ describe('StationFieldComponent', () => {
       {
         prompt: 'Prompt 2',
         instructions: '',
-        questionType: {
-          rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
+      questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.LongText,
           validationExpression: '.+'
         },
@@ -122,8 +125,9 @@ describe('StationFieldComponent', () => {
       component.field = {
         prompt: 'Label',
         instructions: '',
-        questionType: {
-          rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
+      questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.ShortText,
           validationExpression: '.+'
         },
@@ -149,8 +153,9 @@ describe('StationFieldComponent', () => {
       component.field = {
         prompt: 'Label',
         instructions: '',
-        questionType: {
-          rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
+      questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Select,
           validationExpression: '.+'
         },

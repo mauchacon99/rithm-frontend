@@ -130,8 +130,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 1',
           instructions: 'Fake instructions 1',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.ShortText,
             validationExpression: '.+'
           },
@@ -143,8 +144,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 2',
           instructions: 'Fake instructions 2',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.LongText,
             validationExpression: '.+'
           },
@@ -156,8 +158,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 3',
           instructions: '',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.URL,
             validationExpression: '.+'
           },
@@ -169,8 +172,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 4',
           instructions: 'Fake instructions 4',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Email,
             validationExpression: '.+'
           },
@@ -182,8 +186,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 5',
           instructions: 'Fake question 5',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Number,
             validationExpression: '.+'
           },
@@ -195,8 +200,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 6',
           instructions: '',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Phone,
             validationExpression: '.+'
           },
@@ -208,8 +214,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 7',
           instructions: '',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Currency,
             validationExpression: '.+'
           },
@@ -221,8 +228,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 8',
           instructions: 'Fake question 8',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Date,
             validationExpression: '.+'
           },
@@ -234,8 +242,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 9',
           instructions: 'Fake instructions 9',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Select,
             validationExpression: '.+'
           },
@@ -265,8 +274,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 10',
           instructions: 'Fake instructions 10',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.MultiSelect,
             validationExpression: '.+'
           },
@@ -296,8 +306,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 12',
           instructions: 'Fake instructions 12',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.CheckList,
             validationExpression: '.+'
           },
@@ -327,8 +338,9 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 13',
           instructions: 'Fake instructions 13',
+          rithmId: '3j4k-3h2j-hj4j',
           questionType: {
-            rithmId: '',
+            rithmId: '3j4k-3h2j-hj4j',
             typeString: QuestionFieldType.Nested,
             validationExpression: '.+'
           },
@@ -339,8 +351,9 @@ export class MockDocumentService {
             {
               prompt: 'Address Line 1',
               instructions: 'Address Line 1',
+              rithmId: '3j4k-3h2j-hj4j',
               questionType: {
-                rithmId: '',
+                rithmId: '3j4k-3h2j-hj4j',
                 typeString: QuestionFieldType.AddressLine,
                 validationExpression: '.+'
               },
@@ -352,8 +365,9 @@ export class MockDocumentService {
             {
               prompt: 'Address Line 2',
               instructions: 'Address Line 2',
+              rithmId: '3j4k-3h2j-hj4j',
               questionType: {
-                rithmId: '',
+                rithmId: '3j4k-3h2j-hj4j',
                 typeString: QuestionFieldType.AddressLine,
                 validationExpression: '.+'
               },
@@ -365,8 +379,9 @@ export class MockDocumentService {
             {
               prompt: 'Fake question 1',
               instructions: 'Fake instructions 1',
+              rithmId: '3j4k-3h2j-hj4j',
               questionType: {
-                rithmId: '',
+                rithmId: '3j4k-3h2j-hj4j',
                 typeString: QuestionFieldType.City,
                 validationExpression: '.+'
               },
@@ -378,8 +393,9 @@ export class MockDocumentService {
             {
               prompt: 'Fake question 12',
               instructions: 'Fake instructions 12',
+              rithmId: '3j4k-3h2j-hj4j',
               questionType: {
-                rithmId: '',
+                rithmId: '3j4k-3h2j-hj4j',
                 typeString: QuestionFieldType.State,
                 validationExpression: '.+'
               },
@@ -409,8 +425,9 @@ export class MockDocumentService {
             {
               prompt: 'Zip',
               instructions: 'Zip',
+              rithmId: '3j4k-3h2j-hj4j',
               questionType: {
-                rithmId: '',
+                rithmId: '3j4k-3h2j-hj4j',
                 typeString: QuestionFieldType.Zip,
                 validationExpression: '.+'
               },

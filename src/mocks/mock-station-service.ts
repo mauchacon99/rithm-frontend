@@ -1,4 +1,6 @@
-import { Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -16,7 +18,7 @@ export class MockStationService {
    */
   getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      stationRithmId: 'E204F369-386F-4E41',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
@@ -82,6 +84,7 @@ export class MockStationService {
   }
 
   /**
+<<<<<<< HEAD
    * Get all stations all items.
    *
    * @param stationId The Specific id of station.
@@ -89,12 +92,97 @@ export class MockStationService {
    */
    getStationAllItems(stationId: string): Observable<Question[]>{
     const mockAllItems: Question[]= [
+=======
+   * Update station name.
+   *
+   * @returns The list of all stations.
+   * @param station The station information that will be update.
+   */
+  updateStation(station: StationInformation): Observable<StationInformation> {
+    if (!station) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StationInformation = {
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'New Station Name',
+        instructions: '',
+        nextStations: [{
+          stationName: 'Development',
+          totalDocuments: 5,
+          isGenerator: true
+        }],
+        previousStations: [{
+          stationName: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true
+        }, {
+          stationName: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false
+        }],
+        supervisors: [{
+          userRithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com'
+        }, {
+          userRithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com'
+        }],
+        workers: [{
+          userRithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com'
+        }, {
+          userRithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com'
+        }],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2
+      };
+      return of(data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get station information updated date.
+   *
+   * @param stationId The id of the station for witch to get the last updated date.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(stationId: string): Observable<string> {
+    const mockDate = '2021-07-18T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
+  }
+
+  /**
+   * Get all stations private items.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Station private items Array.
+   */
+   getStationPrivateItems(stationId: string): Observable<Question[]>{
+    const mockPrivateItems: Question[]= [
+>>>>>>> dev
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Number,
           validationExpression: '.+'
         },
@@ -106,9 +194,9 @@ export class MockStationService {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Number,
           validationExpression: '.+'
         },
@@ -118,7 +206,12 @@ export class MockStationService {
         children: [],
       },
     ];
+<<<<<<< HEAD
     return of(mockAllItems).pipe(delay(1000));
   }
 
+=======
+    return of(mockPrivateItems).pipe(delay(1000));
+  }
+>>>>>>> dev
 }

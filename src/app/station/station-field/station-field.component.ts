@@ -53,8 +53,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   instructionField: Question = {
     prompt: 'Instructions',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.Instructions,
       validationExpression: '.+'
     },
@@ -68,8 +69,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   labelField: Question = {
     prompt: 'Name your field',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.ShortText,
       validationExpression: '.+'
     },
@@ -83,8 +85,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   selectOptionField: Question = {
     prompt: 'Add Option',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.ShortText,
       validationExpression: '.+'
     },
@@ -98,8 +101,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   checklistOptionField: Question = {
     prompt: 'Add Item',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.ShortText,
       validationExpression: '.+'
     },

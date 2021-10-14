@@ -12,8 +12,14 @@ export interface Question {
   /** Instructions for filling out the question. */
   instructions?: string; // TODO: get this from the back end
 
+  /** The global Rithm ID for the question type. */
+  rithmId: string;
+
   /** Type of the question. */
   questionType: QuestionType;
+
+  /** Whether the question is encrypted or not. */
+  isEncrypted?: boolean;
 
   /** Whether the question is read only and only for reference. */
   isReadOnly: boolean;

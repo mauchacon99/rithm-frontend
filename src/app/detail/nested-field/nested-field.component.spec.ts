@@ -12,8 +12,9 @@ import { NestedFieldComponent } from './nested-field.component';
 const ADDRESS: Question = {
   prompt: '',
   instructions: 'Enter the shipping address',
+  rithmId: '3j4k-3h2j-hj4j',
   questionType: {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     typeString: QuestionFieldType.Nested,
     validationExpression: '.+'
   },
@@ -24,8 +25,9 @@ const ADDRESS: Question = {
     {
       prompt: 'Address Line 1',
       instructions: '',
-      questionType: {
-        rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.AddressLine,
         validationExpression: '.+'
       },
@@ -37,8 +39,9 @@ const ADDRESS: Question = {
     {
       prompt: 'Address Line 2',
       instructions: '',
-      questionType: {
-        rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.AddressLine,
         validationExpression: '.+'
       },
@@ -50,8 +53,9 @@ const ADDRESS: Question = {
     {
       prompt: 'City',
       instructions: '',
-      questionType: {
-        rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.City,
         validationExpression: '.+'
       },
@@ -63,8 +67,9 @@ const ADDRESS: Question = {
     {
       prompt: 'State',
       instructions: '',
-      questionType: {
-        rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.State,
         validationExpression: '.+'
       },
@@ -77,8 +82,9 @@ const ADDRESS: Question = {
     {
       prompt: 'Zip',
       instructions: '',
-      questionType: {
-        rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.Zip,
         validationExpression: '.+'
       },

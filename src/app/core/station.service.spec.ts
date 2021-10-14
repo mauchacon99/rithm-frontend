@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { Question, QuestionFieldType, Station } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -93,15 +93,112 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations all items', () => {
+  xit('should return station information with updated data', () => {
+    const station: StationInformation = {
+      stationRithmId: 'E204F369-386F-4E41',
+      name: 'Station Name',
+      instructions: 'General instructions',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 1,
+    };
+
+    const expectedResponse = {
+      stationRithmId: station.stationRithmId,
+      name: station.name,
+      instructions: 'General instructions',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 1
+    };
+
+    service.updateStation(station)
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
+    expect(req.request.method).toEqual('PUT');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  xit('should return updated date from a specific station', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse = '2021-07-18T17:26:47.3506612Z';
+
+    service.getLastUpdated(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  xit('should return a list of stations private items', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Number,
           validationExpression: '.+'
         },
@@ -113,9 +210,48 @@ describe('StationService', () => {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service.getStationPrivateItems(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  xit('should return a list of stations all items', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse: Question[]= [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Number,
           validationExpression: '.+'
         },

@@ -12,8 +12,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 5',
     instructions: 'Fake question 5',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.Number,
       validationExpression: '.+'
     },
@@ -25,8 +26,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 6',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.Phone,
       validationExpression: '.+'
     },
@@ -38,8 +40,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 7',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.Currency,
       validationExpression: '.+'
     },
@@ -158,8 +161,9 @@ describe('NumberFieldComponent', () => {
       component.field = {
         prompt: 'Postal code',
         instructions: '',
-        questionType: {
-          rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
+    questionType: {
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Zip,
           validationExpression: '.+'
         },

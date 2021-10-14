@@ -11,8 +11,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 1',
     instructions: 'Fake instructions 1',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.ShortText,
       validationExpression: '.+'
     },
@@ -24,8 +25,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 2',
     instructions: 'Fake instructions 2',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.LongText,
       validationExpression: '.+'
     },
@@ -37,8 +39,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 3',
     instructions: '',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.URL,
       validationExpression: '.+'
     },
@@ -50,8 +53,9 @@ const FIELDS: Question[] = [
   {
     prompt: 'Fake question 4',
     instructions: 'Fake instructions 4',
+    rithmId: '3j4k-3h2j-hj4j',
     questionType: {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       typeString: QuestionFieldType.Email,
       validationExpression: '.+'
     },

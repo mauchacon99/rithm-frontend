@@ -11,8 +11,9 @@ const testStationFields = [
       {
         prompt: 'Instructions',
         instructions: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.LongText,
           validationExpression: '.+'
         },
@@ -24,8 +25,9 @@ const testStationFields = [
       {
         prompt: 'Label',
         instructions: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.ShortText,
           validationExpression: '.+'
         },
@@ -37,8 +39,9 @@ const testStationFields = [
       {
         prompt: 'Fake question 7',
         instructions: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: {
-          rithmId: '',
+          rithmId: '3j4k-3h2j-hj4j',
           typeString: QuestionFieldType.Number,
           validationExpression: '.+'
         },

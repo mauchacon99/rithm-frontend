@@ -51,8 +51,9 @@ describe('DocumentFieldComponent', () => {
     component.field = {
       prompt: 'Address line 1',
       instructions: '',
+      rithmId: '3j4k-3h2j-hj4j',
       questionType: {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         typeString: QuestionFieldType.ShortText,
         validationExpression: '.+'
       },
