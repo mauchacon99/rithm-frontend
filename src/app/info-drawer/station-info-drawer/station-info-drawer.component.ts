@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -41,12 +42,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Worker. */
   isWorker = true;
 
+  /** Station name form. */
+  stationNameForm: FormGroup;
+
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
+    private fb: FormBuilder,
     private stationService: StationService,
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
@@ -64,6 +69,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+    this.stationNameForm = this.fb.group({
+      name: ['']
+    });
   }
 
   /**
@@ -116,6 +124,29 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         });
     }
+
+  /**
+   * Update the Station Name.
+   *
+   * @param station The new station information to be updated.
+   */
+   updateStation(station: StationInformation): void{
+     this.stationLoading = true;
+     this.stationService.updateStation(station)
+     .pipe(first())
+     .subscribe((stationUpdated)=>{
+       if (stationUpdated){
+         this.stationInformation = stationUpdated;
+       }
+       this.stationLoading = false;
+     }, (error: unknown) => {
+       this.stationLoading = false;
+       this.errorService.displayError(
+         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+         error
+       );
+     });
+   }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.

@@ -8,18 +8,18 @@ export interface FlowMapData {
   rithmId: string;
 
   /** The name of the flow. */
-  name: string;
+  title: string;
 
   /**
    * The ids of the stations contained immediately within this flow. Does not include stations in nested flows (immediate children only).
    */
-  stationIds: string[];
+  stations: string[];
 
   /**
    * The ids of the flows contained immediately within this flow. Does not include flows nested more than one level deep (immediate children
    * only).
    */
-  flowIds: string[];
+  subFlows: string[];
 
   /** The status of the flow (what should happen to this flow). */
   status: MapItemStatus;
