@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { delay } from 'rxjs/operators';
-import { Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -157,5 +157,45 @@ export class MockStationService {
   getLastUpdated(stationId: string): Observable<string> {
     const mockDate = '2021-07-18T17:26:47.3506612Z';
     return of(mockDate).pipe(delay(1000));
+  }
+
+  /**
+   * Get all stations private items.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Station private items Array.
+   */
+   getStationPrivateItems(stationId: string): Observable<Question[]>{
+    const mockPrivateItems: Question[]= [
+      {
+        prompt: 'Fake question 1',
+        instructions: 'Fake question 1',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        instructions: 'Fake question 2',
+        rithmId: '',
+        questionType: {
+          rithmId: '',
+          typeString: QuestionFieldType.Number,
+          validationExpression: '.+'
+        },
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(mockPrivateItems).pipe(delay(1000));
   }
 }

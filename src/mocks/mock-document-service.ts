@@ -130,6 +130,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 1',
           instructions: 'Fake instructions 1',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.ShortText,
@@ -143,6 +144,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 2',
           instructions: 'Fake instructions 2',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.LongText,
@@ -156,6 +158,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 3',
           instructions: '',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.URL,
@@ -169,6 +172,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 4',
           instructions: 'Fake instructions 4',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Email,
@@ -182,6 +186,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 5',
           instructions: 'Fake question 5',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Number,
@@ -195,6 +200,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 6',
           instructions: '',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Phone,
@@ -208,6 +214,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 7',
           instructions: '',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Currency,
@@ -221,6 +228,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 8',
           instructions: 'Fake question 8',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Date,
@@ -234,6 +242,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 9',
           instructions: 'Fake instructions 9',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Select,
@@ -265,6 +274,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 10',
           instructions: 'Fake instructions 10',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.MultiSelect,
@@ -296,6 +306,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 12',
           instructions: 'Fake instructions 12',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.CheckList,
@@ -327,6 +338,7 @@ export class MockDocumentService {
         {
           prompt: 'Fake question 13',
           instructions: 'Fake instructions 13',
+          rithmId: '',
           questionType: {
             rithmId: '',
             typeString: QuestionFieldType.Nested,
@@ -339,6 +351,7 @@ export class MockDocumentService {
             {
               prompt: 'Address Line 1',
               instructions: 'Address Line 1',
+              rithmId: '',
               questionType: {
                 rithmId: '',
                 typeString: QuestionFieldType.AddressLine,
@@ -352,6 +365,7 @@ export class MockDocumentService {
             {
               prompt: 'Address Line 2',
               instructions: 'Address Line 2',
+              rithmId: '',
               questionType: {
                 rithmId: '',
                 typeString: QuestionFieldType.AddressLine,
@@ -365,6 +379,7 @@ export class MockDocumentService {
             {
               prompt: 'Fake question 1',
               instructions: 'Fake instructions 1',
+              rithmId: '',
               questionType: {
                 rithmId: '',
                 typeString: QuestionFieldType.City,
@@ -378,6 +393,7 @@ export class MockDocumentService {
             {
               prompt: 'Fake question 12',
               instructions: 'Fake instructions 12',
+              rithmId: '',
               questionType: {
                 rithmId: '',
                 typeString: QuestionFieldType.State,
@@ -409,6 +425,7 @@ export class MockDocumentService {
             {
               prompt: 'Zip',
               instructions: 'Zip',
+              rithmId: '',
               questionType: {
                 rithmId: '',
                 typeString: QuestionFieldType.Zip,

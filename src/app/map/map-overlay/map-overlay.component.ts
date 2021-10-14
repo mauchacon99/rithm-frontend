@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapData, MapMode } from 'src/models';
+import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MAX_SCALE, MIN_SCALE } from '../map-constants';
@@ -22,12 +22,6 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** The current mode of the map. */
   private currentMode = MapMode.View;
-
-  /** Build button for admin. Need to remove once object reference has been set. */
-  mapData: MapData = {
-    stations: [],
-    flows: []
-  };
 
   /** Map data request loading indicator. */
   mapDataLoading = false;
@@ -96,10 +90,8 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Publishes map changes.
-   *
-   * @param mapData The selected user to remove.
    */
-  async publish(mapData: MapData): Promise<void> {
+  async publish(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -108,10 +100,11 @@ export class MapOverlayComponent implements OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
-      this.mapService.publishMap(mapData)
+      this.mapService.publishMap()
         .pipe(first())
         .subscribe(() => {
           this.mapDataLoading = false;
+          this.mapService.mapMode$.next(MapMode.View);
           this.popupService.notify('Map data published successfully.');
         }, (error: unknown) => {
           this.mapDataLoading = false;

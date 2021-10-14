@@ -12,6 +12,7 @@ import { NestedFieldComponent } from './nested-field.component';
 const ADDRESS: Question = {
   prompt: '',
   instructions: 'Enter the shipping address',
+  rithmId: '',
   questionType: {
     rithmId: '',
     typeString: QuestionFieldType.Nested,
@@ -24,7 +25,8 @@ const ADDRESS: Question = {
     {
       prompt: 'Address Line 1',
       instructions: '',
-      questionType: {
+      rithmId: '',
+        questionType: {
         rithmId: '',
         typeString: QuestionFieldType.AddressLine,
         validationExpression: '.+'
@@ -37,7 +39,8 @@ const ADDRESS: Question = {
     {
       prompt: 'Address Line 2',
       instructions: '',
-      questionType: {
+      rithmId: '',
+        questionType: {
         rithmId: '',
         typeString: QuestionFieldType.AddressLine,
         validationExpression: '.+'
@@ -50,7 +53,8 @@ const ADDRESS: Question = {
     {
       prompt: 'City',
       instructions: '',
-      questionType: {
+      rithmId: '',
+        questionType: {
         rithmId: '',
         typeString: QuestionFieldType.City,
         validationExpression: '.+'
@@ -63,7 +67,8 @@ const ADDRESS: Question = {
     {
       prompt: 'State',
       instructions: '',
-      questionType: {
+      rithmId: '',
+        questionType: {
         rithmId: '',
         typeString: QuestionFieldType.State,
         validationExpression: '.+'
@@ -77,7 +82,8 @@ const ADDRESS: Question = {
     {
       prompt: 'Zip',
       instructions: '',
-      questionType: {
+      rithmId: '',
+        questionType: {
         rithmId: '',
         typeString: QuestionFieldType.Zip,
         validationExpression: '.+'
