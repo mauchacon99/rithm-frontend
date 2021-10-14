@@ -77,14 +77,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Gets info about the station as well as forward and previous stations for a specific station.
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.getParams();
   }
 
   /**
    * Attempts to retrieve the station info from the query params in the URL and make the requests.
    */
-   private getParams(): void {
+  private getParams(): void {
     this.route.params
       .pipe(first())
       .subscribe((params) => {
@@ -102,28 +102,37 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Toggles the open state of the drawer for station info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawer(drawerItem: 'stationInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
    * Get the last updated date for a specific station.
    *
    * @param stationId The id of the station that the document is in.
    */
-     getLastUpdated(stationId: string): void {
-      this.stationLoading = true;
-      this.stationService.getLastUpdated(stationId)
-        .pipe(first())
-        .subscribe((updatedDate) => {
-          if (updatedDate) {
-            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-          }
-          this.stationLoading = false;
-        }, (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+  getLastUpdated(stationId: string): void {
+    this.stationLoading = true;
+    this.stationService.getLastUpdated(stationId)
+      .pipe(first())
+      .subscribe((updatedDate) => {
+        if (updatedDate) {
+          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
 
   /**
    * Update the Station Name.
@@ -151,7 +160,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
    */
-   private handleInvalidParams(): void {
+  private handleInvalidParams(): void {
     this.errorService.displayError(
       'Unable to retrieve the last updated time.',
       new Error('Invalid params for document')
@@ -161,8 +170,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
-      this.destroyed$.next();
-      this.destroyed$.complete();
-    }
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }
