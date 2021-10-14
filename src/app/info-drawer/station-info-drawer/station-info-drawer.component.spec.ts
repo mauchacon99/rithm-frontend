@@ -7,12 +7,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
+import { MatInputModule } from '@angular/material/input';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,13 +24,17 @@ describe('StationInfoDrawerComponent', () => {
         StationInfoDrawerComponent,
         MockComponent(RosterComponent)
       ],
-      imports: [
+      imports:[
+        MatInputModule,
+        ReactiveFormsModule,
+        NoopAnimationsModule,
         RouterTestingModule,
         MatButtonModule,
         MatRadioModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
+        { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
       ]

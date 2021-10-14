@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType, Question } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -52,6 +52,9 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
+
+  /** The list of station private items. */
+  stationPrivateItems: Question[] = [];
 
 
   constructor(
@@ -164,6 +167,7 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationInformation.questions.push({
       prompt: 'Label',
       instructions: '',
+      rithmId: '',
       questionType: {
         rithmId: '',
         typeString: fieldType,
@@ -173,6 +177,26 @@ export class StationComponent implements OnInit, OnDestroy {
       isRequired: false,
       isPrivate: false,
       children: [],
+    });
+  }
+
+  /**
+   * Get data about the document and station the document is in.
+   *
+   * @param stationId The id of the station that the document is in.
+   */
+  getStationPrivateItems(stationId: string): void{
+    this.stationService.getStationPrivateItems(stationId)
+    .pipe(first())
+    .subscribe((items) => {
+      if (items) {
+        this.stationPrivateItems = items;
+      }
+    }, (error: unknown) => {
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
     });
   }
 

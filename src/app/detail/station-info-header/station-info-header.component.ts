@@ -47,6 +47,7 @@ export class StationInfoHeaderComponent implements OnInit {
     this.nameField = {
       prompt: this.stationName,
       instructions: '',
+      rithmId: '',
       questionType: {
         rithmId: '',
         typeString: QuestionFieldType.ShortText,
