@@ -6,6 +6,6 @@
 
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
-  <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button>
-  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">{{okButtonText}}</button>
+  <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial attr.data-testid="{{dataTestId.cancelButtonTest}}">{{cancelButtonText}}</button>
+  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true" attr.data-testid="{{dataTestId.okButtonTest}}">{{okButtonText}}</button>
 </div>
