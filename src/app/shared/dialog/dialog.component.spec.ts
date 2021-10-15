@@ -34,7 +34,7 @@ const DIALOG_TEST_DATA: DialogData[] =
     title: 'Prompt',
     message: 'This is an example prompt used for testing.',
     promptLabel: 'Grandma name',
-    promptInput: 'Gertrude',
+    promptValue: 'Gertrude',
     okButtonText: 'Go',
     cancelButtonText: 'Nope'
   },
@@ -124,13 +124,13 @@ describe('DialogComponent Type Prompt', () => {
       // TODO: Add unit test to check for the placeholder/label
       const promptLabel = component.promptLabel;
       expect(await inputElement.getName()).toEqual(promptLabel as string);
-      expect(promptLabel).toEqual(DIALOG_TEST_DATA[2].promptInput as string);
+      expect(promptLabel).toEqual(DIALOG_TEST_DATA[2].promptValue as string);
     });
 
     it('should have text pre-populated', async () => {
-      const promptInput = component.promptInput;
+      const promptInput = component.promptValue;
       expect(await inputElement.getValue()).toEqual(promptInput as string);
-      expect(promptInput).toEqual(DIALOG_TEST_DATA[2].promptInput as string);
+      expect(promptInput).toEqual(DIALOG_TEST_DATA[2].promptValue as string);
     });
   });
 
@@ -166,7 +166,7 @@ describe('DialogComponent Type Prompt', () => {
     });
 
     it('should have custom text', async () => {
-      const cancelButtonText = component.cancelButtonText!;
+      const cancelButtonText = component.cancelButtonText;
       expect(await buttonHarness.getText()).toEqual(cancelButtonText);
       expect(cancelButtonText).toEqual(DIALOG_TEST_DATA[2].cancelButtonText as string);
     });
