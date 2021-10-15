@@ -190,7 +190,11 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((questions) => {
         if (questions) {
-          this.stationAllItems = questions;
+          if (isPrivate){
+            this.stationPrivateItems = questions;
+          } else {
+            this.stationAllItems = questions;
+          }
         }
       }, (error: unknown) => {
         this.errorService.displayError(

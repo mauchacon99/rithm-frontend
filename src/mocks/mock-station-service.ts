@@ -163,7 +163,7 @@ export class MockStationService {
    *
    * @param stationId The Specific id of station.
    * @param isPrivate True returns private questions - False returns all questions.
-   * @returns Station private items Array.
+   * @returns Station private/all items Array.
    */
   getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
     const mockPrevQuestions: Question[] = [

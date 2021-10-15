@@ -67,7 +67,7 @@ export class StationService {
    *
    * @param stationId The Specific id of station.
    * @param isPrivate True returns private questions - False returns all questions.
-   * @returns Station private items Array.
+   * @returns Station private/all items Array.
    */
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
