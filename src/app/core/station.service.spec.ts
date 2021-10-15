@@ -93,7 +93,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return station information with updated data', () => {
+  it('should return station information with updated data', () => {
     const station: StationInformation = {
       stationRithmId: 'E204F369-386F-4E41',
       name: 'Station Name',
@@ -164,7 +164,7 @@ describe('StationService', () => {
 
     service.updateStation(station)
       .subscribe((response) => {
-        expect(response).toBeDefined();
+        expect(response).toBe(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
