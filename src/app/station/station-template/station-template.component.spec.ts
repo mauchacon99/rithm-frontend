@@ -9,7 +9,7 @@ import { StationTemplateComponent } from './station-template.component';
 
 const testStationFields = [
       {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Instructions',
         instructions: '',
         questionType: QuestionFieldType.LongText,
@@ -19,7 +19,7 @@ const testStationFields = [
         children: [],
       },
       {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
         instructions: '',
         questionType: QuestionFieldType.ShortText,
@@ -29,7 +29,7 @@ const testStationFields = [
         children: [],
       },
       {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Fake question 7',
         instructions: '',
         questionType: QuestionFieldType.Number,
