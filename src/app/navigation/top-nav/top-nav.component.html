@@ -9,15 +9,15 @@
   </span>
   <ul class="hidden md:block flex-grow h-full">
     <li *ngFor="let navItem of navItems" routerLink="{{navItem}}" [routerLinkActive]="['active']" class="hover:bg-primary-400 cursor-pointer py-5 h-full list-none float-left text-center">
-      <a class="text-white no-underline hover:no-underline capitalize">{{navItem}}</a>
+      <a class="text-white no-underline hover:no-underline capitalize" attr.data-testid="{{navItem}}-button">{{navItem}}</a>
     </li>
   </ul>
-  <button id="notification-button" (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button class="group mr-4">
+  <button id="notification-button" (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button class="group mr-4" data-testid="notification-button">
     <i class="fas fa-bell text-2xl text-white group-hover:text-secondary-100"></i>
   </button>
-  <div [matMenuTriggerFor]="userMenu" class="w-10 h-10 hidden md:block bg-white rounded-full mr-6">
+  <button [matMenuTriggerFor]="userMenu" class="w-10 h-10 hidden md:block bg-white rounded-full mr-6" data-testid="profile-button">
     <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [navProfile]="true" [hideToolTip]="true"></app-user-avatar>
-  </div>
+  </button>
 </nav>
 <mat-menu #userMenu="matMenu">
   <button mat-menu-item routerLink="settings/account">
