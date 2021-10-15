@@ -190,13 +190,14 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private items', () => {
+  xit('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
+    const isPrivate = true;
     const expectedResponse: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -206,7 +207,7 @@ describe('StationService', () => {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -215,7 +216,7 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationPrivateItems(stationId)
+    service.getStationPreviousQuestions(stationId, isPrivate)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });

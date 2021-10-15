@@ -111,18 +111,19 @@ export class StationService {
   }
 
   /**
-   * Get all stations private items.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
+   * @param isPrivate True returns private questions - False returns all questions.
    * @returns Station private items Array.
    */
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   getStationPrivateItems(stationId: string): Observable<Question[]>{
-    const mockPrivateItems: Question[]= [
+   getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
+    const mockPrevQuestions: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -132,7 +133,7 @@ export class StationService {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -140,6 +141,6 @@ export class StationService {
         children: [],
       },
     ];
-     return of(mockPrivateItems).pipe(delay(1000));
+     return of(mockPrevQuestions).pipe(delay(1000));
    }
 }

@@ -10,7 +10,7 @@ import { NumberFieldComponent } from './number-field.component';
 
 const FIELDS: Question[] = [
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 5',
     instructions: 'Fake question 5',
     questionType: QuestionFieldType.Number,
@@ -20,7 +20,7 @@ const FIELDS: Question[] = [
     children: [],
   },
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 6',
     instructions: '',
     questionType: QuestionFieldType.Phone,
@@ -30,7 +30,7 @@ const FIELDS: Question[] = [
     children: [],
   },
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 7',
     instructions: '',
     questionType: QuestionFieldType.Currency,
@@ -147,7 +147,7 @@ describe('NumberFieldComponent', () => {
 
     beforeEach(() => {
       component.field = {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Postal code',
         instructions: '',
         questionType: QuestionFieldType.Zip,
