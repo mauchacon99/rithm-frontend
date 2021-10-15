@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `StationService`.
@@ -84,9 +83,9 @@ export class MockStationService {
   }
 
   /**
-   * Update station name.
+   * Update station information.
    *
-   * @returns The list of all stations.
+   * @returns The station information updated.
    * @param station The station information that will be update.
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
@@ -160,17 +159,18 @@ export class MockStationService {
   }
 
   /**
-   * Get all stations private items.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
-   * @returns Station private items Array.
+   * @param isPrivate True returns private questions - False returns all questions.
+   * @returns Station private/all items Array.
    */
-   getStationPrivateItems(stationId: string): Observable<Question[]>{
-    const mockPrivateItems: Question[]= [
+  getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
+    const mockPrevQuestions: Question[] = [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -180,7 +180,7 @@ export class MockStationService {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -188,6 +188,6 @@ export class MockStationService {
         children: [],
       },
     ];
-    return of(mockPrivateItems).pipe(delay(1000));
+    return of(mockPrevQuestions).pipe(delay(1000));
   }
 }

@@ -38,7 +38,7 @@ describe('StationFieldComponent', () => {
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     component.field = {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'prompt',
       instructions: 'instructions',
       questionType: QuestionFieldType.Number,
@@ -57,7 +57,7 @@ describe('StationFieldComponent', () => {
   it('should remove a field from the array of options', () => {
     component.options = [
       {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'prompt 1',
         instructions: '',
         questionType: QuestionFieldType.LongText,
@@ -67,7 +67,7 @@ describe('StationFieldComponent', () => {
         children: [],
       },
       {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Prompt 2',
         instructions: '',
         questionType: QuestionFieldType.LongText,
@@ -111,7 +111,7 @@ describe('StationFieldComponent', () => {
   describe('label field', () => {
     beforeEach(() => {
       component.field = {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
         instructions: '',
         questionType: QuestionFieldType.ShortText,
@@ -135,7 +135,7 @@ describe('StationFieldComponent', () => {
   describe('handle field options', () => {
     beforeEach(() => {
       component.field = {
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
         instructions: '',
         questionType: QuestionFieldType.Select,

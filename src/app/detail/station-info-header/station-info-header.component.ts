@@ -45,7 +45,7 @@ export class StationInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
 
     this.nameField = {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
       instructions: '',
       questionType: QuestionFieldType.ShortText,
