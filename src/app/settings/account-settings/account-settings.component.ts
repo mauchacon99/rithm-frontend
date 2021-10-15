@@ -110,8 +110,7 @@ export class AccountSettingsComponent {
         this.isLoading = false;
         await this.popupService.terms({
           title: 'Terms and Conditions',
-          message: message,
-          showAgreeButton: false
+          message
         });
       }
     }, (error: unknown) => {

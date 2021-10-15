@@ -7,7 +7,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DialogData } from 'src/models';
+import { DialogOptions } from 'src/models';
 import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
 import { Subject } from 'rxjs';
 
@@ -111,8 +111,7 @@ export class AccountCreateComponent implements OnInit {
           agreeTerms = await this.popupService.terms({
             title: 'Terms and Conditions',
             message: message,
-            okButtonText: 'Agree',
-            showAgreeButton: true
+            okButtonText: 'Agree'
           });
           this.termsConditionsService.setAgreed(agreeTerms);
         }
@@ -129,12 +128,12 @@ export class AccountCreateComponent implements OnInit {
    * Open the alert to validate their email address.
    */
   openValidateEmailModal(): void {
-    const data: DialogData = {
+    const options: DialogOptions = {
       title: 'Validate your email address',
       message: 'Almost there! Please check your email for a link to validate your Rithm account.'
     };
 
-    this.popupService.alert(data).then(() => {
+    this.popupService.alert(options).then(() => {
       this.router.navigate(['']);
     });
   }
