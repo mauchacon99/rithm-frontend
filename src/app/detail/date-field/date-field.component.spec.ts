@@ -10,14 +10,10 @@ import { Question, QuestionFieldType } from 'src/models';
 import { DateFieldComponent } from './date-field.component';
 
 const FIELD: Question = {
+  rithmId: '',
   prompt: 'Fake question 8',
   instructions: 'Fake question 8',
-  rithmId: '',
-  questionType: {
-    rithmId: '',
-    typeString: QuestionFieldType.Date,
-    validationExpression: '.+'
-  },
+  questionType: QuestionFieldType.Date,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,
@@ -69,7 +65,7 @@ describe('DateFieldComponent', () => {
 
   it('should require an input in date field', () => {
     const date = component.dateFieldForm.controls['date'];
-    expect(component.field.questionType.typeString).toBeTruthy();
+    expect(component.field.questionType).toBeTruthy();
     expect(date.valid).toBeFalse();
     expect(date.hasError('required')).toBeTrue();
     expect(component.dateFieldForm.valid).toBeFalse();
