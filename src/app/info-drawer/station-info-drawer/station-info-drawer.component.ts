@@ -141,7 +141,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStation(station: StationInformation): void {
     station.name = this.stationNameForm.value.name;
-    console.log(station);
     this.stationLoading = true;
     this.stationService.updateStation(station)
       .pipe(first())

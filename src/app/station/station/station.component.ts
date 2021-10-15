@@ -209,12 +209,12 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Show hidden loading in component parent.
    *
    * @param action Param for show or hidden in loading.
    */
-  showHiddenLoading(action: boolean): void {
+   showHiddenLoading(action: boolean): void {
     this.stationLoading = action;
-    console.log(this.stationLoading)
   }
 
   /**

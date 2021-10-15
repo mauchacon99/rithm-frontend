@@ -32,8 +32,8 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Field to change station name. */
   nameField!: Question;
 
-  /** Send Loading in station component */
-  @Output() stationLoadingParent = new EventEmitter<boolean>(false);
+  /** Send Loading in station component. */
+  @Output() stationLoadingParent = new EventEmitter<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +62,7 @@ export class StationInfoHeaderComponent implements OnInit {
       isPrivate: false,
       children: [],
     };
-    this.stationNameForm.controls['name'].setValue(this.stationName);
+    //this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
   /** Get name of station from StationInformation based on type.
@@ -93,7 +93,6 @@ export class StationInfoHeaderComponent implements OnInit {
       isWorker: false,
       editMode: this.stationEditMode
     };
-    console.log(dataInformationDrawer);
 
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
   }
@@ -101,7 +100,6 @@ export class StationInfoHeaderComponent implements OnInit {
   /**
    * Update the Station Name.
    *
-   * @param station The new station information to be updated.
    */
   updateStation(): void {
     let stationLoading = false;
@@ -132,7 +130,7 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    * @param showLoading Show or hidden loading in parent component.
    */
-  sendLoadingParent(showLoading: boolean = false): void {
+  sendLoadingParent(showLoading = false): void {
     this.stationLoadingParent.emit(showLoading);
   }
 
