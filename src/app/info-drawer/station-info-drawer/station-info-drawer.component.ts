@@ -48,6 +48,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Color message LastUpdated. */
+  colorMessage  = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -123,6 +126,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (updatedDate) {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
+            this.colorMessage='text-accent-300';
           }
           this.stationLoading = false;
         }, (error: unknown) => {
