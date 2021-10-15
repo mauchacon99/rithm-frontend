@@ -48,6 +48,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Whether the account settings is loading. */
+  isLoading = true;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -123,6 +126,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         if (updatedDate) {
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+            this.isLoading=false;
         }
         this.stationLoading = false;
       }, (error: unknown) => {

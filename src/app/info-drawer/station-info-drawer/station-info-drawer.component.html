@@ -41,6 +41,13 @@
     <button mat-stroked-button color="warn" class="priority font-semibold">Delete Station</button>
   </div>
 </div>
+
+
+<div class="w-full h-full absolute top-0 left-0 flex" *ngIf="isLoading">
+  <app-loading-indicator [diameter]="46" class="m-auto self-center"></app-loading-indicator>
+</div>
+
+
 <div class="flex justify-center">
    <div class="bottom-0 absolute mb-7">
     <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7" (click)="toggleDrawer('stationInfo')">Done</button>

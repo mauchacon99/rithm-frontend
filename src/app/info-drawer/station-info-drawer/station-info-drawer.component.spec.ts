@@ -12,6 +12,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -22,7 +23,8 @@ describe('StationInfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoDrawerComponent,
-        MockComponent(RosterComponent)
+        MockComponent(RosterComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports:[
         MatInputModule,
