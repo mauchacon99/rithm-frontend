@@ -11,7 +11,7 @@
     <li *ngFor="let navItem of navItems" routerLink="{{navItem}}" [routerLinkActive]="['active']" class="hover:bg-primary-400 cursor-pointer py-5 h-full list-none float-left text-center">
       <a *ngIf="navItem === 'dashboard'" class="text-white no-underline hover:no-underline capitalize" data-testid="dashboard-button">{{navItem}}</a>
       <a *ngIf="navItem === 'admin'" class="text-white no-underline hover:no-underline capitalize" data-testid="admin-button">{{navItem}}</a>
-      <a *ngIf="navItem !== 'admin' && navItem !== 'dashboard'" class="text-white no-underline hover:no-underline capitalize" data-testid="admin-button">{{navItem}}</a>
+      <a *ngIf="navItem !== 'admin' && navItem !== 'dashboard'" class="text-white no-underline hover:no-underline capitalize">{{navItem}}</a>
     </li>
   </ul>
   <button id="notification-button" (click)="toggleNotifications()" (clickOutside)="clickedOutside()" mat-icon-button class="group mr-4" data-testid="notification-button">
