@@ -1,4 +1,7 @@
-<div class="grid grid-cols-1">
+<div class="h-full w-full flex justify-center items-center absolute" *ngIf="stationLoading">
+  <app-loading-indicator class=""></app-loading-indicator>
+</div>
+<div class="grid grid-cols-1" *ngIf="!stationLoading">
   <div class="w-full py-2">
     <div class="col-span-12">
       <h6 class="text-center">Station Information</h6>
@@ -6,20 +9,20 @@
     <form [formGroup]="stationNameForm">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>
-        <input id="stationName" type="text" matInput [value]="stationName" formControlName="name" autocomplete="off">
+        <input (blur)="updateStation(stationInformation)" id="stationName" type="text" matInput [value]="stationName" formControlName="name" autocomplete="off">
       </mat-form-field>
     </form>
   </div>
   <div class="w-full py-2">
     <p class="overline font-bold">station owners</p>
     <app-roster [rosterMembers]="stationInformation.supervisors" [rosterSize]="stationInformation.supervisors.length"
-      [stationId]="stationInformation.stationRithmId" [stationName]="stationName" [isWorker]="isWorker"
+      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker"
       [editMode]="editMode"></app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline font-bold">worker roster</p>
     <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
-      [stationId]="stationInformation.stationRithmId" [stationName]="stationName" [isWorker]="isWorker"
+      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker"
       [editMode]="editMode"></app-roster>
   </div>
   <div class="w-full py-2">

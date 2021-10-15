@@ -185,8 +185,8 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId The Specific id of station.
    * @param isPrivate True returns private questions - False returns all questions.
    */
-     getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-      this.stationService.getStationPreviousQuestions(stationId, isPrivate)
+  getStationPreviousQuestions(stationId: string, isPrivate: boolean): void {
+    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
       .pipe(first())
       .subscribe((questions) => {
         if (questions) {
@@ -198,15 +198,24 @@ export class StationComponent implements OnInit, OnDestroy {
           error
         );
       });
-    }
+  }
 
   /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
-      this.destroyed$.next();
-      this.destroyed$.complete();
-    }
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
+   *
+   * @param action Param for show or hidden in loading.
+   */
+  showHiddenLoading(action: boolean): void {
+    this.stationLoading = action;
+    console.log(this.stationLoading)
+  }
 
   /**
    * Retrieves a list of the connected stations for the given document.
@@ -215,23 +224,23 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station for which to retrieve forward stations.
    */
   // private getConnectedStations(documentId: string, stationId: string): void {
-    // TODO: new request for connected stations?
+  // TODO: new request for connected stations?
 
-    // this.connectedStationsLoading = true;
-    // this.documentService.getConnectedStationInfo(documentId, stationId)
-    //   .pipe(first())
-    //   .subscribe((connectedStations) => {
-    //     this.forwardStations = connectedStations.followingStations;
-    //     this.previousStations = connectedStations.previousStations;
-    //     this.connectedStationsLoading = false;
-    //   }, (error: unknown) => {
-    //     this.navigateBack();
-    //     this.connectedStationsLoading = false;
-    //     this.errorService.displayError(
-    //       'Failed to get connected stations for this document.',
-    //       error,
-    //       false
-    //     );
-    //   });
+  // this.connectedStationsLoading = true;
+  // this.documentService.getConnectedStationInfo(documentId, stationId)
+  //   .pipe(first())
+  //   .subscribe((connectedStations) => {
+  //     this.forwardStations = connectedStations.followingStations;
+  //     this.previousStations = connectedStations.previousStations;
+  //     this.connectedStationsLoading = false;
+  //   }, (error: unknown) => {
+  //     this.navigateBack();
+  //     this.connectedStationsLoading = false;
+  //     this.errorService.displayError(
+  //       'Failed to get connected stations for this document.',
+  //       error,
+  //       false
+  //     );
+  //   });
   // }
 }

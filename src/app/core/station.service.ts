@@ -47,7 +47,7 @@ export class StationService {
    * @param station The station information that will be update.
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`, station);
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`, station);
   }
 
   /**
