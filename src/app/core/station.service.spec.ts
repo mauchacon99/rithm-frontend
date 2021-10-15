@@ -66,7 +66,7 @@ describe('StationService', () => {
         expect(response).toBeDefined();
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -95,7 +95,7 @@ describe('StationService', () => {
 
   it('should return station information with updated data', () => {
     const station: StationInformation = {
-      stationRithmId: 'E204F369-386F-4E41',
+      rithmId: 'E204F369-386F-4E41',
       name: 'Station Name',
       instructions: 'General instructions',
       nextStations: [{
@@ -129,7 +129,7 @@ describe('StationService', () => {
     };
 
     const expectedResponse = {
-      stationRithmId: station.stationRithmId,
+      rithmId: station.rithmId,
       name: station.name,
       instructions: 'General instructions',
       nextStations: [{
@@ -167,7 +167,7 @@ describe('StationService', () => {
         expect(response).toBe(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`);
     expect(req.request.method).toEqual('PUT');
 
     req.flush(expectedResponse);
