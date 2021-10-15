@@ -10,8 +10,8 @@
       </p>
     </div>
     <div class="grid grid-cols-2 gap-2 buttons lg:self-center my-2">
-      <button mat-stroked-button color="accent" class="mx-2">New Document</button>
-      <button mat-raised-button color="accent" class="mx-2">Start Working</button>
+      <button mat-stroked-button color="accent" class="mx-2" data-testid="new-document">New Document</button>
+      <button mat-raised-button color="accent" class="mx-2" data-testid="start-working">Start Working</button>
     </div>
   </div>
   <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="isLoading">
