@@ -24,11 +24,23 @@ export class ConfirmDialogComponent {
   /** The text to be displayed for the cancel button. */
   cancelButtonText: string;
 
+  /** UnitTest data test id in HTML. */
+  dataTestId:[] = [];
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.message;
     this.okButtonText = data.okButtonText ? data.okButtonText : 'OK';
     this.cancelButtonText = data.cancelButtonText ? data.cancelButtonText : 'Cancel';
+  }
+
+  /**
+   * Set param data test id in template.
+   *
+   * @param user The selected user to remove.
+   */
+  setDataTestId(message: string){
+
   }
 
 }
