@@ -15,7 +15,7 @@
       </div>
 
       <div class="mobile-save mt-4 flex justify-end">
-        <button type="submit" mat-raised-button color="accent"
+        <button data-testid="save-changes" type="submit" mat-raised-button color="accent"
           [disabled]="!settingsForm.valid || !settingsForm.dirty">Save Changes</button>
       </div>
       <div class="mt-4 sm:mt-0 text-center overline uppercase pb-12 sm:pb-0">{{ appVersionNumber }}</div>

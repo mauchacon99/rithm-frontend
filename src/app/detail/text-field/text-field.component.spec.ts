@@ -9,7 +9,7 @@ import { TextFieldComponent } from './text-field.component';
 
 const FIELDS: Question[] = [
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 1',
     instructions: 'Fake instructions 1',
     questionType: QuestionFieldType.ShortText,
@@ -19,7 +19,7 @@ const FIELDS: Question[] = [
     children: [],
   },
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 2',
     instructions: 'Fake instructions 2',
     questionType: QuestionFieldType.LongText,
@@ -29,7 +29,7 @@ const FIELDS: Question[] = [
     children: [],
   },
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 3',
     instructions: '',
     questionType: QuestionFieldType.URL,
@@ -39,7 +39,7 @@ const FIELDS: Question[] = [
     children: [],
   },
   {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 4',
     instructions: 'Fake instructions 4',
     questionType: QuestionFieldType.Email,

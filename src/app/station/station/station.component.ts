@@ -53,7 +53,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-  /** The list of station private items. */
+  /** The list of station all-items. */
+  stationAllItems: Question[] = [];
+
+  /** The list of station private-items. */
   stationPrivateItems: Question[] = [];
 
 
@@ -165,7 +168,7 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Label',
       instructions: '',
       questionType: fieldType,
@@ -177,30 +180,34 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get data about the document and station the document is in.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
    * @param isPrivate True returns private questions - False returns all questions.
    */
-  getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
-    .pipe(first())
-    .subscribe((questions) => {
-      if (questions) {
-        this.stationPrivateItems = questions;
-      }
-    }, (error: unknown) => {
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error
-      );
-    });
-  }
+     getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
+      this.stationService.getStationPreviousQuestions(stationId, isPrivate)
+      .pipe(first())
+      .subscribe((questions) => {
+        if (questions) {
+          if (isPrivate){
+            this.stationPrivateItems = questions;
+          } else {
+            this.stationAllItems = questions;
+          }
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+    }
 
   /**
    * Completes all subscriptions.
    */
-     ngOnDestroy(): void {
+  ngOnDestroy(): void {
       this.destroyed$.next();
       this.destroyed$.complete();
     }

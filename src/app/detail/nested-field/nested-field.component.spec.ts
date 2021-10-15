@@ -10,7 +10,7 @@ import { TextFieldComponent } from '../text-field/text-field.component';
 import { NestedFieldComponent } from './nested-field.component';
 
 const ADDRESS: Question = {
-  rithmId: '',
+  rithmId: '3j4k-3h2j-hj4j',
   prompt: '',
   instructions: 'Enter the shipping address',
   questionType: QuestionFieldType.Nested,
@@ -19,7 +19,7 @@ const ADDRESS: Question = {
   isPrivate: false,
   children: [
     {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 1',
       instructions: '',
       questionType: QuestionFieldType.AddressLine,
@@ -29,7 +29,7 @@ const ADDRESS: Question = {
       children: [],
     },
     {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 2',
       instructions: '',
       questionType: QuestionFieldType.AddressLine,
@@ -39,7 +39,7 @@ const ADDRESS: Question = {
       children: [],
     },
     {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'City',
       instructions: '',
       questionType: QuestionFieldType.City,
@@ -49,7 +49,7 @@ const ADDRESS: Question = {
       children: [],
     },
     {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'State',
       instructions: '',
       questionType: QuestionFieldType.State,
@@ -60,7 +60,7 @@ const ADDRESS: Question = {
       children: [],
     },
     {
-      rithmId: '',
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Zip',
       instructions: '',
       questionType: QuestionFieldType.Zip,
