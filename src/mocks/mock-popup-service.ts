@@ -1,4 +1,4 @@
-import { DialogData } from 'src/models';
+import { DialogOptions } from 'src/models';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -10,40 +10,40 @@ export class MockPopupService {
   /**
    * Displays an alert dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns A promise upon alert closing.
    */
-  async alert(dialogData: DialogData): Promise<void> {
+   async alert(dialogOptions: DialogOptions): Promise<void> {
     return;
   }
 
   /**
    * Displays a confirmation dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns True if the user confirmed, false otherwise.
    */
-  async confirm(dialogData: DialogData): Promise<boolean> {
+   async confirm(dialogOptions: DialogOptions): Promise<boolean> {
     return true;
   }
 
   /**
    * Displays a prompt dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  async prompt(dialogData: DialogData): Promise<string> {
+   async prompt(dialogOptions: DialogOptions): Promise<string> {
     return 'test';
   }
 
   /**
    * Displays the Terms and Conditions modal.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions The dialog information to display.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  async terms(dialogData: DialogData): Promise<boolean> {
+   async terms(dialogOptions: DialogOptions): Promise<boolean> {
     return true;
   }
 

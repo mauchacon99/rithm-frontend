@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogData, DialogType } from 'src/models';
+import { DialogOptions } from 'src/models/dialog-options';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 
 const DIALOG_WIDTH = '500px';
@@ -23,15 +24,18 @@ export class PopupService {
   /**
    * Displays an alert dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns A promise upon alert closing.
    */
-  async alert(dialogData: DialogData): Promise<void> {
-    const alertData = dialogData;
-    alertData.type = DialogType.Alert;
+  async alert(dialogOptions: DialogOptions): Promise<void> {
+    const alertData: DialogData = {
+      ...dialogOptions,
+      type: DialogType.Alert
+    };
 
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: MAX_WIDTH,
+      width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
       data: alertData
     });
 
@@ -41,16 +45,18 @@ export class PopupService {
   /**
    * Displays a confirmation dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns True if the user confirmed, false otherwise.
    */
-  async confirm(dialogData: DialogData): Promise<boolean> {
-    const confirmData = dialogData;
-    confirmData.type = DialogType.Confirm;
+  async confirm(dialogOptions: DialogOptions): Promise<boolean> {
+    const confirmData: DialogData = {
+      ...dialogOptions,
+      type: DialogType.Confirm
+    };
 
     const dialogRef = this.dialog.open(DialogComponent, {
       maxWidth: MAX_WIDTH,
-      width: dialogData.width ? dialogData.width : DIALOG_WIDTH,
+      width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
       data: confirmData
     });
 
@@ -60,15 +66,19 @@ export class PopupService {
   /**
    * Displays a prompt dialog to the user.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions Options to configure the dialog.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  async prompt(dialogData: DialogData): Promise<string> {
-    const promptData = dialogData;
+  async prompt(dialogOptions: DialogOptions): Promise<string> {
+    const promptData: DialogData = {
+      ...dialogOptions,
+      type: DialogType.Prompt
+    };
     promptData.type = DialogType.Prompt;
 
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: MAX_WIDTH,
+      width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
       data: promptData
     });
 
@@ -78,11 +88,14 @@ export class PopupService {
   /**
    * Displays the Terms and Conditions modal.
    *
-   * @param dialogData The dialog information to display.
+   * @param dialogOptions The dialog information to display.
    * @returns `undefined` if the dialog was closed. Otherwise, the entered string will be returned.
    */
-  async terms(dialogData: DialogData): Promise<boolean> {
-    const termsData = dialogData;
+  async terms(dialogOptions: DialogOptions): Promise<boolean> {
+    const termsData: DialogData = {
+      ...dialogOptions,
+      type: DialogType.Terms
+    };
     termsData.type = DialogType.Terms;
 
     const dialogRef = this.dialog.open(DialogComponent, {
