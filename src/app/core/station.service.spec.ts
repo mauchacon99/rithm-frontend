@@ -174,7 +174,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return updated date from a specific station', () => {
+  it('should return updated date from a specific station', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
@@ -190,7 +190,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private/all questions', () => {
+  it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
     const expectedResponse: Question[]= [
@@ -222,7 +222,7 @@ describe('StationService', () => {
     });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
