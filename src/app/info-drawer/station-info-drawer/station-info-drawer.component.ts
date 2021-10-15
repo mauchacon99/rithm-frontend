@@ -51,6 +51,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage  = '';
 
+  /** Whether the account settings is loading. */
+  isLoading = true;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -124,6 +127,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((updatedDate) => {
         if (updatedDate && updatedDate !== 'Unknown') {
+          this.isLoading=false;
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
             this.colorMessage='text-accent-300';
