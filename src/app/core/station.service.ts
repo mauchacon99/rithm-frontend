@@ -46,12 +46,8 @@ export class StationService {
    * @returns The list of all stations.
    * @param station The station information that will be update.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStation(station: StationInformation): Observable<StationInformation> {
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station/${station.stationRithmId}`,
-      {
-        station,
-      });
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`, station);
   }
 
   /**

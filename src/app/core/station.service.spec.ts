@@ -164,10 +164,10 @@ describe('StationService', () => {
 
     service.updateStation(station)
       .subscribe((response) => {
-        expect(response).toBeDefined();
+        expect(response).toBe(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station/${station.stationRithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
     expect(req.request.method).toEqual('PUT');
 
     req.flush(expectedResponse);
