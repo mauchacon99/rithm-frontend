@@ -10,6 +10,7 @@ import { CheckFieldComponent } from './check-field.component';
 const FIELD: Question = {
   prompt: 'Fake question 11',
   instructions: 'Fake instructions 11',
+  rithmId: '',
   questionType: {
     rithmId: '',
     typeString: QuestionFieldType.CheckList,
