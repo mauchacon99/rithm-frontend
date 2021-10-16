@@ -15,7 +15,7 @@
           <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
-          <app-station-info-header (stationLoadingParent)="showHiddenLoading($event)" [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
+          <app-station-info-header (loadingParent)="showHiddenLoading($event)" [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
             <mat-tab label="Document">

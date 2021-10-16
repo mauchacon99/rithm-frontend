@@ -190,7 +190,7 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((questions) => {
         if (questions) {
-          if (isPrivate){
+          if (isPrivate) {
             this.stationPrivateItems = questions;
           } else {
             this.stationAllItems = questions;
@@ -205,20 +205,20 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Show hidden loading in component parent.
+   *
+   * @param action Param for show or hidden in loading.
+   */
+  showHiddenLoading(action: boolean): void {
+    this.stationLoading = action;
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Show hidden loading in component parent.
-   *
-   * @param action Param for show or hidden in loading.
-   */
-   showHiddenLoading(action: boolean): void {
-    this.stationLoading = action;
   }
 
   /**

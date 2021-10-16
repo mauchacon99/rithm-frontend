@@ -33,7 +33,7 @@ export class StationInfoHeaderComponent implements OnInit {
   nameField!: Question;
 
   /** Send Loading in station component. */
-  @Output() stationLoadingParent = new EventEmitter<boolean>();
+  @Output() loadingParent = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +62,7 @@ export class StationInfoHeaderComponent implements OnInit {
       isPrivate: false,
       children: [],
     };
-    //this.stationNameForm.controls['name'].setValue(this.stationName);
+    this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
   /** Get name of station from StationInformation based on type.
@@ -102,7 +102,7 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    */
   updateStation(): void {
-    let stationLoading = false;
+    let stationLoading: boolean = false;
     const station = this.stationInformation as StationInformation;
     station.name = this.stationNameForm.value.name;
     stationLoading = true;
@@ -130,8 +130,8 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    * @param showLoading Show or hidden loading in parent component.
    */
-  sendLoadingParent(showLoading = false): void {
-    this.stationLoadingParent.emit(showLoading);
+  sendLoadingParent(showLoading: boolean): void {
+    this.loadingParent.emit(showLoading);
   }
 
 }
