@@ -33,7 +33,7 @@ export class StationInfoHeaderComponent implements OnInit {
   nameField!: Question;
 
   /** Send Loading in station component. */
-  @Output() loadingParent = new EventEmitter();
+  @Output() loadingParent = new EventEmitter<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -102,11 +102,11 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    */
   updateStation(): void {
-    let stationLoading: boolean = false;
+    let stationLoading = false;
     const station = this.stationInformation as StationInformation;
     station.name = this.stationNameForm.value.name;
     stationLoading = true;
-    this.sendLoadingParent(stationLoading);
+    this.setLoadingParent(stationLoading);
     this.stationService.updateStation(station)
       .pipe(first())
       .subscribe((stationUpdated) => {
@@ -114,10 +114,10 @@ export class StationInfoHeaderComponent implements OnInit {
           this.stationInformation = stationUpdated;
         }
         stationLoading = false;
-        this.sendLoadingParent(stationLoading);
+        this.setLoadingParent(stationLoading);
       }, (error: unknown) => {
         stationLoading = false;
-        this.sendLoadingParent(stationLoading);
+        this.setLoadingParent(stationLoading);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -130,7 +130,7 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    * @param showLoading Show or hidden loading in parent component.
    */
-  sendLoadingParent(showLoading: boolean): void {
+  setLoadingParent(showLoading: boolean): void {
     this.loadingParent.emit(showLoading);
   }
 
