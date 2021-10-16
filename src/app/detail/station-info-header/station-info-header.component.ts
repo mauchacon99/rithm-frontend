@@ -102,36 +102,23 @@ export class StationInfoHeaderComponent implements OnInit {
    *
    */
   updateStation(): void {
-    let stationLoading = false;
     const station = this.stationInformation as StationInformation;
     station.name = this.stationNameForm.value.name;
-    stationLoading = true;
-    this.setLoadingParent(stationLoading);
+    this.loadingParent.emit(true);
     this.stationService.updateStation(station)
       .pipe(first())
       .subscribe((stationUpdated) => {
         if (stationUpdated) {
           this.stationInformation = stationUpdated;
         }
-        stationLoading = false;
-        this.setLoadingParent(stationLoading);
+        this.loadingParent.emit(false);
       }, (error: unknown) => {
-        stationLoading = false;
-        this.setLoadingParent(stationLoading);
+        this.loadingParent.emit(false);
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
         );
       });
-  }
-
-  /**
-   * Send param show or hidden loading.
-   *
-   * @param showLoading Show or hidden loading in parent component.
-   */
-  setLoadingParent(showLoading: boolean): void {
-    this.loadingParent.emit(showLoading);
   }
 
 }
