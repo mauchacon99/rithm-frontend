@@ -149,8 +149,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationInformation = stationUpdated;
         }
         this.stationLoading = false;
+        this.toggleDrawer('stationInfo');
       }, (error: unknown) => {
         this.stationLoading = false;
+        this.toggleDrawer('stationInfo');
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
