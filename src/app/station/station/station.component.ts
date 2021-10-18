@@ -53,10 +53,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-  /** The list of station private. */
+  /** The list of station private questions. */
   privateQuestions: Question[] | null = null;
 
-  /** The list of station public. */
+  /** The list of station public questions. */
   publicQuestions: Question[] | null = null;
 
   constructor(
