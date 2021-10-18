@@ -53,12 +53,11 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-  /** The list of station all-items. */
-  stationAllItems: Question[] = [];
+  /** The list of station private questions. */
+  privateQuestions: Question[] | null = null;
 
-  /** The list of station private-items. */
-  stationPrivateItems: Question[] = [];
-
+  /** The list of station public questions. */
+  publicQuestions: Question[] | null = null;
 
   constructor(
     private stationService: StationService,
@@ -107,6 +106,8 @@ export class StationComponent implements OnInit, OnDestroy {
           this.handleInvalidParams();
         } else {
           this.getStationInfo(params.stationId);
+          this.getStationPreviousQuestions(params.stationId, true);
+          this.getStationPreviousQuestions(params.stationId, false);
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -180,29 +181,29 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get all station previous private/all questions.
+   * Get all station previous private questions.
    *
    * @param stationId The Specific id of station.
-   * @param isPrivate True returns private questions - False returns all questions.
+   * @param isPrivate True returns private questions.
    */
-     getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-      this.stationService.getStationPreviousQuestions(stationId, isPrivate)
-      .pipe(first())
-      .subscribe((questions) => {
-        if (questions) {
-          if (isPrivate){
-            this.stationPrivateItems = questions;
-          } else {
-            this.stationAllItems = questions;
-          }
+   getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
+    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((questions: Question[]) => {
+      if (questions) {
+        if (isPrivate) {
+          this.privateQuestions = questions;
+        } else {
+          this.publicQuestions = questions;
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-    }
+      }
+    }, (error: unknown) => {
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
+    });
+  }
 
   /**
    * Completes all subscriptions.

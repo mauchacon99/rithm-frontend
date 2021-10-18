@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Question } from 'src/models';
 
 /**
  * Component for all fields.
@@ -9,5 +10,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./all-fields.component.scss']
 })
 export class AllFieldsComponent {
+
+/** The private questions loaded by station-component. */
+@Input() questions: Question[] = [];
 
 }
