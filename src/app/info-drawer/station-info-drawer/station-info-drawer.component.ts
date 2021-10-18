@@ -126,7 +126,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (updatedDate) {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-            this.colorMessage='text-accent-300';
+            this.colorMessage='text-accent-500';
             if (this.lastUpdatedDate === '1 day') {
                 this.lastUpdatedDate = ' Yesterday';
             } else {
