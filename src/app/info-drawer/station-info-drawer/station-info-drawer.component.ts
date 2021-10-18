@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationInfoDrawerData, StationInformation } from 'src/models';
+import { PopupService } from '../../core/popup.service';
 
 /**
  * Component for info station.
@@ -58,7 +59,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private popupService: PopupService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -136,6 +138,24 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationLoading = false;
         }, (error: unknown) => {
           this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
+
+  /**
+   * Delete a station by ID.
+   *
+   * @param stationId The id of the station to be deleted.
+   */
+     deleteStation(stationId: string): void {
+      this.stationService.deleteStation(stationId)
+        .pipe(first())
+        .subscribe(() => {
+          this.popupService.notify('The station has been deleted.');
+        }, (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

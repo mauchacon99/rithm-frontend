@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Question, Station, StationInformation } from 'src/models';
 
@@ -73,5 +74,16 @@ export class StationService {
     .set('stationRithmId', stationId)
     .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+   }
+
+  /**
+   * Gets a station information.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   deleteStation(stationId: string): Observable<unknown> {
+      return of().pipe(delay(1000));
    }
 }

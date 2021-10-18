@@ -190,4 +190,22 @@ export class MockStationService {
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
   }
+
+  /**
+   * Gets a station information.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+   deleteStation(stationId: string): Observable<unknown> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+   }
 }
