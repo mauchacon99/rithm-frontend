@@ -74,7 +74,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
-      name: ['']
+      name: [this.stationName]
     });
   }
 
@@ -148,29 +148,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         if (updatedDate) {
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-        }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-  }
-
-  /**
-   * Update the Station Name.
-   *
-   * @param station The new station information to be updated.
-   */
-  updateStation(station: StationInformation): void {
-    this.stationLoading = true;
-    this.stationService.updateStation(station)
-      .pipe(first())
-      .subscribe((stationUpdated) => {
-        if (stationUpdated) {
-          this.stationInformation = stationUpdated;
         }
         this.stationLoading = false;
       }, (error: unknown) => {
