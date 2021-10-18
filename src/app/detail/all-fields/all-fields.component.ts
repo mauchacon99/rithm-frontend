@@ -8,7 +8,7 @@ import { Question } from 'src/models';
  * Component for all fields.
  */
 @Component({
-  selector: 'app-all-fields',
+  selector: 'app-all-fields[stationId]',
   templateUrl: './all-fields.component.html',
   styleUrls: ['./all-fields.component.scss']
 })

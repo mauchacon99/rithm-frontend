@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, Question } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -52,9 +52,6 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
-
-  /** The list of station private questions. */
-  privateQuestions: Question[] | null = null;
 
   constructor(
     private stationService: StationService,
