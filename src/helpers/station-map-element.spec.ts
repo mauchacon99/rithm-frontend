@@ -1,12 +1,14 @@
-import { StationMapData } from 'src/models';
+import { MapItemStatus, StationMapData } from 'src/models';
 import { StationMapElement } from './station-map-element';
 
 const TEST_STATION_MAP_DATA: StationMapData = {
-  name: 'Test Station',
+  rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+  stationName: 'Test Station',
   mapPoint: { x: 0, y: 0 },
-  outgoingStationIds: [],
-  incomingStationIds: [],
-  noOfDocuments: 5
+  nextStations: [],
+  previousStations: [],
+  noOfDocuments: 5,
+  status: MapItemStatus.Normal
 };
 
 describe('StationMapElement', () => {

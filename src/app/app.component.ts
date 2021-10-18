@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { User } from 'src/models';
 import { SidenavDrawerService } from './core/sidenav-drawer.service';
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sidenav!: MatSidenav;
 
   /** Destroyed. */
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private destroyed$ = new Subject();
 
   /** Used to show top nav. */
   showTopNav = false;
@@ -83,8 +83,6 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           this.mobileLinks = this.mobileLinks.filter(e => e.name !== 'admin');
         }
-      }, (error: unknown) => {
-        console.error(error);
       });
 
     this.sidenavDrawerService.setSidenav(this.sidenav);
@@ -102,8 +100,6 @@ export class AppComponent implements OnInit, OnDestroy {
           (path?.toLowerCase().indexOf(REGISTER_URL) === -1) &&
           (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
       }
-    }, (error: unknown) => {
-      console.error(error);
     });
   }
 
@@ -111,7 +107,7 @@ export class AppComponent implements OnInit, OnDestroy {
    * Cleanup method.
    */
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 

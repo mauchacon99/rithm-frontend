@@ -17,3 +17,12 @@
   /* stylelint-disable-next-line */
   padding-bottom: 0.5rem;
 }
+
+/// Entry folder forms
+.entry-form {
+  ::ng-deep mat-label {
+    background-color: #fff !important;
+
+    @apply px-2;
+  }
+}

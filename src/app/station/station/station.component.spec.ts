@@ -21,6 +21,7 @@ import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -49,7 +50,8 @@ describe('StationComponent', () => {
         ),
         MatSidenavModule,
         ReactiveFormsModule,
-        MatTabsModule
+        MatTabsModule,
+        MatExpansionModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -123,4 +125,5 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
+
 });

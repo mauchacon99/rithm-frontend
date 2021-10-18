@@ -15,7 +15,15 @@ import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
-  declarations: [DashboardComponent, StationCardComponent, DocumentListCardComponent, HeaderComponent, MyStationsComponent, PreviouslyStartedDocumentsComponent, PriorityQueueComponent],
+  declarations: [
+    DashboardComponent,
+    StationCardComponent,
+    DocumentListCardComponent,
+    HeaderComponent,
+    MyStationsComponent,
+    PreviouslyStartedDocumentsComponent,
+    PriorityQueueComponent
+  ],
   imports: [
     CommonModule,
     DashboardRoutingModule,

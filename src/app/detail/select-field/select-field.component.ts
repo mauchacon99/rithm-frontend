@@ -45,7 +45,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    */
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
-      [this.field.questionType.typeString]: ['', []]
+      [this.field.questionType]: ['', []]
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -56,7 +56,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
       validators.push(Validators.required);
     }
 
-    this.selectFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+    this.selectFieldForm.get(this.field.questionType)?.setValidators(validators);
   }
 
   /**

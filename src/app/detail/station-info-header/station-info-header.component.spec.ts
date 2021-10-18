@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { MockComponent } from 'ng-mocks';
 import { UserService } from 'src/app/core/user.service';
-import { RosterComponent } from 'src/app/shared/roster/roster.component';
 import { MockUserService } from 'src/mocks';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
@@ -16,11 +14,10 @@ describe('StationInfoHeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoHeaderComponent,
-        MockComponent(RosterComponent)
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        { provide: UserService, useValue: MockUserService }
+        { provide: UserService, useClass: MockUserService }
       ]
     })
     .compileComponents();
@@ -29,22 +26,6 @@ describe('StationInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoHeaderComponent);
     component = fixture.componentInstance;
-    component.stationInformation = {
-      documentName: 'Metroid Dread',
-      documentPriority: 5,
-      documentRithmId:'E204F369-386F-4E41',
-      currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
-      lastUpdatedUTC: '1943827200000',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      stationName: 'Development',
-      stationPriority: 2,
-      stationInstruction: 'This is an instruction',
-      supervisors: [],
-      workers: [],
-      questions: [],
-      instructions: 'General instructions',
-    };
     fixture.detectChanges();
 
     it('should create', () => {

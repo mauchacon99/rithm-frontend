@@ -1,3 +1,4 @@
+import { MapItemStatus } from '.';
 import { Point } from './point';
 
 /**
@@ -5,10 +6,10 @@ import { Point } from './point';
  */
 export interface StationMapData {
   /** The global Rithm id for the station. */
-  rithmId?: string;
+  rithmId: string;
 
   /** The name of the station. */
-  name: string;
+  stationName: string;
 
   /** The number of documents in the station. */
   noOfDocuments: number;
@@ -17,8 +18,11 @@ export interface StationMapData {
   mapPoint: Point;
 
   /** The ids of the stations that connect TO this station. */
-  incomingStationIds: string[];
+  previousStations: string[];
 
   /** The ids of the stations that connect FROM this station. */
-  outgoingStationIds: string[];
+  nextStations: string[];
+
+  /** The status of the station (what should happen to this flow). */
+  status: MapItemStatus;
 }
