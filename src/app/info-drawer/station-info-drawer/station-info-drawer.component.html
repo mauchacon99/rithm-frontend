@@ -21,7 +21,7 @@
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline ">worker roster</p>
+    <p class="overline">worker roster</p>
     <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
       [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker" [editMode]="editMode">
     </app-roster>
