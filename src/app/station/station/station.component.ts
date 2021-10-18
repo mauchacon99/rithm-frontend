@@ -219,14 +219,14 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /**
    * Update the Station.
+   *
+   * @param stationInformation This Data global, for set data in update request.
    */
-  updateStation(): void {
+  updateStation(stationInformation: StationInformation): void {
     const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    console.log(nameStationChange);
-    const station = this.stationInformation;
-    station.name = nameStationChange;
+    stationInformation.name = nameStationChange;
     this.stationLoading = true;
-    this.stationService.updateStation(station)
+    this.stationService.updateStation(stationInformation)
       .pipe(first())
       .subscribe((stationUpdated) => {
         if (stationUpdated) {
