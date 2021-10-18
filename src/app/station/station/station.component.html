@@ -26,7 +26,6 @@
                 <div class="py-5 px-px">
                   <mat-accordion>
                     <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
-                      <ng-template *ngIf="publicQuestions">
                         <mat-expansion-panel-header class="text-base" >
                           <mat-panel-title>
                             All
@@ -36,12 +35,8 @@
                           </mat-panel-description>
                         </mat-expansion-panel-header>
                         <ng-template matExpansionPanelContent>
-                          <app-all-fields [questions]="publicQuestions"></app-all-fields>
+                          <app-all-fields [stationId]="stationInformation.stationRithmId"></app-all-fields>
                         </ng-template>
-                      </ng-template>
-                      <div class="flex w-full h-full items-center" *ngIf="!publicQuestions">
-                        <app-loading-indicator class="flex-grow"></app-loading-indicator>
-                      </div>
                     </mat-expansion-panel>
                     <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
                       <mat-expansion-panel-header class="text-base">
