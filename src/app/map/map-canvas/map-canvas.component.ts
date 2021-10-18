@@ -34,7 +34,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** The coordinate where the mouse was clicked down. */
-  mouseDownCoords: Point | null = null;
+  mouseDownCoords: Point = {x: -1, y: -1};
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
@@ -177,7 +177,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mouseUp(event: MouseEvent): void {
     const coords = this.getMouseCanvasPoint(event);
     //If it is a click and not a drag.
-    if (Math.abs(coords.x - this.mouseDownCoords!.x) < 5 && Math.abs(coords.y - this.mouseDownCoords!.y) < 5) {
+    if (Math.abs(coords.x - this.mouseDownCoords.x) < 5 && Math.abs(coords.y - this.mouseDownCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
         coords.x = coords.x - STATION_WIDTH/2;
         coords.y = coords.y - STATION_HEIGHT/2;
@@ -202,7 +202,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.mouseDownCoords = null;
+    this.mouseDownCoords = {x: -1, y: -1};
   }
 
   /**
