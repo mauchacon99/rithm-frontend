@@ -33,11 +33,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
-  /** The coordinate where the mouse was clicked down. */
-  private mouseDownCoords: Point = {x: -1, y: -1};
-
-  /** Used to track clicks on a touchscreen. */
-  private startTouchCoords: Point = {x: -1, y: -1};
+  /** The coordinate where the mouse or touch event begins. */
+  private eventStartCoords: Point = {x: -1, y: -1};
 
   /** Used to track map movement on a touchscreen. */
   private lastTouchCoords: Point = {x: -1, y: -1};
@@ -140,7 +137,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
-    this.mouseDownCoords = this.getMouseCanvasPoint(event);
+    this.eventStartCoords = this.getMouseCanvasPoint(event);
 
     if (this.mapMode === MapMode.Build) {
       const mousePos = this.getMouseCanvasPoint(event);
@@ -169,34 +166,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseUp(event: MouseEvent): void {
-    const coords = this.getMouseCanvasPoint(event);
-    //If it is a click and not a drag.
-    if (Math.abs(coords.x - this.mouseDownCoords.x) < 5 && Math.abs(coords.y - this.mouseDownCoords.y) < 5) {
-      if (this.mapMode === MapMode.StationAdd) {
-        coords.x = coords.x - STATION_WIDTH/2;
-        coords.y = coords.y - STATION_HEIGHT/2;
+    const mousePos = this.getMouseCanvasPoint(event);
 
-        //create a new station at click.
-        this.mapService.createNewStation(coords);
-
-        //After clicking, set to build mode.
-        this.mapService.mapMode$.next(MapMode.Build);
-      }
-    }
-
-    this.dragItem = MapDragItem.Default;
-    this.mapCanvas.nativeElement.style.cursor = 'default';
-    this.stations.forEach((station) => {
-      if (station.dragging) {
-        station.dragging = false;
-        if (station.status === MapItemStatus.Normal) {
-          station.status = MapItemStatus.Updated;
-        }
-        this.drawElements();
-      }
-    });
-
-    this.mouseDownCoords = {x: -1, y: -1};
+    this.eventEndLogic(mousePos);
   }
 
   /**
@@ -233,9 +205,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     //TODO: support multitouch.
     const touchPoint = event.touches[0];
-    if (this.lastTouchCoords.x === -1 && this.startTouchCoords.x === -1) {
+    if (this.lastTouchCoords.x === -1 && this.eventStartCoords.x === -1) {
       this.lastTouchCoords = this.getTouchCanvasPoint(touchPoint);
-      this.startTouchCoords = this.getTouchCanvasPoint(touchPoint);
+      this.eventStartCoords = this.getTouchCanvasPoint(touchPoint);
     }
 
     if (this.mapMode === MapMode.Build) {
@@ -268,36 +240,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const touchPoint = event.changedTouches[0];
     const touchPos = this.getTouchCanvasPoint(touchPoint);
-    //If it is a click and not a drag.
-    if (Math.abs(touchPos.x - this.startTouchCoords.x) < 5 && Math.abs(touchPos.y - this.startTouchCoords.y) < 5) {
-      if (this.mapMode === MapMode.StationAdd) {
-        const coords: Point = {x: 0, y: 0};
-        coords.x = touchPos.x - STATION_WIDTH/2;
-        coords.y = touchPos.y - STATION_HEIGHT/2;
 
-        //create a new station at click.
-        this.mapService.createNewStation(coords);
-
-        //After clicking, set to build mode.
-        this.mapService.mapMode$.next(MapMode.Build);
-      }
-    }
-
-    this.dragItem = MapDragItem.Default;
-    this.stations.forEach((station) => {
-      if (station.dragging) {
-        station.dragging = false;
-        if (station.status === MapItemStatus.Normal) {
-          station.status = MapItemStatus.Updated;
-        }
-        this.drawElements();
-      }
-    });
-
-    this.startTouchCoords.x = -1;
-    this.startTouchCoords.y = -1;
-    this.lastTouchCoords.x = -1;
-    this.lastTouchCoords.y = -1;
+    this.eventEndLogic(touchPos);
   }
 
   /**
@@ -460,9 +404,37 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Handles mouseUp and touchEnd logic.
    *
-   * @param event The event for cursor information.
+   * @param position The position of the mouse or touch event.
    */
-  private clickDragLogic(event: MouseEvent | TouchEvent) {
-    //hold
+  private eventEndLogic(position: Point) {
+    //If it is a click and not a drag.
+    if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
+      if (this.mapMode === MapMode.StationAdd) {
+        const coords: Point = {x: 0, y: 0};
+        coords.x = position.x - STATION_WIDTH/2;
+        coords.y = position.y - STATION_HEIGHT/2;
+
+        //create a new station at click.
+        this.mapService.createNewStation(coords);
+
+        //After clicking, set to build mode.
+        this.mapService.mapMode$.next(MapMode.Build);
+      }
+    }
+
+    this.dragItem = MapDragItem.Default;
+    this.stations.forEach((station) => {
+      if (station.dragging) {
+        station.dragging = false;
+        if (station.status === MapItemStatus.Normal) {
+          station.status = MapItemStatus.Updated;
+        }
+        this.drawElements();
+      }
+    });
+
+    this.eventStartCoords = {x: -1, y: -1};
+    this.lastTouchCoords = {x: -1, y: -1};
+    this.mapCanvas.nativeElement.style.cursor = 'default';
   }
 }
