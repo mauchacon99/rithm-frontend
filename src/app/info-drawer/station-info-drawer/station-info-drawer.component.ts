@@ -132,6 +132,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           error
         );
       });
+
   }
 
   /**
