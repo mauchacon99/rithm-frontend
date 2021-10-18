@@ -7,10 +7,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DialogData } from 'src/models';
-import { MatDialog } from '@angular/material/dialog';
-import { ComponentType } from '@angular/cdk/portal';
-import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
+import { DialogOptions } from 'src/models';
 import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
 import { Subject } from 'rxjs';
 
@@ -35,9 +32,6 @@ export class AccountCreateComponent implements OnInit {
   /** Temp message for terms modal. */
   modalMessage = ``;
 
-  /** Terms and conditions modal component. */
-  termsAndConditionsComponent = TermsConditionsModalComponent;
-
   /** The subject data for terms and conditions data. */
   sub$ = new Subject();
 
@@ -47,7 +41,6 @@ export class AccountCreateComponent implements OnInit {
     private fb: FormBuilder,
     private popupService: PopupService,
     private router: Router,
-    private dialog: MatDialog,
     private termsConditionsService: TermsConditionsService
   ) {
     this.passwordRequirements = new PasswordRequirements();
@@ -103,32 +96,44 @@ export class AccountCreateComponent implements OnInit {
 
   /**
    * Open the terms and conditions modal.
-   *
-   * @param component The component to open.
    */
-  openTerms(component: ComponentType<unknown>): void {
-    this.dialog.open(component, {
-      panelClass: 'terms-condition',
-      data: {
-        title: 'Terms and Conditions',
-        message: '',
-        okButtonText: 'Agree',
-        width: '90%',
-        showAgreeButton: true
-      }
-    });
+  async openTerms(): Promise<void> {
+    let message = '';
+    let agreeTerms = false;
+
+    this.isLoading = true;
+    this.userService.getTermsConditions()
+      .toPromise()
+      .then(async (termsConditions) => {
+        if (termsConditions) {
+          message = termsConditions;
+          this.isLoading = false;
+          agreeTerms = await this.popupService.terms({
+            title: 'Terms and Conditions',
+            message: message,
+            okButtonText: 'Agree'
+          });
+          this.termsConditionsService.setAgreed(agreeTerms);
+        }
+      }, (error: unknown) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
    * Open the alert to validate their email address.
    */
   openValidateEmailModal(): void {
-    const data: DialogData = {
+    const options: DialogOptions = {
       title: 'Validate your email address',
       message: 'Almost there! Please check your email for a link to validate your Rithm account.'
     };
 
-    this.popupService.alert(data).then(() => {
+    this.popupService.alert(options).then(() => {
       this.router.navigate(['']);
     });
   }
