@@ -18,7 +18,7 @@ export class MockStationService {
    */
   getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
-      rithmId: 'E204F369-386F-4E41',
+      stationRithmId: 'E204F369-386F-4E41',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
@@ -98,7 +98,7 @@ export class MockStationService {
       })).pipe(delay(1000));
     } else {
       const data: StationInformation = {
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         name: 'New Station Name',
         instructions: '',
         nextStations: [{
@@ -166,8 +166,7 @@ export class MockStationService {
    * @returns Status the document.
    */
   getStationDocumentStatus(stationId: string): Observable<DocumentGeneration> {
-    const mockStatusDocument = DocumentGeneration.None;
-    return of(mockStatusDocument).pipe(delay(1000));
+    return of(DocumentGeneration.None).pipe(delay(1000));
   }
 
   /**

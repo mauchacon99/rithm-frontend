@@ -72,7 +72,7 @@ export class StationService {
     /** Temporary parameter is implemented when the request is made. */
     new HttpParams()
       .set('rithmId', stationId);
-    const mockStatusDocument = DocumentGeneration.Manual;
+    const mockStatusDocument = DocumentGeneration.None;
     return of(mockStatusDocument).pipe(delay(1000));
   }
 
