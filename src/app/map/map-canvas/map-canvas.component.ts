@@ -34,22 +34,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** The coordinate where the mouse was clicked down. */
-  mouseDownCoords: Point = {x: -1, y: -1};
+  private mouseDownCoords: Point = {x: -1, y: -1};
+
+  /** Used to track clicks on a touchscreen. */
+  private startTouchCoords: Point = {x: -1, y: -1};
+
+  /** Used to track map movement on a touchscreen. */
+  private lastTouchCoords: Point = {x: -1, y: -1};
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
-
-  /** Used to track clicks on a touchscreen. */
-  private startTouchX = -1;
-
-  /** Used to track clicks on a touchscreen. */
-  private startTouchY = -1;
-
-  /** Used to track map movement on a touchscreen. */
-  private lastTouchX = -1;
-
-  /** Used to track map movement on a touchscreen. */
-  private lastTouchY = -1;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
@@ -239,11 +233,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     //TODO: support multitouch.
     const touchPoint = event.touches[0];
-    if (this.lastTouchX === -1 && this.startTouchX === -1) {
-      this.lastTouchX = touchPoint.pageX;
-      this.startTouchX = touchPoint.pageX;
-      this.lastTouchY = touchPoint.pageY;
-      this.startTouchY = touchPoint.pageY;
+    if (this.lastTouchCoords.x === -1 && this.startTouchCoords.x === -1) {
+      this.lastTouchCoords = this.getTouchCanvasPoint(touchPoint);
+      this.startTouchCoords = this.getTouchCanvasPoint(touchPoint);
     }
 
     if (this.mapMode === MapMode.Build) {
@@ -275,12 +267,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
 
     const touchPoint = event.changedTouches[0];
+    const touchPos = this.getTouchCanvasPoint(touchPoint);
     //If it is a click and not a drag.
-    if (Math.abs(touchPoint.pageX - this.startTouchX) < 5 && Math.abs(touchPoint.pageY - this.startTouchY) < 5) {
+    if (Math.abs(touchPos.x - this.startTouchCoords.x) < 5 && Math.abs(touchPos.y - this.startTouchCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
         const coords: Point = {x: 0, y: 0};
-        coords.x = touchPoint.pageX - STATION_WIDTH/2;
-        coords.y = touchPoint.pageY - 128 - STATION_HEIGHT/2;
+        coords.x = touchPos.x - STATION_WIDTH/2;
+        coords.y = touchPos.y - STATION_HEIGHT/2;
 
         //create a new station at click.
         this.mapService.createNewStation(coords);
@@ -301,10 +294,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.startTouchX = -1;
-    this.startTouchY = -1;
-    this.lastTouchX = -1;
-    this.lastTouchY = -1;
+    this.startTouchCoords.x = -1;
+    this.startTouchCoords.y = -1;
+    this.lastTouchCoords.x = -1;
+    this.lastTouchCoords.y = -1;
   }
 
   /**
@@ -317,22 +310,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     //TODO: support multitouch.
     const touchPoint = event.changedTouches[0];
-    const moveAmountX = this.lastTouchX - touchPoint.pageX;
-    const moveAmountY = this.lastTouchY - touchPoint.pageY;
+    const touchPos = this.getTouchCanvasPoint(touchPoint);
+
+    const moveAmountX = this.lastTouchCoords.x - touchPos.x;
+    const moveAmountY = this.lastTouchCoords.y - touchPos.y;
 
     if (this.dragItem === MapDragItem.Map) {
       this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.lastTouchX = touchPoint.pageX;
+      this.lastTouchCoords.x = touchPos.x;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
-      this.lastTouchY = touchPoint.pageY;
+      this.lastTouchCoords.y = touchPos.y;
       this.drawElements();
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           station.mapPoint.x -= moveAmountX / this.scale;
-          this.lastTouchX = touchPoint.pageX;
+          this.lastTouchCoords.x = touchPos.x;
           station.mapPoint.y -= moveAmountY / this.scale;
-          this.lastTouchY = touchPoint.pageY;
+          this.lastTouchCoords.y = touchPos.y;
           this.drawElements();
         }
       }
@@ -460,5 +455,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       x: event.clientX - canvasRect.left,
       y: event.clientY - canvasRect.top
     };
+  }
+
+  /**
+   * Handles mouseUp and touchEnd logic.
+   *
+   * @param event The event for cursor information.
+   */
+  private clickDragLogic(event: MouseEvent | TouchEvent) {
+    //hold
   }
 }
