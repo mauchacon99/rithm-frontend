@@ -41,7 +41,7 @@ export class MockMapService {
       stations: [
         {
           rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-          name: 'Development',
+          stationName: 'Development',
           noOfDocuments: 5,
           mapPoint: {
             x: 12,
@@ -53,7 +53,7 @@ export class MockMapService {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
-          name: 'Step 1',
+          stationName: 'Step 1',
           noOfDocuments: 5,
           mapPoint: {
             x: 200,
@@ -65,7 +65,7 @@ export class MockMapService {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
-          name: 'Step 2',
+          stationName: 'Step 2',
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
@@ -77,7 +77,7 @@ export class MockMapService {
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
-          name: 'Step 3',
+          stationName: 'Step 3',
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
@@ -91,14 +91,14 @@ export class MockMapService {
       flows: [
         {
           rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
-          name: 'Flow 1',
-          stationIds: [
+          title: 'Flow 1',
+          stations: [
             'ED6148C9-ABB7-408E-A210-9242B2735B1C',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
           ],
-          flowIds: [],
+          subFlows: [],
           status: MapItemStatus.Normal
         }
       ]

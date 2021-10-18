@@ -40,10 +40,10 @@ export class StationElementService {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
-    this.drawStationName(station);
 
     if (this.mapScale > 0.25) {
       this.drawDocumentBadge(station);
+      this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station);
@@ -109,9 +109,10 @@ export class StationElementService {
     this.canvasContext.shadowColor = 'transparent';
     this.canvasContext.textAlign = 'left';
     this.canvasContext.fillStyle = 'black';
-    this.canvasContext.font = 'normal 16px Montserrat';
+    this.canvasContext.font = this.mapScale > 0.5 ? (this.mapScale > 1 ? 'normal 30px Montserrat' : 'normal 16px Montserrat')
+     : 'normal 8px Montserrat';
 
-    const sn = station.name.trim().split(' ');
+    const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 

@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
@@ -54,6 +54,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
 
+  /** Data for flow used in the map. */
+  flows: FlowMapElement[] = [];
+
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
@@ -83,8 +86,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((mapMode) => {
         this.mapMode = mapMode;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
       });
 
       this.mapService.mapScale$
@@ -92,8 +93,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((scale) => {
         this.scale = scale;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
       });
 
       this.mapService.currentCanvasPoint$
@@ -101,8 +100,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((point) => {
         this.currentCanvasPoint = point;
         this.drawElements();
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
+      });
+
+      this.mapService.mapDataRecieved$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+        this.flows = this.mapService.flowElements;
+        this.drawElements();
       });
     });
   }
@@ -113,9 +118,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
-
-    this.useStationData();
-
+    this.setCanvasSize();
+    this.drawElements();
   }
 
   /**
@@ -150,10 +154,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
-          // Show that the location of the station has changed so backend can update.
-          if (station.status === MapItemStatus.Normal) {
-            station.status = MapItemStatus.Updated;
-          }
           station.dragging = true;
           this.dragItem = MapDragItem.Station;
           break;
@@ -183,10 +183,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         coords.y = coords.y - STATION_HEIGHT/2;
 
         //create a new station at click.
-        const newStation = this.mapService.createNewStation(coords);
+        this.mapService.createNewStation(coords);
 
-        //Add new station to mapElements behavior subject.
-        this.mapService.mapElements$.next([...this.stations, newStation]);
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
       }
@@ -197,6 +195,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.stations.forEach((station) => {
       if (station.dragging) {
         station.dragging = false;
+        if (station.status === MapItemStatus.Normal) {
+          station.status = MapItemStatus.Updated;
+        }
         this.drawElements();
       }
     });
@@ -282,10 +283,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         coords.y = touchPoint.pageY - 128 - STATION_HEIGHT/2;
 
         //create a new station at click.
-        const newStation = this.mapService.createNewStation(coords);
+        this.mapService.createNewStation(coords);
 
-        //Add new station to mapElements behavior subject.
-        this.mapService.mapElements$.next([...this.stations, newStation]);
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
       }
@@ -295,6 +294,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.stations.forEach((station) => {
       if (station.dragging) {
         station.dragging = false;
+        if (station.status === MapItemStatus.Normal) {
+          station.status = MapItemStatus.Updated;
+        }
         this.drawElements();
       }
     });
@@ -378,21 +380,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     this.drawElements();
     event.preventDefault();
-  }
-
-  /**
-   * Converts station data so it can be drawn on the canvas.
-   */
-  private useStationData(): void {
-    this.mapService.mapElements$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((stations) => {
-      this.stations = stations.map((e) => new StationMapElement(e));
-      this.setCanvasSize();
-      this.drawElements();
-    }, (error: unknown) => {
-      throw new Error(`Map service error: ${error}`);
-    });
   }
 
   /**

@@ -1,24 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrivateFieldsComponent } from './private-fields.component';
+import { AllFieldsComponent } from './all-fields.component';
 import { MatCardModule } from '@angular/material/card';
 
-describe('PrivateFieldsComponent', () => {
-  let component: PrivateFieldsComponent;
-  let fixture: ComponentFixture<PrivateFieldsComponent>;
+describe('AllFieldsComponent', () => {
+  let component: AllFieldsComponent;
+  let fixture: ComponentFixture<AllFieldsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PrivateFieldsComponent],
+      declarations: [ AllFieldsComponent ],
       imports: [
         MatCardModule
       ]
     })
-      .compileComponents();
+    .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivateFieldsComponent);
+    fixture = TestBed.createComponent(AllFieldsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

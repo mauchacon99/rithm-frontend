@@ -45,13 +45,10 @@ export class StationInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
 
     this.nameField = {
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
       instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: QuestionFieldType.ShortText,
-        validationExpression: '.+'
-      },
+      questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,
       isPrivate: false,
