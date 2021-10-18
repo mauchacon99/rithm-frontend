@@ -139,23 +139,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mouseDown(event: MouseEvent): void {
     this.eventStartCoords = this.getMouseCanvasPoint(event);
 
-    if (this.mapMode === MapMode.Build) {
-      const mousePos = this.getMouseCanvasPoint(event);
-      // Check for drag start on station
-      for (const station of this.stations) {
-        if (mousePos.x >= station.canvasPoint.x && mousePos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
-          mousePos.y >= station.canvasPoint.y && mousePos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
-          station.dragging = true;
-          this.dragItem = MapDragItem.Station;
-          break;
-        }
-      }
-    }
-
-    if (this.dragItem !== MapDragItem.Station) {
-      // Assume map for now
-      this.dragItem = MapDragItem.Map;
-    }
+    const mousePos = this.getMouseCanvasPoint(event);
+    this.eventStartLogic(mousePos);
   }
 
   /**
@@ -205,28 +190,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     //TODO: support multitouch.
     const touchPoint = event.touches[0];
-    if (this.lastTouchCoords.x === -1 && this.eventStartCoords.x === -1) {
-      this.lastTouchCoords = this.getTouchCanvasPoint(touchPoint);
-      this.eventStartCoords = this.getTouchCanvasPoint(touchPoint);
-    }
 
-    if (this.mapMode === MapMode.Build) {
-      const touchPos = this.getTouchCanvasPoint(touchPoint);
-      // Check for drag start on station
-      for (const station of this.stations) {
-        if (touchPos.x >= station.canvasPoint.x && touchPos.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
-          touchPos.y >= station.canvasPoint.y && touchPos.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
-          station.dragging = true;
-          this.dragItem = MapDragItem.Station;
-          break;
-        }
-      }
-    }
+    this.lastTouchCoords = this.getTouchCanvasPoint(touchPoint);
+    this.eventStartCoords = this.getTouchCanvasPoint(touchPoint);
 
-    if (this.dragItem !== MapDragItem.Station) {
-      // Assume map for now
-      this.dragItem = MapDragItem.Map;
-    }
+    const touchPos = this.getTouchCanvasPoint(touchPoint);
+    this.eventStartLogic(touchPos);
   }
 
   /**
@@ -399,6 +368,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       x: event.clientX - canvasRect.left,
       y: event.clientY - canvasRect.top
     };
+  }
+
+  /**
+   * Handles mouseDown and touchStart logic.
+   *
+   * @param position The position of the mouse or touch event.
+   */
+  private eventStartLogic(position: Point) {
+    if (this.mapMode === MapMode.Build) {
+      // Check for drag start on station
+      for (const station of this.stations) {
+        if (position.x >= station.canvasPoint.x && position.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
+          position.y >= station.canvasPoint.y && position.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+          station.dragging = true;
+          this.dragItem = MapDragItem.Station;
+          break;
+        }
+      }
+    }
+
+    if (this.dragItem !== MapDragItem.Station) {
+      // Assume map for now
+      this.dragItem = MapDragItem.Map;
+    }
   }
 
   /**
