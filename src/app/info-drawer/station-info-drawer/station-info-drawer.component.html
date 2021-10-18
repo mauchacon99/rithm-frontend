@@ -11,13 +11,13 @@
     </form>
   </div>
   <div class="w-full py-2">
-    <p class="overline font-bold">station owners</p>
+    <p class="overline">station owners</p>
     <app-roster [rosterMembers]="stationInformation.supervisors" [rosterSize]="stationInformation.supervisors.length"
       [stationId]="stationInformation.stationRithmId" [stationName]="stationName" [isWorker]="isWorker"
       [editMode]="editMode"></app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline font-bold">worker roster</p>
+    <p class="overline ">worker roster</p>
     <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
       [stationId]="stationInformation.stationRithmId" [stationName]="stationName" [isWorker]="isWorker"
       [editMode]="editMode"></app-roster>
@@ -29,7 +29,7 @@
     </button>
   </div>
   <div class="w-full py-2">
-    <p class="overline font-bold">document generation</p>
+    <p class="overline">document generation</p>
     <div class="py-1">
       <mat-radio-group class="text-sm" aria-label="Set the document generation">
         <mat-radio-button class="px-1" value="1">None</mat-radio-button>
