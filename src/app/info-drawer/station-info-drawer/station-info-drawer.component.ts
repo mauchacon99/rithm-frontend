@@ -132,7 +132,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
             this.colorMessage='text-accent-500';
         } else {
-          this.colorMessage='text-error-600';
+          this.colorMessage='text-error-500';
           this.lastUpdatedDate = 'Unable to retrieve time';
         }
         this.stationLoading = false;
@@ -143,7 +143,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           error
         );
         this.lastUpdatedDate = 'Unable to retrieve time';
-        this.colorMessage='text-error-600';
+        this.colorMessage='text-error-500';
       });
   }
 
