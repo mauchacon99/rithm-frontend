@@ -83,7 +83,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getStationDocumentStatus(this.stationInformation.stationRithmId);
+    this.getStationDocumentStatus(this.stationInformation.rithmId);
   }
 
   /**
