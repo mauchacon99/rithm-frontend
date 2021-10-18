@@ -1,11 +1,5 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-  <div class="flex w-full h-full items-center" *ngIf="isLoading">
-    <app-loading-indicator class="flex-grow"></app-loading-indicator>
-  </div>
-  <div class="flex w-full h-full items-center" *ngIf="!isLoading">
-    <!-- Provisional variable fieldsPrivatesProvisional for view in UI the fields private card -->
-    <mat-card class="padding-card" *ngFor="let fieldPrivate of stationPrivateItems; let i = index">
-      {{fieldPrivate}}
-    </mat-card>
-  </div>
+  <mat-card class="padding-card" *ngFor="let fieldPrivate of questions; let i = index">
+    {{fieldPrivate}}
+  </mat-card>
 </div>
