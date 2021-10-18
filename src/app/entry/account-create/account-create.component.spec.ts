@@ -12,11 +12,10 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
-import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -62,13 +61,6 @@ describe('AccountCreateComponent', () => {
     const link = fixture.debugElement.nativeElement.querySelector('#terms');
     link.click();
     expect(notificationsSpy).toHaveBeenCalled();
-  });
-
-  it('should call service to open terms and conditions', () => {
-    const dialog = TestBed.inject(MatDialog);
-    const dialogSpy = spyOn(dialog, 'open');
-    component.openTerms(MockComponent(TermsConditionsModalComponent));
-    expect(dialogSpy).toHaveBeenCalledTimes(1);
   });
 
   describe('createAccount button', () => {

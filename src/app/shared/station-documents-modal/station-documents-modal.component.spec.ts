@@ -4,7 +4,7 @@ import { StationDocumentsModalComponent } from './station-documents-modal.compon
 import { MockDocumentService } from 'src/mocks';
 import { MockPopupService } from 'src/mocks';
 import { PopupService } from 'src/app/core/popup.service';
-import { DialogData, UserType } from 'src/models';
+import { StationDocumentsModalData, UserType } from 'src/models';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -12,15 +12,12 @@ import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import {  } from '@angular/material/progress-spinner';
 import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 
-const DIALOG_TEST_DATA: DialogData = {
-  title: 'Roster',
-  message: 'This is an example alert used for testing.',
-  okButtonText: 'Understood',
-  cancelButtonText: 'Cancel',
+const DIALOG_TEST_DATA: StationDocumentsModalData = {
+  stationName: 'A Station',
+  stationId: 'jk34jk34jk34'
 };
 
 describe('StationDocumentsModalComponent', () => {

@@ -4,15 +4,14 @@ import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { MockDashboardService, MockPopupService } from 'src/mocks';
-import { DialogData } from 'src/models';
+import { RosterModalData } from 'src/models';
 import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 import { RosterModalComponent } from './roster-modal.component';
 
-const DIALOG_TEST_DATA: DialogData = {
-  title: 'Roster',
-  message: 'This is an example alert used for testing.',
-  okButtonText: 'Understood',
-  cancelButtonText: 'Cancel'
+const DIALOG_TEST_DATA: RosterModalData = {
+  stationName: 'A station',
+  stationId: 'kjdf3kj3kj4k',
+  isWorker: true
 };
 
 describe('RosterModalComponent', () => {

@@ -95,7 +95,7 @@ describe('StationService', () => {
 
   it('should return station information with updated data', () => {
     const station: StationInformation = {
-      stationRithmId: 'E204F369-386F-4E41',
+      rithmId: 'E204F369-386F-4E41',
       name: 'Station Name',
       instructions: 'General instructions',
       nextStations: [{
@@ -129,7 +129,7 @@ describe('StationService', () => {
     };
 
     const expectedResponse = {
-      stationRithmId: station.stationRithmId,
+      rithmId: station.rithmId,
       name: station.name,
       instructions: 'General instructions',
       nextStations: [{
@@ -167,14 +167,14 @@ describe('StationService', () => {
         expect(response).toBe(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`);
     expect(req.request.method).toEqual('PUT');
 
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
 
-  xit('should return updated date from a specific station', () => {
+  it('should return updated date from a specific station', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
@@ -190,7 +190,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private/all questions', () => {
+  it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
     const expectedResponse: Question[]= [
@@ -220,6 +220,13 @@ describe('StationService', () => {
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });
