@@ -76,7 +76,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
-      name: ['']
+      name: [this.stationName]
     });
   }
 
@@ -146,29 +146,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         this.colorMessage='text-error-500';
       });
   }
-
-  /**
-   * Update the Station Name.
-   *
-   * @param station The new station information to be updated.
-   */
-   updateStation(station: StationInformation): void{
-     this.stationLoading = true;
-     this.stationService.updateStation(station)
-     .pipe(first())
-     .subscribe((stationUpdated)=>{
-       if (stationUpdated){
-         this.stationInformation = stationUpdated;
-       }
-       this.stationLoading = false;
-     }, (error: unknown) => {
-       this.stationLoading = false;
-       this.errorService.displayError(
-         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-         error
-       );
-     });
-   }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
