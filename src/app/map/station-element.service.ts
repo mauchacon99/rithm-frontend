@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode } from 'src/models';
+import { MapMode, Point } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -35,8 +35,9 @@ export class StationElementService {
    *
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
+   * @param currentCursorPoint The location of the mouse cursor on the page.
    */
-  drawStation(station: StationMapElement, mapMode: MapMode): void {
+  drawStation(station: StationMapElement, mapMode: MapMode, currentCursorPoint: Point): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
@@ -46,7 +47,7 @@ export class StationElementService {
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-        this.drawConnectionNode(station);
+        this.drawConnectionNode(station, currentCursorPoint);
         this.drawStationButton(station);
       }
     }
@@ -264,11 +265,13 @@ export class StationElementService {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    const nodeColor = NODE_DEFAULT_COLOR;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = nodeColor;
+    if () {
+      ctx.fillStyle = NODE_HOVER_COLOR;
+    } else {
+      ctx.fillStyle = NODE_DEFAULT_COLOR;
+    }
     ctx.fill();
     ctx.strokeStyle = '#ccc';
     ctx.stroke();

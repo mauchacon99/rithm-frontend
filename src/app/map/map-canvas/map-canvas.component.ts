@@ -33,6 +33,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
+  /** Mouse cursor location on map. */
+  currentCursorPoint: Point = { x: -1, y: -1};
+
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
 
@@ -184,6 +187,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
+    //Track mouse position
+    this.currentCursorPoint.x = event.pageX;
+    this.currentCursorPoint.y = event.pageY;
+    this.drawElements();
+
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x -= event.movementX / this.scale;
@@ -386,7 +394,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       // Draw the stations
       this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode);
+        this.stationElementService.drawStation(station, this.mapMode, this.currentCursorPoint);
       });
 
       // Draw the flows
