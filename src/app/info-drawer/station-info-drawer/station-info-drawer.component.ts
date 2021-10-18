@@ -130,7 +130,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.isLoading=false;
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
-            this.colorMessage='text-accent-300';
+            this.colorMessage='text-accent-500';
         } else {
           this.colorMessage='text-error-600';
           this.lastUpdatedDate = 'Unable to retrieve time';
