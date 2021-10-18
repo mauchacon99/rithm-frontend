@@ -14,7 +14,7 @@ import { Question } from 'src/models';
 })
 export class AllFieldsComponent implements OnInit{
 
-/** The private questions loaded by station-component. */
+/** The public questions loaded by station-component. */
 @Input() stationId = '';
 
 /** The list of station public questions. */
@@ -38,10 +38,10 @@ ngOnInit(): void{
 }
 
   /**
-   * Get all station previous private questions.
+   * Get all station previous public questions.
    *
    * @param stationId The Specific id of station.
-   * @param isPrivate True returns private questions.
+   * @param isPrivate False returns public questions.
    */
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
      this.isLoading = true;
