@@ -160,9 +160,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (response){
-      if (response){
-        this.router.navigateByUrl('dashboard');
-      }
+      this.router.navigateByUrl('dashboard');
     }
    }
 
