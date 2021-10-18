@@ -54,6 +54,7 @@ export class StationInfoHeaderComponent implements OnInit {
       isPrivate: false,
       children: [],
     };
+    this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
   /** Get name of station from StationInformation based on type.
@@ -84,6 +85,7 @@ export class StationInfoHeaderComponent implements OnInit {
       isWorker: false,
       editMode: this.stationEditMode
     };
+
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
   }
 

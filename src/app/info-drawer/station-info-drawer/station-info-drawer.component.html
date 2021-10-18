@@ -1,4 +1,7 @@
-<div class="grid grid-cols-1">
+<div class="h-full w-full flex justify-center items-center absolute" *ngIf="stationLoading">
+  <app-loading-indicator></app-loading-indicator>
+</div>
+<div class="grid grid-cols-1" *ngIf="!stationLoading">
   <div class="w-full py-2">
     <div class="col-span-12">
       <h6 class="text-center">Station Information</h6>
@@ -6,22 +9,22 @@
     <form [formGroup]="stationNameForm">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>
-        <input id="stationName" type="text" matInput [value]="stationName" formControlName="name" autocomplete="off">
+        <input id="stationName" type="text" matInput [value]="stationName"
+          formControlName="name" autocomplete="off">
       </mat-form-field>
     </form>
   </div>
   <div class="w-full py-2">
     <p class="overline">station owners</p>
     <app-roster [rosterMembers]="stationInformation.supervisors" [rosterSize]="stationInformation.supervisors.length"
-      [stationId]="stationInformation.stationRithmId" [stationName]="stationName" [isWorker]="isWorker"
-      [editMode]="editMode"></app-roster>
+      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker" [editMode]="editMode">
+    </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline">worker roster</p>
-      <app-roster [rosterMembers]="stationInformation.workers"
-        [rosterSize]="stationInformation.workers.length"
-        [stationId]="stationInformation.stationRithmId" [stationName]="stationName"
-        [isWorker]="isWorker" [editMode]="editMode"></app-roster>
+    <p class="overline font-bold">worker roster</p>
+    <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
+      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker" [editMode]="editMode">
+    </app-roster>
   </div>
   <div class="w-full py-2">
     <p class="overline">station priority</p>
@@ -49,7 +52,9 @@
     </div>
 </div>
 <div class="flex justify-center">
-   <div class="bottom-0 absolute mb-7">
-    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7" (click)="toggleDrawer('stationInfo')">Done</button>
-   </div>
+  <div class="bottom-0 absolute mb-7">
+    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
+      (click)="toggleDrawer('stationInfo')">Done</button>
+  </div>
+</div>
 </div>

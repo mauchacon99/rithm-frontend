@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -47,7 +46,7 @@ export class StationService {
    * @param station The station information that will be update.
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`, station);
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`, station);
   }
 
   /**
@@ -69,30 +68,10 @@ export class StationService {
    * @param isPrivate True returns private questions - False returns all questions.
    * @returns Station private/all items Array.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
-    const mockPrevQuestions: Question[]= [
-      {
-        prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-     return of(mockPrevQuestions).pipe(delay(1000));
+     const params = new HttpParams()
+    .set('stationRithmId', stationId)
+    .set('getPrivate', isPrivate);
+    return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
    }
 }
