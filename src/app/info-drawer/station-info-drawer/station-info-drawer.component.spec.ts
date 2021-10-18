@@ -48,7 +48,7 @@ describe('StationInfoDrawerComponent', () => {
     fixture = TestBed.createComponent(StationInfoDrawerComponent);
     component = fixture.componentInstance;
     component.stationInformation = {
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [],
