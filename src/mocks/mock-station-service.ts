@@ -166,7 +166,7 @@ export class MockStationService {
    * @returns Status the document.
    */
   getStationDocumentStatus(stationId: string): Observable<DocumentGeneration> {
-    const mockStatusDocument = DocumentGeneration.Manual;
+    const mockStatusDocument = DocumentGeneration.None;
     return of(mockStatusDocument).pipe(delay(1000));
   }
 
