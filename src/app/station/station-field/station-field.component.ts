@@ -51,7 +51,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Instruction field to display. */
   instructionField: Question = {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Instructions',
     instructions: '',
     questionType: QuestionFieldType.Instructions,
@@ -63,7 +63,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Label field to display. */
   labelField: Question = {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Name your field',
     instructions: '',
     questionType: QuestionFieldType.ShortText,
@@ -75,7 +75,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** The field for adding an option to a select field. */
   selectOptionField: Question = {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Add Option',
     instructions: '',
     questionType: QuestionFieldType.ShortText,
@@ -87,7 +87,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** The field for adding an item to a checklist field. */
   checklistOptionField: Question = {
-    rithmId: '',
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Add Item',
     instructions: '',
     questionType: QuestionFieldType.ShortText,

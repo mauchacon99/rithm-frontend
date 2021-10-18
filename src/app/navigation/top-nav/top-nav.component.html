@@ -20,10 +20,10 @@
   </button>
 </nav>
 <mat-menu #userMenu="matMenu">
-  <button mat-menu-item routerLink="settings/account">
+  <button mat-menu-item routerLink="settings/account" data-testid="my-account">
     My Account
   </button>
-  <button mat-menu-item (click)="signOut()">
+  <button mat-menu-item (click)="signOut()" data-testid="sign-out">
     Sign Out
   </button>
 </mat-menu>

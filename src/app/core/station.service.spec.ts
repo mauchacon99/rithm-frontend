@@ -93,7 +93,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return station information with updated data', () => {
+  it('should return station information with updated data', () => {
     const station: StationInformation = {
       stationRithmId: 'E204F369-386F-4E41',
       name: 'Station Name',
@@ -164,7 +164,7 @@ describe('StationService', () => {
 
     service.updateStation(station)
       .subscribe((response) => {
-        expect(response).toBeDefined();
+        expect(response).toBe(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.stationRithmId}`);
@@ -174,7 +174,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return updated date from a specific station', () => {
+  it('should return updated date from a specific station', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
@@ -190,13 +190,14 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return a list of stations private items', () => {
+  it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
+    const isPrivate = true;
     const expectedResponse: Question[]= [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -206,7 +207,7 @@ describe('StationService', () => {
       {
         prompt: 'Fake question 2',
         instructions: 'Fake question 2',
-        rithmId: '',
+        rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -215,10 +216,17 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationPrivateItems(stationId)
+    service.getStationPreviousQuestions(stationId, isPrivate)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 });
