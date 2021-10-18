@@ -83,7 +83,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    //this.getStationDocumentStatus(this.stationInformation.rithmId);
+    this.getStationDocumentStatus(this.stationInformation.stationRithmId);
   }
 
   /**
@@ -94,10 +94,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getStationDocumentStatus(stationId: string): void {
     this.stationService.getStationDocumentStatus(stationId)
       .pipe(first())
-      .subscribe((status) => {
-        const statusDocument: DocumentGeneration = status;
-        if (statusDocument) {
-          this.stationDocumentStatus = statusDocument;
+      .subscribe((status: DocumentGeneration) => {
+        if (status) {
+          this.stationDocumentStatus = status;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
