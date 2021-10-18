@@ -39,7 +39,6 @@
                       </ng-template>
                     </mat-expansion-panel>
                     <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
-                      <ng-template *ngIf="privateQuestions">
                         <mat-expansion-panel-header class="text-base" >
                           <mat-panel-title>
                             Private
@@ -49,12 +48,8 @@
                           </mat-panel-description>
                         </mat-expansion-panel-header>
                         <ng-template matExpansionPanelContent>
-                          <app-private-fields [questions]="privateQuestions"></app-private-fields>
+                          <app-private-fields [stationId]="stationInformation.stationRithmId"></app-private-fields>
                         </ng-template>
-                      </ng-template>
-                      <div class="flex w-full h-full items-center" *ngIf="!privateQuestions">
-                        <app-loading-indicator class="flex-grow"></app-loading-indicator>
-                      </div>
                     </mat-expansion-panel>
                   </mat-accordion>
                 </div>

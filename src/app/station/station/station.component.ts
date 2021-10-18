@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, Question } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -52,12 +52,6 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
-
-  /** The list of station private questions. */
-  privateQuestions: Question[] | null = null;
-
-  /** The list of station public questions. */
-  publicQuestions: Question[] | null = null;
 
   constructor(
     private stationService: StationService,
@@ -175,31 +169,6 @@ export class StationComponent implements OnInit, OnDestroy {
       isRequired: false,
       isPrivate: false,
       children: [],
-    });
-  }
-
-  /**
-   * Get all station previous private questions.
-   *
-   * @param stationId The Specific id of station.
-   * @param isPrivate True returns private questions.
-   */
-   getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((questions: Question[]) => {
-      if (questions) {
-        if (isPrivate) {
-          this.privateQuestions = questions;
-        } else {
-          this.publicQuestions = questions;
-        }
-      }
-    }, (error: unknown) => {
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error
-      );
     });
   }
 

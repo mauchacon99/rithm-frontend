@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PrivateFieldsComponent } from './private-fields.component';
 import { MatCardModule } from '@angular/material/card';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('PrivateFieldsComponent', () => {
   let component: PrivateFieldsComponent;
@@ -9,11 +14,16 @@ describe('PrivateFieldsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
-        PrivateFieldsComponent
+        PrivateFieldsComponent,
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
         MatCardModule
       ],
+      providers: [
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService }
+      ]
     })
       .compileComponents();
   });
