@@ -9,23 +9,17 @@ import { AccountSettingsComponent } from './account-settings.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { ErrorService } from 'src/app/core/error.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { TermsConditionsModalComponent } from 'src/app/shared/terms-conditions-modal/terms-conditions-modal.component';
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent;
   let fixture: ComponentFixture<AccountSettingsComponent>;
   const formBuilder = new FormBuilder();
 
-  let dialogSpy: jasmine.Spy;
   // eslint-disable-next-line rxjs/finnish
   const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of({}), close: null });
   dialogRefSpyObj.componentInstance = { body: '' };
-  const dialogData = {
-    panelClass: 'terms-condition',
-    data: { title: 'Terms and Conditions', message: '', okButtonText: 'Ok', width: '90%', showAgreeButton: false }
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,17 +49,8 @@ describe('AccountSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  beforeEach(() => {
-    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
-  });
-
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should open terms and conditions model', () => {
-    component.viewTermsAndConditions();
-    expect(dialogSpy).toHaveBeenCalledWith(TermsConditionsModalComponent, dialogData);
   });
 
 });
