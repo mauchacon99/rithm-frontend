@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGeneration } from '../../../models/enums/document-generation.enum';
 
 /**
  * Component for info station.
@@ -48,6 +49,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Status the document in station. */
+  stationDocumentStatus: DocumentGeneration = DocumentGeneration.None;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -79,6 +83,28 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
+    //this.getStationDocumentStatus(this.stationInformation.rithmId);
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   */
+  getStationDocumentStatus(stationId: string): void {
+    this.stationService.getStationDocumentStatus(stationId)
+      .pipe(first())
+      .subscribe((status) => {
+        const statusDocument: DocumentGeneration = status;
+        if (statusDocument) {
+          this.stationDocumentStatus = statusDocument;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
@@ -139,23 +165,23 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param station The new station information to be updated.
    */
-   updateStation(station: StationInformation): void{
-     this.stationLoading = true;
-     this.stationService.updateStation(station)
-     .pipe(first())
-     .subscribe((stationUpdated)=>{
-       if (stationUpdated){
-         this.stationInformation = stationUpdated;
-       }
-       this.stationLoading = false;
-     }, (error: unknown) => {
-       this.stationLoading = false;
-       this.errorService.displayError(
-         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-         error
-       );
-     });
-   }
+  updateStation(station: StationInformation): void {
+    this.stationLoading = true;
+    this.stationService.updateStation(station)
+      .pipe(first())
+      .subscribe((stationUpdated) => {
+        if (stationUpdated) {
+          this.stationInformation = stationUpdated;
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.

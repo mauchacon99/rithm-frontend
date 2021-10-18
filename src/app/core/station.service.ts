@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Question, Station, StationInformation } from 'src/models';
+import { DocumentGeneration, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -55,10 +56,24 @@ export class StationService {
    * @param stationId The id for the specific station for which to get the latest updated date.
    * @returns The last updated date for this station.
    */
-   getLastUpdated(stationId: string): Observable<string> {
+  getLastUpdated(stationId: string): Observable<string> {
     const params = new HttpParams()
-    .set('rithmId', stationId);
+      .set('rithmId', stationId);
     return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params });
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @returns Status the document.
+   */
+  getStationDocumentStatus(stationId: string): Observable<DocumentGeneration> {
+    /** Temporary parameter is implemented when the request is made. */
+    new HttpParams()
+      .set('rithmId', stationId);
+    const mockStatusDocument = DocumentGeneration.Manual;
+    return of(mockStatusDocument).pipe(delay(1000));
   }
 
   /**
@@ -68,10 +83,10 @@ export class StationService {
    * @param isPrivate True returns private questions - False returns all questions.
    * @returns Station private/all items Array.
    */
-   getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
-     const params = new HttpParams()
-    .set('stationRithmId', stationId)
-    .set('getPrivate', isPrivate);
+  getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationId)
+      .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
-   }
+  }
 }

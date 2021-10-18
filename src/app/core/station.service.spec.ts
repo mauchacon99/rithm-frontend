@@ -190,6 +190,16 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  xit('should return the status of the specific document', () => {
+    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
+    const expectedResponse = 'None';
+
+    service.getStationDocumentStatus(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
