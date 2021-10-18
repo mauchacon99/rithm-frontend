@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationInfoDrawerData, StationInformation } from 'src/models';
-import { DocumentGeneration } from '../../../models/enums/document-generation.enum';
+import { DocumentGenerationStatus } from '../../../models/enums/document-generation-status.enum';
 
 /**
  * Component for info station.
@@ -50,7 +50,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   lastUpdatedDate = '';
 
   /** Status the document in station. */
-  stationDocumentStatus: DocumentGeneration = DocumentGeneration.None;
+  stationDocumentStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
 
   /** Color message LastUpdated. */
   colorMessage  = '';
@@ -97,7 +97,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getStationDocumentStatus(stationId: string): void {
     this.stationService.getStationDocumentStatus(stationId)
       .pipe(first())
-      .subscribe((status: DocumentGeneration) => {
+      .subscribe((status: DocumentGenerationStatus) => {
         if (status) {
           this.stationDocumentStatus = status;
         }

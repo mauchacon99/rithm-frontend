@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGeneration, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -68,11 +68,11 @@ export class StationService {
    * @param stationId The id of the station return status document.
    * @returns Status the document.
    */
-  getStationDocumentStatus(stationId: string): Observable<DocumentGeneration> {
+  getStationDocumentStatus(stationId: string): Observable<DocumentGenerationStatus> {
     /** Temporary parameter is implemented when the request is made. */
     new HttpParams()
       .set('rithmId', stationId);
-    const mockStatusDocument = DocumentGeneration.None;
+    const mockStatusDocument = DocumentGenerationStatus.None;
     return of(mockStatusDocument).pipe(delay(1000));
   }
 
