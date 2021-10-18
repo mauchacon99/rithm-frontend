@@ -17,7 +17,7 @@
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
-            (loadingParent)="setShowHiddenLoading($event)"></app-station-info-header>
+            #stationInfoHeader></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
             <mat-tab label="Document">
@@ -68,7 +68,7 @@
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
                 <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
-                <button mat-raised-button color="accent" class="mx-2">Save</button>
+                <button mat-raised-button color="accent" class="mx-2" (click)="updateStation()">Save</button>
               </div>
             </div>
           </div>

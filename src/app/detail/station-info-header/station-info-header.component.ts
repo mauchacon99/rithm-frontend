@@ -1,9 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
 import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
@@ -32,15 +29,10 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Field to change station name. */
   nameField!: Question;
 
-  /** Send Loading in station component. */
-  @Output() loadingParent = new EventEmitter<boolean>();
-
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService,
-    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
@@ -95,30 +87,6 @@ export class StationInfoHeaderComponent implements OnInit {
     };
 
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
-  }
-
-  /**
-   * Update the Station Name.
-   *
-   */
-  updateStation(): void {
-    const station = this.stationInformation as StationInformation;
-    station.name = this.stationNameForm.value.name;
-    this.loadingParent.emit(true);
-    this.stationService.updateStation(station)
-      .pipe(first())
-      .subscribe((stationUpdated) => {
-        if (stationUpdated) {
-          this.stationInformation = stationUpdated;
-        }
-        this.loadingParent.emit(false);
-      }, (error: unknown) => {
-        this.loadingParent.emit(false);
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
   }
 
 }

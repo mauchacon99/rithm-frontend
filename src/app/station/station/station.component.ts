@@ -9,6 +9,7 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
+import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
 
 /**
  * Main component for viewing a station.
@@ -22,6 +23,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
+
+  /** The component for the station info header this name station. */
+  @ViewChild('stationInfoHeader', { static: false })
+  stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   destroyed$ = new Subject();
@@ -205,20 +210,36 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Show hidden loading in component parent.
-   *
-   * @param showLoading Param for show or hidden in loading.
-   */
-  setShowHiddenLoading(showLoading: boolean): void {
-    this.stationLoading = showLoading;
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update the Station.
+   */
+  updateStation(): void {
+    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
+    console.log(nameStationChange);
+    const station = this.stationInformation;
+    station.name = nameStationChange;
+    this.stationLoading = true;
+    this.stationService.updateStation(station)
+      .pipe(first())
+      .subscribe((stationUpdated) => {
+        if (stationUpdated) {
+          this.stationInformation = stationUpdated;
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
