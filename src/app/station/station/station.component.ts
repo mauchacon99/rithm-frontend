@@ -56,10 +56,6 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The list of station all-items. */
   stationAllItems: Question[] = [];
 
-  /** The list of station private-items. */
-  stationPrivateItems: Question[] = [];
-
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -178,31 +174,6 @@ export class StationComponent implements OnInit, OnDestroy {
       children: [],
     });
   }
-
-  /**
-   * Get all station previous private/all questions.
-   *
-   * @param stationId The Specific id of station.
-   * @param isPrivate True returns private questions - False returns all questions.
-   */
-     getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-      this.stationService.getStationPreviousQuestions(stationId, isPrivate)
-      .pipe(first())
-      .subscribe((questions) => {
-        if (questions) {
-          if (isPrivate){
-            this.stationPrivateItems = questions;
-          } else {
-            this.stationAllItems = questions;
-          }
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-    }
 
   /**
    * Completes all subscriptions.
