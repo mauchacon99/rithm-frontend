@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
@@ -17,7 +17,7 @@ import { FlowElementService } from '../flow-element.service';
   templateUrl: './map-canvas.component.html',
   styleUrls: ['./map-canvas.component.scss']
 })
-export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
+export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
@@ -44,9 +44,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
-
-  /** Is a Station Element hover state active right now? */
-  @Input() private stationElementHover = false;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
@@ -125,17 +122,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
    ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Checks for changes in this.stationElementHover.
-   *
-   * @param changes Watches for changes.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.stationElementHover) {
-      this.drawElements();
-    }
   }
 
   /**
