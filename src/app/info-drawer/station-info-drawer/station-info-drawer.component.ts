@@ -27,6 +27,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
+
+  /** Loading in last updated section. */
+  lastUpdatedLoading = false;
+
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
 
@@ -119,7 +123,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station that the document is in.
    */
      getLastUpdated(stationId: string): void {
-      this.stationLoading = true;
+      this.stationLoading = this.lastUpdatedLoading = true;
       this.stationService.getLastUpdated(stationId)
         .pipe(first())
         .subscribe((updatedDate) => {
@@ -133,8 +137,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.lastUpdatedDate += ' ago';
             }
           }
-          this.stationLoading = false;
+          this.stationLoading = this.lastUpdatedLoading= false;
         }, (error: unknown) => {
+          this.colorMessage='text-error-600';
           this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

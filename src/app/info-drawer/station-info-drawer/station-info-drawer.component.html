@@ -43,8 +43,11 @@
   </div>
   <div class="w-full py-2">
     <p class="overline">last updated</p>
-    <div class="col-span-8 md:col-span-4 text-left text-xs py-2">
-      <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
+     <div class="w-32 items-center pt-2" *ngIf="lastUpdatedLoading" style='background:red'>
+      <app-loading-indicator [diameter]="20"></app-loading-indicator>
+    </div>
+    <div class="col-span-8 md:col-span-4 text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
+      <span  class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
   </div>
   <div class="w-full py-2">
