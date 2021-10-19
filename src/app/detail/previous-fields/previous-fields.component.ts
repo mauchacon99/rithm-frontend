@@ -14,7 +14,7 @@ import { Question } from 'src/models';
 })
 export class PreviousFieldsComponent implements OnInit {
 
-/** The private questions loaded by station-component. */
+/** The station id used to get previous fields. */
 @Input() stationId!: string;
 
 /** The type of fields requested private/true - all/false. */
@@ -45,8 +45,6 @@ ngOnInit(): void{
    * @param isPrivate True/false returns private/all questions.
    */
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-    // eslint-disable-next-line no-console
-    console.log(stationId, isPrivate);
     this.isLoading = true;
     this.stationService.getStationPreviousQuestions(stationId, isPrivate)
     .pipe(first())

@@ -5,9 +5,9 @@
     </mat-card>
   </ng-container>
   <ng-container *ngIf="questions.length === 0">
-    <mat-card class="padding-card text-center col-span-full">
+    <div class="padding-card text-center col-span-full">
       There are no previous fields available
-    </mat-card>
+    </div>
   </ng-container>
 </div>
 <div class="flex w-full h-full items-center" *ngIf="isLoading">
