@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockPopupService, MockStationService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -13,6 +13,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { PopupService } from 'src/app/core/popup.service';
+
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -38,7 +40,8 @@ describe('StationInfoDrawerComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
       ]
     })
       .compileComponents();
