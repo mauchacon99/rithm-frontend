@@ -123,7 +123,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station that the document is in.
    */
      getLastUpdated(stationId: string): void {
-      this.stationLoading = this.lastUpdatedLoading = true;
+      this.stationLoading = true;
+      this.lastUpdatedLoading = true;
       this.stationService.getLastUpdated(stationId)
         .pipe(first())
         .subscribe((updatedDate) => {
@@ -137,9 +138,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.lastUpdatedDate += ' ago';
             }
           }
-          this.stationLoading = this.lastUpdatedLoading= false;
+          this.stationLoading = false;
+          this.lastUpdatedLoading= false;
         }, (error: unknown) => {
-          this.colorMessage='text-error-600';
+          this.colorMessage='text-error-500';
           this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
