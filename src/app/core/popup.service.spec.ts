@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
-import { DialogData } from 'src/models';
+import { DialogData, DialogType } from 'src/models';
 
 import { PopupService } from './popup.service';
 
@@ -14,12 +14,14 @@ describe('PopupService', () => {
   const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of({}), close: null });
   dialogRefSpyObj.componentInstance = { body: '' };
   const dialogWithWidth: DialogData = {
+    type: DialogType.Terms,
     title: 'Terms and Conditions',
     message: 'Returns terms and conditions',
     okButtonText: 'Agree',
     width: '90%'
   };
   const dialogWithoutWidth: DialogData = {
+    type: DialogType.Terms,
     title: 'Terms and Conditions',
     message: 'Returns terms and conditions',
     okButtonText: 'Agree',
