@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
-import { DocumentGenerationStatus } from '../models/enums/document-generation.enum';
+import { DocumentGenerationStatus } from '../models/enums/document-generation-status.enum';
 
 /**
  * Mocks methods of the `StationService`.
