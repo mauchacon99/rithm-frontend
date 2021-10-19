@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
@@ -17,7 +17,7 @@ import { FlowElementService } from '../flow-element.service';
   templateUrl: './map-canvas.component.html',
   styleUrls: ['./map-canvas.component.scss']
 })
-export class MapCanvasComponent implements OnInit, OnDestroy {
+export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
   /** Reference to the main canvas element used for the map. */
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
@@ -33,6 +33,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
+  /** The coordinate at which the mouse cursor is located. */
+  currentCursorPoint: Point = { x: -1, y: -1 };
+
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = {x: -1, y: -1};
 
@@ -41,6 +44,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
+
+  /** Is a Station Element hover state active right now? */
+  @Input() private stationElementHover = false;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
@@ -122,6 +128,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Checks for changes in this.stationElementHover.
+   *
+   * @param changes Watches for changes.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.stationElementHover) {
+      this.drawElements();
+    }
+  }
+
+  /**
    * Responds to changing window size by setting a new canvas size and re-drawing the elements.
    */
   @HostListener('window:resize', ['$event'])
@@ -164,9 +181,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
     //Track mouse position
-    // this.currentCursorPoint.x = event.pageX;
-    // this.currentCursorPoint.y = event.pageY;
-    this.drawElements();
+    this.currentCursorPoint = this.getMouseCanvasPoint(event);
+    //Hovering over different station elements.
+    for (const station of this.stations) {
+      station.checkElementHover(this.currentCursorPoint, this.scale);
+    }
 
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';

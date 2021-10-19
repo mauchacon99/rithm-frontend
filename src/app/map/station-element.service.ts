@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point } from 'src/models';
+import { MapMode, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -35,14 +35,13 @@ export class StationElementService {
    *
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
-   * @param currentCursorPoint The location of the mouse cursor on the page.
    */
   drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
 
-    if (this.mapScale > 0.25) {
+    if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
       this.drawDocumentBadge(station);
       this.drawStationName(station);
 
@@ -267,11 +266,7 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    if () {
-      ctx.fillStyle = NODE_HOVER_COLOR;
-    } else {
-      ctx.fillStyle = NODE_DEFAULT_COLOR;
-    }
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     ctx.strokeStyle = '#ccc';
     ctx.stroke();
