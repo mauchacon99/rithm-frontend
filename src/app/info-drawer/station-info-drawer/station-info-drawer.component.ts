@@ -142,6 +142,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.lastUpdatedLoading= false;
         }, (error: unknown) => {
           this.colorMessage='text-error-500';
+          this.lastUpdatedLoading = false;
           this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
