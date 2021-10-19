@@ -49,7 +49,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
-  /** Status the document in station. */
+  /** Status by default the document in station. */
   stationDocumentStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
 
   /** Color message LastUpdated. */

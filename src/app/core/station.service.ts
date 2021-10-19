@@ -68,11 +68,10 @@ export class StationService {
    * @param stationId The id of the station return status document.
    * @returns Status the document.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationDocumentStatus(stationId: string): Observable<DocumentGenerationStatus> {
-    /** Temporary parameter is implemented when the request is made. */
-    new HttpParams()
-      .set('rithmId', stationId);
-    return of(DocumentGenerationStatus.None).pipe(delay(1000));
+    const mockStatusDocument = DocumentGenerationStatus.None;
+    return of(mockStatusDocument).pipe(delay(1000));
   }
 
   /**
