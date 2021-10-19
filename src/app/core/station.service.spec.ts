@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -190,11 +190,11 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should return the status of the specific document', () => {
+  it('should return the status of the specific document', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
-    const expectedResponse = 'None';
+    const expectedResponse = DocumentGenerationStatus.None;
 
-    service.getStationDocumentStatus(stationId)
+    service.getStationDocumentGenerationStatus(stationId)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });

@@ -35,9 +35,9 @@
     <p class="overline">document generation</p>
     <div class="py-1">
       <mat-radio-group class="text-sm" aria-label="Set the document generation">
-        <mat-radio-button class="px-1" value="1" [checked]="stationDocumentStatus === 'None'? true: false">None
+        <mat-radio-button class="px-1" value="1" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
         </mat-radio-button>
-        <mat-radio-button class="px-1" value="2" [checked]="stationDocumentStatus === 'Manual'? true: false">Manual
+        <mat-radio-button class="px-1" value="2" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
         </mat-radio-button>
       </mat-radio-group>
     </div>

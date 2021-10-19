@@ -2,8 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
-import { DocumentGenerationStatus } from '../models/enums/document-generation-status.enum';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -165,7 +164,7 @@ export class MockStationService {
    * @param stationId The id of the station return status document.
    * @returns Status the document.
    */
-  getStationDocumentStatus(stationId: string): Observable<DocumentGenerationStatus> {
+  getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
     const mockStatusDocument = DocumentGenerationStatus.None;
     return of(mockStatusDocument).pipe(delay(1000));
   }

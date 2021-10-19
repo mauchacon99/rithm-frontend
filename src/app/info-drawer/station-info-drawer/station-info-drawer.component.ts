@@ -8,8 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { StationInfoDrawerData, StationInformation } from 'src/models';
-import { DocumentGenerationStatus } from '../../../models/enums/document-generation-status.enum';
+import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
 
 /**
  * Component for info station.
@@ -50,10 +49,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   lastUpdatedDate = '';
 
   /** Status by default the document in station. */
-  stationDocumentStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
+  stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
 
   /** Color message LastUpdated. */
-  colorMessage  = '';
+  colorMessage = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -86,7 +85,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getStationDocumentStatus(this.stationInformation.rithmId);
+    this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
   }
 
   /**
@@ -94,12 +93,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station return status document.
    */
-  getStationDocumentStatus(stationId: string): void {
-    this.stationService.getStationDocumentStatus(stationId)
+  getStationDocumentGenerationStatus(stationId: string): void {
+    this.stationService.getStationDocumentGenerationStatus(stationId)
       .pipe(first())
       .subscribe((status: DocumentGenerationStatus) => {
         if (status) {
-          this.stationDocumentStatus = status;
+          this.stationDocumentGenerationStatus = status;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -143,30 +142,30 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-     getLastUpdated(stationId: string): void {
-      this.stationLoading = true;
-      this.stationService.getLastUpdated(stationId)
-        .pipe(first())
-        .subscribe((updatedDate) => {
-          if (updatedDate) {
-            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-            this.colorMessage='text-accent-500';
-            if (this.lastUpdatedDate === '1 day') {
-                this.lastUpdatedDate = ' Yesterday';
-            } else {
-              this.lastUpdatedDate += ' ago';
-            }
+  getLastUpdated(stationId: string): void {
+    this.stationLoading = true;
+    this.stationService.getLastUpdated(stationId)
+      .pipe(first())
+      .subscribe((updatedDate) => {
+        if (updatedDate) {
+          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+          this.colorMessage = 'text-accent-500';
+          if (this.lastUpdatedDate === '1 day') {
+            this.lastUpdatedDate = ' Yesterday';
+          } else {
+            this.lastUpdatedDate += ' ago';
           }
-          this.stationLoading = false;
-        }, (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
