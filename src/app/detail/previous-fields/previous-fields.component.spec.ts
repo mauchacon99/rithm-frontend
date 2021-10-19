@@ -1,21 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { AllFieldsComponent } from './all-fields.component';
 import { MatCardModule } from '@angular/material/card';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
-import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { StationService } from 'src/app/core/station.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService, MockStationService } from 'src/mocks';
 
-describe('AllFieldsComponent', () => {
-  let component: AllFieldsComponent;
-  let fixture: ComponentFixture<AllFieldsComponent>;
+import { PreviousFieldsComponent } from './previous-fields.component';
+
+describe('PreviousFieldsComponent', () => {
+  let component: PreviousFieldsComponent;
+  let fixture: ComponentFixture<PreviousFieldsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AllFieldsComponent,
+      declarations: [ PreviousFieldsComponent,
         MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
@@ -30,7 +29,7 @@ describe('AllFieldsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AllFieldsComponent);
+    fixture = TestBed.createComponent(PreviousFieldsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
