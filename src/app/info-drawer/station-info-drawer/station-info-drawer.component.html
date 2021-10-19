@@ -15,7 +15,7 @@
     </form>
   </div>
   <div class="w-full py-2">
-    <p class="overline font-bold">station owners</p>
+    <p class="overline">station owners</p>
     <app-roster [rosterMembers]="stationInformation.supervisors" [rosterSize]="stationInformation.supervisors.length"
       [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="isWorker" [editMode]="editMode">
     </app-roster>
@@ -31,9 +31,9 @@
     <button mat-mini-fab color="warn" class="priority">
       1
     </button>
-  </div>
+    </div>
   <div class="w-full py-2">
-    <p class="overline font-bold">document generation</p>
+    <p class="overline">document generation</p>
     <div class="py-1">
       <mat-radio-group class="text-sm" aria-label="Set the document generation">
         <mat-radio-button class="px-1" value="1">None</mat-radio-button>
@@ -42,12 +42,18 @@
     </div>
   </div>
   <div class="w-full py-2">
-    <button mat-stroked-button color="warn" class="priority font-semibold" (click)="deleteStation(stationInformation.rithmId)">Delete Station</button>
-  </div>
-  <div class="flex justify-center">
-    <div class="bottom-0 absolute mb-7">
-      <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
-        (click)="toggleDrawer('stationInfo')">Done</button>
+    <p class="overline">last updated</p>
+    <div class="col-span-8 md:col-span-4 text-left text-xs py-2">
+      <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
+  </div>
+  <div class="w-full py-2">
+    <button mat-stroked-button color="warn" class="priority font-semibold" (click)="deleteStation(stationInformation.rithmId)">Delete Station</button>
+    </div>
+</div>
+<div class="flex justify-center">
+  <div class="bottom-0 absolute mb-7">
+    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
+      (click)="toggleDrawer('stationInfo')">Done</button>
   </div>
 </div>
