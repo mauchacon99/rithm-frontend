@@ -180,13 +180,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
    */
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
-    //Track mouse position
-    this.currentCursorPoint = this.getMouseCanvasPoint(event);
-    //Hovering over different station elements.
-    for (const station of this.stations) {
-      station.checkElementHover(this.currentCursorPoint, this.scale);
-    }
-
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x -= event.movementX / this.scale;
@@ -200,6 +193,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
           station.mapPoint.y += event.movementY / this.scale;
           this.drawElements();
         }
+      }
+    } else {
+      //Track mouse position
+      this.currentCursorPoint = this.getMouseCanvasPoint(event);
+      //Hovering over different station elements.
+      for (const station of this.stations) {
+        station.checkElementHover(this.currentCursorPoint, this.scale);
       }
     }
   }
