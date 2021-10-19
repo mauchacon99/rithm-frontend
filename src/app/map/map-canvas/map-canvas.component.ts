@@ -33,9 +33,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
-  /** The coordinate at which the mouse cursor is located. */
-  currentCursorPoint: Point = { x: -1, y: -1 };
-
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = {x: -1, y: -1};
 
@@ -182,11 +179,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     } else {
       //Track mouse position
-      this.currentCursorPoint = this.getMouseCanvasPoint(event);
+      const mousePos = this.getMouseCanvasPoint(event);
       //Hovering over different station elements.
       for (const station of this.stations) {
         const previousHoverState = station.hoverActive;
-        station.checkElementHover(this.currentCursorPoint, this.scale);
+        station.checkElementHover(mousePos, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
             this.drawElements();
