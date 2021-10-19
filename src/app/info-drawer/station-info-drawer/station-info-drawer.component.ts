@@ -48,6 +48,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Color message LastUpdated. */
+  colorMessage  = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -70,7 +73,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
-      name: ['']
+      name: [this.stationName]
     });
   }
 
@@ -115,47 +118,30 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-  getLastUpdated(stationId: string): void {
-    this.stationLoading = true;
-    this.stationService.getLastUpdated(stationId)
-      .pipe(first())
-      .subscribe((updatedDate) => {
-        if (updatedDate) {
-          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-        }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-  }
-
-  /**
-   * Update the Station Name.
-   *
-   * @param station The new station information to be updated.
-   */
-   updateStation(station: StationInformation): void{
-     this.stationLoading = true;
-     this.stationService.updateStation(station)
-     .pipe(first())
-     .subscribe((stationUpdated)=>{
-       if (stationUpdated){
-         this.stationInformation = stationUpdated;
-       }
-       this.stationLoading = false;
-     }, (error: unknown) => {
-       this.stationLoading = false;
-       this.errorService.displayError(
-         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-         error
-       );
-     });
-   }
+     getLastUpdated(stationId: string): void {
+      this.stationLoading = true;
+      this.stationService.getLastUpdated(stationId)
+        .pipe(first())
+        .subscribe((updatedDate) => {
+          if (updatedDate) {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+            this.colorMessage='text-accent-500';
+            if (this.lastUpdatedDate === '1 day') {
+                this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          }
+          this.stationLoading = false;
+        }, (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
