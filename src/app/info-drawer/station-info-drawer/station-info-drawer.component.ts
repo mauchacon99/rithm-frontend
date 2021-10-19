@@ -168,7 +168,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
-      width: '350px',
       important: true,
     });
     if (response){
