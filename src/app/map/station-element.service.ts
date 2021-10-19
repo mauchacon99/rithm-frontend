@@ -37,7 +37,7 @@ export class StationElementService {
    * @param mapMode The current mode of the map.
    * @param currentCursorPoint The location of the mouse cursor on the page.
    */
-  drawStation(station: StationMapElement, mapMode: MapMode, currentCursorPoint: Point): void {
+  drawStation(station: StationMapElement, mapMode: MapMode): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
@@ -47,7 +47,7 @@ export class StationElementService {
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-        this.drawConnectionNode(station, currentCursorPoint);
+        this.drawConnectionNode(station);
         this.drawStationButton(station);
       }
     }
