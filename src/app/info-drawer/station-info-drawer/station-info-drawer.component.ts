@@ -121,31 +121,30 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-  getLastUpdated(stationId: string): void {
-    this.stationLoading = true;
-    this.stationService.getLastUpdated(stationId)
-      .pipe(first())
-      .subscribe((updatedDate) => {
-        if (updatedDate && updatedDate !== 'Unknown') {
-          this.isLoading=false;
-          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-            this.utcTimeConversion.getMillisecondsElapsed(updatedDate)) + ' ago' ;
+     getLastUpdated(stationId: string): void {
+      this.stationLoading = true;
+      this.stationService.getLastUpdated(stationId)
+        .pipe(first())
+        .subscribe((updatedDate) => {
+          if (updatedDate) {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
             this.colorMessage='text-accent-500';
-        } else {
-          this.colorMessage='text-error-500';
-          this.lastUpdatedDate = 'Unable to retrieve time';
-        }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-        this.lastUpdatedDate = 'Unable to retrieve time';
-        this.colorMessage='text-error-500';
-      });
-  }
+            if (this.lastUpdatedDate === '1 day') {
+                this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          }
+          this.stationLoading = false;
+        }, (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
