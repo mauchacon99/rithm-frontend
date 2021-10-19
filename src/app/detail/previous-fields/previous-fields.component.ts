@@ -5,19 +5,22 @@ import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
 
 /**
- * Component for all fields.
+ * Component for station private/all fields in extension panel.
  */
 @Component({
-  selector: 'app-all-fields[stationId]',
-  templateUrl: './all-fields.component.html',
-  styleUrls: ['./all-fields.component.scss']
+  selector: 'app-previous-fields[stationId][isPrivate]',
+  templateUrl: './previous-fields.component.html',
+  styleUrls: ['./previous-fields.component.scss']
 })
-export class AllFieldsComponent implements OnInit{
+export class PreviousFieldsComponent implements OnInit {
 
-/** The public questions loaded by station-component. */
-@Input() stationId = '';
+/** The station id used to get previous fields. */
+@Input() stationId!: string;
 
-/** The list of station public questions. */
+/** The type of fields requested private/true - all/false. */
+@Input() isPrivate!: boolean;
+
+/** The list of station private/all questions. */
 questions: Question[] = [];
 
 /** Whether questions is loading. */
@@ -26,25 +29,23 @@ isLoading = false;
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
-){
-
-}
+){}
 
 /**
- * Loading Public Questions.
+ * Load private/all Questions.
  */
 ngOnInit(): void{
-  this.getStationPreviousQuestions(this.stationId, false);
+  this.getStationPreviousQuestions(this.stationId, this.isPrivate);
 }
 
   /**
-   * Get all station previous public questions.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
-   * @param isPrivate False returns public questions.
+   * @param isPrivate True/false returns private/all questions.
    */
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-     this.isLoading = true;
+    this.isLoading = true;
     this.stationService.getStationPreviousQuestions(stationId, isPrivate)
     .pipe(first())
     .subscribe((questions: Question[]) => {
@@ -60,5 +61,4 @@ ngOnInit(): void{
       );
     });
   }
-
 }
