@@ -149,8 +149,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * This will delete the current station.
+   *
+   * @param stationId Target station to be deleted.
    */
-   async deleteStation(): Promise<void> {
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   async deleteStation(stationId: string): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
