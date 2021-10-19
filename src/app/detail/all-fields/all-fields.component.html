@@ -1,20 +1,8 @@
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-    <mat-card class="padding-card">
-      Color
-    </mat-card>
-    <mat-card class="padding-card">
-      Size
-    </mat-card>
-    <mat-card class="padding-card">
-      Quantity
-    </mat-card>
-    <mat-card class="padding-card">
-      Description
-    </mat-card>
-    <mat-card class="padding-card">
-      Location
-    </mat-card>
-    <mat-card class="padding-card">
-      Type
-    </mat-card>
-  </div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" *ngIf="!isLoading">
+  <mat-card class="padding-card" *ngFor="let fieldPublic of questions">
+    {{fieldPublic.prompt}}
+  </mat-card>
+</div>
+<div class="flex w-full h-full items-center" *ngIf="isLoading">
+  <app-loading-indicator class="flex-grow" [diameter]=50></app-loading-indicator>
+</div>
