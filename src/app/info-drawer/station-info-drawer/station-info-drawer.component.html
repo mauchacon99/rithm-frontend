@@ -31,7 +31,7 @@
     <button mat-mini-fab color="warn" class="priority">
       1
     </button>
-  </div>
+    </div>
   <div class="w-full py-2">
     <p class="overline">document generation</p>
     <div class="py-1">
@@ -42,13 +42,19 @@
     </div>
   </div>
   <div class="w-full py-2">
-    <button mat-stroked-button color="warn" class="priority font-semibold">Delete Station</button>
-  </div>
-  <div class="flex justify-center">
-    <div class="bottom-0 absolute mb-7">
-      <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
-        (click)="toggleDrawer('stationInfo')">Done</button>
+    <p class="overline">last updated</p>
+    <div class="col-span-8 md:col-span-4 text-left text-xs py-2">
+      <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
+  </div>
+  <div class="w-full py-2">
+    <button mat-stroked-button color="warn" class="priority">Delete Station</button>
+    </div>
+</div>
+<div class="flex justify-center">
+  <div class="bottom-0 absolute mb-7">
+    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
+      (click)="toggleDrawer('stationInfo')">Done</button>
   </div>
 </div>
 <div class="flex justify-center">
