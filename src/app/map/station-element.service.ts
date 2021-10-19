@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, StationElementHoverType } from 'src/models';
+import { MapMode, Point, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
@@ -35,8 +35,9 @@ export class StationElementService {
    *
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
+   * @param cursor The location of the cursor.
    */
-  drawStation(station: StationMapElement, mapMode: MapMode): void {
+  drawStation(station: StationMapElement, mapMode: MapMode, cursor: Point): void {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
@@ -46,7 +47,7 @@ export class StationElementService {
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-        this.drawConnectionNode(station);
+        this.drawConnectionNode(station, cursor);
         this.drawStationButton(station);
       }
     }
@@ -244,8 +245,9 @@ export class StationElementService {
    * Draws the connection node on right side of station card.
    *
    * @param station The station for which to draw the connection node.
+   * @param cursor The point to draw a line to.
    */
-  private drawConnectionNode(station: StationMapElement): void {
+  private drawConnectionNode(station: StationMapElement, cursor: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
     }
@@ -268,6 +270,9 @@ export class StationElementService {
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
+    if (cursor.x !== -1 && station.dragging) {
+      ctx.lineTo(cursor.x, cursor.y);
+    }
     ctx.strokeStyle = '#ccc';
     ctx.stroke();
     ctx.closePath();

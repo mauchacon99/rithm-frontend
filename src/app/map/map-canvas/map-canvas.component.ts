@@ -33,6 +33,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
+  /** The coordinate where the mouse or touch is located, while it's being tracked. */
+  cursorPoint: Point = { x: -1, y: -1 };
+
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = {x: -1, y: -1};
 
@@ -174,6 +177,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
           station.mapPoint.x += event.movementX / this.scale;
           station.mapPoint.y += event.movementY / this.scale;
+          this.drawElements();
+        }
+      }
+    } else if (this.dragItem === MapDragItem.Node) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+          this.cursorPoint = this.getMouseCanvasPoint(event);
           this.drawElements();
         }
       }
@@ -341,7 +352,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       // Draw the stations
       this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode);
+        this.stationElementService.drawStation(station, this.mapMode, this.cursorPoint);
       });
 
       // Draw the flows
@@ -396,9 +407,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private eventStartLogic(position: Point) {
     if (this.mapMode === MapMode.Build) {
-      // Check for drag start on station
       for (const station of this.stations) {
-        if (position.x >= station.canvasPoint.x && position.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+        // clicked on a connection node.
+        if (station.hoverActive === StationElementHoverType.Node) {
+          station.dragging = true;
+          this.dragItem = MapDragItem.Node;
+          break;
+        // Check for drag start on station
+        } else if (position.x >= station.canvasPoint.x && position.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
           position.y >= station.canvasPoint.y && position.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
           station.dragging = true;
           this.dragItem = MapDragItem.Station;
@@ -407,7 +425,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.dragItem !== MapDragItem.Station) {
+    if (this.dragItem !== MapDragItem.Station && this.dragItem !== MapDragItem.Node) {
       // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
@@ -434,6 +452,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.cursorPoint = { x: -1, y: -1 };
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
       if (station.dragging) {
