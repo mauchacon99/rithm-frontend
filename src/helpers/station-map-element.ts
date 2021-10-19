@@ -39,16 +39,16 @@ export class StationMapElement {
     const startingX = this.canvasPoint.x;
     const startingY = this.canvasPoint.y;
 
-    const scaledNodeRadius = NODE_RADIUS * scale;
+    const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledStationHeight = STATION_HEIGHT * scale;
     const scaledStationWidth = STATION_WIDTH * scale;
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
 
     //Connection node.
-    if (point.x >= startingX + scaledStationWidth - scaledNodeRadius - 8
-      && point.x <= startingX + scaledStationWidth + scaledNodeRadius + 8
-      && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - scaledNodeRadius - 8
-      && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + scaledNodeRadius + 8
+    if (point.x >= startingX + scaledStationWidth - interactiveNodeRadius
+      && point.x <= startingX + scaledStationWidth + interactiveNodeRadius
+      && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
+      && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
     ) {
       this.hoverActive = StationElementHoverType.Node;
     //No hover.
