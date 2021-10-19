@@ -45,10 +45,10 @@ export class StationMapElement {
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
 
     //Connection node.
-    if (point.x >= startingX + scaledStationWidth - scaledNodeRadius
-      && point.x <= startingX + scaledStationWidth + scaledNodeRadius
-      && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - scaledNodeRadius
-      && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + scaledNodeRadius
+    if (point.x >= startingX + scaledStationWidth - scaledNodeRadius - 8
+      && point.x <= startingX + scaledStationWidth + scaledNodeRadius + 8
+      && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - scaledNodeRadius - 8
+      && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + scaledNodeRadius + 8
     ) {
       this.hoverActive = StationElementHoverType.Node;
     //No hover.

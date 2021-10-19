@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, OnIni
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
@@ -199,7 +199,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
       this.currentCursorPoint = this.getMouseCanvasPoint(event);
       //Hovering over different station elements.
       for (const station of this.stations) {
+        const previousHoverState = station.hoverActive;
         station.checkElementHover(this.currentCursorPoint, this.scale);
+        if (station.hoverActive !== StationElementHoverType.None) {
+          if (previousHoverState !== station.hoverActive) {
+            this.drawElements();
+          }
+          this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          break;
+        } else {
+          if (previousHoverState !== station.hoverActive) {
+            this.drawElements();
+          }
+          this.mapCanvas.nativeElement.style.cursor = 'default';
+        }
       }
     }
   }
@@ -319,7 +332,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy, OnChanges {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
-
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
