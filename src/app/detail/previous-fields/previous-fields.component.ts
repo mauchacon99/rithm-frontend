@@ -42,7 +42,7 @@ ngOnInit(): void{
    * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
-   * @param isPrivate True returns private/all questions.
+   * @param isPrivate True/false returns private/all questions.
    */
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
     // eslint-disable-next-line no-console
