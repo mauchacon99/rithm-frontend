@@ -5,19 +5,22 @@ import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
 
 /**
- * Component for station private fields extension panel.
+ * Component for station private/all fields in extension panel.
  */
 @Component({
-  selector: 'app-private-fields',
-  templateUrl: './private-fields.component.html',
-  styleUrls: ['./private-fields.component.scss']
+  selector: 'app-previous-fields[stationId][isPrivate]',
+  templateUrl: './previous-fields.component.html',
+  styleUrls: ['./previous-fields.component.scss']
 })
-export class PrivateFieldsComponent implements OnInit {
+export class PreviousFieldsComponent implements OnInit {
 
 /** The private questions loaded by station-component. */
-@Input() stationId = '';
+@Input() stationId!: string;
 
-/** The list of station private questions. */
+/** The type of fields requested private/true - all/false. */
+@Input() isPrivate!: boolean;
+
+/** The list of station private/all questions. */
 questions: Question[] = [];
 
 /** Whether questions is loading. */
@@ -26,25 +29,25 @@ isLoading = false;
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
-){
-
-}
+){}
 
 /**
- * Loading Private Questions.
+ * Load private/all Questions.
  */
 ngOnInit(): void{
-  this.getStationPreviousQuestions(this.stationId, true);
+  this.getStationPreviousQuestions(this.stationId, this.isPrivate);
 }
 
   /**
-   * Get all station previous private questions.
+   * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
-   * @param isPrivate True returns private questions.
+   * @param isPrivate True returns private/all questions.
    */
    getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
-     this.isLoading = true;
+    // eslint-disable-next-line no-console
+    console.log(stationId, isPrivate);
+    this.isLoading = true;
     this.stationService.getStationPreviousQuestions(stationId, isPrivate)
     .pipe(first())
     .subscribe((questions: Question[]) => {
