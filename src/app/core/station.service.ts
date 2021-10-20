@@ -126,4 +126,15 @@ export class StationService {
     ];
     return of(workerRosterStation).pipe(delay(1000));
   }
+
+  /**
+   * Deletes a specified station.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteStation(stationId: string): Observable<unknown> {
+    return of(void 0).pipe(delay(1000));
+  }
 }
