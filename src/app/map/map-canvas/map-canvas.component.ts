@@ -275,6 +275,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.drawElements();
         }
       }
+    } else if (this.dragItem === MapDragItem.Node) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+          this.cursorPoint = touchPos;
+          this.drawElements();
+        }
+      }
     }
   }
 

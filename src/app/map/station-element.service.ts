@@ -4,8 +4,9 @@ import { MapMode, Point, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
-  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS
+  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR,
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR,
+  SCALE_RENDER_STATION_ELEMENTS, CONNECTION_DEFAULT_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -268,12 +269,14 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ?
+      station.dragging ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (cursor.x !== -1 && station.dragging) {
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = '#ccc';
+    ctx.strokeStyle = station.hoverActive === StationElementHoverType.Node && station.dragging
+      ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
   }
