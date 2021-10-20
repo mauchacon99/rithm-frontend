@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, UserType } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -211,5 +211,32 @@ export class MockStationService {
       },
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
+  }
+
+  /**
+   * Insert user in roster for station.
+   *
+   * @param stationId The Specific id of station.
+   * @param userId The specific id user.
+   * @returns Roster in the station.
+   */
+  addUserRosterStation(stationId: string, userId: string): Observable<unknown> {
+    const mockPrevAddRosterStation: unknown = [
+      {
+        firstName: 'Worker T',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
+        rosterMember: UserType.Worker
+      },
+      {
+        firstName: 'Admin',
+        lastName: 'rr11',
+        email: 'rithmadmin@inpivota.com',
+        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
+        rosterMember: UserType.Worker
+      }
+    ];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
 }

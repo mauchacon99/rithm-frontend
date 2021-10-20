@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, UserType } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -98,5 +98,33 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+  /**
+   * Insert user in roster for station.
+   *
+   * @param stationId The Specific id of station.
+   * @param userId The specific id user.
+   * @returns Roster in the station.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addUserRosterStation(stationId: string, userId: string): Observable<unknown> {
+    const mockPrevAddRosterStation: unknown = [
+      {
+        firstName: 'Worker T',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
+        rosterMember: UserType.Worker
+      },
+      {
+        firstName: 'Admin',
+        lastName: 'rr11',
+        email: 'rithmadmin@inpivota.com',
+        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
+        rosterMember: UserType.Worker
+      }
+    ];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
 }
