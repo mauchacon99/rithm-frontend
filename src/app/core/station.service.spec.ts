@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, RosterMember, Station, StationInformation, UserType } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -229,29 +229,14 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('Return the rosters of the paged station', () => {
+  it('Return the rosters of the station', () => {
     const stationId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
-    const workerRosterStation: unknown = [
+    const workerRosterStation: RosterMember[] = [
       {
         firstName: 'Worker T',
         lastName: 'User',
-        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
         email: 'workeruser@inpivota.com',
-        assignedStations: [
-          {
-            rithmId: '4eca65f1-89ef-4970-8aa5-8a26a5e45628'
-          },
-          {
-            rithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f'
-          },
-          {
-            rithmId: '3813442c-82c6-4035-893a-86fa9deca7c4'
-          },
-          {
-            rithmId: '247cf568-27a4-4968-9338-046ccfee24f3'
-          }
-        ],
-        supervisedStations: []
+        rosterMember: UserType.Admin
       }
     ];
 
