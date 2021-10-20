@@ -28,9 +28,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
 
-
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
+
+  /** Loading in the document generation section. */
+  docGenLoading = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
