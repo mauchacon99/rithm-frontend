@@ -2,7 +2,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { DocumentGenerationStatus, Question, QuestionFieldType, RosterMember, Station, StationInformation, UserType } from 'src/models';
+import {
+  DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationRosterMember,
+  UserType
+} from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -35,23 +38,23 @@ export class MockStationService {
         isGenerator: false
       }],
       supervisors: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
         email: 'marrypoppins@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
         email: 'workeruser@inpivota.com'
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
         email: 'supervisoruser@inpivota.com'
@@ -115,23 +118,23 @@ export class MockStationService {
           isGenerator: false
         }],
         supervisors: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',
           email: 'marrypoppins@inpivota.com'
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Worker',
           lastName: 'User',
           email: 'workeruser@inpivota.com'
         }],
         workers: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Harry',
           lastName: 'Potter',
           email: 'harrypotter@inpivota.com'
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Supervisor',
           lastName: 'User',
           email: 'supervisoruser@inpivota.com'
@@ -208,18 +211,20 @@ export class MockStationService {
    * @param rithmId The Specific id of station.
    * @returns Rosters for the station.
    */
-  getWorkerRosterStation(rithmId: string): Observable<RosterMember[]> {
-    const workerRosterStation: RosterMember[] = [
+  getWorkerRosterStation(rithmId: string): Observable<StationRosterMember[]> {
+    const workerRosterStation: StationRosterMember[] = [
       {
         firstName: 'Worker T',
         lastName: 'User',
         email: 'workeruser@inpivota.com',
+        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
         rosterMember: UserType.Worker
       },
       {
         firstName: 'Admin',
         lastName: 'rr11',
         email: 'rithmadmin@inpivota.com',
+        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
         rosterMember: UserType.Admin
       }
     ];

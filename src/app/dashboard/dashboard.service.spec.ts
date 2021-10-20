@@ -56,8 +56,8 @@ describe('DashboardService', () => {
         stationName: 'station-1',
         numberOfWorkers: 3,
         worker: [
-          {userRithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'},
-          {userRithmId: '', firstName: 'Harry', lastName : 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com'}
+          {rithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'},
+          {rithmId: '', firstName: 'Harry', lastName : 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com'}
         ]
       },
       {
@@ -66,8 +66,8 @@ describe('DashboardService', () => {
         stationName: 'station-2',
         numberOfWorkers: 6,
         worker: [
-          {userRithmId: '', firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
-          {userRithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'}
+          {rithmId: '', firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
+          {rithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'}
         ]
       }
     ];
@@ -89,13 +89,13 @@ describe('DashboardService', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const expectedResponse: Array<StationRosterMember> = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
       },
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software'
@@ -119,13 +119,13 @@ describe('DashboardService', () => {
     const rithmId = 'E204F369-386F-4E41-B3CA-2459E674DF52';
     const expectedResponse: Array<StationRosterMember> = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
       },
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software'

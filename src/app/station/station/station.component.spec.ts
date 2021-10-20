@@ -84,23 +84,23 @@ describe('StationComponent', () => {
         isGenerator: false
       }],
       supervisors: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
         email: 'marrypoppins@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
         email: 'workeruser@inpivota.com'
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
         email: 'supervisoruser@inpivota.com'

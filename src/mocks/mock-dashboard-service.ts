@@ -37,8 +37,8 @@ export class MockDashboardService {
         stationName: 'station-1',
         numberOfWorkers: 3,
         worker: [
-          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          { rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       },
       {
@@ -47,8 +47,8 @@ export class MockDashboardService {
         stationName: 'station-2',
         numberOfWorkers: 6,
         worker: [
-          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          { rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
+          { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
         ]
       }
     ];
@@ -65,13 +65,13 @@ export class MockDashboardService {
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: StationRosterMember[] = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
       },
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software'
@@ -89,14 +89,14 @@ export class MockDashboardService {
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: Array<StationRosterMember> = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com'
       }
       ,
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software'

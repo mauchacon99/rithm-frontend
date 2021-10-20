@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, RosterMember, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 
 /**
@@ -60,7 +60,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   colorMessage = '';
 
   /** Data worker roster station. */
-  dataWorkerRosterStation: RosterMember[] = [];
+  dataWorkerRosterStation: StationRosterMember[] = [];
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,

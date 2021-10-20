@@ -33,8 +33,8 @@ describe('StationCardComponent', () => {
       stationName: 'station-2',
       numberOfWorkers: 6,
       worker: [
-        { userRithmId: '', firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com' },
-        { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+        { rithmId: '', firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com' },
+        { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
       ]
     };
     fixture.detectChanges();

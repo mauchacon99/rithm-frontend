@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, RosterMember, Station, StationInformation, UserType } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember, UserType } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -95,18 +95,20 @@ export class StationService {
    * @returns Rosters for the station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWorkerRosterStation(rithmId: string): Observable<RosterMember[]> {
-    const workerRosterStation: RosterMember[] = [
+  getWorkerRosterStation(rithmId: string): Observable<StationRosterMember[]> {
+    const workerRosterStation: StationRosterMember[] = [
       {
         firstName: 'Worker T',
         lastName: 'User',
         email: 'workeruser@inpivota.com',
+        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
         rosterMember: UserType.Worker
       },
       {
         firstName: 'Admin',
         lastName: 'rr11',
         email: 'rithmadmin@inpivota.com',
+        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
         rosterMember: UserType.Admin
       }
     ];
