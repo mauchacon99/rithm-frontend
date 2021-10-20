@@ -203,6 +203,15 @@ describe('StationService', () => {
       });
   });
 
+  it('should return the status of the specific document once the status is updated', () => {
+    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
+    const statusNew = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+      .subscribe((response) => {
+        expect(response).toEqual(statusNew);
+      });
+  });
+
   it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;

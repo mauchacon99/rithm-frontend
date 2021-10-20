@@ -120,6 +120,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   */
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): void {
+    this.stationService.updateStationDocumentGenerationStatus(stationId, statusNew)
+      .pipe(first())
+      .subscribe((status) => {
+        if (status) {
+          this.stationDocumentGenerationStatus = status;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
    * Attempts to retrieve the station info from the query params in the URL and make the requests.
    */
   private getParams(): void {
