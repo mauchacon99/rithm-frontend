@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
 import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR,
-  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -36,10 +36,8 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection if context is not defined');
     }
 
-    if (this.mapScale > MIN_SCALE) {
-      this.drawConnectionLine(startPoint, endPoint);
-      this.drawConnectionArrow(startPoint, endPoint);
-    }
+    this.drawConnectionLine(startPoint, endPoint);
+    this.drawConnectionArrow(startPoint, endPoint);
   }
 
   /**
