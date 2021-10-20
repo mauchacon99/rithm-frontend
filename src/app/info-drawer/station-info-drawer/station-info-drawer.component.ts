@@ -8,11 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-<<<<<<< HEAD
-import { StationInfoDrawerData, StationInformation } from 'src/models';
-=======
 import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
->>>>>>> dev
 import { PopupService } from '../../core/popup.service';
 
 /**
