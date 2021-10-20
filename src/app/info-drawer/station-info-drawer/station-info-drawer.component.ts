@@ -54,7 +54,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   lastUpdatedDate = '';
 
   /** Color message LastUpdated. */
-  colorMessage  = '';
+  colorMessage = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -89,6 +89,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
+    this.getWorkerRosterStation(this.stationInformation.rithmId)
   }
 
   /**
@@ -125,34 +126,34 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-     getLastUpdated(stationId: string): void {
-      this.stationLoading = true;
-      this.lastUpdatedLoading = true;
-      this.stationService.getLastUpdated(stationId)
-        .pipe(first())
-        .subscribe((updatedDate) => {
-          if (updatedDate) {
-            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-            this.colorMessage='text-accent-500';
-            if (this.lastUpdatedDate === '1 day') {
-                this.lastUpdatedDate = ' Yesterday';
-            } else {
-              this.lastUpdatedDate += ' ago';
-            }
+  getLastUpdated(stationId: string): void {
+    this.stationLoading = true;
+    this.lastUpdatedLoading = true;
+    this.stationService.getLastUpdated(stationId)
+      .pipe(first())
+      .subscribe((updatedDate) => {
+        if (updatedDate) {
+          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+          this.colorMessage = 'text-accent-500';
+          if (this.lastUpdatedDate === '1 day') {
+            this.lastUpdatedDate = ' Yesterday';
+          } else {
+            this.lastUpdatedDate += ' ago';
           }
-          this.stationLoading = false;
-          this.lastUpdatedLoading= false;
-        }, (error: unknown) => {
-          this.colorMessage='text-error-500';
-          this.lastUpdatedLoading = false;
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+        }
+        this.stationLoading = false;
+        this.lastUpdatedLoading = false;
+      }, (error: unknown) => {
+        this.colorMessage = 'text-error-500';
+        this.lastUpdatedLoading = false;
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
@@ -169,8 +170,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId Target station to be deleted.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   async deleteStation(stationId: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async deleteStation(stationId: string): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
@@ -178,10 +179,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancel',
       important: true,
     });
-    if (response){
+    if (response) {
       this.router.navigateByUrl('dashboard');
     }
-   }
+  }
 
   /**
    * Completes all subscriptions.
@@ -189,5 +190,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get worker roster for the given station identified by rithmId.
+   *
+   * @param rithmId The Specific id of station.
+   * @returns Rosters for the station.
+   */
+  getWorkerRosterStation(rithmId: string): void {
+    this.stationService.getWorkerRosterStation(rithmId)
+      .pipe(first())
+      .subscribe((rosterData: unknown) => {
+        if (rosterData) {
+          console.log(rosterData)
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 }

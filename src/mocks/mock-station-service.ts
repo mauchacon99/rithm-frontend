@@ -190,4 +190,37 @@ export class MockStationService {
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
   }
+
+/**
+ * Get worker roster for the given station identified by rithmId.
+ *
+ * @param rithmId The Specific id of station.
+ * @returns Rosters for the station.
+ */
+  getWorkerRosterStation(rithmId: string): Observable<unknown> {
+    const workerRosterStation: unknown = [
+      {
+        firstName: "Worker T",
+        lastName: "User",
+        rithmId: "D4162FAB-E521-492F-9895-C98D4026A126",
+        email: "workeruser@inpivota.com",
+        assignedStations: [
+          {
+            rithmId: "4eca65f1-89ef-4970-8aa5-8a26a5e45628"
+          },
+          {
+            rithmId: "73d47261-1932-4fcf-82bd-159eb1a7243f"
+          },
+          {
+            rithmId: "3813442c-82c6-4035-893a-86fa9deca7c4"
+          },
+          {
+            rithmId: "247cf568-27a4-4968-9338-046ccfee24f3"
+          }
+        ],
+        supervisedStations: []
+      }
+    ];
+    return of(workerRosterStation).pipe(delay(1000));
+  }
 }

@@ -179,9 +179,9 @@ describe('StationService', () => {
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
     service.getLastUpdated(stationId)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
@@ -193,7 +193,7 @@ describe('StationService', () => {
   it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
-    const expectedResponse: Question[]= [
+    const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
@@ -217,9 +217,9 @@ describe('StationService', () => {
     ];
 
     service.getStationPreviousQuestions(stationId, isPrivate)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
@@ -227,6 +227,38 @@ describe('StationService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('Return the rosters of the paged station', () => {
+    const stationId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
+    const workerRosterStation: unknown = [
+      {
+        firstName: "Worker T",
+        lastName: "User",
+        rithmId: "D4162FAB-E521-492F-9895-C98D4026A126",
+        email: "workeruser@inpivota.com",
+        assignedStations: [
+          {
+            rithmId: "4eca65f1-89ef-4970-8aa5-8a26a5e45628"
+          },
+          {
+            rithmId: "73d47261-1932-4fcf-82bd-159eb1a7243f"
+          },
+          {
+            rithmId: "3813442c-82c6-4035-893a-86fa9deca7c4"
+          },
+          {
+            rithmId: "247cf568-27a4-4968-9338-046ccfee24f3"
+          }
+        ],
+        supervisedStations: []
+      }
+    ];
+
+    service.getWorkerRosterStation(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(workerRosterStation);
+      });
   });
 
 });
