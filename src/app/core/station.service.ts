@@ -82,9 +82,8 @@ export class StationService {
    * @returns Status new the document.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  putStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    const mockStatusDocument = DocumentGenerationStatus.Manual;
-    return of(mockStatusDocument).pipe(delay(1000));
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(statusNew).pipe(delay(1000));
   }
 
   /**

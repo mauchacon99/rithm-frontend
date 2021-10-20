@@ -121,10 +121,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station return status document.
    * @param statusNew The new status set in station document.
    */
-  putStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): void {
-    this.stationService.putStationDocumentGenerationStatus(stationId, statusNew)
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): void {
+    this.stationService.updateStationDocumentGenerationStatus(stationId, statusNew)
       .pipe(first())
-      .subscribe((status: DocumentGenerationStatus) => {
+      .subscribe((status) => {
         if (status) {
           this.stationDocumentGenerationStatus = status;
         }
