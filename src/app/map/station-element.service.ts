@@ -281,8 +281,9 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
-    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging ? CONNECTION_DEFAULT_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging
+    ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node && dragItem !== MapDragItem.Node
+    ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (cursor.x !== -1 && station.dragging) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);

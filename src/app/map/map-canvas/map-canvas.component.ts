@@ -201,7 +201,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           if (previousHoverState !== station.hoverActive) {
             this.drawElements();
           }
-          this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          if (this.mapMode === MapMode.Build) {
+            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          }
           break;
         } else {
           if (previousHoverState !== station.hoverActive) {
@@ -467,6 +469,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
+      }
+    }
+
+    //If dragging a connection node.
+    if (this.dragItem === MapDragItem.Node) {
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+
       }
     }
 
