@@ -203,6 +203,12 @@ export class MockStationService {
         firstName: 'Worker T',
         lastName: 'User',
         email: 'workeruser@inpivota.com',
+        rosterMember: UserType.Worker
+      },
+      {
+        firstName: "Admin",
+        lastName: "rr11",
+        email: "rithmadmin@inpivota.com",
         rosterMember: UserType.Admin
       }
     ];
