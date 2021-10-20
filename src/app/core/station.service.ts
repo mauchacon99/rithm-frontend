@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Question, RosterMember, Station, StationInformation, UserType } from 'src/models';
+import { DocumentGenerationStatus, Question, RosterMember, Station, StationInformation, UserType } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -60,6 +60,18 @@ export class StationService {
     const params = new HttpParams()
       .set('rithmId', stationId);
     return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params });
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @returns Status the document.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
+    const mockStatusDocument = DocumentGenerationStatus.None;
+    return of(mockStatusDocument).pipe(delay(1000));
   }
 
   /**

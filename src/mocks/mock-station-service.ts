@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, RosterMember, Station, StationInformation, UserType } from 'src/models';
+import { DocumentGenerationStatus, Question, QuestionFieldType, RosterMember, Station, StationInformation, UserType } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -156,6 +156,17 @@ export class MockStationService {
   getLastUpdated(stationId: string): Observable<string> {
     const mockDate = '2021-07-18T17:26:47.3506612Z';
     return of(mockDate).pipe(delay(1000));
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @returns Status the document.
+   */
+  getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
+    const mockStatusDocument = DocumentGenerationStatus.None;
+    return of(mockStatusDocument).pipe(delay(1000));
   }
 
   /**
