@@ -75,6 +75,18 @@ export class StationService {
   }
 
   /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   * @returns Status new the document.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(statusNew).pipe(delay(1000));
+  }
+
+  /**
    * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
