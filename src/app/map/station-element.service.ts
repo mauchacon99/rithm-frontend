@@ -72,10 +72,12 @@ export class StationElementService {
     const scaledStationHeight = STATION_HEIGHT * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
+    const shadowEquation = (num: number) => Math.floor(num * this.mapScale) > 0 ? Math.floor(num * this.mapScale) : 1;
+
     this.canvasContext.shadowColor = '#ccc';
-    this.canvasContext.shadowBlur = 6;
-    this.canvasContext.shadowOffsetX = 3;
-    this.canvasContext.shadowOffsetY = 3;
+    this.canvasContext.shadowBlur = shadowEquation(6);
+    this.canvasContext.shadowOffsetX = shadowEquation(3);
+    this.canvasContext.shadowOffsetY = shadowEquation(3);
 
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startingX + scaledStationRadius, startingY);
