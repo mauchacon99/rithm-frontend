@@ -15,7 +15,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
 
-
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
