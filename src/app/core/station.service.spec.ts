@@ -200,7 +200,7 @@ describe('StationService', () => {
     });
   });
 
-  it('should return the status of the specific document', () => {
+  it('should return the status of the specific document once the status is updated', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const statusNew = DocumentGenerationStatus.Manual;
     const expectedResponse = DocumentGenerationStatus.Manual;
