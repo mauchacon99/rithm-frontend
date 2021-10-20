@@ -159,7 +159,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.stationService.getLastUpdated(stationId)
       .pipe(first())
       .subscribe((updatedDate) => {
-        if (updatedDate) {
+        if (updatedDate && updatedDate !== 'Unknown') {
           this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
             this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
           this.colorMessage = 'text-accent-500';
@@ -168,6 +168,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           } else {
             this.lastUpdatedDate += ' ago';
           }
+        } else {
+          this.colorMessage = 'text-error-500';
+          this.lastUpdatedDate = 'Unable to retrieve time';
         }
         this.stationLoading = false;
         this.lastUpdatedLoading = false;
@@ -179,6 +182,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
         );
+        this.lastUpdatedDate = 'Unable to retrieve time';
+        this.colorMessage = 'text-error-500';
       });
   }
 
