@@ -248,7 +248,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  xit('should delete a station', () => {
+  it('should delete a station', () => {
     const stationId = 'E204F369-386F-4E41';
 
     service.deleteStation(stationId)

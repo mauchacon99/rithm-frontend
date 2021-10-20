@@ -233,13 +233,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(() => {
         this.popupService.notify('The station has been deleted.');
+        this.router.navigateByUrl('dashboard');
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
         );
       });
-      this.router.navigateByUrl('dashboard');
     }
   }
 
