@@ -5,10 +5,14 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
+<<<<<<< HEAD
 import { StationInfoDrawerData, StationInformation } from 'src/models';
+=======
+import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
+>>>>>>> dev
 import { PopupService } from '../../core/popup.service';
 
 /**
@@ -27,6 +31,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
+
+
+  /** Loading in last updated section. */
+  lastUpdatedLoading = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
@@ -49,8 +57,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Status by default the document in station. */
+  stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
+
   /** Color message LastUpdated. */
-  colorMessage  = '';
+  colorMessage = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -60,7 +71,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
     private route: ActivatedRoute,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -84,6 +96,48 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
+    this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   */
+  getStationDocumentGenerationStatus(stationId: string): void {
+    this.stationService.getStationDocumentGenerationStatus(stationId)
+      .pipe(first())
+      .subscribe((status: DocumentGenerationStatus) => {
+        if (status) {
+          this.stationDocumentGenerationStatus = status;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   */
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): void {
+    this.stationService.updateStationDocumentGenerationStatus(stationId, statusNew)
+      .pipe(first())
+      .subscribe((status) => {
+        if (status) {
+          this.stationDocumentGenerationStatus = status;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
@@ -120,48 +174,39 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-     getLastUpdated(stationId: string): void {
-      this.stationLoading = true;
-      this.stationService.getLastUpdated(stationId)
-        .pipe(first())
-        .subscribe((updatedDate) => {
-          if (updatedDate) {
-            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-            this.colorMessage='text-accent-500';
-            if (this.lastUpdatedDate === '1 day') {
-                this.lastUpdatedDate = ' Yesterday';
-            } else {
-              this.lastUpdatedDate += ' ago';
-            }
+  getLastUpdated(stationId: string): void {
+    this.stationLoading = true;
+    this.lastUpdatedLoading = true;
+    this.stationService.getLastUpdated(stationId)
+      .pipe(first())
+      .subscribe((updatedDate) => {
+        if (updatedDate && updatedDate !== 'Unknown') {
+          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+          this.colorMessage = 'text-accent-500';
+          if (this.lastUpdatedDate === '1 day') {
+            this.lastUpdatedDate = ' Yesterday';
+          } else {
+            this.lastUpdatedDate += ' ago';
           }
-          this.stationLoading = false;
-        }, (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
-
-  /**
-   * Delete a station by ID.
-   *
-   * @param stationId The id of the station to be deleted.
-   */
-     deleteStation(stationId: string): void {
-      this.stationService.deleteStation(stationId)
-        .pipe(first())
-        .subscribe(() => {
-          this.popupService.notify('The station has been deleted.');
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+        } else {
+          this.colorMessage = 'text-error-500';
+          this.lastUpdatedDate = 'Unable to retrieve time';
+        }
+        this.stationLoading = false;
+        this.lastUpdatedLoading = false;
+      }, (error: unknown) => {
+        this.colorMessage = 'text-error-500';
+        this.lastUpdatedLoading = false;
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+        this.lastUpdatedDate = 'Unable to retrieve time';
+        this.colorMessage = 'text-error-500';
+      });
+  }
 
   /**
    * Navigates the user back to dashboard and displays a message about the invalid params.
@@ -171,6 +216,35 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       'Unable to retrieve the last updated time.',
       new Error('Invalid params for document')
     );
+  }
+
+  /**
+   * This will delete the current station.
+   *
+   * @param stationId Target station to be deleted.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async deleteStation(stationId: string): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      this.stationService.deleteStation(stationId)
+      .pipe(first())
+      .subscribe(() => {
+        this.popupService.notify('The station has been deleted.');
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+      this.router.navigateByUrl('dashboard');
+    }
   }
 
   /**
