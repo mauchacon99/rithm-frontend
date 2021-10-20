@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { StationInfoDrawerData, StationInformation } from 'src/models';
+import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 
 /**
@@ -53,8 +53,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
+  /** Status by default the document in station. */
+  stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
+
   /** Color message LastUpdated. */
-  colorMessage  = '';
+  colorMessage = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -89,6 +92,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
+    this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+  }
+
+  /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   */
+  getStationDocumentGenerationStatus(stationId: string): void {
+    this.stationService.getStationDocumentGenerationStatus(stationId)
+      .pipe(first())
+      .subscribe((status: DocumentGenerationStatus) => {
+        if (status) {
+          this.stationDocumentGenerationStatus = status;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
