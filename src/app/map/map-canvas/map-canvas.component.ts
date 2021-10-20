@@ -181,9 +181,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     } else if (this.dragItem === MapDragItem.Node) {
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(this.cursorPoint, this.scale);
         if (station.dragging) {
-          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
           this.cursorPoint = this.getMouseCanvasPoint(event);
           this.drawElements();
         }
@@ -277,8 +279,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     } else if (this.dragItem === MapDragItem.Node) {
       for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(this.cursorPoint, this.scale);
         if (station.dragging) {
-          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
           this.cursorPoint = touchPos;
           this.drawElements();
         }
@@ -360,7 +363,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       // Draw the stations
       this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode, this.cursorPoint);
+        this.stationElementService.drawStation(station, this.mapMode, this.cursorPoint, this.dragItem);
       });
 
       // Draw the flows
@@ -424,12 +427,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.dragItem = MapDragItem.Node;
           break;
         // Check for drag start on station
-        } else if (position.x >= station.canvasPoint.x && position.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
-          position.y >= station.canvasPoint.y && position.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+        } else if (station.hoverActive === StationElementHoverType.Station) {
           station.dragging = true;
-          this.dragItem = MapDragItem.Station;
+          if (this.dragItem !== MapDragItem.Node) {
+            this.dragItem = MapDragItem.Station;
+          }
           break;
         }
+      }
+      //This ensures that when dragging a station or node connection, it will always display above other stations.
+      if (this.stations.find( obj => obj.dragging === true)) {
+        const draggingStation = this.stations.filter( obj => obj.dragging === true);
+        this.stations = this.stations.filter( obj => obj.dragging !== true);
+        this.stations.push(draggingStation[0]);
       }
     }
 

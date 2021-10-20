@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, StationElementHoverType } from 'src/models';
+import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
@@ -37,30 +37,31 @@ export class StationElementService {
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
    * @param cursor The location of the cursor.
+   * @param dragItem The item being dragged on the map.
    */
-  drawStation(station: StationMapElement, mapMode: MapMode, cursor: Point): void {
+  drawStation(station: StationMapElement, mapMode: MapMode, cursor: Point, dragItem: MapDragItem): void {
     this.canvasContext = this.mapService.canvasContext;
 
-    this.drawStationCard(station);
+    this.drawStationCard(station, dragItem);
 
     if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
       this.drawDocumentBadge(station);
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-        this.drawConnectionNode(station, cursor);
+        this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station);
       }
     }
-
   }
 
   /**
    * Draws the station card on the map for a station.
    *
    * @param station The station for which to draw the card.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawStationCard(station: StationMapElement): void {
+  private drawStationCard(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
@@ -92,7 +93,10 @@ export class StationElementService {
     this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
     // top left curve to line going top right
     this.canvasContext.closePath();
-    this.canvasContext.fillStyle = '#fff';
+    this.canvasContext.fillStyle = station.hoverActive === StationElementHoverType.Station
+    && dragItem === MapDragItem.Node
+    && !station.dragging
+    ? NODE_HOVER_COLOR : '#fff';
     this.canvasContext.fill();
   }
 
@@ -246,9 +250,10 @@ export class StationElementService {
    * Draws the connection node on right side of station card.
    *
    * @param station The station for which to draw the connection node.
+   * @param dragItem The item being dragged on the map.
    * @param cursor The point to draw a line to.
    */
-  private drawConnectionNode(station: StationMapElement, cursor: Point): void {
+  private drawConnectionNode(station: StationMapElement, dragItem: MapDragItem, cursor: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
     }
@@ -269,13 +274,14 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ?
-      station.dragging ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging ? CONNECTION_DEFAULT_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (cursor.x !== -1 && station.dragging) {
+      ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = station.hoverActive === StationElementHoverType.Node && station.dragging
+    ctx.strokeStyle = dragItem === MapDragItem.Node && station.dragging
       ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();

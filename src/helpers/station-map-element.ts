@@ -51,6 +51,13 @@ export class StationMapElement {
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
     ) {
       this.hoverActive = StationElementHoverType.Node;
+    //station itself.
+    } else if (point.x >= this.canvasPoint.x
+      && point.x <= this.canvasPoint.x + scaledStationWidth
+      && point.y >= this.canvasPoint.y
+      && point.y <= this.canvasPoint.y + scaledStationHeight
+    ) {
+      this.hoverActive = StationElementHoverType.Station;
     //No hover.
     } else {
       this.hoverActive = StationElementHoverType.None;
