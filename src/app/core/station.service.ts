@@ -92,9 +92,9 @@ export class StationService {
         rosterMember: UserType.Worker
       },
       {
-        firstName: "Admin",
-        lastName: "rr11",
-        email: "rithmadmin@inpivota.com",
+        firstName: 'Admin',
+        lastName: 'rr11',
+        email: 'rithmadmin@inpivota.com',
         rosterMember: UserType.Admin
       }
     ];

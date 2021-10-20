@@ -230,7 +230,7 @@ describe('StationService', () => {
   });
 
   it('Return the rosters of the station', () => {
-    const stationId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
+    const rithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const workerRosterStation: RosterMember[] = [
       {
         firstName: 'Worker T',
@@ -239,14 +239,14 @@ describe('StationService', () => {
         rosterMember: UserType.Worker
       },
       {
-        firstName: "Admin",
-        lastName: "rr11",
-        email: "rithmadmin@inpivota.com",
+        firstName: 'Admin',
+        lastName: 'rr11',
+        email: 'rithmadmin@inpivota.com',
         rosterMember: UserType.Admin
       }
     ];
 
-    service.getWorkerRosterStation(stationId)
+    service.getWorkerRosterStation(rithmId)
       .subscribe((response) => {
         expect(response).toEqual(workerRosterStation);
       });
