@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { StationRosterMember } from 'src/models';
+import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
 
 /**
  * Reusable component for all user/roster selection and display.
@@ -56,4 +57,13 @@ export class RosterComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens a modal with roster management.
+   */
+  openManagementRosterModal(): void {
+    this.dialog.open(RosterManagementModalComponent, {
+      minWidth: '370px',
+      data: { stationId: this.stationId }
+    });
+  }
 }
