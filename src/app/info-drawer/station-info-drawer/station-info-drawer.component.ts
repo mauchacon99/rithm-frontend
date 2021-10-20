@@ -89,7 +89,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getWorkerRosterStation(this.stationInformation.rithmId)
+    this.getWorkerRosterStation(this.stationInformation.rithmId);
   }
 
   /**
@@ -196,14 +196,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Get worker roster for the given station identified by rithmId.
    *
    * @param rithmId The Specific id of station.
-   * @returns Rosters for the station.
    */
   getWorkerRosterStation(rithmId: string): void {
     this.stationService.getWorkerRosterStation(rithmId)
       .pipe(first())
       .subscribe((rosterData: unknown) => {
         if (rosterData) {
-          console.log(rosterData)
+          console.log(rosterData);
         }
       }, (error: unknown) => {
         this.errorService.displayError(
