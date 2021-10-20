@@ -492,7 +492,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(position, this.scale);
         if (station.hoverActive === StationElementHoverType.Station) {
           //ensure we cant get duplicate ids.
-          if (!station.previousStations.includes(newPreviousStationId)) {
+          if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
             station.previousStations.push(newPreviousStationId);
           }
           if (station.status === MapItemStatus.Normal) {
@@ -501,7 +501,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         if (station.dragging) {
           //ensure we cant get duplicate ids.
-          if (!station.nextStations.includes(newNextStationId)) {
+          if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
             station.nextStations.push(newNextStationId);
           }
         }
