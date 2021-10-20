@@ -109,7 +109,7 @@ export class StationService {
         lastName: 'rr11',
         email: 'rithmadmin@inpivota.com',
         rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Admin
+        rosterMember: UserType.Worker
       }
     ];
     return of(workerRosterStation).pipe(delay(1000));
