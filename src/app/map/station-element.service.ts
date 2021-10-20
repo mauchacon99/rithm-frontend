@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode } from 'src/models';
+import { MapMode, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -41,7 +41,7 @@ export class StationElementService {
 
     this.drawStationCard(station);
 
-    if (this.mapScale > 0.25) {
+    if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
       this.drawDocumentBadge(station);
       this.drawStationName(station);
 
@@ -264,11 +264,9 @@ export class StationElementService {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    const nodeColor = NODE_DEFAULT_COLOR;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = nodeColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     ctx.strokeStyle = '#ccc';
     ctx.stroke();
