@@ -103,13 +103,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station return status document.
    */
   getStationDocumentGenerationStatus(stationId: string): void {
+    this.docGenLoading = true;
     this.stationService.getStationDocumentGenerationStatus(stationId)
       .pipe(first())
       .subscribe((status: DocumentGenerationStatus) => {
+        this.docGenLoading = false;
         if (status) {
           this.stationDocumentGenerationStatus = status;
         }
       }, (error: unknown) => {
+        this.docGenLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
