@@ -227,7 +227,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getWorkerRosterStation(rithmId: string): void {
     this.stationService.getWorkerRosterStation(rithmId)
       .pipe(first())
-      .subscribe((rosterData: RosterMember[]) => {
+      .subscribe((rosterData) => {
         if (rosterData) {
           this.dataWorkerRosterStation = rosterData;
         }
