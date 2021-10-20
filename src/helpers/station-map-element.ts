@@ -56,6 +56,7 @@ export class StationMapElement {
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
     ) {
       this.hoverActive = StationElementHoverType.Node;
+      //Option Button.
     } else if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
       && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
       && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
