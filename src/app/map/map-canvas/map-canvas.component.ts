@@ -474,10 +474,37 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If dragging a connection node.
     if (this.dragItem === MapDragItem.Node) {
+      let newNextStationId = '';
+      let newPreviousStationId = '';
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.scale);
+        if (station.hoverActive === StationElementHoverType.Station) {
+          newNextStationId = station.rithmId;
+        }
+        if (station.dragging) {
+          newPreviousStationId = station.rithmId;
+        }
+      }
 
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+        if (station.hoverActive === StationElementHoverType.Station) {
+          //ensure we cant get duplicate ids.
+          if (!station.previousStations.includes(newPreviousStationId)) {
+            station.previousStations.push(newPreviousStationId);
+          }
+          if (station.status === MapItemStatus.Normal) {
+            station.status = MapItemStatus.Updated;
+          }
+        }
+        if (station.dragging) {
+          //ensure we cant get duplicate ids.
+          if (!station.nextStations.includes(newNextStationId)) {
+            station.nextStations.push(newNextStationId);
+          }
+        }
       }
     }
 
