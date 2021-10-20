@@ -116,13 +116,6 @@ export class StationService {
         email: 'workeruser@inpivota.com',
         rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
         rosterMember: UserType.Worker
-      },
-      {
-        firstName: 'Admin',
-        lastName: 'rr11',
-        email: 'rithmadmin@inpivota.com',
-        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
       }
     ];
     return of(mockPrevAddRosterStation).pipe(delay(1000));
