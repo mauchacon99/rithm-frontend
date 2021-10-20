@@ -96,7 +96,12 @@ export class StationElementService {
     this.canvasContext.fillStyle = station.hoverActive === StationElementHoverType.Station
     && dragItem === MapDragItem.Node
     && !station.dragging
+    ? '#ebebeb' : '#fff';
+    this.canvasContext.strokeStyle = station.hoverActive === StationElementHoverType.Station
+    && dragItem === MapDragItem.Node
+    && !station.dragging
     ? NODE_HOVER_COLOR : '#fff';
+    this.canvasContext.stroke();
     this.canvasContext.fill();
   }
 
