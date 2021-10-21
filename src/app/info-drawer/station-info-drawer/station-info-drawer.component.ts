@@ -100,7 +100,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getOrganizationList('7D2E67D8-C705-4D02-9C34-76209E53061F', this.stationInformation.rithmId, this.pageNumUsersOrganization);
+    this.getOrganizationList(this.stationInformation.rithmId, this.pageNumUsersOrganization);
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
   }
 
@@ -273,7 +273,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
-  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): void {
+  getOrganizationList(stationRithmId: string, pageNum: number): void {
+    const organizationId: string = this.userService.user?.organization;
     this.stationService.getOrganizationList(organizationId, stationRithmId, pageNum)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((orgUsers) => {
