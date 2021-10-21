@@ -8,21 +8,21 @@ on:
 jobs:
 
   # Checks that the Angular app conforms to standards
-  lint-app:
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
+  # lint-app:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 2
 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
 
-    - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+  #   - name: Installing dependencies
+  #     run: npm ci --no-audit --production --ignore-scripts
 
-    - name: Linting Angular app
-      run: npm run lint
+  #   - name: Linting Angular app
+  #     run: npx run lint
 
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
@@ -39,7 +39,7 @@ jobs:
       run: npm ci --no-audit --production --ignore-scripts
 
     - name: Linting all stylesheets
-      run: npm run lint-style
+      run: npx run lint-style
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
   # build:
