@@ -21,7 +21,7 @@ jobs:
         node-version: '14'
 
     - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+      run: npm ci --no-audit
 
     # - name: Stopping IIS pool
     #   run: c:\batch\elevate Stop-WebAppPool -Name devapp
@@ -48,7 +48,7 @@ jobs:
         node-version: '14'
 
     - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+      run: npm ci --no-audit
 
     - name: Generating test coverage
       run: npm run test-ci
@@ -69,7 +69,7 @@ jobs:
         node-version: '14'
 
     - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+      run: npm ci --no-audit
 
     - name: Compiling documentation
       run: npm run compile-docs
@@ -90,7 +90,7 @@ jobs:
         node-version: '14'
 
     - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+      run: npm ci --no-audit
 
     - name: Compiling documentation
       run: npm run compile-style-docs

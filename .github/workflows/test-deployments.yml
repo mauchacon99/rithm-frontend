@@ -21,7 +21,7 @@ jobs:
         node-version: '14'
 
     - name: Installing dependencies
-      run: npm ci --no-audit --production --ignore-scripts
+      run: npm ci --no-audit
 
     - name: Stopping IIS pool
       run: c:\batch\elevate Stop-WebAppPool -Name testapp.rithm.tech
