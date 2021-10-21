@@ -1,4 +1,5 @@
-import { DEFAULT_CANVAS_POINT, NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_CANVAS_POINT, NODE_RADIUS,
+   NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
 import { StationMapData, Point, StationElementHoverType } from 'src/models';
 
 export interface StationMapElement extends StationMapData {
@@ -38,11 +39,14 @@ export class StationMapElement {
   checkElementHover(point: Point, scale: number): void {
     const startingX = this.canvasPoint.x;
     const startingY = this.canvasPoint.y;
-
-    const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledStationHeight = STATION_HEIGHT * scale;
     const scaledStationWidth = STATION_WIDTH * scale;
+
+    const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
+
+    const interactiveBadgeRadius = BADGE_RADIUS * scale;
+    const scaledBadgeMargin = BADGE_MARGIN * scale;
 
     //Connection node.
     if (point.x >= startingX + scaledStationWidth - interactiveNodeRadius
@@ -51,6 +55,13 @@ export class StationMapElement {
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
     ) {
       this.hoverActive = StationElementHoverType.Node;
+    //Document badge.
+    } else if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
+      && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
+      && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
+      && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+    ) {
+      this.hoverActive = StationElementHoverType.Badge;
     //station itself.
     } else if (point.x >= this.canvasPoint.x
       && point.x <= this.canvasPoint.x + scaledStationWidth

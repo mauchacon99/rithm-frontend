@@ -33,7 +33,10 @@
   </div>
   <div class="w-full py-2">
     <p class="overline">document generation</p>
-    <div class="py-1">
+    <div class="w-24 items-center py-2" *ngIf="docGenLoading">
+      <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+    </div>
+    <div class="py-1" *ngIf="!docGenLoading">
       <mat-radio-group class="text-sm" aria-label="Set the document generation">
         <mat-radio-button class="px-1" value="1" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
         </mat-radio-button>
