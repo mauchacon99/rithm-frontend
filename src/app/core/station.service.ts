@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -107,56 +108,55 @@ export class StationService {
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   removeUserFromWorkerRoster(stationId: string, usersIds: StationRosterMember[]): Observable<StationInformation>{
-   const data: StationInformation = {
-    rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-    name: 'New Station Name',
-    instructions: '',
-    nextStations: [{
-      stationName: 'Development',
-      totalDocuments: 5,
-      isGenerator: true
-    }],
-    previousStations: [{
-      stationName: 'Station-1',
-      totalDocuments: 2,
-      isGenerator: true
-    }, {
-      stationName: 'Station-2',
-      totalDocuments: 0,
-      isGenerator: false
-    }],
-    supervisors: [{
-      userRithmId: '',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com'
-    }, {
-      userRithmId: '',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com'
-    }],
-    workers: [{
-      userRithmId: '',
-      firstName: 'Harry',
-      lastName: 'Potter',
-      email: 'harrypotter@inpivota.com'
-    }, {
-      userRithmId: '',
-      firstName: 'Supervisor',
-      lastName: 'User',
-      email: 'supervisoruser@inpivota.com'
-    }],
-    createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-    createdDate: '2021-07-16T17:26:47.3506612Z',
-    updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-    updatedDate: '2021-07-18T17:26:47.3506612Z',
-    questions: [],
-    priority: 2
-   };
-  return of(data).pipe(delay(1000));
-
-}
+   // eslint-disable-next-line max-len
+   removeUserFromWorkerRoster(stationId: string, usersIds: { /** User worker Id to be removed. */rithmId: string}[]): Observable<StationInformation>{
+    const data: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        stationName: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+    return of(data).pipe(delay(1000));
+  }
 }

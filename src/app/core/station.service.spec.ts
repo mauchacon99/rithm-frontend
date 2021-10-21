@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationRosterMember } from 'src/models';
+import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -248,20 +248,14 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return the estation information with new worker roster', () => {
+  it('should return the station information with new worker roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
-    const userIdList: Array<StationRosterMember> = [
+    const userIdList: Array<{ /** User worker Id to be removed. */rithmId: string}> = [
       {
-        userRithmId: '',
-        firstName: 'Adarsh',
-        lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
       },
       {
-        userRithmId: '',
-        firstName: 'Tyler',
-        lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
       }
     ];
     const expectedResponse: StationInformation = {

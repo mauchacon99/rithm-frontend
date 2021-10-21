@@ -29,7 +29,7 @@ export class RosterManagementModalComponent {
    * @param usersIds The selected users id array to removed.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeUserFromWorkerRoster(stationId: string, usersIds: StationRosterMember[]): void{
+  removeUserFromWorkerRoster(stationId: string, usersIds: { /** User worker Id to be removed. */rithmId: string}[]): void{
     this.stationService.removeUserFromWorkerRoster(stationId, usersIds)
     .pipe(first())
     .subscribe((data)=>{
