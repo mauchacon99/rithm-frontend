@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, OrganizationUsers, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, OrganizationRosterList, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -252,42 +252,27 @@ describe('StationService', () => {
     const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
-    const orgUsers: OrganizationUsers = {
-      totalOrgUsers: 20,
-      currentPageNum: pageNum,
-      userPerPage: 10,
-      users: [{
-        rithmId: '123',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '1/2/20',
-        role: null,
-        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-      }, {
-        rithmId: '1234',
-        firstName: 'Rithm',
-        lastName: 'User',
-        email: 'rithmuser@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '7/4/21',
-        role: null,
-        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-      }, {
-        rithmId: '7812',
-        firstName: 'Rithm',
-        lastName: 'Admin',
-        email: 'rithmadmin@inpivota.com',
-        isEmailVerified: true,
-        notificationSettings: null,
-        createdDate: '5/9/21',
-        role: 'admin',
-        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-      }]
-    };
+    const orgUsers: OrganizationRosterList[] = [{
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
 
     service.getOrganizationList(organizationId, stationRithmId, pageNum)
       .subscribe((users) => {

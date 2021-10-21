@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { OrganizationUsers } from 'src/models';
+import { OrganizationRosterList } from 'src/models';
 
 /**
  * Component for roster management.
@@ -20,7 +20,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject();
 
   /** List users the organization. */
-  listUsersOrgatization!: OrganizationUsers;
+  listUsersOrgatization: OrganizationRosterList[]=[];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;

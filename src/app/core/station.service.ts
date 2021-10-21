@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, OrganizationUsers, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, OrganizationRosterList, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -108,7 +108,7 @@ export class StationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-   getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): Observable<OrganizationUsers> {
+  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): Observable<OrganizationRosterList[]> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -116,42 +116,27 @@ export class StationService {
         }
       })).pipe(delay(1000));
     } else {
-      const orgUsers: OrganizationUsers = {
-        totalOrgUsers: 20,
-        currentPageNum: pageNum,
-        userPerPage: 10,
-        users: [{
-          rithmId: '123',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isEmailVerified: true,
-          notificationSettings: null,
-          createdDate: '1/2/20',
-          role: null,
-          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-        }, {
-          rithmId: '1234',
-          firstName: 'Rithm',
-          lastName: 'User',
-          email: 'rithmuser@inpivota.com',
-          isEmailVerified: true,
-          notificationSettings: null,
-          createdDate: '7/4/21',
-          role: null,
-          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-        }, {
-          rithmId: '7812',
-          firstName: 'Rithm',
-          lastName: 'Admin',
-          email: 'rithmadmin@inpivota.com',
-          isEmailVerified: true,
-          notificationSettings: null,
-          createdDate: '5/9/21',
-          role: 'admin',
-          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
-        }]
-      };
+      const orgUsers: OrganizationRosterList[] = [{
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
       return of(orgUsers).pipe(delay(1000));
     }
   }
