@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UserService } from '../../../../../simustream-strut-dashboard/src/app/common/services/user.service';
-import { OrganizationUsers } from '../../../models/organization-users';
+import { UserService } from 'src/app/core/user.service';
+import { OrganizationUsers } from 'src/models';
 
 /**
  * Component for roster management.

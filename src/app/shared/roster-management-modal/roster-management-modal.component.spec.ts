@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { UserService } from 'src/app/core/user.service';
+import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
 
 import { RosterManagementModalComponent } from './roster-management-modal.component';
-import { MockUserService } from '../../../mocks/mock-user-service';
-import { UserService } from 'src/app/core/user.service';
 
 describe('RosterManagementModalComponent', () => {
   let component: RosterManagementModalComponent;
