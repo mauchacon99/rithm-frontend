@@ -8,37 +8,37 @@ on:
 jobs:
 
   # Checks that the Angular app conforms to standards
-  # lint-app:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 2
+  lint-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Linting Angular app
-  #     run: npm run lint
+    - name: Linting Angular app
+      run: npm run lint
 
   # Checks that all stylesheets conform to standards
-  # lint-stylesheets:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 2
+  lint-stylesheets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Linting all stylesheets
-  #     run: npm run lint-style
+    - name: Linting all stylesheets
+      run: npm run lint-style
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
   build:
     runs-on: ubuntu-latest
-    # needs: [lint-app, lint-stylesheets]
+    needs: [lint-app, lint-stylesheets]
     timeout-minutes: 5
 
     steps:
@@ -52,24 +52,22 @@ jobs:
 
     - name: Building Angular web project
       run: npm run build
-      env:
-        NODE_OPTIONS: --max_old_space_size=4096
 
 
   # Checks that the Angular app passes all defined unit and integration tests
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   timeout-minutes: 4
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 4
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '14'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Running all unit and integration tests
-  #     run: npm run test-ci
+    - name: Running all unit and integration tests
+      run: npm run test-ci
