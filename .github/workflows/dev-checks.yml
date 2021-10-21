@@ -30,7 +30,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Installing lint config package
-      run: npm ci @strut-software/stylelint-config
+      run: npm i @strut-software/stylelint-config
 
     - name: Linting all stylesheets
       run: npm run lint-style
