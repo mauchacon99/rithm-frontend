@@ -6,7 +6,7 @@
 export interface OrganizationRosterList {
 
   /** Id the user for Roster. */
-  rithmId: string
+  rithmId: string;
 
   /** The user's first name. */
   firstName: string;
