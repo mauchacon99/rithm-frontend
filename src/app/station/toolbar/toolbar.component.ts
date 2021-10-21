@@ -24,68 +24,81 @@ export class ToolbarComponent {
     {
       name: 'Short Text',
       icon: 'fas fa-font',
-      typeString: this.fieldTypeEnum.ShortText
+      typeString: this.fieldTypeEnum.ShortText,
+      dataTestId: 'add-short-text'
     },
     {
       name: 'Long Text',
       icon: 'fas fa-paragraph',
-      typeString: this.fieldTypeEnum.LongTextLabel
+      typeString: this.fieldTypeEnum.LongTextLabel,
+      dataTestId: 'add-long-text'
     },
     {
       name: 'URL',
       icon: 'fas fa-link',
-      typeString: this.fieldTypeEnum.URL
+      typeString: this.fieldTypeEnum.URL,
+      dataTestId: 'add-url'
     },
     {
       name: 'Email',
       icon: 'fas fa-envelope',
-      typeString: this.fieldTypeEnum.Email
+      typeString: this.fieldTypeEnum.Email,
+      dataTestId: 'add-email'
     },
     //TODO: figure out how to correctly format the nested field upon creation.
     {
       name: 'Address',
       icon: 'far fa-address-card',
-      typeString: this.fieldTypeEnum.AddressLine
+      typeString: this.fieldTypeEnum.AddressLine,
+      dataTestId: 'add-address'
     },
     {
       name: 'Number',
       icon: 'fas fa-calculator',
-      typeString: this.fieldTypeEnum.Number
+      typeString: this.fieldTypeEnum.Number,
+      dataTestId: 'add-number'
     },
     {
       name: 'Phone Number',
       icon: 'fas fa-phone',
-      typeString: this.fieldTypeEnum.Phone
+      typeString: this.fieldTypeEnum.Phone,
+      dataTestId: 'add-phone-number'
     },
     {
       name: 'Currency',
       icon: 'fas fa-money-bill-wave',
-      typeString: this.fieldTypeEnum.Currency
+      typeString: this.fieldTypeEnum.Currency,
+      dataTestId: 'add-currency'
     },
     {
       name: 'Date',
       icon: 'fas fa-calendar-day',
-      typeString: this.fieldTypeEnum.Date
+      typeString: this.fieldTypeEnum.Date,
+      dataTestId: 'add-date'
     },
     {
       name: 'Checklist',
       icon: 'fas fa-list',
-      typeString: this.fieldTypeEnum.CheckList
+      typeString: this.fieldTypeEnum.CheckList,
+      dataTestId: 'add-checklist'
     },
     {
       name: 'Single Select',
       icon: 'fas fa-chevron-circle-down',
-      typeString: this.fieldTypeEnum.Select
+      typeString: this.fieldTypeEnum.Select,
+      dataTestId: 'add-select'
     },
     {
       name: 'Multi Select',
       icon: 'fas fa-chevron-circle-down',
-      typeString: this.fieldTypeEnum.MultiSelect
+      typeString: this.fieldTypeEnum.MultiSelect,
+      dataTestId: 'add-multi-select'
     },
     {
       name: 'Instructions',
       icon: 'fas fa-sticky-note',
-      typeString: this.fieldTypeEnum.Instructions
+      typeString: this.fieldTypeEnum.Instructions,
+      dataTestId: 'add-instructions'
     }
   ];
 

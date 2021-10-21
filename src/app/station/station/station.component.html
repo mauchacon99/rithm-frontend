@@ -20,7 +20,10 @@
             #stationInfoHeader></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
-            <mat-tab  label="Document" data-testid="document-tab">
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span data-testid="document-tab">Document</span>
+              </ng-template>
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
@@ -28,7 +31,7 @@
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">
                   <mat-accordion>
-                    <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded" data-testid="all-fields">
+                    <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
                       <mat-expansion-panel-header class="text-base">
                         <mat-panel-title>
                           All
@@ -58,8 +61,11 @@
                 </div>
               </ng-template>
             </mat-tab>
-            <mat-tab data-testid="flow-logic-tab" label="Flow Logic">
-              <ng-template matTabContent>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span data-testid="flow-logic-tab">Flow Logic</span>
+              </ng-template>
+              <ng-template matTabContent >
                 Flow Logic tab
               </ng-template>
             </mat-tab>
@@ -67,7 +73,7 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span data-testid="station-cancel" class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                <span class="mr-3"><button data-testid="station-cancel" mat-stroked-button color="accent">Cancel</button></span>
                 <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" (click)="updateStation(stationInformation)">Save</button>
               </div>
             </div>
