@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, StationRosterMember, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation, OrganizationUsers } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 
 /**
@@ -61,8 +61,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
-  /** Data worker roster station. */
-  dataWorkerRosterStation: StationRosterMember[] = [];
+  /** Users in organization a station. */
+  dataUsersOrganizationStation!: OrganizationUsers;
+
+  /** Pages for users in organization. */
+  pageNumUsersOrganization: number = 1;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -97,7 +100,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getWorkerRosterStation(this.stationInformation.rithmId);
+    this.getOrganizationList('7D2E67D8-C705-4D02-9C34-76209E53061F', this.stationInformation.rithmId, this.pageNumUsersOrganization);
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
   }
 
@@ -242,16 +245,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     });
     if (response) {
       this.stationService.deleteStation(stationId)
-      .pipe(first())
-      .subscribe(() => {
-        this.popupService.notify('The station has been deleted.');
-        this.router.navigateByUrl('dashboard');
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+        .pipe(first())
+        .subscribe(() => {
+          this.popupService.notify('The station has been deleted.');
+          this.router.navigateByUrl('dashboard');
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
     }
   }
 
@@ -264,16 +267,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get worker roster for the given station identified by rithmId.
+   * Get organization users for a specific station.
    *
-   * @param rithmId The Specific id of station.
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
    */
-  getWorkerRosterStation(rithmId: string): void {
-    this.stationService.getWorkerRosterStation(rithmId)
-      .pipe(first())
-      .subscribe((rosterData) => {
-        if (rosterData) {
-          this.dataWorkerRosterStation = rosterData;
+  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): void {
+    this.stationService.getOrganizationList(stationRithmId, stationRithmId, pageNum)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((orgUsers) => {
+        if (orgUsers) {
+          this.dataUsersOrganizationStation = orgUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(

@@ -1,9 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember, UserType } from 'src/models';
+import { DocumentGenerationStatus, OrganizationUsers, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -101,30 +101,59 @@ export class StationService {
   }
 
   /**
-   * Get worker roster for the given station identified by rithmId.
+   * Get organization users for a specific station.
    *
-   * @param rithmId The Specific id of station.
-   * @returns Rosters for the station.
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWorkerRosterStation(rithmId: string): Observable<StationRosterMember[]> {
-    const workerRosterStation: StationRosterMember[] = [
-      {
-        firstName: 'Worker T',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
-      },
-      {
-        firstName: 'Admin',
-        lastName: 'rr11',
-        email: 'rithmadmin@inpivota.com',
-        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
-      }
-    ];
-    return of(workerRosterStation).pipe(delay(1000));
+   getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): Observable<OrganizationUsers> {
+    if (!organizationId || !pageNum) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgUsers: OrganizationUsers = {
+        totalOrgUsers: 20,
+        currentPageNum: pageNum,
+        userPerPage: 10,
+        users: [{
+          rithmId: '123',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/20',
+          role: null,
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+        }, {
+          rithmId: '1234',
+          firstName: 'Rithm',
+          lastName: 'User',
+          email: 'rithmuser@inpivota.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '7/4/21',
+          role: null,
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+        }, {
+          rithmId: '7812',
+          firstName: 'Rithm',
+          lastName: 'Admin',
+          email: 'rithmadmin@inpivota.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '5/9/21',
+          role: 'admin',
+          organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+        }]
+      };
+      return of(orgUsers).pipe(delay(1000));
+    }
   }
 
   /**

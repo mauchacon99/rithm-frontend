@@ -1,10 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import {
-  DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationRosterMember,
-  UserType
-} from 'src/models';
+import { DocumentGenerationStatus, OrganizationUsers, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -251,28 +248,50 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('Return the rosters of the station', () => {
-    const rithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
-    const workerRosterStation: StationRosterMember[] = [
-      {
-        firstName: 'Worker T',
+  it('Return the users of the organization', () => {
+    const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
+    const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
+    const pageNum = 1;
+    const orgUsers: OrganizationUsers = {
+      totalOrgUsers: 20,
+      currentPageNum: pageNum,
+      userPerPage: 10,
+      users: [{
+        rithmId: '123',
+        firstName: 'Worker',
         lastName: 'User',
         email: 'workeruser@inpivota.com',
-        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
-      },
-      {
-        firstName: 'Admin',
-        lastName: 'rr11',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '1/2/20',
+        role: null,
+        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+      }, {
+        rithmId: '1234',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '7/4/21',
+        role: null,
+        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+      }, {
+        rithmId: '7812',
+        firstName: 'Rithm',
+        lastName: 'Admin',
         email: 'rithmadmin@inpivota.com',
-        rithmId: '4RFGF2FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
-      }
-    ];
+        isEmailVerified: true,
+        notificationSettings: null,
+        createdDate: '5/9/21',
+        role: 'admin',
+        organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+      }]
+    };
 
-    service.getWorkerRosterStation(rithmId)
-      .subscribe((response) => {
-        expect(response).toEqual(workerRosterStation);
+    service.getOrganizationList(organizationId, stationRithmId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(orgUsers);
       });
   });
 
