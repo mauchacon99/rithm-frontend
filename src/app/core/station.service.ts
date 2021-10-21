@@ -81,11 +81,12 @@ export class StationService {
    * @param statusNew The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationRithmId: string, generatorStatus: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+  // eslint-disable-next-line max-len
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
     return this.http.put<DocumentGenerationStatus>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`,
       {
-        stationRithmId,
-        generatorStatus
+        stationRithmId: stationId,
+        generatorStatus: statusNew
       }
     );
   }

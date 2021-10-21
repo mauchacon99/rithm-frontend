@@ -206,12 +206,12 @@ describe('StationService', () => {
     const paramsExpected = {
       stationRithmId: stationId,
       generatorStatus: statusNew
-    }
+    };
     service.updateStationDocumentGenerationStatus(stationId, statusNew)
       .subscribe((response) => {
         expect(response).toEqual(statusNew);
       });
-
+    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/organization-info?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(paramsExpected);
