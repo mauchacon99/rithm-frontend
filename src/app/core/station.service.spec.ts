@@ -179,9 +179,9 @@ describe('StationService', () => {
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
     service.getLastUpdated(stationId)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
@@ -195,15 +195,24 @@ describe('StationService', () => {
     const expectedResponse = DocumentGenerationStatus.None;
 
     service.getStationDocumentGenerationStatus(stationId)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
+  it('should return the status of the specific document once the status is updated', () => {
+    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
+    const statusNew = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+      .subscribe((response) => {
+        expect(response).toEqual(statusNew);
+      });
   });
 
   it('should return a list of stations private/all questions', () => {
     const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
-    const expectedResponse: Question[]= [
+    const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
         instructions: 'Fake question 1',
@@ -227,9 +236,9 @@ describe('StationService', () => {
     ];
 
     service.getStationPreviousQuestions(stationId, isPrivate)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
 
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
@@ -237,6 +246,15 @@ describe('StationService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should delete a station', () => {
+    const stationId = 'E204F369-386F-4E41';
+
+    service.deleteStation(stationId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
   });
 
 });

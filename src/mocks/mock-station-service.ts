@@ -170,6 +170,17 @@ export class MockStationService {
   }
 
   /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   * @returns Status new the document.
+   */
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(statusNew).pipe(delay(1000));
+  }
+
+  /**
    * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
@@ -201,4 +212,22 @@ export class MockStationService {
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
   }
+
+  /**
+   * Deletes a specified station.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+   deleteStation(stationId: string): Observable<unknown> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+   }
 }
