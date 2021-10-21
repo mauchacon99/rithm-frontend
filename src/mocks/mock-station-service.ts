@@ -212,4 +212,63 @@ export class MockStationService {
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
   }
+
+  /**
+   * Removes a user from the station's worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Station information with worker roster.
+   */
+  removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
+    const data: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        stationName: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+    return of(data).pipe(delay(1000));
+
+  }
 }
