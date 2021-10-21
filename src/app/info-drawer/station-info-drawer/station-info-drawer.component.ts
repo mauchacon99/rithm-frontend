@@ -269,7 +269,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get organization users for a specific station.
    *
-   * @param organizationId The id of the organization.
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
