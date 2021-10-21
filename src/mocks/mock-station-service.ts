@@ -230,6 +230,7 @@ export class MockStationService {
       })).pipe(delay(1000));
     } else {
       const orgUsers: OrganizationRosterList[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
         lastName: 'Quijada',
         email: 'strut@gmail.com',
@@ -237,6 +238,7 @@ export class MockStationService {
         isWorker: true,
       },
       {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
         firstName: 'Maria',
         lastName: 'Quintero',
         email: 'Maquin@gmail.com',
@@ -244,6 +246,7 @@ export class MockStationService {
         isWorker: true,
       },
       {
+        rithmId: '12dasd1-asd12asdasd-a231',
         firstName: 'Pedro',
         lastName: 'Perez',
         email: 'pperez@gmail.com',

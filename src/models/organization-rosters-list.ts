@@ -1,9 +1,13 @@
 
 /**
- * List the roster in organization.
+ * List the user for roster in station.
  */
 
 export interface OrganizationRosterList {
+
+  /** Id the user for Roster. */
+  rithmId: string
+
   /** The user's first name. */
   firstName: string;
 

@@ -253,6 +253,7 @@ describe('StationService', () => {
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
     const orgUsers: OrganizationRosterList[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
       firstName: 'Cesar',
       lastName: 'Quijada',
       email: 'strut@gmail.com',
@@ -260,6 +261,7 @@ describe('StationService', () => {
       isWorker: true,
     },
     {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
       firstName: 'Maria',
       lastName: 'Quintero',
       email: 'Maquin@gmail.com',
@@ -267,6 +269,7 @@ describe('StationService', () => {
       isWorker: true,
     },
     {
+      rithmId: '12dasd1-asd12asdasd-a231',
       firstName: 'Pedro',
       lastName: 'Perez',
       email: 'pperez@gmail.com',
