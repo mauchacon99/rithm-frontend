@@ -61,12 +61,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
-  /** Users in organization a station. */
-  dataUsersOrganizationStation!: OrganizationUsers;
-
-  /** Pages for users in organization. */
-  pageNumUsersOrganization = 1;
-
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -100,7 +94,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.getOrganizationList(this.stationInformation.rithmId, this.pageNumUsersOrganization);
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
   }
 
@@ -264,27 +257,5 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Get organization users for a specific station.
-   *
-   * @param stationRithmId The Specific id of station.
-   * @param pageNum The current page.
-   */
-  getOrganizationList(stationRithmId: string, pageNum: number): void {
-    const organizationId: string = this.userService.user?.organization;
-    this.stationService.getOrganizationList(organizationId, stationRithmId, pageNum)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((orgUsers) => {
-        if (orgUsers) {
-          this.dataUsersOrganizationStation = orgUsers;
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
   }
 }
