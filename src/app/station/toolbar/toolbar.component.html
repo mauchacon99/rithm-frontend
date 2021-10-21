@@ -1,5 +1,5 @@
 <div class="relative w-full">
-  <button mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
+  <button data-testid="add-field-to-doc" mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
     <i class="fas fa-plus"></i> Add field to document
   </button>
   <div class="grid grid-cols-3 md:grid-cols-4 gap-2 absolute -top-60 md:-top-38 left-0 p-2 bg-white shadow-lg rounded border border-secondary-50" *ngIf="isInlineToolbarOpen">

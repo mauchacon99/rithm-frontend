@@ -20,7 +20,7 @@
             #stationInfoHeader></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
-            <mat-tab label="Document">
+            <mat-tab  label="Document" data-testid="document-tab">
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
@@ -28,7 +28,7 @@
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">
                   <mat-accordion>
-                    <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
+                    <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded" data-testid="all-fields">
                       <mat-expansion-panel-header class="text-base">
                         <mat-panel-title>
                           All
@@ -41,7 +41,7 @@
                         <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"></app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
+                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded" data-testid="private-fields">
                       <mat-expansion-panel-header class="text-base">
                         <mat-panel-title>
                           Private
@@ -58,7 +58,7 @@
                 </div>
               </ng-template>
             </mat-tab>
-            <mat-tab label="Flow Logic">
+            <mat-tab data-testid="flow-logic-tab" label="Flow Logic">
               <ng-template matTabContent>
                 Flow Logic tab
               </ng-template>
@@ -67,8 +67,8 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
-                <button mat-raised-button color="accent" class="mx-2" (click)="updateStation(stationInformation)">Save</button>
+                <span data-testid="station-cancel" class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" (click)="updateStation(stationInformation)">Save</button>
               </div>
             </div>
           </div>
