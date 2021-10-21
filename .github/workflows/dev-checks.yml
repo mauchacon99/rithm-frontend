@@ -56,7 +56,7 @@ jobs:
         NODE_OPTIONS: --max_old_space_size=4096
 
     - name: Installing dependencies
-      run: npm ci --no-audit
+      run: npm ci --no-audit --production
 
     # - name: Building Angular web project
     #   run: npm run build
