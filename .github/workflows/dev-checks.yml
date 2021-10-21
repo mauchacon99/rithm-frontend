@@ -29,8 +29,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Installing lint config package
-      run: npm i @strut-software/stylelint-config
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
     - name: Linting all stylesheets
       run: npm run lint-style
