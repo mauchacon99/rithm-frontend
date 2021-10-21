@@ -49,7 +49,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    */
   ngOnInit(): void {
     this.numberFieldForm = this.fb.group({
-      [this.field.questionType.typeString]: ['', []]
+      [this.field.questionType]: ['', []]
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -61,7 +61,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
     }
 
     //Need to set zip, currency and phone validation.
-    switch (this.field.questionType.typeString) {
+    switch (this.field.questionType) {
       case QuestionFieldType.Zip:
         validators.push(this.fieldValidation.zipValidation());
         break;
@@ -73,7 +73,7 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
         break;
     }
 
-    this.numberFieldForm.get(this.field.questionType.typeString)?.setValidators(validators);
+    this.numberFieldForm.get(this.field.questionType)?.setValidators(validators);
 
   }
 

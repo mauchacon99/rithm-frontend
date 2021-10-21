@@ -8,20 +8,23 @@
   <mat-drawer-content>
     <div class="textured-bg grid grid-cols-12">
       <!-- Left column -->
-      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations"
+        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 py-12">
         <div class="loading" *ngIf="stationLoading">
           <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
-          <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"></app-station-info-header>
+          <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
+            #stationInfoHeader></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
             <mat-tab label="Document">
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
-                <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm"></app-station-template>
+                <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
+                </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">
                   <mat-accordion>
@@ -31,11 +34,11 @@
                           All
                         </mat-panel-title>
                         <mat-panel-description>
-                            View all items on this document
+                          View all items on this document
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"></app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
                     <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
@@ -44,11 +47,11 @@
                           Private
                         </mat-panel-title>
                         <mat-panel-description>
-                            View all private items on this document
+                          View all private items on this document
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-private-fields></app-private-fields>
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true"></app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
                   </mat-accordion>
@@ -64,15 +67,16 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                  <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
-                  <button mat-raised-button color="accent" class="mx-2">Save</button>
+                <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
+                <button mat-raised-button color="accent" class="mx-2" (click)="updateStation(stationInformation)">Save</button>
               </div>
             </div>
           </div>
         </form>
       </div>
       <!-- Right column -->
-      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations"
+        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

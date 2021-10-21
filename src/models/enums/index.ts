@@ -5,3 +5,5 @@ export * from './map-mode.enum';
 export * from './station-element-hover-type.enum';
 export * from './map-item-status.enum';
 export * from './map-drag-item.enum';
+export * from './dialog-type.enum';
+export * from './document-generation-status.enum';

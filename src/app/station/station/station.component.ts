@@ -9,6 +9,7 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
+import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
 
 /**
  * Main component for viewing a station.
@@ -16,12 +17,16 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-station',
   templateUrl: './station.component.html',
-  styleUrls: ['./station.component.scss']
+  styleUrls: ['./station.component.scss'],
 })
 export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
+
+  /** The component for the station info header this name station. */
+  @ViewChild('stationInfoHeader', { static: false })
+  stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   destroyed$ = new Subject();
@@ -53,14 +58,13 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -79,14 +83,6 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-  }
-
-  /**
-   * Cleans up subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
@@ -135,7 +131,6 @@ export class StationComponent implements OnInit, OnDestroy {
   private navigateBack(): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
-
     // If no previous page, go to dashboard
     this.router.navigateByUrl('dashboard');
   }
@@ -171,18 +166,48 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
+      rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Label',
       instructions: '',
-      questionType: {
-        rithmId: '',
-        typeString: fieldType,
-        validationExpression: '.+'
-      },
+      questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
     });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
+   * Update the Station.
+   *
+   * @param stationInformation This Data global, for set data in update request.
+   */
+  updateStation(stationInformation: StationInformation): void {
+    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
+    stationInformation.name = nameStationChange;
+    this.stationLoading = true;
+    this.stationService.updateStation(stationInformation)
+      .pipe(first())
+      .subscribe((stationUpdated) => {
+        if (stationUpdated) {
+          this.stationInformation = stationUpdated;
+        }
+        this.stationLoading = false;
+      }, (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
@@ -192,23 +217,23 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station for which to retrieve forward stations.
    */
   // private getConnectedStations(documentId: string, stationId: string): void {
-    // TODO: new request for connected stations?
+  // TODO: new request for connected stations?
 
-    // this.connectedStationsLoading = true;
-    // this.documentService.getConnectedStationInfo(documentId, stationId)
-    //   .pipe(first())
-    //   .subscribe((connectedStations) => {
-    //     this.forwardStations = connectedStations.followingStations;
-    //     this.previousStations = connectedStations.previousStations;
-    //     this.connectedStationsLoading = false;
-    //   }, (error: unknown) => {
-    //     this.navigateBack();
-    //     this.connectedStationsLoading = false;
-    //     this.errorService.displayError(
-    //       'Failed to get connected stations for this document.',
-    //       error,
-    //       false
-    //     );
-    //   });
+  // this.connectedStationsLoading = true;
+  // this.documentService.getConnectedStationInfo(documentId, stationId)
+  //   .pipe(first())
+  //   .subscribe((connectedStations) => {
+  //     this.forwardStations = connectedStations.followingStations;
+  //     this.previousStations = connectedStations.previousStations;
+  //     this.connectedStationsLoading = false;
+  //   }, (error: unknown) => {
+  //     this.navigateBack();
+  //     this.connectedStationsLoading = false;
+  //     this.errorService.displayError(
+  //       'Failed to get connected stations for this document.',
+  //       error,
+  //       false
+  //     );
+  //   });
   // }
 }

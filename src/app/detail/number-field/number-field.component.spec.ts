@@ -10,39 +10,30 @@ import { NumberFieldComponent } from './number-field.component';
 
 const FIELDS: Question[] = [
   {
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 5',
     instructions: 'Fake question 5',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.Number,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.Number,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
   },
   {
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 6',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.Phone,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.Phone,
     isReadOnly: false,
     isRequired: false,
     isPrivate: false,
     children: [],
   },
   {
+    rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 7',
     instructions: '',
-    questionType: {
-      rithmId: '',
-      typeString: QuestionFieldType.Currency,
-      validationExpression: '.+'
-    },
+    questionType: QuestionFieldType.Currency,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
@@ -95,7 +86,7 @@ describe('NumberFieldComponent', () => {
     });
 
     it('should require an input in number field', () => {
-      expect(component.field.questionType.typeString).toBeTruthy();
+      expect(component.field.questionType).toBeTruthy();
       expect(numberField.valid).toBeFalse();
       expect(numberField.hasError('required')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
@@ -156,13 +147,10 @@ describe('NumberFieldComponent', () => {
 
     beforeEach(() => {
       component.field = {
+        rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Postal code',
         instructions: '',
-        questionType: {
-          rithmId: '',
-          typeString: QuestionFieldType.Zip,
-          validationExpression: '.+'
-        },
+        questionType: QuestionFieldType.Zip,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,

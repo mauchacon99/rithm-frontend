@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode } from 'src/models';
+import { MapMode, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -40,10 +40,10 @@ export class StationElementService {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station);
-    this.drawStationName(station);
 
-    if (this.mapScale > 0.25) {
+    if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
       this.drawDocumentBadge(station);
+      this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station);
@@ -109,9 +109,10 @@ export class StationElementService {
     this.canvasContext.shadowColor = 'transparent';
     this.canvasContext.textAlign = 'left';
     this.canvasContext.fillStyle = 'black';
-    this.canvasContext.font = 'normal 16px Montserrat';
+    this.canvasContext.font = this.mapScale > 0.5 ? (this.mapScale > 1 ? 'normal 30px Montserrat' : 'normal 16px Montserrat')
+     : 'normal 8px Montserrat';
 
-    const sn = station.name.trim().split(' ');
+    const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
@@ -263,11 +264,9 @@ export class StationElementService {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    const nodeColor = NODE_DEFAULT_COLOR;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = nodeColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     ctx.strokeStyle = '#ccc';
     ctx.stroke();

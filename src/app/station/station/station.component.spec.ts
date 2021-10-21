@@ -66,7 +66,7 @@ describe('StationComponent', () => {
     fixture = TestBed.createComponent(StationComponent);
     component = fixture.componentInstance;
     component.stationInformation = {
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
@@ -125,4 +125,5 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
+
 });
