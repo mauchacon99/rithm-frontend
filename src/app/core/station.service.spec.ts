@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, UserType } from 'src/models';
+import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -250,21 +250,65 @@ describe('StationService', () => {
 
   it('the status of the new roster created for the user should return', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
-    const userId = 'C5C1480C-461E-4267-BBB1-BB79E489F991';
-    const expectedResponse: unknown = [
+    const usersIds: { /** Ids users to add.. */rithmId: string }[] = [
       {
-        firstName: 'Worker T',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        rithmId: 'D4162FAB-E521-492F-9895-C98D4026A126',
-        rosterMember: UserType.Worker
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      },
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
       }
     ];
+    const expectedResponse: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        stationName: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      supervisors: [{
+        userRithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com'
+      }],
+      workers: [{
+        userRithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com'
+      }, {
+        userRithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com'
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
 
-    service.addUserRosterStation(stationId, userId)
+    service.addUserRosterStation(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
-
       });
   });
 

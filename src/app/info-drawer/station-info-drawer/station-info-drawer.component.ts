@@ -95,7 +95,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
-    //this.addUserRosterStation();
   }
 
   /**
@@ -258,26 +257,5 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Insert user in roster for station.
-   *
-   * @param stationId The Specific id of station.
-   * @param userId The specific id user.
-   */
-  addUserRosterStation(stationId: string, userId: string): void {
-    this.stationService.addUserRosterStation(stationId, userId)
-      .pipe(first())
-      .subscribe((userRoster) => {
-        if (userRoster) {
-          //this.stationDocumentGenerationStatus = status;
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
   }
 }
