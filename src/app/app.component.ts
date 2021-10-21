@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -101,6 +101,9 @@ export class AppComponent implements OnInit, OnDestroy {
           (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
       }
     });
+
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--appvh', `${vh}px`);
   }
 
   /**
@@ -123,4 +126,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.closeSidenav();
   }
 
+  /**
+   * Responds to changing window size by setting a new canvas size and re-drawing the elements.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--appvh', `${vh}px`);
+  }
 }

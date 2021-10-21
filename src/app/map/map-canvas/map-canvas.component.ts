@@ -353,6 +353,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
   private setCanvasSize(): void {
+    // //change canvas element size dynamically. this solves an issue mobile has with vh.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--canvasvh', `${vh}px`);
+
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 

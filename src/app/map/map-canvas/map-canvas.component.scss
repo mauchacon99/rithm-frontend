@@ -1,5 +1,6 @@
 .h-calc {
   height: calc(100vh - 128px);
+  height: calc(var(--canvasvh, 1vh) * 100 - 128px);
 }
 
 .addStationCur {
