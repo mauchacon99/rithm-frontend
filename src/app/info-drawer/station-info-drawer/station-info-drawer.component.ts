@@ -106,7 +106,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.docGenLoading = true;
     this.stationService.getStationDocumentGenerationStatus(stationId)
       .pipe(first())
-      .subscribe((status: DocumentGenerationStatus) => {
+      .subscribe((status) => {
+        console.log(status);
+
         this.docGenLoading = false;
         if (status) {
           this.stationDocumentGenerationStatus = status;
