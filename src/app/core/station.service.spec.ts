@@ -259,13 +259,9 @@ describe('StationService', () => {
 
   it('should return the station information with new worker roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
-    const userIdList: Array<{ /** User worker Id to be removed. */rithmId: string}> = [
-      {
-        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-      },
-      {
-        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-      }
+    const userIdList: Array<string> = [
+      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
     const expectedResponse: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',

@@ -120,7 +120,7 @@ export class StationService {
    * @returns New Station information with worker roster.
    */
    // eslint-disable-next-line max-len
-   removeUserFromWorkerRoster(stationId: string, usersIds: { /** User worker Id to be removed. */rithmId: string}[]): Observable<StationInformation>{
+   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
     const data: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'New Station Name',
