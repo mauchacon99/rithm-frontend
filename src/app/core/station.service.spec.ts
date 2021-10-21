@@ -248,6 +248,15 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should delete a station', () => {
+    const stationId = 'E204F369-386F-4E41';
+
+    service.deleteStation(stationId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
   it('should return the station information with new worker roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<{ /** User worker Id to be removed. */rithmId: string}> = [

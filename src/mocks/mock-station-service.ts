@@ -214,13 +214,31 @@ export class MockStationService {
   }
 
   /**
+   * Deletes a specified station.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+   deleteStation(stationId: string): Observable<unknown> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+   }
+
+  /**
    * Removes a user from the station's worker roster.
    *
    * @param stationId The Specific id of station.
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-  removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
+   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
     const data: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'New Station Name',
@@ -269,6 +287,5 @@ export class MockStationService {
       priority: 2
     };
     return of(data).pipe(delay(1000));
-
   }
 }

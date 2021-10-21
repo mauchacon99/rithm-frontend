@@ -5,7 +5,7 @@ import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS, BADGE_HOVER_COLOR
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -179,11 +179,9 @@ export class StationElementService {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    const badgeColor = BADGE_DEFAULT_COLOR;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = badgeColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
     ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
      : '400 10px Montserrat-SemiBold';
