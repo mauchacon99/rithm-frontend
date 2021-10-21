@@ -3,7 +3,7 @@
   "version": "0.0.14",
   "scripts": {
     "start": "ng serve",
-    "build": "npx -p @angular/cli ng build",
+    "build": "ng build",
     "build-test": "cross-env NODE_ENV=test ng build --configuration test",
     "test": "ng test",
     "test-ci": "npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
