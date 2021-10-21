@@ -238,7 +238,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (response) {
-      this.router.navigateByUrl('dashboard');
+      this.stationService.deleteStation(stationId)
+      .pipe(first())
+      .subscribe(() => {
+        this.popupService.notify('The station has been deleted.');
+        this.router.navigateByUrl('dashboard');
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
     }
   }
 
