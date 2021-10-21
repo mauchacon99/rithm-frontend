@@ -58,10 +58,10 @@ jobs:
     - name: Installing dependencies
       run: npm ci
 
-    - name: Building Angular web project
-      run: npm run build
-      env:
-        NODE_OPTIONS: --max_old_space_size=4096
+    # - name: Building Angular web project
+    #   run: npm run build
+    #   env:
+    #     NODE_OPTIONS: --max_old_space_size=4096
 
   # Checks that the Angular app passes all defined unit and integration tests
   # test:
