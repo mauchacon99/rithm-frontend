@@ -32,8 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Installing dependencies
+      run: npm ci --no-audit --ignore-scripts
+
     - name: Linting all stylesheets
-      run: npx run lint-style
+      run: npm run lint-style
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
   # build:
