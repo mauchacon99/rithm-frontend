@@ -108,7 +108,7 @@ export class StationService {
    * @returns Rosters in the station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addUserRosterStation(stationId: string, usersIds: { /** Ids users to add. */rithmId: string }[]): Observable<StationInformation> {
+  addUserRosterStation(stationId: string, usersIds: string[]): Observable<StationInformation> {
     const mockPrevAddRosterStation: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'New Station Name',

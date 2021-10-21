@@ -28,7 +28,7 @@ export class RosterManagementModalComponent {
    * @param stationId The Specific id of station.
    * @param usersIds The users ids for assign in station.
    */
-  addUserRosterStation(stationId: string, usersIds: { /** Ids users to add. */rithmId: string }[]): void {
+  addUserRosterStation(stationId: string, usersIds: string[]): void {
     this.stationService.addUserRosterStation(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
