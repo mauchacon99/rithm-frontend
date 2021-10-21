@@ -65,7 +65,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   dataUsersOrganizationStation!: OrganizationUsers;
 
   /** Pages for users in organization. */
-  pageNumUsersOrganization: number = 1;
+  pageNumUsersOrganization = 1;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -274,7 +274,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param pageNum The current page.
    */
   getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): void {
-    this.stationService.getOrganizationList(stationRithmId, stationRithmId, pageNum)
+    this.stationService.getOrganizationList(organizationId, stationRithmId, pageNum)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((orgUsers) => {
         if (orgUsers) {
