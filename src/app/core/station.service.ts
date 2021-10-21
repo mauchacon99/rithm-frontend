@@ -81,9 +81,13 @@ export class StationService {
    * @param statusNew The new status set in station document.
    * @returns Status new the document.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return of(statusNew).pipe(delay(1000));
+  updateStationDocumentGenerationStatus(stationRithmId: string, generatorStatus: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return this.http.put<DocumentGenerationStatus>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`,
+      {
+        stationRithmId,
+        generatorStatus
+      }
+    );
   }
 
   /**
@@ -98,7 +102,7 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
-   }
+  }
 
   /**
    * Deletes a specified station.
@@ -106,8 +110,8 @@ export class StationService {
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   deleteStation(stationId: string): Observable<unknown> {
-      return of(void 0).pipe(delay(1000));
-   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteStation(stationId: string): Observable<unknown> {
+    return of(void 0).pipe(delay(1000));
+  }
 }
