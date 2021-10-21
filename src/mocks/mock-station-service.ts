@@ -214,7 +214,7 @@ export class MockStationService {
   }
 
   /**
-   * Insert user in roster for station.
+   * Aggregate user in roster for station.
    *
    * @param stationId The Specific id of station.
    * @param usersIds The users ids for assign in station.

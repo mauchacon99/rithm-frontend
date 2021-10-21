@@ -250,7 +250,7 @@ describe('StationService', () => {
 
   it('the status of the new roster created for the user should return', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
-    const usersIds: { /** Ids users to add.. */rithmId: string }[] = [
+    const usersIds: { /** Ids users to add. */rithmId: string }[] = [
       {
         rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
       },
