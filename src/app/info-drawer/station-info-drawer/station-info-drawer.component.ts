@@ -59,16 +59,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   lastUpdatedDate = '';
 
   /** Message doc error. */
-  messageDoc = '';
+  messageDoc = 'Error: unable to set document generation type';
 
   /** Status by default the document in station. */
   stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
 
   /** Color message LastUpdated. */
   colorMessage = '';
-
-  /** Color message Doc Generation. */
-  colorMessageDoc = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -123,14 +120,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
         if (status !== 'None' && status !== 'Manual'){
           this.docGeneration=false;
-          this.colorMessageDoc = 'text-error-500';
-          this.messageDoc='Error: unable to set document generation type';
          }
       }, (error: unknown) => {
         this.docGenLoading = false;
         this.docGeneration=false;
-        this.colorMessageDoc = 'text-error-500';
-        this.messageDoc='Error: unable to set document generation type';
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
