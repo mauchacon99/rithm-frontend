@@ -102,6 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--appvh', `${vh}px`);
   }
@@ -127,10 +128,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Responds to changing window size by setting a new canvas size and re-drawing the elements.
+   * Needed to resize a mobile browser when a the scrollbar hides.
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--appvh', `${vh}px`);
   }

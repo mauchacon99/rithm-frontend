@@ -1,4 +1,5 @@
 .h-calc {
+  //this height is set for browser compatibility.
   height: calc(100vh - 128px);
   height: calc(var(--canvasvh, 1vh) * 100 - 128px);
 }
