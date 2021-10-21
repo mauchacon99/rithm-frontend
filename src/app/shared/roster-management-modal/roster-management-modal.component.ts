@@ -33,7 +33,9 @@ export class RosterManagementModalComponent {
     this.stationService.addUserRosterStation(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
-        this.workerRosterStation = data.workers;
+        if (data) {
+          this.workerRosterStation = data.workers;
+        }
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
