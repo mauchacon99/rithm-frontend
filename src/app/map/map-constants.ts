@@ -3,7 +3,7 @@ import { Point } from 'src/models';
 // TODO: refine this file; this is polluting the global namespace a little
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
-export const ZOOM_VELOCITY = .9;
+export const ZOOM_VELOCITY = .8;
 export const MAX_SCALE = 2;
 export const MIN_SCALE = .0625;
 export const DEFAULT_SCALE = 1;
