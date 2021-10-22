@@ -35,7 +35,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   docGenLoading = false;
 
   /** Use to determinate generation of document. */
-  docGeneration = false;
+  showDocumentGenerationError  = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
@@ -58,8 +58,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
-  /** Message doc error. */
-  messageDoc = 'Error: unable to set document generation type';
+  /** Message for document generation error. */
+  documentGenErrorMessage  = 'Error: unable to set document generation status';
 
   /** Status by default the document in station. */
   stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
@@ -116,14 +116,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         this.docGenLoading = false;
         if (status) {
           this.stationDocumentGenerationStatus = status;
-          this.docGeneration=true;
         }
         if (status !== 'None' && status !== 'Manual'){
-          this.docGeneration=false;
+          this.showDocumentGenerationError = true;
          }
       }, (error: unknown) => {
         this.docGenLoading = false;
-        this.docGeneration=false;
+        this.showDocumentGenerationError = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
