@@ -27,8 +27,16 @@ describe('RosterComponent', () => {
     component = fixture.componentInstance;
     component.rosterSize = 7;
     component.rosterMembers = [
-      { rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-      { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+      {
+        rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      },
+      {
+        rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }
     ];
     component.isWorker = true;
     component.stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C',

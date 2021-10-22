@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, OrganizationRosterList, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -109,7 +109,7 @@ export class StationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): Observable<OrganizationRosterList[]> {
+   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -117,7 +117,7 @@ export class StationService {
         }
       })).pipe(delay(1000));
     } else {
-      const orgUsers: OrganizationRosterList[] = [{
+      const orgUsers: StationRosterMember[] = [{
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
         lastName: 'Quijada',

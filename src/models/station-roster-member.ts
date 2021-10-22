@@ -22,6 +22,9 @@ export interface StationRosterMember {
   /** The user assigned any document or not. */
   isAssigned?: boolean;
 
-  /** Enum station owner.*/
-  rosterMember?: UserType;
+  /** Is worker or not. */
+  isWorker: boolean;
+
+  /** Is owner or not. */
+  isOwner: boolean;
 }

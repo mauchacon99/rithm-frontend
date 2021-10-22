@@ -1,11 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { OrganizationRosterList } from 'src/models';
+import { StationRosterMember } from 'src/models';
 
 /**
  * Component for roster management.
@@ -15,13 +14,10 @@ import { OrganizationRosterList } from 'src/models';
   templateUrl: './roster-management-modal.component.html',
   styleUrls: ['./roster-management-modal.component.scss']
 })
-export class RosterManagementModalComponent implements OnInit, OnDestroy {
-
-  /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+export class RosterManagementModalComponent implements OnInit {
 
   /** List users the organization. */
-  listUsersOrgatization: OrganizationRosterList[] = [];
+  listUsersOrgatization: StationRosterMember[] = [];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
@@ -57,8 +53,8 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
    * @param pageNum The current page.
    */
   getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): void {
-    this.stationService.getOrganizationList(organizationId, stationRithmId, pageNum)
-      .pipe(takeUntil(this.destroyed$))
+    this.stationService.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
+      .pipe(first())
       .subscribe((orgUsers) => {
         if (orgUsers) {
           this.listUsersOrgatization = orgUsers;
@@ -69,13 +65,5 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
           error
         );
       });
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

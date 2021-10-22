@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { DocumentGenerationStatus, OrganizationRosterList, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -38,23 +38,31 @@ export class MockStationService {
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }, {
         rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
-        email: 'workeruser@inpivota.com'
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }],
       workers: [{
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
       }, {
         rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -118,23 +126,31 @@ export class MockStationService {
           rithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com'
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }, {
           rithmId: '',
           firstName: 'Worker',
           lastName: 'User',
-          email: 'workeruser@inpivota.com'
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }],
         workers: [{
           rithmId: '',
           firstName: 'Harry',
           lastName: 'Potter',
-          email: 'harrypotter@inpivota.com'
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
         }, {
           rithmId: '',
           firstName: 'Supervisor',
           lastName: 'User',
-          email: 'supervisoruser@inpivota.com'
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
         }],
         createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
         createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -221,7 +237,7 @@ export class MockStationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): Observable<OrganizationRosterList[]> {
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -229,7 +245,7 @@ export class MockStationService {
         }
       })).pipe(delay(1000));
     } else {
-      const orgUsers: OrganizationRosterList[] = [{
+      const orgUsers: StationRosterMember[] = [{
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
         lastName: 'Quijada',

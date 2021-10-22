@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, OrganizationRosterList, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -112,13 +112,17 @@ describe('StationService', () => {
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       workers: [{
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -128,7 +132,7 @@ describe('StationService', () => {
       priority: 1,
     };
 
-    const expectedResponse = {
+    const expectedResponse: StationInformation = {
       rithmId: station.rithmId,
       name: station.name,
       instructions: 'General instructions',
@@ -146,13 +150,17 @@ describe('StationService', () => {
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       workers: [{
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -258,7 +266,7 @@ describe('StationService', () => {
     const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
-    const orgUsers: OrganizationRosterList[] = [{
+    const orgUsers: StationRosterMember[] = [{
       rithmId: '12dasd1-asd12asdasd-asdas',
       firstName: 'Cesar',
       lastName: 'Quijada',
@@ -283,7 +291,7 @@ describe('StationService', () => {
       isWorker: true,
     }];
 
-    service.getOrganizationList(organizationId, stationRithmId, pageNum)
+    service.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
       .subscribe((users) => {
         expect(users).toEqual(orgUsers);
       });

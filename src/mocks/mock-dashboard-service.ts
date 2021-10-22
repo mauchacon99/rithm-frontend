@@ -37,8 +37,16 @@ export class MockDashboardService {
         stationName: 'station-1',
         numberOfWorkers: 3,
         worker: [
-          { rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          {
+            rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       },
       {
@@ -47,8 +55,16 @@ export class MockDashboardService {
         stationName: 'station-2',
         numberOfWorkers: 6,
         worker: [
-          { rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          {
+            rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       }
     ];
@@ -68,13 +84,17 @@ export class MockDashboardService {
         rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       },
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
     return of(expectedResponse).pipe(delay(1000));
@@ -92,14 +112,18 @@ export class MockDashboardService {
         rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }
       ,
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
     return of(expectedResponse).pipe(delay(1000));

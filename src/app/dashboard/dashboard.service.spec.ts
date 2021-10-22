@@ -56,8 +56,16 @@ describe('DashboardService', () => {
         stationName: 'station-1',
         numberOfWorkers: 3,
         worker: [
-          {rithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'},
-          {rithmId: '', firstName: 'Harry', lastName : 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com'}
+          {
+            rithmId: '', firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       },
       {
@@ -66,8 +74,16 @@ describe('DashboardService', () => {
         stationName: 'station-2',
         numberOfWorkers: 6,
         worker: [
-          {rithmId: '', firstName: 'Worker', lastName : 'User', isAssigned: false, email: 'workeruser@inpivota.com'},
-          {rithmId: '', firstName: 'Supervisor', lastName : 'User', isAssigned: false, email: 'supervisoruser@inpivota.com'}
+          {
+            rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '', firstName: 'Supervisor', lastName: 'User', isAssigned: false, email: 'supervisoruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       }
     ];
@@ -92,13 +108,17 @@ describe('DashboardService', () => {
         rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       },
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
 
@@ -122,13 +142,17 @@ describe('DashboardService', () => {
         rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       },
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
 
