@@ -265,8 +265,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param statusNew New status the station update.
    */
-  updateStatusStation(statusNew: MatRadioChange) {
-    console.log(statusNew);
+  updateStatusStation(statusNew: MatRadioChange): void {
     this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
   }
 }
