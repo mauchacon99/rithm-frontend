@@ -20,6 +20,14 @@ NOTE: You may see a message that says:
 
 This is because we use a self-signed certificate to use HTTPS locally during development, so you shouldn't worry about this. If you select `Advanced` or `Show Details`, you should be able to proceed to the page, which should make this certificate trusted on your system.
 
+## Testing Changes on Mobile
+
+If you want to test your locally served changes on a mobile device or tablet, you can instead run the app with the `--host {{ your local IP address }}`. So this would something like `ng serve --host 192.168.x.x` or `npm start -- --host 192.168.x.x`. You can find some simple instructions on locating this IP address for Windows and Mac [here](https://www.ipconfig.in/what-is-my-local-ip-address/).
+
+Once the development server is running, you can open the link listed in the terminal on your external device. You will need to make sure that the development server machine and the external device are on the same local network. The link will look something like `https://192.168.x.x:4200`. You will likely have to trust the certificate for the page for the same reasons mentioned above under **Getting Started**.
+
+> NOTE: The site will be accessible for anybody on your network, so be careful which networks you expose this to. Likely this won't be a concern, however.
+
 ### Sign In
 
 You can use any of the following pre-existing credentials for signing in:
