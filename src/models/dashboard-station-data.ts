@@ -1,7 +1,7 @@
 import { StationRosterMember } from './station-roster-member';
 
 /**
- * Represents data about a station to be displayed on the dashboard (workers and supervisors).
+ * Represents data about a station to be displayed on the dashboard (workers and station owners).
  *
  * @see `StationDashViewModel` in the back end.
  */
