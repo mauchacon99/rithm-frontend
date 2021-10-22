@@ -1,4 +1,3 @@
-import { UserType } from './enums';
 
 /**
  * Represents all information about a member on a roster for a station (both supervisor roster and worker roster).
