@@ -35,7 +35,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    /** Temporary parameter organizationId. */
+    /** Temporary parameter stationId. */
     const stationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const organizationId: string = this.userService.user?.organization;
     this.getOrganizationList(organizationId, stationId, this.pageNumUsersOrganization);
@@ -44,6 +44,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
   /**
    * Get organization users for a specific station.
    *
+   * @param organizationId The id of the organization.
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
