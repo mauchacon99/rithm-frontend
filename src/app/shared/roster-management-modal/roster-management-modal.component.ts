@@ -9,4 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./roster-management-modal.component.scss']
 })
 export class RosterManagementModalComponent {
+
+  /** Array of avatars. */
+  avatars = ['JH','ZT','NR','CB','SR','NL'];
 }
