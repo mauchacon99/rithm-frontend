@@ -186,9 +186,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(mousePos, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
+             this.drawElements();
           }
-          this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          // eslint-disable-next-line max-len
+          if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
+            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          }
           break;
         } else {
           if (previousHoverState !== station.hoverActive) {
