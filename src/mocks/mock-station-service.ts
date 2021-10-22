@@ -34,7 +34,7 @@ export class MockStationService {
         totalDocuments: 0,
         isGenerator: false
       }],
-      supervisors: [{
+      stationOwners: [{
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
@@ -122,7 +122,7 @@ export class MockStationService {
           totalDocuments: 0,
           isGenerator: false
         }],
-        supervisors: [{
+        stationOwners: [{
           rithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',

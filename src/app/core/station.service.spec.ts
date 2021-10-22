@@ -108,7 +108,7 @@ describe('StationService', () => {
         totalDocuments: 2,
         isGenerator: true
       }],
-      supervisors: [{
+      stationOwners: [{
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
@@ -146,7 +146,7 @@ describe('StationService', () => {
         totalDocuments: 2,
         isGenerator: true
       }],
-      supervisors: [{
+      stationOwners: [{
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',

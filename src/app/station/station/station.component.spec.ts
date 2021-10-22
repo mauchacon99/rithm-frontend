@@ -83,7 +83,7 @@ describe('StationComponent', () => {
         totalDocuments: 0,
         isGenerator: false
       }],
-      supervisors: [{
+      stationOwners: [{
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
