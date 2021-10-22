@@ -248,7 +248,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('Return the users of the organization', () => {
+  it('should return the worker roster of the station', () => {
     const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
