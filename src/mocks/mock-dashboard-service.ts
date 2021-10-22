@@ -38,12 +38,20 @@ export class MockDashboardService {
         numberOfWorkers: 3,
         worker: [
           {
-            rithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com',
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            isAssigned: false,
+            email: 'workeruser@inpivota.com',
             isWorker: true,
             isOwner: false
           },
           {
-            rithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com',
+            rithmId: '',
+            firstName: 'Harry',
+            lastName: 'Potter',
+            isAssigned: false,
+            email: 'harrypotter@inpivota.com',
             isWorker: true,
             isOwner: false
           }
