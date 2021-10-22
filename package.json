@@ -18,7 +18,7 @@
   "dependencies": {
     "@angular/animations": "^12.2.9",
     "@angular/cdk": "^12.2.0",
-    "@angular/common": "^12.2.10",
+    "@angular/common": "^12.2.11",
     "@angular/compiler": "^12.2.8",
     "@angular/core": "^12.2.0",
     "@angular/forms": "^12.2.10",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.1202.10",
-    "@angular-devkit/build-angular": "~12.2.10",
+    "@angular-devkit/build-angular": "~12.2.11",
     "@angular-eslint/builder": "^12.5.0",
     "@angular-eslint/eslint-plugin": "^12.5.0",
     "@angular-eslint/eslint-plugin-template": "^12.5.0",
@@ -50,7 +50,7 @@
     "@strut-software/stylelint-config": "^1.1.1",
     "@types/css-font-loading-module": "0.0.6",
     "@types/jasmine": "^3.10.0",
-    "@types/node": "^16.11.1",
+    "@types/node": "^16.11.3",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
