@@ -58,9 +58,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
-  /** Message for document generation error. */
-  documentGenErrorMessage  = 'Error: unable to set document generation status';
-
   /** Status by default the document in station. */
   stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
 

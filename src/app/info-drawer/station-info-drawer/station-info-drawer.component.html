@@ -43,8 +43,8 @@
         <mat-radio-button class="px-1" value="2" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
         </mat-radio-button>
       </mat-radio-group>
-      <div class="col-span-8 md:col-span-4 text-left text-xs py-2" *ngIf="showDocumentGenerationError">
-        <span class="text-error-500">{{documentGenErrorMessage}} </span>
+      <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
+        <span class="text-error-500">Error: unable to set document generation status</span>
       </div>
     </div>
   </div>
