@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
 
@@ -71,7 +71,8 @@ export class StationService {
   getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
     const params = new HttpParams()
       .set('rithmId', stationId);
-    return this.http.get<DocumentGenerationStatus>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params });
+    return this.http.get(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params, responseType: 'text' })
+      .pipe(map((value) => value as DocumentGenerationStatus));
   }
 
   /**
