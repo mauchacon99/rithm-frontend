@@ -109,10 +109,10 @@ export class MockDashboardService {
   }
 
   /**
-   * Gets a list of supervisor roster of a station.
+   * Gets a list of station owner roster of a station.
    *
    * @param stationId The id of the station for which to get the roster.
-   * @returns A list of supervisor roster of a station.
+   * @returns A list of station owner roster of a station.
    */
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: Array<StationRosterMember> = [
