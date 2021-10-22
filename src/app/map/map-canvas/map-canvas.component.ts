@@ -423,8 +423,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
         const coords: Point = {x: 0, y: 0};
-        coords.x = position.x - STATION_WIDTH/2;
-        coords.y = position.y - STATION_HEIGHT/2;
+        coords.x = position.x - STATION_WIDTH/2*this.scale;
+        coords.y = position.y - STATION_HEIGHT/2*this.scale;
 
         //create a new station at click.
         this.mapService.createNewStation(coords);
