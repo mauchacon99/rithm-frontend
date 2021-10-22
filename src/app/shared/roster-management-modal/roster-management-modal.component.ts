@@ -20,7 +20,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject();
 
   /** List users the organization. */
-  listUsersOrgatization: OrganizationRosterList[]=[];
+  listUsersOrgatization: OrganizationRosterList[] = [];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
@@ -36,8 +36,9 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     /** Temporary parameter organizationId. */
-    const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
-    this.getOrganizationList(organizationId, this.pageNumUsersOrganization);
+    const stationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
+    const organizationId: string = this.userService.user?.organization;
+    this.getOrganizationList(organizationId, stationId, this.pageNumUsersOrganization);
   }
 
   /**
@@ -46,8 +47,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
-  getOrganizationList(stationRithmId: string, pageNum: number): void {
-    const organizationId: string = this.userService.user?.organization;
+  getOrganizationList(organizationId: string, stationRithmId: string, pageNum: number): void {
     this.stationService.getOrganizationList(organizationId, stationRithmId, pageNum)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((orgUsers) => {
