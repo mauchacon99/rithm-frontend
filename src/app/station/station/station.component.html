@@ -33,7 +33,7 @@
                   <mat-accordion>
                     <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
                       <mat-expansion-panel-header class="text-base">
-                        <mat-panel-title>
+                        <mat-panel-title data-testid="all-fields">
                           All
                         </mat-panel-title>
                         <mat-panel-description>
@@ -44,9 +44,9 @@
                         <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"></app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded" data-testid="private-fields">
+                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
                       <mat-expansion-panel-header class="text-base">
-                        <mat-panel-title>
+                        <mat-panel-title data-testid="private-fields">
                           Private
                         </mat-panel-title>
                         <mat-panel-description>
