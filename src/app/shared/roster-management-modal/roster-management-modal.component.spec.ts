@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ErrorService } from 'src/app/core/error.service';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { RosterManagementModalComponent } from './roster-management-modal.component';
 
@@ -8,7 +11,11 @@ describe('RosterManagementModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RosterManagementModalComponent ]
+      declarations: [ RosterManagementModalComponent ],
+      providers: [
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService }
+      ]
     })
     .compileComponents();
   });

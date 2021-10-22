@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationRosterMember } from 'src/models';
 
 import { StationService } from './station.service';
 
@@ -254,6 +254,31 @@ describe('StationService', () => {
     service.deleteStation(stationId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
+      });
+  });
+
+  it('should returns a worker roster for a given station', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse: StationRosterMember[] = [
+      {
+        firstName: 'Worker',
+        lastName: 'User',
+        userRithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        email: 'workeruser@inpivota.com',
+        isAssigned: true,
+      },
+      {
+        firstName: 'Rithm',
+        lastName: 'User',
+        userRithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        email: 'rithmuser@inpivota.com',
+        isAssigned: true,
+      },
+    ];
+
+    service.deleteStation(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
       });
   });
 

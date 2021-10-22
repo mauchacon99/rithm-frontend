@@ -1,9 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -110,4 +110,38 @@ export class StationService {
    deleteStation(stationId: string): Observable<unknown> {
       return of(void 0).pipe(delay(1000));
    }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockRosterMember: StationRosterMember[] = [
+        {
+          firstName: 'Worker',
+          lastName: 'User',
+          userRithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+          email: 'workeruser@inpivota.com',
+          isAssigned: true,
+        },
+        {
+          firstName: 'Rithm',
+          lastName: 'User',
+          userRithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+          email: 'rithmuser@inpivota.com',
+          isAssigned: true,
+        },
+      ];
+      return of(mockRosterMember).pipe(delay(1000));
+    }
+  }
 }

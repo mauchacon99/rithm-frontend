@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { StationRosterMember } from '../models/station-roster-member';
 
 /**
  * Mocks methods of the `StationService`.
@@ -230,4 +231,30 @@ export class MockStationService {
       return of().pipe(delay(1000));
     }
    }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]>{
+    const mockRosterMember: StationRosterMember[] = [
+        {
+            firstName: 'Worker',
+            lastName: 'User',
+            userRithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            email: 'workeruser@inpivota.com',
+            isAssigned: true,
+        },
+        {
+            firstName: 'Rithm',
+            lastName: 'User',
+            userRithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            email: 'rithmuser@inpivota.com',
+            isAssigned: true,
+        },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
+  }
 }
