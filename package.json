@@ -24,7 +24,7 @@
     "@angular/forms": "^12.2.11",
     "@angular/material": "^12.2.11",
     "@angular/platform-browser": "^12.2.11",
-    "@angular/platform-browser-dynamic": "^12.2.10",
+    "@angular/platform-browser-dynamic": "^12.2.11",
     "@angular/router": "^12.2.11",
     "autoprefixer": "^10.3.7",
     "ng-click-outside": "^9.0.0",
