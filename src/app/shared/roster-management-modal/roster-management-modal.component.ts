@@ -42,7 +42,7 @@ export class RosterManagementModalComponent implements OnInit {
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    this.getOrganizationList(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
+    this.getPotentialStationRosterMembers(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
   }
 
   /**
