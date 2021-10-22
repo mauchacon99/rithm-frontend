@@ -222,7 +222,7 @@ describe('StationService', () => {
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(paramsExpected);
 
-    req.flush(paramsExpected);
+    req.flush(statusNew);
     httpTestingController.verify();
   });
 
