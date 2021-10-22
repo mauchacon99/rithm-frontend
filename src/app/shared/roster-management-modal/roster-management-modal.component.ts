@@ -36,7 +36,7 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private errorService: ErrorService,
     private userService: UserService,
-    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId */ stationId: string; },
+    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId. */ stationId: string },
   ) {
     this.stationRithmId = this.modalData.stationId;
     this.organizationId = this.userService.user?.organization;
