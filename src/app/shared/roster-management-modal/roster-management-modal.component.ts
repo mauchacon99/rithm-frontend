@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -25,20 +26,27 @@ export class RosterManagementModalComponent implements OnInit, OnDestroy {
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
 
+  /** The station rithmId. */
+  stationRithmId = '';
+
+  /** Id the organization.  */
+  organizationId = '';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId */ stationId: string; },
+  ) {
+    this.stationRithmId = this.modalData.stationId;
+    this.organizationId = this.userService.user?.organization;
+  }
 
   /**
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    /** Temporary parameter stationId. */
-    const stationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
-    const organizationId: string = this.userService.user?.organization;
-    this.getOrganizationList(organizationId, stationId, this.pageNumUsersOrganization);
+    this.getOrganizationList(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
   }
 
   /**
