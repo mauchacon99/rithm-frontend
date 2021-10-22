@@ -136,14 +136,14 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
-    this.mapService.zoom(2);
+    this.mapService.zoom(true);
   }
 
   /**
    * Zooms the map out from center.
    */
   zoomOut(): void {
-    this.mapService.zoom(.5);
+    this.mapService.zoom(false);
   }
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE } from './map-constants';
+import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, ZOOM_VELOCITY } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -175,12 +175,10 @@ export class MapService {
   /**
    * Zooms the map by adjusting the map scale and position.
    *
-   * @param scaleFactor The multiplier by which to scale the size of elements on the map.
+   * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  zoom(scaleFactor: number, zoomOrigin = this.getCanvasCenterPoint()): void {
-
-    const zoomingIn = scaleFactor > 1;
+  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
@@ -190,12 +188,12 @@ export class MapService {
     const translateDirection = zoomingIn ? -1 : 1;
 
     // translate current viewport position
-    const newScale = this.mapScale$.value * scaleFactor;
+    const newScale = zoomingIn ? this.mapScale$.value / ZOOM_VELOCITY : this.mapScale$.value * ZOOM_VELOCITY;
 
-    // TODO: Find a cleaner way to refactor the specific scale; also isn't working for non 2x .5x?
     this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
     this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
-
+    console.log(zoomOrigin);
+    console.log(this.currentCanvasPoint$.value);
     // scale
     this.mapScale$.next(zoomingIn ? Math.min(MAX_SCALE, newScale) : Math.max(MIN_SCALE, newScale));
   }
