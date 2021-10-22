@@ -1,5 +1,5 @@
-import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_CANVAS_POINT, NODE_RADIUS,
-   NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT,
+         NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
 import { StationMapData, Point, StationElementHoverType } from 'src/models';
 
 export interface StationMapElement extends StationMapData {
@@ -45,6 +45,9 @@ export class StationMapElement {
     const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
 
+    const interactiveButtonRadius = BUTTON_RADIUS * scale + 9;
+    const scaledButtonYMargin = BUTTON_Y_MARGIN * scale;
+    const scaledButtonMargin = BADGE_MARGIN * scale;
     const interactiveBadgeRadius = BADGE_RADIUS * scale;
     const scaledBadgeMargin = BADGE_MARGIN * scale;
 
@@ -54,7 +57,14 @@ export class StationMapElement {
       && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
     ) {
-        this.hoverActive = StationElementHoverType.Node;
+      this.hoverActive = StationElementHoverType.Node;
+    //Option Button.
+    } else if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
+      && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
+      && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
+      && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+      ) {
+      this.hoverActive = StationElementHoverType.Button;
     //Document badge.
     } else if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
       && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
