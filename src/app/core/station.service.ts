@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -102,61 +102,25 @@ export class StationService {
   }
 
   /**
-   * Aggregate user in roster for station.
+   * Adds users to the worker roster.
    *
    * @param stationId The Specific id of station.
-   * @param usersIds The users ids for assign in station.
+   * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addUserToWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation> {
-    const mockPrevAddRosterStation: StationInformation = {
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      name: 'New Station Name',
-      instructions: '',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
-      }],
-      supervisors: [{
-        userRithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
-      }, {
-        userRithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com'
-      }],
-      workers: [{
-        userRithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
-      }, {
-        userRithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: [],
-      priority: 2
-    };
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      userRithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com'
+    }, {
+      userRithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com'
+    }];
     return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
 

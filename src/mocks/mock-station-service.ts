@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -214,60 +214,24 @@ export class MockStationService {
   }
 
   /**
-   * Aggregate user in roster for station.
+   * Adds users to the worker roster.
    *
    * @param stationId The Specific id of station.
-   * @param usersIds The users ids for assign in station.
+   * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
-   addUserToWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation> {
-    const mockPrevAddRosterStation: StationInformation = {
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      name: 'New Station Name',
-      instructions: '',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
-      }],
-      supervisors: [{
-        userRithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
-      }, {
-        userRithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com'
-      }],
-      workers: [{
-        userRithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
-      }, {
-        userRithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: [],
-      priority: 2
-    };
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      userRithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com'
+    }, {
+      userRithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com'
+    }];
     return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
 
