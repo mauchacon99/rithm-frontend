@@ -73,6 +73,10 @@ export class StationElementService {
     this.canvasContext.shadowBlur = 6;
     this.canvasContext.shadowOffsetX = 3;
     this.canvasContext.shadowOffsetY = 3;
+    if (station.dragging) {
+      this.canvasContext.shadowOffsetY = 20;
+      this.canvasContext.shadowBlur = 40;
+    }
 
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startingX + scaledStationRadius, startingY);

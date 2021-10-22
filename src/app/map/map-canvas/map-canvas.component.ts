@@ -353,6 +353,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
   private setCanvasSize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--canvasvh', `${vh}px`);
+
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
@@ -423,8 +427,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
         const coords: Point = {x: 0, y: 0};
-        coords.x = position.x - STATION_WIDTH/2;
-        coords.y = position.y - STATION_HEIGHT/2;
+        coords.x = position.x - STATION_WIDTH/2*this.scale;
+        coords.y = position.y - STATION_HEIGHT/2*this.scale;
 
         //create a new station at click.
         this.mapService.createNewStation(coords);
