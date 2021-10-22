@@ -28,9 +28,8 @@ export class RosterManagementModalComponent {
    * @param stationId The Specific id of station.
    * @param usersIds The selected users id array to removed.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): void{
-    this.stationService.removeUserFromWorkerRoster(stationId, usersIds)
+    this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
     .pipe(first())
     .subscribe((data)=>{
       this.workerRosterStation = data.workers;

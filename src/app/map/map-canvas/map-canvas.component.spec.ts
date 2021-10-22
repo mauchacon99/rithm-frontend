@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
 import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
-
+import { MatDialogModule } from '@angular/material/dialog';
 import { MapCanvasComponent } from './map-canvas.component';
 
 describe('MapCanvasComponent', () => {
@@ -13,7 +13,7 @@ describe('MapCanvasComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ MapCanvasComponent ],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatDialogModule],
       providers: [
         { provide: MapService, useClass: MockMapService }
       ]

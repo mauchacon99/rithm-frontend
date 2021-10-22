@@ -2,7 +2,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
 
@@ -69,10 +69,11 @@ export class StationService {
    * @param stationId The id of the station return status document.
    * @returns Status the document.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
-    const mockStatusDocument = DocumentGenerationStatus.None;
-    return of(mockStatusDocument).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('rithmId', stationId);
+    return this.http.get(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params, responseType: 'text' })
+      .pipe(map((value) => value as DocumentGenerationStatus));
   }
 
   /**
@@ -120,7 +121,7 @@ export class StationService {
    * @returns New Station information with worker roster.
    */
    // eslint-disable-next-line max-len
-   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
+   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
     const data: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'New Station Name',

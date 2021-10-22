@@ -198,6 +198,12 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the status of the specific document once the status is updated', () => {
@@ -311,7 +317,7 @@ describe('StationService', () => {
       priority: 2
     };
 
-    service.removeUserFromWorkerRoster(stationId, userIdList)
+    service.removeUsersFromWorkerRoster(stationId, userIdList)
     .subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
