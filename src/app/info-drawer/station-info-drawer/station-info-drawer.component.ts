@@ -10,6 +10,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
 import { PopupService } from '../../core/popup.service';
+import { MatRadioChange } from '@angular/material/radio';
 
 /**
  * Component for info station.
@@ -238,16 +239,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     });
     if (response) {
       this.stationService.deleteStation(stationId)
-      .pipe(first())
-      .subscribe(() => {
-        this.popupService.notify('The station has been deleted.');
-        this.router.navigateByUrl('dashboard');
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+        .pipe(first())
+        .subscribe(() => {
+          this.popupService.notify('The station has been deleted.');
+          this.router.navigateByUrl('dashboard');
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
     }
   }
 
@@ -257,5 +258,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update status the station.
+   *
+   * @param statusNew New status the station update.
+   */
+  updateStatusStation(statusNew: MatRadioChange) {
+    console.log(statusNew);
+    this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
   }
 }
