@@ -248,7 +248,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('the status of the new roster created for the user should return', () => {
+  it('should add a new member to the worker roster', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const usersIds: string[] = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
@@ -302,7 +302,7 @@ describe('StationService', () => {
       priority: 2
     };
 
-    service.addUserRosterStation(stationId, usersIds)
+    service.addUserToWorkerRoster(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });

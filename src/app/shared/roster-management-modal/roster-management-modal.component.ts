@@ -28,8 +28,8 @@ export class RosterManagementModalComponent {
    * @param stationId The Specific id of station.
    * @param usersIds The users ids for assign in station.
    */
-  addUserRosterStation(stationId: string, usersIds: string[]): void {
-    this.stationService.addUserRosterStation(stationId, usersIds)
+   addUserToWorkerRoster(stationId: string, usersIds: string[]): void {
+    this.stationService.addUserToWorkerRoster(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
         if (data) {
