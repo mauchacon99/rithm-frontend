@@ -5,8 +5,8 @@ export enum UserType {
   /** The user with role worker. */
   Worker = 'worker',
 
-  /** The user with role supervisor. */
-  Supervisor = 'supervisor',
+  /** The user with role station owner. */
+  StationOwner = 'stationOwner',
 
   /** The user with role admin. */
   Admin = 'admin',

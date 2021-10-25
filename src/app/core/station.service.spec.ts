@@ -42,7 +42,7 @@ describe('StationService', () => {
         totalDocuments: 2,
         isGenerator: true
       }],
-      supervisors: [{
+      stationOwners: [{
         userRithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
@@ -108,7 +108,7 @@ describe('StationService', () => {
         totalDocuments: 2,
         isGenerator: true
       }],
-      supervisors: [{
+      stationOwners: [{
         userRithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
@@ -142,7 +142,7 @@ describe('StationService', () => {
         totalDocuments: 2,
         isGenerator: true
       }],
-      supervisors: [{
+      stationOwners: [{
         userRithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
