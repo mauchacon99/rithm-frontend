@@ -4,7 +4,9 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, PINCH_ZOOM_TRAVEL_REQ, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS,
+  DEFAULT_SCALE, PINCH_ZOOM_TRAVEL_REQ,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
