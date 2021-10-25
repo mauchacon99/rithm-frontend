@@ -219,7 +219,7 @@ export class MockStationService {
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
    */
-   deleteStation(stationId: string): Observable<unknown> {
+  deleteStation(stationId: string): Observable<unknown> {
     if (!stationId) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -229,5 +229,5 @@ export class MockStationService {
     } else {
       return of().pipe(delay(1000));
     }
-   }
+  }
 }
