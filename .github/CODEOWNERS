@@ -16,6 +16,11 @@ src/app/map/*.scss @Gobsmack90
 src/app/map/**/*.scss @Gobsmack90
 src/app/map/**/*.html @Gobsmack90
 
+src/app/map/*.ts @Gobsmack90 @adarsh3593
+src/app/map/*.js @Gobsmack90 @adarsh3593
+src/app/map/*.spec.ts @Gobsmack90 @adarsh3593
+src/app/map/*.json @Gobsmack90 @adarsh3593
+
 # Team Lion rules
 src/app/detail/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
 src/app/document/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
