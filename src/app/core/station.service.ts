@@ -140,7 +140,7 @@ export class StationService {
         totalDocuments: 0,
         isGenerator: false
       }],
-      supervisors: [{
+      stationOwners: [{
         userRithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
