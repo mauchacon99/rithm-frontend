@@ -6,8 +6,8 @@
   <div *ngIf="!editMode && rosterSize > 3" class="float-left my-1 mx-px first:ml-0 circle-30-secondary" (click)="openRosterModal()">
     +{{rosterSize - 2}}</div>
   <!-- The custom add/remove user icon. -->
-  <div *ngIf="editMode" class="float-left my-1 mx-px first:ml-0 circle-30-secondary icon">
-    <i class="fas fa-plus plus" ></i>
+  <div *ngIf="editMode" class="float-left my-1 mx-px first:ml-0 circle-30-secondary icon cursor-pointer" (click)="openManagementRosterModal()">
+    <i class="fas fa-plus plus"></i>
     <i class="fas fa-slash fa-flip-horizontal slash"></i>
     <i class="fas fa-minus minus"></i>
     <div *ngIf="rosterSize > 3" class="badge-accent mat-elevation-z4">

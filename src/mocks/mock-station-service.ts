@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -17,7 +17,7 @@ export class MockStationService {
    */
   getStationInfo(stationId: string): Observable<StationInformation> {
     const data: StationInformation = {
-      stationRithmId: 'E204F369-386F-4E41',
+      rithmId: 'E204F369-386F-4E41',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
@@ -34,7 +34,7 @@ export class MockStationService {
         totalDocuments: 0,
         isGenerator: false
       }],
-      supervisors: [{
+      stationOwners: [{
         userRithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
@@ -97,7 +97,7 @@ export class MockStationService {
       })).pipe(delay(1000));
     } else {
       const data: StationInformation = {
-        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         name: 'New Station Name',
         instructions: '',
         nextStations: [{
@@ -114,7 +114,7 @@ export class MockStationService {
           totalDocuments: 0,
           isGenerator: false
         }],
-        supervisors: [{
+        stationOwners: [{
           userRithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',
@@ -159,6 +159,28 @@ export class MockStationService {
   }
 
   /**
+   * Get station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @returns Status the document.
+   */
+  getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
+    const mockStatusDocument = DocumentGenerationStatus.None;
+    return of(mockStatusDocument).pipe(delay(1000));
+  }
+
+  /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   * @returns Status new the document.
+   */
+  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(statusNew).pipe(delay(1000));
+  }
+
+  /**
    * Get all station previous private/all questions.
    *
    * @param stationId The Specific id of station.
@@ -190,4 +212,22 @@ export class MockStationService {
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
   }
+
+  /**
+   * Deletes a specified station.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+   deleteStation(stationId: string): Observable<unknown> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+   }
 }

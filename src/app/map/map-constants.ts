@@ -7,6 +7,8 @@ export const ZOOM_VELOCITY = 2;
 export const MAX_SCALE = 2;
 export const MIN_SCALE = .0625;
 export const DEFAULT_SCALE = 1;
+/** The scale at which Station Elements are no longer rendered. */
+export const SCALE_RENDER_STATION_ELEMENTS = 0.25;
 
 // Flow
 export const FLOW_PADDING = 20;
@@ -29,6 +31,8 @@ export const CONNECTION_LINE_WIDTH = 2;
 export const CONNECTION_LINE_WIDTH_ZOOM_OUT = 1;
 export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
+export const CONNECTION_NODE_OFFSET = 80;
+export const CONNECTION_HEIGHT_REDUCER = 5;
 
 // Connection node
 export const NODE_X_MARGIN = 0;

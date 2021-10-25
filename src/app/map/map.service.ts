@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE } from './map-constants';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
+import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -96,18 +96,15 @@ export class MapService {
    */
   createNewStation(coords: Point): void {
     const mapCoords = this.getMapPoint(coords);
-    const newStation = {
+    const newStation = new StationMapElement({
       rithmId: uuidv4(),
       stationName: 'Untitled Station',
       mapPoint: mapCoords,
-      canvasPoint: coords,
       noOfDocuments: 0,
       previousStations: [],
       nextStations: [],
-      dragging: false,
-      hoverActive: StationElementHoverType.None,
-      status: MapItemStatus.Created
-    };
+      status: MapItemStatus.Created,
+    });
 
     //update the stationElements array.
     this.stationElements.push(newStation);
@@ -115,11 +112,33 @@ export class MapService {
   }
 
   /**
+   * Deep copy an array or object to retain type.
+   *
+   * @param source The array or object to copy.
+   * @returns The copied array or object.
+   */
+   deepCopy<T>(source: T): T {
+    return Array.isArray(source)
+    ? source.map(item => this.deepCopy(item))
+    : source instanceof Date
+    ? new Date(source.getTime())
+    : source && typeof source === 'object'
+          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+             Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+             return o;
+          }, Object.create(Object.getPrototypeOf(source)))
+    : source as T;
+  }
+
+  /**
    * Enters build mode for the map.
    */
   buildMap(): void {
-    this.storedStationElements = JSON.parse(JSON.stringify(this.stationElements));
-    this.storedFlowElements = JSON.parse(JSON.stringify(this.flowElements));
+    this.storedStationElements = this.deepCopy(this.stationElements);
+    this.storedFlowElements = this.deepCopy(this.flowElements);
     this.mapMode$.next(MapMode.Build);
   }
 
@@ -128,11 +147,11 @@ export class MapService {
    */
   cancelMapChanges(): void {
     if (this.storedStationElements.length > 0) {
-      this.stationElements = JSON.parse(JSON.stringify(this.storedStationElements));
+      this.stationElements = this.deepCopy(this.storedStationElements);
       this.storedStationElements = [];
     }
     if (this.storedFlowElements.length > 0) {
-      this.flowElements = JSON.parse(JSON.stringify(this.storedFlowElements));
+      this.flowElements = this.deepCopy(this.storedFlowElements);
       this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
@@ -165,6 +184,11 @@ export class MapService {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+      return;
+    }
+
+    // Don't zoom out past a certain point if in build mode
+    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS*2 && !zoomingIn && this.mapMode$.value !== MapMode.View) {
       return;
     }
 

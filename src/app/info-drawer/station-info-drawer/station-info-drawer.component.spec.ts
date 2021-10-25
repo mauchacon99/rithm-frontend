@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockPopupService, MockStationService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -12,6 +12,8 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -22,7 +24,8 @@ describe('StationInfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationInfoDrawerComponent,
-        MockComponent(RosterComponent)
+        MockComponent(RosterComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports:[
         MatInputModule,
@@ -36,7 +39,8 @@ describe('StationInfoDrawerComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
       ]
     })
       .compileComponents();
@@ -46,12 +50,12 @@ describe('StationInfoDrawerComponent', () => {
     fixture = TestBed.createComponent(StationInfoDrawerComponent);
     component = fixture.componentInstance;
     component.stationInformation = {
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [],
       previousStations: [],
-      supervisors: [],
+      stationOwners: [],
       workers: [],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
