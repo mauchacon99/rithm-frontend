@@ -55,7 +55,7 @@ describe('StationInfoDrawerComponent', () => {
       instructions: '',
       nextStations: [],
       previousStations: [],
-      supervisors: [],
+      stationOwners: [],
       workers: [],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',

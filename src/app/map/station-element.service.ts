@@ -5,8 +5,8 @@ import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
   BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
   NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS, BADGE_HOVER_COLOR
-} from './map-constants';
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR,
+  NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS, BUTTON_HOVER_COLOR, BADGE_HOVER_COLOR } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -238,6 +238,7 @@ export class StationElementService {
       startingY + scaledButtonYMargin,
       scaledButtonRadius, 0, 2 * Math.PI);
     ctx.fillStyle = buttonColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Button ? BUTTON_HOVER_COLOR : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
