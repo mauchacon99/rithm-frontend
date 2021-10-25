@@ -9,7 +9,9 @@
       <i *ngIf="field.questionType === fieldTypeEnum.Email" class="far fa-envelope"></i>
       <!-- Number Icons -->
       <i *ngIf="field.questionType === fieldTypeEnum.Number" class="fas fa-calculator"></i>
+      <!-- Currency -->
       <i *ngIf="field.questionType === fieldTypeEnum.Currency" class="fas fa-money-bill-wave"></i>
+      <!-- Phone Number -->
       <i *ngIf="field.questionType === fieldTypeEnum.Phone" class="fa fa-phone"></i>
       <!-- Date Icon -->
       <i *ngIf="field.questionType === fieldTypeEnum.Date" class="fas fa-calendar-day"></i>
@@ -30,6 +32,6 @@
       </button>
     </div>
     <input *ngIf="field.questionType !== fieldTypeEnum.LongText && field.questionType !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="this.field.questionType" autocomplete="off">
-    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="this.field.questionType"></textarea>
+    <textarea [attr.data-testid] ="field.prompt === 'General Instructions' ? 'general-instructions' : '' " *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="this.field.questionType"></textarea>
   </mat-form-field>
 </div>
