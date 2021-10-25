@@ -4,6 +4,7 @@ import { Point } from 'src/models';
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const ZOOM_VELOCITY = 2;
+export const PINCH_ZOOM_TRAVEL_REQ = 30;
 export const MAX_SCALE = 2;
 export const MIN_SCALE = .0625;
 export const DEFAULT_SCALE = 1;

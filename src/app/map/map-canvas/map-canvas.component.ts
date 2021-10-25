@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, PINCH_ZOOM_TRAVEL_REQ, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -217,11 +217,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.touches.length === 1) {
       const touchPoint = event.touches[0];
-
-      this.lastTouchCoords[0] = this.getTouchCanvasPoint(touchPoint);
-      this.eventStartCoords = this.getTouchCanvasPoint(touchPoint);
-
       const touchPos = this.getTouchCanvasPoint(touchPoint);
+
+      this.lastTouchCoords[0] = touchPos;
+      this.eventStartCoords = touchPos;
+
       this.eventStartLogic(touchPos);
     }
 
@@ -296,19 +296,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
       const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
 
-      const middlePoint = {x: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2),
-        y: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2)};
+      const middlePoint = {
+        x: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2),
+        y: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2)
+      };
 
-      if (Math.abs(xCurrentDiff) > Math.abs(xBeginDiff) + 30 || Math.abs(yCurrentDiff) > Math.abs(yBeginDiff) + 30) {
+      if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom in
         this.mapService.zoom(ZOOM_VELOCITY, middlePoint);
-        this.lastTouchCoords = touchPos;
-      } else if (Math.abs(xCurrentDiff) < Math.abs(xBeginDiff) - 30 || Math.abs(yCurrentDiff) < Math.abs(yBeginDiff) - 30) {
+      } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom out
         this.mapService.zoom(1 / ZOOM_VELOCITY, middlePoint);
-        this.lastTouchCoords = touchPos;
       }
 
+      this.lastTouchCoords = touchPos;
       this.drawElements();
     }
   }
