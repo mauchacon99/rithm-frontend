@@ -190,9 +190,10 @@ export class MapService {
     // translate current viewport position
     const newScale = zoomingIn ? this.mapScale$.value / ZOOM_VELOCITY : this.mapScale$.value * ZOOM_VELOCITY;
 
-    this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
-    this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
+    this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / newScale * translateDirection);
+    this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / newScale * translateDirection);
 
+    console.log(newScale);
     console.log(zoomOrigin);
     console.log(this.currentCanvasPoint$.value);
     // scale
