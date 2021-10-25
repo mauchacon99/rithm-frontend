@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
-import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR,
-  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_SCALE } from './map-constants';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_HEIGHT_REDUCER,
+  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, CONNECTION_NODE_OFFSET,
+  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -35,6 +36,7 @@ export class ConnectionElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection if context is not defined');
     }
+
     this.drawConnectionLine(startPoint, endPoint);
     this.drawConnectionArrow(startPoint, endPoint);
   }
@@ -59,7 +61,7 @@ export class ConnectionElementService {
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
-    this.canvasContext.lineWidth = this.mapScale > 0.25 ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
   }
@@ -82,13 +84,13 @@ export class ConnectionElementService {
 
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
     let x, y;
-    x = arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
-    y = arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    x = (arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
+    y = (arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(ex + x, ey + y);
     this.canvasContext.lineTo(ex, ey);
-    x = arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y;
-    y = arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x;
+    x = (arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
+    y = (arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
     this.canvasContext.lineTo(ex + x, ey + y);
     this.canvasContext.fillStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
@@ -107,11 +109,11 @@ export class ConnectionElementService {
     const controlPoint2 = { x: 0, y: 0 };
     const heightDifference = startPoint.y - endPoint.y;
 
-    controlPoint1.y = Math.floor(startPoint.y - heightDifference / 5); // TODO: Fix magic number; what does 5 represent?
-    controlPoint2.y = Math.floor(endPoint.y + heightDifference / 5);
+    controlPoint1.y = Math.floor(startPoint.y - heightDifference / CONNECTION_HEIGHT_REDUCER);
+    controlPoint2.y = Math.floor(endPoint.y + heightDifference / CONNECTION_HEIGHT_REDUCER);
 
-    controlPoint1.x = startPoint.x + 80; // TODO: Fix magic number; what does 80 represent?
-    controlPoint2.x = endPoint.x - 80;
+    controlPoint1.x = startPoint.x + CONNECTION_NODE_OFFSET * this.mapScale;
+    controlPoint2.x = endPoint.x - CONNECTION_NODE_OFFSET * this.mapScale;
 
     return [controlPoint1, controlPoint2];
   }
