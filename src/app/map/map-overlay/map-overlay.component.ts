@@ -6,6 +6,7 @@ import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MAX_SCALE, MIN_SCALE } from '../map-constants';
+import { StationMapElement } from 'src/helpers';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -25,6 +26,9 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Map data request loading indicator. */
   mapDataLoading = false;
+
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
 
   /**
    * Whether the map is in any building mode.
@@ -70,6 +74,12 @@ export class MapOverlayComponent implements OnDestroy {
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
+
+    this.mapService.mapDataRecieved$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+    });
   }
 
   /**
@@ -144,6 +154,22 @@ export class MapOverlayComponent implements OnDestroy {
    */
   zoomOut(): void {
     this.mapService.zoom(.5);
+  }
+
+  /**
+   * Updates station status to delete.
+   *
+   * @param station The station for which status has to be set to delete.
+   */
+   async deleteStation(station: StationMapElement): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Confirmation',
+      message: `Are you sure you want to delete this station?`,
+      okButtonText: 'Confirm',
+    });
+    if (confirm) {
+      this.mapService.deleteStation(station);
+    }
   }
 
 }

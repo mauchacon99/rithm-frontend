@@ -112,6 +112,19 @@ export class MapService {
   }
 
   /**
+   * Updates station status to delete.
+   *
+   * @param station The station for which status has to be set to delete.
+   */
+  deleteStation(station: StationMapElement): void {
+    const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
+    if (index >= 0 ) {
+      this.stationElements[index].status = MapItemStatus.Deleted;
+    }
+    this.mapDataRecieved$.next(true);
+  }
+
+  /**
    * Deep copy an array or object to retain type.
    *
    * @param source The array or object to copy.
