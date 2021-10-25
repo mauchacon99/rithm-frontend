@@ -217,7 +217,6 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(statusNew);
       });
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(paramsExpected);
