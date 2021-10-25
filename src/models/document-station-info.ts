@@ -35,8 +35,8 @@ export interface DocumentStationInformation {
   /** The general instructions for the whole station, if any. */
   stationInstruction: string;
 
-  /** The list of supervisors. */
-  supervisors: StationRosterMember[];
+  /** The list of station owners. */
+  stationOwners: StationRosterMember[];
 
   /** The list of workers. */
   workers: StationRosterMember[];

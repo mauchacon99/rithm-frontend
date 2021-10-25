@@ -98,7 +98,7 @@ describe('DocumentService', () => {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      supervisors: [],
+      stationOwners: [],
       workers: [],
       questions: [],
       instructions: 'General instructions'
