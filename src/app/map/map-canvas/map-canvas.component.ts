@@ -440,7 +440,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.dragItem = MapDragItem.Node;
           break;
         // Check for drag start on station
-        } else if (station.hoverActive === StationElementHoverType.Station) {
+        } else if (station.hoverActive !== StationElementHoverType.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
             this.dragItem = MapDragItem.Station;
