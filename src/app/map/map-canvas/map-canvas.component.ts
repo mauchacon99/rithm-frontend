@@ -4,10 +4,12 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -64,7 +66,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
-    private flowElementService: FlowElementService
+    private flowElementService: FlowElementService,
+    private dialog: MatDialog
   ) {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
@@ -186,9 +189,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(mousePos, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
+             this.drawElements();
           }
-          this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          // eslint-disable-next-line max-len
+          if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
+            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          }
           break;
         } else {
           if (previousHoverState !== station.hoverActive) {
@@ -319,6 +325,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles user input when a mouse button is clicked.
+   *
+   * @param event The click event that was triggered.
+   */
+  @HostListener('click', ['$event'])
+  click(event: MouseEvent): void {
+    const point = this.getMouseCanvasPoint(event);
+
+    this.openDocumentModal(point);
+  }
+
+  /**
    * Handles user input when a keyboard key is pressed. Used for keyboard shortcuts.
    *
    * @param event The keydown event that was triggered.
@@ -393,6 +411,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Sets an accurate canvas size based on the viewport and scales the canvas for accurate display on HiDPI/Retina displays.
    */
   private setCanvasSize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--canvasvh', `${vh}px`);
+
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
@@ -463,8 +485,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
         const coords: Point = {x: 0, y: 0};
-        coords.x = position.x - STATION_WIDTH/2;
-        coords.y = position.y - STATION_HEIGHT/2;
+        coords.x = position.x - STATION_WIDTH/2*this.scale;
+        coords.y = position.y - STATION_HEIGHT/2*this.scale;
 
         //create a new station at click.
         this.mapService.createNewStation(coords);
@@ -489,4 +511,34 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.lastTouchCoords = [{x: -1, y: -1}];
     this.mapCanvas.nativeElement.style.cursor = 'default';
   }
+
+  /**
+   * Open document modal when clicked on station document badge.
+   *
+   * @param point The position of mouse click event.
+   */
+  private openDocumentModal(point: Point) {
+    const scaledStationWidth = STATION_WIDTH * this.scale;
+
+    const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
+    const scaledBadgeMargin = BADGE_MARGIN * this.scale;
+
+    for (const station of this.stations) {
+      const startingX = station.canvasPoint.x;
+      const startingY = station.canvasPoint.y;
+
+      if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
+        && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
+        && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
+        && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+      ) {
+        this.dialog.open(StationDocumentsModalComponent, {
+          minWidth: '370px',
+          data: { stationName: station.stationName, stationId: station.rithmId }
+        });
+        break;
+      }
+    }
+  }
+
 }
