@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, StationElementHoverType } from 'src/models';
+import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
   STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
-  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR,
-  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR,
-  NODE_HOVER_COLOR, SCALE_RENDER_STATION_ELEMENTS, BUTTON_HOVER_COLOR, BADGE_HOVER_COLOR } from './map-constants';
+  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR,
+  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR,
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, BUTTON_HOVER_COLOR,
+  SCALE_RENDER_STATION_ELEMENTS, CONNECTION_DEFAULT_COLOR,
+} from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -35,30 +36,32 @@ export class StationElementService {
    *
    * @param station The station to draw on the map.
    * @param mapMode The current mode of the map.
+   * @param cursor The location of the cursor.
+   * @param dragItem The item being dragged on the map.
    */
-  drawStation(station: StationMapElement, mapMode: MapMode): void {
+  drawStation(station: StationMapElement, mapMode: MapMode, cursor: Point, dragItem: MapDragItem): void {
     this.canvasContext = this.mapService.canvasContext;
 
-    this.drawStationCard(station);
+    this.drawStationCard(station, dragItem);
 
     if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
-      this.drawDocumentBadge(station);
+      this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
-        this.drawConnectionNode(station);
-        this.drawStationButton(station);
+        this.drawConnectionNode(station, dragItem, cursor);
+        this.drawStationButton(station, dragItem);
       }
     }
-
   }
 
   /**
    * Draws the station card on the map for a station.
    *
    * @param station The station for which to draw the card.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawStationCard(station: StationMapElement): void {
+  private drawStationCard(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
@@ -69,13 +72,17 @@ export class StationElementService {
     const scaledStationHeight = STATION_HEIGHT * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
+    const shadowEquation = (num: number) => Math.floor(num * this.mapScale) > 0 ? Math.floor(num * this.mapScale) : 1;
+
     this.canvasContext.shadowColor = '#ccc';
-    this.canvasContext.shadowBlur = 6;
-    this.canvasContext.shadowOffsetX = 3;
-    this.canvasContext.shadowOffsetY = 3;
-    if (station.dragging) {
-      this.canvasContext.shadowOffsetY = 20;
-      this.canvasContext.shadowBlur = 40;
+    this.canvasContext.shadowBlur = shadowEquation(6);
+    this.canvasContext.shadowOffsetX = shadowEquation(3);
+    this.canvasContext.shadowOffsetY = shadowEquation(3);
+    if (station.hoverActive === StationElementHoverType.Station
+      && dragItem === MapDragItem.Station
+      && station.dragging) {
+      this.canvasContext.shadowOffsetY = shadowEquation(20);
+      this.canvasContext.shadowBlur = shadowEquation(40);
     }
 
     this.canvasContext.beginPath();
@@ -94,7 +101,15 @@ export class StationElementService {
     this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
     // top left curve to line going top right
     this.canvasContext.closePath();
-    this.canvasContext.fillStyle = '#fff';
+    this.canvasContext.fillStyle = station.hoverActive !== StationElementHoverType.None
+    && dragItem === MapDragItem.Node
+    && !station.dragging
+    ? '#ebebeb' : '#fff';
+    this.canvasContext.strokeStyle = station.hoverActive !== StationElementHoverType.None
+    && dragItem === MapDragItem.Node
+    && !station.dragging
+    ? NODE_HOVER_COLOR : '#fff';
+    this.canvasContext.stroke();
     this.canvasContext.fill();
   }
 
@@ -164,8 +179,9 @@ export class StationElementService {
    * Draws the document badge indicating the number of documents for the station at the top right of the station card.
    *
    * @param station The station for which to draw the badge.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawDocumentBadge(station: StationMapElement): void {
+  private drawDocumentBadge(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the document badge when canvas context is not set');
     }
@@ -185,7 +201,10 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge
+    && dragItem !== MapDragItem.Node
+    && !station.dragging
+    ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
     ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
      : '400 10px Montserrat-SemiBold';
@@ -201,8 +220,9 @@ export class StationElementService {
    * Draws the interactive button on the bottom right of a station card.
    *
    * @param station The station for which to draw the button.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawStationButton(station: StationMapElement): void {
+  private drawStationButton(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station button when canvas context is not set');
     }
@@ -238,7 +258,10 @@ export class StationElementService {
       startingY + scaledButtonYMargin,
       scaledButtonRadius, 0, 2 * Math.PI);
     ctx.fillStyle = buttonColor;
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Button ? BUTTON_HOVER_COLOR : buttonColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Button
+    && dragItem !== MapDragItem.Node
+    && !station.dragging
+    ? BUTTON_HOVER_COLOR : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -247,8 +270,10 @@ export class StationElementService {
    * Draws the connection node on right side of station card.
    *
    * @param station The station for which to draw the connection node.
+   * @param dragItem The item being dragged on the map.
+   * @param cursor The point to draw a line to.
    */
-  private drawConnectionNode(station: StationMapElement): void {
+  private drawConnectionNode(station: StationMapElement, dragItem: MapDragItem, cursor: Point): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the connection node when canvas context is not set');
     }
@@ -269,9 +294,16 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Node ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging
+    ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node && dragItem !== MapDragItem.Node
+    ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    ctx.strokeStyle = '#ccc';
+    if (cursor.x !== -1 && station.dragging) {
+      ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
+      ctx.lineTo(cursor.x, cursor.y);
+    }
+    ctx.strokeStyle = dragItem === MapDragItem.Node && station.dragging
+      ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
   }
