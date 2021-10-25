@@ -23,8 +23,8 @@ export interface StationInformation {
   /** The list of previous stations. */
   previousStations: ConnectedStationInfo[];
 
-  /** The list of supervisors for the station. */
-  supervisors: StationRosterMember[];
+  /** The list of station owners for the station. */
+  stationOwners: StationRosterMember[];
 
   /** List of Workers who will work on Documents in the Station. */
   workers: StationRosterMember[];
