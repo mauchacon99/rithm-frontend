@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
-import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR,
-  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_HEIGHT_REDUCER,
+  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, CONNECTION_NODE_OFFSET,
+  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -108,11 +109,11 @@ export class ConnectionElementService {
     const controlPoint2 = { x: 0, y: 0 };
     const heightDifference = startPoint.y - endPoint.y;
 
-    controlPoint1.y = Math.floor(startPoint.y - heightDifference / 5); // TODO: Fix magic number; what does 5 represent?
-    controlPoint2.y = Math.floor(endPoint.y + heightDifference / 5);
+    controlPoint1.y = Math.floor(startPoint.y - heightDifference / CONNECTION_HEIGHT_REDUCER);
+    controlPoint2.y = Math.floor(endPoint.y + heightDifference / CONNECTION_HEIGHT_REDUCER);
 
-    controlPoint1.x = startPoint.x + 80 * this.mapScale; // TODO: Fix magic number; what does 80 represent?
-    controlPoint2.x = endPoint.x - 80 * this.mapScale;
+    controlPoint1.x = startPoint.x + CONNECTION_NODE_OFFSET * this.mapScale;
+    controlPoint2.x = endPoint.x - CONNECTION_NODE_OFFSET * this.mapScale;
 
     return [controlPoint1, controlPoint2];
   }
