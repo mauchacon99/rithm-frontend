@@ -63,7 +63,7 @@ export class StationMapElement {
       && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
       && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
       && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-      ) {
+    ) {
       this.hoverActive = StationElementHoverType.Button;
     //Document badge.
     } else if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
@@ -71,7 +71,14 @@ export class StationMapElement {
       && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
       && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
     ) {
-        this.hoverActive = StationElementHoverType.Badge;
+      this.hoverActive = StationElementHoverType.Badge;
+    //station itself.
+    } else if (point.x >= this.canvasPoint.x
+      && point.x <= this.canvasPoint.x + scaledStationWidth
+      && point.y >= this.canvasPoint.y
+      && point.y <= this.canvasPoint.y + scaledStationHeight
+    ) {
+      this.hoverActive = StationElementHoverType.Station;
     //No hover.
     } else {
       this.hoverActive = StationElementHoverType.None;
