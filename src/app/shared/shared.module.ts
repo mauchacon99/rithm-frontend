@@ -66,4 +66,5 @@ import { DialogComponent } from './dialog/dialog.component';
     RosterComponent
   ]
 })
+
 export class SharedModule { }
