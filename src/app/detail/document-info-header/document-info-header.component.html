@@ -15,7 +15,7 @@
     <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn" class="priority">
       1
     </button>
-    <div *ngIf="userType === userTypeEnum.Admin || userType === userTypeEnum.Supervisor">
+    <div *ngIf="userType === userTypeEnum.Admin || userType === userTypeEnum.StationOwner">
       <button mat-icon-button color="accent">
         <!-- TODO: Display if not locked -->
         <i class="fas fa-pen"></i>
