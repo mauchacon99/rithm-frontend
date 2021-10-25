@@ -11,5 +11,9 @@ import { Component } from '@angular/core';
 export class RosterManagementModalComponent {
 
   /** Array of avatars. */
-  avatars = ['JH','ZT','NR','CB','SR','NL'];
+  // rosterMembers = ['JH','ZT','NR','CB','SR','NL'];
+  rosterMembers = [{ firstName: 'Tyler', lastName: 'Hendrickson' },{ firstName: 'Natasha ', lastName: 'Romanov' },
+                    { firstName: 'Clinton ',lastName: 'Barton' },{ firstName: 'Steve',lastName: 'Rogers' },
+                    { firstName: 'Victor', lastName: 'Shade' }
+  ];
 }

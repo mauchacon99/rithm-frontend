@@ -21,7 +21,6 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DialogComponent } from './dialog/dialog.component';
-import { RosterManagementModalComponent } from './roster-management-modal/roster-management-modal.component';
 
 
 @NgModule({
@@ -36,7 +35,7 @@ import { RosterManagementModalComponent } from './roster-management-modal/roster
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-    RosterManagementModalComponent
+
   ],
   imports: [
     CommonModule,
@@ -51,7 +50,7 @@ import { RosterManagementModalComponent } from './roster-management-modal/roster
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   exports: [
     LoadingIndicatorComponent,
@@ -65,7 +64,7 @@ import { RosterManagementModalComponent } from './roster-management-modal/roster
     PaginationComponent,
     UserFormComponent,
     UserRemovalComponent,
-    RosterComponent
+    RosterComponent,
   ]
 })
 export class SharedModule { }
