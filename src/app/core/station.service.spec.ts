@@ -210,14 +210,13 @@ describe('StationService', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const statusNew = DocumentGenerationStatus.Manual;
     const paramsExpected = {
-      stationRithmId: stationId,
       generatorStatus: statusNew
     };
     service.updateStationDocumentGenerationStatus(stationId, statusNew)
       .subscribe((response) => {
         expect(response).toEqual(statusNew);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(paramsExpected);
 

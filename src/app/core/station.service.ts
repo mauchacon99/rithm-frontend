@@ -84,9 +84,8 @@ export class StationService {
    */
   // eslint-disable-next-line max-len
   updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return this.http.put(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`,
+    return this.http.put(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
       {
-        stationRithmId: stationId,
         generatorStatus: statusNew
       },
       { responseType: 'text' }
