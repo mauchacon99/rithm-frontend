@@ -101,13 +101,11 @@ export class StationElementService {
     this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
     // top left curve to line going top right
     this.canvasContext.closePath();
-    this.canvasContext.fillStyle = station.hoverActive !== StationElementHoverType.Node
-    && station.hoverActive !== StationElementHoverType.None
+    this.canvasContext.fillStyle = station.hoverActive !== StationElementHoverType.None
     && dragItem === MapDragItem.Node
     && !station.dragging
     ? '#ebebeb' : '#fff';
-    this.canvasContext.strokeStyle = station.hoverActive !== StationElementHoverType.Node
-    && station.hoverActive !== StationElementHoverType.None
+    this.canvasContext.strokeStyle = station.hoverActive !== StationElementHoverType.None
     && dragItem === MapDragItem.Node
     && !station.dragging
     ? NODE_HOVER_COLOR : '#fff';
