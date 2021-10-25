@@ -78,7 +78,9 @@ export class StationElementService {
     this.canvasContext.shadowBlur = shadowEquation(6);
     this.canvasContext.shadowOffsetX = shadowEquation(3);
     this.canvasContext.shadowOffsetY = shadowEquation(3);
-    if (station.dragging) {
+    if (station.hoverActive === StationElementHoverType.Station
+      && dragItem === MapDragItem.Station
+      && station.dragging) {
       this.canvasContext.shadowOffsetY = shadowEquation(20);
       this.canvasContext.shadowBlur = shadowEquation(40);
     }
