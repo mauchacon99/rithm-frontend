@@ -481,6 +481,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
       }
+
+      //Check if click was over document badge.
       this.openDocumentModal(position);
     }
 
