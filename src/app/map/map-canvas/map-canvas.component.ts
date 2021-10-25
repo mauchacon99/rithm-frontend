@@ -291,10 +291,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const touchPoint = event.changedTouches;
       const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
 
-      const xBeginDiff = this.lastTouchCoords[0].x - this.lastTouchCoords[1].x;
-      const yBeginDiff = this.lastTouchCoords[0].y - this.lastTouchCoords[1].y;
-      const xCurrentDiff = touchPos[0].x - touchPos[1].x;
-      const yCurrentDiff = touchPos[0].y - touchPos[1].y;
+      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
+      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
+      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
+      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
 
       const middlePoint = {x: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2),
         y: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2)};
