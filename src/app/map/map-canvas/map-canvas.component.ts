@@ -310,18 +310,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input when a mouse button is clicked.
-   *
-   * @param event The click event that was triggered.
-   */
-  @HostListener('click', ['$event'])
-  click(event: MouseEvent): void {
-    const point = this.getMouseCanvasPoint(event);
-
-    this.openDocumentModal(point);
-  }
-
-  /**
    * Handles user input when a keyboard key is pressed. Used for keyboard shortcuts.
    *
    * @param event The keydown event that was triggered.
@@ -493,6 +481,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
       }
+      this.openDocumentModal(position);
     }
 
     //If dragging a connection node.
@@ -502,7 +491,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.scale);
-        if (station.hoverActive === StationElementHoverType.Station) {
+        if (station.hoverActive !== StationElementHoverType.Node
+          && station.hoverActive !== StationElementHoverType.None) {
           newNextStationId = station.rithmId;
         }
         if (station.dragging) {

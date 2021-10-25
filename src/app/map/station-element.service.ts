@@ -45,12 +45,12 @@ export class StationElementService {
     this.drawStationCard(station, dragItem);
 
     if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
-      this.drawDocumentBadge(station);
+      this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station, dragItem, cursor);
-        this.drawStationButton(station);
+        this.drawStationButton(station, dragItem);
       }
     }
   }
@@ -101,11 +101,13 @@ export class StationElementService {
     this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
     // top left curve to line going top right
     this.canvasContext.closePath();
-    this.canvasContext.fillStyle = station.hoverActive === StationElementHoverType.Station
+    this.canvasContext.fillStyle = station.hoverActive !== StationElementHoverType.Node
+    && station.hoverActive !== StationElementHoverType.None
     && dragItem === MapDragItem.Node
     && !station.dragging
     ? '#ebebeb' : '#fff';
-    this.canvasContext.strokeStyle = station.hoverActive === StationElementHoverType.Station
+    this.canvasContext.strokeStyle = station.hoverActive !== StationElementHoverType.Node
+    && station.hoverActive !== StationElementHoverType.None
     && dragItem === MapDragItem.Node
     && !station.dragging
     ? NODE_HOVER_COLOR : '#fff';
@@ -179,8 +181,9 @@ export class StationElementService {
    * Draws the document badge indicating the number of documents for the station at the top right of the station card.
    *
    * @param station The station for which to draw the badge.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawDocumentBadge(station: StationMapElement): void {
+  private drawDocumentBadge(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the document badge when canvas context is not set');
     }
@@ -200,7 +203,10 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge
+    && dragItem !== MapDragItem.Node
+    && !station.dragging
+    ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
     ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
      : '400 10px Montserrat-SemiBold';
@@ -216,8 +222,9 @@ export class StationElementService {
    * Draws the interactive button on the bottom right of a station card.
    *
    * @param station The station for which to draw the button.
+   * @param dragItem Checks which item is being dragged on the map.
    */
-  private drawStationButton(station: StationMapElement): void {
+  private drawStationButton(station: StationMapElement, dragItem: MapDragItem): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station button when canvas context is not set');
     }
@@ -253,7 +260,10 @@ export class StationElementService {
       startingY + scaledButtonYMargin,
       scaledButtonRadius, 0, 2 * Math.PI);
     ctx.fillStyle = buttonColor;
-    ctx.fillStyle = station.hoverActive === StationElementHoverType.Button ? BUTTON_HOVER_COLOR : buttonColor;
+    ctx.fillStyle = station.hoverActive === StationElementHoverType.Button
+    && dragItem !== MapDragItem.Node
+    && !station.dragging
+    ? BUTTON_HOVER_COLOR : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
