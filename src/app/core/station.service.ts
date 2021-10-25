@@ -113,7 +113,7 @@ export class StationService {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Invalid organization ID or page number.'
         }
       })).pipe(delay(1000));
     } else {

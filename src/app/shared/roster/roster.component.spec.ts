@@ -31,7 +31,6 @@ describe('RosterComponent', () => {
         rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
-        isAssigned: false,
         email: 'workeruser@inpivota.com',
         isWorker: true,
         isOwner: false
@@ -40,7 +39,6 @@ describe('RosterComponent', () => {
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        isAssigned: false,
         email: 'harrypotter@inpivota.com',
         isWorker: true,
         isOwner: false

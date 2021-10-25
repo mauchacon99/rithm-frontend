@@ -18,12 +18,9 @@ export interface StationRosterMember {
   /** The email address for the user. */
   readonly email: string;
 
-  /** The user assigned any document or not. */
-  isAssigned?: boolean;
-
   /** Is worker or not. */
-  isWorker: boolean;
+  isWorker?: boolean;
 
   /** Is owner or not. */
-  isOwner: boolean;
+  isOwner?: boolean;
 }

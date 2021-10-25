@@ -37,7 +37,6 @@ describe('StationCardComponent', () => {
           rithmId: '',
           firstName: 'Supervisor',
           lastName: 'User',
-          isAssigned: false,
           email: 'supervisoruser@inpivota.com',
           isWorker: true,
           isOwner: false
@@ -46,7 +45,6 @@ describe('StationCardComponent', () => {
           rithmId: '',
           firstName: 'Harry',
           lastName: 'Potter',
-          isAssigned: false,
           email: 'harrypotter@inpivota.com',
           isWorker: true,
           isOwner: false
