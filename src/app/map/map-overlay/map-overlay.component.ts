@@ -181,7 +181,7 @@ export class MapOverlayComponent implements OnDestroy {
   }
 
   /**
-   * Zoom in/out button state Enable and disable when limits has been reached.
+   * Display menu option for station on option button is clicked.
    *
    * @param points The points coordinates values.
    */
