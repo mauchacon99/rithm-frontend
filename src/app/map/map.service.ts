@@ -19,8 +19,8 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
- /** This behavior subject will track the array of stations and flows. */
-  mapData: MapData = {stations: [], flows: []};
+  /** This behavior subject will track the array of stations and flows. */
+  mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
   mapDataRecieved$ = new BehaviorSubject(false);
@@ -50,7 +50,10 @@ export class MapService {
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({x: 0, y: 0});
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+
+  /** Check current mouse click if clicked the station option button. */
+  currentMouseClick$ = new BehaviorSubject(false);
 
   constructor(private http: HttpClient) { }
 
@@ -70,18 +73,18 @@ export class MapService {
    */
   getMapElements(): Observable<MapData> {
     return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
-    .pipe(map((data) => {
-      data.stations.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      data.flows.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      this.mapData = data;
-      this.useStationData();
-      this.mapDataRecieved$.next(true);
-      return data;
-    }));
+      .pipe(map((data) => {
+        data.stations.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        data.flows.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        this.mapData = data;
+        this.useStationData();
+        this.mapDataRecieved$.next(true);
+        return data;
+      }));
   }
 
   /**
@@ -120,20 +123,20 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-   deepCopy<T>(source: T): T {
+  deepCopy<T>(source: T): T {
     return Array.isArray(source)
-    ? source.map(item => this.deepCopy(item))
-    : source instanceof Date
-    ? new Date(source.getTime())
-    : source && typeof source === 'object'
+      ? source.map(item => this.deepCopy(item))
+      : source instanceof Date
+        ? new Date(source.getTime())
+        : source && typeof source === 'object'
           ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-             Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
-             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-             o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-             return o;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+            return o;
           }, Object.create(Object.getPrototypeOf(source)))
-    : source as T;
+          : source as T;
   }
 
   /**
@@ -172,7 +175,7 @@ export class MapService {
       flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal)
     };
 
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData );
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
   }
 
   /**
@@ -191,7 +194,7 @@ export class MapService {
     }
 
     // Don't zoom out past a certain point if in build mode
-    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS*2 && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS * 2 && !zoomingIn && this.mapMode$.value !== MapMode.View) {
       return;
     }
 

@@ -37,7 +37,7 @@ export class MapOverlayComponent implements OnDestroy {
   menuY = 0;
 
   /** The MatMenu displayed on option button click. */
-  @ViewChild(MatMenuTrigger,{static:false})
+  @ViewChild(MatMenuTrigger, { static: false })
   menu!: MatMenuTrigger;
 
   /**
@@ -64,19 +64,19 @@ export class MapOverlayComponent implements OnDestroy {
    * @param zoom Zoom in/out buttons.
    * @returns Disable zoom button state if limits are reached.
    */
-     enableZoom(zoom: number): boolean {
-       if (zoom === 1){
-         return this.mapScale >= MAX_SCALE;
-       }
-       if (zoom === 0){
-         //disable zooming out past a certain point when in build mode.
-         if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS*2 && this.currentMode !== MapMode.View) {
-           return true;
-         }
-        return this.mapScale <= MIN_SCALE;
-      }
-      return false;
+  enableZoom(zoom: number): boolean {
+    if (zoom === 1) {
+      return this.mapScale >= MAX_SCALE;
     }
+    if (zoom === 0) {
+      //disable zooming out past a certain point when in build mode.
+      if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS * 2 && this.currentMode !== MapMode.View) {
+        return true;
+      }
+      return this.mapScale <= MIN_SCALE;
+    }
+    return false;
+  }
 
   constructor(private mapService: MapService,
     private popupService: PopupService,
@@ -88,17 +88,21 @@ export class MapOverlayComponent implements OnDestroy {
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
-      this.mapService.mapScale$
+
+    this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
       });
 
-      this.mapService.currentMousePoint$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((point) => {
-          console.log(point);
-        });
+    this.mapService.currentMouseClick$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((click) => {
+        if (click) {
+          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+          this.mapService.currentMouseClick$.next(false);
+        }
+      });
 
   }
 
@@ -179,11 +183,11 @@ export class MapOverlayComponent implements OnDestroy {
   /**
    * Zoom in/out button state Enable and disable when limits has been reached.
    *
-   * @param points Cursor x & y coordinates for display menu.
+   * @param points Cursor x and y coordinates for display menu.
    */
-   optionMenuTrigger(points: any): void {
-    this.menuX = points.x - 10;
-    this.menuY = points.y + 50;
+  optionMenuTrigger(points: any): void {
+    this.menuX = points.x - 15;
+    this.menuY = points.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
   }

@@ -148,9 +148,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const mousePos = this.getMouseCanvasPoint(event);
     this.eventStartLogic(mousePos);
-    if (this.mapMode === MapMode.Build) {
-      this.eventOptionMenu(mousePos);
-    }
   }
 
   /**
@@ -242,10 +239,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const touchPos = this.getTouchCanvasPoint(touchPoint);
     this.eventStartLogic(touchPos);
-
-    if (this.mapMode === MapMode.Build) {
-      this.eventOptionMenu(touchPos);
-    }
   }
 
 
@@ -493,6 +486,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //Check if click was over document badge.
       this.openDocumentModal(position);
+
+      //Check if click was over option menu in build mode.
+      if (this.mapMode === MapMode.Build) {
+        this.eventOptionMenu(position);
+      }
     }
 
     //If dragging a connection node.
@@ -598,6 +596,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
       ) {
         this.mapService.currentMousePoint$.next(point);
+        this.mapService.currentMouseClick$.next(true);
       }
     }
   }
