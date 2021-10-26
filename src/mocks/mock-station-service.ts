@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -103,7 +103,7 @@ export class MockStationService {
     if (!station) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot update station without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
@@ -285,11 +285,39 @@ export class MockStationService {
     if (!stationId) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot delete the station without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
       return of().pipe(delay(1000));
     }
+   }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]>{
+    const mockRosterMember: StationRosterMember[] = [
+        {
+            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: true,
+            isWorker: true,
+        },
+        {
+            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            firstName: 'Rithm',
+            lastName: 'User',
+            email: 'rithmuser@inpivota.com',
+            isOwner: true,
+            isWorker: true,
+        },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
   }
 }
