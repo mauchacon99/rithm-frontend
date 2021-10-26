@@ -181,7 +181,7 @@ export class MapService {
   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
 
     // Don't zoom if limits are reached
-    if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+    if (this.mapScale$.value <= MIN_SCALE/ZOOM_VELOCITY && !zoomingIn || this.mapScale$.value >= MAX_SCALE*ZOOM_VELOCITY && zoomingIn) {
       return;
     }
 
@@ -196,7 +196,6 @@ export class MapService {
     const newScale = zoomingIn ? this.mapScale$.value / ZOOM_VELOCITY : this.mapScale$.value * ZOOM_VELOCITY;
 
     const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
-
       if (zoom) {
         return Math.round(
           (zoomOrigin[coord] / this.mapScale$.value - zoomOrigin[coord] / newScale) * translateDirection

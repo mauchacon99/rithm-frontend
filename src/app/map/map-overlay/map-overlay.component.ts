@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from '../map-constants';
+import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -55,14 +55,14 @@ export class MapOverlayComponent implements OnDestroy {
    */
      enableZoom(zoom: number): boolean {
        if (zoom === 1){
-         return this.mapScale >= MAX_SCALE;
+         return this.mapScale >= MAX_SCALE*ZOOM_VELOCITY;
        }
        if (zoom === 0){
          //disable zooming out past a certain point when in build mode.
          if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS*2 && this.currentMode !== MapMode.View) {
            return true;
          }
-        return this.mapScale <= MIN_SCALE;
+        return this.mapScale <= MIN_SCALE/ZOOM_VELOCITY;
       }
       return false;
     }

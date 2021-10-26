@@ -4,8 +4,8 @@ import { Point } from 'src/models';
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const ZOOM_VELOCITY = .7;
-export const MAX_SCALE = 2.04;
-export const MIN_SCALE = .0823;
+export const MAX_SCALE = 2.9155;
+export const MIN_SCALE = .0576;
 export const DEFAULT_SCALE = 1;
 /** The scale at which Station Elements are no longer rendered. */
 export const SCALE_RENDER_STATION_ELEMENTS = 0.25;
