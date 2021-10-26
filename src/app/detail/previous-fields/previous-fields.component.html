@@ -4,9 +4,14 @@
       {{previousField.prompt}}
     </mat-card>
   </ng-container>
-  <ng-container *ngIf="questions.length === 0">
-    <div class="padding-card text-center col-span-full">
+  <ng-container *ngIf="questions.length === 0 && !questionsError">
+    <div class="text-center col-span-full">
       There are no previous fields available
+    </div>
+  </ng-container>
+  <ng-container *ngIf="questionsError">
+    <div class="text-center col-span-full text-error-500">
+        Error: unable to retrieve previous fields
     </div>
   </ng-container>
 </div>
