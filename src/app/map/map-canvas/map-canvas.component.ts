@@ -35,6 +35,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
+  /** The coordinate where the mouse or touch is located, while it's being tracked. */
+  cursorPoint: Point = { x: -1, y: -1 };
+
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = {x: -1, y: -1};
 
@@ -180,6 +183,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.drawElements();
         }
       }
+    } else if (this.dragItem === MapDragItem.Node) {
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(this.cursorPoint, this.scale);
+        if (station.dragging) {
+          this.cursorPoint = this.getMouseCanvasPoint(event);
+          this.drawElements();
+        }
+      }
     } else {
       //Track mouse position
       const mousePos = this.getMouseCanvasPoint(event);
@@ -193,6 +206,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
           // eslint-disable-next-line max-len
           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
+            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          }
+          if (this.mapMode === MapMode.Build) {
             this.mapCanvas.nativeElement.style.cursor = 'pointer';
           }
           break;
@@ -270,6 +286,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.drawElements();
         }
       }
+    } else if (this.dragItem === MapDragItem.Node) {
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(this.cursorPoint, this.scale);
+        if (station.dragging) {
+          this.cursorPoint = touchPos;
+          this.drawElements();
+        }
+      }
     }
   }
 
@@ -282,18 +307,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contextMenu(event: MouseEvent): void {
     // TODO: Handle behavior when mouse is right clicked
-  }
-
-  /**
-   * Handles user input when a mouse button is clicked.
-   *
-   * @param event The click event that was triggered.
-   */
-  @HostListener('click', ['$event'])
-  click(event: MouseEvent): void {
-    const point = this.getMouseCanvasPoint(event);
-
-    this.openDocumentModal(point);
   }
 
   /**
@@ -359,7 +372,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       // Draw the stations
       this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode);
+        this.stationElementService.drawStation(station, this.mapMode, this.cursorPoint, this.dragItem);
       });
 
       // Draw the flows
@@ -418,18 +431,32 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private eventStartLogic(position: Point) {
     if (this.mapMode === MapMode.Build) {
-      // Check for drag start on station
       for (const station of this.stations) {
-        if (position.x >= station.canvasPoint.x && position.x <= station.canvasPoint.x + STATION_WIDTH * this.scale &&
-          position.y >= station.canvasPoint.y && position.y <= station.canvasPoint.y + STATION_HEIGHT * this.scale) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+        // clicked on a connection node.
+        if (station.hoverActive === StationElementHoverType.Node) {
           station.dragging = true;
-          this.dragItem = MapDragItem.Station;
+          this.dragItem = MapDragItem.Node;
+          break;
+        // Check for drag start on station
+        } else if (station.hoverActive !== StationElementHoverType.None) {
+          station.dragging = true;
+          if (this.dragItem !== MapDragItem.Node) {
+            this.dragItem = MapDragItem.Station;
+          }
           break;
         }
       }
+      //This ensures that when dragging a station or node connection, it will always display above other stations.
+      if (this.stations.find( obj => obj.dragging === true)) {
+        const draggingStation = this.stations.filter( obj => obj.dragging === true);
+        this.stations = this.stations.filter( obj => obj.dragging !== true);
+        this.stations.push(draggingStation[0]);
+      }
     }
 
-    if (this.dragItem !== MapDragItem.Station) {
+    if (this.dragItem !== MapDragItem.Station && this.dragItem !== MapDragItem.Node) {
       // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
@@ -454,8 +481,49 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //After clicking, set to build mode.
         this.mapService.mapMode$.next(MapMode.Build);
       }
+
+      //Check if click was over document badge.
+      this.openDocumentModal(position);
     }
 
+    //If dragging a connection node.
+    if (this.dragItem === MapDragItem.Node) {
+      let newNextStationId = '';
+      let newPreviousStationId = '';
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+        if (station.hoverActive !== StationElementHoverType.Node
+          && station.hoverActive !== StationElementHoverType.None) {
+          newNextStationId = station.rithmId;
+        }
+        if (station.dragging) {
+          newPreviousStationId = station.rithmId;
+        }
+      }
+
+      for (const station of this.stations) {
+        // Check if clicked on an interactive station element.
+        station.checkElementHover(position, this.scale);
+        if (station.hoverActive === StationElementHoverType.Station) {
+          //ensure we cant get duplicate ids.
+          if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
+            station.previousStations.push(newPreviousStationId);
+          }
+          if (station.status === MapItemStatus.Normal) {
+            station.status = MapItemStatus.Updated;
+          }
+        }
+        if (station.dragging) {
+          //ensure we cant get duplicate ids.
+          if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
+            station.nextStations.push(newNextStationId);
+          }
+        }
+      }
+    }
+
+    this.cursorPoint = { x: -1, y: -1 };
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
       if (station.dragging) {
