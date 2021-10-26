@@ -394,7 +394,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapCanvas.nativeElement.width = canvasBoundingRect.width * pixelRatio;
     this.mapCanvas.nativeElement.height = canvasBoundingRect.height * pixelRatio;
     this.context.scale(pixelRatio, pixelRatio);
-    console.log(this.context.canvas);
   }
 
   /**
