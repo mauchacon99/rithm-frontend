@@ -179,7 +179,7 @@ export class MapService {
    * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
+   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {

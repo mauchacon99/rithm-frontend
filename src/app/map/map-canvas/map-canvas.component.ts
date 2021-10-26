@@ -337,7 +337,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.zoom(false, mousePoint);
     }
 
-    this.drawElements();
     event.preventDefault();
   }
 
