@@ -2,7 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -35,26 +35,34 @@ export class MockStationService {
         isGenerator: false
       }],
       stationOwners: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
-        email: 'workeruser@inpivota.com'
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -115,26 +123,34 @@ export class MockStationService {
           isGenerator: false
         }],
         stationOwners: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com'
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Worker',
           lastName: 'User',
-          email: 'workeruser@inpivota.com'
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }],
         workers: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Harry',
           lastName: 'Potter',
-          email: 'harrypotter@inpivota.com'
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Supervisor',
           lastName: 'User',
-          email: 'supervisoruser@inpivota.com'
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
         }],
         createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
         createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -214,7 +230,50 @@ export class MockStationService {
   }
 
   /**
-   * Deletes a specified station.
+   * Get organization users for a specific station.
+   *
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+    if (!organizationId || !pageNum) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Some error message'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgUsers: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /** Deletes a specified station.
    *
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
