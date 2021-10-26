@@ -10,5 +10,8 @@
   Map,
 
   /** A station is being dragged. */
-  Station
+  Station,
+
+  /** A connection node is being dragged. */
+  Node,
 }

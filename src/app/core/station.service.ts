@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -109,7 +108,7 @@ export class StationService {
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-   // eslint-disable-next-line max-len
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationInformation>{
     const data: StationInformation = {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -130,23 +129,23 @@ export class StationService {
         isGenerator: false
       }],
       stationOwners: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
         email: 'marrypoppins@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
         email: 'workeruser@inpivota.com'
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com'
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
         email: 'supervisoruser@inpivota.com'
@@ -162,6 +161,50 @@ export class StationService {
   }
 
   /**
+   * Get organization users for a specific station.
+   *
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+    if (!organizationId || !pageNum) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Invalid organization ID or page number.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgUsers: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
@@ -169,6 +212,42 @@ export class StationService {
    */
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    deleteStation(stationId: string): Observable<unknown> {
-    return of(void 0).pipe(delay(1000));
- }
+    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
+   }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Cannot get worker roster without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockRosterMember: StationRosterMember[] = [
+        {
+          rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+          firstName: 'Rithm',
+          lastName: 'User',
+          email: 'rithmuser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(mockRosterMember).pipe(delay(1000));
+    }
+  }
 }
