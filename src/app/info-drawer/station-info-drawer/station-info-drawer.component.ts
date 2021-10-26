@@ -114,9 +114,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         if (status) {
           this.stationDocumentGenerationStatus = status;
         }
-        if (status !== 'None' && status !== 'Manual'){
-          this.showDocumentGenerationError = true;
-         }
       }, (error: unknown) => {
         this.docGenLoading = false;
         this.showDocumentGenerationError = true;
