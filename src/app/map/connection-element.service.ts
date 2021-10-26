@@ -61,7 +61,7 @@ export class ConnectionElementService {
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
-    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY
+    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS/Math.pow(ZOOM_VELOCITY,4)
     ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
