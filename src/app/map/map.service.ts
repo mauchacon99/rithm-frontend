@@ -178,8 +178,9 @@ export class MapService {
    *
    * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param zoomAmount How much to zoom in/out.
    */
-   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
+   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
@@ -187,14 +188,14 @@ export class MapService {
     }
 
     // Don't zoom out past a certain point if in build mode
-    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
       return;
     }
 
     const translateDirection = zoomingIn ? -1 : 1;
 
     // translate current viewport position
-    const newScale = zoomingIn ? this.mapScale$.value / ZOOM_VELOCITY : this.mapScale$.value * ZOOM_VELOCITY;
+    const newScale = zoomingIn ? this.mapScale$.value / zoomAmount : this.mapScale$.value * zoomAmount;
 
     const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
       if (zoom) {

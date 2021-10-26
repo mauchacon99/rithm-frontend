@@ -6,7 +6,7 @@ export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_SCALE = 1;
 export const ZOOM_VELOCITY = .9;
 export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,5);
-export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,20);
+export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,19);
 //Needed to solve a bug related to map zoom.
 export const ABOVE_MAX = MAX_SCALE/ZOOM_VELOCITY;
 export const BELOW_MIN = MIN_SCALE*ZOOM_VELOCITY;
