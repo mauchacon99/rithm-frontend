@@ -165,7 +165,7 @@ export class StationService {
     if (!stationId) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot get worker roster without defining a station.'
         }
       })).pipe(delay(1000));
     } else {

@@ -100,7 +100,7 @@ export class MockStationService {
     if (!station) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot update station without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
@@ -282,7 +282,7 @@ export class MockStationService {
     if (!stationId) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot delete the station without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
