@@ -282,50 +282,50 @@ describe('StationService', () => {
     service.addUsersToWorkerRoster(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
-        it('should return the worker roster of the station', () => {
-          const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
-          const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
-          const pageNum = 1;
-          const orgUsers: StationRosterMember[] = [{
-            rithmId: '12dasd1-asd12asdasd-asdas',
-            firstName: 'Cesar',
-            lastName: 'Quijada',
-            email: 'strut@gmail.com',
-            isOwner: true,
-            isWorker: true,
-          },
-          {
-            rithmId: '12dasd1-asd12asdasd-ffff1',
-            firstName: 'Maria',
-            lastName: 'Quintero',
-            email: 'Maquin@gmail.com',
-            isOwner: true,
-            isWorker: true,
-          },
-          {
-            rithmId: '12dasd1-asd12asdasd-a231',
-            firstName: 'Pedro',
-            lastName: 'Perez',
-            email: 'pperez@gmail.com',
-            isOwner: true,
-            isWorker: true,
-          }];
-
-          service.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
-            .subscribe((users) => {
-              expect(users).toEqual(orgUsers);
-            });
-        });
-
-        it('should delete a station', () => {
-          const stationId = 'E204F369-386F-4E41';
-
-          service.deleteStation(stationId)
-            .subscribe((response) => {
-              expect(response).toBeFalsy();
-            });
-        });
       });
   });
 
+  it('should return the worker roster of the station', () => {
+    const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
+    const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
+    const pageNum = 1;
+    const orgUsers: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
+
+    service.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(orgUsers);
+      });
+  });
+
+  it('should delete a station', () => {
+    const stationId = 'E204F369-386F-4E41';
+
+    service.deleteStation(stationId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
 });
