@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
@@ -14,6 +14,13 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
   providedIn: 'root'
 })
 export class StationService {
+
+
+  /** The Name of the Station as BehaviorSubject. */
+  stationName$ = new BehaviorSubject<string>('');
+
+  /** BehaviorSubject for Station text name. */
+  currentStationName$ = this.stationName$.asObservable();
 
   constructor(
     private http: HttpClient
@@ -110,4 +117,14 @@ export class StationService {
    deleteStation(stationId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
    }
+
+  /**
+   * Returns the station text name.
+   *
+   * @param stationName ASD.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
+  }
+
 }

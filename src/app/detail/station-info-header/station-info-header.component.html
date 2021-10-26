@@ -12,7 +12,7 @@
     <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>
-        <input data-testid="station-name-field" id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name" autocomplete="off">
+        <input data-testid="station-name-field" id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name" autocomplete="off" (keyup)="updStationInfoDrawerName()">
         <button data-testid="station-info-drawer" mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('stationInfo')">
           <i class="fas fa-info-circle text-2xl text-primary-500"></i>
         </button>
