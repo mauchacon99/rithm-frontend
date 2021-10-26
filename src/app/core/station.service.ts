@@ -114,7 +114,7 @@ export class StationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -156,7 +156,7 @@ export class StationService {
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
    */
-   deleteStation(stationId: string): Observable<unknown> {
+  deleteStation(stationId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
-   }
+  }
 }
