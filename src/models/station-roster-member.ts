@@ -1,3 +1,4 @@
+
 /**
  * Represents all information about a member on a roster for a station (both supervisor roster and worker roster).
  *
@@ -6,7 +7,7 @@
 export interface StationRosterMember {
 
   /** The unique Rithm ID for the member on the roster. */
-  readonly userRithmId: string;
+  readonly rithmId: string;
 
   /** The user's first name. */
   readonly firstName: string;
@@ -17,6 +18,9 @@ export interface StationRosterMember {
   /** The email address for the user. */
   readonly email: string;
 
-  /** The user assigned any document or not. */
-  isAssigned?: boolean;
+  /** Is worker or not. */
+  isWorker?: boolean;
+
+  /** Is owner or not. */
+  isOwner?: boolean;
 }
