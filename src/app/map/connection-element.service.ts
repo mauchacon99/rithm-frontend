@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
 import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_HEIGHT_REDUCER,
   CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, CONNECTION_NODE_OFFSET,
-  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -61,7 +61,8 @@ export class ConnectionElementService {
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
     this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
-    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY
+    ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
   }
