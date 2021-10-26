@@ -22,6 +22,12 @@ export class UserAvatarComponent {
   /** Whether to hide the tooltip hover effect for this avatar. */
   @Input() hideToolTip!: boolean;
 
+  /** Whether to show a plus badge. */
+  @Input() plusBadge = false;
+
+  /** Whether the cursor is hover then change badge content if is enabled. */
+  badgeHover = false;
+
   /**
    * The first + last initials for the user.
    *

@@ -17,15 +17,16 @@ import { StationRosterMember } from 'src/models';
 export class RosterManagementModalComponent implements OnInit {
 
   /** Array of avatars. */
-  rosterMembers = [{ firstName: 'Tyler', lastName: 'Hendrickson' },
-  { firstName: 'Natasha ', lastName: 'Romanov' },
-  { firstName: 'Clinton ', lastName: 'Barton' },
-  { firstName: 'Steve', lastName: 'Rogers' },
-  { firstName: 'Victor', lastName: 'Shade' }
+  rosterMembers = [
+  { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
+  { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
+  { rithmId:'user-3', firstName: 'Clinton ', lastName: 'Barton' },
+  { rithmId:'user-4', firstName: 'Steve', lastName: 'Rogers' },
+  { rithmId:'user-5', firstName: 'Victor', lastName: 'Shade' }
   ];
 
   /** List users the organization. */
-  listUsersOrgatization: StationRosterMember[] = [];
+  listUsersOrganization: StationRosterMember[] = [];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
@@ -65,7 +66,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((orgUsers) => {
         if (orgUsers) {
-          this.listUsersOrgatization = orgUsers;
+          this.listUsersOrganization = orgUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -73,5 +74,20 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
+  }
+
+  /**
+   * Any.
+   *
+   * @param userRithmId The current user to be removed from worker roster.
+   */
+  removeFromRoster(userRithmId: string): void{
+    // eslint-disable-next-line no-console
+    console.log('removed: '+userRithmId);
+    this.rosterMembers.forEach( (userMember, i)=>{
+      if (userMember.rithmId === userRithmId){
+        this.rosterMembers.splice(i,1);
+      }
+    });
   }
 }
