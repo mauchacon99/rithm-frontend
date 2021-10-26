@@ -49,7 +49,7 @@ export class MapService {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
-  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  /** The coordinate at which the current mouse point in the overall map. */
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
   /** Check current mouse click if clicked the station option button. */
