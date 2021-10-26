@@ -160,9 +160,9 @@ export class StationService {
    }
 
   /**
-   * Returns the station text name.
+   * Returns the station name.
    *
-   * @param stationName ASD.
+   * @param stationName The name of the station.
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
