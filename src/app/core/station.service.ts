@@ -1,9 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, Station, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -103,6 +103,50 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+  /**
+   * Get organization users for a specific station.
+   *
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+    if (!organizationId || !pageNum) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Invalid organization ID or page number.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const orgUsers: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+      return of(orgUsers).pipe(delay(1000));
+    }
   }
 
   /**
