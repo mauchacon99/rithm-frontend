@@ -2,7 +2,7 @@ import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode } from 'src/models';
+import { MapMode, Point } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from '../map-constants';
@@ -185,7 +185,7 @@ export class MapOverlayComponent implements OnDestroy {
    *
    * @param points The points coordinates values.
    */
-  optionMenuTrigger(points: any): void {
+  optionMenuTrigger(points: Point): void {
     this.menuX = points.x - 15;
     this.menuY = points.y + 63;
     this.menu.closeMenu();
