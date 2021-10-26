@@ -23,7 +23,7 @@ export class PreviousFieldsComponent implements OnInit {
 /** The list of station private/all questions. */
 questions: Question[] = [];
 
-/** Error get Questions. */
+/** Enable error message if question request fails. */
 questionsError=false;
 
 /** Whether questions is loading. */
