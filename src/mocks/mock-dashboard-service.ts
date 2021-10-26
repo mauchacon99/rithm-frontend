@@ -37,8 +37,22 @@ export class MockDashboardService {
         stationName: 'station-1',
         numberOfWorkers: 3,
         worker: [
-          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '',
+            firstName: 'Harry',
+            lastName: 'Potter',
+            email: 'harrypotter@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       },
       {
@@ -47,8 +61,22 @@ export class MockDashboardService {
         stationName: 'station-2',
         numberOfWorkers: 6,
         worker: [
-          { userRithmId: '', firstName: 'Worker', lastName: 'User', isAssigned: false, email: 'workeruser@inpivota.com' },
-          { userRithmId: '', firstName: 'Harry', lastName: 'Potter', isAssigned: false, email: 'harrypotter@inpivota.com' }
+          {
+            rithmId: '',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          },
+          {
+            rithmId: '',
+            firstName: 'Harry',
+            lastName: 'Potter',
+            email: 'harrypotter@inpivota.com',
+            isWorker: true,
+            isOwner: false
+          }
         ]
       }
     ];
@@ -65,16 +93,20 @@ export class MockDashboardService {
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: StationRosterMember[] = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       },
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
     return of(expectedResponse).pipe(delay(1000));
@@ -89,17 +121,21 @@ export class MockDashboardService {
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     const expectedResponse: Array<StationRosterMember> = [
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Adarsh',
         lastName: 'Achar',
-        email: 'adarsh.achar@inpivota.com'
+        email: 'adarsh.achar@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }
       ,
       {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
-        email: 'tyler.hendrickson@rithm.software'
+        email: 'tyler.hendrickson@rithm.software',
+        isWorker: true,
+        isOwner: false
       }
     ];
     return of(expectedResponse).pipe(delay(1000));
