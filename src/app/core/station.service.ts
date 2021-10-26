@@ -19,9 +19,6 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** BehaviorSubject for Station text name. */
-  currentStationName$ = this.stationName$.asObservable();
-
   constructor(
     private http: HttpClient
   ) { }

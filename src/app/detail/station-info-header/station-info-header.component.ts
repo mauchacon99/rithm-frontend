@@ -89,6 +89,7 @@ export class StationInfoHeaderComponent implements OnInit {
     };
 
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
+    this.updStationInfoDrawerName();
   }
 
   /**
