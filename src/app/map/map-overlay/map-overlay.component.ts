@@ -183,7 +183,7 @@ export class MapOverlayComponent implements OnDestroy {
   /**
    * Zoom in/out button state Enable and disable when limits has been reached.
    *
-   * @param points Cursor x and y coordinates for display menu.
+   * @param points The point coordinates for display menu in canvas for option menu.
    */
   optionMenuTrigger(points: any): void {
     this.menuX = points.x - 15;
