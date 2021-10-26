@@ -118,7 +118,7 @@ export class StationService {
       })).pipe(delay(1000));
     } else {
       const params = new HttpParams()
-        .set('stationRithmId', stationRithmId)
+        .set('rithmId', stationRithmId)
         .set('organizationRithmId', organizationId)
         .set('pageNum', pageNum)
         .set('workersPerPage', 20);
