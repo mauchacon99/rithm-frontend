@@ -35,7 +35,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   docGenLoading = false;
 
   /** Use to determinate generation of document. */
-  showDocumentGenerationError  = false;
+  showDocumentGenerationError = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
