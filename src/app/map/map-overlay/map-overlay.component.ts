@@ -29,6 +29,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
 
+  /** Zoom level build enabled. */
+  zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -55,14 +58,14 @@ export class MapOverlayComponent implements OnDestroy {
    */
      enableZoom(zoom: number): boolean {
        if (zoom === 1){
-         return this.mapScale >= MAX_SCALE*ZOOM_VELOCITY;
+         return this.mapScale >= MAX_SCALE;
        }
        if (zoom === 0){
          //disable zooming out past a certain point when in build mode.
-         if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS*2 && this.currentMode !== MapMode.View) {
+         if (this.mapScale <= this.zoomBuild/ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
            return true;
          }
-        return this.mapScale <= MIN_SCALE/ZOOM_VELOCITY;
+        return this.mapScale <= MIN_SCALE;
       }
       return false;
     }
