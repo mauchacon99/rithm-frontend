@@ -4,7 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_SCALE, STATION_HEIGHT,
+  STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -39,10 +40,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   cursorPoint: Point = { x: -1, y: -1 };
 
   /** The coordinate where the mouse or touch event begins. */
-  private eventStartCoords: Point = {x: -1, y: -1};
+  private eventStartCoords: Point = { x: -1, y: -1 };
 
   /** Used to track map movement on a touchscreen. */
-  private lastTouchCoords: Point = {x: -1, y: -1};
+  private lastTouchCoords: Point = { x: -1, y: -1 };
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
@@ -73,39 +74,39 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {
     //Needed to get the correct font loaded before it gets drawn.
-    const f = new FontFace('Montserrat-SemiBold','url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
+    const f = new FontFace('Montserrat-SemiBold', 'url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
     f.load().then((font) => {
       document.fonts.add(font);
 
       this.mapService.mapMode$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((mapMode) => {
-        this.mapMode = mapMode;
-        this.drawElements();
-      });
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((mapMode) => {
+          this.mapMode = mapMode;
+          this.drawElements();
+        });
 
       this.mapService.mapScale$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((scale) => {
-        this.scale = scale;
-        this.drawElements();
-      });
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((scale) => {
+          this.scale = scale;
+          this.drawElements();
+        });
 
       this.mapService.currentCanvasPoint$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((point) => {
-        this.currentCanvasPoint = point;
-        this.drawElements();
-      });
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((point) => {
+          this.currentCanvasPoint = point;
+          this.drawElements();
+        });
 
       this.mapService.mapDataRecieved$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.stations = this.mapService.stationElements;
-        this.flows = this.mapService.flowElements;
-        this.drawElements();
-      });
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(() => {
+          this.stations = this.mapService.stationElements;
+          this.flows = this.mapService.flowElements;
+          this.drawElements();
+        });
     });
   }
 
@@ -122,7 +123,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Cleans up subscription.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
@@ -147,6 +148,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const mousePos = this.getMouseCanvasPoint(event);
     this.eventStartLogic(mousePos);
+    if (this.mapMode === MapMode.Build) {
+      this.eventOptionMenu(mousePos);
+    }
   }
 
   /**
@@ -202,7 +206,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(mousePos, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
-             this.drawElements();
+            this.drawElements();
           }
           // eslint-disable-next-line max-len
           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
@@ -238,7 +242,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const touchPos = this.getTouchCanvasPoint(touchPoint);
     this.eventStartLogic(touchPos);
+
+    if (this.mapMode === MapMode.Build) {
+      this.eventOptionMenu(touchPos);
+    }
   }
+
 
   /**
    * Handles user input when a user lifts their finger. Used for placing dragged elements.
@@ -376,7 +385,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
-        this.flowElementService.drawFlow(this.stations);
+      this.flowElementService.drawFlow(this.stations);
     });
   }
 
@@ -471,9 +480,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
-        const coords: Point = {x: 0, y: 0};
-        coords.x = position.x - STATION_WIDTH/2*this.scale;
-        coords.y = position.y - STATION_HEIGHT/2*this.scale;
+        const coords: Point = { x: 0, y: 0 };
+        coords.x = position.x - STATION_WIDTH / 2 * this.scale;
+        coords.y = position.y - STATION_HEIGHT / 2 * this.scale;
 
         //create a new station at click.
         this.mapService.createNewStation(coords);
@@ -535,8 +544,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.eventStartCoords = {x: -1, y: -1};
-    this.lastTouchCoords = {x: -1, y: -1};
+    this.eventStartCoords = { x: -1, y: -1 };
+    this.lastTouchCoords = { x: -1, y: -1 };
     this.mapCanvas.nativeElement.style.cursor = 'default';
   }
 
@@ -565,6 +574,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           data: { stationName: station.stationName, stationId: station.rithmId }
         });
         break;
+      }
+    }
+  }
+
+  /**
+   * Handles cursor point logic.
+   *
+   * @param point The cursor location.
+   */
+  private eventOptionMenu(point: Point) {
+    for (const station of this.stations) {
+      const startingX = station.canvasPoint.x;
+      const startingY = station.canvasPoint.y;
+      const scaledStationWidth = STATION_WIDTH * this.scale;
+
+      const interactiveButtonRadius = BUTTON_RADIUS * this.scale + 9;
+      const scaledButtonYMargin = BUTTON_Y_MARGIN * this.scale;
+      const scaledButtonMargin = BADGE_MARGIN * this.scale;
+      if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
+        && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
+        && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
+        && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+      ) {
+        this.mapService.currentMousePoint$.next(point);
       }
     }
   }

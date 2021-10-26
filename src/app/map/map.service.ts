@@ -49,6 +49,9 @@ export class MapService {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
+  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({x: 0, y: 0});
+
   constructor(private http: HttpClient) { }
 
   /**

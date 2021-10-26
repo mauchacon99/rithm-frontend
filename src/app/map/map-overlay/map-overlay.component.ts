@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -6,6 +6,7 @@ import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from '../map-constants';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -28,6 +29,16 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
+
+  /** Used to track map cursor point option button. */
+  menuX = 0;
+
+  /** Used to track map cursor point option button. */
+  menuY = 0;
+
+  /** The MatMenu displayed on option button click. */
+  @ViewChild(MatMenuTrigger,{static:false})
+  menu!: MatMenuTrigger;
 
   /**
    * Whether the map is in any building mode.
@@ -82,6 +93,13 @@ export class MapOverlayComponent implements OnDestroy {
       .subscribe((scale) => {
         this.mapScale = scale;
       });
+
+      this.mapService.currentMousePoint$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((point) => {
+          console.log(point);
+        });
+
   }
 
   /**
@@ -156,6 +174,18 @@ export class MapOverlayComponent implements OnDestroy {
    */
   zoomOut(): void {
     this.mapService.zoom(.5);
+  }
+
+  /**
+   * Zoom in/out button state Enable and disable when limits has been reached.
+   *
+   * @param points Cursor x & y coordinates for display menu.
+   */
+   optionMenuTrigger(points: any): void {
+    this.menuX = points.x - 10;
+    this.menuY = points.y + 50;
+    this.menu.closeMenu();
+    this.menu.openMenu();
   }
 
 }
