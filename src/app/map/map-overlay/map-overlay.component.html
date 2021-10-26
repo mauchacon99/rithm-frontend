@@ -1,6 +1,6 @@
 <app-loading-indicator *ngIf="mapDataLoading" class="fixed right-0 left-0 top-2/4 text-center"></app-loading-indicator>
 <div class="absolute right-0 left-0 bottom-0 md:left-auto md:bottom-auto z-40">
-  <div class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2">
+  <div *ngIf="mapScale > 0.25" class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2">
     <button mat-raised-button color="accent" *ngIf="!isBuilding" (click)="build()" data-testid="build" class="h-9 md:w-auto w-full">Build</button>
     <button mat-raised-button color="basic" *ngIf="isBuilding" (click)="cancel()" data-testid="cancel" class="h-9 w-1/2 md:w-auto">Cancel</button>
     <button mat-raised-button color="accent" *ngIf="isBuilding" (click)="publish()" data-testid="publish" class="h-9 w-1/2 md:w-auto">Publish</button>
@@ -9,6 +9,11 @@
 <div *ngIf="isStationAdd" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
   <div class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-sm bg-opacity-90">
     Select a location for this new station
+  </div>
+</div>
+<div *ngIf="mapScale < 0.5" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
+  <div class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-xs bg-opacity-90">
+    View only. Zoom in to edit.
   </div>
 </div>
 <div class="bg-white absolute shadow-md rounded border border-solid flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
