@@ -6,6 +6,8 @@ import { UserService } from 'src/app/core/user.service';
 import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
 
 import { RosterManagementModalComponent } from './roster-management-modal.component';
+import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
+import { MockComponent } from 'ng-mocks';
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
   stationId: 'jk34jk34jk34'
@@ -17,7 +19,10 @@ describe('RosterManagementModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RosterManagementModalComponent],
+      declarations: [
+        RosterManagementModalComponent,
+        MockComponent(UserAvatarComponent)
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },

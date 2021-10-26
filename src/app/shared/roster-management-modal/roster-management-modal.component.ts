@@ -16,6 +16,14 @@ import { StationRosterMember } from 'src/models';
 })
 export class RosterManagementModalComponent implements OnInit {
 
+  /** Array of avatars. */
+  rosterMembers = [{ firstName: 'Tyler', lastName: 'Hendrickson' },
+  { firstName: 'Natasha ', lastName: 'Romanov' },
+  { firstName: 'Clinton ', lastName: 'Barton' },
+  { firstName: 'Steve', lastName: 'Rogers' },
+  { firstName: 'Victor', lastName: 'Shade' }
+  ];
+
   /** List users the organization. */
   listUsersOrgatization: StationRosterMember[] = [];
 
