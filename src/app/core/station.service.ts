@@ -176,5 +176,41 @@ export class StationService {
    */
   deleteStation(stationId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
+   }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Cannot get worker roster without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockRosterMember: StationRosterMember[] = [
+        {
+          rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+          firstName: 'Rithm',
+          lastName: 'User',
+          email: 'rithmuser@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ];
+      return of(mockRosterMember).pipe(delay(1000));
+    }
   }
 }
