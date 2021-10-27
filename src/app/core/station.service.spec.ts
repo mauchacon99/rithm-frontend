@@ -262,7 +262,6 @@ describe('StationService', () => {
   });
 
   it('should return the potential roster members of the station', () => {
-    const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
     const orgUsers: StationRosterMember[] = [{
@@ -290,7 +289,7 @@ describe('StationService', () => {
       isWorker: true,
     }];
 
-    service.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
+    service.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .subscribe((users) => {
         expect(users).toEqual(orgUsers);
       });
