@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
 
@@ -8,6 +8,9 @@ import { Question, QuestionFieldType, Station, StationInformation, DocumentGener
  * Mocks methods of the `StationService`.
  */
 export class MockStationService {
+
+  /** The Name of the Station as BehaviorSubject. */
+    stationName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a station information.
