@@ -16,17 +16,17 @@ import { StationRosterMember } from 'src/models';
 })
 export class RosterManagementModalComponent implements OnInit {
 
-  /** Array of avatars. */
+  /** Array of avatars (Mock till the backend is ready). */
   rosterMembers = [
-    { firstName: 'Tyler', lastName: 'Hendrickson' },
-    { firstName: 'Natasha ', lastName: 'Romanov' },
-    { firstName: 'Clinton ', lastName: 'Barton' },
-    { firstName: 'Steve', lastName: 'Rogers' },
-    { firstName: 'Victor', lastName: 'Shade' }
+    { rithmId: 'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
+    { rithmId: 'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
+    { rithmId: 'user-3', firstName: 'Clinton ', lastName: 'Barton' },
+    { rithmId: 'user-4', firstName: 'Steve', lastName: 'Rogers' },
+    { rithmId: 'user-5', firstName: 'Victor', lastName: 'Shade' }
   ];
 
   /** List users the organization. */
-  listUsersOrgatization: StationRosterMember[] = [];
+  listUsersOrganization: StationRosterMember[] = [];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
@@ -89,7 +89,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((orgUsers) => {
         if (orgUsers) {
-          this.listUsersOrgatization = orgUsers;
+          this.listUsersOrganization = orgUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -112,6 +112,25 @@ export class RosterManagementModalComponent implements OnInit {
         if (data) {
           this.stationWorkerRoster = data;
         }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
+  * Removes users from the station's worker roster.
+  *
+  * @param stationId The Specific id of station.
+  * @param usersIds The selected users id array to removed.
+  */
+  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
+    this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
+      .pipe(first())
+      .subscribe((data) => {
+        this.stationWorkerRoster = data;
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

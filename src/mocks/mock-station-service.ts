@@ -314,6 +314,41 @@ export class MockStationService {
    }
 
   /**
+   * Removes a user from the station's worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Station information with worker roster.
+   */
+   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
+    const data: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
    * Get Workers Roster for a given Station.
    *
    * @param stationId The id of the given station.
