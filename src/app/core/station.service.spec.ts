@@ -311,53 +311,30 @@ describe('StationService', () => {
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
       '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
-    const expectedResponse: StationInformation = {
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      name: 'New Station Name',
-      instructions: '',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
-      }, {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com'
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
-      }, {
-        rithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: [],
-      priority: 2
-    };
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
 
     service.removeUsersFromWorkerRoster(stationId, userIdList)
       .subscribe((response) => {

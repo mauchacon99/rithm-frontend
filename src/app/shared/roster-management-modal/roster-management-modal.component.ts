@@ -112,7 +112,7 @@ export class RosterManagementModalComponent implements OnInit {
     this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
-        this.workerRosterStation = data.workers;
+        this.workerRosterStation = data;
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
