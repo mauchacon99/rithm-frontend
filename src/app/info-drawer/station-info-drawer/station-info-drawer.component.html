@@ -34,12 +34,15 @@
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
     <div class="py-1" *ngIf="!docGenLoading">
-      <mat-radio-group class="text-sm" aria-label="Set the document generation">
+      <mat-radio-group class="text-sm" aria-label="Set the document generation" *ngIf="!showDocumentGenerationError">
         <mat-radio-button class="px-1" value="1" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
         </mat-radio-button>
         <mat-radio-button class="px-1" value="2" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
         </mat-radio-button>
       </mat-radio-group>
+      <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
+        <span class="text-error-500">Error: unable to set document generation status</span>
+      </div>
     </div>
   </div>
   <div class="w-full py-2">
