@@ -63,7 +63,8 @@ export class ConnectionElementService {
       this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
     } else {
       //Using trig to get points.
-      const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale?
+      const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
       {
         x: Math.floor(startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
         y: Math.floor(startPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
@@ -72,7 +73,7 @@ export class ConnectionElementService {
         x: Math.floor((startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)) - STATION_WIDTH/1.5*this.mapScale),
         y: Math.floor(startPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
       };
-      const endArc: Point = startPoint.y <= endPoint.y - STATION_HEIGHT*this.mapScale?
+      const endArc: Point = startPoint.y <= endPoint.y ?
       {
         x: Math.floor(endPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
         y: Math.floor(endPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
@@ -82,7 +83,8 @@ export class ConnectionElementService {
         y: Math.floor(endPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
       };
 
-      startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale?
+      startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y  &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
         this.canvasContext.arc(
           startPoint.x, startPoint.y - STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, true) :
         this.canvasContext.arc(
@@ -91,7 +93,7 @@ export class ConnectionElementService {
         startArc.x - STATION_WIDTH*this.mapScale, startArc.y,
         endArc.x + STATION_WIDTH*this.mapScale, endArc.y,
         endArc.x, endArc.y);
-      startPoint.y <= endPoint.y - STATION_HEIGHT*this.mapScale?
+      startPoint.y <= endPoint.y ?
         this.canvasContext.arc(
           endPoint.x, endPoint.y - STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, true) :
         this.canvasContext.arc(
