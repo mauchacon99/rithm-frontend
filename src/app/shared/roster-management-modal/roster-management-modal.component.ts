@@ -92,6 +92,27 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
+   * Adds users to the worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   */
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
+    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.stationWorkerRoster = data;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
    * Removes users from the station's worker roster.
    *
    * @param usersId The selected user id to remove.
