@@ -1,4 +1,4 @@
-@import "rithm-light-palettes";
+@import 'rithm-light-palettes';
 
 .workerRosterActive {
   &::ng-deep {
@@ -11,4 +11,3 @@
 .workerRosterInactive {
   @apply md:border-none border-2 rounded-md;
 }
-
