@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DocumentGenerationStatus, StationRosterMember, Question, Station, StationInformation } from 'src/models';
@@ -14,6 +14,10 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
   providedIn: 'root'
 })
 export class StationService {
+
+
+  /** The Name of the Station as BehaviorSubject. */
+  stationName$ = new BehaviorSubject<string>('');
 
   constructor(
     private http: HttpClient
@@ -226,5 +230,14 @@ export class StationService {
       ];
       return of(mockRosterMember).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Returns the station name.
+   *
+   * @param stationName The name of the station.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
   }
 }
