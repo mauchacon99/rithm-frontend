@@ -25,9 +25,6 @@ export class RosterManagementModalComponent implements OnInit {
     { firstName: 'Victor', lastName: 'Shade' }
   ];
 
-  /** Worker Station Roster. */
-  workerRosterStation: StationRosterMember[] = [];
-
   /** List users the organization. */
   listUsersOrgatization: StationRosterMember[] = [];
 
@@ -113,7 +110,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((data) => {
         if (data) {
-          this.workerRosterStation = data;
+          this.stationWorkerRoster = data;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
