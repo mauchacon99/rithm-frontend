@@ -42,13 +42,13 @@ describe('StationService', () => {
         isGenerator: true
       }],
       stationOwners: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
         email: 'marrypoppins@inpivota.com'
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com'
@@ -261,6 +261,30 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should add a new member to the worker roster', () => {
+    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
+    const usersIds: string[] = [
+      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      '49B1A2B4-7B2A-466E-93F9-78F14A672052'
+    ];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com'
+    }, {
+      rithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com'
+    }];
+
+    service.addUsersToWorkerRoster(stationId, usersIds)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
   it('should return the potential roster members of the station', () => {
     const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
@@ -302,6 +326,43 @@ describe('StationService', () => {
     service.deleteStation(stationId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
+      });
+  });
+
+  it('should remove a member from the roster', () => {
+    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const userIdList: Array<string> = [
+      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+    ];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
+
+    service.removeUsersFromWorkerRoster(stationId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
       });
   });
 
