@@ -19,11 +19,11 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Array of avatars (Mock till the backend is ready). */
   rosterMembers = [
-  { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
-  { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
-  { rithmId:'user-3', firstName: 'Clinton ', lastName: 'Barton' },
-  { rithmId:'user-4', firstName: 'Steve', lastName: 'Rogers' },
-  { rithmId:'user-5', firstName: 'Victor', lastName: 'Shade' }
+    { rithmId: 'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
+    { rithmId: 'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
+    { rithmId: 'user-3', firstName: 'Clinton ', lastName: 'Barton' },
+    { rithmId: 'user-4', firstName: 'Steve', lastName: 'Rogers' },
+    { rithmId: 'user-5', firstName: 'Victor', lastName: 'Shade' }
   ];
 
   /** List users the organization. */
@@ -44,15 +44,15 @@ export class RosterManagementModalComponent implements OnInit {
 
 
   /** Array of list users. */
-  listUsers=[
-    {firstName:'Maggie',lastName:'Rhee',email:'maggie.rhee@email.com',  isWorker:false},
-    {firstName:'Charles',lastName:'Willis',email:'charles.willis@email.com',isWorker:false},
-    {firstName:'Billie',lastName:'Suanson',email:'billie.suanson@email.com',isWorker:false},
-    {firstName:'Chuck',lastName:'Brown',email:'chuck.brown@email.com',isWorker:false},
-    {firstName:'Harrison',lastName:'King',email:'harrison.king@email.com',isWorker:false},
-    {firstName:'John',lastName:'Matrix',email:'john.matrix@email.com',isWorker:false},
-    {firstName:'Barry',lastName:'Allen',email:'barry.allen@email.com',isWorker:false},
-    {firstName:'Steve',lastName:'Rogers',email:'steve.rogers@email.com',isWorker:false},
+  listUsers = [
+    { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false },
+    { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false },
+    { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false },
+    { firstName: 'Chuck', lastName: 'Brown', email: 'chuck.brown@email.com', isWorker: false },
+    { firstName: 'Harrison', lastName: 'King', email: 'harrison.king@email.com', isWorker: false },
+    { firstName: 'John', lastName: 'Matrix', email: 'john.matrix@email.com', isWorker: false },
+    { firstName: 'Barry', lastName: 'Allen', email: 'barry.allen@email.com', isWorker: false },
+    { firstName: 'Steve', lastName: 'Rogers', email: 'steve.rogers@email.com', isWorker: false },
   ];
 
   /** The worker roster of the station given. */
@@ -122,8 +122,30 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param index The id of the organization.
    */
-   changeSelectedWorker(index: number): void {
-    this.listUsers[index].isWorker=!this.listUsers[index].isWorker;
+  changeSelectedWorker(index: number): void {
+    this.listUsers[index].isWorker = !this.listUsers[index].isWorker;
+  }
+
+  /**
+   * Adds users to the worker roster.
+  *
+  * @param stationId The Specific id of station.
+  * @param userIds The users ids for assign in station.
+  */
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
+    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.stationWorkerRoster = data;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+
   }
 
   /**
@@ -132,7 +154,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The Specific id of station.
    * @param usersIds The selected users id array to removed.
    */
-   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
+  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
     this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
