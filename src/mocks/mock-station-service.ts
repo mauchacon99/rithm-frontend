@@ -244,12 +244,16 @@ export class MockStationService {
       rithmId: '',
       firstName: 'Marry',
       lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com'
+      email: 'marrypoppins@inpivota.com',
+      isOwner: false,
+      isWorker: true
     }, {
       rithmId: '',
       firstName: 'Worker',
       lastName: 'User',
-      email: 'workeruser@inpivota.com'
+      email: 'workeruser@inpivota.com',
+      isOwner: false,
+      isWorker: true
     }];
     return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
