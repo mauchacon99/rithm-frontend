@@ -69,4 +69,5 @@ import { MatBadgeModule } from '@angular/material/badge';
     RosterComponent,
   ]
 })
+
 export class SharedModule { }

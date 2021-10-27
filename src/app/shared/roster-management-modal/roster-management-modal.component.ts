@@ -16,15 +16,6 @@ import { StationRosterMember } from 'src/models';
 })
 export class RosterManagementModalComponent implements OnInit {
 
-  /** Array of avatars. */
-  rosterMembers = [
-  { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
-  { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
-  { rithmId:'user-3', firstName: 'Clinton ', lastName: 'Barton' },
-  { rithmId:'user-4', firstName: 'Steve', lastName: 'Rogers' },
-  { rithmId:'user-5', firstName: 'Victor', lastName: 'Shade' }
-  ];
-
   /** List users the organization. */
   listUsersOrganization: StationRosterMember[] = [];
 
@@ -55,6 +46,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getPotentialStationRosterMembers(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
+    this.getStationWorkerRoster(this.stationRithmId);
   }
 
   /**
@@ -100,17 +92,22 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Any.
+   * Removes users from the station's worker roster.
    *
-   * @param userRithmId The current user to be removed from worker roster.
+   * @param usersId The selected user id to remove.
    */
-  removeFromRoster(userRithmId: string): void{
-    // eslint-disable-next-line no-console
-    console.log('removed: '+userRithmId);
-    this.rosterMembers.forEach( (userMember, i)=>{
-      if (userMember.rithmId === userRithmId){
-        this.rosterMembers.splice(i,1);
-      }
-    });
+   removeUsersFromWorkerRoster(usersId: string): void {
+    const usersIds: string[] = [];
+    usersIds.push(usersId);
+    this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
+      .pipe(first())
+      .subscribe((data) => {
+        this.stationWorkerRoster = data;
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 }
