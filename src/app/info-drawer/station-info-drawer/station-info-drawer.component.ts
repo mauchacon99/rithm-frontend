@@ -34,6 +34,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docGenLoading = false;
 
+  /** Use to determinate generation of document. */
+  showDocumentGenerationError = false;
+
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
 
@@ -95,6 +98,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+
+    this.stationService.stationName$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe(data => {
+      this.stationName = data.length > 0 ? data : 'Untitled Station';
+    }, (error: unknown) => {
+      this.docGenLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
+    });
+
   }
 
   /**
@@ -113,6 +129,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
       }, (error: unknown) => {
         this.docGenLoading = false;
+        this.showDocumentGenerationError = true;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
