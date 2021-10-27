@@ -29,7 +29,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** The worker roster of the station given. */
-  stationWorkerRoster: StationRosterMember[] = [];
+  rosterMembers: StationRosterMember[] = [];
 
   constructor(
     private stationService: StationService,
@@ -59,7 +59,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((data) => {
         if (data) {
-          this.stationWorkerRoster = data;
+          this.rosterMembers = data;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -102,7 +102,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((data) => {
         if (data) {
-          this.stationWorkerRoster = data;
+          this.rosterMembers = data;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -123,7 +123,7 @@ export class RosterManagementModalComponent implements OnInit {
     this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
       .pipe(first())
       .subscribe((data) => {
-        this.stationWorkerRoster = data;
+        this.rosterMembers = data;
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
