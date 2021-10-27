@@ -18,15 +18,15 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Array of avatars. */
   rosterMembers = [
-    { firstName: 'Tyler', lastName: 'Hendrickson' },
-    { firstName: 'Natasha ', lastName: 'Romanov' },
-    { firstName: 'Clinton ', lastName: 'Barton' },
-    { firstName: 'Steve', lastName: 'Rogers' },
-    { firstName: 'Victor', lastName: 'Shade' }
+  { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
+  { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
+  { rithmId:'user-3', firstName: 'Clinton ', lastName: 'Barton' },
+  { rithmId:'user-4', firstName: 'Steve', lastName: 'Rogers' },
+  { rithmId:'user-5', firstName: 'Victor', lastName: 'Shade' }
   ];
 
   /** List users the organization. */
-  listUsersOrgatization: StationRosterMember[] = [];
+  listUsersOrganization: StationRosterMember[] = [];
 
   /** Pages for users in organization. */
   pageNumUsersOrganization = 1;
@@ -39,9 +39,6 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** The worker roster of the station given. */
   stationWorkerRoster: StationRosterMember[] = [];
-
-  /** Worker Station Roster. */
-  workerRosterStation: StationRosterMember[] = [];
 
   constructor(
     private stationService: StationService,
@@ -92,7 +89,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((orgUsers) => {
         if (orgUsers) {
-          this.listUsersOrgatization = orgUsers;
+          this.listUsersOrganization = orgUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -103,21 +100,17 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Removes a user from the station's worker roster.
+   * Remove users from roster when click.
    *
-   * @param stationId The Specific id of station.
-   * @param usersIds The selected users id array to removed.
+   * @param userRithmId The current user to be removed from worker roster.
    */
-  removeUserFromWorkerRoster(stationId: string, usersIds: string[]): void {
-    this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
-      .pipe(first())
-      .subscribe((data) => {
-        this.workerRosterStation = data;
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+   removeUserFromWorkerRoster(userRithmId: string): void{
+    // eslint-disable-next-line no-console
+    console.log('removed: '+userRithmId);
+    this.rosterMembers.forEach( (userMember, i)=>{
+      if (userMember.rithmId === userRithmId){
+        this.rosterMembers.splice(i,1);
+      }
+    });
   }
 }
