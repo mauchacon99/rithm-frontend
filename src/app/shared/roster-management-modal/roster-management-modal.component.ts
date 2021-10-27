@@ -74,7 +74,6 @@ export class RosterManagementModalComponent implements OnInit {
   /**
    * Get organization users for a specific station.
    *
-   * @param organizationId The id of the organization.
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
