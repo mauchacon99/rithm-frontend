@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, StationRosterMember, Question, Station, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -14,6 +14,10 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
   providedIn: 'root'
 })
 export class StationService {
+
+
+  /** The Name of the Station as BehaviorSubject. */
+  stationName$ = new BehaviorSubject<string>('');
 
   constructor(
     private http: HttpClient
@@ -99,6 +103,33 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+  /**
+   * Adds users to the worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns Rosters in the station.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      rithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }, {
+      rithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
   }
 
   /**
@@ -205,5 +236,14 @@ export class StationService {
       ];
       return of(mockRosterMember).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Returns the station name.
+   *
+   * @param stationName The name of the station.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
   }
 }

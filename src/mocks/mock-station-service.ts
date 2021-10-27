@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
 
@@ -8,6 +8,9 @@ import { Question, QuestionFieldType, Station, StationInformation, DocumentGener
  * Mocks methods of the `StationService`.
  */
 export class MockStationService {
+
+  /** The Name of the Station as BehaviorSubject. */
+    stationName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a station information.
@@ -230,6 +233,33 @@ export class MockStationService {
   }
 
   /**
+   * Adds users to the worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns Rosters in the station.
+   */
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      rithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }, {
+      rithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
+  }
+
+  /**
+   * Deletes a specified station.
    * Get organization users for a specific station.
    *
    * @param organizationId The id of the organization.

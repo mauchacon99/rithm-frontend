@@ -17,11 +17,11 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Array of avatars (Mock till the backend is ready). */
   rosterMembers = [
-  { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
-  { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
-  { rithmId:'user-3', firstName: 'Clinton ', lastName: 'Barton' },
-  { rithmId:'user-4', firstName: 'Steve', lastName: 'Rogers' },
-  { rithmId:'user-5', firstName: 'Victor', lastName: 'Shade' }
+    { rithmId: 'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
+    { rithmId: 'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
+    { rithmId: 'user-3', firstName: 'Clinton ', lastName: 'Barton' },
+    { rithmId: 'user-4', firstName: 'Steve', lastName: 'Rogers' },
+    { rithmId: 'user-5', firstName: 'Victor', lastName: 'Shade' }
   ];
 
   /** List users the organization. */
@@ -93,12 +93,33 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
+   * Adds users to the worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   */
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
+    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.stationWorkerRoster = data;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
    * Removes users from the station's worker roster.
    *
    * @param stationId The Specific id of station.
    * @param usersIds The selected users id array to removed.
    */
-   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
+  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
     this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
       .pipe(first())
       .subscribe((data) => {
@@ -110,5 +131,4 @@ export class RosterManagementModalComponent implements OnInit {
         );
       });
   }
-
 }
