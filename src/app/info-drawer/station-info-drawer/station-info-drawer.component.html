@@ -4,14 +4,11 @@
 <div class="grid grid-cols-1" *ngIf="!stationLoading">
   <div class="w-full py-2">
     <div class="col-span-12">
-      <h6 class="text-center">Station Information</h6>
+      <p class="overline">Station Information</p>
     </div>
-    <form [formGroup]="stationNameForm">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Station Name</mat-label>
-        <input id="stationName" type="text" matInput [value]="stationName" formControlName="name" autocomplete="off">
-      </mat-form-field>
-    </form>
+    <div class="col-span-12">
+      <p>{{stationName}}</p>
+    </div>
   </div>
   <div class="w-full py-2">
     <p class="overline">station owners</p>
