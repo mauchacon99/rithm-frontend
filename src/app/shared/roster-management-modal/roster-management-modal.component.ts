@@ -37,6 +37,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** Id the organization.  */
   organizationId = '';
 
+  /** The worker roster of the station given. */
+  stationWorkerRoster: StationRosterMember[] = [];
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -52,6 +55,26 @@ export class RosterManagementModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getPotentialStationRosterMembers(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
+  }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   */
+  getStationWorkerRoster(stationId: string): void {
+    this.stationService.getStationWorkerRoster(stationId)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.stationWorkerRoster = data;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 
   /**
