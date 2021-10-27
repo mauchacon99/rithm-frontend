@@ -16,7 +16,7 @@ $secondary-black: #202020;
 /// Rithm Secondary Blue
 $secondary-blue: #2b3c54;
 /// Rithm Secondary Gray
-$secondary-gray: #667080;
+$secondary-gray: map-get($secondary-gray-palette, 500);
 
 // Warning Colors---------------
 $warning-red: map-get($error-palette, 500);
