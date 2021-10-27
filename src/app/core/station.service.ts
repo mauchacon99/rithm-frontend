@@ -122,7 +122,7 @@ export class StationService {
         .set('organizationRithmId', organizationId)
         .set('pageNum', pageNum)
         .set('workersPerPage', 20);
-      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
+      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
 
