@@ -1,7 +1,7 @@
 <div id="avatar" [ngClass]="{'circle-40-secondary' : navProfile, 'circle-30-secondary' : !navProfile}" matTooltip="{{firstName + ' ' + lastName}}" [matTooltipDisabled]="hideToolTip" class="cursor-pointer" (mouseenter)="badgeHover=true" (mouseleave)="badgeHover=false">
   <span *ngIf="badge==='none'">{{initials}}</span>
-  <p class="inline-block">
-    <span *ngIf="badge!=='none'"
+  <p class="inline-block" *ngIf="badge!=='none'">
+    <span
     [matBadge]="badgeHover?'&minus;':
       badge==='check'?'&check;':
       badge==='plus'?'&plus;':
