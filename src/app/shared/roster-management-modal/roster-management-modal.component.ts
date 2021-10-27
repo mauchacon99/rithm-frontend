@@ -16,7 +16,7 @@ import { StationRosterMember } from 'src/models';
 })
 export class RosterManagementModalComponent implements OnInit {
 
-  /** Array of avatars. */
+  /** Array of avatars (Mock till the backend is ready). */
   rosterMembers = [
   { rithmId:'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
   { rithmId:'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
@@ -100,17 +100,22 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Remove users from roster when click.
+   * Removes a user from the station's worker roster.
    *
-   * @param userRithmId The current user to be removed from worker roster.
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected users id array to removed.
    */
-   removeUserFromWorkerRoster(userRithmId: string): void{
-    // eslint-disable-next-line no-console
-    console.log('removed: '+userRithmId);
-    this.rosterMembers.forEach( (userMember, i)=>{
-      if (userMember.rithmId === userRithmId){
-        this.rosterMembers.splice(i,1);
-      }
-    });
+   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): void {
+    this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
+      .pipe(first())
+      .subscribe((data) => {
+        this.stationWorkerRoster = data;
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
+
 }
