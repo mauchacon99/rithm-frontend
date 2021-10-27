@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss']
 })
-export class UserAvatarComponent {
+export class UserAvatarComponent{
 
   /** The first name of the user. */
   @Input() firstName!: string;
@@ -22,8 +22,8 @@ export class UserAvatarComponent {
   /** Whether to hide the tooltip hover effect for this avatar. */
   @Input() hideToolTip!: boolean;
 
-  /** Whether to show a plus badge. */
-  @Input() plusBadge = false;
+  /** Whether to show any badge type or not. */
+  @Input() badge: 'none' | 'check' | 'minus' | 'plus' = 'none';
 
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;

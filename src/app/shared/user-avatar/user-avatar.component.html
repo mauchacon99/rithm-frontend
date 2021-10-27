@@ -1,5 +1,14 @@
 <div id="avatar" [ngClass]="{'circle-40-secondary' : navProfile, 'circle-30-secondary' : !navProfile}" matTooltip="{{firstName + ' ' + lastName}}" [matTooltipDisabled]="hideToolTip" class="cursor-pointer" (mouseenter)="badgeHover=true" (mouseleave)="badgeHover=false">
-  <span *ngIf="!plusBadge">{{initials}}</span>
-  <span *ngIf="plusBadge" [matBadge]="badgeHover?'&minus;':'&#10003;'" matBadgeSize="small" matBadgePosition="below after"
-  [matBadgeColor]="badgeHover?'warn':'accent'" matBadgeIcon="check">{{initials}}</span>
+  <span *ngIf="badge==='none'">{{initials}}</span>
+  <p class="inline-block">
+    <span *ngIf="badge!=='none'"
+    [matBadge]="badgeHover?'&minus;':
+      badge==='check'?'&check;':
+      badge==='plus'?'&plus;':
+      badge==='minus'?'&minus;':''"
+    matBadgeSize="small"
+    matBadgePosition="below after"
+    [matBadgeColor]="badgeHover || badge==='minus'?'warn':'accent'"
+    class="inline-block w-max">{{initials}}</span>
+  </p>
 </div>
