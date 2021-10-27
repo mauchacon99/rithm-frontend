@@ -3,10 +3,29 @@
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
-          <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"></app-user-avatar>
+        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true">
+        </app-user-avatar>
       </div>
     </div>
   </div>
+   <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <ng-container>
+      <div *ngFor="let member of listUsers; let i=index" [ngClass]="{workerRosterActive: member.isWorker === true, workerRosterInactive: member.isWorker === false}" class="cursor-pointer flex p-2 my-2 justify-items-center" (click)='changeValid(i)'>
+        <div>
+            <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true">
+            </app-user-avatar>
+        </div>
+         <div>
+          <p class="leading-none pt-1 px-4">
+            {{member.firstName}} {{member.lastName}}
+            <br>
+            <span class="overline text-secondary-500">{{member.email}}</span>
+          </p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
 </div>
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">

@@ -6,6 +6,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { StationRosterMember } from 'src/models';
 
+
 /**
  * Component for roster management.
  */
@@ -35,6 +36,24 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Id the organization.  */
   organizationId = '';
+
+
+  /** Valid. */
+  valid = false;
+
+
+  /** Array of list users. */
+  listUsers=[
+    {firstName:'Maggie',lastName:'Rhee',email:'maggie.rhee@email.com',  isWorker:false},
+    {firstName:'Charles',lastName:'Willis',email:'charles.willis@email.com',isWorker:false},
+    {firstName:'Billie',lastName:'Suanson',email:'billie.suanson@email.com',isWorker:false},
+    {firstName:'Chuck',lastName:'Brown',email:'chuck.brown@email.com',isWorker:false},
+    {firstName:'Harrison',lastName:'King',email:'harrison.king@email.com',isWorker:false},
+    {firstName:'John',lastName:'Matrix',email:'john.matrix@email.com',isWorker:false},
+    {firstName:'Barry',lastName:'Allen',email:'barry.allen@email.com',isWorker:false},
+    {firstName:'Steve',lastName:'Rogers',email:'steve.rogers@email.com',isWorker:false},
+  ];
+
 
   constructor(
     private stationService: StationService,
@@ -73,5 +92,15 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
+  }
+
+
+  /**
+   * Index from list users.
+   *
+   * @param index The id of the organization.
+   */
+  changeValid(index: number): void {
+    this.listUsers[index].isWorker=!this.listUsers[index].isWorker;
   }
 }
