@@ -34,6 +34,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docGenLoading = false;
 
+  /** Use to determinate generation of document. */
+  showDocumentGenerationError = false;
+
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
 
@@ -113,6 +116,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
       }, (error: unknown) => {
         this.docGenLoading = false;
+        this.showDocumentGenerationError = true;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
