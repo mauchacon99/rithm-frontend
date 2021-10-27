@@ -128,10 +128,10 @@ export class RosterManagementModalComponent implements OnInit {
 
   /**
    * Adds users to the worker roster.
-  *
-  * @param stationId The Specific id of station.
-  * @param userIds The users ids for assign in station.
-  */
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   */
   addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
     this.stationService.addUsersToWorkerRoster(stationId, userIds)
       .pipe(first())
