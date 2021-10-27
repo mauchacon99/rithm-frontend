@@ -487,10 +487,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Check if click was over document badge.
       this.openDocumentModal(position);
 
-      //Check if click was over option menu in build mode.
-      if (this.mapMode === MapMode.Build) {
-        this.eventOptionMenu(position);
-      }
     }
 
     //If dragging a connection node.
@@ -558,6 +554,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
     const scaledBadgeMargin = BADGE_MARGIN * this.scale;
 
+    const interactiveButtonRadius = BUTTON_RADIUS * this.scale + 9;
+    const scaledButtonYMargin = BUTTON_Y_MARGIN * this.scale;
+    const scaledButtonMargin = BADGE_MARGIN * this.scale;
+
     for (const station of this.stations) {
       const startingX = station.canvasPoint.x;
       const startingY = station.canvasPoint.y;
@@ -573,30 +573,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         });
         break;
       }
-    }
-  }
-
-  /**
-   * Handles cursor point logic.
-   *
-   * @param point The cursor location.
-   */
-  private eventOptionMenu(point: Point) {
-    for (const station of this.stations) {
-      const startingX = station.canvasPoint.x;
-      const startingY = station.canvasPoint.y;
-      const scaledStationWidth = STATION_WIDTH * this.scale;
-
-      const interactiveButtonRadius = BUTTON_RADIUS * this.scale + 9;
-      const scaledButtonYMargin = BUTTON_Y_MARGIN * this.scale;
-      const scaledButtonMargin = BADGE_MARGIN * this.scale;
-      if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
-        && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
-        && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
-        && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-      ) {
-        this.mapService.currentMousePoint$.next(point);
-        this.mapService.currentMouseClick$.next(true);
+      //Check if click was over option menu in build mode.
+      if (this.mapMode === MapMode.Build) {
+        if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
+          && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
+          && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
+          && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+        ) {
+          this.mapService.currentMousePoint$.next(point);
+          this.mapService.currentMouseClick$.next(true);
+          break;
+        }
       }
     }
   }

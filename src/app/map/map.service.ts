@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+import { DEFAULT_CANVAS_POINT, DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
+  SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -50,7 +51,7 @@ export class MapService {
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
   /** The coordinate at which the current mouse point in the overall map. */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
 
   /** Check current mouse click if clicked the station option button. */
   currentMouseClick$ = new BehaviorSubject(false);
