@@ -297,7 +297,7 @@ export class MockStationService {
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-   removeUserFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
+   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
     const data: StationRosterMember[] = [{
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
