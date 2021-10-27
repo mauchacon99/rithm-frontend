@@ -10,7 +10,7 @@
   </div>
    <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
     <ng-container>
-      <div *ngFor="let member of listUsers; let i=index" [ngClass]="{workerRosterActive: member.isWorker === true, workerRosterInactive: member.isWorker === false}" class="cursor-pointer flex p-2 my-2 justify-items-center" (click)='changeValid(i)'>
+      <div *ngFor="let member of listUsers; let i=index" [ngClass]="{workerRosterActive: member.isWorker === true, workerRosterInactive: member.isWorker === false}" class="cursor-pointer flex p-2 my-2 justify-items-center" (click)='changeSelectedWorker(i)'>
         <div>
             <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true">
             </app-user-avatar>

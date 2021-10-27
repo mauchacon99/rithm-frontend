@@ -122,7 +122,7 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param index The id of the organization.
    */
-  changeSelectedWorker(index: number): void {
+   changeSelectedWorker(index: number): void {
     this.listUsers[index].isWorker=!this.listUsers[index].isWorker;
   }
 
