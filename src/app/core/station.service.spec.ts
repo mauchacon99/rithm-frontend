@@ -1,7 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import {
+  DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
+} from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -292,30 +294,33 @@ describe('StationService', () => {
   it('should return the potential roster members of the station', () => {
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
-    const orgUsers: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    }];
+    const orgUsers: StationPotentialRostersUsers = {
+      potentialRosterUsers: [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }],
+      totalUsers: 3
+    };
 
     service.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .subscribe((users) => {

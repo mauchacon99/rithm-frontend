@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationRosterMember } from 'src/models';
+import {
+  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
+} from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -175,7 +177,8 @@ export class StationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-  getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+  // eslint-disable-next-line max-len
+  getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -187,7 +190,8 @@ export class StationService {
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
-      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
+        // eslint-disable-next-line max-len
+      return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
 

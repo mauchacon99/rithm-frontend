@@ -36,6 +36,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   stationWorkerRoster: StationRosterMember[] = [];
 
+  /** Total the potential worker users. */
+  totalPotentialWorkerUsers = 0;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -80,9 +83,10 @@ export class RosterManagementModalComponent implements OnInit {
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((orgUsers) => {
-        if (orgUsers) {
-          this.listUsersOrganization = orgUsers;
+      .subscribe((potentialUsers) => {
+        if (potentialUsers) {
+          this.listUsersOrganization = potentialUsers.potentialRosterUsers;
+          this.totalPotentialWorkerUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(

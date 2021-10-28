@@ -2,7 +2,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
+import {
+  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
+} from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -10,7 +12,7 @@ import { Question, QuestionFieldType, Station, StationInformation, DocumentGener
 export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
-    stationName$ = new BehaviorSubject<string>('');
+  stationName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a station information.
@@ -267,7 +269,8 @@ export class MockStationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+  // eslint-disable-next-line max-len
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
@@ -275,30 +278,33 @@ export class MockStationService {
         }
       })).pipe(delay(1000));
     } else {
-      const orgUsers: StationRosterMember[] = [{
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      }];
+      const orgUsers: StationPotentialRostersUsers = {
+        potentialRosterUsers: [{
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        }],
+        totalUsers: 3
+      };
       return of(orgUsers).pipe(delay(1000));
     }
   }
@@ -318,7 +324,7 @@ export class MockStationService {
     } else {
       return of().pipe(delay(1000));
     }
-   }
+  }
 
   /**
    * Removes a user from the station's worker roster.
@@ -327,31 +333,31 @@ export class MockStationService {
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
+  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
     const data: StationRosterMember[] = [{
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      }];
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
     return of(data).pipe(delay(1000));
   }
 
@@ -361,24 +367,24 @@ export class MockStationService {
    * @param stationId The id of the given station.
    * @returns A rosterMember array.
    */
-  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]>{
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const mockRosterMember: StationRosterMember[] = [
-        {
-            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: true,
-            isWorker: true,
-        },
-        {
-            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-            firstName: 'Rithm',
-            lastName: 'User',
-            email: 'rithmuser@inpivota.com',
-            isOwner: true,
-            isWorker: true,
-        },
+      {
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isOwner: true,
+        isWorker: true,
+      },
     ];
     return of(mockRosterMember).pipe(delay(1000));
   }
