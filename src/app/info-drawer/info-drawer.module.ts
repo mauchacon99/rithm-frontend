@@ -6,14 +6,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentInfoDrawerComponent } from './document-info-drawer/document-info-drawer.component';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { MatRadioModule } from '@angular/material/radio';
+import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
 
 @NgModule({
   declarations: [
     InfoDrawerComponent,
     StationInfoDrawerComponent,
-    DocumentInfoDrawerComponent
+    DocumentInfoDrawerComponent,
+    RosterManagementModalComponent
   ],
   imports: [
     CommonModule,

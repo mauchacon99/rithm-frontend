@@ -34,7 +34,8 @@ import { DialogComponent } from './dialog/dialog.component';
     UserFormComponent,
     UserRemovalComponent,
     LoadingIndicatorComponent,
-    DialogComponent
+    DialogComponent,
+
   ],
   imports: [
     CommonModule,
@@ -49,7 +50,7 @@ import { DialogComponent } from './dialog/dialog.component';
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   exports: [
     LoadingIndicatorComponent,
@@ -63,7 +64,8 @@ import { DialogComponent } from './dialog/dialog.component';
     PaginationComponent,
     UserFormComponent,
     UserRemovalComponent,
-    RosterComponent
+    RosterComponent,
   ]
 })
+
 export class SharedModule { }

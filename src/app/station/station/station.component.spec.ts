@@ -84,26 +84,34 @@ describe('StationComponent', () => {
         isGenerator: false
       }],
       stationOwners: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
-        email: 'workeruser@inpivota.com'
+        email: 'workeruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
