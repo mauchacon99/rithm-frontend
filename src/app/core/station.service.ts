@@ -114,22 +114,8 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-    const mockPrevAddRosterStation: StationRosterMember[] = [{
-      rithmId: '',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }, {
-      rithmId: '',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }];
-    return of(mockPrevAddRosterStation).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`, userIds);
   }
 
   /**
@@ -218,8 +204,8 @@ export class StationService {
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   deleteStation(stationId: string): Observable<unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteStation(stationId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
   }
 
