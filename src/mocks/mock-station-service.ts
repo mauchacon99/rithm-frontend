@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
  */
 export class MockStationService {
+
+  /** The Name of the Station as BehaviorSubject. */
+    stationName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a station information.
@@ -35,26 +38,34 @@ export class MockStationService {
         isGenerator: false
       }],
       stationOwners: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Worker',
         lastName: 'User',
-        email: 'workeruser@inpivota.com'
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }],
       workers: [{
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
       }, {
-        userRithmId: '',
+        rithmId: '',
         firstName: 'Supervisor',
         lastName: 'User',
-        email: 'supervisoruser@inpivota.com'
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -92,7 +103,7 @@ export class MockStationService {
     if (!station) {
       return throwError(new HttpErrorResponse({
         error: {
-          error: 'Some error message'
+          error: 'Cannot update station without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
@@ -115,26 +126,34 @@ export class MockStationService {
           isGenerator: false
         }],
         stationOwners: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Marry',
           lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com'
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Worker',
           lastName: 'User',
-          email: 'workeruser@inpivota.com'
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
         }],
         workers: [{
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Harry',
           lastName: 'Potter',
-          email: 'harrypotter@inpivota.com'
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
         }, {
-          userRithmId: '',
+          rithmId: '',
           firstName: 'Supervisor',
           lastName: 'User',
-          email: 'supervisoruser@inpivota.com'
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
         }],
         createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
         createdDate: '2021-07-16T17:26:47.3506612Z',
@@ -214,20 +233,153 @@ export class MockStationService {
   }
 
   /**
-   * Deletes a specified station.
+   * Adds users to the worker roster.
    *
    * @param stationId The Specific id of station.
-   * @returns Returns an empty observable.
+   * @param userIds The users ids for assign in station.
+   * @returns Rosters in the station.
    */
-   deleteStation(stationId: string): Observable<unknown> {
-    if (!stationId) {
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      rithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }, {
+      rithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
+  }
+
+  /**
+   * Deletes a specified station.
+   * Get organization users for a specific station.
+   *
+   * @param organizationId The id of the organization.
+   * @param stationRithmId The Specific id of station.
+   * @param pageNum The current page.
+   * @returns Users for the organization bind to station.
+   */
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+    if (!organizationId || !pageNum) {
       return throwError(new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
       })).pipe(delay(1000));
     } else {
+      const orgUsers: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+      return of(orgUsers).pipe(delay(1000));
+    }
+  }
+
+  /** Deletes a specified station.
+   *
+   * @param stationId The Specific id of station.
+   * @returns Returns an empty observable.
+   */
+  deleteStation(stationId: string): Observable<unknown> {
+    if (!stationId) {
+      return throwError(new HttpErrorResponse({
+        error: {
+          error: 'Cannot delete the station without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
       return of().pipe(delay(1000));
     }
    }
+
+  /**
+   * Removes a user from the station's worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected users id array to removed.
+   * @returns New Station information with worker roster.
+   */
+   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
+    const data: StationRosterMember[] = [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }];
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Get Workers Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]>{
+    const mockRosterMember: StationRosterMember[] = [
+        {
+            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: true,
+            isWorker: true,
+        },
+        {
+            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            firstName: 'Rithm',
+            lastName: 'User',
+            email: 'rithmuser@inpivota.com',
+            isOwner: true,
+            isWorker: true,
+        },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
+  }
 }

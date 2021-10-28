@@ -4,6 +4,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
 import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
+import { StationService } from '../../core/station.service';
 
 /**
  * Reusable component for the station information header.
@@ -32,6 +33,7 @@ export class StationInfoHeaderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
@@ -87,6 +89,14 @@ export class StationInfoHeaderComponent implements OnInit {
     };
 
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
+    this.updStationInfoDrawerName();
   }
+
+  /**
+   * Update InfoDrawer Station Name.
+   */
+     updStationInfoDrawerName(): void{
+      this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+    }
 
 }
