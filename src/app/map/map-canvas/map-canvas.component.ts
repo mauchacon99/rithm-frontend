@@ -330,10 +330,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom in
-        this.mapService.zoom(ZOOM_VELOCITY, middlePoint);
+        this.mapService.zoom(true, middlePoint);
       } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom out
-        this.mapService.zoom(1 / ZOOM_VELOCITY, middlePoint);
+        this.mapService.zoom(false, middlePoint);
       }
 
       this.lastTouchCoords = touchPos;
@@ -374,13 +374,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.deltaY < 0) {
       // Zoom in
-      this.mapService.zoom(ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(true, mousePoint);
     } else {
       // Zoom out
-      this.mapService.zoom(1 / ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(false, mousePoint);
     }
 
-    this.drawElements();
     event.preventDefault();
   }
 
