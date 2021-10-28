@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
-  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from './map-constants';
+  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,8 +20,8 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
- /** This behavior subject will track the array of stations and flows. */
-  mapData: MapData = {stations: [], flows: []};
+  /** This behavior subject will track the array of stations and flows. */
+  mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
   mapDataRecieved$ = new BehaviorSubject(false);
@@ -50,6 +50,12 @@ export class MapService {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
+  /** The coordinate at which the current mouse point in the overall map. */
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
+
+  /** Check current mouse click if clicked the station option button. */
+  currentMouseClick$ = new BehaviorSubject(false);
+
   constructor(private http: HttpClient) { }
 
   /**
@@ -68,18 +74,18 @@ export class MapService {
    */
   getMapElements(): Observable<MapData> {
     return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
-    .pipe(map((data) => {
-      data.stations.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      data.flows.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      this.mapData = data;
-      this.useStationData();
-      this.mapDataRecieved$.next(true);
-      return data;
-    }));
+      .pipe(map((data) => {
+        data.stations.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        data.flows.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        this.mapData = data;
+        this.useStationData();
+        this.mapDataRecieved$.next(true);
+        return data;
+      }));
   }
 
   /**
@@ -118,20 +124,20 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-   deepCopy<T>(source: T): T {
+  deepCopy<T>(source: T): T {
     return Array.isArray(source)
-    ? source.map(item => this.deepCopy(item))
-    : source instanceof Date
-    ? new Date(source.getTime())
-    : source && typeof source === 'object'
+      ? source.map(item => this.deepCopy(item))
+      : source instanceof Date
+        ? new Date(source.getTime())
+        : source && typeof source === 'object'
           ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-             Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
-             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-             o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-             return o;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+            return o;
           }, Object.create(Object.getPrototypeOf(source)))
-    : source as T;
+          : source as T;
   }
 
   /**
@@ -170,7 +176,7 @@ export class MapService {
       flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal)
     };
 
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData );
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
   }
 
   /**
