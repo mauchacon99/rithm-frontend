@@ -275,12 +275,16 @@ describe('StationService', () => {
       rithmId: '',
       firstName: 'Marry',
       lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com'
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: true,
     }, {
       rithmId: '',
       firstName: 'Worker',
       lastName: 'User',
-      email: 'workeruser@inpivota.com'
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: true,
     }];
 
     service.addUsersToWorkerRoster(stationId, usersIds)
