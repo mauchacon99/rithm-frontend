@@ -58,9 +58,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
-  /** THIS SHOULD BE REMOVED. YELL AT HARRISON IF IT'S STILL HERE. */
-  testDataDisplay = 0;
-
   /**
    * Add station mode active.
    *
@@ -321,28 +318,27 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const touchPoint = event.changedTouches;
       const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
 
-      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x)/ this.scale;
-      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y)/ this.scale;
-      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x)/ this.scale;
-      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y)/ this.scale;
-      //REMOVE
-      this.testDataDisplay = this.lastTouchCoords[0].x;
+      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
+      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
+      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
+      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
 
       const middlePoint = {
-        x: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2),
-        y: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2)
+        x: (touchPos[0].x + touchPos[1].x) / 2,
+        y: (touchPos[0].y + touchPos[1].y) / 2
       };
 
-      if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
+      if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom in
         this.mapService.zoom(true, middlePoint);
-      } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ || yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
+        this.lastTouchCoords = touchPos;
+        this.drawElements();
+      } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
         // Zoom out
         this.mapService.zoom(false, middlePoint);
+        this.lastTouchCoords = touchPos;
+        this.drawElements();
       }
-
-      this.lastTouchCoords = touchPos;
-      this.drawElements();
     }
   }
 
