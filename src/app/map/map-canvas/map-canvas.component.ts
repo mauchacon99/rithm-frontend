@@ -4,8 +4,10 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_SCALE, STATION_HEIGHT,
-  STATION_WIDTH, DEFAULT_MOUSE_POINT } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS,
+  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
+  DEFAULT_SCALE, PINCH_ZOOM_TRAVEL_REQ,
+  STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -40,7 +42,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
   /** Used to track map movement on a touchscreen. */
-  private lastTouchCoords: Point = DEFAULT_MOUSE_POINT;
+  private lastTouchCoords: Point[] = [DEFAULT_MOUSE_POINT];
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
@@ -228,14 +230,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('touchstart', ['$event'])
   touchStart(event: TouchEvent): void {
     event.preventDefault();
-    //TODO: support multitouch.
-    const touchPoint = event.touches[0];
 
-    this.lastTouchCoords = this.getTouchCanvasPoint(touchPoint);
-    this.eventStartCoords = this.getTouchCanvasPoint(touchPoint);
+    if (event.touches.length === 1) {
+      const touchPoint = event.touches[0];
+      const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-    const touchPos = this.getTouchCanvasPoint(touchPoint);
-    this.eventStartLogic(touchPos);
+      this.lastTouchCoords[0] = touchPos;
+      this.eventStartCoords = touchPos;
+
+      this.eventStartLogic(touchPos);
+    }
+
+    if (event.touches.length === 2) {
+      const touchPoint1 = event.touches[0];
+      const touchPoint2 = event.touches[1];
+
+      this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
+      this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
+    }
+
   }
 
 
@@ -262,37 +275,68 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('touchmove', ['$event'])
   touchMove(event: TouchEvent): void {
     event.preventDefault();
-    //TODO: support multitouch.
-    const touchPoint = event.changedTouches[0];
-    const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-    const moveAmountX = this.lastTouchCoords.x - touchPos.x;
-    const moveAmountY = this.lastTouchCoords.y - touchPos.y;
+    //Single touch.
+    if (event.touches.length === 1) {
+      const touchPoint = event.changedTouches[0];
+      const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-    if (this.dragItem === MapDragItem.Map) {
-      this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.lastTouchCoords.x = touchPos.x;
-      this.currentCanvasPoint.y += moveAmountY / this.scale;
-      this.lastTouchCoords.y = touchPos.y;
-      this.drawElements();
-    } else if (this.dragItem === MapDragItem.Station) {
-      for (const station of this.stations) {
-        if (station.dragging) {
-          station.mapPoint.x -= moveAmountX / this.scale;
-          this.lastTouchCoords.x = touchPos.x;
-          station.mapPoint.y -= moveAmountY / this.scale;
-          this.lastTouchCoords.y = touchPos.y;
-          this.drawElements();
+      const moveAmountX = this.lastTouchCoords[0].x - touchPos.x;
+      const moveAmountY = this.lastTouchCoords[0].y - touchPos.y;
+
+      if (this.dragItem === MapDragItem.Map) {
+        this.currentCanvasPoint.x += moveAmountX / this.scale;
+        this.lastTouchCoords[0].x = touchPos.x;
+        this.currentCanvasPoint.y += moveAmountY / this.scale;
+        this.lastTouchCoords[0].y = touchPos.y;
+        this.drawElements();
+      } else if (this.dragItem === MapDragItem.Station) {
+        for (const station of this.stations) {
+          if (station.dragging) {
+            station.mapPoint.x -= moveAmountX / this.scale;
+            this.lastTouchCoords[0].x = touchPos.x;
+            station.mapPoint.y -= moveAmountY / this.scale;
+            this.lastTouchCoords[0].y = touchPos.y;
+            this.drawElements();
+          }
+        }
+      } else if (this.dragItem === MapDragItem.Node) {
+        for (const station of this.stations) {
+          // Check if clicked on an interactive station element.
+          station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
+          if (station.dragging) {
+            this.mapService.currentMousePoint$.next(touchPos);
+            this.drawElements();
+          }
         }
       }
-    } else if (this.dragItem === MapDragItem.Node) {
-      for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
-        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
-        if (station.dragging) {
-          this.mapService.currentMousePoint$.next(touchPos);
-          this.drawElements();
-        }
+    }
+
+    //Pinch event.
+    if (event.touches.length === 2) {
+      const touchPoint = event.changedTouches;
+      const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
+
+      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
+      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
+      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
+      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
+
+      const middlePoint = {
+        x: (touchPos[0].x + touchPos[1].x) / 2,
+        y: (touchPos[0].y + touchPos[1].y) / 2
+      };
+
+      if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
+        // Zoom in
+        this.mapService.zoom(true, middlePoint);
+        this.lastTouchCoords = touchPos;
+        this.drawElements();
+      } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
+        // Zoom out
+        this.mapService.zoom(false, middlePoint);
+        this.lastTouchCoords = touchPos;
+        this.drawElements();
       }
     }
   }
@@ -538,7 +582,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     });
 
     this.eventStartCoords = DEFAULT_MOUSE_POINT;
-    this.lastTouchCoords = DEFAULT_MOUSE_POINT;
+    this.lastTouchCoords = [DEFAULT_MOUSE_POINT];
     this.mapCanvas.nativeElement.style.cursor = 'default';
   }
 
