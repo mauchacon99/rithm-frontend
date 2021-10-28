@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
 import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_HEIGHT_REDUCER,
   CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, CONNECTION_NODE_OFFSET,
-  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -52,15 +52,53 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection line if context is not defined');
     }
 
-    const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
-
     // Draw connection line
     this.canvasContext.setLineDash([0, 0]);
 
     // Line
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(startPoint.x, startPoint.y);
-    this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    if (startPoint.x - STATION_WIDTH*1.5*this.mapScale < endPoint.x) {
+      const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
+      this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    } else {
+      //Using trig to get points.
+      const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
+      {
+        x: Math.floor(startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
+        y: Math.floor(startPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
+      } :
+      {
+        x: Math.floor((startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)) - STATION_WIDTH/1.5*this.mapScale),
+        y: Math.floor(startPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
+      };
+      const endArc: Point = startPoint.y <= endPoint.y ?
+      {
+        x: Math.floor(endPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
+        y: Math.floor(endPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
+      } :
+      {
+        x: Math.floor(endPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(.5*Math.PI)),
+        y: Math.floor(endPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
+      };
+
+      startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y  &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
+        this.canvasContext.arc(
+          startPoint.x, startPoint.y - STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, true) :
+        this.canvasContext.arc(
+          startPoint.x, startPoint.y + STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, false);
+      this.canvasContext.bezierCurveTo(
+        startArc.x - STATION_WIDTH*this.mapScale, startArc.y,
+        endArc.x + STATION_WIDTH*this.mapScale, endArc.y,
+        endArc.x, endArc.y);
+      startPoint.y <= endPoint.y ?
+        this.canvasContext.arc(
+          endPoint.x, endPoint.y - STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, true) :
+        this.canvasContext.arc(
+          endPoint.x, endPoint.y + STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, false);
+    }
     this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();
@@ -80,7 +118,9 @@ export class ConnectionElementService {
 
     const ex = endPoint.x;
     const ey = endPoint.y;
-    const norm = this.getNormalizedVectorPoint(controlPoints[1], endPoint);
+    const norm = startPoint.x - STATION_WIDTH*1.5*this.mapScale > endPoint.x ?
+    this.getNormalizedVectorPoint({x: endPoint.x - 10, y: endPoint.y}, endPoint)
+    : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
 
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
     let x, y;
