@@ -140,14 +140,17 @@ export class StationElementService {
     const secondLineArray: string[] = [];
 
     for (const word of sn) {
-      // eslint-disable-next-line max-len
-      if (word.length <= 12 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
-        firstLineArray.push(word);
+      if (word.length <= 12
+        && firstLineArray.join(' ').length <= 12
+        && firstLineArray.join(' ').length + word.length <= 12
+        && secondLineArray.length === 0) {
+          firstLineArray.push(word);
       } else {
-        // eslint-disable-next-line max-len
-        if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
-          secondLineArray.push(word);
-        } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
+        if (word.length <= 12
+          && secondLineArray.join(' ').length <= 12
+          && secondLineArray.join(' ').length + word.length <= 12) {
+            secondLineArray.push(word);
+        } else if (secondLineArray.join(' ').length + word.length >= 12) {
           if (word.length > 12) {
             if (firstLineArray.length === 0) {
               firstLineArray.push(word.substring(0, 10));
@@ -171,11 +174,11 @@ export class StationElementService {
       }
     }
 
-    // eslint-disable-next-line max-len
-    ctx.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 12 + scaledStationPadding, 114 * this.mapScale);
+    ctx.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding,
+    station.canvasPoint.y + 12 * this.mapScale + scaledStationPadding, 114 * this.mapScale);
     if (secondLineArray.join(' ').length > 0) {
-      // eslint-disable-next-line max-len
-      ctx.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 32 + scaledStationPadding, 114 * this.mapScale);
+      ctx.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding,
+      station.canvasPoint.y + 32 * this.mapScale + scaledStationPadding, 114 * this.mapScale);
     }
   }
 
