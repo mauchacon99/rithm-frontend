@@ -485,7 +485,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       //Check if click was over document badge.
-      this.openDocumentModal(position);
+      this.clickEventHandler(position);
 
     }
 
@@ -544,11 +544,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open document modal when clicked on station document badge.
+   * Handle click events when click on station document badge, option button.
    *
    * @param point The position of mouse click event.
    */
-  private openDocumentModal(point: Point) {
+  private clickEventHandler(point: Point) {
     const scaledStationWidth = STATION_WIDTH * this.scale;
 
     const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
