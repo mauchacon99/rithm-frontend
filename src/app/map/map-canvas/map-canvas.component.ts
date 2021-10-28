@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import { BADGE_MARGIN, BADGE_RADIUS, DEFAULT_SCALE, STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -331,13 +331,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.deltaY < 0) {
       // Zoom in
-      this.mapService.zoom(ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(true, mousePoint);
     } else {
       // Zoom out
-      this.mapService.zoom(1 / ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(false, mousePoint);
     }
 
-    this.drawElements();
     event.preventDefault();
   }
 
@@ -493,8 +492,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.scale);
-        if (station.hoverActive !== StationElementHoverType.Node
-          && station.hoverActive !== StationElementHoverType.None) {
+        if (station.hoverActive !== StationElementHoverType.None) {
           newNextStationId = station.rithmId;
         }
         if (station.dragging) {
@@ -508,7 +506,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.hoverActive === StationElementHoverType.Station) {
           //ensure we cant get duplicate ids.
           if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
-            station.previousStations.push(newPreviousStationId);
+            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
+              station.previousStations.push(newPreviousStationId);
+            }
           }
           if (station.status === MapItemStatus.Normal) {
             station.status = MapItemStatus.Updated;
@@ -517,7 +517,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.dragging) {
           //ensure we cant get duplicate ids.
           if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
-            station.nextStations.push(newNextStationId);
+            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
+              station.nextStations.push(newNextStationId);
+            }
           }
         }
       }
