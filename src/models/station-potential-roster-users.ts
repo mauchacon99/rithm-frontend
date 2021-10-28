@@ -8,6 +8,6 @@ export interface StationPotentialRostersUsers {
   /** The list of possible users of the station. */
   potentialRosterUsers: StationRosterMember[];
 
-  /** The total number of users in the station. */
+  /** The total number of users in the list. */
   totalUsers: number;
 }

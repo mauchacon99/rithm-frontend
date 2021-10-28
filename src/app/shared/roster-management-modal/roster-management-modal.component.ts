@@ -36,8 +36,8 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   stationWorkerRoster: StationRosterMember[] = [];
 
-  /** Total the potential worker users. */
-  totalPotentialWorkerUsers = 0;
+  /** Total the of members in the list of organization members. */
+  totalPotentialUsers = 0;
 
   constructor(
     private stationService: StationService,
@@ -86,7 +86,7 @@ export class RosterManagementModalComponent implements OnInit {
       .subscribe((potentialUsers) => {
         if (potentialUsers) {
           this.listUsersOrganization = potentialUsers.potentialRosterUsers;
-          this.totalPotentialWorkerUsers = potentialUsers.totalUsers;
+          this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
