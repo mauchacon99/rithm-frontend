@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
-  SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
+  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -182,12 +182,11 @@ export class MapService {
   /**
    * Zooms the map by adjusting the map scale and position.
    *
-   * @param scaleFactor The multiplier by which to scale the size of elements on the map.
+   * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param zoomAmount How much to zoom in/out.
    */
-  zoom(scaleFactor: number, zoomOrigin = this.getCanvasCenterPoint()): void {
-
-    const zoomingIn = scaleFactor > 1;
+   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
@@ -195,21 +194,32 @@ export class MapService {
     }
 
     // Don't zoom out past a certain point if in build mode
-    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS * 2 && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
       return;
     }
 
     const translateDirection = zoomingIn ? -1 : 1;
 
     // translate current viewport position
-    const newScale = this.mapScale$.value * scaleFactor;
+    const newScale = zoomingIn ? this.mapScale$.value / zoomAmount : this.mapScale$.value * zoomAmount;
 
-    // TODO: Find a cleaner way to refactor the specific scale; also isn't working for non 2x .5x?
-    this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
-    this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
+    const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
+      if (zoom) {
+        return Math.round(
+          (zoomOrigin[coord] / this.mapScale$.value - zoomOrigin[coord] / newScale) * translateDirection
+        );
+      } else {
+        return Math.round(
+          (zoomOrigin[coord] / newScale - zoomOrigin[coord] / this.mapScale$.value) * translateDirection
+        );
+      }
+    };
+
+    this.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
+    this.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
 
     // scale
-    this.mapScale$.next(zoomingIn ? Math.min(MAX_SCALE, newScale) : Math.max(MIN_SCALE, newScale));
+    this.mapScale$.next(zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale));
   }
 
   /**

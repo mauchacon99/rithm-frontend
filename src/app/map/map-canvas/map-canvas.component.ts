@@ -5,7 +5,7 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_SCALE, STATION_HEIGHT,
-  STATION_WIDTH, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from '../map-constants';
+  STATION_WIDTH, DEFAULT_MOUSE_POINT } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -333,13 +333,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.deltaY < 0) {
       // Zoom in
-      this.mapService.zoom(ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(true, mousePoint);
     } else {
       // Zoom out
-      this.mapService.zoom(1 / ZOOM_VELOCITY, mousePoint);
+      this.mapService.zoom(false, mousePoint);
     }
 
-    this.drawElements();
     event.preventDefault();
   }
 
