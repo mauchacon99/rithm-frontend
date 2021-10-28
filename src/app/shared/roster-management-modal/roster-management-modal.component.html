@@ -7,10 +7,10 @@
       </div>
     </div>
   </div>
-  <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-4 m-auto space-y-1">
+  <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-4 m-auto">
     <ng-container>
       <div *ngFor="let member of listUsers" [ngClass]="{'border-accent-500': member.isWorker === true}"
-        class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md"
+        class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
         (click)='changeSelectedWorker(member.rithmId)'>
         <div class="my-1">
           <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [hideToolTip]="true">
