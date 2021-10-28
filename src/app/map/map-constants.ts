@@ -3,6 +3,7 @@ import { Point } from 'src/models';
 // TODO: refine this file; this is polluting the global namespace a little
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
+export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 
 // Scale
 export const DEFAULT_SCALE = 1;
