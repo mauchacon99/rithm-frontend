@@ -44,7 +44,7 @@
     "@angular-eslint/schematics": "^12.6.1",
     "@angular-eslint/template-parser": "^12.6.1",
     "@angular/cli": "^12.2.12",
-    "@angular/compiler-cli": "^12.2.11",
+    "@angular/compiler-cli": "^12.2.12",
     "@compodoc/compodoc": "^1.1.15",
     "@strut-software/eslint-config": "^1.5.0",
     "@strut-software/stylelint-config": "^1.1.1",
