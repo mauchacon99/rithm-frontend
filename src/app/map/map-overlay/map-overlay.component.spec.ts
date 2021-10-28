@@ -7,7 +7,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MockErrorService, MockPopupService } from 'src/mocks';
 import { MockMapService } from 'src/mocks';
 import { MapService } from '../map.service';
-
+import { MatMenuModule } from '@angular/material/menu';
 import { MapOverlayComponent } from './map-overlay.component';
 
 describe('MapOverlayComponent', () => {
@@ -20,7 +20,8 @@ describe('MapOverlayComponent', () => {
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatMenuModule
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
