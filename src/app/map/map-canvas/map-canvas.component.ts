@@ -36,9 +36,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
-  /** The coordinate where the mouse or touch is located, while it's being tracked. */
-  cursorPoint: Point = DEFAULT_MOUSE_POINT;
-
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
@@ -188,9 +185,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(this.cursorPoint, this.scale);
+        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
-          this.cursorPoint = this.getMouseCanvasPoint(event);
+          this.mapService.currentMousePoint$.next(this.getMouseCanvasPoint(event));
           this.drawElements();
         }
       }
@@ -291,9 +288,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else if (this.dragItem === MapDragItem.Node) {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(this.cursorPoint, this.scale);
+        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
-          this.cursorPoint = touchPos;
+          this.mapService.currentMousePoint$.next(touchPos);
           this.drawElements();
         }
       }
@@ -373,7 +370,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       // Draw the stations
       this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode, this.cursorPoint, this.dragItem);
+        this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
 
       // Draw the flows
@@ -528,7 +525,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.cursorPoint = DEFAULT_MOUSE_POINT;
+    this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
       if (station.dragging) {
