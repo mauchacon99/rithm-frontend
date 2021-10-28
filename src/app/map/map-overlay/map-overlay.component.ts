@@ -1,11 +1,12 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode } from 'src/models';
+import { MapMode, Point } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from '../map-constants';
+import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -28,6 +29,19 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
+
+  /** Used to track map cursor point option button. */
+  menuX = 0;
+
+  /** Used to track map cursor point option button. */
+  menuY = 0;
+
+  /** The MatMenu displayed on option button click. */
+  @ViewChild(MatMenuTrigger, { static: false })
+  menu!: MatMenuTrigger;
+
+  /** Zoom level build enabled. */
+  zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
 
   /**
    * Whether the map is in any building mode.
@@ -53,19 +67,19 @@ export class MapOverlayComponent implements OnDestroy {
    * @param zoom Zoom in/out buttons.
    * @returns Disable zoom button state if limits are reached.
    */
-     enableZoom(zoom: number): boolean {
-       if (zoom === 1){
-         return this.mapScale >= MAX_SCALE;
-       }
-       if (zoom === 0){
-         //disable zooming out past a certain point when in build mode.
-         if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS*2 && this.currentMode !== MapMode.View) {
-           return true;
-         }
-        return this.mapScale <= MIN_SCALE;
-      }
-      return false;
+  enableZoom(zoom: number): boolean {
+    if (zoom === 1) {
+      return this.mapScale >= MAX_SCALE;
     }
+    if (zoom === 0) {
+      //disable zooming out past a certain point when in build mode.
+      if (this.mapScale <= this.zoomBuild / ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
+        return true;
+      }
+      return this.mapScale <= MIN_SCALE;
+    }
+    return false;
+  }
 
   constructor(private mapService: MapService,
     private popupService: PopupService,
@@ -77,11 +91,22 @@ export class MapOverlayComponent implements OnDestroy {
       }, (error: unknown) => {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
-      this.mapService.mapScale$
+
+    this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
       });
+
+    this.mapService.currentMouseClick$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((click) => {
+        if (click) {
+          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
+          this.mapService.currentMouseClick$.next(false);
+        }
+      });
+
   }
 
   /**
@@ -148,14 +173,26 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
-    this.mapService.zoom(2);
+    this.mapService.zoom(true, undefined, Math.pow(ZOOM_VELOCITY, 5));
   }
 
   /**
    * Zooms the map out from center.
    */
   zoomOut(): void {
-    this.mapService.zoom(.5);
+    this.mapService.zoom(false, undefined, Math.pow(ZOOM_VELOCITY, 5));
+  }
+
+  /**
+   * Display menu option for station on option button is clicked.
+   *
+   * @param points The points coordinates values.
+   */
+  optionMenuTrigger(points: Point): void {
+    this.menuX = points.x - 15;
+    this.menuY = points.y + 63;
+    this.menu.closeMenu();
+    this.menu.openMenu();
   }
 
 }

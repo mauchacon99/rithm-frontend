@@ -44,7 +44,7 @@ export class StationElementService {
 
     this.drawStationCard(station, dragItem);
 
-    if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
+    if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
       this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
