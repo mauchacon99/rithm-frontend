@@ -21,6 +21,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { DialogComponent } from './dialog/dialog.component';
     MatCardModule,
     MatMenuModule,
     MatTooltipModule,
+    MatBadgeModule,
   ],
   exports: [
     LoadingIndicatorComponent,
