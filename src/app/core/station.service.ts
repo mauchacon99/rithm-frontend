@@ -112,7 +112,6 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
     return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`, userIds);
