@@ -138,7 +138,7 @@ export class StationService {
   }
 
   /**
-   * Removes a user from the station's worker roster.
+   * Removes users from the station's roster.
    *
    * @param stationId The Specific id of station.
    * @param usersIds The selected users id array to removed.
