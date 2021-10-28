@@ -15,15 +15,6 @@ import { StationRosterMember } from 'src/models';
 })
 export class RosterManagementModalComponent implements OnInit {
 
-  /** Array of avatars (Mock till the backend is ready). */
-  rosterMembers = [
-    { rithmId: 'user-1', firstName: 'Tyler', lastName: 'Hendrickson' },
-    { rithmId: 'user-2', firstName: 'Natasha ', lastName: 'Romanov' },
-    { rithmId: 'user-3', firstName: 'Clinton ', lastName: 'Barton' },
-    { rithmId: 'user-4', firstName: 'Steve', lastName: 'Rogers' },
-    { rithmId: 'user-5', firstName: 'Victor', lastName: 'Shade' }
-  ];
-
   /** List users the organization. */
   listUsersOrganization: StationRosterMember[] = [];
 
@@ -34,7 +25,7 @@ export class RosterManagementModalComponent implements OnInit {
   stationRithmId = '';
 
   /** The worker roster of the station given. */
-  stationWorkerRoster: StationRosterMember[] = [];
+  rosterMembers: StationRosterMember[] = [];
 
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
@@ -52,6 +43,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
+    this.getStationWorkerRoster(this.stationRithmId);
   }
 
   /**
@@ -64,7 +56,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((data) => {
         if (data) {
-          this.stationWorkerRoster = data;
+          this.rosterMembers = data;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -107,7 +99,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((data) => {
         if (data) {
-          this.stationWorkerRoster = data;
+          this.rosterMembers = data;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -118,16 +110,17 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Removes users from the station's worker roster.
+   * Removes members from the station's worker roster.
    *
-   * @param stationId The Specific id of station.
-   * @param usersIds The selected users id array to removed.
+   * @param usersId The selected user id to remove.
    */
-  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): void {
-    this.stationService.removeUsersFromWorkerRoster(stationId, usersIds)
+   removeMemberFromRoster(usersId: string): void {
+    const usersIds: string[] = [];
+    usersIds.push(usersId);
+    this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
       .pipe(first())
       .subscribe((data) => {
-        this.stationWorkerRoster = data;
+        this.rosterMembers = data;
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

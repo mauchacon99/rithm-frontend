@@ -47,13 +47,17 @@ describe('StationService', () => {
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com'
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true
       }],
       workers: [{
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
-        email: 'harrypotter@inpivota.com'
+        email: 'harrypotter@inpivota.com',
+        isOwner: false,
+        isWorker: true
       }],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
