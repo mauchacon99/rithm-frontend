@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { StationInfoDrawerData, StationInformation, DocumentGenerationStatus } from 'src/models';
+import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 
 /**
@@ -33,6 +33,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading in the document generation section. */
   docGenLoading = false;
+
+  /** Use to determinate generation of document. */
+  showDocumentGenerationError = false;
 
   /** Type of user looking at a document. */
   type: 'admin' | 'super' | 'worker';
@@ -95,6 +98,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+
+    this.stationService.stationName$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe(data => {
+      this.stationName = data.length > 0 ? data : 'Untitled Station';
+    }, (error: unknown) => {
+      this.docGenLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
+    });
+
   }
 
   /**
@@ -113,6 +129,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
       }, (error: unknown) => {
         this.docGenLoading = false;
+        this.showDocumentGenerationError = true;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -238,16 +255,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     });
     if (response) {
       this.stationService.deleteStation(stationId)
-      .pipe(first())
-      .subscribe(() => {
-        this.popupService.notify('The station has been deleted.');
-        this.router.navigateByUrl('dashboard');
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+        .pipe(first())
+        .subscribe(() => {
+          this.popupService.notify('The station has been deleted.');
+          this.router.navigateByUrl('dashboard');
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
     }
   }
 

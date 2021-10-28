@@ -21,6 +21,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { DialogComponent } from './dialog/dialog.component';
     UserFormComponent,
     UserRemovalComponent,
     LoadingIndicatorComponent,
-    DialogComponent
+    DialogComponent,
+
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { DialogComponent } from './dialog/dialog.component';
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule,
   ],
   exports: [
     LoadingIndicatorComponent,
@@ -63,7 +66,8 @@ import { DialogComponent } from './dialog/dialog.component';
     PaginationComponent,
     UserFormComponent,
     UserRemovalComponent,
-    RosterComponent
+    RosterComponent,
   ]
 })
+
 export class SharedModule { }

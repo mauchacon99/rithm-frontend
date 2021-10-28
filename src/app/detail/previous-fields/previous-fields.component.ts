@@ -23,6 +23,9 @@ export class PreviousFieldsComponent implements OnInit {
 /** The list of station private/all questions. */
 questions: Question[] = [];
 
+/** Enable error message if question request fails. */
+questionsError=false;
+
 /** Whether questions is loading. */
 isLoading = false;
 
@@ -54,6 +57,7 @@ ngOnInit(): void{
       }
       this.isLoading = false;
     }, (error: unknown) => {
+      this.questionsError=true;
       this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
