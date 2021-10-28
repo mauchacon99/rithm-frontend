@@ -6,7 +6,7 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   DEFAULT_SCALE, PINCH_ZOOM_TRAVEL_REQ,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+  STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -57,6 +57,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
+
+  /** THIS SHOULD BE REMOVED. YELL AT HARRISON IF IT'S STILL HERE. */
+  testDataDisplay = 0;
 
   /**
    * Add station mode active.
@@ -318,10 +321,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const touchPoint = event.changedTouches;
       const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
 
-      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
-      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
-      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
-      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
+      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x)/ this.scale;
+      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y)/ this.scale;
+      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x)/ this.scale;
+      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y)/ this.scale;
+      //REMOVE
+      this.testDataDisplay = this.lastTouchCoords[0].x;
 
       const middlePoint = {
         x: ((this.lastTouchCoords[0].x + this.lastTouchCoords[1].x) / 2),
