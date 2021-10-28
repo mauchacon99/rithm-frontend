@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MapMode } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from '../map-constants';
+import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -28,6 +28,9 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
+
+  /** Zoom level build enabled. */
+  zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
 
   /**
    * Whether the map is in any building mode.
@@ -59,7 +62,7 @@ export class MapOverlayComponent implements OnDestroy {
        }
        if (zoom === 0){
          //disable zooming out past a certain point when in build mode.
-         if (this.mapScale <= SCALE_RENDER_STATION_ELEMENTS*2 && this.currentMode !== MapMode.View) {
+         if (this.mapScale <= this.zoomBuild/ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
            return true;
          }
         return this.mapScale <= MIN_SCALE;
@@ -148,14 +151,14 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
-    this.mapService.zoom(2);
+    this.mapService.zoom(true, undefined, Math.pow(ZOOM_VELOCITY, 5));
   }
 
   /**
    * Zooms the map out from center.
    */
   zoomOut(): void {
-    this.mapService.zoom(.5);
+    this.mapService.zoom(false, undefined, Math.pow(ZOOM_VELOCITY, 5));
   }
 
 }
