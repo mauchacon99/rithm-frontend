@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Point } from 'src/models';
 import { CONNECTION_ARROW_LENGTH, CONNECTION_DEFAULT_COLOR, CONNECTION_HEIGHT_REDUCER,
   CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, CONNECTION_NODE_OFFSET,
-  DEFAULT_SCALE, SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from './map-constants';
+  DEFAULT_SCALE, SCALE_REDUCED_RENDER, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -99,7 +99,7 @@ export class ConnectionElementService {
         this.canvasContext.arc(
           endPoint.x, endPoint.y + STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, false);
     }
-    this.canvasContext.lineWidth = this.mapScale > SCALE_RENDER_STATION_ELEMENTS/Math.pow(ZOOM_VELOCITY,4)
+    this.canvasContext.lineWidth = this.mapScale > SCALE_REDUCED_RENDER
     ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
     this.canvasContext.stroke();

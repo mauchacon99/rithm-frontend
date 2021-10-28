@@ -3,15 +3,18 @@ import { Point } from 'src/models';
 // TODO: refine this file; this is polluting the global namespace a little
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
+
+// Scale
 export const DEFAULT_SCALE = 1;
 export const ZOOM_VELOCITY = .9;
 export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,5);
 export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,19);
-//Needed to solve a bug related to map zoom.
+/** Needed to solve a bug related to map zoom. */
 export const ABOVE_MAX = MAX_SCALE/ZOOM_VELOCITY;
 export const BELOW_MIN = MIN_SCALE*ZOOM_VELOCITY;
 /** The scale at which Station Elements are no longer rendered. */
 export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,10);
+export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS/Math.pow(ZOOM_VELOCITY,4);
 
 // Flow
 export const FLOW_PADDING = 20;
