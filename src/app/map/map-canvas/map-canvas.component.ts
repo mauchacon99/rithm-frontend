@@ -5,7 +5,7 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_SCALE, STATION_HEIGHT,
-  STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+  STATION_WIDTH, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -37,13 +37,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
   /** The coordinate where the mouse or touch is located, while it's being tracked. */
-  cursorPoint: Point = { x: -1, y: -1 };
+  cursorPoint: Point = DEFAULT_MOUSE_POINT;
 
   /** The coordinate where the mouse or touch event begins. */
-  private eventStartCoords: Point = { x: -1, y: -1 };
+  private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
   /** Used to track map movement on a touchscreen. */
-  private lastTouchCoords: Point = { x: -1, y: -1 };
+  private lastTouchCoords: Point = DEFAULT_MOUSE_POINT;
 
   /** What type of thing is being dragged? */
   private dragItem = MapDragItem.Default;
@@ -529,7 +529,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.cursorPoint = { x: -1, y: -1 };
+    this.cursorPoint = DEFAULT_MOUSE_POINT;
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
       if (station.dragging) {
@@ -541,8 +541,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.eventStartCoords = { x: -1, y: -1 };
-    this.lastTouchCoords = { x: -1, y: -1 };
+    this.eventStartCoords = DEFAULT_MOUSE_POINT;
+    this.lastTouchCoords = DEFAULT_MOUSE_POINT;
     this.mapCanvas.nativeElement.style.cursor = 'default';
   }
 
