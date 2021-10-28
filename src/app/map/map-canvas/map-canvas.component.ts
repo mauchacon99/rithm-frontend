@@ -492,8 +492,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.scale);
-        if (station.hoverActive !== StationElementHoverType.Node
-          && station.hoverActive !== StationElementHoverType.None) {
+        if (station.hoverActive !== StationElementHoverType.None) {
           newNextStationId = station.rithmId;
         }
         if (station.dragging) {
@@ -507,7 +506,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.hoverActive === StationElementHoverType.Station) {
           //ensure we cant get duplicate ids.
           if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
-            station.previousStations.push(newPreviousStationId);
+            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
+              station.previousStations.push(newPreviousStationId);
+            }
           }
           if (station.status === MapItemStatus.Normal) {
             station.status = MapItemStatus.Updated;
@@ -516,7 +517,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.dragging) {
           //ensure we cant get duplicate ids.
           if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
-            station.nextStations.push(newNextStationId);
+            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
+              station.nextStations.push(newNextStationId);
+            }
           }
         }
       }
