@@ -233,6 +233,33 @@ export class MockStationService {
   }
 
   /**
+   * Adds users to the worker roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns Rosters in the station.
+   */
+  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevAddRosterStation: StationRosterMember[] = [{
+      rithmId: '',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }, {
+      rithmId: '',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: false,
+      isWorker: true
+    }];
+    return of(mockPrevAddRosterStation).pipe(delay(1000));
+  }
+
+  /**
+   * Deletes a specified station.
    * Get organization users for a specific station.
    *
    * @param organizationId The id of the organization.
