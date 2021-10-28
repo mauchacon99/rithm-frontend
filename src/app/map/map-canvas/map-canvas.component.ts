@@ -301,14 +301,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.drawElements();
           }
         }
-      }
-    } else if (this.dragItem === MapDragItem.Node) {
-      for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
-        station.checkElementHover(this.cursorPoint, this.scale);
-        if (station.dragging) {
-          this.cursorPoint = touchPos;
-          this.drawElements();
+      } else if (this.dragItem === MapDragItem.Node) {
+        for (const station of this.stations) {
+          // Check if clicked on an interactive station element.
+          station.checkElementHover(this.cursorPoint, this.scale);
+          if (station.dragging) {
+            this.cursorPoint = touchPos;
+            this.drawElements();
+          }
         }
       }
     }
