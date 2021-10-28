@@ -3,10 +3,12 @@ import { Point } from 'src/models';
 // TODO: refine this file; this is polluting the global namespace a little
 
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
+export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 
 // Scale
 export const DEFAULT_SCALE = 1;
 export const ZOOM_VELOCITY = .9;
+export const PINCH_ZOOM_TRAVEL_REQ = 10;
 export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,5);
 export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,19);
 /** Needed to solve a bug related to map zoom. */
