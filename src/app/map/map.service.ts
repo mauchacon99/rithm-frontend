@@ -54,7 +54,7 @@ export class MapService {
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
 
   /** Check current mouse click if clicked the station option button. */
-  currentMouseClick$ = new BehaviorSubject(false);
+  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
 
   constructor(private http: HttpClient) { }
 

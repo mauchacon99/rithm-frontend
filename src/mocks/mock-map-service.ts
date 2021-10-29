@@ -26,7 +26,7 @@ export class MockMapService {
    currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
 
    /** Check current mouse click if clicked the station option button. */
-   currentMouseClick$ = new BehaviorSubject(false);
+   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.

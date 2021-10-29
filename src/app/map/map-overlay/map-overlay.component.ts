@@ -31,6 +31,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
 
+  /** Data of station used in the map. */
+  station = {};
+
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
 
@@ -108,12 +111,13 @@ export class MapOverlayComponent implements OnDestroy {
         this.mapScale = scale;
     });
 
-    this.mapService.currentMouseClick$
+    this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((click) => {
-        if (click) {
+      .subscribe((clickRes) => {
+        if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.mapService.currentMouseClick$.next(false);
+          this.station = clickRes.data;
+          this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
     });
 
@@ -207,17 +211,15 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**
    * Updates station status to delete.
-   *
-   * @param station The station for which status has to be set to delete.
    */
-   async deleteStation(station: StationMapElement): Promise<void> {
+  async deleteStation(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Confirmation',
       message: `Are you sure you want to delete this station?`,
       okButtonText: 'Confirm',
     });
     if (confirm) {
-      this.mapService.deleteStation(station);
+      this.mapService.deleteStation(<StationMapElement>(this.station));
     }
   }
 
