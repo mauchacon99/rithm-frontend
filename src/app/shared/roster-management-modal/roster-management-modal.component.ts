@@ -29,11 +29,6 @@ export class RosterManagementModalComponent implements OnInit {
   /** Id the organization.  */
   organizationId = '';
 
-  /** Valid. */
-  valid = false;
-
-
-
   /** Array of list users. */
   listUsers = [
     { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0},

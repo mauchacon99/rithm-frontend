@@ -53,7 +53,7 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
-       data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker}
+      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker}
     });
   }
 
@@ -64,7 +64,7 @@ export class RosterComponent implements OnInit {
     this.dialog.open(RosterManagementModalComponent, {
       panelClass: ['w-5/6','sm:w-4/5'],
       maxWidth: '1024px',
-       data: { stationId: this.stationId }
+      data: { stationId: this.stationId }
     });
   }
 }
