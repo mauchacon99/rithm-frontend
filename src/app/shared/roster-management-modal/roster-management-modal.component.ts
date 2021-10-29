@@ -31,6 +31,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** Loading members from roster. */
+  loadingMembers=true;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -82,6 +85,7 @@ export class RosterManagementModalComponent implements OnInit {
       .subscribe((orgUsers) => {
         if (orgUsers) {
           this.listUsersOrganization = orgUsers;
+          this.loadingMembers=false;
         }
       }, (error: unknown) => {
         this.errorService.displayError(

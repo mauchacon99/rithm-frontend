@@ -5,6 +5,9 @@
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
           <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true" [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
       </div>
+      <div class="w-24 items-center py-2" *ngIf="loadingMembers">
+        <app-loading-indicator></app-loading-indicator>
+      </div>
     </div>
   </div>
 </div>
