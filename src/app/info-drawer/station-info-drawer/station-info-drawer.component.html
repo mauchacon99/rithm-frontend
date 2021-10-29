@@ -35,9 +35,9 @@
     </div>
     <div class="py-1" *ngIf="!docGenLoading">
       <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)" *ngIf="!showDocumentGenerationError">
-        <mat-radio-button class="px-1" value="DocumentGenerationStatus.None" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
+        <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
         </mat-radio-button>
-        <mat-radio-button class="px-1" value="DocumentGenerationStatus.Manual" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
+        <mat-radio-button class="px-1" value="Manual" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
         </mat-radio-button>
       </mat-radio-group>
       <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
