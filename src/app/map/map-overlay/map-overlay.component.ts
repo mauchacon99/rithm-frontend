@@ -215,7 +215,7 @@ export class MapOverlayComponent implements OnDestroy {
   async deleteStation(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Confirmation',
-      message: `Are you sure you want to delete this station?`,
+      message: `Are you sure, you want to delete this station?`,
       okButtonText: 'Confirm',
     });
     if (confirm) {
