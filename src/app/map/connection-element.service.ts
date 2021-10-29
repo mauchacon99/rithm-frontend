@@ -52,15 +52,17 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection line if context is not defined');
     }
 
+    const ctx = this.canvasContext;
+
     // Draw connection line
-    this.canvasContext.setLineDash([0, 0]);
+    ctx.setLineDash([0, 0]);
 
     // Line
-    this.canvasContext.beginPath();
-    this.canvasContext.moveTo(startPoint.x, startPoint.y);
+    ctx.beginPath();
+    ctx.moveTo(startPoint.x, startPoint.y);
     if (startPoint.x - STATION_WIDTH*1.5*this.mapScale < endPoint.x) {
       const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
-      this.canvasContext.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+      ctx.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
     } else {
       //Using trig to get points.
       const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
@@ -85,24 +87,24 @@ export class ConnectionElementService {
 
       startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
       || (startPoint.y <= endPoint.y  &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
-        this.canvasContext.arc(
+        ctx.arc(
           startPoint.x, startPoint.y - STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, true) :
-        this.canvasContext.arc(
+        ctx.arc(
           startPoint.x, startPoint.y + STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, false);
-      this.canvasContext.bezierCurveTo(
+      ctx.bezierCurveTo(
         startArc.x - STATION_WIDTH*this.mapScale, startArc.y,
         endArc.x + STATION_WIDTH*this.mapScale, endArc.y,
         endArc.x, endArc.y);
       startPoint.y <= endPoint.y ?
-        this.canvasContext.arc(
+        ctx.arc(
           endPoint.x, endPoint.y - STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, true) :
-        this.canvasContext.arc(
+        ctx.arc(
           endPoint.x, endPoint.y + STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, false);
     }
-    this.canvasContext.lineWidth = this.mapScale > SCALE_REDUCED_RENDER
+    ctx.lineWidth = this.mapScale > SCALE_REDUCED_RENDER
     ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
-    this.canvasContext.strokeStyle = CONNECTION_DEFAULT_COLOR;
-    this.canvasContext.stroke();
+    ctx.strokeStyle = CONNECTION_DEFAULT_COLOR;
+    ctx.stroke();
   }
 
   /**
@@ -115,6 +117,8 @@ export class ConnectionElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection arrow if context is not defined');
     }
+    const ctx = this.canvasContext;
+
     const controlPoints = this.getConnectionLineControlPoints(startPoint, endPoint);
 
     const ex = endPoint.x;
@@ -127,15 +131,15 @@ export class ConnectionElementService {
     let x, y;
     x = (arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
     y = (arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
-    this.canvasContext.beginPath();
-    this.canvasContext.moveTo(ex + x, ey + y);
-    this.canvasContext.lineTo(ex, ey);
+    ctx.beginPath();
+    ctx.moveTo(ex + x, ey + y);
+    ctx.lineTo(ex, ey);
     x = (arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
     y = (arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
-    this.canvasContext.lineTo(ex + x, ey + y);
-    this.canvasContext.fillStyle = CONNECTION_DEFAULT_COLOR;
-    this.canvasContext.stroke();
-    this.canvasContext.fill();
+    ctx.lineTo(ex + x, ey + y);
+    ctx.fillStyle = CONNECTION_DEFAULT_COLOR;
+    ctx.stroke();
+    ctx.fill();
   }
 
   /**
