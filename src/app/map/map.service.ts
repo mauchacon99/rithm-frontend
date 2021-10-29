@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
-import { DEFAULT_CANVAS_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS } from './map-constants';
+import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
+  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,8 +20,8 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
- /** This behavior subject will track the array of stations and flows. */
-  mapData: MapData = {stations: [], flows: []};
+  /** This behavior subject will track the array of stations and flows. */
+  mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
   mapDataRecieved$ = new BehaviorSubject(false);
@@ -49,6 +50,12 @@ export class MapService {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
+  /** The coordinate at which the current mouse point in the overall map. */
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
+
+  /** Check current mouse click if clicked the station option button. */
+  currentMouseClick$ = new BehaviorSubject(false);
+
   constructor(private http: HttpClient) { }
 
   /**
@@ -67,18 +74,18 @@ export class MapService {
    */
   getMapElements(): Observable<MapData> {
     return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
-    .pipe(map((data) => {
-      data.stations.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      data.flows.map((e) => {
-        e.status = MapItemStatus.Normal;
-      });
-      this.mapData = data;
-      this.useStationData();
-      this.mapDataRecieved$.next(true);
-      return data;
-    }));
+      .pipe(map((data) => {
+        data.stations.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        data.flows.map((e) => {
+          e.status = MapItemStatus.Normal;
+        });
+        this.mapData = data;
+        this.useStationData();
+        this.mapDataRecieved$.next(true);
+        return data;
+      }));
   }
 
   /**
@@ -130,20 +137,20 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-   deepCopy<T>(source: T): T {
+  deepCopy<T>(source: T): T {
     return Array.isArray(source)
-    ? source.map(item => this.deepCopy(item))
-    : source instanceof Date
-    ? new Date(source.getTime())
-    : source && typeof source === 'object'
+      ? source.map(item => this.deepCopy(item))
+      : source instanceof Date
+        ? new Date(source.getTime())
+        : source && typeof source === 'object'
           ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-             Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
-             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-             o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-             return o;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+            return o;
           }, Object.create(Object.getPrototypeOf(source)))
-    : source as T;
+          : source as T;
   }
 
   /**
@@ -182,18 +189,17 @@ export class MapService {
       flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal)
     };
 
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData );
+    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
   }
 
   /**
    * Zooms the map by adjusting the map scale and position.
    *
-   * @param scaleFactor The multiplier by which to scale the size of elements on the map.
+   * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param zoomAmount How much to zoom in/out.
    */
-  zoom(scaleFactor: number, zoomOrigin = this.getCanvasCenterPoint()): void {
-
-    const zoomingIn = scaleFactor > 1;
+   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
@@ -201,21 +207,32 @@ export class MapService {
     }
 
     // Don't zoom out past a certain point if in build mode
-    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS*2 && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
       return;
     }
 
     const translateDirection = zoomingIn ? -1 : 1;
 
     // translate current viewport position
-    const newScale = this.mapScale$.value * scaleFactor;
+    const newScale = zoomingIn ? this.mapScale$.value / zoomAmount : this.mapScale$.value * zoomAmount;
 
-    // TODO: Find a cleaner way to refactor the specific scale; also isn't working for non 2x .5x?
-    this.currentCanvasPoint$.value.x -= Math.round(zoomOrigin.x / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
-    this.currentCanvasPoint$.value.y -= Math.round(zoomOrigin.y / (zoomingIn ? newScale : this.mapScale$.value) * translateDirection);
+    const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
+      if (zoom) {
+        return Math.round(
+          (zoomOrigin[coord] / this.mapScale$.value - zoomOrigin[coord] / newScale) * translateDirection
+        );
+      } else {
+        return Math.round(
+          (zoomOrigin[coord] / newScale - zoomOrigin[coord] / this.mapScale$.value) * translateDirection
+        );
+      }
+    };
+
+    this.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
+    this.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
 
     // scale
-    this.mapScale$.next(zoomingIn ? Math.min(MAX_SCALE, newScale) : Math.max(MIN_SCALE, newScale));
+    this.mapScale$.next(zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale));
   }
 
   /**
