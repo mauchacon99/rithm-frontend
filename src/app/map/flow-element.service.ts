@@ -29,6 +29,8 @@ export class FlowElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw flow if context is not defined');
     }
+    const ctx = this.canvasContext;
+
     const flowPoints: Point[] = [];
 
     // Get the stations within this flow
@@ -52,17 +54,17 @@ export class FlowElementService {
     const strokeColor = CONNECTION_DEFAULT_COLOR;
 
     // Draw the bounding box
-    this.canvasContext.setLineDash([7, 7]);
-    this.canvasContext.beginPath();
-    this.canvasContext.strokeStyle = strokeColor;
+    ctx.setLineDash([7, 7]);
+    ctx.beginPath();
+    ctx.strokeStyle = strokeColor;
 
-    this.canvasContext.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
+    ctx.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
     boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
 
     for (const point of boundaryPoints) {
-    this.canvasContext.lineTo(point.x, point.y);
+    ctx.lineTo(point.x, point.y);
     }
-    this.canvasContext.stroke();
+    ctx.stroke();
   }
 
   /**
