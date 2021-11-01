@@ -43,6 +43,9 @@ export class MapOverlayComponent implements OnDestroy {
   /** Zoom level build enabled. */
   zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
 
+  /**Track zoomCount. */
+  zoomCount = 0;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -106,7 +109,11 @@ export class MapOverlayComponent implements OnDestroy {
           this.mapService.currentMouseClick$.next(false);
         }
       });
-
+    this.mapService.zoomCount$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((count) => {
+        this.zoomCount = count;
+      });
   }
 
   /**
@@ -173,14 +180,16 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
-    this.mapService.zoom(true, undefined, Math.pow(ZOOM_VELOCITY, 5));
+    this.mapService.zoomCount$.next(this.zoomCount + 50);
+    this.mapService.handleZoom(undefined, false);
   }
 
   /**
    * Zooms the map out from center.
    */
   zoomOut(): void {
-    this.mapService.zoom(false, undefined, Math.pow(ZOOM_VELOCITY, 5));
+    this.mapService.zoomCount$.next(this.zoomCount - 50);
+    this.mapService.handleZoom(undefined, false);
   }
 
   /**
