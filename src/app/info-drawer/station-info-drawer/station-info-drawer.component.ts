@@ -100,9 +100,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.getParams();
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
 
+    this.docGenLoading = true;
     this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(data => {
+        this.docGenLoading = false;
         this.stationName = data.length > 0 ? data : 'Untitled Station';
       }, (error: unknown) => {
         this.docGenLoading = false;
