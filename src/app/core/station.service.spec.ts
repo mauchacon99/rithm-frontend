@@ -291,6 +291,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(usersIds);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the potential roster members of the station', () => {
