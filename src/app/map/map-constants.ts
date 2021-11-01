@@ -8,7 +8,6 @@ export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 // Scale
 export const DEFAULT_SCALE = 1;
 export const ZOOM_VELOCITY = .99;
-export const PINCH_ZOOM_TRAVEL_REQ = 10;
 export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,50);
 export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,190);
 /** Needed to solve a bug related to map zoom. */

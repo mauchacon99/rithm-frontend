@@ -190,7 +190,6 @@ export class MapService {
    */
   handleZoom(zoomOrigin = this.getCanvasCenterPoint(), pinch: boolean): void {
     let count = this.zoomCount$.value;
-    console.log(count);
 
     const zoomLogic = () => {
       if (count > 0) {
