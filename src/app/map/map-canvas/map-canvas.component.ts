@@ -329,21 +329,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
       const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
       const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
+      const averageDiff = (xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2;
 
       const middlePoint = {
         x: (touchPos[0].x + touchPos[1].x) / 2,
         y: (touchPos[0].y + touchPos[1].y) / 2
       };
 
-      if (xCurrentDiff > xBeginDiff + PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff > yBeginDiff + PINCH_ZOOM_TRAVEL_REQ) {
+      if (xCurrentDiff > xBeginDiff || yCurrentDiff > yBeginDiff) {
         // Zoom in
-        this.mapService.zoom(true, middlePoint);
         this.lastTouchCoords = touchPos;
+        this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+        this.mapService.handleZoom(middlePoint, true);
         this.drawElements();
-      } else if (xCurrentDiff < xBeginDiff - PINCH_ZOOM_TRAVEL_REQ|| yCurrentDiff < yBeginDiff - PINCH_ZOOM_TRAVEL_REQ) {
+      } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
         // Zoom out
-        this.mapService.zoom(false, middlePoint);
         this.lastTouchCoords = touchPos;
+        this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+        this.mapService.handleZoom(middlePoint, true);
         this.drawElements();
       }
     }
@@ -382,14 +385,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.deltaY < 0) {
       // Zoom in
-      // this.mapService.zoom(true, mousePoint);
       this.mapService.zoomCount$.next(this.zoomCount + 10);
-      this.mapService.handleZoom(mousePoint);
+      this.mapService.handleZoom(mousePoint, false);
     } else {
       // Zoom out
-      // this.mapService.zoom(false, mousePoint);
       this.mapService.zoomCount$.next(this.zoomCount - 10);
-      this.mapService.handleZoom(mousePoint);
+      this.mapService.handleZoom(mousePoint, false);
     }
 
     event.preventDefault();
