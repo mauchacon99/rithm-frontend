@@ -80,6 +80,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param pageNum The current page.
    */
   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): void {
+    this.loadingMembers = true;
     this.stationService.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
       .pipe(first())
       .subscribe((orgUsers) => {
