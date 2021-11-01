@@ -56,6 +56,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
+  /**Track zoomCount. */
+  zoomCount = 0;
+
   /**
    * Add station mode active.
    *
@@ -105,6 +108,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.stations = this.mapService.stationElements;
           this.flows = this.mapService.flowElements;
           this.drawElements();
+        });
+      this.mapService.zoomCount$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((count) => {
+          this.zoomCount = count;
         });
     });
   }
@@ -374,10 +382,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (event.deltaY < 0) {
       // Zoom in
-      this.mapService.zoom(true, mousePoint);
+      // this.mapService.zoom(true, mousePoint);
+      this.mapService.zoomCount$.next(this.zoomCount + 10);
+      this.mapService.handleZoom(mousePoint);
     } else {
       // Zoom out
-      this.mapService.zoom(false, mousePoint);
+      // this.mapService.zoom(false, mousePoint);
+      this.mapService.zoomCount$.next(this.zoomCount - 10);
+      this.mapService.handleZoom(mousePoint);
     }
 
     event.preventDefault();

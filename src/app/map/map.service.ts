@@ -47,6 +47,9 @@ export class MapService {
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
+  /** The number of zoom levels to increment or decrement. */
+  zoomCount$ = new BehaviorSubject(0);
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
@@ -177,6 +180,34 @@ export class MapService {
     };
 
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
+  }
+
+  /**
+   * Calls the zoom() method a number of times equal to the zoomCount.
+   *
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   */
+  handleZoom(zoomOrigin = this.getCanvasCenterPoint()): void {
+    let count = this.zoomCount$.value;
+    console.log(count);
+
+    if (count > 0) {
+      this.zoom(true, zoomOrigin);
+      count -= 1;
+      this.zoomCount$.next(count);
+      if (count > 0) {
+        this.handleZoom(zoomOrigin);
+      }
+    }
+
+    if (count < 0) {
+      this.zoom(false, zoomOrigin);
+      count += 1;
+      this.zoomCount$.next(count);
+      if (count < 0) {
+        this.handleZoom(zoomOrigin);
+      }
+    }
   }
 
   /**
