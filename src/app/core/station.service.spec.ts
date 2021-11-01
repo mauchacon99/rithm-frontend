@@ -298,7 +298,8 @@ describe('StationService', () => {
   it('should return the potential roster members of the station', () => {
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
-    const orgUsers: StationPotentialRostersUsers = {
+    const pageSize = 20;
+    const expectedResponse: StationPotentialRostersUsers = {
       potentialRosterUsers: [{
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
@@ -328,8 +329,15 @@ describe('StationService', () => {
 
     service.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .subscribe((users) => {
-        expect(users).toEqual(orgUsers);
+        expect(users).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationRithmId}&pageNum=${pageNum}&pageSize=${pageSize}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should delete a station', () => {
