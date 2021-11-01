@@ -30,7 +30,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  Users = [
+  users = [
     { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0},
     { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false, rithmId: 1 },
     { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false, rithmId: 2 },
@@ -110,7 +110,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param index The index position of the user in the list to toggle.
    */
    toggleSelectedWorker(index: number): void {
-    this.Users[index].isWorker = !this.Users[index].isWorker;
+    this.users[index].isWorker = !this.users[index].isWorker;
   }
 
   /**
