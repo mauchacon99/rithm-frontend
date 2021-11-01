@@ -37,7 +37,7 @@ jobs:
 
   # Checks that the Angular app successfully builds using ahead-of-time compilation
   build:
-    runs-on: [self-hosted, DEV]
+    runs-on: ubuntu-latest
     needs: [lint-app, lint-stylesheets]
     timeout-minutes: 5
 
