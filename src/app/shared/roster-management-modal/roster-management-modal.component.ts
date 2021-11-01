@@ -30,7 +30,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  listUsers = [
+  Users = [
     { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0},
     { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false, rithmId: 1 },
     { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false, rithmId: 2 },
@@ -107,10 +107,10 @@ export class RosterManagementModalComponent implements OnInit {
   /**
    * Receives the worker's index to change the state of the isWorker field.
    *
-   * @param index The id of the organization.
+   * @param index The index position of the user in the list to toggle.
    */
-  changeSelectedWorker(index: number): void {
-    this.listUsers[index].isWorker = !this.listUsers[index].isWorker;
+   toggleSelectedWorker(index: number): void {
+    this.Users[index].isWorker = !this.Users[index].isWorker;
   }
 
   /**
