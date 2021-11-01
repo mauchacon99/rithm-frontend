@@ -83,11 +83,12 @@ export class RosterManagementModalComponent implements OnInit {
     this.stationService.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
       .pipe(first())
       .subscribe((orgUsers) => {
+        this.loadingMembers = false;
         if (orgUsers) {
           this.listUsersOrganization = orgUsers;
-          this.loadingMembers=false;
         }
       }, (error: unknown) => {
+        this.loadingMembers = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
