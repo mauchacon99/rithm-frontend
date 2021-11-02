@@ -6,7 +6,7 @@ import { StationRosterMember } from './station-roster-member';
 export interface StationPotentialRostersUsers {
 
   /** The list of possible users of the station. */
-  potentialRosterUsers: StationRosterMember[];
+  users: StationRosterMember[];
 
   /** The total number of users in the list. */
   totalUsers: number;
