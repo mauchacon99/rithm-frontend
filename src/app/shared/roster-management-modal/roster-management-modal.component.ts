@@ -117,13 +117,35 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param usersId The selected user id to remove.
    */
-   removeMemberFromRoster(usersId: string): void {
+  removeMemberFromRoster(usersId: string): void {
     const usersIds: string[] = [];
     usersIds.push(usersId);
     this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
       .pipe(first())
       .subscribe((data) => {
         this.rosterMembers = data;
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
+
+  /**
+   * Remove owner from the station's roster.
+   *
+   * @param usersId The selected owners id array to removed.
+   */
+  removeUsersFromOwnerRoster(usersId: string): void {
+    const usersIds: string[] = [];
+    usersIds.push(usersId);
+    this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, usersIds)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.rosterMembers = data;
+        }
       }, (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
