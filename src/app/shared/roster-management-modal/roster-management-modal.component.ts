@@ -28,7 +28,7 @@ export class RosterManagementModalComponent implements OnInit {
   rosterMembers: StationRosterMember[] = [];
 
   /** Roster type received from modal. */
-  rosterType = '';
+  rosterType: 'worker' | 'owner' = 'worker';
 
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
@@ -39,8 +39,8 @@ export class RosterManagementModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public modalData: {
       /** The station rithmId. */
       stationId: string;
-      /** The type received from modal.  */
-      type: string;
+      /** The type of roster which will be showed.  */
+      type: 'worker' | 'owner';
     },
   ) {
     this.stationRithmId = this.modalData.stationId;
