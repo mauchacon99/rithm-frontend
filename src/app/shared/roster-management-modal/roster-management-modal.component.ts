@@ -31,14 +31,14 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Array of list users. */
   users = [
-    { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0},
-    { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false, rithmId: 1 },
-    { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false, rithmId: 2 },
-    { firstName: 'Chuck', lastName: 'Brown', email: 'chuck.brown@email.com', isWorker: false, rithmId: 3 },
-    { firstName: 'Harrison', lastName: 'King', email: 'harrison.king@email.com', isWorker: false, rithmId: 4 },
-    { firstName: 'John', lastName: 'Matrix', email: 'john.matrix@email.com', isWorker: false, rithmId: 5 },
-    { firstName: 'Barry', lastName: 'Allen', email: 'barry.allen@email.com', isWorker: false, rithmId: 6 },
-    { firstName: 'Steve', lastName: 'Rogers', email: 'steve.rogers@email.com', isWorker: false, rithmId: 7 },
+    { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0, badge: 'none'},
+    { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false, rithmId: 1, badge: 'none'},
+    { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false, rithmId: 2, badge: 'none'},
+    { firstName: 'Chuck', lastName: 'Brown', email: 'chuck.brown@email.com', isWorker: false, rithmId: 3, badge: 'none'},
+    { firstName: 'Harrison', lastName: 'King', email: 'harrison.king@email.com', isWorker: false, rithmId: 4, badge: 'none'},
+    { firstName: 'John', lastName: 'Matrix', email: 'john.matrix@email.com', isWorker: false, rithmId: 5, badge: 'none'},
+    { firstName: 'Barry', lastName: 'Allen', email: 'barry.allen@email.com', isWorker: false, rithmId: 6, badge: 'none'},
+    { firstName: 'Steve', lastName: 'Rogers', email: 'steve.rogers@email.com', isWorker: false, rithmId: 7, badge: 'none'},
   ];
 
   /** The worker roster of the station given. */
@@ -111,6 +111,11 @@ export class RosterManagementModalComponent implements OnInit {
    */
    toggleSelectedWorker(index: number): void {
     this.users[index].isWorker = !this.users[index].isWorker;
+    if (this.users[index].isWorker){
+      this.users[index].badge = 'check';
+    } else {
+      this.users[index].badge = 'none';
+    }
   }
 
   /**
