@@ -22,11 +22,14 @@ export class MockMapService {
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
 
-   /** The coordinate at which the current mouse point in the overall map. */
-   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
+  /** The coordinate at which the current mouse point in the overall map. */
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
 
-   /** Check current mouse click if clicked the station option button. */
-   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+  /** Check current mouse click if clicked the station option button. */
+  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+
+  /** The number of zoom levels to increment or decrement. */
+  zoomCount$ = new BehaviorSubject(0);
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.

@@ -4,28 +4,23 @@
 src/assets/**/* @belugasanity
 .browserslistrc @belugasanity
 
-*.ts @Gobsmack90
-*.js @Gobsmack90
-*.spec.ts @Gobsmack90
-*.json @Gobsmack90
+*.ts @HendricksonTyler
+*.js @HendricksonTyler
+*.spec.ts @HendricksonTyler
+*.json @HendricksonTyler
 
-*.html @Gobsmack90 @belugasanity
+*.html @HendricksonTyler @belugasanity
 
 # Team Falcon rules
 src/app/map/*.scss @Gobsmack90
 src/app/map/**/*.scss @Gobsmack90
-src/app/map/**/*.html @Gobsmack90
-
-src/app/map/*.ts @Gobsmack90 @adarsh3593
-src/app/map/*.js @Gobsmack90 @adarsh3593
-src/app/map/*.spec.ts @Gobsmack90 @adarsh3593
-src/app/map/*.json @Gobsmack90 @adarsh3593
+src/app/map/**/*.html @HendricksonTyler @Gobsmack90
 
 # Team Lion rules
-src/app/detail/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
-src/app/document/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
-src/app/station/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
-src/app/info-drawer/**/*.ts @Gobsmack90 @cqmdeveloper @belugasanity
+src/app/detail/**/*.ts @HendricksonTyler @cqmdeveloper
+src/app/document/**/*.ts @HendricksonTyler @cqmdeveloper
+src/app/station/**/*.ts @HendricksonTyler @cqmdeveloper
+src/app/info-drawer/**/*.ts @HendricksonTyler @cqmdeveloper
 
 src/app/detail/**/*.html @strut-software/team-lion-style-reviewers
 src/app/document/**/*.html @strut-software/team-lion-style-reviewers
