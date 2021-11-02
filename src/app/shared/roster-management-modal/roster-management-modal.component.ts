@@ -120,7 +120,7 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param usersId The selected user id to remove.
    */
-  removeUsersToRoster(usersId: string): void {
+  removeMemberFromRoster(usersId: string): void {
     if (this.rosterType === 'worker') {
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
