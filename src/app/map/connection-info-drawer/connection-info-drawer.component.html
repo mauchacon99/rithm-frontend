@@ -1,1 +1,28 @@
-<p>connection-info-drawer works!</p>
+<div class="h-full w-full flex justify-center items-center absolute" *ngIf="connectionLoading">
+  <app-loading-indicator></app-loading-indicator>
+</div>
+<div class="grid grid-cols-1" *ngIf="!connectionLoading">
+  <div class="w-full py-2">
+    <div class="col-span-12">
+      <p class="overline">Connection Information</p>
+    </div>
+    <div class="col-span-12">
+      <p>{{station1}} connects to {{station2}}</p>
+    </div>
+  </div>
+  <div class="w-full py-2">
+    <p class="overline">Flow Logic</p>
+    <div class="col-span-12">
+      <p>No data available.</p>
+    </div>
+  </div>
+  <div class="w-full py-2">
+    <button mat-stroked-button color="warn" class="priority" (click)="toggleDrawer('connectionInfo')">Remove Connection</button>
+  </div>
+</div>
+<div class="flex justify-center">
+  <div class="bottom-0 absolute mb-7">
+    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
+      (click)="toggleDrawer('connectionInfo')">Done</button>
+  </div>
+</div>
