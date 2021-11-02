@@ -413,7 +413,7 @@ describe('StationService', () => {
 
   it('should remove a member the owner from the roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
-    const userIdList: Array<string> = [
+    const usersIds: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
       '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
@@ -442,7 +442,7 @@ describe('StationService', () => {
       isWorker: false,
     }];
 
-    service.removeUsersFromOwnerRoster(stationId, userIdList)
+    service.removeUsersFromOwnerRoster(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
