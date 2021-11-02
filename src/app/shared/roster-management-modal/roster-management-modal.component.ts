@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
@@ -31,14 +32,23 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** Roster type received from modal. */
+  rosterType = '';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
     private userService: UserService,
-    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId. */ stationId: string },
+    @Inject(MAT_DIALOG_DATA) public modalData: {
+      /** The station rithmId. */
+      stationId: string;
+      /** The type received from modal.  */
+      type: string;
+    },
   ) {
     this.stationRithmId = this.modalData.stationId;
     this.organizationId = this.userService.user?.organization;
+    this.rosterType = this.modalData.type;
   }
 
   /**
