@@ -3,7 +3,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UserService } from 'src/app/core/user.service';
 import { StationRosterMember } from 'src/models';
 
 /**
@@ -25,27 +24,25 @@ export class RosterManagementModalComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
-  /** Id the organization.  */
-  organizationId = '';
-
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
+
+  /** Total the of members in the list of organization members. */
+  totalPotentialUsers = 0;
 
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId. */ stationId: string },
   ) {
     this.stationRithmId = this.modalData.stationId;
-    this.organizationId = this.userService.user?.organization;
   }
 
   /**
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    this.getPotentialStationRosterMembers(this.organizationId, this.stationRithmId, this.pageNumUsersOrganization);
+    this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
     this.getStationWorkerRoster(this.stationRithmId);
   }
 
@@ -72,16 +69,16 @@ export class RosterManagementModalComponent implements OnInit {
   /**
    * Get organization users for a specific station.
    *
-   * @param organizationId The id of the organization.
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
-  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): void {
-    this.stationService.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
+  getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
+    this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((orgUsers) => {
-        if (orgUsers) {
-          this.listUsersOrganization = orgUsers;
+      .subscribe((potentialUsers) => {
+        if (potentialUsers) {
+          this.listUsersOrganization = potentialUsers.users;
+          this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
@@ -117,7 +114,7 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param usersId The selected user id to remove.
    */
-   removeMemberFromRoster(usersId: string): void {
+  removeMemberFromRoster(usersId: string): void {
     const usersIds: string[] = [];
     usersIds.push(usersId);
     this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
