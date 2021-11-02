@@ -30,6 +30,10 @@ export class RosterManagementModalComponent implements OnInit {
   /** Charges while users are being removed. */
   loadingMembersRemoved=false;
 
+  /** The roster type received from modal data. */
+  rosterType: 'worker' | 'owner' = 'owner';
+
+
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
@@ -114,25 +118,35 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Removes members from the station's worker roster.
+   * Remove users to the worker roster.
    *
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    const usersIds: string[] = [];
-    usersIds.push(usersId);
-    this.loadingMembersRemoved=true;
-    this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
-      .pipe(first())
-      .subscribe((data) => {
-        this.loadingMembersRemoved=false;
-        this.rosterMembers = data;
-      }, (error: unknown) => {
-        this.loadingMembersRemoved=false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+    if (this.rosterType === 'worker') {
+      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
+        .pipe(first())
+        .subscribe((data) => {
+          this.rosterMembers = data;
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    } else if (this.rosterType === 'owner') {
+      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
+        .pipe(first())
+        .subscribe((data) => {
+          if (data) {
+            this.rosterMembers = data;
+          }
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
   }
 }
