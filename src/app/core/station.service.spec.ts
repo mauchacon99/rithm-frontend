@@ -467,4 +467,13 @@ describe('StationService', () => {
         expect(response).toEqual(expectedResponse);
       });
   });
+
+  it('should update the status to see if the document is editable', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const newStatus = true;
+    service.updateStatusDocumentEditable(stationRithmId, newStatus)
+      .subscribe((response) => {
+        expect(response).toEqual(newStatus);
+      });
+  });
 });

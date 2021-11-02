@@ -180,7 +180,7 @@ export class StationService {
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
@@ -250,5 +250,17 @@ export class StationService {
       isWorker: false,
     }];
     return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
   }
 }
