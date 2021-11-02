@@ -1,9 +1,15 @@
-import { FlowMapData, Point } from '.';
+import { FlowElementHoverType, FlowMapData, Point } from '.';
 
 export interface FlowMapElement extends FlowMapData {
 
   /** The points used for the boundary shape of the flow (the points used for the convex hull). */
   boundaryPoints: Point[];
+
+  /** Whether the flow is currently being dragged or not. */
+  dragging: boolean;
+
+  /** Whether the flow is currently hovering? */
+  hoverActive: FlowElementHoverType;
 }
 
 /**
@@ -17,7 +23,10 @@ export class FlowMapElement {
    * @param flowMapData The `FlowMapData` returned from the API.
    */
   constructor(flowMapData: FlowMapData) {
-
+    this.boundaryPoints = [];
+    this.dragging = false;
+    this.hoverActive = FlowElementHoverType.None;
     Object.assign(this, flowMapData);
   }
+
 }
