@@ -31,6 +31,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** Charges while users are being removed. */
+  loadingMembersRemoved=false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -120,11 +123,14 @@ export class RosterManagementModalComponent implements OnInit {
    removeMemberFromRoster(usersId: string): void {
     const usersIds: string[] = [];
     usersIds.push(usersId);
+    this.loadingMembersRemoved=true;
     this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
       .pipe(first())
       .subscribe((data) => {
+        this.loadingMembersRemoved=false;
         this.rosterMembers = data;
       }, (error: unknown) => {
+        this.loadingMembersRemoved=false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
