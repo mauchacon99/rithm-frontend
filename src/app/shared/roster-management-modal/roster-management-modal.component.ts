@@ -31,6 +31,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** The roster type received from modal data. */
+  rosterType: 'worker' | 'owner' = 'owner';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -113,44 +116,37 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Removes members from the station's worker roster.
+   * Remove users to the worker roster.
    *
    * @param usersId The selected user id to remove.
    */
-  removeMemberFromRoster(usersId: string): void {
+  removeUsersToRoster(usersId: string): void {
     const usersIds: string[] = [];
     usersIds.push(usersId);
-    this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
-      .pipe(first())
-      .subscribe((data) => {
-        this.rosterMembers = data;
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
-  }
-
-  /**
-   * Remove owner from the station's roster.
-   *
-   * @param usersId The selected owners id array to removed.
-   */
-  removeUsersFromOwnerRoster(usersId: string): void {
-    const usersIds: string[] = [];
-    usersIds.push(usersId);
-    this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, usersIds)
-      .pipe(first())
-      .subscribe((data) => {
-        if (data) {
+    if (this.rosterType === 'worker') {
+      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
+        .pipe(first())
+        .subscribe((data) => {
           this.rosterMembers = data;
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    } else if (this.rosterType === 'owner') {
+      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, usersIds)
+        .pipe(first())
+        .subscribe((data) => {
+          if (data) {
+            this.rosterMembers = data;
+          }
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
   }
 }
