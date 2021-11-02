@@ -29,6 +29,11 @@ export class RosterManagementModalComponent implements OnInit {
   /** Id the organization.  */
   organizationId = '';
 
+
+  /** Are members removed being loaded. */
+  loadingMembersRemoved=false;
+
+
   /** Array of list users. */
   users = [
     { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0, badge: 'none'},
@@ -143,11 +148,15 @@ export class RosterManagementModalComponent implements OnInit {
    removeMemberFromRoster(usersId: string): void {
     const usersIds: string[] = [];
     usersIds.push(usersId);
+    this.loadingMembersRemoved=true;
     this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
       .pipe(first())
       .subscribe((data) => {
+        this.loadingMembersRemoved=false;
         this.rosterMembers = data;
+
       }, (error: unknown) => {
+        this.loadingMembersRemoved=false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
