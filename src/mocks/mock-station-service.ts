@@ -279,7 +279,7 @@ export class MockStationService {
       })).pipe(delay(1000));
     } else {
       const orgUsers: StationPotentialRostersUsers = {
-        potentialRosterUsers: [{
+        users: [{
           rithmId: '12dasd1-asd12asdasd-asdas',
           firstName: 'Cesar',
           lastName: 'Quijada',
