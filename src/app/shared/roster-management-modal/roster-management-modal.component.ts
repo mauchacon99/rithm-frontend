@@ -77,7 +77,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((potentialUsers) => {
         if (potentialUsers) {
-          this.listUsersOrganization = potentialUsers.potentialRosterUsers;
+          this.listUsersOrganization = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
