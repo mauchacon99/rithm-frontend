@@ -121,10 +121,8 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeUsersToRoster(usersId: string): void {
-    const usersIds: string[] = [];
-    usersIds.push(usersId);
     if (this.rosterType === 'worker') {
-      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, usersIds)
+      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
           this.rosterMembers = data;
@@ -135,7 +133,7 @@ export class RosterManagementModalComponent implements OnInit {
           );
         });
     } else if (this.rosterType === 'owner') {
-      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, usersIds)
+      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
           if (data) {
