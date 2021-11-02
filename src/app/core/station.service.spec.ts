@@ -300,7 +300,7 @@ describe('StationService', () => {
     const pageNum = 1;
     const pageSize = 20;
     const expectedResponse: StationPotentialRostersUsers = {
-      potentialRosterUsers: [{
+      users: [{
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
         lastName: 'Quijada',
