@@ -111,11 +111,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
    toggleSelectedWorker(index: number): void {
     this.users[index].isWorker = !this.users[index].isWorker;
-    if (this.users[index].isWorker){
-      this.users[index].badge = 'check';
-    } else {
-      this.users[index].badge = 'none';
-    }
+    console.log(this.users);
   }
 
   /**
