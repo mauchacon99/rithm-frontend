@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MockComponent } from 'ng-mocks';
-import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationMapElement } from 'src/helpers';
 import { MockMapService } from 'src/mocks';
 import { MapItemStatus, StationMapData } from 'src/models';
@@ -44,7 +42,6 @@ describe('ConnectionInfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         ConnectionInfoDrawerComponent,
-        MockComponent(LoadingIndicatorComponent),
       ],
       imports:[
         MatButtonModule,

@@ -18,9 +18,6 @@ export class ConnectionInfoDrawerComponent {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
 
-  /** Whether the request to get the connection info is currently underway. */
-  connectionLoading = false;
-
   /** Array of the two connected stations. */
   connectedStations: StationMapElement[] = [];
 
