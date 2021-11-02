@@ -30,7 +30,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
 
-  /** Are members removed being loaded. */
+  /** Charges while users are being removed. */
   loadingMembersRemoved=false;
 
 
