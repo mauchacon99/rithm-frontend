@@ -119,24 +119,9 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-    const mockPrevAddRosterStation: StationRosterMember[] = [{
-      rithmId: '',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }, {
-      rithmId: '',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }];
-    return of(mockPrevAddRosterStation).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`, userIds);
   }
 
   /**
