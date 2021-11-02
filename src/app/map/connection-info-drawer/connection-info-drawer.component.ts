@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -14,7 +14,7 @@ import { MapService } from '../map.service';
   styleUrls: ['./connection-info-drawer.component.scss']
 })
 
-export class ConnectionInfoDrawerComponent implements OnInit {
+export class ConnectionInfoDrawerComponent {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
 
@@ -46,12 +46,6 @@ export class ConnectionInfoDrawerComponent implements OnInit {
           this.station2 = this.connectedStations[1].stationName;
         }
       });
-  }
-
-  /** On Init. */
-  ngOnInit(): void {
-    this.station1 = this.connectedStations[0].stationName;
-    this.station2 = this.connectedStations[1].stationName;
   }
 
   /**
