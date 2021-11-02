@@ -106,13 +106,13 @@ export class MapOverlayComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stations = this.mapService.stationElements;
-    });
+      });
 
     this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
-    });
+      });
 
     this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
@@ -122,7 +122,7 @@ export class MapOverlayComponent implements OnDestroy {
           this.station = clickRes.data;
           this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
-    });
+      });
 
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
@@ -230,6 +230,20 @@ export class MapOverlayComponent implements OnDestroy {
     });
     if (confirm) {
       this.mapService.deleteStation(<StationMapElement>(this.station));
+    }
+  }
+
+  /**
+   * Removes all connections for a station.
+   */
+  async removeStationConnections(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Confirmation',
+      message: `Are you sure? This will remove all connections to and from this station. This action cannot be undone.`,
+      okButtonText: 'Confirm',
+    });
+    if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
     }
   }
 

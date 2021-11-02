@@ -135,6 +135,31 @@ export class MapService {
   }
 
   /**
+   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
+   *
+   * @param station The station for which connections has to be removed.
+   */
+   removeStationConnection(station: StationMapElement): void {
+    this.stationElements.map((e) => {
+      if (e.rithmId === station.rithmId) {
+        e.previousStations = [];
+        e.nextStations = [];
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.previousStations.includes(station.rithmId)) {
+        e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.nextStations.includes(station.rithmId)) {
+        e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+    });
+  }
+
+  /**
    * Deep copy an array or object to retain type.
    *
    * @param source The array or object to copy.
