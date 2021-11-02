@@ -29,4 +29,13 @@ export class FlowMapElement {
     Object.assign(this, flowMapData);
   }
 
+  /**
+   * Whether the flow is empty and does not contain any stations or sub flows.
+   *
+   * @returns Whether the flow is empty.
+   */
+  get isEmpty(): boolean {
+    return !this.stations && !this.subFlows;
+  }
+
 }
