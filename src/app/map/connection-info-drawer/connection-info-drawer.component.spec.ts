@@ -3,7 +3,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationMapElement } from 'src/helpers';
+import { MockMapService } from 'src/mocks';
 import { MapItemStatus, StationMapData } from 'src/models';
+import { MapService } from '../map.service';
 
 import { ConnectionInfoDrawerComponent } from './connection-info-drawer.component';
 
@@ -46,6 +48,9 @@ describe('ConnectionInfoDrawerComponent', () => {
       ],
       imports:[
         MatButtonModule,
+      ],
+      providers:[
+        { provide: MapService, useClass: MockMapService }
       ]
     })
     .compileComponents();
@@ -55,6 +60,8 @@ describe('ConnectionInfoDrawerComponent', () => {
     fixture = TestBed.createComponent(ConnectionInfoDrawerComponent);
     component = fixture.componentInstance;
     component.connectedStations = STATIONS.map((e) => new StationMapElement(e));
+    component.station1 = component.connectedStations[0].stationName;
+    component.station2 = component.connectedStations[1].stationName;
     fixture.detectChanges();
   });
 

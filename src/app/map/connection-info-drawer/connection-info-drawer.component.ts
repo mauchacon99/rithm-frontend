@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationMapElement } from 'src/helpers';
+import { MapService } from '../map.service';
 
 /**
  * Component for connection info drawer.
@@ -31,16 +32,18 @@ export class ConnectionInfoDrawerComponent implements OnInit {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer = data;
+        const dataDrawer: string[] = data as string[];
         if (dataDrawer) {
-          this.editMode = dataDrawer.editMode;
-          this.stationInformation = dataDrawer.stationInformation as StationInformation;
-          this.stationName = dataDrawer.stationName;
-          this.isWorker = dataDrawer.isWorker;
+          this.connectedStations = this.mapService.stationElements.filter((e) => {
+            e.rithmId === dataDrawer[0] || dataDrawer[1];
+          });
+          this.station1 = this.connectedStations[0].stationName;
+          this.station2 = this.connectedStations[1].stationName;
         }
       });
   }

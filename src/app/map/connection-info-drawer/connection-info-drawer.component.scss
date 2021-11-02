@@ -1,0 +1,12 @@
+@import 'rithm-light-palettes';
+
+.mat-stroked-button {
+  &.priority {
+    &::ng-deep .mat-button-wrapper {
+      padding: 0;
+    }
+
+    border: 2px solid map-get($error-palette, 300);
+    color: map-get($error-palette, 300);
+  }
+}
