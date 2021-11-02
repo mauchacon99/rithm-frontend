@@ -94,7 +94,7 @@ export class MapService {
   /**
    * Converts station data so it can be drawn on the canvas.
    */
-  useStationData(): void {
+  private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
   }
@@ -140,7 +140,7 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-  deepCopy<T>(source: T): T {
+  private deepCopy<T>(source: T): T {
     return Array.isArray(source)
       ? source.map(item => this.deepCopy(item))
       : source instanceof Date
@@ -240,7 +240,7 @@ export class MapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
+  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
