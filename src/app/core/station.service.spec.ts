@@ -411,4 +411,31 @@ describe('StationService', () => {
       });
   });
 
+  it('should returns a owner roster for a given station', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+    },
+    {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+    },
+    ];
+
+    service.getStationOwnerRoster(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
 });

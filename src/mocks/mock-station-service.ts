@@ -382,4 +382,32 @@ export class MockStationService {
     ];
     return of(mockRosterMember).pipe(delay(1000));
   }
+
+  /**
+   * Get Owner Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]>{
+    const mockRosterMember: StationRosterMember[] = [
+        {
+            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+        {
+            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            firstName: 'Rithm',
+            lastName: 'User',
+            email: 'rithmuser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
+  }
 }

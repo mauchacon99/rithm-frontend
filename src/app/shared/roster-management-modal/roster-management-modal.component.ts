@@ -31,6 +31,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** The type of modal which is gonna be showed. */
+  rosterType: 'worker' | 'owner' = 'worker';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -55,18 +58,34 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The id of the given station.
    */
   getStationWorkerRoster(stationId: string): void {
-    this.stationService.getStationWorkerRoster(stationId)
-      .pipe(first())
-      .subscribe((data) => {
-        if (data) {
-          this.rosterMembers = data;
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+
+    if (this.rosterType === 'worker') {
+      this.stationService.getStationWorkerRoster(stationId)
+        .pipe(first())
+        .subscribe((data) => {
+          if (data) {
+            this.rosterMembers = data;
+          }
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    } else {
+      this.stationService.getStationOwnerRoster(stationId)
+        .pipe(first())
+        .subscribe((data) => {
+          if (data) {
+            this.rosterMembers = data;
+          }
+        }, (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        });
+    }
   }
 
   /**
