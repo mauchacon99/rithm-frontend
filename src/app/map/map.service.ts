@@ -47,6 +47,9 @@ export class MapService {
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
+  /** The number of zoom levels to increment or decrement. */
+  zoomCount$ = new BehaviorSubject(0);
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
@@ -180,6 +183,44 @@ export class MapService {
   }
 
   /**
+   * Calls the zoom() method a number of times equal to the zoomCount.
+   *
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param pinch Remove delay if zoom is a pinch zoom.
+   */
+  handleZoom(zoomOrigin = this.getCanvasCenterPoint(), pinch: boolean): void {
+    let count = this.zoomCount$.value;
+
+    const zoomLogic = () => {
+      if (count > 0) {
+        this.zoom(true, zoomOrigin);
+        count -= 1;
+        this.zoomCount$.next(count);
+        if (count > 0) {
+          this.handleZoom(zoomOrigin, pinch);
+        }
+      }
+
+      if (count < 0) {
+        this.zoom(false, zoomOrigin);
+        count += 1;
+        this.zoomCount$.next(count);
+        if (count < 0) {
+          this.handleZoom(zoomOrigin, pinch);
+        }
+      }
+    };
+
+    if (!pinch) {
+      setTimeout(() => {
+        zoomLogic();
+      }, count > 10 || count < -10 ? 3 : 10);
+    } else {
+      zoomLogic();
+    }
+  }
+
+  /**
    * Zooms the map by adjusting the map scale and position.
    *
    * @param zoomingIn Zooming in or out?
@@ -190,11 +231,13 @@ export class MapService {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+      this.zoomCount$.next(0);
       return;
     }
 
     // Don't zoom out past a certain point if in build mode
     if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+      this.zoomCount$.next(0);
       return;
     }
 
