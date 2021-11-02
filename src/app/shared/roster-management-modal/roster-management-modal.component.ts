@@ -31,6 +31,9 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+  /** The roster type received from modal data. */
+  rosterType: 'worker' | 'owner' = 'owner';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -97,8 +100,9 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The Specific id of station.
    * @param userIds The users ids for assign in station.
    */
-  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
-    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+  addUsersToRoster(stationId: string, userIds: string[]): void {
+    if (this.rosterType === 'worker'){
+      this.stationService.addUsersToWorkerRoster(stationId, userIds)
       .pipe(first())
       .subscribe((data) => {
         if (data) {
@@ -108,8 +112,22 @@ export class RosterManagementModalComponent implements OnInit {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
-        );
-      });
+          );
+        });
+    } else {
+      this.stationService.addUsersToOwnersRoster(stationId, userIds)
+      .pipe(first())
+      .subscribe((data) => {
+        if (data) {
+          this.rosterMembers = data;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+          );
+        });
+      }
   }
 
   /**

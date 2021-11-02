@@ -248,4 +248,38 @@ export class StationService {
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
   }
+
+  /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+     addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+      if (!stationId || !userIds) {
+        return throwError(new HttpErrorResponse({
+          error: {
+            error: 'Invalid Station ID or users array.'
+          }
+        })).pipe(delay(1000));
+      } else {
+        const stationOwnerRoster: StationRosterMember[] = [{
+          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: true,
+          isWorker: false
+        }, {
+          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: true,
+          isWorker: false
+        }];
+        return of(stationOwnerRoster).pipe(delay(1000));
+      }
+    }
 }
