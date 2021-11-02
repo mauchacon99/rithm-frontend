@@ -29,16 +29,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  users = [
-    { firstName: 'Maggie', lastName: 'Rhee', email: 'maggie.rhee@email.com', isWorker: false, rithmId: 0},
-    { firstName: 'Charles', lastName: 'Willis', email: 'charles.willis@email.com', isWorker: false, rithmId: 1},
-    { firstName: 'Billie', lastName: 'Suanson', email: 'billie.suanson@email.com', isWorker: false, rithmId: 2},
-    { firstName: 'Chuck', lastName: 'Brown', email: 'chuck.brown@email.com', isWorker: false, rithmId: 3},
-    { firstName: 'Harrison', lastName: 'King', email: 'harrison.king@email.com', isWorker: false, rithmId: 4},
-    { firstName: 'John', lastName: 'Matrix', email: 'john.matrix@email.com', isWorker: false, rithmId: 5},
-    { firstName: 'Barry', lastName: 'Allen', email: 'barry.allen@email.com', isWorker: false, rithmId: 6},
-    { firstName: 'Steve', lastName: 'Rogers', email: 'steve.rogers@email.com', isWorker: false, rithmId: 7},
-  ];
+  users: StationRosterMember[]=[];
 
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
@@ -93,7 +84,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((potentialUsers) => {
         if (potentialUsers) {
-          this.listUsersOrganization = potentialUsers.users;
+          this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
@@ -107,10 +98,15 @@ export class RosterManagementModalComponent implements OnInit {
   /**
    * Receives the worker's index to change the state of the isWorker field.
    *
-   * @param index The index position of the user in the list to toggle.
+   * @param rithmId The index position of the user in the list to toggle.
    */
-   toggleSelectedWorker(index: number): void {
-    this.users[index].isWorker = !this.users[index].isWorker;
+   toggleSelectedWorker(rithmId: string): void {
+    // this.users[index].isWorker = !this.users[index].isWorker;
+    this.users.filter(( data )=> {
+      if (data.rithmId === rithmId ) {
+          data.isWorker=!data.isWorker;
+      }
+    });
   }
 
   /**
