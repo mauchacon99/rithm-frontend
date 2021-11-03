@@ -30,9 +30,9 @@ export class DocumentInfoDrawerComponent {
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
     this.stationService.updateStatusDocumentEditable(stationRithmId, newStatus)
       .pipe(first())
-      .subscribe((editableDocument) => {
-        if (editableDocument) {
-          this.documentNameEditable = editableDocument;
+      .subscribe((documentEditableStatus) => {
+        if (documentEditableStatus) {
+          this.documentNameEditable = documentEditableStatus;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
