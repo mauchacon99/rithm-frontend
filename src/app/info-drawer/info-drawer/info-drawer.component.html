@@ -1,4 +1,5 @@
 <div class="p-4">
-  <app-station-info-drawer></app-station-info-drawer>
+   <app-station-info-drawer *ngIf="typeMode !== 'documentInfo'"></app-station-info-drawer>
+  <app-document-info-drawer *ngIf="typeMode === 'documentInfo' "></app-document-info-drawer>
 </div>
 
