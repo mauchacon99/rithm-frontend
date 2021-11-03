@@ -423,4 +423,15 @@ export class MockStationService {
     }];
     return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
   }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = true;
+    return of(expectedResponse).pipe(delay(1000));
+  }
 }
