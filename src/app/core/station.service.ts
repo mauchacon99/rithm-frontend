@@ -253,7 +253,7 @@ export class StationService {
    */
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
     const params = new HttpParams()
-      .set('stationRithmId', stationRithmId)
+      .set('stationRithmId', stationRithmId);
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 }
