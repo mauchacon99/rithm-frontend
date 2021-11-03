@@ -261,6 +261,7 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+
     return of(newStatus).pipe(delay(1000));
   }
 }
