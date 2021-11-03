@@ -84,7 +84,6 @@ export class StationInfoHeaderComponent implements OnInit {
     const dataInformationDrawer: StationInfoDrawerData = {
       stationInformation: this.stationInformation as StationInformation,
       stationName: this.stationName,
-      isWorker: false,
       editMode: this.stationEditMode
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);

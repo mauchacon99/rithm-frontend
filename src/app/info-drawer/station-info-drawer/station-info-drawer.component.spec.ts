@@ -14,11 +14,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
+import { DocumentGenerationStatus } from 'src/models';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
   const formBuilder = new FormBuilder();
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,7 +29,7 @@ describe('StationInfoDrawerComponent', () => {
         MockComponent(RosterComponent),
         MockComponent(LoadingIndicatorComponent),
       ],
-      imports:[
+      imports: [
         MatInputModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
@@ -71,11 +73,29 @@ describe('StationInfoDrawerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /**TODO : fix. */
-  xit('should get station last updated date', async () => {
-    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    const updatedDateSpy: jasmine.Spy = spyOn(TestBed.inject(StationService), 'getLastUpdated');
+  it('should get station last updated date', async () => {
+    const getLastUpdatedSpy = spyOn(TestBed.inject(StationService), 'getLastUpdated').and.callThrough();
+
     await component.getLastUpdated(stationId);
-    expect(updatedDateSpy).toHaveBeenCalled();
+
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should delete a station', async () => {
+    const deleteStationSpy = spyOn(TestBed.inject(StationService), 'deleteStation').and.callThrough();
+
+    await component.deleteStation(stationId);
+
+    expect(deleteStationSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should update station document generation status', async () => {
+    const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStationDocumentGenerationStatus').and.callThrough();
+
+    const newStatus = DocumentGenerationStatus.Manual;
+
+    await component.updateStationDocumentGenerationStatus(stationId, newStatus);
+
+    expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
 });

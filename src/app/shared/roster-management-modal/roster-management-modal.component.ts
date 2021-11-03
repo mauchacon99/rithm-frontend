@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
+
 /**
  * Component for roster management.
  */
@@ -24,6 +25,12 @@ export class RosterManagementModalComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
+  /** Id the organization.  */
+  organizationId = '';
+
+  /** Array of list users. */
+  users: StationRosterMember[]=[];
+
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
@@ -36,9 +43,15 @@ export class RosterManagementModalComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId. */ stationId: string },
+    @Inject(MAT_DIALOG_DATA) public modalData: {
+      /** The station rithmId. */
+      stationId: string;
+      /** The type of roster which will be showed.  */
+      type: 'worker' | 'owner';
+    },
   ) {
     this.stationRithmId = this.modalData.stationId;
+    this.rosterType = this.modalData.type;
   }
 
   /**
@@ -80,7 +93,7 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe((potentialUsers) => {
         if (potentialUsers) {
-          this.listUsersOrganization = potentialUsers.users;
+          this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
@@ -89,6 +102,19 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
+  }
+
+  /**
+   * Receives the worker's index to change the state of the isWorker field.
+   *
+   * @param rithmId The index position of the user in the list to toggle.
+   */
+   toggleSelectedWorker(rithmId: string): void {
+    this.users.filter(( data )=> {
+      if (data.rithmId === rithmId ) {
+          data.isWorker=!data.isWorker;
+      }
+    });
   }
 
   /**
@@ -110,6 +136,7 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
+
   }
 
   /**
