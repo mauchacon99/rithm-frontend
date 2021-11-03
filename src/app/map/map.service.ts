@@ -157,6 +157,7 @@ export class MapService {
         e.status = MapItemStatus.Updated;
       }
     });
+    this.mapDataRecieved$.next(true);
   }
 
   /**

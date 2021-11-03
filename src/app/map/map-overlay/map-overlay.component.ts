@@ -224,9 +224,10 @@ export class MapOverlayComponent implements OnDestroy {
    */
   async deleteStation(): Promise<void> {
     const confirm = await this.popupService.confirm({
-      title: 'Confirmation',
-      message: `Are you sure, you want to delete this station?`,
+      title: 'Are you sure?',
+      message: `The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.`,
       okButtonText: 'Confirm',
+      important: true
     });
     if (confirm) {
       this.mapService.deleteStation(<StationMapElement>(this.station));
@@ -238,9 +239,10 @@ export class MapOverlayComponent implements OnDestroy {
    */
   async removeStationConnections(): Promise<void> {
     const confirm = await this.popupService.confirm({
-      title: 'Confirmation',
-      message: `Are you sure? This will remove all connections to and from this station. This action cannot be undone.`,
+      title: 'Are you sure?',
+      message: `This will remove all connections to and from this station and any associated flow logic. This action cannot be undone.`,
       okButtonText: 'Confirm',
+      important: true
     });
     if (confirm) {
       this.mapService.removeStationConnection(<StationMapElement>(this.station));
