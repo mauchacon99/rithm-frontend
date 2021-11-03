@@ -36,9 +36,15 @@ export class RosterManagementModalComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    @Inject(MAT_DIALOG_DATA) public modalData: {/** The station rithmId. */ stationId: string },
+    @Inject(MAT_DIALOG_DATA) public modalData: {
+      /** The station rithmId. */
+      stationId: string;
+      /** The type of roster which will be showed.  */
+      type: 'worker' | 'owner';
+    },
   ) {
     this.stationRithmId = this.modalData.stationId;
+    this.rosterType = this.modalData.type;
   }
 
   /**
