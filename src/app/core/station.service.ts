@@ -203,7 +203,7 @@ export class StationService {
    */
   getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const params = new HttpParams()
-      .set('stationRithmId', stationId);
+      .set('rithmId', stationId);
     return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
   }
 
