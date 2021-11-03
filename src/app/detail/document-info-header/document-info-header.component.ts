@@ -103,7 +103,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
    * @param drawerItem The drawer item to toggle.
    */
    toggleDrawer(drawerItem: 'documentInfo'): void {
-    const documentInfoDrawerData  =  drawerItem;
-    this.sidenavDrawerService.toggleDrawer(drawerItem,documentInfoDrawerData);
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 }

@@ -87,7 +87,6 @@ export class StationInfoHeaderComponent implements OnInit {
       isWorker: false,
       editMode: this.stationEditMode
     };
-
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updStationInfoDrawerName();
   }

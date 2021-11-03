@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
-import { StationInformation } from '../../../models/station-info';
+import { StationInformation } from 'src/models/station-info';
 
 /**
  * Component for info drawer.
@@ -18,7 +18,7 @@ export class InfoDrawerComponent implements OnDestroy {
   private destroyed$ = new Subject();
 
   /** Specific mode of drawer. */
-  typeMode: unknown;
+  drawerMode: '' | 'stationInfo' | 'documentInfo' = '';
 
   /** Station information object passed from parent. */
   stationInformation!: StationInformation;
@@ -27,12 +27,14 @@ export class InfoDrawerComponent implements OnDestroy {
     private sidenavDrawerService: SidenavDrawerService
 
   ) {
-    this.sidenavDrawerService.drawerData$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        this.typeMode = data;
+    this.sidenavDrawerService.drawerContext$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((data) => {
+      if (data === 'documentInfo' || data === 'stationInfo') {
+        this.drawerMode = data;
       }
-      );
+    }
+    );
   }
 
   /**
@@ -42,5 +44,4 @@ export class InfoDrawerComponent implements OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
 }
