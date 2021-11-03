@@ -13,8 +13,8 @@ import { ErrorService } from '../../core/error.service';
 })
 export class DocumentInfoDrawerComponent {
 
-  /** Status this document is editable. */
-  statusEditableDocument = false;
+  /** Is the document name editable. */
+  documentNameEditable = false;
 
   constructor(private stationService: StationService,
     private errorService: ErrorService) {
@@ -32,7 +32,7 @@ export class DocumentInfoDrawerComponent {
       .pipe(first())
       .subscribe((editableDocument) => {
         if (editableDocument) {
-          this.statusEditableDocument = editableDocument;
+          this.documentNameEditable = editableDocument;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
