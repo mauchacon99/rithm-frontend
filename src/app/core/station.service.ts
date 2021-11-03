@@ -234,6 +234,18 @@ export class StationService {
   }
 
   /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
+  }
+
+  /**
    * Get status document is editable or not.
    *
    * @param stationRithmId The Specific id of station.

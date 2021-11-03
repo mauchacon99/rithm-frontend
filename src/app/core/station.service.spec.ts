@@ -473,6 +473,15 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update the editable status of the document in the station', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const newStatus = true;
+    service.updateStatusDocumentEditable(stationRithmId, newStatus)
+      .subscribe((response) => {
+        expect(response).toEqual(newStatus);
+      });
+  });
+
   it('should get the current editable status of the document', () => {
     const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse = true;
