@@ -203,7 +203,7 @@ export class StationService {
    */
   getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const params = new HttpParams()
-      .set('stationRithmId', stationId);
+      .set('rithmId', stationId);
     return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
   }
 
@@ -231,6 +231,18 @@ export class StationService {
           usersIds
         ]
       });
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
   }
 
   /**
