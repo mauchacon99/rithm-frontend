@@ -22,10 +22,6 @@ describe('StationInfoDrawerComponent', () => {
   const formBuilder = new FormBuilder();
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
-  // let getLastUpdatedSpy: jasmine.Spy;
-  // let deleteStationSpy: jasmine.Spy;
-  // let updateGenerationStatusSpy: jasmine.Spy;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -78,7 +74,6 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should get station last updated date', async () => {
-    // let getLastUpdatedSpy: jasmine.Spy;
     const getLastUpdatedSpy = spyOn(TestBed.inject(StationService), 'getLastUpdated').and.callThrough();
 
     await component.getLastUpdated(stationId);
@@ -87,7 +82,6 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should delete a station', async () => {
-    // let deleteStationSpy: jasmine.Spy;
     const deleteStationSpy = spyOn(TestBed.inject(StationService), 'deleteStation').and.callThrough();
 
     await component.deleteStation(stationId);
@@ -96,7 +90,6 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should update station document generation status', async () => {
-    // let updateGenerationStatusSpy: jasmine.Spy;
     const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStationDocumentGenerationStatus').and.callThrough();
 
     const newStatus = DocumentGenerationStatus.Manual;
