@@ -28,7 +28,7 @@ export class RosterManagementModalComponent implements OnInit {
   rosterMembers: StationRosterMember[] = [];
 
   /** Charges while users are being removed. */
-  loadingMembersRemoved=false;
+  loadingCurrentRosterMembers =false;
 
   /** The roster type received from modal data. */
   rosterType: 'worker' | 'owner' = 'owner';
@@ -124,11 +124,11 @@ export class RosterManagementModalComponent implements OnInit {
    */
   removeMemberFromRoster(usersId: string): void {
     if (this.rosterType === 'worker') {
-      this.loadingMembersRemoved=true;
+      this.loadingCurrentRosterMembers =true;
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
-          this.loadingMembersRemoved=false;
+          this.loadingCurrentRosterMembers =false;
           this.rosterMembers = data;
         }, (error: unknown) => {
           this.errorService.displayError(
@@ -137,16 +137,16 @@ export class RosterManagementModalComponent implements OnInit {
           );
         });
     } else if (this.rosterType === 'owner') {
-      this.loadingMembersRemoved=true;
+      this.loadingCurrentRosterMembers =true;
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
           if (data) {
-            this.loadingMembersRemoved=false;
+            this.loadingCurrentRosterMembers =false;
             this.rosterMembers = data;
           }
         }, (error: unknown) => {
-          this.loadingMembersRemoved=false;
+          this.loadingCurrentRosterMembers =false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
