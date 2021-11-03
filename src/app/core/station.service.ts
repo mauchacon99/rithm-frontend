@@ -232,4 +232,16 @@ export class StationService {
         ]
       });
   }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = true;
+    return of(expectedResponse).pipe(delay(1000));
+  }
 }
