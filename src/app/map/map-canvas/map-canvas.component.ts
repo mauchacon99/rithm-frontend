@@ -145,16 +145,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input when a mouse button is pressed. Used for initiating dragging.
+   * Handles user input a pointer event is fired. Used for initiating dragging.
    *
-   * @param event The mousedown event that was triggered.
+   * @param event The pointerdown event that was triggered.
    */
-  @HostListener('mousedown', ['$event'])
-  mouseDown(event: MouseEvent): void {
-    this.eventStartCoords = this.getMouseCanvasPoint(event);
+  @HostListener('pointerdown', ['$event'])
+  pointerDown(event: PointerEvent): void {
+    this.eventStartCoords = this.getPointerCanvasPoint(event);
 
-    const mousePos = this.getMouseCanvasPoint(event);
-    this.eventStartLogic(mousePos);
+    const pointerPos = this.getPointerCanvasPoint(event);
+    this.eventStartLogic(pointerPos);
+
+    if (this.dragItem !== MapDragItem.Default) {
+      const map = document.getElementById('map');
+      map?.setPointerCapture(event.pointerId);
+    }
   }
 
   /**
@@ -162,32 +167,40 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    *
    * @param event The mouseup event that was triggered.
    */
-  @HostListener('mouseup', ['$event'])
+  @HostListener('pointerup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  mouseUp(event: MouseEvent): void {
-    const mousePos = this.getMouseCanvasPoint(event);
+  pointerUp(event: PointerEvent): void {
+    const pointerPos = this.getPointerCanvasPoint(event);
 
-    this.eventEndLogic(mousePos);
+    this.eventEndLogic(pointerPos);
+
+    if (this.dragItem !== MapDragItem.Default) {
+      const map = document.getElementById('map');
+      map?.releasePointerCapture(event.pointerId);
+    }
   }
 
   /**
-   * Handles user input when a mouse cursor is moved. Used for calculating dragged element movement, or map pan drag.
+   * Handles user input when a pointer is moved. Used for calculating dragged element movement, or map pan drag.
    *
-   * @param event The mousemove event that was triggered.
+   * @param event The pointermove event that was triggered.
    */
-  @HostListener('mousemove', ['$event'])
-  mouseMove(event: MouseEvent): void {
+  @HostListener('pointermove', ['$event'])
+  pointerMove(event: PointerEvent): void {
+    //This is required to ensure that high DPI devices move correctly.
+    const pixelRatio = window.devicePixelRatio || 1;
+    //TODO: Find a fix for the messed up ratio when device toolbar is active in developer tools in chrome.
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
-      this.currentCanvasPoint.x -= event.movementX / this.scale;
-      this.currentCanvasPoint.y -= event.movementY / this.scale;
+      this.currentCanvasPoint.x -= event.movementX / pixelRatio / this.scale;
+      this.currentCanvasPoint.y -= event.movementY / pixelRatio / this.scale;
       this.drawElements();
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-          station.mapPoint.x += event.movementX / this.scale;
-          station.mapPoint.y += event.movementY / this.scale;
+          station.mapPoint.x += event.movementX / pixelRatio / this.scale;
+          station.mapPoint.y += event.movementY / pixelRatio / this.scale;
           this.drawElements();
         }
       }
@@ -197,17 +210,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if clicked on an interactive station element.
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
-          this.mapService.currentMousePoint$.next(this.getMouseCanvasPoint(event));
+          this.mapService.currentMousePoint$.next(this.getPointerCanvasPoint(event));
           this.drawElements();
         }
       }
     } else {
-      //Track mouse position
-      const mousePos = this.getMouseCanvasPoint(event);
+      //Track pointer position
+      const pointerPos = this.getPointerCanvasPoint(event);
       //Hovering over different station elements.
       for (const station of this.stations) {
         const previousHoverState = station.hoverActive;
-        station.checkElementHover(mousePos, this.scale);
+        station.checkElementHover(pointerPos, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
             this.drawElements();
@@ -230,127 +243,221 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Handles input when a user presses a touchscreen. Used for initiating dragging.
-   *
-   * @param event The touchstart event that was triggered.
-   */
-  @HostListener('touchstart', ['$event'])
-  touchStart(event: TouchEvent): void {
-    event.preventDefault();
+  // /**
+  //  * Handles user input when a mouse button is pressed. Used for initiating dragging.
+  //  *
+  //  * @param event The mousedown event that was triggered.
+  //  */
+  // @HostListener('mousedown', ['$event'])
+  // mouseDown(event: MouseEvent): void {
+  //   if (!window.PointerEvent) {
+  //     this.eventStartCoords = this.getMouseCanvasPoint(event);
 
-    if (event.touches.length === 1) {
-      const touchPoint = event.touches[0];
-      const touchPos = this.getTouchCanvasPoint(touchPoint);
+  //     const mousePos = this.getMouseCanvasPoint(event);
+  //     this.eventStartLogic(mousePos);
+  //   }
+  // }
 
-      this.lastTouchCoords[0] = touchPos;
-      this.eventStartCoords = touchPos;
+  // /**
+  //  * Handles user input when a mouse button is released. Used for placing dragged elements.
+  //  *
+  //  * @param event The mouseup event that was triggered.
+  //  */
+  // @HostListener('mouseup', ['$event'])
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // mouseUp(event: MouseEvent): void {
+  //   if (!window.PointerEvent) {
+  //     const mousePos = this.getMouseCanvasPoint(event);
 
-      this.eventStartLogic(touchPos);
-    }
+  //     this.eventEndLogic(mousePos);
+  //   }
+  // }
 
-    if (event.touches.length === 2) {
-      const touchPoint1 = event.touches[0];
-      const touchPoint2 = event.touches[1];
+  // /**
+  //  * Handles user input when a mouse cursor is moved. Used for calculating dragged element movement, or map pan drag.
+  //  *
+  //  * @param event The mousemove event that was triggered.
+  //  */
+  // @HostListener('mousemove', ['$event'])
+  // mouseMove(event: MouseEvent): void {
+  //   if (!window.PointerEvent) {
+  //     if (this.dragItem === MapDragItem.Map) {
+  //       this.mapCanvas.nativeElement.style.cursor = 'move';
+  //       this.currentCanvasPoint.x -= event.movementX / this.scale;
+  //       this.currentCanvasPoint.y -= event.movementY / this.scale;
+  //       this.drawElements();
+  //     } else if (this.dragItem === MapDragItem.Station) {
+  //       for (const station of this.stations) {
+  //         if (station.dragging) {
+  //           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+  //           station.mapPoint.x += event.movementX / this.scale;
+  //           station.mapPoint.y += event.movementY / this.scale;
+  //           this.drawElements();
+  //         }
+  //       }
+  //     } else if (this.dragItem === MapDragItem.Node) {
+  //       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+  //       for (const station of this.stations) {
+  //         // Check if clicked on an interactive station element.
+  //         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
+  //         if (station.dragging) {
+  //           this.mapService.currentMousePoint$.next(this.getMouseCanvasPoint(event));
+  //           this.drawElements();
+  //         }
+  //       }
+  //     } else {
+  //       //Track mouse position
+  //       const mousePos = this.getMouseCanvasPoint(event);
+  //       //Hovering over different station elements.
+  //       for (const station of this.stations) {
+  //         const previousHoverState = station.hoverActive;
+  //         station.checkElementHover(mousePos, this.scale);
+  //         if (station.hoverActive !== StationElementHoverType.None) {
+  //           if (previousHoverState !== station.hoverActive) {
+  //             this.drawElements();
+  //           }
+  //           // eslint-disable-next-line max-len
+  //           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
+  //             this.mapCanvas.nativeElement.style.cursor = 'pointer';
+  //           }
+  //           if (this.mapMode === MapMode.Build) {
+  //             this.mapCanvas.nativeElement.style.cursor = 'pointer';
+  //           }
+  //           break;
+  //         } else {
+  //           if (previousHoverState !== station.hoverActive) {
+  //             this.drawElements();
+  //           }
+  //           this.mapCanvas.nativeElement.style.cursor = 'default';
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-      this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
-      this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
-    }
+  // /**
+  //  * Handles input when a user presses a touchscreen. Used for initiating dragging.
+  //  *
+  //  * @param event The touchstart event that was triggered.
+  //  */
+  // @HostListener('touchstart', ['$event'])
+  // touchStart(event: TouchEvent): void {
+  //   event.preventDefault();
 
-  }
+  //   if (event.touches.length === 1) {
+  //     const touchPoint = event.touches[0];
+  //     const touchPos = this.getTouchCanvasPoint(touchPoint);
+
+  //     this.lastTouchCoords[0] = touchPos;
+  //     this.eventStartCoords = touchPos;
+
+  //     this.eventStartLogic(touchPos);
+  //   }
+
+  //   if (event.touches.length === 2) {
+  //     const touchPoint1 = event.touches[0];
+  //     const touchPoint2 = event.touches[1];
+
+  //     this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
+  //     this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
+  //   }
+
+  // }
 
 
-  /**
-   * Handles user input when a user lifts their finger. Used for placing dragged elements.
-   *
-   * @param event The touchend event that was triggered.
-   */
-  @HostListener('touchend', ['$event'])
-  touchEnd(event: TouchEvent): void {
-    event.preventDefault();
+  // /**
+  //  * Handles user input when a user lifts their finger. Used for placing dragged elements.
+  //  *
+  //  * @param event The touchend event that was triggered.
+  //  */
+  // @HostListener('touchend', ['$event'])
+  // touchEnd(event: TouchEvent): void {
+  //   event.preventDefault();
 
-    const touchPoint = event.changedTouches[0];
-    const touchPos = this.getTouchCanvasPoint(touchPoint);
+  //   const touchPoint = event.changedTouches[0];
+  //   const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-    this.eventEndLogic(touchPos);
-  }
+  //   this.eventEndLogic(touchPos);
+  // }
 
-  /**
-   * Handles input when a user drags their finger across the screen. Used for calculating dragged element movement, or map pan drag.
-   *
-   * @param event The touchmove event that was triggered.
-   */
-  @HostListener('touchmove', ['$event'])
-  touchMove(event: TouchEvent): void {
-    event.preventDefault();
+  // /**
+  //  * Handles input when a user drags their finger across the screen. Used for calculating dragged element movement, or map pan drag.
+  //  *
+  //  * @param event The touchmove event that was triggered.
+  //  */
+  // @HostListener('touchmove', ['$event'])
+  // touchMove(event: TouchEvent): void {
+  //   event.preventDefault();
 
-    //Single touch.
-    if (event.touches.length === 1) {
-      const touchPoint = event.changedTouches[0];
-      const touchPos = this.getTouchCanvasPoint(touchPoint);
+  //   //Single touch.
+  //   if (event.touches.length === 1) {
+  //     const touchPoint = event.changedTouches[0];
+  //     const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-      const moveAmountX = this.lastTouchCoords[0].x - touchPos.x;
-      const moveAmountY = this.lastTouchCoords[0].y - touchPos.y;
+  //     const moveAmountX = this.lastTouchCoords[0].x - touchPos.x;
+  //     const moveAmountY = this.lastTouchCoords[0].y - touchPos.y;
 
-      if (this.dragItem === MapDragItem.Map) {
-        this.currentCanvasPoint.x += moveAmountX / this.scale;
-        this.lastTouchCoords[0].x = touchPos.x;
-        this.currentCanvasPoint.y += moveAmountY / this.scale;
-        this.lastTouchCoords[0].y = touchPos.y;
-        this.drawElements();
-      } else if (this.dragItem === MapDragItem.Station) {
-        for (const station of this.stations) {
-          if (station.dragging) {
-            station.mapPoint.x -= moveAmountX / this.scale;
-            this.lastTouchCoords[0].x = touchPos.x;
-            station.mapPoint.y -= moveAmountY / this.scale;
-            this.lastTouchCoords[0].y = touchPos.y;
-            this.drawElements();
-          }
-        }
-      } else if (this.dragItem === MapDragItem.Node) {
-        for (const station of this.stations) {
-          // Check if clicked on an interactive station element.
-          station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
-          if (station.dragging) {
-            this.mapService.currentMousePoint$.next(touchPos);
-            this.drawElements();
-          }
-        }
-      }
-    }
+  //     if (this.dragItem === MapDragItem.Map) {
+  //       this.currentCanvasPoint.x += moveAmountX / this.scale;
+  //       this.lastTouchCoords[0].x = touchPos.x;
+  //       this.currentCanvasPoint.y += moveAmountY / this.scale;
+  //       this.lastTouchCoords[0].y = touchPos.y;
+  //       this.drawElements();
+  //     } else if (this.dragItem === MapDragItem.Station) {
+  //       for (const station of this.stations) {
+  //         if (station.dragging) {
+  //           station.mapPoint.x -= moveAmountX / this.scale;
+  //           this.lastTouchCoords[0].x = touchPos.x;
+  //           station.mapPoint.y -= moveAmountY / this.scale;
+  //           this.lastTouchCoords[0].y = touchPos.y;
+  //           this.drawElements();
+  //         }
+  //       }
+  //     } else if (this.dragItem === MapDragItem.Node) {
+  //       for (const station of this.stations) {
+  //         // Check if clicked on an interactive station element.
+  //         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
+  //         if (station.dragging) {
+  //           this.mapService.currentMousePoint$.next(touchPos);
+  //           this.drawElements();
+  //         }
+  //       }
+  //     }
+  //   }
 
-    //Pinch event.
-    if (event.touches.length === 2) {
-      const touchPoint = event.changedTouches;
-      const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
+  //   //Pinch event.
+  //   if (event.touches.length === 2) {
+  //     const touchPoint = event.changedTouches;
+  //     const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
 
-      const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
-      const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
-      const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
-      const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
-      const averageDiff = (xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2;
+  //     const xBeginDiff = Math.abs(this.lastTouchCoords[0].x - this.lastTouchCoords[1].x);
+  //     const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
+  //     const xCurrentDiff = Math.abs(touchPos[0].x - touchPos[1].x);
+  //     const yCurrentDiff = Math.abs(touchPos[0].y - touchPos[1].y);
+  //     const averageDiff = (xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2;
 
-      const middlePoint = {
-        x: (touchPos[0].x + touchPos[1].x) / 2,
-        y: (touchPos[0].y + touchPos[1].y) / 2
-      };
+  //     const middlePoint = {
+  //       x: (touchPos[0].x + touchPos[1].x) / 2,
+  //       y: (touchPos[0].y + touchPos[1].y) / 2
+  //     };
 
-      if (xCurrentDiff > xBeginDiff || yCurrentDiff > yBeginDiff) {
-        // Zoom in
-        this.lastTouchCoords = touchPos;
-        this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
-        this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
-      } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
-        // Zoom out
-        this.lastTouchCoords = touchPos;
-        this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
-        this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
-      }
-    }
-  }
+  //     if (xCurrentDiff > xBeginDiff || yCurrentDiff > yBeginDiff) {
+  //       // Zoom in
+  //       this.lastTouchCoords = touchPos;
+  //       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+  //       this.mapService.handleZoom(middlePoint, true);
+  //       this.drawElements();
+  //     } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
+  //       // Zoom out
+  //       this.lastTouchCoords = touchPos;
+  //       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+  //       this.mapService.handleZoom(middlePoint, true);
+  //       this.drawElements();
+  //     }
+  //   }
+  // }
+
+
 
   /**
    * Handles user input when a mouse button is right clicked. Used for bringing up the right click menu.
@@ -449,6 +556,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapCanvas.nativeElement.width = canvasBoundingRect.width * pixelRatio;
     this.mapCanvas.nativeElement.height = canvasBoundingRect.height * pixelRatio;
     this.context.scale(pixelRatio, pixelRatio);
+  }
+
+  /**
+   * Determines the point on the canvas that the pointer is positioned.
+   *
+   * @param event The pointer event for the cursor information.
+   * @returns An accurate point for the pointer position on the canvas.
+   */
+  private getPointerCanvasPoint(event: PointerEvent): Point {
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+    return {
+      x: event.clientX - canvasRect.left,
+      y: event.clientY - canvasRect.top
+    };
   }
 
   /**
