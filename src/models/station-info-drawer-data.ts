@@ -11,9 +11,6 @@ export interface StationInfoDrawerData {
   /** Name Station. */
   stationName: string;
 
-  /** Is Worker. */
-  isWorker: boolean;
-
   /** Mode Edit. */
   editMode: boolean;
 }

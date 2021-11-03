@@ -50,9 +50,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Edit Mode. */
   stationName = '';
 
-  /** Worker. */
-  isWorker = true;
-
   /** Station name form. */
   stationNameForm: FormGroup;
 
@@ -84,7 +81,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
-          this.isWorker = dataDrawer.isWorker;
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';

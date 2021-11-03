@@ -481,4 +481,14 @@ describe('StationService', () => {
         expect(response).toEqual(newStatus);
       });
   });
+
+  it('should get the current editable status of the document', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse = true;
+
+    service.getStatusDocumentEditable(stationRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });
