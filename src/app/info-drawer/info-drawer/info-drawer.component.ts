@@ -17,7 +17,7 @@ export class InfoDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject();
 
-  /**  Specific mode of drawer. */
+  /** Specific mode of drawer. */
   typeMode: unknown;
 
   /** Station information object passed from parent. */
