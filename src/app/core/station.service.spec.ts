@@ -433,10 +433,7 @@ describe('StationService', () => {
 
   it('should remove a member the owner from the roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
-    const usersIds: Array<string> = [
-      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-    ];
+    const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
     const expectedResponse: StationRosterMember[] = [{
       rithmId: '12dasd1-asd12asdasd-asdas',
       firstName: 'Cesar',
@@ -466,6 +463,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual([usersIds]);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should get the current editable status of the document', () => {
