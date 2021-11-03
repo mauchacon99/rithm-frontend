@@ -28,9 +28,6 @@ export class UserAvatarComponent{
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;
 
-  /** */
-  hover=false;
-
   /**
    * The first + last initials for the user.
    *
