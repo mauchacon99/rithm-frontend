@@ -239,9 +239,9 @@ export class StationService {
    * @param stationRithmId The Specific id of station.
    * @returns Status for document editable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
-    const expectedResponse = true;
-    return of(expectedResponse).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId)
+    return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 }

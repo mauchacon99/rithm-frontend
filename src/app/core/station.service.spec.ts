@@ -481,5 +481,12 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
