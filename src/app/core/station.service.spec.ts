@@ -468,7 +468,7 @@ describe('StationService', () => {
       });
   });
 
-  it('should get the status to see if the document is editable', () => {
+  it('should get the current editable status of the document', () => {
     const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse = true;
 

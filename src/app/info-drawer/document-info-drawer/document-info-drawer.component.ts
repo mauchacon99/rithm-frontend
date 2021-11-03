@@ -39,9 +39,9 @@ export class DocumentInfoDrawerComponent implements OnInit {
   getStatusDocumentEditable(stationRithmId: string): void {
     this.stationService.getStatusDocumentEditable(stationRithmId)
       .pipe(first())
-      .subscribe((editableDocument) => {
-        if (editableDocument) {
-          this.documentNameEditable = editableDocument;
+      .subscribe((documentEditableStatus) => {
+        if (documentEditableStatus) {
+          this.documentNameEditable = documentEditableStatus;
         }
       }, (error: unknown) => {
         this.errorService.displayError(
