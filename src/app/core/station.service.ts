@@ -180,7 +180,7 @@ export class StationService {
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
@@ -223,32 +223,13 @@ export class StationService {
    * @param usersIds The selected owners id array to removed.
    * @returns New Station information with owners roster.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
-    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    }];
-    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
+      {
+        body: [
+          usersIds
+        ]
+      });
   }
 }
