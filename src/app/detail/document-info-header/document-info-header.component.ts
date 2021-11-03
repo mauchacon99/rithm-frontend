@@ -98,12 +98,12 @@ export class DocumentInfoHeaderComponent implements OnInit {
   }
 
   /**
-   * Toggles the open state of the drawer for station info.
+   * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
    */
    toggleDrawer(drawerItem: 'documentInfo'): void {
-    const dataDocumentDrawer =  drawerItem;
-    this.sidenavDrawerService.toggleDrawer(drawerItem,dataDocumentDrawer);
+    const documentInfoDrawerData  =  drawerItem;
+    this.sidenavDrawerService.toggleDrawer(drawerItem,documentInfoDrawerData);
   }
 }
