@@ -39,7 +39,7 @@ jobs:
   build:
     runs-on: self-hosted
     needs: [lint-app, lint-stylesheets]
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
