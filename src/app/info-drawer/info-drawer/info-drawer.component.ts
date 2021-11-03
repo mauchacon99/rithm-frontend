@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationInformation } from 'src/models/station-info';
 
 /**
