@@ -21,11 +21,11 @@ export class ConnectionInfoDrawerComponent {
   /** Array of the two connected stations. */
   connectedStations: StationMapElement[] = [];
 
-  /** Name of first station. */
-  station1 = '';
+  /** Name of the station where the connection begins. */
+  connectionStartStationName = '';
 
-  /** Name of second station. */
-  station2 = '';
+  /** Name of the station where the connection ends. */
+  connectionEndStationName = '';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
