@@ -5,7 +5,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
-
 /**
  * Component for roster management.
  */
@@ -113,6 +112,10 @@ export class RosterManagementModalComponent implements OnInit {
     this.users.filter(( data )=> {
       if (data.rithmId === rithmId ) {
           data.isWorker=!data.isWorker;
+          if (!data.isWorker){
+            /** If data.isWorker is false is because the user is being removed. */
+            this.removeMemberFromRoster(rithmId);
+          }
       }
     });
   }
@@ -136,7 +139,6 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
-
   }
 
   /**
