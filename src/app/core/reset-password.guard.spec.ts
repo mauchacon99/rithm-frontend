@@ -33,7 +33,7 @@ describe('ResetPasswordGuard', () => {
         { guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
     };
     guard.canActivate(invalidParams as ActivatedRouteSnapshot);
-    expect(routerSpy).toHaveBeenCalledWith('');
+    expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
   it('should navigate back to sign in if params are valid, but type is not reset', () => {
@@ -42,7 +42,7 @@ describe('ResetPasswordGuard', () => {
         { type: 'register', guid: 'kj343kh2o3ih23ih423', email: 'johndoe@email.com' })
     };
     guard.canActivate(validParams as ActivatedRouteSnapshot);
-    expect(routerSpy).toHaveBeenCalledWith('');
+    expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 
   it('should allow navigation if params are valid and type is reset', () => {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -131,33 +131,12 @@ export class StationService {
    * @param usersIds The selected users id array to removed.
    * @returns New station Worker Roster.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
-    const data: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
+    // eslint-disable-next-line max-len
+    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
     {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    }];
-    return of(data).pipe(delay(1000));
+      body: usersIds
+    });
   }
 
   /**
@@ -180,7 +159,7 @@ export class StationService {
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
@@ -203,7 +182,7 @@ export class StationService {
    */
   getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const params = new HttpParams()
-      .set('stationRithmId', stationId);
+      .set('rithmId', stationId);
     return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
   }
 
@@ -223,32 +202,35 @@ export class StationService {
    * @param usersIds The selected owners id array to removed.
    * @returns New Station information with owners roster.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
-    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    }];
-    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
+      {
+        body: usersIds
+      });
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    // eslint-disable-next-line max-len
+    return this.http.put<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`, stationRithmId);
+  }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId);
+    return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 }
