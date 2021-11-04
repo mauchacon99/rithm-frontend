@@ -24,7 +24,7 @@ export class MapService {
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
-  mapDataRecieved$ = new BehaviorSubject(false);
+  mapDataReceived$ = new BehaviorSubject(false);
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
@@ -86,7 +86,7 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
-        this.mapDataRecieved$.next(true);
+        this.mapDataReceived$.next(true);
         return data;
       }));
   }
@@ -118,7 +118,7 @@ export class MapService {
 
     //update the stationElements array.
     this.stationElements.push(newStation);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -165,7 +165,7 @@ export class MapService {
       this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**
