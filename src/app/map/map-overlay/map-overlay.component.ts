@@ -19,7 +19,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 export class MapOverlayComponent implements OnDestroy {
 
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** The current mode of the map. */
   private currentMode = MapMode.View;
