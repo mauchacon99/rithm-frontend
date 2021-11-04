@@ -45,6 +45,10 @@ describe('MapOverlayComponent', () => {
   it('should display confirmation prompt when cancel', () => {
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
     component.cancel();
-    expect(dialogSpy).toHaveBeenCalledTimes(1);
+    expect(dialogSpy).toHaveBeenCalledWith({
+      title: 'Confirmation',
+      message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+      okButtonText: 'Confirm',
+    });
   });
 });

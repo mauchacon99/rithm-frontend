@@ -11,7 +11,6 @@ import { UserService } from './user.service';
 
 describe('AdminAuthGuard', () => {
   let guard: AdminAuthGuard;
-  let userSignedInSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,9 +33,9 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should determine if the user is signed in and can perform the attempted routing action', () => {
-    userSignedInSpy = spyOn(TestBed.inject(UserService), 'isSignedIn');
+    const userSignedInSpy = spyOn(TestBed.inject(UserService), 'isSignedIn');
     guard.canActivate();
-    expect(userSignedInSpy).toHaveBeenCalled();
+    expect(userSignedInSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should allow navigation to admin pages if the user is admin', () => {
