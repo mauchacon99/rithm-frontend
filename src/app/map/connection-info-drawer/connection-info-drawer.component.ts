@@ -35,9 +35,9 @@ export class ConnectionInfoDrawerComponent {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const stationIds = data as string[];
-        if (dataDrawer) {
+        if (stationIds) {
           this.connectedStations = this.mapService.stationElements.filter((e) => {
-            e.rithmId === dataDrawer[0] || dataDrawer[1];
+            e.rithmId === stationIds[0] || stationIds[1];
           });
           this.station1 = this.connectedStations[0].stationName;
           this.station2 = this.connectedStations[1].stationName;
