@@ -9,7 +9,7 @@ import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/mode
 export class MockMapService {
 
   /** Notifies when the map data has been received. */
-  mapDataRecieved$ = new BehaviorSubject(false);
+  mapDataReceived$ = new BehaviorSubject(false);
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;

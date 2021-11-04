@@ -97,7 +97,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
-    this.mapService.mapDataRecieved$
+    this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stations = this.mapService.stationElements;
