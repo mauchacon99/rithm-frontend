@@ -227,9 +227,7 @@ export class StationService {
     // eslint-disable-next-line max-len
     return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
       {
-        body: [
-          usersIds
-        ]
+        body: usersIds
       });
   }
 

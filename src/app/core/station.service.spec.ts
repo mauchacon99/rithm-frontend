@@ -467,7 +467,7 @@ describe('StationService', () => {
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('DELETE');
-    expect(req.request.body).toEqual([usersIds]);
+    expect(req.request.body).toEqual(usersIds);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
