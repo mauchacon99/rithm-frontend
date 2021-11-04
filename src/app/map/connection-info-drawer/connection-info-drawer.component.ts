@@ -34,7 +34,7 @@ export class ConnectionInfoDrawerComponent {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const dataDrawer: string[] = data as string[];
+        const stationIds = data as string[];
         if (dataDrawer) {
           this.connectedStations = this.mapService.stationElements.filter((e) => {
             e.rithmId === dataDrawer[0] || dataDrawer[1];
