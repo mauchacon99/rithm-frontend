@@ -75,46 +75,40 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog
   ) {
-    //Needed to get the correct font loaded before it gets drawn.
-    const f = new FontFace('Montserrat-SemiBold', 'url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
-    f.load().then(() => {
-      // document.fonts.add(font);
+    this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      });
 
-      this.mapService.mapMode$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((mapMode) => {
-          this.mapMode = mapMode;
-          this.drawElements();
-        });
+    this.mapService.mapScale$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((scale) => {
+        this.scale = scale;
+        this.drawElements();
+      });
 
-      this.mapService.mapScale$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((scale) => {
-          this.scale = scale;
-          this.drawElements();
-        });
+    this.mapService.currentCanvasPoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentCanvasPoint = point;
+        this.drawElements();
+      });
 
-      this.mapService.currentCanvasPoint$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((point) => {
-          this.currentCanvasPoint = point;
-          this.drawElements();
-        });
-
-      this.mapService.mapDataRecieved$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => {
-          this.stations = this.mapService.stationElements;
-          this.flows = this.mapService.flowElements;
-          this.drawElements();
-        });
-      this.mapService.zoomCount$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((count) => {
-          this.zoomCount = count;
-        });
-    });
+    this.mapService.mapDataRecieved$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+        this.flows = this.mapService.flowElements;
+        this.drawElements();
+      });
+    this.mapService.zoomCount$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((count) => {
+        this.zoomCount = count;
+      });
   }
 
   /**
