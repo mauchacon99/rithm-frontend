@@ -303,6 +303,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(usersIds);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the potential roster members of the station', () => {
@@ -423,4 +431,64 @@ describe('StationService', () => {
       });
   });
 
+  it('should remove a member the owner from the roster', () => {
+    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    }];
+
+    service.removeUsersFromOwnerRoster(stationId, usersIds)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual([usersIds]);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should update the editable status of the document in the station', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const newStatus = true;
+    service.updateStatusDocumentEditable(stationRithmId, newStatus)
+      .subscribe((response) => {
+        expect(response).toEqual(newStatus);
+      });
+  });
+
+  it('should get the current editable status of the document', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse = true;
+
+    service.getStatusDocumentEditable(stationRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });
