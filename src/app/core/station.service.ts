@@ -240,9 +240,9 @@ export class StationService {
    * @param newStatus The new status is editable in the change for document.
    * @returns New status for document editable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
-    return of(newStatus).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.put<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`, stationRithmId);
   }
 
   /**
