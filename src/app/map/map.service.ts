@@ -131,7 +131,7 @@ export class MapService {
     if (index >= 0 ) {
       this.stationElements[index].status = MapItemStatus.Deleted;
     }
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -157,7 +157,7 @@ export class MapService {
         e.status = MapItemStatus.Updated;
       }
     });
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**

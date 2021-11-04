@@ -102,7 +102,7 @@ export class MapOverlayComponent implements OnDestroy {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
 
-    this.mapService.mapDataRecieved$
+    this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stations = this.mapService.stationElements;
