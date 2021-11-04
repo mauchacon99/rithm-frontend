@@ -31,7 +31,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   mapMode = MapMode.View;
 
   /** Destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /**
    * Whether the map is in any building mode.

@@ -27,7 +27,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
   /** Subject for whether the component was destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
