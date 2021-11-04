@@ -32,7 +32,7 @@ export class MapOverlayComponent implements OnDestroy {
   stations: StationMapElement[] = [];
 
   /** Data of station used in the map. */
-  station = {};
+  station?: StationMapElement;
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
@@ -119,7 +119,7 @@ export class MapOverlayComponent implements OnDestroy {
       .subscribe((clickRes) => {
         if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.station = clickRes.data;
+          this.station = clickRes.data as StationMapElement;
           this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
       });
