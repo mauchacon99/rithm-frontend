@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UserService } from 'src/app/core/user.service';
-import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { RosterManagementModalComponent } from './roster-management-modal.component';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
@@ -28,7 +27,6 @@ describe('RosterManagementModalComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: UserService, useClass: MockUserService },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
       ]
     })
