@@ -132,27 +132,24 @@ describe('UserFormComponent', () => {
     expect(component.confirmPasswordLabel).toEqual('Confirm new password');
   });
 
-  it('should toggle password requirements based on focus', async () => {
-    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements');
+  it('should show password requirements based on focus', async () => {
+    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements').and.callThrough();
     const passwordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#password' }));
 
     await passwordHarness.focus();
     expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('password');
-
-    // TODO: test for focusout
     // await passwordHarness.blur();
-    // expect(passwordRequirementsSpy).toHaveBeenCalledWith('');
+    // expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('password');
   });
 
-  it('should toggle confirm password requirements based on focus', async () => {
+  it('should show confirm password requirements based on focus', async () => {
     const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements');
     const confirmPasswordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#confirmPassword' }));
 
     await confirmPasswordHarness.focus();
     expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('confirmPassword');
-    // TODO: test for focusout
     // await confirmPasswordHarness.blur();
-    // expect(passwordRequirementsSpy).toHaveBeenCalledWith('');
+    // expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('confirmPassword');
   });
 
   it('should toggle password requirements', () => {
