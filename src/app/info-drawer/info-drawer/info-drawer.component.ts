@@ -2,7 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation } from 'src/models/station-info';
 
 /**
  * Component for info drawer.
@@ -15,13 +14,10 @@ import { StationInformation } from 'src/models/station-info';
 
 export class InfoDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
-  /** Specific mode of drawer. */
+  /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'documentInfo' = '';
-
-  /** Station information object passed from parent. */
-  stationInformation!: StationInformation;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService

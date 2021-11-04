@@ -48,7 +48,7 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('call toogleDrawer in document', ()=>{
+  it('should display/hide the document info drawer in station', ()=>{
     const drawerItem='documentInfo';
     const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService),'toggleDrawer');
     component.toggleDrawer(drawerItem);
