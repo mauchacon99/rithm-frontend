@@ -57,8 +57,8 @@ describe('ConnectionInfoDrawerComponent', () => {
     fixture = TestBed.createComponent(ConnectionInfoDrawerComponent);
     component = fixture.componentInstance;
     component.connectedStations = STATIONS.map((e) => new StationMapElement(e));
-    component.station1 = component.connectedStations[0].stationName;
-    component.station2 = component.connectedStations[1].stationName;
+    component.connectionStartStationName = component.connectedStations[0].stationName;
+    component.connectionEndStationName = component.connectedStations[1].stationName;
     fixture.detectChanges();
   });
 
