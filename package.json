@@ -48,7 +48,6 @@
     "@compodoc/compodoc": "^1.1.15",
     "@strut-software/eslint-config": "^1.5.0",
     "@strut-software/stylelint-config": "^1.1.1",
-    "@types/css-font-loading-module": "0.0.6",
     "@types/jasmine": "^3.10.2",
     "@types/node": "^16.11.6",
     "@types/uuid": "^8.3.1",
