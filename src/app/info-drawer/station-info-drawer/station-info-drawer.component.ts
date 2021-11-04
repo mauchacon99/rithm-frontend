@@ -24,7 +24,7 @@ import { MatRadioChange } from '@angular/material/radio';
 
 export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;

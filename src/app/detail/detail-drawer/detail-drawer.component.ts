@@ -14,7 +14,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 export class DetailDrawerComponent implements OnDestroy {
 
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /**
    * The type of detail item to display in the drawer.
