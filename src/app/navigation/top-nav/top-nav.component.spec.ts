@@ -11,13 +11,13 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('TopNavComponent', () => {
   let component: TopNavComponent;
   let fixture: ComponentFixture<TopNavComponent>;
   let loader: HarnessLoader;
   let notificationButtonHarness: MatButtonHarness;
-  let signOutSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,27 +58,21 @@ describe('TopNavComponent', () => {
   });
 
   it('should call the `signOut` method on the `UserService`', () => {
-    signOutSpy = spyOn(TestBed.inject(UserService), 'signOut');
+    const signOutSpy = spyOn(TestBed.inject(UserService), 'signOut');
     component.signOut();
-    expect(signOutSpy).toHaveBeenCalled();
+    expect(signOutSpy).toHaveBeenCalledOnceWith();
   });
 
   it('should call the `toggle` method on the `SidenavService`', async () => {
-    const spy = spyOn(component, 'toggle');
+    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleSidenav');
     component.toggle();
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledOnceWith();
   });
 
-  it('should call the clickedOutside', () => {
+  it('should hide the notifications pane when clicked outside', () => {
     component.notificationsVisible = true;
     component.clickedOutside();
     expect(component.notificationsVisible).toBeFalse();
-  });
-
-  it('should call the onResize', async () => {
-    const spy = spyOn(component, 'onResize');
-    component.onResize();
-    expect(spy).toHaveBeenCalled();
   });
 
   it('should toggle notifications pane when button clicked', () => {

@@ -41,7 +41,6 @@ const TEST_USERS: User[] = [{
 describe('OrganizationManagementComponent', () => {
   let component: OrganizationManagementComponent;
   let fixture: ComponentFixture<OrganizationManagementComponent>;
-  let removeUserSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -76,19 +75,18 @@ describe('OrganizationManagementComponent', () => {
 
   it('should get an array of users', fakeAsync(() => {
     component.getUsers(1);
-
     tick(1000);
     expect(component.users.length).toEqual(3);
   }));
 
   it('should make a userService call to remove a user', async () => {
-    removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
+    const removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
     await component.removeUser(TEST_USERS[0]);
-    expect(removeUserSpy).toHaveBeenCalled();
+    expect(removeUserSpy).toHaveBeenCalledOnceWith(TEST_USERS[0].organization, TEST_USERS[0].rithmId);
   });
 
   it('should not make a userService call when id is same as current user', async () => {
-    removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
+    const removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
     await component.removeUser(TEST_USERS[1]);
     expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });
@@ -113,23 +111,23 @@ describe('OrganizationManagementComponent', () => {
     expect(component.editName).toBe(false);
   });
 
-  it('should get organization information', async () => {
+  it('should get organization information', () => {
     const organizationSpy = spyOn(TestBed.inject(OrganizationService), 'getOrganizationInfo').and.callThrough();
-    await component.getOrganizationInfo();
+    component.getOrganizationInfo();
     const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
-    expect(organizationSpy).toHaveBeenCalledWith(organizationId);
+    expect(organizationSpy).toHaveBeenCalledOnceWith(organizationId);
   });
 
   it('should promote user to admin role.', async () => {
     const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
-    await component.updateUserRole(TEST_USERS[0], 'kdjfkd-kjdkfjd-jkjdfkdjk', 1);
-    expect(adminSpy).toHaveBeenCalledTimes(1);
+    await component.updateUserRole(TEST_USERS[0], TEST_USERS[0].rithmId, 1);
+    expect(adminSpy).toHaveBeenCalledOnceWith('admin', TEST_USERS[0].organization, TEST_USERS[0].rithmId);
   });
 
   it('should demote user from admin role.', async () => {
     const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
-    await component.updateUserRole(TEST_USERS[1], 'kdjfkd-kjdkfjd-jkjdfkdjk', 1);
-    expect(adminSpy).toHaveBeenCalledTimes(1);
+    await component.updateUserRole(TEST_USERS[1], TEST_USERS[1].rithmId, 1);
+    expect(adminSpy).toHaveBeenCalledOnceWith(null, TEST_USERS[1].organization, TEST_USERS[1].rithmId);
   });
 
 });
