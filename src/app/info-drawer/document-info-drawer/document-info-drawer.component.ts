@@ -51,4 +51,24 @@ export class DocumentInfoDrawerComponent implements OnInit {
       });
   }
 
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   */
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
+    this.stationService.updateStatusDocumentEditable(stationRithmId, newStatus)
+      .pipe(first())
+      .subscribe((documentEditableStatus) => {
+        if (documentEditableStatus) {
+          this.documentNameEditable = documentEditableStatus;
+        }
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
+  }
 }
