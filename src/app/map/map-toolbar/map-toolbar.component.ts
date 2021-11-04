@@ -6,7 +6,7 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
-import type { } from 'css-font-loading-module';
+// import type { } from 'css-font-loading-module';
 import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for managing the toolbar on the map.

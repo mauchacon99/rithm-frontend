@@ -78,8 +78,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Needed to get the correct font loaded before it gets drawn.
     const f = new FontFace('Montserrat-SemiBold', 'url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
-    f.load().then((font) => {
-      document.fonts.add(font);
+    f.load().then(() => {
+      // document.fonts.add(font);
 
       this.mapService.mapMode$
         .pipe(takeUntil(this.destroyed$))
