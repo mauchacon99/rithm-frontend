@@ -388,4 +388,61 @@ export class MockStationService {
     ];
     return of(mockRosterMember).pipe(delay(1000));
   }
+
+  /**
+   * Remove owner from the station's roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Station information with owners roster.
+   */
+  removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    }];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
+  }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = true;
+    return of(expectedResponse).pipe(delay(1000));
+  }
 }

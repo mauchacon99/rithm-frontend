@@ -119,24 +119,9 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-    const mockPrevAddRosterStation: StationRosterMember[] = [{
-      rithmId: '',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }, {
-      rithmId: '',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }];
-    return of(mockPrevAddRosterStation).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`, userIds);
   }
 
   /**
@@ -195,7 +180,7 @@ export class StationService {
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
     }
   }
@@ -218,7 +203,7 @@ export class StationService {
    */
   getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const params = new HttpParams()
-      .set('stationRithmId', stationId);
+      .set('rithmId', stationId);
     return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
   }
 
@@ -229,5 +214,46 @@ export class StationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Remove owner from the station's roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Station information with owners roster.
+   */
+  removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
+    // eslint-disable-next-line max-len
+    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
+      {
+        body: [
+          usersIds
+        ]
+      });
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
+  }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = true;
+    return of(expectedResponse).pipe(delay(1000));
   }
 }

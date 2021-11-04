@@ -16,7 +16,7 @@ export class SidenavDrawerService {
   private drawerComponent?: MatDrawer;
 
   /** The name of the context for which the drawer is opened. */
-  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo'> = new Subject();
+  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo'> = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
   drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
