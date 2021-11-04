@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 
 /**
  * Service for all behavior and state for the sidenav and drawers.
@@ -16,7 +16,7 @@ export class SidenavDrawerService {
   private drawerComponent?: MatDrawer;
 
   /** The name of the context for which the drawer is opened. */
-  drawerContext$: ReplaySubject<'comments' | 'history' | 'stationInfo' | 'documentInfo'> = new ReplaySubject(1);
+  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo'> = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
   drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
