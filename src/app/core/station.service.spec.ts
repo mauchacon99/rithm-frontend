@@ -1,7 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation } from 'src/models';
+import {
+  DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
+} from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -220,10 +222,20 @@ describe('StationService', () => {
   it('should return the status of the specific document once the status is updated', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const statusNew = DocumentGenerationStatus.Manual;
+    const paramsExpected = {
+      generatorStatus: statusNew
+    };
     service.updateStationDocumentGenerationStatus(stationId, statusNew)
       .subscribe((response) => {
         expect(response).toEqual(statusNew);
       });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(paramsExpected);
+
+    req.flush(statusNew);
+    httpTestingController.verify();
   });
 
   it('should return a list of stations private/all questions', () => {
@@ -291,41 +303,59 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(usersIds);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return the potential roster members of the station', () => {
-    const organizationId = '7D2E67D8-C705-4D02-9C34-76209E53061F';
     const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
-    const orgUsers: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    }];
+    const pageSize = 20;
+    const expectedResponse: StationPotentialRostersUsers = {
+      users: [{
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      }],
+      totalUsers: 3
+    };
 
-    service.getPotentialStationRosterMembers(organizationId, stationRithmId, pageNum)
+    service.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .subscribe((users) => {
-        expect(users).toEqual(orgUsers);
+        expect(users).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationRithmId}&pageNum=${pageNum}&pageSize=${pageSize}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should delete a station', () => {
@@ -401,4 +431,64 @@ describe('StationService', () => {
       });
   });
 
+  it('should remove a member the owner from the roster', () => {
+    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    }];
+
+    service.removeUsersFromOwnerRoster(stationId, usersIds)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual([usersIds]);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should update the editable status of the document in the station', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const newStatus = true;
+    service.updateStatusDocumentEditable(stationRithmId, newStatus)
+      .subscribe((response) => {
+        expect(response).toEqual(newStatus);
+      });
+  });
+
+  it('should get the current editable status of the document', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse = true;
+
+    service.getStatusDocumentEditable(stationRithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });

@@ -4,6 +4,8 @@ import { MockPopupService } from 'src/mocks';
 import { ErrorService } from './error.service';
 import { PopupService } from './popup.service';
 
+const ERROR_MESSAGE = 'Ruh roh, Raggy';
+
 describe('ErrorService', () => {
   let service: ErrorService;
   let popupService: PopupService;
@@ -33,13 +35,17 @@ describe('ErrorService', () => {
   });
 
   it('should display important errors to user', () => {
-    service.displayError('Ruh roh, Raggy', new Error('Zoinks'));
-    expect(popupService.alert).toHaveBeenCalled();
+    service.displayError(ERROR_MESSAGE, new Error('Zoinks'));
+    expect(popupService.alert).toHaveBeenCalledOnceWith({
+      title: 'Error',
+      message: ERROR_MESSAGE,
+      important: true
+    });
   });
 
   it('should display minor errors to user', () => {
-    service.displayError('Ruh roh, Raggy', new Error('Zoinks'), false);
-    expect(popupService.notify).toHaveBeenCalled();
+    service.displayError(ERROR_MESSAGE, new Error('Zoinks'), false);
+    expect(popupService.notify).toHaveBeenCalledOnceWith(ERROR_MESSAGE, true);
   });
 
 });
