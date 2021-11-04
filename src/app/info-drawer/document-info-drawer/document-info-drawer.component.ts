@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { StationService } from '../../core/station.service';
 import { ErrorService } from '../../core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for document drawer.
@@ -19,8 +20,11 @@ export class DocumentInfoDrawerComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
-  constructor(private stationService: StationService,
-    private errorService: ErrorService) {
+  constructor(
+    private stationService: StationService,
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService,
+  ) {
 
   }
 
@@ -70,5 +74,14 @@ export class DocumentInfoDrawerComponent implements OnInit {
           error
         );
       });
+  }
+
+  /**
+   * Toggles the open state of the drawer for document info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawer(drawerItem: 'documentInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 }
