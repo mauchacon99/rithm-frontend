@@ -39,8 +39,15 @@ export class ConnectionInfoDrawerComponent {
           this.connectedStations = this.mapService.stationElements.filter((e) => {
             e.rithmId === stationIds[0] || stationIds[1];
           });
-          this.station1 = this.connectedStations[0].stationName;
-          this.station2 = this.connectedStations[1].stationName;
+          this.connectedStations.sort((a) => {
+            if (a.rithmId === stationIds[0]) {
+              return -1;
+            } else {
+              return 1;
+            }
+          });
+          this.connectionStartStationName = this.connectedStations[0].stationName;
+          this.connectionEndStationName = this.connectedStations[1].stationName;
         }
       });
   }
