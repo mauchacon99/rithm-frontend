@@ -467,7 +467,7 @@ describe('StationService', () => {
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('DELETE');
-    expect(req.request.body).toEqual([usersIds]);
+    expect(req.request.body).toEqual(usersIds);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -480,6 +480,13 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(newStatus);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`);
+    expect(req.request.method).toEqual('PUT');
+
+    req.flush(newStatus);
+    httpTestingController.verify();
   });
 
   it('should get the current editable status of the document', () => {
