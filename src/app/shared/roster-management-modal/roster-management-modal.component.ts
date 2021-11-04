@@ -106,6 +106,23 @@ export class RosterManagementModalComponent implements OnInit {
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
+
+          const tempuser = this.users[2];
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
+          this.users.push(tempuser);
         }
       }, (error: unknown) => {
         this.loadingMembers = false;

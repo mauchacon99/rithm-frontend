@@ -11,11 +11,11 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center">
+  <div class="flex items-center overflow-y-auto list-area">
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
       <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
     </div>
-    <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-4 m-auto">
+    <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-4 m-auto" *ngIf="!listLoading">
       <ng-container>
         <div *ngFor="let user of users" [ngClass]="{'border-accent-500': user.isWorker}"
           class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
