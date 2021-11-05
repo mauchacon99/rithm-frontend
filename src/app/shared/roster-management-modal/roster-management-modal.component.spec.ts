@@ -42,4 +42,23 @@ describe('RosterManagementModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should return true if you have error when adding or removing station worker', () => {
+    const rithmId = '12434567';
+    component.addingStationRosterError = false;
+    component.removingStationRosterError = true;
+    component.lastRithmIdPerformed = rithmId;
+    const errorToWorker = component.checkErrorMessageStationWorker(rithmId);
+    expect(errorToWorker).toEqual(true);
+  });
+
+  it('should return false if you have error when adding or removing station worker', () => {
+    const rithmId = '12434567';
+    component.addingStationRosterError = false;
+    component.removingStationRosterError = true;
+    component.lastRithmIdPerformed = rithmId+1;
+    const errorToWorker = component.checkErrorMessageStationWorker(rithmId);
+    expect(errorToWorker).toEqual(false);
+  });
+
 });

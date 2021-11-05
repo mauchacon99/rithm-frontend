@@ -29,7 +29,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  users: StationRosterMember[]=[];
+  users: StationRosterMember[] = [];
 
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
@@ -52,7 +52,7 @@ export class RosterManagementModalComponent implements OnInit {
 
   /** Last rithmId performed when adding or deleting. */
   lastRithmIdPerformed = '';
-  
+
   /** Charging indicator from loading users.  */
   listLoading = true;
 
@@ -106,19 +106,19 @@ export class RosterManagementModalComponent implements OnInit {
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.loadingMembers = true;
-    this.listLoading=true;
+    this.listLoading = true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe((potentialUsers) => {
         this.loadingMembers = false;
-        this.listLoading=false;
+        this.listLoading = false;
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.loadingMembers = false;
-        this.listLoading=false;
+        this.listLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -131,12 +131,12 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param rithmId The index position of the user in the list to toggle.
    */
-   toggleSelectedWorker(rithmId: string): void {
+  toggleSelectedWorker(rithmId: string): void {
     this.lastRithmIdPerformed = rithmId;
     this.addingStationRosterError = !this.addingStationRosterError;
-    this.users.filter(( data )=> {
-      if (data.rithmId === rithmId ) {
-          data.isWorker=!data.isWorker;
+    this.users.filter((data) => {
+      if (data.rithmId === rithmId) {
+        data.isWorker = !data.isWorker;
       }
     });
   }
@@ -201,13 +201,14 @@ export class RosterManagementModalComponent implements OnInit {
     }
   }
   /**
-   * Check error message in station owner.
+   * Check error message in station worker.
    *
    * @param rithmId The index position of the user in the list.
    * @returns True If there is an error in the verification of the station owner.
    */
   // eslint-disable-next-line lines-between-class-members
-  checkErrorMessageStationOwner(rithmId: string): boolean {
-    return ((this.addingStationRosterError || this.removingStationRosterError) && (this.lastRithmIdPerformed === rithmId)) ? true : false;
+  checkErrorMessageStationWorker(rithmId: string): boolean {
+    return (this.addingStationRosterError || this.removingStationRosterError) &&
+      (this.lastRithmIdPerformed === rithmId) ? true : false;
   }
 }
