@@ -7,7 +7,10 @@ import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
   DEFAULT_SCALE,
-  STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+  MAX_SCALE,
+  MIN_SCALE,
+  SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -92,7 +95,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((scale) => {
           this.scale = scale;
-          this.drawElements();
         });
 
       this.mapService.currentCanvasPoint$
@@ -114,6 +116,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         .subscribe((count) => {
           this.zoomCount = count;
         });
+
+      this.scaleChangeDraw(60);
     });
   }
 
@@ -124,6 +128,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
+    this.scaleChangeDraw(60);
     this.drawElements();
   }
 
@@ -341,13 +346,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.lastTouchCoords = touchPos;
         this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
         this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
       } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
         // Zoom out
         this.lastTouchCoords = touchPos;
         this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
         this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
       }
     }
   }
@@ -384,16 +387,38 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const mousePoint = this.getMouseCanvasPoint(event);
 
     if (event.deltaY < 0) {
+      // Do nothing if already at max zoom.
+      if (this.scale >= MAX_SCALE) {
+        return;
+      }
       // Zoom in
       this.mapService.zoomCount$.next(this.zoomCount + 10);
       this.mapService.handleZoom(mousePoint, false);
     } else {
+      // Do nothing if already at min zoom.
+      if (this.scale <= MIN_SCALE
+        || this.mapService.mapMode$.value !== MapMode.View
+        && this.scale <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY) {
+          return;
+        }
       // Zoom out
       this.mapService.zoomCount$.next(this.zoomCount - 10);
       this.mapService.handleZoom(mousePoint, false);
     }
-
     event.preventDefault();
+  }
+
+  /**
+   * Animates at a set framerate when scale is changed.
+   *
+   * @param fps The framerate to animate at.
+   */
+  private scaleChangeDraw(fps: number): void {
+      setInterval(() => {
+        if (this.zoomCount !== 0){
+          this.drawElements();
+        }
+      }, 1000/ fps);
   }
 
   /**
@@ -401,6 +426,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+      console.log('draw');
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
