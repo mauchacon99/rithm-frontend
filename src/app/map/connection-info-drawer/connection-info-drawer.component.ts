@@ -16,7 +16,7 @@ import { MapService } from '../map.service';
 
 export class ConnectionInfoDrawerComponent {
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Array of the two connected stations. */
   connectedStations: StationMapElement[] = [];
