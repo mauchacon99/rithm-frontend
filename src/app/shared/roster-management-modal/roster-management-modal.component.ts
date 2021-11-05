@@ -124,8 +124,10 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
-    if (this.rosterType === 'worker'){
-      this.stationService.addUsersToWorkerRoster(stationId, userIds)
+    const addUserToRosterMethod$ = this.rosterType === 'worker'
+      ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      : this.stationService.addUsersToOwnersRoster(stationId, userIds);
+      addUserToRosterMethod$
       .pipe(first())
       .subscribe((data) => {
         if (data) {
@@ -135,22 +137,8 @@ export class RosterManagementModalComponent implements OnInit {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
-          );
-        });
-    } else {
-      this.stationService.addUsersToOwnersRoster(stationId, userIds)
-      .pipe(first())
-      .subscribe((data) => {
-        if (data) {
-          this.rosterMembers = data;
-        }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-          );
-        });
-    }
+        );
+      });
   }
 
   /**

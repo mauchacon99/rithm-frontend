@@ -431,7 +431,7 @@ describe('StationService', () => {
       });
   });
 
-  xit('should return an owner roster  assigned to the station', () => {
+  it('should return an owner roster  assigned to the station', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
