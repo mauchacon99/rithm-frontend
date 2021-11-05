@@ -1,0 +1,7 @@
+.list-area {
+  height: 360px;
+
+  @media screen and (max-width: 767px) {
+    height: 300px;
+  }
+}
