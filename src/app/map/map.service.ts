@@ -59,6 +59,9 @@ export class MapService {
   /** Check current mouse click if clicked the station option button. */
   currentMouseClick$ = new BehaviorSubject(false);
 
+  /** Check if mouse clicked outside of the option menu in canvas area. */
+  matMenuStatus$ = new BehaviorSubject(false);
+
   constructor(private http: HttpClient) { }
 
   /**

@@ -149,6 +149,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const mousePos = this.getMouseCanvasPoint(event);
     this.eventStartLogic(mousePos);
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
   }
 
   /**
@@ -249,6 +253,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
       this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
+    }
+
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
     }
 
   }
@@ -385,6 +394,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Zoom out
       this.mapService.zoomCount$.next(this.zoomCount - 10);
       this.mapService.handleZoom(mousePoint, false);
+    }
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
     }
 
     event.preventDefault();

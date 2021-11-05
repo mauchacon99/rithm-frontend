@@ -32,6 +32,9 @@ export class MockMapService {
   /** Check current mouse click if clicked the station option button. */
   currentMouseClick$ = new BehaviorSubject(false);
 
+  /** Check if mouse clicked outside of the option menu in canvas area. */
+  matMenuStatus$ = new BehaviorSubject(false);
+
   /** The number of zoom levels to increment or decrement. */
   zoomCount$ = new BehaviorSubject(0);
 
@@ -40,7 +43,7 @@ export class MockMapService {
    *
    * @param canvasContext The rendering context for the canvas element.
    */
-   registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
+  registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
     this.canvasContext = canvasContext;
   }
 

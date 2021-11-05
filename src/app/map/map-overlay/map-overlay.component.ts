@@ -46,6 +46,9 @@ export class MapOverlayComponent implements OnDestroy {
   /**Track zoomCount. */
   zoomCount = 0;
 
+  /** Option menu button cursor handler. */
+  optionMenuNone = false;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -114,6 +117,14 @@ export class MapOverlayComponent implements OnDestroy {
       .subscribe((count) => {
         this.zoomCount = count;
       });
+      this.mapService.matMenuStatus$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((click) => {
+        if (click) {
+          this.optionMenuClose();
+          this.mapService.matMenuStatus$.next(false);
+        }
+      });
   }
 
   /**
@@ -136,6 +147,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Publishes map changes.
    */
   async publish(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -166,6 +178,7 @@ export class MapOverlayComponent implements OnDestroy {
    *
    */
   async cancel(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Confirmation',
       message: `Are you sure you want to cancel these changes? All map changes will be lost`,
@@ -180,6 +193,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
+    this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount + 50);
     this.mapService.handleZoom(undefined, false);
   }
@@ -188,6 +202,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map out from center.
    */
   zoomOut(): void {
+    this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount - 50);
     this.mapService.handleZoom(undefined, false);
   }
@@ -198,10 +213,22 @@ export class MapOverlayComponent implements OnDestroy {
    * @param points The points coordinates values.
    */
   optionMenuTrigger(points: Point): void {
+    this.optionMenuNone = false;
     this.menuX = points.x - 15;
     this.menuY = points.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
   }
+
+  /**
+   * Close display menu option to default state.
+   *
+   */
+    optionMenuClose(): void {
+      this.optionMenuNone = true;
+      this.menuX = -1;
+      this.menuY = -1;
+      this.menu.closeMenu();
+    }
 
 }
