@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sidenav!: MatSidenav;
 
   /** Destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Used to show top nav. */
   showTopNav = false;

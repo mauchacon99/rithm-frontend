@@ -29,7 +29,7 @@ export class StationComponent implements OnInit, OnDestroy {
   stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
-  destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Station form. */
   stationForm: FormGroup;
