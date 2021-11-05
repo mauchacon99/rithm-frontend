@@ -438,6 +438,33 @@ describe('StationService', () => {
       });
   });
 
+  it('should return an owner roster  assigned to the station', () => {
+    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const userIdList: Array<string> = [
+      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+    ];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }, {
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }];
+    service.addUsersToOwnersRoster(stationId, userIdList)
+    .subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   it('should remove a member the owner from the roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
@@ -512,4 +539,5 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
 });
