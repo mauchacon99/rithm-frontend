@@ -147,9 +147,12 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The Specific id of station.
    * @param userIds The users ids for assign in station.
    */
-  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
+  addUsersToRoster(stationId: string, userIds: string[]): void {
     this.addingStationRosterError = false;
-    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+    const addUserToRosterMethod$ = this.rosterType === 'worker'
+      ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      : this.stationService.addUsersToOwnersRoster(stationId, userIds);
+      addUserToRosterMethod$
       .pipe(first())
       .subscribe((data) => {
         if (data) {
@@ -162,7 +165,6 @@ export class RosterManagementModalComponent implements OnInit {
           error
         );
       });
-
   }
 
   /**
