@@ -133,7 +133,6 @@ export class RosterManagementModalComponent implements OnInit {
    */
   toggleSelectedWorker(rithmId: string): void {
     this.lastRithmIdPerformed = rithmId;
-    this.addingStationRosterError = !this.addingStationRosterError;
     this.users.filter((data) => {
       if (data.rithmId === rithmId) {
         data.isWorker = !data.isWorker;
