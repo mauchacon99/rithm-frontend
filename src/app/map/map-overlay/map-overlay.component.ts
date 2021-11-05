@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MapMode, Point } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { StationMapElement } from 'src/helpers';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -26,6 +27,12 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Map data request loading indicator. */
   mapDataLoading = false;
+
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
+
+  /** Data of station used in the map. */
+  station?: StationMapElement;
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
@@ -95,20 +102,28 @@ export class MapOverlayComponent implements OnDestroy {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
 
+    this.mapService.mapDataReceived$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+      });
+
     this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
       });
 
-    this.mapService.currentMouseClick$
+    this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((click) => {
-        if (click) {
+      .subscribe((clickRes) => {
+        if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.mapService.currentMouseClick$.next(false);
+          this.station = clickRes.data as StationMapElement;
+          this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
       });
+
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
@@ -202,6 +217,36 @@ export class MapOverlayComponent implements OnDestroy {
     this.menuY = points.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
+  }
+
+  /**
+   * Updates station status to delete.
+   */
+  async deleteStation(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.deleteStation(<StationMapElement>(this.station));
+    }
+  }
+
+  /**
+   * Removes all connections for a station.
+   */
+  async removeStationConnections(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `This will remove all connections to and from this station and any associated flow logic. This action cannot be undone.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+    }
   }
 
 }
