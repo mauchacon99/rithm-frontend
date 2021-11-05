@@ -19,6 +19,9 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Document information object passed from parent. */
   @Input() documentInformation!: DocumentStationInformation | StationInformation;
 
+  /** Whether the component would be display. */
+  @Input() displaySection: 'document' | 'station' = 'document';
+
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
