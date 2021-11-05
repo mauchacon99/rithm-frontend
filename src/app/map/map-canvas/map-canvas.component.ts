@@ -644,7 +644,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
         ) {
           this.mapService.currentMousePoint$.next(point);
-          this.mapService.currentMouseClick$.next(true);
+          this.mapService.stationButtonClick$.next({ click: true, data: station });
           break;
         }
       }
