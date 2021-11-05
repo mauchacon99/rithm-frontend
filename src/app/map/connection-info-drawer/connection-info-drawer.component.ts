@@ -40,11 +40,7 @@ export class ConnectionInfoDrawerComponent {
             e.rithmId === stationIds[0] || stationIds[1];
           });
           this.connectedStations.sort((a) => {
-            if (a.rithmId === stationIds[0]) {
-              return -1;
-            } else {
-              return 1;
-            }
+            return a.rithmId === stationIds[0] ? -1 : 1;
           });
           this.connectionStartStationName = this.connectedStations[0].stationName;
           this.connectionEndStationName = this.connectedStations[1].stationName;
