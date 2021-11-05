@@ -40,6 +40,15 @@ export class RosterManagementModalComponent implements OnInit {
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
+  /** The current page number. */
+  activeNum = 1;
+
+  /** Total number of users in this organization. */
+  totalNumUsers = 0;
+
+  /** Charging indicator from loading users.  */
+  listLoading = true;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -89,14 +98,19 @@ export class RosterManagementModalComponent implements OnInit {
    * @param pageNum The current page.
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
+    this.pageNumUsersOrganization=pageNum;
+    this.listLoading=true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe((potentialUsers) => {
+        this.listLoading=false;
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
+          this.totalNumUsers=potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
+        this.listLoading=false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error

@@ -7,6 +7,7 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { RosterManagementModalComponent } from './roster-management-modal.component';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { MockComponent } from 'ng-mocks';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
   stationId: 'jk34jk34jk34'
@@ -20,7 +21,8 @@ describe('RosterManagementModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         RosterManagementModalComponent,
-        MockComponent(UserAvatarComponent)
+        MockComponent(UserAvatarComponent),
+        MockComponent(PaginationComponent)
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },

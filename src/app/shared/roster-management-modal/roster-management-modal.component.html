@@ -3,7 +3,8 @@
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
-          <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true" [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
+          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
       </div>
     </div>
   </div>
@@ -26,6 +27,12 @@
     </ng-container>
   </div>
 </div>
+<div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalNumUsers"
+    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  </app-pagination>
+</div>
+
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
 </div>
