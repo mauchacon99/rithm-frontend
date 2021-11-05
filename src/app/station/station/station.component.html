@@ -37,11 +37,15 @@
                           All
                         </mat-panel-title>
                         <mat-panel-description>
-                          View all items on this document
+                          <div class="hidden sm:block flex items-center justify-center w-full">
+                            View all items on this document
+                          </div>
                         </mat-panel-description>
+
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"></app-previous-fields>
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false">
+                        </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
                     <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
@@ -50,11 +54,14 @@
                           Private
                         </mat-panel-title>
                         <mat-panel-description>
-                          View all private items on this document
+                          <div class="hidden sm:block flex items-center justify-center w-full">
+                            View all private items on this document
+                          </div>
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true"></app-previous-fields>
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true">
+                        </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
                   </mat-accordion>
@@ -65,7 +72,7 @@
               <ng-template mat-tab-label>
                 <span data-testid="flow-logic-tab">Flow Logic</span>
               </ng-template>
-              <ng-template matTabContent >
+              <ng-template matTabContent>
                 Flow Logic tab
               </ng-template>
             </mat-tab>
@@ -73,8 +80,10 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span class="mr-3"><button data-testid="station-cancel" mat-stroked-button color="accent">Cancel</button></span>
-                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" (click)="updateStation(stationInformation)">Save</button>
+                <span class="mr-3"><button data-testid="station-cancel" mat-stroked-button
+                    color="accent">Cancel</button></span>
+                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2"
+                  (click)="updateStation(stationInformation)">Save</button>
               </div>
             </div>
           </div>
