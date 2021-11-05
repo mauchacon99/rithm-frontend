@@ -47,8 +47,6 @@ export class RosterManagementModalComponent implements OnInit {
   /** The current page number. */
   activeNum = 1;
 
-  /** Total number of users in this organization. */
-  totalNumUsers = 0;
 
   /** Charging indicator from loading users.  */
   listLoading = true;
@@ -113,7 +111,6 @@ export class RosterManagementModalComponent implements OnInit {
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
-          this.totalNumUsers=potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.loadingMembers = false;
