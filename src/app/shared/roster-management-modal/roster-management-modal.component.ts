@@ -34,6 +34,10 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+
+  /** Loading members from roster. */
+  loadingMembers = true;
+
   /** The roster type received from modal data. */
   rosterType: 'worker' | 'owner' = 'owner';
 
@@ -99,10 +103,12 @@ export class RosterManagementModalComponent implements OnInit {
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.pageNumUsersOrganization=pageNum;
+    this.loadingMembers = true;
     this.listLoading=true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe((potentialUsers) => {
+        this.loadingMembers = false;
         this.listLoading=false;
         if (potentialUsers) {
           this.users = potentialUsers.users;
@@ -110,6 +116,7 @@ export class RosterManagementModalComponent implements OnInit {
           this.totalNumUsers=potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
+        this.loadingMembers = false;
         this.listLoading=false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

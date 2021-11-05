@@ -8,6 +8,8 @@ import { RosterManagementModalComponent } from './roster-management-modal.compon
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { MockComponent } from 'ng-mocks';
 import { PaginationComponent } from '../pagination/pagination.component';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
+
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
   stationId: 'jk34jk34jk34'
@@ -22,7 +24,9 @@ describe('RosterManagementModalComponent', () => {
       declarations: [
         RosterManagementModalComponent,
         MockComponent(UserAvatarComponent),
-        MockComponent(PaginationComponent)
+        MockComponent(PaginationComponent),
+        MockComponent(LoadingIndicatorComponent),
+
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
