@@ -40,6 +40,15 @@ export class RosterManagementModalComponent implements OnInit {
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
+  /** Check if there is an error when adding the owner of the station. */
+  addingStationRosterError = false;
+
+  /** Check if there is an error when deleting the owner of the station. */
+  removingStationRosterError = false;
+
+  /** Last rithmId performed when adding or deleting. */
+  lastRithmIdPerformed = '';
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -110,6 +119,8 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list to toggle.
    */
    toggleSelectedWorker(rithmId: string): void {
+    this.lastRithmIdPerformed = rithmId;
+    this.addingStationRosterError = !this.addingStationRosterError;
     this.users.filter(( data )=> {
       if (data.rithmId === rithmId ) {
           data.isWorker=!data.isWorker;
@@ -124,6 +135,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
+    this.addingStationRosterError = false;
     this.stationService.addUsersToWorkerRoster(stationId, userIds)
       .pipe(first())
       .subscribe((data) => {
@@ -131,6 +143,7 @@ export class RosterManagementModalComponent implements OnInit {
           this.rosterMembers = data;
         }
       }, (error: unknown) => {
+        this.addingStationRosterError = true;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -145,12 +158,14 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
+    this.removingStationRosterError = false;
     if (this.rosterType === 'worker') {
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
           this.rosterMembers = data;
         }, (error: unknown) => {
+          this.removingStationRosterError = true;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -164,11 +179,22 @@ export class RosterManagementModalComponent implements OnInit {
             this.rosterMembers = data;
           }
         }, (error: unknown) => {
+          this.removingStationRosterError = true;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
         });
     }
+  }
+  /**
+   * Check error message in station owner.
+   *
+   * @param rithmId The index position of the user in the list.
+   * @returns True If there is an error in the verification of the station owner.
+   */
+  // eslint-disable-next-line lines-between-class-members
+  checkErrorMessageStationOwner(rithmId: string): boolean {
+    return ((this.addingStationRosterError || this.removingStationRosterError) && (this.lastRithmIdPerformed === rithmId)) ? true : false;
   }
 }
