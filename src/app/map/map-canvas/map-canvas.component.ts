@@ -62,6 +62,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Track zoomCount. */
   zoomCount = 0;
 
+  /**Set up interval for zoom. */
+  zoomInterval?: NodeJS.Timeout;
+
   /**
    * Add station mode active.
    *
@@ -95,6 +98,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((scale) => {
           this.scale = scale;
+          this.scaleChangeDraw();
         });
 
       this.mapService.currentCanvasPoint$
@@ -111,13 +115,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.flows = this.mapService.flowElements;
           this.drawElements();
         });
+
       this.mapService.zoomCount$
         .pipe(takeUntil(this.destroyed$))
         .subscribe((count) => {
           this.zoomCount = count;
         });
-
-      this.scaleChangeDraw(60);
     });
   }
 
@@ -384,14 +387,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('wheel', ['$event'])
   wheel(event: WheelEvent): void {
+    event.preventDefault();
     const mousePoint = this.getMouseCanvasPoint(event);
+
+    console.log('EVENT');
 
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
       if (this.scale >= MAX_SCALE) {
+        this.mapService.zoomCount$.next(0);
         return;
       }
       // Zoom in
+      if (this.zoomCount < 0) {
+        this.mapService.zoomCount$.next(0);
+      }
       this.mapService.zoomCount$.next(this.zoomCount + 10);
       this.mapService.handleZoom(mousePoint, false);
     } else {
@@ -399,13 +409,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.scale <= MIN_SCALE
         || this.mapService.mapMode$.value !== MapMode.View
         && this.scale <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY) {
+          this.mapService.zoomCount$.next(0);
           return;
         }
       // Zoom out
+      if (this.zoomCount > 0) {
+        this.mapService.zoomCount$.next(0);
+      }
       this.mapService.zoomCount$.next(this.zoomCount - 10);
       this.mapService.handleZoom(mousePoint, false);
     }
-    event.preventDefault();
   }
 
   /**
@@ -413,12 +426,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    *
    * @param fps The framerate to animate at.
    */
-  private scaleChangeDraw(fps: number): void {
-      setInterval(() => {
-        if (this.zoomCount !== 0){
+  private scaleChangeDraw(fps = 60): void {
+    if (this.zoomCount !== 0){
+      if (!this.zoomInterval) {
+        this.zoomInterval = setInterval(() => {
+          if (this.zoomCount === 0 && this.zoomInterval) {
+            clearInterval(this.zoomInterval);
+            this.zoomInterval = undefined;
+          }
           this.drawElements();
-        }
-      }, 1000/ fps);
+        }, 1000/ fps);
+      }
+    }
   }
 
   /**
@@ -426,7 +445,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
-      console.log('draw');
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
 
