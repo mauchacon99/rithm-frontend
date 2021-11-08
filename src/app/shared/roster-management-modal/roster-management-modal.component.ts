@@ -29,7 +29,7 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  users: StationRosterMember[]=[];
+  users: StationRosterMember[] = [];
 
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
@@ -97,19 +97,19 @@ export class RosterManagementModalComponent implements OnInit {
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.loadingMembers = true;
-    this.listLoading=true;
+    this.listLoading = true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe((potentialUsers) => {
         this.loadingMembers = false;
-        this.listLoading=false;
+        this.listLoading = false;
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
         this.loadingMembers = false;
-        this.listLoading=false;
+        this.listLoading = false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -122,10 +122,10 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param rithmId The index position of the user in the list to toggle.
    */
-   toggleSelectedWorker(rithmId: string): void {
-    this.users.filter(( data )=> {
-      if (data.rithmId === rithmId ) {
-          data.isWorker=!data.isWorker;
+  toggleSelectedWorker(rithmId: string): void {
+    this.users.filter((data) => {
+      if (data.rithmId === rithmId) {
+        data.isWorker = !data.isWorker;
       }
     });
   }
@@ -140,7 +140,7 @@ export class RosterManagementModalComponent implements OnInit {
     const addUserToRosterMethod$ = this.rosterType === 'worker'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
-      addUserToRosterMethod$
+    addUserToRosterMethod$
       .pipe(first())
       .subscribe((data) => {
         if (data) {
@@ -155,35 +155,24 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Remove users to the worker roster.
+   * Remove users or owners to the worker roster.
    *
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    if (this.rosterType === 'worker') {
-      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
-        .pipe(first())
-        .subscribe((data) => {
-          this.rosterMembers = data;
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    } else if (this.rosterType === 'owner') {
-      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
-        .pipe(first())
-        .subscribe((data) => {
-          if (data) {
-            this.rosterMembers = data;
-          }
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+    // eslint-disable-next-line max-len
+    const removeUserMember = this.rosterType === 'worker' ?
+      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
+      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
+
+    removeUserMember.pipe(first())
+      .subscribe((data) => {
+        this.rosterMembers = data;
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
   }
 }
