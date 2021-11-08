@@ -4,6 +4,7 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from '../../core/station.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -16,7 +17,10 @@ describe('DocumentInfoDrawerComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
-      ]
+      ],
+      imports: [
+        MatCheckboxModule,
+      ],
     })
       .compileComponents();
   });
