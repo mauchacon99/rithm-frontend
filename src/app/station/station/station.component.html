@@ -25,7 +25,7 @@
                 <span data-testid="document-tab">Document</span>
               </ng-template>
               <ng-template matTabContent>
-                <app-document-info-header [documentInformation]="stationInformation" [displaySection]="'station'"></app-document-info-header>
+                <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>

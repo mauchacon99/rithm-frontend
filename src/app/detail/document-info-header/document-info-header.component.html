@@ -2,7 +2,7 @@
   <div class="col-span-12">
     <h6 class="text-center">Document Information</h6>
   </div>
-  <div class="col-span-12 flex justify-between" *ngIf="displaySection === 'station'">
+  <div class="col-span-12 flex justify-between" *ngIf="isStation">
       <div class="self-center">
         <p>Document Name</p>
       </div>
@@ -11,7 +11,7 @@
       </button>
   </div>
 
-  <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="displaySection === 'document'">
+  <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Document Name</mat-label>
       <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
