@@ -7,6 +7,7 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { RosterManagementModalComponent } from './roster-management-modal.component';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
   stationId: 'jk34jk34jk34'
@@ -15,12 +16,15 @@ const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
 describe('RosterManagementModalComponent', () => {
   let component: RosterManagementModalComponent;
   let fixture: ComponentFixture<RosterManagementModalComponent>;
+  const stationRithmId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+  const userList = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         RosterManagementModalComponent,
-        MockComponent(UserAvatarComponent)
+        MockComponent(UserAvatarComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -40,4 +44,23 @@ describe('RosterManagementModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should add an owner to station roster', async () => {
+    component.rosterType = 'owner';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToOwnersRoster').and.callThrough();
+
+    await component.addUsersToRoster(stationRithmId, userList);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
+
+  it('should add a worker to station roster', async () => {
+    component.rosterType = 'worker';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToWorkerRoster').and.callThrough();
+
+    await component.addUsersToRoster(stationRithmId, userList);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
+
 });

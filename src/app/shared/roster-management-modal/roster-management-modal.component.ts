@@ -33,11 +33,18 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
+
+  /** Loading members from roster. */
+  loadingMembers = true;
+
   /** The roster type received from modal data. */
   rosterType: 'worker' | 'owner' = 'owner';
 
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
+
+  /** Charging indicator from loading users.  */
+  listLoading = true;
 
   constructor(
     private stationService: StationService,
@@ -88,14 +95,20 @@ export class RosterManagementModalComponent implements OnInit {
    * @param pageNum The current page.
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
+    this.loadingMembers = true;
+    this.listLoading=true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe((potentialUsers) => {
+        this.loadingMembers = false;
+        this.listLoading=false;
         if (potentialUsers) {
           this.users = potentialUsers.users;
           this.totalPotentialUsers = potentialUsers.totalUsers;
         }
       }, (error: unknown) => {
+        this.loadingMembers = false;
+        this.listLoading=false;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -109,10 +122,11 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list to toggle.
    */
    toggleSelectedWorker(rithmId: string): void {
-    this.users.map(( data )=> {
-      if (data.rithmId === rithmId ) {
-          data.isWorker=!data.isWorker;
-          if (!data.isWorker){
+    this.users.map(( user )=> {
+      if (user.rithmId === rithmId ) {
+         const rosterUserType = this.rosterType === 'worker' ? 'isWorker' : 'isOwner' ;
+          user[rosterUserType] = !user[rosterUserType];
+          if (!user[rosterUserType]){
             /** If data.isWorker is false is because the user is being removed. */
             this.removeMemberFromRoster(rithmId);
           }
@@ -126,8 +140,11 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The Specific id of station.
    * @param userIds The users ids for assign in station.
    */
-  addUsersToWorkerRoster(stationId: string, userIds: string[]): void {
-    this.stationService.addUsersToWorkerRoster(stationId, userIds)
+  addUsersToRoster(stationId: string, userIds: string[]): void {
+    const addUserToRosterMethod$ = this.rosterType === 'worker'
+      ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
+      : this.stationService.addUsersToOwnersRoster(stationId, userIds);
+      addUserToRosterMethod$
       .pipe(first())
       .subscribe((data) => {
         if (data) {
