@@ -44,14 +44,11 @@ export class RosterManagementModalComponent implements OnInit {
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
-  /** Check if there is an error when adding the owner of the station. */
-  addingStationRosterError = false;
-
-  /** Check if there is an error when deleting the owner of the station. */
-  removingStationRosterError = false;
+  /** Check if there is an error when adding or deleting the owner of the station. */
+  addRemoveRosterError = false;
 
   /** Last rithmId performed when adding or deleting. */
-  lastRithmIdPerformed = '';
+  lastUserIdClicked = '';
 
   /** Charging indicator from loading users.  */
   listLoading = true;
@@ -132,7 +129,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list to toggle.
    */
   toggleSelectedWorker(rithmId: string): void {
-    this.lastRithmIdPerformed = rithmId;
+    this.lastUserIdClicked = rithmId;
     this.users.filter((data) => {
       if (data.rithmId === rithmId) {
         data.isWorker = !data.isWorker;
@@ -147,7 +144,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
-    this.addingStationRosterError = false;
+    this.addRemoveRosterError = false;
     const addUserToRosterMethod$ = this.rosterType === 'worker'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
@@ -158,7 +155,7 @@ export class RosterManagementModalComponent implements OnInit {
           this.rosterMembers = data;
         }
       }, (error: unknown) => {
-        this.addingStationRosterError = true;
+        this.addRemoveRosterError = true;
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error
@@ -172,14 +169,14 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    this.removingStationRosterError = false;
+    this.addRemoveRosterError = false;
     if (this.rosterType === 'worker') {
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe((data) => {
           this.rosterMembers = data;
         }, (error: unknown) => {
-          this.removingStationRosterError = true;
+          this.addRemoveRosterError = true;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -193,7 +190,7 @@ export class RosterManagementModalComponent implements OnInit {
             this.rosterMembers = data;
           }
         }, (error: unknown) => {
-          this.removingStationRosterError = true;
+          this.addRemoveRosterError = true;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -201,15 +198,15 @@ export class RosterManagementModalComponent implements OnInit {
         });
     }
   }
+
   /**
    * Check error message in station worker.
    *
    * @param rithmId The index position of the user in the list.
    * @returns True If there is an error in the verification of the station owner.
    */
-  // eslint-disable-next-line lines-between-class-members
-  checkErrorMessageStationWorker(rithmId: string): boolean {
-    return (this.addingStationRosterError || this.removingStationRosterError) &&
-      (this.lastRithmIdPerformed === rithmId) ? true : false;
+  checkAddRemoveErrorMsg(rithmId: string): boolean {
+    const erroMessage: boolean = this.addRemoveRosterError && this.lastUserIdClicked === rithmId ? true : false;
+    return erroMessage;
   }
 }

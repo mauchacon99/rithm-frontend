@@ -19,7 +19,7 @@
       <ng-container *ngFor="let user of users">
         <div class="h-100">
           <div
-            [ngClass]="{'border-accent-500': user.isWorker, 'border-error-500': checkErrorMessageStationWorker(user.rithmId)}"
+            [ngClass]="{'border-accent-500': user.isWorker, 'border-error-500': checkAddRemoveErrorMsg(user.rithmId)}"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)='toggleSelectedWorker(user.rithmId)'>
             <div class="my-1">
@@ -33,7 +33,7 @@
               <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
             </div>
           </div>
-          <div class="col-xs-12 text-error-worker text-center truncate" *ngIf="checkErrorMessageStationWorker(user.rithmId)">
+          <div class="col-xs-12 text-error-worker text-center truncate" *ngIf="checkAddRemoveErrorMsg(user.rithmId)">
             <span class="text-error-500">Error: Unable to add/remove station owner</span>
           </div>
         </div>
