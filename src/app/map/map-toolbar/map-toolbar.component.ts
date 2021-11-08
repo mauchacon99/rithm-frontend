@@ -83,6 +83,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	addStation(): void {
     if (!this.stationAddActive) {
       this.mapService.mapMode$.next(MapMode.StationAdd);
+      this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }
