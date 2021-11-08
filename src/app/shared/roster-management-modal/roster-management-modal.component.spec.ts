@@ -50,7 +50,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should add an owner to station roster', async () => {
-    component.rosterType = 'owner';
+    component.rosterType = 'owners';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToOwnersRoster').and.callThrough();
 
     await component.addUsersToRoster(stationRithmId, userList);
@@ -59,7 +59,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should add a worker to station roster', async () => {
-    component.rosterType = 'worker';
+    component.rosterType = 'workers';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToWorkerRoster').and.callThrough();
 
     await component.addUsersToRoster(stationRithmId, userList);
