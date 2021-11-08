@@ -109,7 +109,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list to toggle.
    */
    toggleSelectedWorker(rithmId: string): void {
-    this.users.filter(( data )=> {
+    this.users.map(( data )=> {
       if (data.rithmId === rithmId ) {
           data.isWorker=!data.isWorker;
           if (!data.isWorker){
