@@ -8,6 +8,7 @@
       </div>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+
       </div>
     </div>
   </div>
@@ -35,7 +36,11 @@
     </div>
   </div>
 </div>
-
+<div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
+    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  </app-pagination>
+</div>
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
 </div>

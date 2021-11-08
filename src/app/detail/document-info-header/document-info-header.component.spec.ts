@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
+import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -44,5 +45,12 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display/hide the document info drawer in station', ()=>{
+    const drawerItem='documentInfo';
+    const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService),'toggleDrawer');
+    component.toggleDrawer(drawerItem);
+    expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem);
   });
 });
