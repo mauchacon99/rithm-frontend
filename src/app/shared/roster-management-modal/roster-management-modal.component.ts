@@ -50,6 +50,10 @@ export class RosterManagementModalComponent implements OnInit {
   /** Last rithmId performed when adding or deleting. */
   lastUserIdClicked = '';
 
+  /** The current page number. */
+  activeNum = 1;
+
+
   /** Charging indicator from loading users.  */
   listLoading = true;
 
@@ -102,6 +106,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param pageNum The current page.
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
+    this.pageNumUsersOrganization=pageNum;
     this.loadingMembers = true;
     this.listLoading = true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
