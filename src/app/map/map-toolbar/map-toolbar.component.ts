@@ -6,7 +6,6 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
-import type { } from 'css-font-loading-module';
 import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for managing the toolbar on the map.
@@ -31,7 +30,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   mapMode = MapMode.View;
 
   /** Destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /**
    * Whether the map is in any building mode.
@@ -84,6 +83,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	addStation(): void {
     if (!this.stationAddActive) {
       this.mapService.mapMode$.next(MapMode.StationAdd);
+      this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }

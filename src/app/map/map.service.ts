@@ -24,7 +24,7 @@ export class MapService {
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
-  mapDataRecieved$ = new BehaviorSubject(false);
+  mapDataReceived$ = new BehaviorSubject(false);
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
@@ -57,7 +57,10 @@ export class MapService {
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
 
   /** Check current mouse click if clicked the station option button. */
-  currentMouseClick$ = new BehaviorSubject(false);
+  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+
+  /** Check if mouse clicked outside of the option menu in canvas area. */
+  matMenuStatus$ = new BehaviorSubject(false);
 
   constructor(private http: HttpClient) { }
 
@@ -86,7 +89,7 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
-        this.mapDataRecieved$.next(true);
+        this.mapDataReceived$.next(true);
         return data;
       }));
   }
@@ -94,7 +97,7 @@ export class MapService {
   /**
    * Converts station data so it can be drawn on the canvas.
    */
-  useStationData(): void {
+  private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
   }
@@ -118,7 +121,46 @@ export class MapService {
 
     //update the stationElements array.
     this.stationElements.push(newStation);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Updates station status to delete.
+   *
+   * @param station The station for which status has to be set to delete.
+   */
+  deleteStation(station: StationMapElement): void {
+    const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
+    if (index >= 0 ) {
+      this.stationElements[index].status = MapItemStatus.Deleted;
+    }
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
+   *
+   * @param station The station for which connections has to be removed.
+   */
+   removeStationConnection(station: StationMapElement): void {
+    this.stationElements.map((e) => {
+      if (e.rithmId === station.rithmId) {
+        e.previousStations = [];
+        e.nextStations = [];
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.previousStations.includes(station.rithmId)) {
+        e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.nextStations.includes(station.rithmId)) {
+        e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+    });
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -127,7 +169,7 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-  deepCopy<T>(source: T): T {
+  private deepCopy<T>(source: T): T {
     return Array.isArray(source)
       ? source.map(item => this.deepCopy(item))
       : source instanceof Date
@@ -165,7 +207,7 @@ export class MapService {
       this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -227,7 +269,7 @@ export class MapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
+  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
