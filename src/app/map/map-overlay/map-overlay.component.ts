@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MapMode, Point } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { StationMapElement } from 'src/helpers';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -27,6 +28,12 @@ export class MapOverlayComponent implements OnDestroy {
   /** Map data request loading indicator. */
   mapDataLoading = false;
 
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
+
+  /** Data of station used in the map. */
+  station?: StationMapElement;
+
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
 
@@ -45,6 +52,9 @@ export class MapOverlayComponent implements OnDestroy {
 
   /**Track zoomCount. */
   zoomCount = 0;
+
+  /** Option menu button cursor handler. */
+  optionMenuNone = false;
 
   /**
    * Whether the map is in any building mode.
@@ -95,24 +105,40 @@ export class MapOverlayComponent implements OnDestroy {
         throw new Error(`Map overlay subscription error: ${error}`);
       });
 
+    this.mapService.mapDataReceived$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+      });
+
     this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
       });
 
-    this.mapService.currentMouseClick$
+    this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((click) => {
-        if (click) {
+      .subscribe((clickRes) => {
+        if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.mapService.currentMouseClick$.next(false);
+          this.station = clickRes.data as StationMapElement;
+          this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
       });
+
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
+      });
+      this.mapService.matMenuStatus$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((click) => {
+        if (click) {
+          this.optionMenuClose();
+          this.mapService.matMenuStatus$.next(false);
+        }
       });
   }
 
@@ -136,6 +162,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Publishes map changes.
    */
   async publish(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -166,6 +193,7 @@ export class MapOverlayComponent implements OnDestroy {
    *
    */
   async cancel(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Confirmation',
       message: `Are you sure you want to cancel these changes? All map changes will be lost`,
@@ -180,6 +208,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
+    this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount + 50);
     this.mapService.handleZoom(undefined, false);
   }
@@ -188,6 +217,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map out from center.
    */
   zoomOut(): void {
+    this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount - 50);
     this.mapService.handleZoom(undefined, false);
   }
@@ -198,10 +228,52 @@ export class MapOverlayComponent implements OnDestroy {
    * @param points The points coordinates values.
    */
   optionMenuTrigger(points: Point): void {
+    this.optionMenuNone = false;
     this.menuX = points.x - 15;
     this.menuY = points.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
+  }
+
+  /**
+   * Close display menu option to default state.
+   *
+   */
+    optionMenuClose(): void {
+      this.optionMenuNone = true;
+      this.menuX = -1;
+      this.menuY = -1;
+      this.menu.closeMenu();
+    }
+
+  /**
+   * Updates station status to delete.
+   */
+  async deleteStation(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.deleteStation(<StationMapElement>(this.station));
+    }
+  }
+
+  /**
+   * Removes all connections for a station.
+   */
+  async removeStationConnections(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `This will remove all connections to and from this station and any associated flow logic. This action cannot be undone.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+    }
   }
 
 }
