@@ -10,6 +10,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
+import { MatRadioChange } from '@angular/material/radio';
 
 /**
  * Component for info station.
@@ -23,7 +24,7 @@ import { PopupService } from '../../core/popup.service';
 
 export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
@@ -48,9 +49,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Edit Mode. */
   stationName = '';
-
-  /** Worker. */
-  isWorker = true;
 
   /** Station name form. */
   stationNameForm: FormGroup;
@@ -83,7 +81,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
-          this.isWorker = dataDrawer.isWorker;
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
@@ -100,16 +97,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
 
     this.stationService.stationName$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe(data => {
-      this.stationName = data.length > 0 ? data : 'Untitled Station';
-    }, (error: unknown) => {
-      this.docGenLoading = false;
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error
-      );
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(data => {
+        this.stationName = data.length > 0 ? data : 'Untitled Station';
+      }, (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      });
 
   }
 
@@ -274,5 +270,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update status the station.
+   *
+   * @param statusNew New status the station update.
+   */
+  updateStatusStation(statusNew: MatRadioChange): void {
+    this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
   }
 }
