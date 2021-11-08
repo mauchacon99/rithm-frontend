@@ -64,10 +64,37 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should call remove users from station user list', async () => {
+    component.rosterType = 'owner';
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: true
+      }
+    ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const toggleSelectedUser = spyOn(component,'toggleSelectedUser');
+    const removeOwnerSpy = spyOn(component,'removeMemberFromRoster');
     await component.toggleSelectedUser(userRithmId);
-    expect(toggleSelectedUser).toHaveBeenCalledOnceWith(userRithmId);
+    expect(removeOwnerSpy).toHaveBeenCalledOnceWith(userRithmId);
+  });
+
+  it('should call remove users from station user list', async () => {
+    component.rosterType = 'worker';
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isWorker: true
+      }
+    ];
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    const removeWorkerSpy = spyOn(component, 'removeMemberFromRoster');
+    await component.toggleSelectedUser(userRithmId);
+    expect(removeWorkerSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 
 });
