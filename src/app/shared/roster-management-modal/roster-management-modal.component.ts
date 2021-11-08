@@ -155,7 +155,7 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Remove users to the station roster.
+   * Remove users from the station roster.
    *
    * @param usersId The selected user id to remove.
    */
