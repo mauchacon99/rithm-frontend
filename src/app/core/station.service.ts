@@ -131,33 +131,12 @@ export class StationService {
    * @param usersIds The selected users id array to removed.
    * @returns New station Worker Roster.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
-    const data: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
+    // eslint-disable-next-line max-len
+    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
     {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    }];
-    return of(data).pipe(delay(1000));
+      body: usersIds
+    });
   }
 
   /**
@@ -217,6 +196,40 @@ export class StationService {
   }
 
   /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+     addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+      if (!stationId || !userIds) {
+        return throwError(new HttpErrorResponse({
+          error: {
+            error: 'Invalid Station ID or users array.'
+          }
+        })).pipe(delay(1000));
+      } else {
+        const stationOwnerRoster: StationRosterMember[] = [{
+          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: true,
+          isWorker: false
+        }, {
+          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isOwner: true,
+          isWorker: false
+        }];
+        return of(stationOwnerRoster).pipe(delay(1000));
+      }
+    }
+
+  /**
    * Remove owner from the station's roster.
    *
    * @param stationId The Specific id of station.
@@ -227,9 +240,7 @@ export class StationService {
     // eslint-disable-next-line max-len
     return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
       {
-        body: [
-          usersIds
-        ]
+        body: usersIds
       });
   }
 
@@ -240,9 +251,9 @@ export class StationService {
    * @param newStatus The new status is editable in the change for document.
    * @returns New status for document editable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
-    return of(newStatus).pipe(delay(1000));
+    // eslint-disable-next-line max-len
+    return this.http.put<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`, stationRithmId);
   }
 
   /**
@@ -251,9 +262,9 @@ export class StationService {
    * @param stationRithmId The Specific id of station.
    * @returns Status for document editable.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
-    const expectedResponse = true;
-    return of(expectedResponse).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId);
+    return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 }
