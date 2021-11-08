@@ -35,7 +35,7 @@ export class RosterManagementModalComponent implements OnInit {
   rosterMembers: StationRosterMember[] = [];
 
   /** Charges while users are being removed. */
-  loadingCurrentRosterMembers =false;
+  loadingCurrentRosterMembers = false;
 
   /** Loading members from roster. */
   loadingMembers = true;
