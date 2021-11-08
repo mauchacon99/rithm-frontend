@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { StationService } from '../../core/station.service';
-import { ErrorService } from '../../core/error.service';
+import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
