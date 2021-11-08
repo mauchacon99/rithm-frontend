@@ -10,7 +10,7 @@ import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
-  stationId: 'jk34jk34jk34'
+  stationId: '73d47261-1932-4fcf-82bd-159eb1a7243f'
 };
 
 describe('RosterManagementModalComponent', () => {
@@ -63,4 +63,21 @@ describe('RosterManagementModalComponent', () => {
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
 
+  it('should remove an owner to station roster', async () => {
+    component.rosterType = 'owner';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'removeUsersFromOwnerRoster').and.callThrough();
+
+    await component.removeMemberFromRoster(userList[0]);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
+
+  it('should remove a worker to station roster', async () => {
+    component.rosterType = 'worker';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'removeUsersFromWorkerRoster').and.callThrough();
+
+    await component.removeMemberFromRoster(userList[0]);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
 });
