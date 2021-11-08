@@ -160,12 +160,11 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    // eslint-disable-next-line max-len
-    const removeUserMember = this.rosterType === 'worker' ?
+    const removeUserMemberRoster$ = this.rosterType === 'worker' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
 
-    removeUserMember.pipe(first())
+    removeUserMemberRoster$.pipe(first())
       .subscribe((data) => {
         this.rosterMembers = data;
       }, (error: unknown) => {
