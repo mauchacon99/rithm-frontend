@@ -63,4 +63,11 @@ describe('RosterManagementModalComponent', () => {
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
 
+  it('should call remove users from station user list', async () => {
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    const toggleSelectedUser = spyOn(component,'toggleSelectedUser');
+    await component.toggleSelectedUser(userRithmId);
+    expect(toggleSelectedUser).toHaveBeenCalledOnceWith(userRithmId);
+  });
+
 });
