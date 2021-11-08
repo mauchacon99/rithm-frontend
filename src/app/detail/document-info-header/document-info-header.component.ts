@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Reusable component for the document information header.
@@ -27,6 +28,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
   ) {
     this.documentNameForm = this.fb.group({
@@ -93,5 +95,14 @@ export class DocumentInfoHeaderComponent implements OnInit {
    */
   get documentName(): string {
     return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
+  }
+
+  /**
+   * Toggles the open state of the drawer for document info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+   toggleDrawer(drawerItem: 'documentInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 }
