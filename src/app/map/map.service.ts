@@ -253,7 +253,7 @@ export class MapService {
     if (!pinch) {
       setTimeout(() => {
         zoomLogic();
-      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 10 : 10);
+      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10);
     } else {
       zoomLogic();
     }

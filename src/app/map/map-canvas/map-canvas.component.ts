@@ -6,10 +6,7 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE,
-  MAX_SCALE,
-  MIN_SCALE,
-  SCALE_RENDER_STATION_ELEMENTS,
+  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -80,7 +77,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
     private dialog: MatDialog
-    ) {
+  ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
@@ -124,7 +121,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
-    this.scaleChangeDraw(60);
     this.drawElements();
   }
 
