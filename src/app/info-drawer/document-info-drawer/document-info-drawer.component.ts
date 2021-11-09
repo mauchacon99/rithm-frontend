@@ -20,6 +20,9 @@ export class DocumentInfoDrawerComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
+  /** Whether the request to get the document info drawer is currently underway. */
+  documentInfoDrawerLoading = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
