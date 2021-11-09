@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ZOOM_VELOCITY } from 'src/app/map/map-constants';
+import { StationMapElement } from 'src/helpers';
 import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/models';
 
 /**
@@ -30,7 +32,10 @@ export class MockMapService {
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
 
   /** Check current mouse click if clicked the station option button. */
-  currentMouseClick$ = new BehaviorSubject(false);
+  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+
+  /** Check if mouse clicked outside of the option menu in canvas area. */
+  matMenuStatus$ = new BehaviorSubject(false);
 
   /** The number of zoom levels to increment or decrement. */
   zoomCount$ = new BehaviorSubject(0);
@@ -40,7 +45,7 @@ export class MockMapService {
    *
    * @param canvasContext The rendering context for the canvas element.
    */
-   registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
+  registerCanvasContext(canvasContext: CanvasRenderingContext2D): void {
     this.canvasContext = canvasContext;
   }
 
@@ -120,6 +125,34 @@ export class MockMapService {
   }
 
   /**
+   * Create a new Station.
+   *
+   * @param coords The coordinates where the station will be placed.
+   */
+   // eslint-disable-next-line
+   createNewStation(coords: Point): void { }
+
+  /**
+   * Updates station status to delete.
+   *
+   * @param station The station for which status has to be set to delete.
+   */
+  // eslint-disable-next-line
+  deleteStation(station: StationMapElement): void { }
+
+  /**
+   * Enters build mode for the map.
+   */
+   // eslint-disable-next-line @typescript-eslint/no-empty-function
+   buildMap(): void { }
+
+  /**
+   * Cancels local map changes and returns to view mode.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  cancelMapChanges(): void { }
+
+  /**
    * Publishes local map changes to the server.
    *
    * @param mapData Data sending to the API.
@@ -127,7 +160,7 @@ export class MockMapService {
    */
   publishMap(mapData: MapData): Observable<unknown> {
     if (!mapData) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -135,5 +168,97 @@ export class MockMapService {
     } else {
       return of().pipe(delay(1000));
     }
+  }
+
+  /**
+   * Zooms the map by adjusting the map scale and position.
+   *
+   * @param zoomingIn Zooming in or out?
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param zoomAmount How much to zoom in/out.
+   */
+   // eslint-disable-next-line
+   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void { }
+
+  /**
+   * Gets the center point of the canvas.
+   *
+   * @returns The center point of the canvas.
+   */
+  getCanvasCenterPoint(): Point {
+    if (!this.canvasContext) {
+      throw new Error('Cannot get center point of canvas when canvas context is not set');
+    }
+    const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
+    return {
+      x: canvasBoundingRect.width / 2,
+      y: canvasBoundingRect.height / 2
+    };
+  }
+
+  /**
+   * Gets the x-coordinate on the canvas for a given map x-coordinate.
+   *
+   * @param mapX The x-coordinate on the map.
+   * @returns The x-coordinate for the canvas.
+   */
+  getCanvasX(mapX: number): number {
+    return Math.floor((mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value);
+  }
+
+  /**
+   * Gets the y-coordinate on the canvas for a given map y-coordinate.
+   *
+   * @param mapY The y-coordinate on the map.
+   * @returns The y-coordinate for the canvas.
+   */
+  getCanvasY(mapY: number): number {
+    return Math.floor((mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value);
+  }
+
+  /**
+   * Gets the point on the canvas for a given map point.
+   *
+   * @param mapPoint The point on the map.
+   * @returns The point for the canvas.
+   */
+  getCanvasPoint(mapPoint: Point): Point {
+    return {
+      x: this.getCanvasX(mapPoint.x),
+      y: this.getCanvasY(mapPoint.y)
+    };
+  }
+
+  /**
+   * Gets the x-coordinate on the map for a given canvas x-coordinate.
+   *
+   * @param canvasX The x-coordinate on the canvas.
+   * @returns The x-coordinate for the map.
+   */
+  getMapX(canvasX: number): number {
+    return Math.floor(canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x);
+  }
+
+  /**
+   * Gets the y-coordinate on the map for a given canvas y-coordinate.
+   *
+   * @param canvasY The y-coordinate on the canvas.
+   * @returns The y-coordinate for the map.
+   */
+  getMapY(canvasY: number): number {
+    return Math.floor(canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y);
+  }
+
+  /**
+   * Gets the point on the map for a given canvas point.
+   *
+   * @param canvasPoint The point on the canvas.
+   * @returns The point for the map.
+   */
+  getMapPoint(canvasPoint: Point): Point {
+    return {
+      x: this.getMapX(canvasPoint.x),
+      y: this.getMapY(canvasPoint.y)
+    };
   }
 }
