@@ -6,7 +6,7 @@
       <div class="self-center">
         <p>Document Name</p>
       </div>
-      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top">
+      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('documentInfo')">
         <i class="fas fa-info-circle text-2xl text-primary-500"></i>
       </button>
   </div>
