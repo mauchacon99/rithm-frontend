@@ -214,7 +214,7 @@ export class StationElementService {
     ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16*this.mapScale);
-    ctx.font = `600 ${fontSize}px Montserrat-SemiBold`;
+    ctx.font = `600 ${fontSize}px Montserrat`;
     ctx.fillStyle = '#fff';
     ctx.textAlign =  'center';
     ctx.fillText(station.noOfDocuments.toString(),
