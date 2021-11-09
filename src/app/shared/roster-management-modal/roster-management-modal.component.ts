@@ -112,14 +112,12 @@ export class RosterManagementModalComponent implements OnInit {
         next: (potentialUsers) => {
           this.loadingMembers = false;
           this.listLoading = false;
-          this.listLoading = false;
           if (potentialUsers) {
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
         },
         error: (error: unknown) => {
-          this.loadingMembers = false;
           this.loadingMembers = false;
           this.listLoading = false;
           this.errorService.displayError(
