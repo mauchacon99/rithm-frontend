@@ -4,7 +4,7 @@
     <div class="gap-2 flex justify-center">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
         <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+          [badge]="'check'" [hoverEffect]="true" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
       </div>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
@@ -22,7 +22,8 @@
           class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
           (click)='toggleSelectedUser(user.rithmId)'>
           <div class="my-1">
-            <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true">
+            <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true"
+              [badge]="getBadge(user)" [hoverEffect]="false">
             </app-user-avatar>
           </div>
           <div class="flex flex-col justify-center overflow-hidden">

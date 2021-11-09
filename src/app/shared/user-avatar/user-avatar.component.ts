@@ -25,6 +25,9 @@ export class UserAvatarComponent {
   /** Whether to show any badge type or not. */
   @Input() badge: 'none' | 'check' | 'minus' | 'plus' = 'none';
 
+  /** Whether the enabled switching badges on mouseover. */
+  @Input() hoverEffect!: boolean;
+
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;
 
