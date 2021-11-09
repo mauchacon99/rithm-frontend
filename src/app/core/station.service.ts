@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -187,6 +187,42 @@ export class StationService {
   }
 
   /**
+   * Get Owner Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]> {
+    if (!stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Invalid station ID.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const ownerRoster: StationRosterMember[] = [
+        {
+            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+        {
+            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            firstName: 'Rithm',
+            lastName: 'User',
+            email: 'rithmuser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+    ];
+      return of(ownerRoster).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Returns the station name.
    *
    * @param stationName The name of the station.
@@ -203,30 +239,8 @@ export class StationService {
    * @returns OwnerRoster in the station.
    */
      addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-      if (!stationId || !userIds) {
-        return throwError(() => new HttpErrorResponse({
-          error: {
-            error: 'Invalid Station ID or users array.'
-          }
-        })).pipe(delay(1000));
-      } else {
-        const stationOwnerRoster: StationRosterMember[] = [{
-          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isOwner: true,
-          isWorker: false
-        }, {
-          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isOwner: true,
-          isWorker: false
-        }];
-        return of(stationOwnerRoster).pipe(delay(1000));
-      }
+      // eslint-disable-next-line max-len
+      return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
     }
 
   /**
