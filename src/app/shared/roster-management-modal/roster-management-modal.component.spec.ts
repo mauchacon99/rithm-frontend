@@ -63,7 +63,7 @@ describe('RosterManagementModalComponent', () => {
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
 
-  it('should call remove users from station user list', async () => {
+  it('should remove an owner from station roster', async () => {
     component.rosterType = 'owner';
     component.users = [
       {
@@ -80,7 +80,7 @@ describe('RosterManagementModalComponent', () => {
     expect(removeOwnerSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 
-  it('should call remove users from station user list', async () => {
+  it('should remove a worker user from station roster', async () => {
     component.rosterType = 'worker';
     component.users = [
       {
