@@ -8,9 +8,11 @@
       </div>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
-
       </div>
     </div>
+  </div>
+  <div class="flex justify-center" *ngIf="addRemoveRosterError">
+     <span class="text-error-500 text-xs">Error: Unable to add/remove station owner</span>
   </div>
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
