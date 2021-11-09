@@ -149,7 +149,7 @@ export class StationService {
   // eslint-disable-next-line max-len
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Invalid page number.'
         }
