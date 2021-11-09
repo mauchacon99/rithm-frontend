@@ -51,18 +51,20 @@ ngOnInit(): void{
     this.isLoading = true;
     this.stationService.getStationPreviousQuestions(stationId, isPrivate)
     .pipe(first())
-    .subscribe((questions: Question[]) => {
-      if (questions) {
-        this.questions = questions;
+    .subscribe({
+      next: (questions: Question[]) => {
+        if (questions) {
+          this.questions = questions;
+        }
+        this.isLoading = false;
+      }, error: (error: unknown) => {
+        this.questionsError=true;
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
       }
-      this.isLoading = false;
-    }, (error: unknown) => {
-      this.questionsError=true;
-      this.isLoading = false;
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        error
-      );
     });
   }
 }
