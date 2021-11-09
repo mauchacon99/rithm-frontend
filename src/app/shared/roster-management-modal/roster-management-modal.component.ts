@@ -211,15 +211,4 @@ export class RosterManagementModalComponent implements OnInit {
         });
     }
   }
-
-  /**
-   * Gets the badge to be send.
-   *
-   * @param user The current user to be added/removed.
-   * @returns The badge set in each case.
-   */
-  getBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus'{
-    const badgeType = this.rosterType === 'worker' ? user.isWorker : user.isOwner;
-    return badgeType ? 'check' : 'none';
-  }
 }
