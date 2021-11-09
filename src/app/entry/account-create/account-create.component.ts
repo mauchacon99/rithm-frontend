@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogOptions } from 'src/models';
 import { TermsConditionsService } from 'src/app/core/terms-conditions.service';
-import { Subject } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 
 /**
  * Component used for creating an account.
@@ -69,27 +69,29 @@ export class AccountCreateComponent implements OnInit {
     const formValues = this.signUpForm.value.userForm;
     this.userService.register(formValues.firstName, formValues.lastName, formValues.email, formValues.password)
       .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.openValidateEmailModal();
-      }, (error: unknown) => {
-        this.isLoading = false;
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.openValidateEmailModal();
+        }, error: (error: unknown) => {
+          this.isLoading = false;
 
-        if (!(error instanceof HttpErrorResponse)) {
-          throw new Error('Unknown error');
-        }
-        const errorMessage: string = error.error.error;
+          if (!(error instanceof HttpErrorResponse)) {
+            throw new Error('Unknown error');
+          }
+          const errorMessage: string = error.error.error;
 
-        if (errorMessage === 'This username has already been used.') {
-          this.popupService.alert({
-            title: 'Account Already Exists',
-            message: 'An account has already been created for this email address. Try signing into this account instead.'
-          });
-        } else {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+          if (errorMessage === 'This username has already been used.') {
+            this.popupService.alert({
+              title: 'Account Already Exists',
+              message: 'An account has already been created for this email address. Try signing into this account instead.'
+            });
+          } else {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
         }
       });
   }
@@ -102,26 +104,25 @@ export class AccountCreateComponent implements OnInit {
     let agreeTerms = false;
 
     this.isLoading = true;
-    this.userService.getTermsConditions()
-      .toPromise()
-      .then(async (termsConditions) => {
-        if (termsConditions) {
-          message = termsConditions;
-          this.isLoading = false;
-          agreeTerms = await this.popupService.terms({
-            title: 'Terms and Conditions',
-            message: message,
-            okButtonText: 'Agree'
-          });
-          this.termsConditionsService.setAgreed(agreeTerms);
-        }
-      }, (error: unknown) => {
+    try {
+      const termsAndConditionsText = await firstValueFrom(this.userService.getTermsConditions());
+      if (termsAndConditionsText) {
+        message = termsAndConditionsText;
         this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      });
+        agreeTerms = await this.popupService.terms({
+          title: 'Terms and Conditions',
+          message: message,
+          okButtonText: 'Agree'
+        });
+        this.termsConditionsService.setAgreed(agreeTerms);
+      }
+    } catch (error) {
+      this.isLoading = false;
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        error
+      );
+    }
   }
 
   /**

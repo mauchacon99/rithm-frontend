@@ -39,15 +39,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
   getStatusDocumentEditable(stationRithmId: string): void {
     this.stationService.getStatusDocumentEditable(stationRithmId)
       .pipe(first())
-      .subscribe((documentEditableStatus) => {
-        if (documentEditableStatus) {
-          this.documentNameEditable = documentEditableStatus;
+      .subscribe({
+        next: (documentEditableStatus) => {
+          if (documentEditableStatus) {
+            this.documentNameEditable = documentEditableStatus;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -60,15 +62,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
     this.stationService.updateStatusDocumentEditable(stationRithmId, newStatus)
       .pipe(first())
-      .subscribe((documentEditableStatus) => {
-        if (documentEditableStatus) {
-          this.documentNameEditable = documentEditableStatus;
+      .subscribe({
+        next: (documentEditableStatus) => {
+          if (documentEditableStatus) {
+            this.documentNameEditable = documentEditableStatus;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 }
