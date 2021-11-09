@@ -17,7 +17,7 @@ export class MockOrganizationService {
    */
   getUsersForOrganization(organizationId: string, pageNum: number): Observable<OrganizationUsers> {
     if (!organizationId || !pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -72,7 +72,7 @@ export class MockOrganizationService {
    */
   removeUserFromOrganization(organizationRithmId: string, userRithmId: string): Observable<unknown> {
     if (!organizationRithmId || !userRithmId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -90,7 +90,7 @@ export class MockOrganizationService {
    */
   getOrganizationInfo(organizationId: string): Observable<OrganizationInfo> {
     if (!organizationId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -116,7 +116,7 @@ export class MockOrganizationService {
    */
   updateUserRole(role: 'admin' | null, organizationRithmId: string, userRithmId: string): Observable<unknown> {
     if (!organizationRithmId || !userRithmId || !role) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -135,7 +135,7 @@ export class MockOrganizationService {
    */
   updateOrganizationInfo(organizationInfo: OrganizationInfo, organizationId: string): Observable<OrganizationInfo> {
     if (!organizationId || !organizationInfo) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }

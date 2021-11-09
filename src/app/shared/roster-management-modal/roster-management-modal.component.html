@@ -24,7 +24,7 @@
           <div
             [ngClass]="{'border-accent-500': user.isWorker, 'border-error-500': checkAddRemoveErrorMsg(user.rithmId)}"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
-            (click)='toggleSelectedWorker(user.rithmId)'>
+            (click)='toggleSelectedUser(user.rithmId)'>
             <div class="my-1">
               <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true">
               </app-user-avatar>

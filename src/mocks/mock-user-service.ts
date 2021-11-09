@@ -34,7 +34,7 @@ export class MockUserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    let response;
+    let response: HttpErrorResponse;
 
     if (email.includes('unverified')) {
       response = new HttpErrorResponse({
@@ -61,7 +61,7 @@ export class MockUserService {
       }).pipe(delay(1000));
     }
 
-    return throwError(response).pipe(delay(1000));
+    return throwError(() => response).pipe(delay(1000));
   }
 
   /**
@@ -100,7 +100,7 @@ export class MockUserService {
    */
   register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Unable to login before email has been verified.'
         }
@@ -118,7 +118,7 @@ export class MockUserService {
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -135,7 +135,7 @@ export class MockUserService {
    */
   sendPasswordResetEmail(email: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -154,7 +154,7 @@ export class MockUserService {
    */
   resetPassword(guid: string, email: string, password: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -171,7 +171,7 @@ export class MockUserService {
    */
   updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
     if (!accountInfo) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -221,7 +221,7 @@ export class MockUserService {
    */
   updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
     if (!notificationSettings) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
