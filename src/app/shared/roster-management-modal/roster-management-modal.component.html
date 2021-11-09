@@ -1,5 +1,5 @@
 <div class="modal-container">
-  <h4 class="text-center">Manage {{ rosterType | titlecase }} Roster</h4>
+  <h4 class="text-center">Manage Station {{ rosterType | titlecase }}</h4>
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
@@ -22,7 +22,7 @@
       <ng-container *ngFor="let user of users">
         <div class="h-100">
           <div
-            [ngClass]="{'border-accent-500': user.isWorker, 'border-error-500': checkAddRemoveErrorMsg(user.rithmId)}"
+            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}, 'border-error-500': checkAddRemoveErrorMsg(user.rithmId)}"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)='toggleSelectedUser(user.rithmId)'>
             <div class="my-1">
