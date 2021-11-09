@@ -80,8 +80,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
     private dialog: MatDialog
-  ) {
-
+    ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
