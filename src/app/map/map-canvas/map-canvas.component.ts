@@ -200,6 +200,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       this.eventEndLogic(pointerPos);
     }
+
   }
 
   /**
@@ -567,6 +568,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.zoomCount$.next(this.zoomCount - 10);
       this.mapService.handleZoom(mousePoint, false);
     }
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
 
     event.preventDefault();
   }
@@ -674,6 +679,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventStartLogic(position: Point) {
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
     if (this.mapMode === MapMode.Build) {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
@@ -712,6 +721,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventEndLogic(position: Point) {
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
@@ -826,7 +839,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
         ) {
           this.mapService.currentMousePoint$.next(point);
-          this.mapService.currentMouseClick$.next(true);
+          this.mapService.stationButtonClick$.next({ click: true, data: station });
           break;
         }
       }

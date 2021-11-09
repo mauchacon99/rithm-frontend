@@ -2,15 +2,25 @@
   <div class="col-span-12">
     <h6 class="text-center">Document Information</h6>
   </div>
-  <form [formGroup]="documentNameForm" class="col-span-12">
+  <div class="col-span-12 flex justify-between" *ngIf="isStation">
+      <div class="self-center">
+        <p>Document Name</p>
+      </div>
+      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top">
+        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+      </button>
+  </div>
+
+  <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Document Name</mat-label>
       <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
-      <button *ngIf="isStation" mat-icon-button matSuffix class="icon icon-top">
-        <i class="fas fa-cog text-2xl"></i>
+      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top">
+        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
       </button>
     </mat-form-field>
   </form>
+
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
     <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn" class="priority">
       1

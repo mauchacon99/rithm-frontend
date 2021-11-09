@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { firstValueFrom } from 'rxjs';
 import { DialogData, DialogType } from 'src/models';
 import { DialogOptions } from 'src/models/dialog-options';
 import { DialogComponent } from '../shared/dialog/dialog.component';
@@ -39,7 +40,7 @@ export class PopupService {
       data: alertData
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -60,7 +61,7 @@ export class PopupService {
       data: confirmData
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -82,7 +83,7 @@ export class PopupService {
       data: promptData
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -104,7 +105,7 @@ export class PopupService {
       data: termsData
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**

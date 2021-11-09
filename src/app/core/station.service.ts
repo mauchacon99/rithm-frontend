@@ -149,7 +149,7 @@ export class StationService {
   // eslint-disable-next-line max-len
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Invalid page number.'
         }
@@ -194,6 +194,18 @@ export class StationService {
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
   }
+
+  /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+     addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+      // eslint-disable-next-line max-len
+      return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
+    }
 
   /**
    * Remove owner from the station's roster.
