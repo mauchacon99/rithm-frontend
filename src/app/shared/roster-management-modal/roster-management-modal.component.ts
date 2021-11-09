@@ -33,12 +33,11 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
-
   /** Loading members from roster. */
   loadingMembers = true;
 
   /** The roster type received from modal data. */
-  rosterType: 'worker' | 'owner' = 'owner';
+  rosterType: 'workers' | 'owners' = 'owners';
 
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
@@ -57,7 +56,7 @@ export class RosterManagementModalComponent implements OnInit {
       /** The station rithmId. */
       stationId: string;
       /** The type of roster which will be showed.  */
-      type: 'worker' | 'owner';
+      type: 'workers' | 'owners';
     },
   ) {
     this.stationRithmId = this.modalData.stationId;
@@ -69,16 +68,19 @@ export class RosterManagementModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
-    this.getStationWorkerRoster(this.stationRithmId);
+    this.getStationUsersRoster(this.stationRithmId);
   }
 
   /**
-   * Get Workers Roster for a given Station.
+   * Get Users Roster for a given Station.
    *
    * @param stationId The id of the given station.
    */
-  getStationWorkerRoster(stationId: string): void {
-    this.stationService.getStationWorkerRoster(stationId)
+  getStationUsersRoster(stationId: string): void {
+    const stationUserRoster$ = this.rosterType === 'workers'
+      ? this.stationService.getStationWorkerRoster(stationId)
+      : this.stationService.getStationOwnerRoster(stationId);
+    stationUserRoster$
       .pipe(first())
       .subscribe({
         next: (data) => {
@@ -134,7 +136,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   toggleSelectedUser(rithmId: string): void {
     const selectedUser = this.users.find((user) => user.rithmId === rithmId);
-    const rosterUserType = this.rosterType === 'worker' ? 'isWorker' : 'isOwner';
+    const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
     if (selectedUser){
       selectedUser[rosterUserType] = !selectedUser[rosterUserType];
       if (!selectedUser[rosterUserType]) {
@@ -151,7 +153,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
-    const addUserToRosterMethod$ = this.rosterType === 'worker'
+    const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
       addUserToRosterMethod$
@@ -177,7 +179,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    if (this.rosterType === 'worker') {
+    if (this.rosterType === 'workers') {
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe({
@@ -191,7 +193,7 @@ export class RosterManagementModalComponent implements OnInit {
             );
           }
         });
-    } else if (this.rosterType === 'owner') {
+    } else if (this.rosterType === 'owners') {
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
         .pipe(first())
         .subscribe({
