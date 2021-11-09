@@ -31,17 +31,19 @@ export class MyStationsComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardService.getDashboardStations()
       .pipe(first())
-      .subscribe((stations) => {
-        if (stations) {
-          this.stations = stations;
+      .subscribe({
+        next: (stations) => {
+          if (stations) {
+            this.stations = stations;
+          }
+          this.isLoading = false;
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.isLoading = false;
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
