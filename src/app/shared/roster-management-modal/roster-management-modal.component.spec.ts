@@ -67,6 +67,24 @@ describe('RosterManagementModalComponent', () => {
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
 
+  it('should get the station owner roster', async () => {
+    component.rosterType = 'owner';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
+
+    await component.getStationUsersRoster(stationRithmId);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId);
+  });
+
+  it('should get the station worker roster', async () => {
+    component.rosterType = 'worker';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'getStationWorkerRoster').and.callThrough();
+
+    await component.getStationUsersRoster(stationRithmId);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId);
+  });
+
   it('should remove an owner from station roster', async () => {
     component.rosterType = 'owner';
     component.users = [

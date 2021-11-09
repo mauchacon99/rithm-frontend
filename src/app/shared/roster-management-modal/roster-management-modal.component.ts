@@ -33,7 +33,6 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
-
   /** Loading members from roster. */
   loadingMembers = true;
 
@@ -69,16 +68,19 @@ export class RosterManagementModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
-    this.getStationWorkerRoster(this.stationRithmId);
+    this.getStationUsersRoster(this.stationRithmId);
   }
 
   /**
-   * Get Workers Roster for a given Station.
+   * Get Users Roster for a given Station.
    *
    * @param stationId The id of the given station.
    */
-  getStationWorkerRoster(stationId: string): void {
-    this.stationService.getStationWorkerRoster(stationId)
+  getStationUsersRoster(stationId: string): void {
+    const stationUserRoster$ = this.rosterType === 'worker'
+      ? this.stationService.getStationWorkerRoster(stationId)
+      : this.stationService.getStationOwnerRoster(stationId);
+    stationUserRoster$
       .pipe(first())
       .subscribe({
         next: (data) => {
