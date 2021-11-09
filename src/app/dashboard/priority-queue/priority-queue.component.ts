@@ -30,17 +30,19 @@ export class PriorityQueueComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardService.getPriorityQueueDocuments()
       .pipe(first())
-      .subscribe((documents) => {
-        this.isLoading = false;
-        if (documents) {
-          this.priorityQueueDocuments = documents;
+      .subscribe({
+        next: (documents) => {
+          this.isLoading = false;
+          if (documents) {
+            this.priorityQueueDocuments = documents;
+          }
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 

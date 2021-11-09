@@ -56,18 +56,21 @@ export class RosterModalComponent implements OnInit {
   ngOnInit(): void {
     this.roster$
       .pipe(first())
-      .subscribe((rosterMembers) => {
-        this.isLoading = false;
-        if (rosterMembers) {
-          this.members = rosterMembers;
+      .subscribe({
+          next: (rosterMembers) => {
+          this.isLoading = false;
+          if (rosterMembers) {
+            this.members = rosterMembers;
+          }
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.dialogRef.close();
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.dialogRef.close();
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
