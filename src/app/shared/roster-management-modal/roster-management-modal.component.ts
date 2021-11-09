@@ -5,7 +5,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
-
 /**
  * Component for roster management.
  */
@@ -110,7 +109,7 @@ export class RosterManagementModalComponent implements OnInit {
         next: (potentialUsers) => {
           this.loadingMembers = false;
           this.listLoading = false;
-          this.listLoading=false;
+          this.listLoading = false;
           if (potentialUsers) {
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
@@ -119,7 +118,7 @@ export class RosterManagementModalComponent implements OnInit {
         error: (error: unknown) => {
           this.loadingMembers = false;
           this.loadingMembers = false;
-          this.listLoading=false;
+          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -140,6 +139,25 @@ export class RosterManagementModalComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Receives the worker's index to change the state of the isWorker field.
+   *
+   * @param rithmId The index position of the user in the list to toggle.
+   */
+  toggleSelectedUser(rithmId: string): void {
+    const selectedUser = this.users.find((user) => user.rithmId === rithmId);
+    const rosterUserType = this.rosterType === 'worker' ? 'isWorker' : 'isOwner';
+    if (selectedUser) {
+      selectedUser[rosterUserType] = !selectedUser[rosterUserType];
+      if (!selectedUser[rosterUserType]) {
+        /** If data.isWorker is false is because the user is being removed. */
+        this.removeMemberFromRoster(rithmId);
+      }
+    }
+  }
+
+
 
   /**
    * Adds users to the worker roster.
