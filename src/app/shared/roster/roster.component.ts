@@ -64,7 +64,7 @@ export class RosterComponent implements OnInit {
     this.dialog.open(RosterManagementModalComponent, {
       panelClass: ['w-5/6','sm:w-4/5'],
       maxWidth: '1024px',
-      data: { stationId: this.stationId, type: this.isWorker ? 'worker' : 'owner'  }
+      data: { stationId: this.stationId, type: this.isWorker ? 'workers' : 'owners'  }
     });
   }
 }
