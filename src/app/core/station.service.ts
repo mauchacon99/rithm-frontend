@@ -194,7 +194,7 @@ export class StationService {
    */
   getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]> {
     if (!stationId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Invalid station ID.'
         }
