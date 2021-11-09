@@ -40,15 +40,17 @@ export class ForgotPasswordComponent {
     this.isLoading = true;
     this.userService.sendPasswordResetEmail(this.forgotPassForm.value.email)
       .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.openAlert();
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong and we were unable to send you an email. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.openAlert();
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong and we were unable to send you an email. Please try again in a little while.',
+            error
+          );
+        }
       });
   }
 

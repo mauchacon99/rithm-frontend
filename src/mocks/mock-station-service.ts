@@ -103,7 +103,7 @@ export class MockStationService {
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
     if (!station) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station without defining a station.'
         }
@@ -272,7 +272,7 @@ export class MockStationService {
   // eslint-disable-next-line max-len
   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!organizationId || !pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -316,7 +316,7 @@ export class MockStationService {
    */
   deleteStation(stationId: string): Observable<unknown> {
     if (!stationId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot delete the station without defining a station.'
         }
@@ -387,6 +387,60 @@ export class MockStationService {
       },
     ];
     return of(mockRosterMember).pipe(delay(1000));
+  }
+
+  /**
+   * Get Owner Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]>{
+    const mockRosterMember: StationRosterMember[] = [
+        {
+            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+            firstName: 'Worker',
+            lastName: 'User',
+            email: 'workeruser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+        {
+            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+            firstName: 'Rithm',
+            lastName: 'User',
+            email: 'rithmuser@inpivota.com',
+            isOwner: true,
+            isWorker: false,
+        },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
+  }
+
+  /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+   addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockOwnerRoster: StationRosterMember[] = [{
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }, {
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }];
+    return of(mockOwnerRoster).pipe(delay(1000));
   }
 
   /**
