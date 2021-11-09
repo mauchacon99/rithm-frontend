@@ -41,18 +41,20 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardService.getDashboardHeader()
       .pipe(first())
-      .subscribe((headerData: WorkerDashboardHeader) => {
-        if (headerData) {
-          this.numPrevDocs = headerData.startedDocuments;
-          this.numStations = headerData.rosterStations;
+      .subscribe({
+        next: (headerData: WorkerDashboardHeader) => {
+          if (headerData) {
+            this.numPrevDocs = headerData.startedDocuments;
+            this.numStations = headerData.rosterStations;
+            this.isLoading = false;
+          }
+        }, error: (error: unknown) => {
           this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
