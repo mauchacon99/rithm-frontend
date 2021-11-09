@@ -46,7 +46,7 @@ export class RosterManagementModalComponent implements OnInit {
   addRemoveRosterError = false;
 
   /** Last rithmId performed when adding or deleting. */
-  lastUserIdClicked = '';
+  private lastUserIdClicked = '';
 
   /** The current page number. */
   activeNum = 1;
@@ -229,8 +229,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list.
    * @returns True If there is an error in the verification of the station owner.
    */
-  checkAddRemoveErrorMsg(rithmId: string): boolean {
-    const erroMessage: boolean = this.addRemoveRosterError && this.lastUserIdClicked === rithmId ? true : false;
-    return erroMessage;
+  checkAddRemoveErrorMessage(rithmId: string): boolean {
+    return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
 }

@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="flex justify-center" *ngIf="addRemoveRosterError">
-     <span class="text-error-500 text-xs">Error: Unable to add/remove station owner</span>
+    <span class="text-error-500 text-xs">Error: Unable to add/remove station owner</span>
   </div>
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
@@ -22,7 +22,7 @@
       <ng-container *ngFor="let user of users">
         <div class="h-100">
           <div
-            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}, 'border-error-500': checkAddRemoveErrorMsg(user.rithmId)}"
+            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner, 'border-error-500': checkAddRemoveErrorMessage(user.rithmId)}"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)='toggleSelectedUser(user.rithmId)'>
             <div class="my-1">
@@ -36,7 +36,7 @@
               <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
             </div>
           </div>
-          <div class="col-xs-12 text-error-worker text-center truncate" *ngIf="checkAddRemoveErrorMsg(user.rithmId)">
+          <div class="col-xs-12 text-error-worker text-center truncate" *ngIf="checkAddRemoveErrorMessage(user.rithmId)">
             <span class="text-error-500">Error: Unable to add/remove station owner</span>
           </div>
         </div>
@@ -45,8 +45,8 @@
   </div>
 </div>
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
-    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+    [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
   </app-pagination>
 </div>
 <!-- Buttons -->
