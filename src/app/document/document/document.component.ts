@@ -79,20 +79,21 @@ export class DocumentComponent implements OnInit {
   private getParams(): void {
     this.route.queryParams
       .pipe(first())
-      .subscribe((params) => {
-
-        if (!params.stationId || !params.documentId) {
-          this.handleInvalidParams();
-        } else {
-          this.documentId = params.documentId;
-          this.getDocumentStationData(params.documentId, params.stationId);
-          this.getConnectedStations(params.documentId, params.stationId);
+      .subscribe({
+        next: (params) => {
+          if (!params.stationId || !params.documentId) {
+            this.handleInvalidParams();
+          } else {
+            this.documentId = params.documentId;
+            this.getDocumentStationData(params.documentId, params.stationId);
+            this.getConnectedStations(params.documentId, params.stationId);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -128,18 +129,20 @@ export class DocumentComponent implements OnInit {
     this.documentLoading = true;
     this.documentService.getDocumentInfo(documentId, stationId)
       .pipe(first())
-      .subscribe((document) => {
-        if (document) {
-          this.documentInformation = document;
+      .subscribe({
+        next: (document) => {
+          if (document) {
+            this.documentInformation = document;
+          }
+          this.documentLoading = false;
+        }, error: (error: unknown) => {
+          this.navigateBack();
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.documentLoading = false;
-      }, (error: unknown) => {
-        this.navigateBack();
-        this.documentLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -153,18 +156,20 @@ export class DocumentComponent implements OnInit {
     this.connectedStationsLoading = true;
     this.documentService.getConnectedStationInfo(documentId, stationId)
       .pipe(first())
-      .subscribe((connectedStations) => {
-        this.forwardStations = connectedStations.followingStations;
-        this.previousStations = connectedStations.previousStations;
-        this.connectedStationsLoading = false;
-      }, (error: unknown) => {
-        this.navigateBack();
-        this.connectedStationsLoading = false;
-        this.errorService.displayError(
-          'Failed to get connected stations for this document.',
-          error,
-          false
-        );
+      .subscribe({
+        next: (connectedStations) => {
+          this.forwardStations = connectedStations.followingStations;
+          this.previousStations = connectedStations.previousStations;
+          this.connectedStationsLoading = false;
+        }, error: (error: unknown) => {
+          this.navigateBack();
+          this.connectedStationsLoading = false;
+          this.errorService.displayError(
+            'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        }
       });
   }
 
