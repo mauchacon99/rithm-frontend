@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss']
 })
-export class UserAvatarComponent{
+export class UserAvatarComponent {
 
   /** The first name of the user. */
   @Input() firstName!: string;
@@ -34,8 +34,8 @@ export class UserAvatarComponent{
    * @returns The initials.
    */
   get initials(): string {
-    const firstInitial = this.firstName.charAt(0);
-    const lastInitial = this.lastName.charAt(0);
+    const firstInitial = this.firstName ? this.firstName.charAt(0) : '';
+    const lastInitial = this.lastName ? this.lastName.charAt(0) : '';
 
     return firstInitial + lastInitial;
   }

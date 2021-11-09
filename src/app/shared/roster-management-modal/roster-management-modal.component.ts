@@ -5,7 +5,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
-
 /**
  * Component for roster management.
  */
@@ -131,12 +130,16 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param rithmId The index position of the user in the list to toggle.
    */
-  toggleSelectedWorker(rithmId: string): void {
-    this.users.filter((data) => {
-      if (data.rithmId === rithmId) {
-        data.isWorker = !data.isWorker;
+  toggleSelectedUser(rithmId: string): void {
+    const selectedUser = this.users.find((user) => user.rithmId === rithmId);
+    const rosterUserType = this.rosterType === 'worker' ? 'isWorker' : 'isOwner';
+    if (selectedUser){
+      selectedUser[rosterUserType] = !selectedUser[rosterUserType];
+      if (!selectedUser[rosterUserType]) {
+        /** If data.isWorker is false is because the user is being removed. */
+        this.removeMemberFromRoster(rithmId);
       }
-    });
+    }
   }
 
   /**

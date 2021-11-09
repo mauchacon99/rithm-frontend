@@ -34,14 +34,17 @@ export class UserRemovalComponent {
     const formValues = this.deleteForm.value;
     this.userService.delete(formValues.email)
       .pipe(first())
-      .subscribe(() => {
-        this.popupService.notify('Deleted should have worked');
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'unable to delete. ',
-          error,
-          true
-        );
+      .subscribe({
+        next: () => {
+          this.popupService.notify('Deleted should have worked');
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'unable to delete. ',
+            error,
+            true
+          );
+        }
       });
   }
 }

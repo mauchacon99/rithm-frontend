@@ -49,27 +49,29 @@ export class SignInComponent implements OnInit {
 
     this.route.queryParamMap
       .pipe(first())
-      .subscribe((params) => {
-        const emailLinkParams = new EmailLinkParams(params);
+      .subscribe({
+        next: (params) => {
+          const emailLinkParams = new EmailLinkParams(params);
 
-        if (emailLinkParams.type && !emailLinkParams.valid) {
-          this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
-        } else {
-          if (emailLinkParams.type === EmailLinkType.Register) {
-            this.validateEmail(emailLinkParams.guid as string, emailLinkParams.email as string);
-          } else if (emailLinkParams.type === EmailLinkType.ForgotPassword) {
-            this.router.navigate(['password-reset'], {
-              queryParams: {
-                type: emailLinkParams.type,
-                guid: emailLinkParams.guid,
-                email: emailLinkParams.email
-              }
-            });
+          if (emailLinkParams.type && !emailLinkParams.valid) {
+            this.showInvalidLinkMessage(new Error('Missing GUID or email address'));
+          } else {
+            if (emailLinkParams.type === EmailLinkType.Register) {
+              this.validateEmail(emailLinkParams.guid as string, emailLinkParams.email as string);
+            } else if (emailLinkParams.type === EmailLinkType.ForgotPassword) {
+              this.router.navigate(['password-reset'], {
+                queryParams: {
+                  type: emailLinkParams.type,
+                  guid: emailLinkParams.guid,
+                  email: emailLinkParams.email
+                }
+              });
+            }
           }
-        }
 
-      }, (error: unknown) => {
-        this.showInvalidLinkMessage(error);
+        }, error: (error: unknown) => {
+          this.showInvalidLinkMessage(error);
+        }
       });
   }
 
@@ -95,34 +97,36 @@ export class SignInComponent implements OnInit {
 
     this.userService.signIn(formValues.email, formValues.password)
       .pipe(first())
-      .subscribe(() => {
-        this.router.navigateByUrl('dashboard');
-      }, (error: unknown) => {
-        this.isLoading = false;
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl('dashboard');
+        }, error: (error: unknown) => {
+          this.isLoading = false;
 
-        if (!(error instanceof HttpErrorResponse)) {
-          throw new Error('Unknown error occurred');
-        }
-        const errorMessage: string = error.error.error;
+          if (!(error instanceof HttpErrorResponse)) {
+            throw new Error('Unknown error occurred');
+          }
+          const errorMessage: string = error.error.error;
 
-        if (errorMessage.includes('Invalid')) {
-          this.invalidCredentials = true;
-        } else if (errorMessage.includes('verified')) {
-          this.popupService.alert({
-            title: 'Unverified Email',
-            message: 'You will need to verify your email before you can sign in. Please check your email for instructions.'
-          });
-        } else if (errorMessage.includes('Must be apart of an Organization.')) {
-          this.popupService.alert({
-            title: 'No Organization for Account',
-            message:
-              'Your account does not belong to any organizations. In order to get access, have somebody invite you to their organization.',
-          });
-        } else {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+          if (errorMessage.includes('Invalid')) {
+            this.invalidCredentials = true;
+          } else if (errorMessage.includes('verified')) {
+            this.popupService.alert({
+              title: 'Unverified Email',
+              message: 'You will need to verify your email before you can sign in. Please check your email for instructions.'
+            });
+          } else if (errorMessage.includes('Must be apart of an Organization.')) {
+            this.popupService.alert({
+              title: 'No Organization for Account',
+              message:
+                'Your account does not belong to any organizations. In order to get access, have someone invite you to their organization.',
+            });
+          } else {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
         }
       });
   }
@@ -137,16 +141,18 @@ export class SignInComponent implements OnInit {
     this.isLoading = true;
     this.userService.validateEmail(guid, email)
       .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.popupService.notify('Email successfully verified');
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we were unable to validate your email address. ' +
-          'We\'ve made note of this. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.popupService.notify('Email successfully verified');
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we were unable to validate your email address. ' +
+            'We\'ve made note of this. Please try again in a little while.',
+            error
+          );
+        }
       });
   }
 
