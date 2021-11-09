@@ -18,7 +18,7 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
       <ng-container>
-        <div *ngFor="let user of users" [ngClass]="{'border-accent-500': rosterType === 'worker' ? user.isWorker: user.isOwner}"
+        <div *ngFor="let user of users" [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
           class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
           (click)='toggleSelectedUser(user.rithmId)'>
           <div class="my-1">

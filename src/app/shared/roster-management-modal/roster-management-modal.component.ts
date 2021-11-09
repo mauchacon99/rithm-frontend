@@ -77,7 +77,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The id of the given station.
    */
   getStationUsersRoster(stationId: string): void {
-    const stationUserRoster$ = this.rosterType === 'worker'
+    const stationUserRoster$ = this.rosterType === 'workers'
       ? this.stationService.getStationWorkerRoster(stationId)
       : this.stationService.getStationOwnerRoster(stationId);
     stationUserRoster$
@@ -136,7 +136,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   toggleSelectedUser(rithmId: string): void {
     const selectedUser = this.users.find((user) => user.rithmId === rithmId);
-    const rosterUserType = this.rosterType === 'worker' ? 'isWorker' : 'isOwner';
+    const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
     if (selectedUser){
       selectedUser[rosterUserType] = !selectedUser[rosterUserType];
       if (!selectedUser[rosterUserType]) {

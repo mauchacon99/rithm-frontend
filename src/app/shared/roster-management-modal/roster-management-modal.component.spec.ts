@@ -68,7 +68,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should get the station owner roster', async () => {
-    component.rosterType = 'owner';
+    component.rosterType = 'owners';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
 
     await component.getStationUsersRoster(stationRithmId);
@@ -77,7 +77,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should get the station worker roster', async () => {
-    component.rosterType = 'worker';
+    component.rosterType = 'workers';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'getStationWorkerRoster').and.callThrough();
 
     await component.getStationUsersRoster(stationRithmId);
@@ -86,7 +86,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should remove an owner from station roster', async () => {
-    component.rosterType = 'owner';
+    component.rosterType = 'owners';
     component.users = [
       {
         rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
@@ -103,7 +103,7 @@ describe('RosterManagementModalComponent', () => {
   });
 
   it('should remove a worker user from station roster', async () => {
-    component.rosterType = 'worker';
+    component.rosterType = 'workers';
     component.users = [
       {
         rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
