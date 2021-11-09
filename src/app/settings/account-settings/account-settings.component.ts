@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { AccountSettingsService } from 'src/app/core/account-settings.service';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Component for all of the account settings.
@@ -62,17 +63,19 @@ export class AccountSettingsComponent {
 
     this.userService.updateUserAccount({ firstName, lastName, password: confirmPassword })
       .pipe(first())
-      .subscribe(() => {
-        this.isLoading = false;
-        this.settingsForm.reset();
-        this.popupService.notify('Your account settings are updated.');
-        this.accountSettingsService.setUser({ firstName, lastName });
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.settingsForm.reset();
+          this.popupService.notify('Your account settings are updated.');
+          this.accountSettingsService.setUser({ firstName, lastName });
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
       });
   }
 
@@ -100,26 +103,24 @@ export class AccountSettingsComponent {
    */
    async openTerms(): Promise<void> {
     let message = '';
-
     this.isLoading = true;
-    this.userService.getTermsConditions()
-    .toPromise()
-    .then(async (termsConditions) => {
-      if (termsConditions) {
-        message = termsConditions;
+    try {
+      const termsConditionsText = await firstValueFrom(this.userService.getTermsConditions());
+      if (termsConditionsText) {
+        message = termsConditionsText;
         this.isLoading = false;
         await this.popupService.terms({
           title: 'Terms and Conditions',
           message
         });
       }
-    }, (error: unknown) => {
+    } catch (error) {
       this.isLoading = false;
       this.errorService.displayError(
         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
         error
       );
-    });
+    }
   }
 
 }

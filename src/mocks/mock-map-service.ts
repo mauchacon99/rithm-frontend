@@ -160,7 +160,7 @@ export class MockMapService {
    */
   publishMap(mapData: MapData): Observable<unknown> {
     if (!mapData) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
