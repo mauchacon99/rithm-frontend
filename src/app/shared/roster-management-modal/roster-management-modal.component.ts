@@ -127,20 +127,6 @@ export class RosterManagementModalComponent implements OnInit {
         }
       });
   }
-
-  /**
-   * Receives the worker's index to change the state of the isWorker field.
-   *
-   * @param rithmId The index position of the user in the list to toggle.
-   */
-  toggleSelectedWorker(rithmId: string): void {
-    this.users.filter((data) => {
-      if (data.rithmId === rithmId) {
-        data.isWorker = !data.isWorker;
-      }
-    });
-  }
-
   /**
    * Receives the worker's index to change the state of the isWorker field.
    *
