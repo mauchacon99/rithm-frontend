@@ -103,7 +103,7 @@ export class MockStationService {
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
     if (!station) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station without defining a station.'
         }
@@ -272,7 +272,7 @@ export class MockStationService {
   // eslint-disable-next-line max-len
   getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!organizationId || !pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
@@ -316,7 +316,7 @@ export class MockStationService {
    */
   deleteStation(stationId: string): Observable<unknown> {
     if (!stationId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot delete the station without defining a station.'
         }
@@ -387,6 +387,32 @@ export class MockStationService {
       },
     ];
     return of(mockRosterMember).pipe(delay(1000));
+  }
+
+  /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+   addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockOwnerRoster: StationRosterMember[] = [{
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }, {
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }];
+    return of(mockOwnerRoster).pipe(delay(1000));
   }
 
   /**

@@ -24,7 +24,7 @@ import { MatRadioChange } from '@angular/material/radio';
 
 export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Whether the request to get the station info is currently underway. */
   stationLoading = false;
@@ -98,13 +98,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
     this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(data => {
-        this.stationName = data.length > 0 ? data : 'Untitled Station';
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: (data) => {
+          this.stationName = data.length > 0 ? data : 'Untitled Station';
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
       });
 
   }
@@ -118,18 +120,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.docGenLoading = true;
     this.stationService.getStationDocumentGenerationStatus(stationId)
       .pipe(first())
-      .subscribe((status: DocumentGenerationStatus) => {
-        this.docGenLoading = false;
-        if (status) {
-          this.stationDocumentGenerationStatus = status;
+      .subscribe({
+        next: (status: DocumentGenerationStatus) => {
+          this.docGenLoading = false;
+          if (status) {
+            this.stationDocumentGenerationStatus = status;
+          }
+        }, error: (error: unknown) => {
+          this.docGenLoading = false;
+          this.showDocumentGenerationError = true;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.docGenLoading = false;
-        this.showDocumentGenerationError = true;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -143,17 +147,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.docGenLoading = true;
     this.stationService.updateStationDocumentGenerationStatus(stationId, statusNew)
       .pipe(first())
-      .subscribe((status) => {
-        this.docGenLoading = false;
-        if (status) {
-          this.stationDocumentGenerationStatus = status;
+      .subscribe({
+        next: (status) => {
+          this.docGenLoading = false;
+          if (status) {
+            this.stationDocumentGenerationStatus = status;
+          }
+        }, error: (error: unknown) => {
+          this.docGenLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.docGenLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -163,17 +169,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   private getParams(): void {
     this.route.params
       .pipe(first())
-      .subscribe((params) => {
-        if (!params.stationId) {
-          this.handleInvalidParams();
-        } else {
-          this.getLastUpdated(params.stationId);
+      .subscribe({
+        next: (params) => {
+          if (!params.stationId) {
+            this.handleInvalidParams();
+          } else {
+            this.getLastUpdated(params.stationId);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -196,32 +204,34 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.lastUpdatedLoading = true;
     this.stationService.getLastUpdated(stationId)
       .pipe(first())
-      .subscribe((updatedDate) => {
-        if (updatedDate && updatedDate !== 'Unknown') {
-          this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-            this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
-          this.colorMessage = 'text-accent-500';
-          if (this.lastUpdatedDate === '1 day') {
-            this.lastUpdatedDate = ' Yesterday';
+      .subscribe({
+        next: (updatedDate) => {
+          if (updatedDate && updatedDate !== 'Unknown') {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+            this.colorMessage = 'text-accent-500';
+            if (this.lastUpdatedDate === '1 day') {
+              this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
           } else {
-            this.lastUpdatedDate += ' ago';
+            this.colorMessage = 'text-error-500';
+            this.lastUpdatedDate = 'Unable to retrieve time';
           }
-        } else {
+          this.stationLoading = false;
+          this.lastUpdatedLoading = false;
+        }, error: (error: unknown) => {
           this.colorMessage = 'text-error-500';
+          this.lastUpdatedLoading = false;
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
           this.lastUpdatedDate = 'Unable to retrieve time';
+          this.colorMessage = 'text-error-500';
         }
-        this.stationLoading = false;
-        this.lastUpdatedLoading = false;
-      }, (error: unknown) => {
-        this.colorMessage = 'text-error-500';
-        this.lastUpdatedLoading = false;
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-        this.lastUpdatedDate = 'Unable to retrieve time';
-        this.colorMessage = 'text-error-500';
       });
   }
 
@@ -252,14 +262,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (response) {
       this.stationService.deleteStation(stationId)
         .pipe(first())
-        .subscribe(() => {
-          this.popupService.notify('The station has been deleted.');
-          this.router.navigateByUrl('dashboard');
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+        .subscribe({
+          next: () => {
+            this.popupService.notify('The station has been deleted.');
+            this.router.navigateByUrl('dashboard');
+          }, error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
         });
     }
   }

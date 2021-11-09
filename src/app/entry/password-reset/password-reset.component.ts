@@ -83,16 +83,18 @@ export class PasswordResetComponent implements OnInit {
     this.isLoading = true;
     this.route.queryParamMap
       .pipe(first())
-      .subscribe((params) => {
-        this.isLoading = false;
-        this.email = params.get('email') as string;
-        this.guid = params.get('guid') as string;
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'The link you followed was invalid. Please double check the link in your email and try again.',
-          error
-        );
+      .subscribe({
+        next: (params) => {
+          this.isLoading = false;
+          this.email = params.get('email') as string;
+          this.guid = params.get('guid') as string;
+        }, error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'The link you followed was invalid. Please double check the link in your email and try again.',
+            error
+          );
+        }
       });
   }
 
@@ -114,15 +116,17 @@ export class PasswordResetComponent implements OnInit {
     this.isLoading = true;
     this.userService.resetPassword(this.guid, this.email, this.passResetForm.value.password)
     .pipe(first())
-    .subscribe(() => {
-      this.isLoading = false;
-      this.openAlert();
-    }, (error: unknown) => {
-      this.isLoading = false;
-      this.errorService.displayError(
-        'Something went wrong and we were unable to reset your password. Please try again in a little while.',
-        error
-      );
+    .subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.openAlert();
+      }, error: (error: unknown) => {
+        this.isLoading = false;
+        this.errorService.displayError(
+          'Something went wrong and we were unable to reset your password. Please try again in a little while.',
+          error
+        );
+      }
     });
   }
 

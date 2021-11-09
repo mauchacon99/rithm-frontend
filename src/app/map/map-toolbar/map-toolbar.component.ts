@@ -6,20 +6,19 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
-import type { } from 'css-font-loading-module';
 import { HttpErrorResponse } from '@angular/common/http';
 /**
  * Component for managing the toolbar on the map.
  */
 @Component({
-	selector: 'app-map-toolbar',
-	templateUrl: './map-toolbar.component.html',
-	styleUrls: ['./map-toolbar.component.scss'],
+  selector: 'app-map-toolbar',
+  templateUrl: './map-toolbar.component.html',
+  styleUrls: ['./map-toolbar.component.scss'],
 })
 
 export class MapToolbarComponent implements OnInit, OnDestroy {
-	/** The users of the organization. */
-	users: User[] = [];
+  /** The users of the organization. */
+  users: User[] = [];
 
   /** Whether the organization is being loaded. */
   isLoading = true;
@@ -31,14 +30,14 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   mapMode = MapMode.View;
 
   /** Destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /**
    * Whether the map is in any building mode.
    *
    * @returns True if the map is in any building mode, false otherwise.
    */
-   get isBuilding(): boolean {
+  get isBuilding(): boolean {
     return this.mapMode === MapMode.Build || this.mapMode === MapMode.StationAdd || this.mapMode === MapMode.FlowAdd;
   }
 
@@ -51,12 +50,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     return this.mapMode === MapMode.StationAdd;
   }
 
-	constructor(
-		private userService: UserService,
-		private organizationService: OrganizationService,
-		private errorService: ErrorService,
+  constructor(
+    private userService: UserService,
+    private organizationService: OrganizationService,
+    private errorService: ErrorService,
     private mapService: MapService
-	) {
+  ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mode) => {
@@ -71,30 +70,31 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this.getOrganizationInfo();
   }
 
-	/**
-	 * Sets the map to add flow mode in preparation for a flow to be selected.
-	 */
-	addFlow(): void {
-		// TODO: Implement add flow
-	}
+  /**
+   * Sets the map to add flow mode in preparation for a flow to be selected.
+   */
+  addFlow(): void {
+    // TODO: Implement add flow
+  }
 
-	/**
-	 * Sets the map to add station mode in preparation for a station to be selected.
-	 */
-	addStation(): void {
+  /**
+   * Sets the map to add station mode in preparation for a station to be selected.
+   */
+  addStation(): void {
     if (!this.stationAddActive) {
       this.mapService.mapMode$.next(MapMode.StationAdd);
+      this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }
-		// TODO: Implement add station
-	}
+    // TODO: Implement add station
+  }
 
-	// MVP +1 below
+  // MVP +1 below
 
-	// undo(): void {}
-	// redo(): void {}
-	// search(): void {}
+  // undo(): void {}
+  // redo(): void {}
+  // search(): void {}
 
   /**
    * Gets organization information.
@@ -104,14 +104,14 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
-      .subscribe(
-        (organization) => {
+      .subscribe({
+        next: (organization) => {
           this.isLoading = false;
           if (organization) {
             this.orgInfo = organization;
           }
         },
-        (error: unknown) => {
+        error: (error: unknown) => {
           let errorMessage = 'Something went wrong on our end and we\'re looking into it. Please try again in a little while.';
           if (error instanceof HttpErrorResponse) {
             switch (error.status) {
@@ -125,13 +125,13 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
             error
           );
         }
-      );
+      });
   }
 
   /**
    * Cleanup method.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }

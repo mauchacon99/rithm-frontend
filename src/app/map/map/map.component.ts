@@ -14,8 +14,9 @@ export class MapComponent {
   constructor(private mapService: MapService) {
     this.mapService.getMapElements()
     .pipe(first())
-    .subscribe(() => null, (error: unknown) => {
-      throw new Error(`Unable to get map data: ${error}`);
+    .subscribe({ next: () => null, error: (error: unknown) => {
+        throw new Error(`Unable to get map data: ${error}`);
+      }
     });
   }
 }

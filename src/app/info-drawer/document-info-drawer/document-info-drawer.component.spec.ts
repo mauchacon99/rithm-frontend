@@ -39,4 +39,12 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
+
+  it('should get the current editable status of the document', async () => {
+    const getGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
+
+    await component.getStatusDocumentEditable(stationId);
+
+    expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
+  });
 });

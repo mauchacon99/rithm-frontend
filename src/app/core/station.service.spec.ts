@@ -367,11 +367,10 @@ describe('StationService', () => {
       });
   });
 
-  it('should remove a member from the roster', () => {
+  it('should remove a member from worker roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
     const expectedResponse: StationRosterMember[] = [{
       rithmId: '12dasd1-asd12asdasd-asdas',
@@ -402,6 +401,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should returns a worker roster for a given station', () => {
@@ -429,6 +436,41 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+  });
+
+  it('should add a new member to the owner roster', () => {
+    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const userIdList: Array<string> = [
+      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+    ];
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }, {
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }];
+
+    service.addUsersToOwnersRoster(stationId, userIdList)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should remove a member the owner from the roster', () => {
@@ -467,7 +509,7 @@ describe('StationService', () => {
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('DELETE');
-    expect(req.request.body).toEqual([usersIds]);
+    expect(req.request.body).toEqual(usersIds);
 
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -480,6 +522,13 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(newStatus);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`);
+    expect(req.request.method).toEqual('PUT');
+
+    req.flush(newStatus);
+    httpTestingController.verify();
   });
 
   it('should get the current editable status of the document', () => {
@@ -490,5 +539,13 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
+
 });

@@ -30,7 +30,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @ViewChild('map', { static: true }) private mapCanvas!: ElementRef<HTMLCanvasElement>;
 
   /** Subject for whether the component was destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
@@ -81,47 +81,41 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog
   ) {
-    //Needed to get the correct font loaded before it gets drawn.
-    const f = new FontFace('Montserrat-SemiBold', 'url(assets/fonts/Montserrat/Montserrat-SemiBold.ttf)');
 
-    f.load().then((font) => {
-      document.fonts.add(font);
+    this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+        this.drawElements();
+      });
 
-      this.mapService.mapMode$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((mapMode) => {
-          this.mapMode = mapMode;
-          this.drawElements();
-        });
+    this.mapService.mapScale$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((scale) => {
+        this.scale = scale;
+        this.scaleChangeDraw();
+      });
 
-      this.mapService.mapScale$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((scale) => {
-          this.scale = scale;
-          this.scaleChangeDraw();
-        });
+    this.mapService.currentCanvasPoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentCanvasPoint = point;
+        this.drawElements();
+      });
 
-      this.mapService.currentCanvasPoint$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((point) => {
-          this.currentCanvasPoint = point;
-          this.drawElements();
-        });
+    this.mapService.mapDataReceived$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+        this.flows = this.mapService.flowElements;
+        this.drawElements();
+      });
 
-      this.mapService.mapDataRecieved$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => {
-          this.stations = this.mapService.stationElements;
-          this.flows = this.mapService.flowElements;
-          this.drawElements();
-        });
-
-      this.mapService.zoomCount$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((count) => {
-          this.zoomCount = count;
-        });
-    });
+    this.mapService.zoomCount$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((count) => {
+        this.zoomCount = count;
+      });
   }
 
   /**
@@ -163,6 +157,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const mousePos = this.getMouseCanvasPoint(event);
     this.eventStartLogic(mousePos);
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
   }
 
   /**
@@ -263,6 +261,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
       this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
+    }
+
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
     }
 
   }
@@ -421,6 +424,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10*eventAmount));
       this.mapService.handleZoom(mousePoint, false);
+    }
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
     }
   }
 
@@ -684,7 +691,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
         ) {
           this.mapService.currentMousePoint$.next(point);
-          this.mapService.currentMouseClick$.next(true);
+          this.mapService.stationButtonClick$.next({ click: true, data: station });
           break;
         }
       }
