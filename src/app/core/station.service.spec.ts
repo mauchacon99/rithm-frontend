@@ -438,7 +438,7 @@ describe('StationService', () => {
       });
   });
 
-  it('should returns a owner roster for a given station', () => {
+  it('should returns the owner roster for a given station', () => {
     const stationId = 'E204F369-386F-4E41';
     const expectedResponse: StationRosterMember[] = [
       {
@@ -465,11 +465,10 @@ describe('StationService', () => {
       });
   });
 
-  it('should return an owner roster assigned to the station', () => {
+  it('should add a new member to the owner roster', () => {
     const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
     const expectedResponse: StationRosterMember[] = [{
       rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
@@ -486,10 +485,19 @@ describe('StationService', () => {
       isOwner: true,
       isWorker: false
     }];
+
     service.addUsersToOwnersRoster(stationId, userIdList)
-    .subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(userIdList);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should remove a member the owner from the roster', () => {
