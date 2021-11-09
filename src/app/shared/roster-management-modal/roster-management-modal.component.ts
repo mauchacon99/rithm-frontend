@@ -100,7 +100,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param pageNum The current page.
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
-    this.pageNumUsersOrganization=pageNum;
+    this.pageNumUsersOrganization = pageNum;
     this.loadingMembers = true;
     this.listLoading = true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
@@ -170,13 +170,15 @@ export class RosterManagementModalComponent implements OnInit {
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
 
     removeUserMemberRoster$.pipe(first())
-      .subscribe((data) => {
-        this.rosterMembers = data;
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: (data) => {
+          this.rosterMembers = data;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
       });
   }
 }

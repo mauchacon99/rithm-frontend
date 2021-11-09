@@ -118,20 +118,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.docGenLoading = true;
     this.stationService.getStationDocumentGenerationStatus(stationId)
       .pipe(first())
-      .subscribe({
-        next: (status: DocumentGenerationStatus) => {
-          this.docGenLoading = false;
-          if (status) {
-            this.stationDocumentGenerationStatus = status;
-          }
-        }, error: (error: unknown) => {
-          this.docGenLoading = false;
-          this.showDocumentGenerationError = true;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+      .subscribe((status: DocumentGenerationStatus) => {
+        this.docGenLoading = false;
+        if (status) {
+          this.stationDocumentGenerationStatus = status;
         }
+      }, (error: unknown) => {
+        this.docGenLoading = false;
+        this.showDocumentGenerationError = true;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
       });
   }
 
