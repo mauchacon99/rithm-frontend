@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, ReplaySubject, throwError } from 'rxjs';
+import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
@@ -84,7 +84,7 @@ export class UserService {
     }
 
     // Attempt to refresh the token
-    await this.refreshToken().toPromise()
+    await firstValueFrom(this.refreshToken())
       .catch(() => false);
 
     // Check if token is good
@@ -105,7 +105,7 @@ export class UserService {
 
     if (!refreshTokenGuid) {
       this.signOut();
-      return throwError('Unable to refresh token without GUID');
+      return throwError(() => 'Unable to refresh token without GUID');
     }
 
     const params = new HttpParams().set('refreshTokenGuid', refreshTokenGuid);

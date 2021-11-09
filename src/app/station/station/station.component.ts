@@ -100,17 +100,19 @@ export class StationComponent implements OnInit, OnDestroy {
   private getParams(): void {
     this.route.params
       .pipe(first())
-      .subscribe((params) => {
-        if (!params.stationId) {
-          this.handleInvalidParams();
-        } else {
-          this.getStationInfo(params.stationId);
+      .subscribe({
+        next: (params) => {
+          if (!params.stationId) {
+            this.handleInvalidParams();
+          } else {
+            this.getStationInfo(params.stationId);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -144,18 +146,21 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe((stationInfo) => {
-        if (stationInfo) {
-          this.stationInformation = stationInfo;
+      .subscribe({
+        next: (stationInfo) => {
+          if (stationInfo) {
+            this.stationInformation = stationInfo;
+          }
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.navigateBack();
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.navigateBack();
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -196,17 +201,20 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationLoading = true;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
-      .subscribe((stationUpdated) => {
-        if (stationUpdated) {
-          this.stationInformation = stationUpdated;
+      .subscribe({
+        next: (stationUpdated) => {
+          if (stationUpdated) {
+            this.stationInformation = stationUpdated;
+          }
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 

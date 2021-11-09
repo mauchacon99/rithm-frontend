@@ -58,20 +58,22 @@ export class CommentInputComponent {
 
     this.commentService.postDocumentComment(newComment)
       .pipe(first())
-      .subscribe((comment) => {
-        this.commentForm.enable();
-        this.newComment.emit(comment);
-        this.postingComment.emit(false);
-        this.commentForm.get('comment')?.reset('');
-        this.formDirective.resetForm();
-      }, (error: unknown) => {
-        this.commentForm.enable();
-        this.postingComment.emit(false);
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
+      .subscribe({
+          next: (comment) => {
+          this.commentForm.enable();
+          this.newComment.emit(comment);
+          this.postingComment.emit(false);
+          this.commentForm.get('comment')?.reset('');
+          this.formDirective.resetForm();
+        }, error: (error: unknown) => {
+          this.commentForm.enable();
+          this.postingComment.emit(false);
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error,
+            true
+          );
+        }
       });
   }
 }
