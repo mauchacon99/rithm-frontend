@@ -189,7 +189,6 @@ export class MapService {
    * @param pinch Remove delay if zoom is a pinch zoom.
    */
   handleZoom(zoomOrigin = this.getCanvasCenterPoint(), pinch: boolean): void {
-    console.log(this.zoomCount$.value);
 
     const zoomLogic = () => {
       if (this.zoomCount$.value > 0) {
@@ -197,8 +196,6 @@ export class MapService {
         this.zoomCount$.next(this.zoomCount$.value - 1);
         if (this.zoomCount$.value > 0) {
           this.handleZoom(zoomOrigin, pinch);
-        } else {
-          console.log(this.mapScale$.value);
         }
       }
 
@@ -207,17 +204,14 @@ export class MapService {
         this.zoomCount$.next(this.zoomCount$.value + 1);
         if (this.zoomCount$.value < 0) {
           this.handleZoom(zoomOrigin, pinch);
-        } else {
-          console.log(this.mapScale$.value);
         }
       }
     };
 
     if (!pinch) {
       setTimeout(() => {
-        console.log(this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 'big boy' : 'small boy');
         zoomLogic();
-      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10);
+      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 10 : 10);
     } else {
       zoomLogic();
     }

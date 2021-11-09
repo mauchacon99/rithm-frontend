@@ -389,8 +389,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   wheel(event: WheelEvent): void {
     event.preventDefault();
     const mousePoint = this.getMouseCanvasPoint(event);
-
-    console.log('EVENT');
+    const eventAmount = event.deltaY >= 100
+    ? Math.floor(event.deltaY/100)
+    : event.deltaY <= -100
+      ? Math.ceil(event.deltaY/100)
+      : event.deltaY/3;
 
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
@@ -402,7 +405,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.zoomCount < 0) {
         this.mapService.zoomCount$.next(0);
       }
-      this.mapService.zoomCount$.next(this.zoomCount + 10);
+      this.mapService.zoomCount$.next(this.zoomCount + Math.floor(10*-eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     } else {
       // Do nothing if already at min zoom.
@@ -416,7 +419,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.zoomCount > 0) {
         this.mapService.zoomCount$.next(0);
       }
-      this.mapService.zoomCount$.next(this.zoomCount - 10);
+      this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10*eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     }
   }
