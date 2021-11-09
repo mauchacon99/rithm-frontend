@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -149,7 +149,7 @@ export class StationService {
   // eslint-disable-next-line max-len
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Invalid page number.'
         }
@@ -203,30 +203,8 @@ export class StationService {
    * @returns OwnerRoster in the station.
    */
      addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-      if (!stationId || !userIds) {
-        return throwError(new HttpErrorResponse({
-          error: {
-            error: 'Invalid Station ID or users array.'
-          }
-        })).pipe(delay(1000));
-      } else {
-        const stationOwnerRoster: StationRosterMember[] = [{
-          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isOwner: true,
-          isWorker: false
-        }, {
-          rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isOwner: true,
-          isWorker: false
-        }];
-        return of(stationOwnerRoster).pipe(delay(1000));
-      }
+      // eslint-disable-next-line max-len
+      return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
     }
 
   /**

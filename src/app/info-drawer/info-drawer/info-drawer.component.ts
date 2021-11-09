@@ -21,16 +21,15 @@ export class InfoDrawerComponent implements OnDestroy {
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService
-
   ) {
     this.sidenavDrawerService.drawerContext$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((data) => {
-      if (data === 'documentInfo' || data === 'stationInfo') {
-        this.drawerMode = data;
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (data === 'documentInfo' || data === 'stationInfo') {
+          this.drawerMode = data;
+        }
       }
-    }
-    );
+      );
   }
 
   /**

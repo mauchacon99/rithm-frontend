@@ -68,20 +68,23 @@ export class StationDocumentsModalComponent implements OnInit {
     this.isLoading = true;
     this.documentService.getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((documentsResponse) => {
-        if (documentsResponse) {
-          this.documents = documentsResponse.documents;
-          this.totalNumDocs = documentsResponse.totalDocuments;
-          this.userType = documentsResponse.userType;
+      .subscribe({
+        next: (documentsResponse) => {
+          if (documentsResponse) {
+            this.documents = documentsResponse.documents;
+            this.totalNumDocs = documentsResponse.totalDocuments;
+            this.userType = documentsResponse.userType;
+          }
+          this.isLoading = false;
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.dialogRef.close();
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.isLoading = false;
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.dialogRef.close();
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -94,7 +97,7 @@ export class StationDocumentsModalComponent implements OnInit {
     if (this.userType !== UserType.None) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
       this.router.navigate(
-        [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId }});
+        [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId } });
       this.dialogRef.close();
     }
   }

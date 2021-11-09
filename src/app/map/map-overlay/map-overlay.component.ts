@@ -94,15 +94,19 @@ export class MapOverlayComponent implements OnDestroy {
     return false;
   }
 
-  constructor(private mapService: MapService,
+  constructor(
+    private mapService: MapService,
     private popupService: PopupService,
-    private errorService: ErrorService) {
+    private errorService: ErrorService
+  ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((mapMode) => {
-        this.currentMode = mapMode;
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
+      .subscribe({
+        next: (mapMode) => {
+          this.currentMode = mapMode;
+        }, error: (error: unknown) => {
+          throw new Error(`Map overlay subscription error: ${error}`);
+        }
       });
 
     this.mapService.mapDataReceived$
@@ -132,7 +136,7 @@ export class MapOverlayComponent implements OnDestroy {
       .subscribe((count) => {
         this.zoomCount = count;
       });
-      this.mapService.matMenuStatus$
+    this.mapService.matMenuStatus$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((click) => {
         if (click) {
@@ -173,17 +177,19 @@ export class MapOverlayComponent implements OnDestroy {
       this.mapDataLoading = true;
       this.mapService.publishMap()
         .pipe(first())
-        .subscribe(() => {
-          this.mapDataLoading = false;
-          this.mapService.mapMode$.next(MapMode.View);
-          this.popupService.notify('Map data published successfully.');
-        }, (error: unknown) => {
-          this.mapDataLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
-          );
+        .subscribe({
+          next: () => {
+            this.mapDataLoading = false;
+            this.mapService.mapMode$.next(MapMode.View);
+            this.popupService.notify('Map data published successfully.');
+          }, error: (error: unknown) => {
+            this.mapDataLoading = false;
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error,
+              true
+            );
+          }
         });
     }
   }
@@ -239,12 +245,12 @@ export class MapOverlayComponent implements OnDestroy {
    * Close display menu option to default state.
    *
    */
-    optionMenuClose(): void {
-      this.optionMenuNone = true;
-      this.menuX = -1;
-      this.menuY = -1;
-      this.menu.closeMenu();
-    }
+  optionMenuClose(): void {
+    this.optionMenuNone = true;
+    this.menuX = -1;
+    this.menuY = -1;
+    this.menu.closeMenu();
+  }
 
   /**
    * Updates station status to delete.
