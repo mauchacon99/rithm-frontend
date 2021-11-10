@@ -86,8 +86,7 @@ export class RosterManagementModalComponent implements OnInit {
           if (data) {
             this.rosterMembers = data;
           }
-        },
-        error: (error: unknown) => {
+        }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -116,8 +115,7 @@ export class RosterManagementModalComponent implements OnInit {
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
-        },
-        error: (error: unknown) => {
+        }, error: (error: unknown) => {
           this.loadingMembers = false;
           this.listLoading = false;
           this.errorService.displayError(
@@ -164,8 +162,7 @@ export class RosterManagementModalComponent implements OnInit {
           if (data) {
             this.rosterMembers = data;
           }
-        },
-        error: (error: unknown) => {
+        }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -175,7 +172,7 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
-   * Remove users to the worker roster.
+   * Remove users from the station roster.
    *
    * @param usersId The selected user id to remove.
    */
@@ -221,5 +218,20 @@ export class RosterManagementModalComponent implements OnInit {
           }
         });
     }
+    const removeUserMemberRoster$ = this.rosterType === 'workers' ?
+      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
+      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
+
+    removeUserMemberRoster$.pipe(first())
+      .subscribe({
+        next: (data) => {
+          this.rosterMembers = data;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
