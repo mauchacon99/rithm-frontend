@@ -33,7 +33,7 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
-  /** Loading members from roster. */
+  /** Loading current members from roster. */
   loadingMembers = true;
 
   /** The roster type received from modal data. */
@@ -45,11 +45,11 @@ export class RosterManagementModalComponent implements OnInit {
   /** The current page number. */
   activeNum = 1;
 
-  /** Charging indicator from loading users.  */
+  /** Is the list of organization members loading.  */
   listLoading = true;
 
   /** Show not data in potentials users. */
-  notListPotentialMembers = false;
+  emptyPotentialMembersList = false;
 
   constructor(
     private stationService: StationService,
@@ -79,6 +79,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The id of the given station.
    */
   getStationUsersRoster(stationId: string): void {
+    this.loadingMembers = true;
     const stationUserRoster$ = this.rosterType === 'workers'
       ? this.stationService.getStationWorkerRoster(stationId)
       : this.stationService.getStationOwnerRoster(stationId);
@@ -86,10 +87,12 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data) => {
+          this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
           }
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -115,7 +118,7 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           this.listLoading = false;
           if (potentialUsers) {
-            potentialUsers.totalUsers > 0 ? this.notListPotentialMembers = false : this.notListPotentialMembers = true;
+            potentialUsers.totalUsers > 0 ? this.emptyPotentialMembersList = false : this.emptyPotentialMembersList = true;
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
@@ -154,6 +157,8 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
+    this.listLoading = true;
+    this.loadingMembers = true;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
@@ -163,8 +168,13 @@ export class RosterManagementModalComponent implements OnInit {
         next: (data) => {
           if (data) {
             this.rosterMembers = data;
+            this.loadingMembers = false;
+            this.listLoading = false;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
+          this.loadingMembers = false;
+          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -179,6 +189,8 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
+    this.loadingMembers = true;
+    this.listLoading = true;
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
@@ -186,8 +198,12 @@ export class RosterManagementModalComponent implements OnInit {
     removeUserMemberRoster$.pipe(first())
       .subscribe({
         next: (data) => {
+          this.listLoading = false;
+          this.loadingMembers = false;
           this.rosterMembers = data;
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
+          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
