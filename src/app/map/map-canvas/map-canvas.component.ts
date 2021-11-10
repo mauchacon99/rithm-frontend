@@ -153,8 +153,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   pointerDown(event: PointerEvent): void {
     if (window.PointerEvent) {
         event.preventDefault();
-        //Add event to cache.
-        this.pointerCache.push(event);
+        //If event exists in pointerCache, update event in cache.
+        for (let i = 0; i < this.pointerCache.length; i++) {
+          if (this.pointerCache[i].pointerId === event.pointerId) {
+            this.pointerCache.splice(i, 1, event);
+            break;
+          }
+        }
+
+        //If event doesn't exist in pointerCache, add it.
+        if (!this.pointerCache.includes(event)) {
+          this.pointerCache.push(event);
+        }
 
         if (this.pointerCache.length === 1) {
           const pointer = this.pointerCache[0];
@@ -189,9 +199,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pointerUp(event: PointerEvent): void {
     if (window.PointerEvent) {
-      //remove event from cache.
       event.preventDefault();
 
+      //remove event from cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1);
@@ -208,10 +218,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
 
         this.eventEndLogic(pointerPos);
-      } else if (this.pointerCache.length === 1) {
-        const pointer = this.pointerCache[0];
-        this.lastTouchCoords[0] = this.getMouseCanvasPoint(pointer);
-        this.eventStartCoords = this.getMouseCanvasPoint(pointer);
       }
     }
   }
@@ -225,12 +231,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   pointerMove(event: PointerEvent): void {
     if (window.PointerEvent) {
       event.preventDefault();
-      //Update event in cache.
+      //If event exists in pointerCache, update event in cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1, event);
           break;
         }
+      }
+
+      //If event doesn't exist in pointerCache, add it.
+      if (!this.pointerCache.includes(event)) {
+        this.pointerCache.push(event);
       }
 
       if (this.pointerCache.length === 1) {
