@@ -4,10 +4,12 @@
   </div>
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
-      <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
-        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
-      </div>
+      <ng-container *ngIf="!loadingMembers">
+        <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
+          <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
+            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+        </div>
+      </ng-container>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
