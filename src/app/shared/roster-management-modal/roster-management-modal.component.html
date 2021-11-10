@@ -43,7 +43,7 @@
   </div>
 </div>
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId, $event)"
     [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
   </app-pagination>
 </div>
