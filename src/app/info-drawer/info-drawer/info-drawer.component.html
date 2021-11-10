@@ -1,4 +1,9 @@
 <div class="p-4">
   <app-station-info-drawer *ngIf="drawerMode === 'stationInfo'"></app-station-info-drawer>
   <app-document-info-drawer *ngIf="drawerMode === 'documentInfo'"></app-document-info-drawer>
+  <div class="flex justify-center">
+    <div class="bottom-0 absolute my-5 btn-done-fixed">
+      <button mat-stroked-button color="accent" (click)="toggleDrawer(drawerMode)">Done</button>
+    </div>
+  </div>
 </div>
