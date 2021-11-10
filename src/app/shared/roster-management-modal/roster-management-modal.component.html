@@ -11,8 +11,8 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-center" *ngIf="addRemoveRosterError">
-    <span class="text-error-500 text-xs">Error: Unable to add/remove station owner</span>
+  <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
+    <span class="text-error-500">Error: Unable to add/remove member</span>
   </div>
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
@@ -36,8 +36,8 @@
               <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
             </div>
           </div>
-          <div class="col-xs-12 text-error-worker text-center truncate" *ngIf="checkAddRemoveErrorMessage(user.rithmId)">
-            <span class="text-error-500">Error: Unable to add/remove station owner</span>
+          <div class="col-xs-12 text-center truncate text-xs" *ngIf="checkAddRemoveErrorMessage(user.rithmId)">
+            <span class="text-error-500">Error: Unable to add/remove member</span>
           </div>
         </div>
       </ng-container>
