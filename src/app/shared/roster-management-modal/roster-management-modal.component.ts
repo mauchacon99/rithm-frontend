@@ -164,14 +164,10 @@ export class RosterManagementModalComponent implements OnInit {
             this.loadingMembers = false;
             this.listLoading = false;
           }
-<<<<<<< HEAD
         },
         error: (error: unknown) => {
           this.loadingMembers = false;
           this.listLoading = false;
-=======
-        }, error: (error: unknown) => {
->>>>>>> origin/dev
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
