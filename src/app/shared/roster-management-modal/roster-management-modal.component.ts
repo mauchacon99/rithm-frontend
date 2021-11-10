@@ -152,6 +152,8 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
+    this.listLoading = true;
+    this.loadingMembers = true;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
@@ -161,9 +163,13 @@ export class RosterManagementModalComponent implements OnInit {
         next: (data) => {
           if (data) {
             this.rosterMembers = data;
+            this.loadingMembers = false;
+            this.listLoading = false;
           }
         },
         error: (error: unknown) => {
+          this.loadingMembers = false;
+          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
