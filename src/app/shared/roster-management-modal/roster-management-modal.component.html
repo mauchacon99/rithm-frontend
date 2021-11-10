@@ -1,24 +1,34 @@
 <div class="modal-container">
-  <h4 class="text-center">Manage Station {{ rosterType | titlecase }}</h4>
+  <!-- Modal header -->
+  <div class="flex justify-center items-center h-full">
+    <h4 class="text-center">Manage Station {{ rosterType | titlecase }}</h4>
+  </div>
+  <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
-      <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
-        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-          [badge]="'check'" [hoverEffect]="true" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
-      </div>
+      <ng-container *ngIf="!loadingMembers">
+        <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
+          <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
+            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+        </div>
+      </ng-container>
+      <!-- Loading indicator for current roster members -->
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
-
       </div>
     </div>
   </div>
+  <!-- List of organization members -->
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
+    <!-- Loading indicator for list of members -->
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
       <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
     </div>
+    <!-- List of members -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
       <ng-container>
-        <div *ngFor="let user of users" [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
+        <div *ngFor="let user of users"
+          [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker:user.isOwner}"
           class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
           (click)='toggleSelectedUser(user.rithmId)'>
           <div class="my-1">
@@ -37,9 +47,10 @@
     </div>
   </div>
 </div>
+<!-- Paginator -->
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
-    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+    [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
   </app-pagination>
 </div>
 <!-- Buttons -->

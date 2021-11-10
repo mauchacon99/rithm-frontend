@@ -1,13 +1,10 @@
-<div class="grid grid-cols-1">
+<div class="h-full w-full flex justify-center items-center absolute" *ngIf="documentInfoDrawerLoading">
+  <app-loading-indicator></app-loading-indicator>
+</div>
+<div class="grid grid-cols-1" *ngIf="!documentInfoDrawerLoading">
   <div class="w-full py-2">
     <div class="col-span-12">
       <h6 class="text-center">Document Information</h6>
     </div>
-  </div>
-</div>
-<div class="flex justify-center">
-  <div class="bottom-0 absolute mb-7">
-    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
-    (click)="toggleDrawer('documentInfo')">Done</button>
   </div>
 </div>

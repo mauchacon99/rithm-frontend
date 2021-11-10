@@ -9,7 +9,7 @@
     @apply w-72 mt-28;
 
     position: fixed !important;
-    height: calc(100vh - 107px);
+    height: calc(100% - 107px);
 
     .mat-tab-label {
       @apply opacity-100 text-accent-500 text-sm;
