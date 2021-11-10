@@ -165,7 +165,6 @@ export class RosterManagementModalComponent implements OnInit {
           if (data) {
             this.rosterMembers = data;
             this.loadingMembers = false;
-            this.listLoading = false;
           }
         }, error: (error: unknown) => {
           this.loadingMembers = false;
@@ -184,6 +183,12 @@ export class RosterManagementModalComponent implements OnInit {
    */
   removeMemberFromRoster(usersId: string): void {
     this.loadingMembers = true;
+    const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
+    this.users.map((user) => {
+      if (user.rithmId === usersId) {
+        user[rosterUserType] = false;
+      }
+    });
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
@@ -194,7 +199,6 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
-            this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
           }
         }, error: (error: unknown) => {
           this.loadingMembers = false;
