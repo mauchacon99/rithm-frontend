@@ -48,7 +48,7 @@ export class RosterManagementModalComponent implements OnInit {
   /** Charging indicator from loading users.  */
   listLoading = true;
 
-  /** Show not data in users potentials. */
+  /** Show not data in potentials users. */
   notListPotentialMembers = false;
 
   constructor(
