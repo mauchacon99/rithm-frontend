@@ -127,6 +127,7 @@ export class RosterManagementModalComponent implements OnInit {
         }
       });
   }
+
   /**
    * Receives the worker's index to change the state of the isWorker field.
    *
