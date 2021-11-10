@@ -76,6 +76,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The id of the given station.
    */
   getStationUsersRoster(stationId: string): void {
+    this.loadingMembers = true;
     const stationUserRoster$ = this.rosterType === 'workers'
       ? this.stationService.getStationWorkerRoster(stationId)
       : this.stationService.getStationOwnerRoster(stationId);
@@ -83,10 +84,12 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data) => {
+          this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
           }
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -181,7 +184,9 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param usersId The selected user id to remove.
    */
-   removeMemberFromRoster(usersId: string): void {
+  removeMemberFromRoster(usersId: string): void {
+    this.loadingMembers = true;
+    this.listLoading = true;
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
@@ -189,8 +194,12 @@ export class RosterManagementModalComponent implements OnInit {
     removeUserMemberRoster$.pipe(first())
       .subscribe({
         next: (data) => {
+          this.listLoading = false;
+          this.loadingMembers = false;
           this.rosterMembers = data;
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
+          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
