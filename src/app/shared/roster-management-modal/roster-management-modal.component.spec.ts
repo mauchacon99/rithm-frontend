@@ -150,9 +150,9 @@ describe('RosterManagementModalComponent', () => {
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const removeWorkerSpy = spyOn(component, 'addUsersToRoster');
+    const addMemberSpy = spyOn(component, 'addUsersToRoster');
     await component.toggleSelectedUser(userRithmId);
-    expect(removeWorkerSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
   });
 
   it('should add an owner from station roster', async () => {
@@ -167,8 +167,8 @@ describe('RosterManagementModalComponent', () => {
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const removeOwnerSpy = spyOn(component, 'addUsersToRoster');
+    const addMemberSpy = spyOn(component, 'addUsersToRoster');
     await component.toggleSelectedUser(userRithmId);
-    expect(removeOwnerSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
   });
 });
