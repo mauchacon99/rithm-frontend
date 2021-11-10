@@ -1,7 +1,9 @@
 <div class="modal-container">
+  <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">Manage Station {{ rosterType | titlecase }}</h4>
   </div>
+  <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
     <div class="gap-2 flex justify-center">
       <ng-container *ngIf="!loadingMembers">
@@ -10,15 +12,19 @@
             [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
         </div>
       </ng-container>
+      <!-- Loading indicator for current roster members -->
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
     </div>
   </div>
+  <!-- List of organization members -->
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
+    <!-- Loading indicator for list of members -->
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
       <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
     </div>
+    <!-- List of members -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
       <ng-container>
         <div *ngFor="let user of users"
@@ -40,6 +46,7 @@
     </div>
   </div>
 </div>
+<!-- Paginator -->
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
   <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
     [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
