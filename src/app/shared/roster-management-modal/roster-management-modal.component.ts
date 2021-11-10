@@ -33,7 +33,7 @@ export class RosterManagementModalComponent implements OnInit {
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
-  /** Loading members from roster. */
+  /** Loading current members from roster. */
   loadingMembers = true;
 
   /** The roster type received from modal data. */
@@ -45,8 +45,7 @@ export class RosterManagementModalComponent implements OnInit {
   /** The current page number. */
   activeNum = 1;
 
-
-  /** Charging indicator from loading users.  */
+  /** Is the list of organization members loading.  */
   listLoading = true;
 
   constructor(
@@ -165,6 +164,8 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
+            this.loadingMembers = false;
+            this.listLoading = false;
           }
         }, error: (error: unknown) => {
           this.loadingMembers = false;
