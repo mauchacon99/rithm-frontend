@@ -12,33 +12,39 @@
       </div>
     </div>
   </div>
-  <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
-    <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
-      <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
-      <ng-container>
-        <div *ngFor="let user of users" [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
-          class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
-          (click)='toggleSelectedUser(user.rithmId)'>
-          <div class="my-1">
-            <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true">
-            </app-user-avatar>
+  <div *ngIf="!notListPotentialMembers">
+    <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
+      <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
+        <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
+        <ng-container>
+          <div *ngFor="let user of users"
+            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
+            class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
+            (click)='toggleSelectedUser(user.rithmId)'>
+            <div class="my-1">
+              <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true">
+              </app-user-avatar>
+            </div>
+            <div class="flex flex-col justify-center overflow-hidden">
+              <p class="leading-none pl-2 mb-1 truncate">
+                {{user.firstName}} {{user.lastName}}
+              </p>
+              <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
+            </div>
           </div>
-          <div class="flex flex-col justify-center overflow-hidden">
-            <p class="leading-none pl-2 mb-1 truncate">
-              {{user.firstName}} {{user.lastName}}
-            </p>
-            <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
-          </div>
-        </div>
-      </ng-container>
+        </ng-container>
+      </div>
     </div>
+  </div>
+  <div *ngIf="notListPotentialMembers" class="flex justify-center my-40">
+    <p>Not Members</p>
   </div>
 </div>
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
-    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+    [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
   </app-pagination>
 </div>
 <!-- Buttons -->
