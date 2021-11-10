@@ -186,15 +186,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggles the open state of the drawer for station info.
-   *
-   * @param drawerItem The drawer item to toggle.
-   */
-  toggleDrawer(drawerItem: 'stationInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem);
-  }
-
-  /**
    * Get the last updated date for a specific station.
    *
    * @param stationId The id of the station that the document is in.
