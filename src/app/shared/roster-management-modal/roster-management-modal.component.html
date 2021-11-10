@@ -6,7 +6,7 @@
     <div class="gap-2 flex justify-center">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
         <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)" *ngIf="!loadingMembers"></app-user-avatar>
       </div>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
@@ -19,7 +19,8 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
       <ng-container>
-        <div *ngFor="let user of users" [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
+        <div *ngFor="let user of users"
+          [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner}"
           class="cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2 ml-1.5"
           (click)='toggleSelectedUser(user.rithmId)'>
           <div class="my-1">
@@ -38,8 +39,8 @@
   </div>
 </div>
 <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
-    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+    [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
   </app-pagination>
 </div>
 <!-- Buttons -->
