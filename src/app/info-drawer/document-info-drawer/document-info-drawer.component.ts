@@ -82,13 +82,4 @@ export class DocumentInfoDrawerComponent implements OnInit {
         }
       });
   }
-
-  /**
-   * Toggles the open state of the drawer for document info.
-   *
-   * @param drawerItem The drawer item to toggle.
-   */
-  toggleDrawer(drawerItem: 'documentInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem);
-  }
 }
