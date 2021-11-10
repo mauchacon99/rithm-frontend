@@ -42,4 +42,16 @@ export class UserAvatarComponent {
 
     return firstInitial + lastInitial;
   }
+
+  /**
+   * Gets the unicode badge needed for each case.
+   *
+   * @returns The current badge to be shown.
+   */
+  getBadges(): string{
+    return this.badgeHover ? '\u2212' :
+    this.badge==='check' ? '\u2714' :
+    this.badge==='plus' ? '\u002b' :
+    this.badge==='minus' ? '\u2212' : '';
+  }
 }

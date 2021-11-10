@@ -3,10 +3,7 @@
   (mouseenter)="hoverEffect ? badgeHover = true : badgeHover = false" (mouseleave)="badgeHover = false">
   <button *ngIf="badge === 'none'">{{initials}}</button>
   <button *ngIf="badge !== 'none'"
-    [matBadge]="badgeHover ? '&minus;' :
-      badge==='check' ? '&check;' :
-      badge==='plus' ? '&plus;' :
-      badge==='minus' ? '&minus;' : ''"
+    [matBadge]="getBadges()"
     matBadgeSize="small"
     matBadgePosition="below after"
     [matBadgeColor]="badgeHover || badge === 'minus' ? 'warn' : 'accent'">{{initials}}

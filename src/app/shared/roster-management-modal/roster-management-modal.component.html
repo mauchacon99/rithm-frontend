@@ -9,7 +9,7 @@
       <ng-container *ngIf="!loadingMembers">
         <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
           <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)" [hoverEffect]="true"></app-user-avatar>
         </div>
       </ng-container>
       <!-- Loading indicator for current roster members -->
