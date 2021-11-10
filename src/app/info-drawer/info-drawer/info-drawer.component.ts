@@ -39,4 +39,15 @@ export class InfoDrawerComponent implements OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+  /**
+   * Toggles the open state for drawer mode.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+  toggleDrawer(drawerItem: '' | 'stationInfo' | 'documentInfo'): void {
+    if (drawerItem === 'documentInfo' || drawerItem === 'stationInfo') {
+      this.sidenavDrawerService.toggleDrawer(drawerItem);
+    }
+  }
 }
