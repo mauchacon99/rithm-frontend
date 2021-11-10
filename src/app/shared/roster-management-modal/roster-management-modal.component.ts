@@ -182,13 +182,13 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    this.loadingMembers = true;
     const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
     this.users.map((user) => {
       if (user.rithmId === usersId) {
         user[rosterUserType] = false;
       }
     });
+    this.loadingMembers = true;
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
