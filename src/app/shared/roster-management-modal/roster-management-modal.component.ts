@@ -193,6 +193,7 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
+            this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
           }
         }, error: (error: unknown) => {
           this.loadingMembers = false;
