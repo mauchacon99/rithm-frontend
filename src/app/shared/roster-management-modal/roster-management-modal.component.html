@@ -36,12 +36,13 @@
       </ng-container>
     </div>
   </div>
-</div>
-<div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
-    [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
-  </app-pagination>
-</div>
-<!-- Buttons -->
-<div mat-dialog-actions class="flex justify-end">
+  <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
+    <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)" [numItems]="totalPotentialUsers"
+      [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+    </app-pagination>
+  </div>
+  <!-- Buttons -->
+  <div mat-dialog-actions class="flex justify-end">
+    <button data-testid="close-dialog-button" mat-button color="accent" [mat-dialog-close]="true">Done</button>
+  </div>
 </div>

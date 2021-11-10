@@ -61,6 +61,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatCardModule,
     MatButtonModule,
     MatTooltipModule,
+    MatDialogModule,
     PasswordRequirementsComponent,
     UserAvatarComponent,
     PaginationComponent,
