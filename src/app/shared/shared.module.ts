@@ -67,6 +67,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     UserFormComponent,
     UserRemovalComponent,
     RosterComponent,
+    MatDialogModule
   ]
 })
 
