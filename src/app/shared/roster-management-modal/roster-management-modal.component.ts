@@ -77,6 +77,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The id of the given station.
    */
   getStationUsersRoster(stationId: string): void {
+    this.loadingMembers = true;
     const stationUserRoster$ = this.rosterType === 'workers'
       ? this.stationService.getStationWorkerRoster(stationId)
       : this.stationService.getStationOwnerRoster(stationId);
@@ -84,10 +85,12 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data) => {
+          this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
           }
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -104,20 +107,17 @@ export class RosterManagementModalComponent implements OnInit {
    */
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.pageNumUsersOrganization = pageNum;
-    this.loadingMembers = true;
     this.listLoading = true;
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe({
         next: (potentialUsers) => {
-          this.loadingMembers = false;
           this.listLoading = false;
           if (potentialUsers) {
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
         }, error: (error: unknown) => {
-          this.loadingMembers = false;
           this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -135,11 +135,14 @@ export class RosterManagementModalComponent implements OnInit {
   toggleSelectedUser(rithmId: string): void {
     const selectedUser = this.users.find((user) => user.rithmId === rithmId);
     const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
-    if (selectedUser){
+    if (selectedUser) {
       selectedUser[rosterUserType] = !selectedUser[rosterUserType];
       if (!selectedUser[rosterUserType]) {
         /** If data.isWorker is false is because the user is being removed. */
         this.removeMemberFromRoster(rithmId);
+      } else {
+        /** If data.isWorker is true is because the user is being add. */
+        this.addUsersToRoster(this.stationRithmId, [rithmId]);
       }
     }
   }
@@ -151,6 +154,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param userIds The users ids for assign in station.
    */
   addUsersToRoster(stationId: string, userIds: string[]): void {
+    this.loadingMembers = true;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
       : this.stationService.addUsersToOwnersRoster(stationId, userIds);
@@ -158,10 +162,12 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (data) => {
+          this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
           }
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -176,6 +182,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
+    this.loadingMembers = true;
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
       this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId]);
@@ -183,8 +190,12 @@ export class RosterManagementModalComponent implements OnInit {
     removeUserMemberRoster$.pipe(first())
       .subscribe({
         next: (data) => {
-          this.rosterMembers = data;
+          this.loadingMembers = false;
+          if (data) {
+            this.rosterMembers = data;
+          }
         }, error: (error: unknown) => {
+          this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
