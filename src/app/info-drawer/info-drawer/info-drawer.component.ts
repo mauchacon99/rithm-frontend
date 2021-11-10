@@ -47,7 +47,7 @@ export class InfoDrawerComponent implements OnDestroy {
    */
   toggleDrawer(drawerItem: '' | 'stationInfo' | 'documentInfo'): void {
     if (drawerItem === 'documentInfo' || drawerItem === 'stationInfo') {
-      this.sidenavDrawerService.toggleDrawer(drawerItem);
+       this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
   }
 }
