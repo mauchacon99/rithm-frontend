@@ -22,6 +22,7 @@ import { UserRemovalComponent } from './user-removal/user-removal.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
 
 
 @NgModule({
@@ -36,7 +37,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-
+    RosterManagementModalComponent
   ],
   imports: [
     CommonModule,
@@ -66,7 +67,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     PaginationComponent,
     UserFormComponent,
     UserRemovalComponent,
-    RosterComponent,
+    RosterComponent
   ]
 })
 
