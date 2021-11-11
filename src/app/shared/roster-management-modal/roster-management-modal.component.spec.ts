@@ -56,7 +56,7 @@ describe('RosterManagementModalComponent', () => {
     component.rosterType = 'owners';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToOwnersRoster').and.callThrough();
 
-    await component.addUsersToRoster(stationRithmId, userList);
+    await component.addUserToRoster(userList[0]);
 
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
@@ -65,7 +65,7 @@ describe('RosterManagementModalComponent', () => {
     component.rosterType = 'workers';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToWorkerRoster').and.callThrough();
 
-    await component.addUsersToRoster(stationRithmId, userList);
+    await component.addUserToRoster(userList[0]);
 
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
@@ -141,7 +141,7 @@ describe('RosterManagementModalComponent', () => {
     expect(removeWorkerSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 
-  it('should add a worker user from station roster', async () => {
+  it('should add a worker user to station roster', () => {
     component.rosterType = 'workers';
     component.users = [
       {
@@ -153,12 +153,12 @@ describe('RosterManagementModalComponent', () => {
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const addMemberSpy = spyOn(component, 'addUsersToRoster');
-    await component.toggleSelectedUser(userRithmId);
-    expect(addMemberSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
+    const addMemberSpy = spyOn(component, 'addUserToRoster');
+    component.toggleSelectedUser(userRithmId);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 
-  it('should add an owner from station roster', async () => {
+  it('should add an owner to station roster', () => {
     component.rosterType = 'owners';
     component.users = [
       {
@@ -170,8 +170,8 @@ describe('RosterManagementModalComponent', () => {
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const addMemberSpy = spyOn(component, 'addUsersToRoster');
-    await component.toggleSelectedUser(userRithmId);
-    expect(addMemberSpy).toHaveBeenCalledOnceWith(stationRithmId, [userRithmId]);
+    const addMemberSpy = spyOn(component, 'addUserToRoster');
+    component.toggleSelectedUser(userRithmId);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 });

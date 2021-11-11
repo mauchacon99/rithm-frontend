@@ -141,7 +141,7 @@ export class RosterManagementModalComponent implements OnInit {
         this.removeMemberFromRoster(rithmId);
       } else {
         /** If data.isWorker is true is because the user is being add. */
-        this.addUsersToRoster(this.stationRithmId, [rithmId]);
+        this.addUserToRoster(rithmId);
       }
     }
   }
@@ -152,11 +152,11 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationId The Specific id of station.
    * @param userIds The users ids for assign in station.
    */
-  addUsersToRoster(stationId: string, userIds: string[]): void {
+  addUserToRoster(userIds: string): void {
     this.loadingMembers = true;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
-      ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
-      : this.stationService.addUsersToOwnersRoster(stationId, userIds);
+      ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [userIds])
+      : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [userIds]);
     addUserToRosterMethod$
       .pipe(first())
       .subscribe({
@@ -183,7 +183,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   removeMemberFromRoster(usersId: string): void {
     const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
-    this.users.map((user) => {
+    this.users.find((user) => {
       if (user.rithmId === usersId) {
         user[rosterUserType] = false;
       }
