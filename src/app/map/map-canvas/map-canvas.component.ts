@@ -458,6 +458,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
       });
 
+      // Draw the flows
+      this.flowElementService.drawFlow(this.stations);
+
       // Draw the connections
       for (const station of this.stations) {
         for (const connection of station.nextStations) {
@@ -479,8 +482,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
 
-      // Draw the flows
-      this.flowElementService.drawFlow(this.stations);
     });
   }
 
