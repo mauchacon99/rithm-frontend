@@ -38,7 +38,7 @@ describe('UserAvatarComponent', () => {
     expect(component.initials).toBeTruthy();
   });
 
-  it('should return a check badge', async () => {
+  it('should return a check badge', () => {
     component.badgeHover = false;
     component.badge = 'check';
     const badgeValue = component.getBadges();
@@ -52,14 +52,14 @@ describe('UserAvatarComponent', () => {
     expect(badgeValue).toEqual('\u002b');
   });
 
-  it('should return a minus badge', async () => {
+  it('should return a minus badge', () => {
     component.badgeHover = false;
     component.badge = 'minus';
     const badgeValue = component.getBadges();
     expect(badgeValue).toEqual('\u2212');
   });
 
-  it('should return a minus badge on mouseover', async () => {
+  it('should return a minus badge on mouseover', () => {
     component.badgeHover = true;
     const badgeValue = component.getBadges();
     expect(badgeValue).toEqual('\u2212');
