@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
@@ -12,7 +12,7 @@ import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicato
 
 
 const DIALOG_TEST_DATA: {/** The station rithmId. */ stationId: string } = {
-  stationId: 'jk34jk34jk34'
+  stationId: '73d47261-1932-4fcf-82bd-159eb1a7243f'
 };
 
 describe('RosterManagementModalComponent', () => {
@@ -29,6 +29,9 @@ describe('RosterManagementModalComponent', () => {
         MockComponent(PaginationComponent),
         MockComponent(LoadingIndicatorComponent),
 
+      ],
+      imports: [
+        MatDialogModule
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -67,6 +70,25 @@ describe('RosterManagementModalComponent', () => {
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
 
+
+  it('should remove an owner to station roster', async () => {
+    component.rosterType = 'owners';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'removeUsersFromOwnerRoster').and.callThrough();
+
+    await component.removeMemberFromRoster(userList[0]);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
+
+  it('should remove a worker to station roster', async () => {
+    component.rosterType = 'workers';
+    const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'removeUsersFromWorkerRoster').and.callThrough();
+
+    await component.removeMemberFromRoster(userList[0]);
+
+    expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
+  });
+
   it('should get the station owner roster', async () => {
     component.rosterType = 'owners';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
@@ -97,7 +119,7 @@ describe('RosterManagementModalComponent', () => {
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
-    const removeOwnerSpy = spyOn(component,'removeMemberFromRoster');
+    const removeOwnerSpy = spyOn(component, 'removeMemberFromRoster');
     await component.toggleSelectedUser(userRithmId);
     expect(removeOwnerSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
@@ -118,5 +140,4 @@ describe('RosterManagementModalComponent', () => {
     await component.toggleSelectedUser(userRithmId);
     expect(removeWorkerSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
-
 });
