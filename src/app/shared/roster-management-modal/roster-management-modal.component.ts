@@ -80,6 +80,7 @@ export class RosterManagementModalComponent implements OnInit {
     const stationUserRoster$ = this.rosterType === 'workers'
       ? this.stationService.getStationWorkerRoster(stationId)
       : this.stationService.getStationOwnerRoster(stationId);
+
     stationUserRoster$
       .pipe(first())
       .subscribe({
@@ -107,6 +108,7 @@ export class RosterManagementModalComponent implements OnInit {
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.pageNumUsersOrganization = pageNum;
     this.listLoading = true;
+
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe({
@@ -156,6 +158,7 @@ export class RosterManagementModalComponent implements OnInit {
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [userIds])
       : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [userIds]);
+
     addUserToRosterMethod$
       .pipe(first())
       .subscribe({
@@ -163,7 +166,6 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           if (data) {
             this.rosterMembers = data;
-            this.loadingMembers = false;
           }
         }, error: (error: unknown) => {
           this.loadingMembers = false;

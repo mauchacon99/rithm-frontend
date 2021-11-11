@@ -14,7 +14,7 @@
       </ng-container>
       <!-- Loading indicator for current roster members -->
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
-        <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        <app-loading-indicator id="roster-member-loading" [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
     <!-- Loading indicator for list of members -->
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
-      <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+      <app-loading-indicator id="user-organization-loading" class="flex-grow m-auto"></app-loading-indicator>
     </div>
     <!-- List of members -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">

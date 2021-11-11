@@ -174,4 +174,26 @@ describe('RosterManagementModalComponent', () => {
     component.toggleSelectedUser(userRithmId);
     expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
+
+  it('should loading indicator before getting potential members', () => {
+    const pageNum = 1;
+    component.getPotentialStationRosterMembers(stationRithmId, pageNum);
+    expect(component.listLoading).toBe(true);
+    const loading = fixture.debugElement.nativeElement.querySelector('#user-organization-loading');
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show loading-indicators while adding a user to roster', () => {
+    component.addUserToRoster(userList[0]);
+    expect(component.loadingMembers).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#roster-member-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while remove a user to roster', () => {
+    component.removeMemberFromRoster(userList[0]);
+    expect(component.loadingMembers).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#roster-member-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
 });
