@@ -220,6 +220,17 @@ export class RosterManagementModalComponent implements OnInit {
   }
 
   /**
+   * Switch de badge when user belongs to the station roster.
+   *
+   * @param user The user which will change its status.
+   * @returns Check badge when user is added or None badge when is removed.
+   */
+  getCurrentBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus'{
+    const enableBadge = this.rosterType === 'workers' ? user.isWorker : user.isOwner;
+    return enableBadge ? 'check' : 'none';
+  }
+
+  /**
    * Check error message in station worker.
    *
    * @param rithmId The id of the user in the list to check.
@@ -228,4 +239,5 @@ export class RosterManagementModalComponent implements OnInit {
   userHadLastError(rithmId: string): boolean {
     return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
+
 }
