@@ -56,18 +56,20 @@ export class CommentDrawerComponent implements OnInit {
   ngOnInit(): void {
     this.sidenavDrawerService.drawerData$
       .pipe(first())
-      .subscribe((drawerData) => {
-        const info = drawerData as DocumentStationInformation;
-        if (info) {
-          this.stationId = info.stationRithmId;
-          this.documentId = info.documentRithmId;
-          this.getDocumentComments(true);
+      .subscribe({
+        next: (drawerData) => {
+          const info = drawerData as DocumentStationInformation;
+          if (info) {
+            this.stationId = info.stationRithmId;
+            this.documentId = info.documentRithmId;
+            this.getDocumentComments(true);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -99,20 +101,22 @@ export class CommentDrawerComponent implements OnInit {
     setLoading(true);
     this.commentService.getDocumentComments(this.documentId, this.stationId, this.commentPage, COMMENTS_PER_PAGE)
       .pipe(first())
-      .subscribe((commentsResponse) => {
-        this.comments = this.comments.concat(commentsResponse);
-        if (commentsResponse.length === COMMENTS_PER_PAGE) {
-          ++this.commentPage;
-        } else {
-          this.commentsEnd = true;
+      .subscribe({
+        next: (commentsResponse) => {
+          this.comments = this.comments.concat(commentsResponse);
+          if (commentsResponse.length === COMMENTS_PER_PAGE) {
+            ++this.commentPage;
+          } else {
+            this.commentsEnd = true;
+          }
+          setLoading(false);
+        }, error: (error: unknown) => {
+          setLoading(false);
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        setLoading(false);
-      }, (error: unknown) => {
-        setLoading(false);
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 

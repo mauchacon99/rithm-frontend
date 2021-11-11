@@ -6,8 +6,8 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE,
-  STATION_HEIGHT, STATION_WIDTH } from '../map-constants';
+  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -59,6 +59,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Track zoomCount. */
   zoomCount = 0;
 
+  /**Set up interval for zoom. */
+  zoomInterval?: NodeJS.Timeout;
+
   /**
    * Add station mode active.
    *
@@ -75,7 +78,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog
   ) {
-
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
@@ -87,7 +89,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.scale = scale;
-        this.drawElements();
+        this.scaleChangeDraw();
       });
 
     this.mapService.currentCanvasPoint$
@@ -104,6 +106,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.flows = this.mapService.flowElements;
         this.drawElements();
       });
+
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
@@ -149,6 +152,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     const mousePos = this.getMouseCanvasPoint(event);
     this.eventStartLogic(mousePos);
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
   }
 
   /**
@@ -251,6 +258,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
     }
 
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
+
   }
 
 
@@ -335,13 +347,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.lastTouchCoords = touchPos;
         this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
         this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
       } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
         // Zoom out
         this.lastTouchCoords = touchPos;
         this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
         this.mapService.handleZoom(middlePoint, true);
-        this.drawElements();
       }
     }
   }
@@ -375,19 +385,64 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('wheel', ['$event'])
   wheel(event: WheelEvent): void {
+    event.preventDefault();
     const mousePoint = this.getMouseCanvasPoint(event);
+    const eventAmount = event.deltaY >= 100
+    ? Math.floor(event.deltaY/100)
+    : event.deltaY <= -100
+      ? Math.ceil(event.deltaY/100)
+      : event.deltaY/3;
 
     if (event.deltaY < 0) {
+      // Do nothing if already at max zoom.
+      if (this.scale >= MAX_SCALE) {
+        this.mapService.zoomCount$.next(0);
+        return;
+      }
       // Zoom in
-      this.mapService.zoomCount$.next(this.zoomCount + 10);
+      if (this.zoomCount < 0) {
+        this.mapService.zoomCount$.next(0);
+      }
+      this.mapService.zoomCount$.next(this.zoomCount + Math.floor(10*-eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     } else {
+      // Do nothing if already at min zoom.
+      if (this.scale <= MIN_SCALE
+        || this.mapService.mapMode$.value !== MapMode.View
+        && this.scale <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY) {
+          this.mapService.zoomCount$.next(0);
+          return;
+        }
       // Zoom out
-      this.mapService.zoomCount$.next(this.zoomCount - 10);
+      if (this.zoomCount > 0) {
+        this.mapService.zoomCount$.next(0);
+      }
+      this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10*eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     }
+    // Overlay option menu close state.
+    if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
+      this.mapService.matMenuStatus$.next(true);
+    }
+  }
 
-    event.preventDefault();
+  /**
+   * Animates at a set framerate when scale is changed.
+   *
+   * @param fps The framerate to animate at.
+   */
+  private scaleChangeDraw(fps = 60): void {
+    if (this.zoomCount !== 0){
+      if (!this.zoomInterval) {
+        this.zoomInterval = setInterval(() => {
+          if (this.zoomCount === 0 && this.zoomInterval) {
+            clearInterval(this.zoomInterval);
+            this.zoomInterval = undefined;
+          }
+          this.drawElements();
+        }, 1000/ fps);
+      }
+    }
   }
 
   /**

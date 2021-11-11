@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { StationService } from '../../core/station.service';
-import { ErrorService } from '../../core/error.service';
+import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for document drawer.
@@ -19,8 +20,14 @@ export class DocumentInfoDrawerComponent implements OnInit {
   /** The station rithmId. */
   stationRithmId = '';
 
-  constructor(private stationService: StationService,
-    private errorService: ErrorService) {
+  /** Whether the request to get the document info drawer is currently underway. */
+  documentInfoDrawerLoading = false;
+
+  constructor(
+    private stationService: StationService,
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService,
+  ) {
 
   }
 
@@ -39,15 +46,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
   getStatusDocumentEditable(stationRithmId: string): void {
     this.stationService.getStatusDocumentEditable(stationRithmId)
       .pipe(first())
-      .subscribe((documentEditableStatus) => {
-        if (documentEditableStatus) {
-          this.documentNameEditable = documentEditableStatus;
+      .subscribe({
+        next: (documentEditableStatus) => {
+          if (documentEditableStatus) {
+            this.documentNameEditable = documentEditableStatus;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -60,15 +69,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
     this.stationService.updateStatusDocumentEditable(stationRithmId, newStatus)
       .pipe(first())
-      .subscribe((documentEditableStatus) => {
-        if (documentEditableStatus) {
-          this.documentNameEditable = documentEditableStatus;
+      .subscribe({
+        next: (documentEditableStatus) => {
+          if (documentEditableStatus) {
+            this.documentNameEditable = documentEditableStatus;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 }

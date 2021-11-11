@@ -1,1 +1,18 @@
-<p>document-info-drawer works!</p>
+<div class="h-full w-full flex justify-center items-center absolute" *ngIf="documentInfoDrawerLoading">
+  <app-loading-indicator></app-loading-indicator>
+</div>
+<div class="grid grid-cols-1" *ngIf="!documentInfoDrawerLoading">
+  <div class="w-full py-2">
+    <div class="col-span-12">
+      <h6 class="text-center">Document Information</h6>
+    </div>
+    <div class="col-span-12 pt-2">
+      <p class="overline">Document Name</p>
+      <div class="pt-1">
+        <mat-checkbox>
+          Editable Name
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>
