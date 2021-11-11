@@ -5,6 +5,7 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -20,6 +21,7 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       imports: [
         MatCheckboxModule,
+        FormsModule
       ],
     })
       .compileComponents();
@@ -37,17 +39,18 @@ describe('DocumentInfoDrawerComponent', () => {
 
   it('should update the editable status of the document in the station', async () => {
     const newStatus = true;
+    component.stationRithmId = stationId;
     const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStatusDocumentEditable').and.callThrough();
 
-    await component.updateStatusDocumentEditable(stationId, newStatus);
+    await component.updateStatusDocumentEditable(newStatus);
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
 
   it('should get the current editable status of the document', async () => {
+    component.stationRithmId = stationId;
     const getGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
-
-    await component.getStatusDocumentEditable(stationId);
+    await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });

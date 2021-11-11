@@ -97,12 +97,20 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 
+  /** Get StationRithmId.
+   *
+   * @returns The Document Name.
+   */
+  get rithmId(): string {
+    return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
+  }
+
   /**
    * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
    */
-   toggleDrawer(drawerItem: 'documentInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem);
+  toggleDrawer(drawerItem: 'documentInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem, { rithmId: this.rithmId });
   }
 }
