@@ -175,7 +175,7 @@ describe('RosterManagementModalComponent', () => {
     expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
   });
 
-  it('should loading indicator before getting potential members', () => {
+  it('should display a loading indicator while getting potential members', () => {
     const pageNum = 1;
     component.getPotentialStationRosterMembers(stationRithmId, pageNum);
     expect(component.listLoading).toBe(true);
