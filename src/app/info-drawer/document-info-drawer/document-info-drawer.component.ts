@@ -13,7 +13,6 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   styleUrls: ['./document-info-drawer.component.scss']
 })
 export class DocumentInfoDrawerComponent implements OnInit {
-
   /** Is the document name editable. */
   documentNameEditable = false;
 
