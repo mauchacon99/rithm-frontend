@@ -5,18 +5,18 @@
   </div>
   <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
-    <div class="gap-2 flex justify-center">
-      <ng-container *ngIf="!loadingMembers">
-        <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
-          <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
-        </div>
-      </ng-container>
-      <!-- Loading indicator for current roster members -->
+    <div class="gap-2 flex justify-center" *ngIf="rosterMembers.length > 0 && loadingMembers else rosterMembersEmpty">
+      <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
+        <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
+          [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+      </div>
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
     </div>
+    <ng-template #rosterMembersEmpty>
+        <p class="leading-none text-error-500 my-3 truncate">There are not currently any {{ rosterType | titlecase }} roster members</p>
+    </ng-template>
   </div>
   <!-- List of organization members -->
   <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
