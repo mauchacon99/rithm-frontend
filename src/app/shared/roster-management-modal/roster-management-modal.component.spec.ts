@@ -56,7 +56,7 @@ describe('RosterManagementModalComponent', () => {
     component.rosterType = 'owners';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToOwnersRoster').and.callThrough();
 
-    await component.addUsersToRoster(stationRithmId, userList);
+    await component.addUserToRoster(userList[0]);
 
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
@@ -65,7 +65,7 @@ describe('RosterManagementModalComponent', () => {
     component.rosterType = 'workers';
     const addUserToRosterSpy = spyOn(TestBed.inject(StationService), 'addUsersToWorkerRoster').and.callThrough();
 
-    await component.addUsersToRoster(stationRithmId, userList);
+    await component.addUserToRoster(userList[0]);
 
     expect(addUserToRosterSpy).toHaveBeenCalledOnceWith(stationRithmId, userList);
   });
@@ -139,5 +139,61 @@ describe('RosterManagementModalComponent', () => {
     const removeWorkerSpy = spyOn(component, 'removeMemberFromRoster');
     await component.toggleSelectedUser(userRithmId);
     expect(removeWorkerSpy).toHaveBeenCalledOnceWith(userRithmId);
+  });
+
+  it('should add a worker user to station roster', () => {
+    component.rosterType = 'workers';
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isWorker: false
+      }
+    ];
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    const addMemberSpy = spyOn(component, 'addUserToRoster');
+    component.toggleSelectedUser(userRithmId);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
+  });
+
+  it('should add an owner to station roster', () => {
+    component.rosterType = 'owners';
+    component.users = [
+      {
+        rithmId: '4CFE69D2-C768-4066-8712-AB29C0241168',
+        firstName: 'Rithm',
+        lastName: 'Admin',
+        email: 'rithmadmin@inpivota.com',
+        isOwner: false
+      }
+    ];
+    const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
+    const addMemberSpy = spyOn(component, 'addUserToRoster');
+    component.toggleSelectedUser(userRithmId);
+    expect(addMemberSpy).toHaveBeenCalledOnceWith(userRithmId);
+  });
+
+  it('should display a loading indicator while getting potential members', () => {
+    const pageNum = 1;
+    component.getPotentialStationRosterMembers(stationRithmId, pageNum);
+    expect(component.listLoading).toBe(true);
+    const loading = fixture.debugElement.nativeElement.querySelector('#user-organization-loading');
+    expect(loading).toBeTruthy();
+  });
+
+  it('should show loading-indicators while adding a user to roster', () => {
+    component.addUserToRoster(userList[0]);
+    expect(component.loadingMembers).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#roster-member-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while remove a user to roster', () => {
+    component.removeMemberFromRoster(userList[0]);
+    expect(component.loadingMembers).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#roster-member-loading');
+    expect(loadingComponent).toBeTruthy();
   });
 });
