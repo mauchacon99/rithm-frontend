@@ -46,18 +46,19 @@
         </ng-container>
       </div>
     </div>
+    <!-- Loading indicator for not found members -->
+    <div *ngIf="emptyPotentialMembersList" class="flex justify-center text-center my-40">
+      <p>Members not found</p>
+    </div>
   </div>
-  <!-- Loading indicator for not found members -->
-  <div *ngIf="emptyPotentialMembersList" class="flex justify-center text-center my-40">
-    <p>Members not found</p>
+  <!-- Paginator -->
+  <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
+    <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId,$event)"
+      [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
+    </app-pagination>
   </div>
-</div>
-<!-- Paginator -->
-<div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getPotentialStationRosterMembers(stationRithmId, $event)"
-    [numItems]="totalPotentialUsers" [numPerPage]="20" [activeNum]="pageNumUsersOrganization">
-  </app-pagination>
-</div>
-<!-- Buttons -->
-<div mat-dialog-actions class="flex justify-end">
+  <!-- Buttons -->
+  <div mat-dialog-actions class="flex justify-end">
+    <button data-testid="close-dialog-button" mat-button color="accent" [mat-dialog-close]="true">Done</button>
+  </div>
 </div>
