@@ -57,10 +57,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   flows: FlowMapElement[] = [];
 
   /** Scale to calculate canvas points. */
-  private scale = DEFAULT_SCALE;
+  scale = DEFAULT_SCALE;
 
   /**Track zoomCount. */
-  private zoomCount = 0;
+  zoomCount = 0;
 
   /**Set up interval for zoom. */
   zoomInterval?: NodeJS.Timeout;
@@ -218,6 +218,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
 
         this.eventEndLogic(pointerPos);
+      } else {
+        const pointer = this.pointerCache[0];
+        this.lastTouchCoords[0] = this.getMouseCanvasPoint(pointer);
       }
     }
   }
@@ -231,6 +234,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   pointerMove(event: PointerEvent): void {
     if (window.PointerEvent) {
       event.preventDefault();
+
       //If event exists in pointerCache, update event in cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
@@ -797,7 +801,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
     const xCurrentDiff = Math.abs(position[0].x - position[1].x);
     const yCurrentDiff = Math.abs(position[0].y - position[1].y);
-    const averageDiff = (xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2;
+    const averageDiff = Math.floor((xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2);
 
     const middlePoint = {
       x: (position[0].x + position[1].x) / 2,
