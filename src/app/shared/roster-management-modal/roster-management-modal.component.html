@@ -5,6 +5,7 @@
   </div>
   <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
+    <!-- Loading indicator for current roster members -->
     <div class="gap-2 flex justify-center" *ngIf="rosterMembers.length > 0 || loadingMembers else rosterMembersEmpty">
       <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
         <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
@@ -15,7 +16,7 @@
       </div>
     </div>
     <ng-template #rosterMembersEmpty>
-      <p class="leading-none text-error-500 my-3">There are not currently any {{rosterType}} roster members</p>
+      <p class="leading-none text-error-500 my-3">There are no {{rosterType}} roster members</p>
     </ng-template>
   </div>
   <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
