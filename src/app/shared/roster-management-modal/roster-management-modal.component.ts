@@ -222,10 +222,10 @@ export class RosterManagementModalComponent implements OnInit {
   /**
    * Check error message in station worker.
    *
-   * @param rithmId The index position of the user in the list.
+   * @param rithmId The id of the user in the list to check.
    * @returns True If there is an error in the verification of the station owner.
    */
-  checkAddRemoveErrorMessage(rithmId: string): boolean {
+  userHadLastError(rithmId: string): boolean {
     return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
 }

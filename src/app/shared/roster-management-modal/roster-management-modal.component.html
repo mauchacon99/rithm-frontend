@@ -32,7 +32,7 @@
       <ng-container *ngFor="let user of users">
         <div class="h-100">
           <div
-            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner, 'border-error-500': checkAddRemoveErrorMessage(user.rithmId)}"
+            [ngClass]="{'border-accent-500': rosterType === 'workers' ? user.isWorker: user.isOwner, 'border-error-500': userHadLastError(user.rithmId)}"
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)='toggleSelectedUser(user.rithmId)'>
             <div class="my-1">
@@ -46,7 +46,7 @@
               <p class="leading-none overline pl-2 text-secondary-500 truncate">{{user.email}}</p>
             </div>
           </div>
-          <div class="col-xs-12 text-center truncate text-xs" *ngIf="checkAddRemoveErrorMessage(user.rithmId)">
+          <div class="col-xs-12 text-center truncate text-xs" *ngIf="userHadLastError(user.rithmId)">
             <span class="text-error-500">Error: Unable to add/remove member</span>
           </div>
         </div>
