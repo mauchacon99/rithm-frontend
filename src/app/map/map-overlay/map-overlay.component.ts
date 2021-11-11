@@ -263,6 +263,7 @@ export class MapOverlayComponent implements OnDestroy {
       important: true
     });
     if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
       this.mapService.deleteStation(<StationMapElement>(this.station));
     }
   }
