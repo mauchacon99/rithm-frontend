@@ -23,6 +23,9 @@ export class DocumentInfoDrawerComponent implements OnInit {
   /** Whether the request to get the document info drawer is currently underway. */
   documentInfoDrawerLoading = false;
 
+  /** Loading in the document name section. */
+  documentNameLoading = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -44,14 +47,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
    * @param stationRithmId The Specific id of station.
    */
   getStatusDocumentEditable(stationRithmId: string): void {
+    this.documentNameLoading = true;
     this.stationService.getStatusDocumentEditable(stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
+          this.documentNameLoading = false;
           if (documentEditableStatus) {
             this.documentNameEditable = documentEditableStatus;
           }
         }, error: (error: unknown) => {
+          this.documentNameLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -67,14 +73,17 @@ export class DocumentInfoDrawerComponent implements OnInit {
    * @param newStatus The new status is editable in the change for document.
    */
   updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
+    this.documentNameLoading = true;
     this.stationService.updateStatusDocumentEditable(stationRithmId, newStatus)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
+          this.documentNameLoading = false;
           if (documentEditableStatus) {
             this.documentNameEditable = documentEditableStatus;
           }
         }, error: (error: unknown) => {
+          this.documentNameLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
