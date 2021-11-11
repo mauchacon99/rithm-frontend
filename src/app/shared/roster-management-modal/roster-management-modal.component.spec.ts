@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, } from '@angular/material/dialog';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
@@ -30,7 +30,7 @@ describe('RosterManagementModalComponent', () => {
         MockComponent(LoadingIndicatorComponent),
 
       ],
-      imports:[
+      imports: [
         MatDialogModule
       ],
       providers: [
