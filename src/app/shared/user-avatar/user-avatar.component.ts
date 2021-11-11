@@ -25,6 +25,9 @@ export class UserAvatarComponent {
   /** Whether to show any badge type or not. */
   @Input() badge: 'none' | 'check' | 'minus' | 'plus' = 'none';
 
+  /** Whether the enabled switching badges on mouseover. */
+  @Input() hoverEffect = false;
+
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;
 
@@ -38,5 +41,17 @@ export class UserAvatarComponent {
     const lastInitial = this.lastName ? this.lastName.charAt(0) : '';
 
     return firstInitial + lastInitial;
+  }
+
+  /**
+   * Gets the unicode badge needed for each case.
+   *
+   * @returns The current badge to be shown.
+   */
+  getBadge(): string{
+    return this.badgeHover ? '\u2212' :
+    this.badge==='check' ? '\u2714' :
+    this.badge==='plus' ? '\u002b' :
+    this.badge==='minus' ? '\u2212' : '';
   }
 }
