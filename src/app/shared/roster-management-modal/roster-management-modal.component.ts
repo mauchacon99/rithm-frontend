@@ -120,17 +120,17 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (potentialUsers) => {
-          this.listLoading = false;
           if (potentialUsers) {
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
         }, error: (error: unknown) => {
-          this.listLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
+        }, complete: () => {
+          this.listLoading = false;
         }
       });
   }
