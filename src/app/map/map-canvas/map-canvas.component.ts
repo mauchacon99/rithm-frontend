@@ -102,7 +102,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-        this.stations = this.mapService.stationElements;
+        this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
         this.flows = this.mapService.flowElements;
         this.drawElements();
       });
