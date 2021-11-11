@@ -200,7 +200,9 @@ export class StationService {
         }
       })).pipe(delay(1000));
     } else {
-      return  this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`);
+      const params = new HttpParams()
+      .set('stationRithmId', stationId);
+      return  this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users`,{params});
     }
   }
 
