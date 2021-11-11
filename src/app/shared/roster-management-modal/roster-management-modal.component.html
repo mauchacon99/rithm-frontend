@@ -22,7 +22,8 @@
     <span class="text-error-500">Error: Unable to add/remove member</span>
   </div>
   <!-- List of organization members -->
-  <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
+  <div class="flex items-start justify-center pt-4 overflow-y-auto list-area"
+    *ngIf="totalPotentialUsers > 0 || listLoading">
     <!-- Loading indicator for list of members -->
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
       <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
@@ -53,6 +54,10 @@
         </div>
       </ng-container>
     </div>
+  </div>
+  <!-- Loading indicator for not found members -->
+  <div *ngIf="totalPotentialUsers === 0 && !listLoading" class="flex justify-center text-center my-40">
+    <p>Members not found</p>
   </div>
   <!-- Paginator -->
   <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">
