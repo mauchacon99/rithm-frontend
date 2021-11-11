@@ -42,6 +42,12 @@ export class RosterManagementModalComponent implements OnInit {
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
+  /** Check if there is an error when adding or deleting the owner of the station. */
+  addRemoveRosterError = false;
+
+  /** Last rithmId performed when adding or deleting. */
+  private lastUserIdClicked = '';
+
   /** The current page number. */
   activeNum = 1;
 
@@ -134,6 +140,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param rithmId The index position of the user in the list to toggle.
    */
   toggleSelectedUser(rithmId: string): void {
+    this.lastUserIdClicked = rithmId;
     const selectedUser = this.users.find((user) => user.rithmId === rithmId);
     const rosterUserType = this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
     if (selectedUser) {
@@ -167,7 +174,9 @@ export class RosterManagementModalComponent implements OnInit {
           if (data) {
             this.rosterMembers = data;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
+          this.addRemoveRosterError = true;
           this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -189,6 +198,7 @@ export class RosterManagementModalComponent implements OnInit {
         user[rosterUserType] = false;
       }
     });
+    this.addRemoveRosterError = false;
     this.loadingMembers = true;
     const removeUserMemberRoster$ = this.rosterType === 'workers' ?
       this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId]) :
@@ -202,6 +212,7 @@ export class RosterManagementModalComponent implements OnInit {
             this.rosterMembers = data;
           }
         }, error: (error: unknown) => {
+          this.addRemoveRosterError = true;
           this.loadingMembers = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -209,5 +220,15 @@ export class RosterManagementModalComponent implements OnInit {
           );
         }
       });
+  }
+
+  /**
+   * Check error message in station worker.
+   *
+   * @param rithmId The id of the user in the list to check.
+   * @returns True If there is an error in the verification of the station owner.
+   */
+  userHadLastError(rithmId: string): boolean {
+    return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
 }
