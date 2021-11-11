@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -14,7 +14,7 @@ import { MapService } from '../map.service';
   styleUrls: ['./connection-info-drawer.component.scss']
 })
 
-export class ConnectionInfoDrawerComponent {
+export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -53,6 +53,14 @@ export class ConnectionInfoDrawerComponent {
    */
   toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }
