@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { BehaviorSubject, Observable, throwError} from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -200,25 +200,7 @@ export class StationService {
         }
       })).pipe(delay(1000));
     } else {
-      const ownerRoster: StationRosterMember[] = [
-        {
-            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: true,
-            isWorker: false,
-        },
-        {
-            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-            firstName: 'Rithm',
-            lastName: 'User',
-            email: 'rithmuser@inpivota.com',
-            isOwner: true,
-            isWorker: false,
-        },
-    ];
-      return of(ownerRoster).pipe(delay(1000));
+      return  this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`);
     }
   }
 
