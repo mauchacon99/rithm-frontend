@@ -48,7 +48,7 @@ export class UserAvatarComponent {
    *
    * @returns The current badge to be shown.
    */
-  getBadges(): string{
+  getBadge(): string{
     return this.badgeHover ? '\u2212' :
     this.badge==='check' ? '\u2714' :
     this.badge==='plus' ? '\u002b' :
