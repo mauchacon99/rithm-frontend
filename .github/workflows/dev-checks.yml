@@ -58,7 +58,7 @@ jobs:
   test:
     runs-on: self-hosted
     needs: build
-    timeout-minutes: 4
+    timeout-minutes: 6
 
     steps:
     - uses: actions/checkout@v2
