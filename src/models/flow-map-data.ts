@@ -5,7 +5,7 @@ import { MapItemStatus } from '.';
  */
 export interface FlowMapData {
   /** The global Rithm id for the flow. */
-  rithmId: string;
+  readonly rithmId: string;
 
   /** The name of the flow. */
   title: string;
@@ -23,4 +23,7 @@ export interface FlowMapData {
 
   /** The status of the flow (what should happen to this flow). */
   status: MapItemStatus;
+
+  /** Whether this flow is the implicit, root flow for the whole map. This should not be sent to the API. */
+  readonly isReadOnlyRootFlow: boolean;
 }
