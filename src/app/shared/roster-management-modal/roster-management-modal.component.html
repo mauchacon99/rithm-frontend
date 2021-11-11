@@ -18,7 +18,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!emptyPotentialMembersList">
+  <div *ngIf="totalPotentialUsers > 0 || listLoading">
     <!-- List of organization members -->
     <div class="flex items-start justify-center pt-4 overflow-y-auto list-area">
       <!-- Loading indicator for list of members -->
@@ -46,10 +46,10 @@
         </ng-container>
       </div>
     </div>
-    <!-- Loading indicator for not found members -->
-    <div *ngIf="emptyPotentialMembersList" class="flex justify-center text-center my-40">
-      <p>Members not found</p>
-    </div>
+  </div>
+  <!-- Loading indicator for not found members -->
+  <div *ngIf="totalPotentialUsers === 0 && !listLoading" class="flex justify-center text-center my-40">
+    <p>Members not found</p>
   </div>
   <!-- Paginator -->
   <div *ngIf="!listLoading && totalPotentialUsers > 0" class="flex justify-center">

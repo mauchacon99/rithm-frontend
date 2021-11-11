@@ -48,9 +48,6 @@ export class RosterManagementModalComponent implements OnInit {
   /** Is the list of organization members loading.  */
   listLoading = true;
 
-  /** Show not data in potentials users. */
-  emptyPotentialMembersList = false;
-
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -118,7 +115,6 @@ export class RosterManagementModalComponent implements OnInit {
           this.loadingMembers = false;
           this.listLoading = false;
           if (potentialUsers) {
-            potentialUsers.totalUsers > 0 ? this.emptyPotentialMembersList = false : this.emptyPotentialMembersList = true;
             this.users = potentialUsers.users;
             this.totalPotentialUsers = potentialUsers.totalUsers;
           }
