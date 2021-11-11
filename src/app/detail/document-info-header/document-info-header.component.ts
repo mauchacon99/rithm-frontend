@@ -97,9 +97,9 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 
-  /** Get StationRithmId.
+  /** The id of the station or document.
    *
-   * @returns The Document Name.
+   * @returns The id of the station or document.
    */
   get rithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;

@@ -25,7 +25,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   documentInfoDrawerLoading = false;
 
   /** Subject for when the component is destroyed. */
-  destroyed$ = new Subject<void>();
+  private destroyed$ = new Subject<void>();
 
   constructor(
     private stationService: StationService,
@@ -102,11 +102,4 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
-  /** Change status check in documentNameEditable. */
-  changeDocumentNameEditable(): void {
-    // this.documentNameEditable=!this.documentNameEditable;
-    this.updateStatusDocumentEditable(this.documentNameEditable);
-  }
-
 }
