@@ -56,7 +56,7 @@ jobs:
 
   # Checks that the Angular app passes all defined unit and integration tests
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     timeout-minutes: 4
 
