@@ -132,7 +132,7 @@ describe('RosterManagementModalComponent', () => {
         firstName: 'Rithm',
         lastName: 'Admin',
         email: 'rithmadmin@inpivota.com',
-        isWorker: true
+        isOwner: true
       }
     ];
     const userRithmId = '4CFE69D2-C768-4066-8712-AB29C0241168';
