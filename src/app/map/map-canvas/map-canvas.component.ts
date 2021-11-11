@@ -57,13 +57,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   flows: FlowMapElement[] = [];
 
   /** Scale to calculate canvas points. */
-  scale = DEFAULT_SCALE;
+  private scale = DEFAULT_SCALE;
 
   /**Track zoomCount. */
-  zoomCount = 0;
+  private zoomCount = 0;
 
   /**Set up interval for zoom. */
-  zoomInterval?: NodeJS.Timeout;
+  private zoomInterval?: NodeJS.Timeout;
 
   /**
    * Add station mode active.
@@ -151,7 +151,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('pointerdown', ['$event'])
   pointerDown(event: PointerEvent): void {
-    if (window.PointerEvent) {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+    if (window.PointerEvent && !(is_android && is_firefox)) {
         event.preventDefault();
         //If event exists in pointerCache, update event in cache.
         for (let i = 0; i < this.pointerCache.length; i++) {
@@ -198,7 +203,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('pointerup', ['$event'])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pointerUp(event: PointerEvent): void {
-    if (window.PointerEvent) {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+    if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
       //remove event from cache.
@@ -232,7 +242,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('pointermove', ['$event'])
   pointerMove(event: PointerEvent): void {
-    if (window.PointerEvent) {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
+    if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
       //If event exists in pointerCache, update event in cache.
@@ -250,13 +265,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
-
-        if (pointer.pointerType === 'mouse') {
-          this.singleInputMouseMoveLogic(pointer);
-        } else {
-          const touchPos = this.getMouseCanvasPoint(pointer);
-          this.singleInputTouchMoveLogic(touchPos);
-        }
+        const touchPos = this.getMouseCanvasPoint(pointer);
+        //this method has better compatibility with different input types than singleInputMouseMoveLogic.
+        this.singleInputMoveLogic(touchPos);
       }
 
       // Pinch event.
@@ -280,6 +291,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mouseDown(event: MouseEvent): void {
     if (!window.PointerEvent) {
       this.eventStartCoords = this.getMouseCanvasPoint(event);
+      this.lastTouchCoords[0] = this.getMouseCanvasPoint(event);
+      this.eventStartCoords = this.getMouseCanvasPoint(event);
 
       const mousePos = this.getMouseCanvasPoint(event);
       this.eventStartLogic(mousePos);
@@ -293,10 +306,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mouseup event that was triggered.
    */
   @HostListener('mouseup', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mouseUp(event: MouseEvent): void {
     if (!window.PointerEvent) {
       const mousePos = this.getMouseCanvasPoint(event);
+      this.lastTouchCoords[0] = this.getMouseCanvasPoint(event);
 
       this.eventEndLogic(mousePos);
     }
@@ -311,7 +324,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      this.singleInputMouseMoveLogic(event);
+      const pos = this.getMouseCanvasPoint(event);
+      this.singleInputMoveLogic(pos);
     }
   }
 
@@ -323,9 +337,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('touchstart', ['$event'])
   touchStart(event: TouchEvent): void {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
     event.preventDefault();
 
-    if (!window.PointerEvent) {
+    if (!window.PointerEvent || (is_android && is_firefox)) {
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
         const touchPos = this.getTouchCanvasPoint(touchPoint);
@@ -355,9 +374,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('touchend', ['$event'])
   touchEnd(event: TouchEvent): void {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
     event.preventDefault();
 
-    if (!window.PointerEvent) {
+    if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
       const touchPos = this.getTouchCanvasPoint(touchPoint);
 
@@ -373,15 +397,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('touchmove', ['$event'])
   touchMove(event: TouchEvent): void {
+    /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
+    We disable pointer event listening and use touch events instead in this case. */
+    const is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
     event.preventDefault();
 
-    if (!window.PointerEvent) {
+    if (!window.PointerEvent || (is_android && is_firefox)) {
       //Single touch.
       if (event.touches.length === 1) {
         const touchPoint = event.changedTouches[0];
         const touchPos = this.getTouchCanvasPoint(touchPoint);
 
-        this.singleInputTouchMoveLogic(touchPos);
+        this.singleInputMoveLogic(touchPos);
       }
 
       //Pinch event.
@@ -695,23 +724,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Logic for handling panning, dragging, etc on a desktop device.
+   * Logic for handling panning, dragging, etc on a mobile device.
    *
    * @param moveInput The point of movement.
    */
-  private singleInputMouseMoveLogic(moveInput: MouseEvent | PointerEvent) {
+  private singleInputMoveLogic(moveInput: Point) {
+    const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
+    const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
 
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
-      this.currentCanvasPoint.x -= moveInput.movementX / this.scale;
-      this.currentCanvasPoint.y -= moveInput.movementY / this.scale;
+      this.currentCanvasPoint.x += moveAmountX / this.scale;
+      this.lastTouchCoords[0].x = moveInput.x;
+      this.currentCanvasPoint.y += moveAmountY / this.scale;
+      this.lastTouchCoords[0].y = moveInput.y;
       this.drawElements();
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-          station.mapPoint.x += moveInput.movementX / this.scale;
-          station.mapPoint.y += moveInput.movementY / this.scale;
+          station.mapPoint.x -= moveAmountX / this.scale;
+          this.lastTouchCoords[0].x = moveInput.x;
+          station.mapPoint.y -= moveAmountY / this.scale;
+          this.lastTouchCoords[0].y = moveInput.y;
           this.drawElements();
         }
       }
@@ -721,17 +756,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if clicked on an interactive station element.
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
-          this.mapService.currentMousePoint$.next(this.getMouseCanvasPoint(moveInput));
+          this.mapService.currentMousePoint$.next(moveInput);
           this.drawElements();
         }
       }
     } else {
-      //Track moveInput position.
-      const pos = this.getMouseCanvasPoint(moveInput);
       //Hovering over different station elements.
       for (const station of this.stations) {
         const previousHoverState = station.hoverActive;
-        station.checkElementHover(pos, this.scale);
+        station.checkElementHover(moveInput, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           if (previousHoverState !== station.hoverActive) {
             this.drawElements();
@@ -749,43 +782,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.drawElements();
           }
           this.mapCanvas.nativeElement.style.cursor = 'default';
-        }
-      }
-    }
-  }
-
-  /**
-   * Logic for handling panning, dragging, etc on a mobile device.
-   *
-   * @param moveInput The point of movement.
-   */
-  private singleInputTouchMoveLogic(moveInput: Point) {
-    const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
-    const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
-
-    if (this.dragItem === MapDragItem.Map) {
-      this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.lastTouchCoords[0].x = moveInput.x;
-      this.currentCanvasPoint.y += moveAmountY / this.scale;
-      this.lastTouchCoords[0].y = moveInput.y;
-      this.drawElements();
-    } else if (this.dragItem === MapDragItem.Station) {
-      for (const station of this.stations) {
-        if (station.dragging) {
-          station.mapPoint.x -= moveAmountX / this.scale;
-          this.lastTouchCoords[0].x = moveInput.x;
-          station.mapPoint.y -= moveAmountY / this.scale;
-          this.lastTouchCoords[0].y = moveInput.y;
-          this.drawElements();
-        }
-      }
-    } else if (this.dragItem === MapDragItem.Node) {
-      for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
-        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
-        if (station.dragging) {
-          this.mapService.currentMousePoint$.next(moveInput);
-          this.drawElements();
         }
       }
     }
