@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -57,7 +57,6 @@ export class RosterManagementModalComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    public dialogRef: MatDialogRef<RosterManagementModalComponent>,
     @Inject(MAT_DIALOG_DATA) public modalData: {
       /** The station rithmId. */
       stationId: string;
@@ -67,7 +66,6 @@ export class RosterManagementModalComponent implements OnInit {
   ) {
     this.stationRithmId = this.modalData.stationId;
     this.rosterType = this.modalData.type;
-    dialogRef.disableClose = true
   }
 
   /**
