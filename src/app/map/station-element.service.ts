@@ -76,13 +76,15 @@ export class StationElementService {
 
     const shadowEquation = (num: number) => Math.floor(num * this.mapScale) > 0 ? Math.floor(num * this.mapScale) : 1;
 
+    ctx.save();
     ctx.shadowColor = '#ccc';
     ctx.shadowBlur = shadowEquation(6);
     ctx.shadowOffsetX = shadowEquation(3);
     ctx.shadowOffsetY = shadowEquation(3);
     if (station.hoverActive === StationElementHoverType.Station
       && dragItem === MapDragItem.Station
-      && station.dragging) {
+      && station.dragging
+    ) {
       ctx.shadowOffsetY = shadowEquation(20);
       ctx.shadowBlur = shadowEquation(40);
     }
@@ -104,15 +106,16 @@ export class StationElementService {
     // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle = station.hoverActive !== StationElementHoverType.None
-    && dragItem === MapDragItem.Node
-    && !station.dragging
-    ? '#ebebeb' : '#fff';
+      && dragItem === MapDragItem.Node
+      && !station.dragging
+        ? '#ebebeb' : '#fff';
     ctx.strokeStyle = station.hoverActive !== StationElementHoverType.None
-    && dragItem === MapDragItem.Node
-    && !station.dragging
-    ? NODE_HOVER_COLOR : '#fff';
+      && dragItem === MapDragItem.Node
+      && !station.dragging
+        ? NODE_HOVER_COLOR : '#fff';
     ctx.stroke();
     ctx.fill();
+    ctx.restore();
   }
 
   /**
@@ -128,8 +131,6 @@ export class StationElementService {
 
     const scaledStationPadding = STATION_PADDING * this.mapScale;
 
-    ctx.shadowBlur = 0;
-    ctx.shadowColor = 'transparent';
     ctx.textAlign = 'left';
     ctx.fillStyle = 'black';
     const fontSize = Math.ceil(16*this.mapScale);
@@ -201,17 +202,13 @@ export class StationElementService {
     const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge
-    && dragItem !== MapDragItem.Node
-    && !station.dragging
-    ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
+      && dragItem !== MapDragItem.Node
+      && !station.dragging
+        ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16*this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
@@ -242,11 +239,6 @@ export class StationElementService {
     const scaledButtonXMargin = BUTTON_X_MARGIN * this.mapScale;
     const scaledButtonYMargin = BUTTON_Y_MARGIN * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-
     const buttonColor = BUTTON_DEFAULT_COLOR;
 
     ctx.beginPath();
@@ -264,11 +256,10 @@ export class StationElementService {
       startingX + scaledButtonXMargin - 2 * 2 - 4 * scaledButtonRadius,
       startingY + scaledButtonYMargin,
       scaledButtonRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = buttonColor;
     ctx.fillStyle = station.hoverActive === StationElementHoverType.Button
-    && dragItem !== MapDragItem.Node
-    && !station.dragging
-    ? BUTTON_HOVER_COLOR : buttonColor;
+      && dragItem !== MapDragItem.Node
+      && !station.dragging
+        ? BUTTON_HOVER_COLOR : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -294,50 +285,22 @@ export class StationElementService {
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
     const scaledNodeYMargin = NODE_Y_MARGIN * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging
-    ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node && dragItem !== MapDragItem.Node
-    ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = dragItem === MapDragItem.Node
+      && station.dragging
+        ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node
+          && dragItem !== MapDragItem.Node
+            ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (cursor.x !== -1 && station.dragging) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = dragItem === MapDragItem.Node && station.dragging
-      ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
+    ctx.strokeStyle = dragItem === MapDragItem.Node
+      && station.dragging
+        ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
-  }
-
-  /**
-   * Resets the shadow on the ctx.
-   */
-  private resetShadow(): void {
-    if (!this.canvasContext) {
-      throw new Error('Cannot reset the shadow if context is not defined');
-    }
-    const ctx = this.canvasContext;
-
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
-  }
-
-  /**
-   * Resets the stroke on the ctx.
-   */
-  private resetStroke(): void {
-    if (!this.canvasContext) {
-      throw new Error('Cannot reset the stroke if context is not defined');
-    }
-    const ctx = this.canvasContext;
-
-    ctx.setLineDash([0, 0]);
-    ctx.strokeStyle = 'transparent';
   }
 }
