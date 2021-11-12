@@ -67,13 +67,7 @@ export class RosterManagementModalComponent implements OnInit {
   ) {
     this.stationRithmId = this.modalData.stationId;
     this.rosterType = this.modalData.type;
-
-    /** This functionality for close in button or close in background the this dialog. */
-    this.dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        this.updateStationInfoDrawerName();
-      });
+    dialogRef.disableClose = true
   }
 
   /**
