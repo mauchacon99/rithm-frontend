@@ -547,7 +547,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
-      this.flowElementService.drawFlow(this.stations);
+      this.flowElementService.drawFlows();
     });
   }
 

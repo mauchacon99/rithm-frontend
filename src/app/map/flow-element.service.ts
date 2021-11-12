@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
-import { Point } from 'src/models';
+import { FlowMapElement, Point } from 'src/models';
 import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
@@ -19,41 +19,76 @@ export class FlowElementService {
     private mapService: MapService
   ) { }
 
+  drawFlows(): void {
+    if (!this.mapService.flowElements.length) {
+      return; // nothing to draw
+    }
+    const rootFlow = this.mapService.flowElements.find((flow) => flow.isReadOnlyRootFlow);
+    if (!rootFlow) {
+      throw new Error('Root flow could not be found');
+    }
+    this.drawFlow(rootFlow);
+  }
+
   /**
    * Draws a flow on the map.
    *
    * @param stations The station for which to draw the card.
    */
-  drawFlow(stations: StationMapElement[]): void {
-    this.canvasContext = this.mapService.canvasContext;
-    if (!this.canvasContext) {
-      throw new Error('Cannot draw flow if context is not defined');
+  drawFlow(flow: FlowMapElement): void {
+
+    // If flow has a sub-flow, draw that first
+    flow.subFlows.forEach((subFlowId) => {
+      const subFlow = this.mapService.flowElements.find((flowElement) => flowElement.rithmId === subFlowId);
+      if (!subFlow) {
+        throw new Error(`Couldn't find a sub-flow for which an id exists: ${subFlowId}`);
+      }
+      this.drawFlow(subFlow);
+    });
+
+    if (flow.isReadOnlyRootFlow) {
+      return;
     }
-    const ctx = this.canvasContext;
 
-    const flowPoints: Point[] = [];
+    let flowPoints: Point[] = [];
 
-    // Get the stations within this flow
-    const flowStations = stations; // TODO: dynamically get this
+    // If flow contains stations, calculate the points
+    if (flow.stations) {
+      const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
 
-    // Get all the points within this flow
-    for (const station of flowStations) {
-      const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
-      const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
-      const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
+      // Get all the points within this flow
+      for (const station of flowStations) {
+        const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
+        const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
+        const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
 
-      flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
-      flowPoints.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
-      flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
-      flowPoints.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+        flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
+        flowPoints.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
+        flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
+        flowPoints.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+      }
+    }
+
+    if (flow.subFlows) {
+      const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
+      subFlows.forEach((subFlow) => {
+        flowPoints = flowPoints.concat(subFlow.boundaryPoints);
+      });
     }
 
     // Determine the bounding box points
     let boundaryPoints = this.getConvexHull(flowPoints);
-
-    const strokeColor = CONNECTION_DEFAULT_COLOR;
+    flow.boundaryPoints = boundaryPoints;
 
     // Draw the bounding box
+    const strokeColor = CONNECTION_DEFAULT_COLOR;
+    this.canvasContext = this.mapService.canvasContext;
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw flow if context is not defined');
+    }
+
+    const ctx = this.canvasContext;
+
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle = strokeColor;
@@ -62,10 +97,12 @@ export class FlowElementService {
     boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
 
     for (const point of boundaryPoints) {
-    ctx.lineTo(point.x, point.y);
+      ctx.lineTo(point.x, point.y);
     }
     ctx.stroke();
-  }
+
+    // If flow doesn't have stations, draw shape
+    }
 
   /**
    * Gets a new array of points representing the convex hull of the given set of points. The convex hull excludes collinear points.
