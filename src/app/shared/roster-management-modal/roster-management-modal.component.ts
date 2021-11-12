@@ -14,7 +14,6 @@ import { StationRosterMember } from 'src/models';
   styleUrls: ['./roster-management-modal.component.scss']
 })
 export class RosterManagementModalComponent implements OnInit {
-
   /** List users the organization. */
   listUsersOrganization: StationRosterMember[] = [];
 
