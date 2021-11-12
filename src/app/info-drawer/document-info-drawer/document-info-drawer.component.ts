@@ -82,19 +82,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Update status document is editable or not.
    *
-   * @param stationRithmId The stationRithmId.
    * @param newStatus The new status is editable in the change for document.
    */
-  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
+  updateStatusDocumentEditable(newStatus: boolean): void {
     this.documentNameLoading = true;
     this.stationService.updateStatusDocumentEditable(this.stationRithmId, newStatus)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
+          this.documentNameEditable = documentEditableStatus;
           this.documentNameLoading = false;
-          if (documentEditableStatus) {
-            this.documentNameEditable = documentEditableStatus;
-          }
         }, error: (error: unknown) => {
           this.documentNameLoading = false;
           this.errorService.displayError(
