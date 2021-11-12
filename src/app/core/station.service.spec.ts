@@ -1,16 +1,19 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
+import { AccessToken } from 'src/helpers';
 import {
   DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
 } from 'src/models';
 import { StationService } from './station.service';
+import { UserService } from './user.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
 describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
+  let userService: UserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -448,15 +451,15 @@ describe('StationService', () => {
         email: 'workeruser@inpivota.com',
         isOwner: true,
         isWorker: false,
-    },
-    {
+      },
+      {
         rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
         firstName: 'Rithm',
         lastName: 'User',
         email: 'rithmuser@inpivota.com',
         isOwner: true,
         isWorker: false,
-    },
+      },
     ];
 
     service.getStationOwnerRoster(stationId)
@@ -575,4 +578,25 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should return the station owners roster', () => {
+    const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }
+    ];
+    service.getStationOwnerRoster(stationId)
+      .subscribe((orgInfo) => {
+        expect(orgInfo).toEqual(expectedResponse);
+      });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
 });
