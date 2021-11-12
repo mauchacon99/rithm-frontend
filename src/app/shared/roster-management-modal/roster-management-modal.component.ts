@@ -114,8 +114,8 @@ export class RosterManagementModalComponent implements OnInit {
   getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
     this.pageNumUsersOrganization = pageNum;
     this.listLoading = true;
+    this.addRemoveRosterError = false;
     this.lastUserIdClicked = '';
-
     this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
       .subscribe({
