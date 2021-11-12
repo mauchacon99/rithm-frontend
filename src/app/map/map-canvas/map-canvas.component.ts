@@ -568,6 +568,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Calculates a bounding box around the border of the canvas.
+   *
+   * @param position The position of the mouse or touch event.
+   * @returns True if the canvas point is outside the bounds.
+   */
+  private outsideBoundingBox(position: Point): boolean {
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+
+    if (position.x < canvasRect.left + 100
+      || position.x > canvasRect.right - 100
+      || position.y < canvasRect.top - 100
+      || position.y > canvasRect.bottom + 100
+    ) {
+        return true;
+      }
+    return false;
+  }
+
+  /**
    * Determines the point on the canvas that the mouse cursor/pointer is positioned.
    *
    * @param event The MouseEvent/PointerEvent for the cursor information.
@@ -623,6 +642,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       if (this.stations.find( obj => obj.dragging === true)) {
         const draggingStation = this.stations.filter( obj => obj.dragging === true);
@@ -748,7 +768,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           station.mapPoint.y -= moveAmountY / this.scale;
           this.lastTouchCoords[0].y = moveInput.y;
 
-          //move map if hit bounding box.
           this.drawElements();
         }
       }
@@ -760,7 +779,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
 
-          //move map if hit bounding box.
           this.drawElements();
         }
       }
