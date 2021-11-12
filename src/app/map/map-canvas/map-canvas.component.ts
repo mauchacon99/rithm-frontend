@@ -35,6 +35,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
+  /** Checks if point is outside the bounding box. */
+  outsideBox = false;
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
@@ -125,6 +128,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
     this.drawElements();
+    while (this.outsideBox) {
+      this.autoMapPan();
+    }
   }
 
   /**
@@ -573,20 +579,33 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Calculates a bounding box around the border of the canvas.
    *
    * @param position The position of the mouse or touch event.
-   * @returns True if the canvas point is outside the bounds.
    */
-  private outsideBoundingBox(position: Point): boolean {
+  private isOutsideBoundingBox(position: Point): void {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
 
     if (position.x < canvasRect.left + 100
       || position.x > canvasRect.right - 100
-      || position.y < canvasRect.top - 100
-      || position.y > canvasRect.bottom + 100
+      || position.y < canvasRect.top - 50
+      || position.y > canvasRect.bottom - 200
     ) {
-        return true;
-      }
-    return false;
+      this.outsideBox = true;
+    }
+    this.outsideBox = false;
   }
+
+  /**
+   * Pans the map if dragging a station or node and mouse position is outside the bounding box.
+   *
+   * @param position The position of the mouse or touch event.
+   */
+     private autoMapPan(): void {
+
+      this.currentCanvasPoint.x -= 10;
+      // this.lastTouchCoords[0].x = position.x + 10;
+      this.currentCanvasPoint.y -= 10;
+      // this.lastTouchCoords[0].y = position.y + 10;
+
+    }
 
   /**
    * Determines the point on the canvas that the mouse cursor/pointer is positioned.
@@ -765,10 +784,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-          station.mapPoint.x -= moveAmountX / this.scale;
+          station.mapPoint.x -= Math.floor(moveAmountX / this.scale);
           this.lastTouchCoords[0].x = moveInput.x;
-          station.mapPoint.y -= moveAmountY / this.scale;
+          station.mapPoint.y -= Math.floor(moveAmountY / this.scale);
           this.lastTouchCoords[0].y = moveInput.y;
+
+          this.isOutsideBoundingBox(moveInput);
 
           this.drawElements();
         }
@@ -780,6 +801,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
+
+          this.isOutsideBoundingBox(moveInput);
 
           this.drawElements();
         }
