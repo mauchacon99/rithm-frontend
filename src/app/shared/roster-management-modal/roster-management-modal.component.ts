@@ -162,6 +162,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   addUserToRoster(userIds: string): void {
     this.loadingMembers = true;
+    this.addRemoveRosterError = false;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [userIds])
       : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [userIds]);
