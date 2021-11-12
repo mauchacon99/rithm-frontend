@@ -65,6 +65,7 @@ export class FlowElementService {
     ctx.lineTo(point.x, point.y);
     }
     ctx.stroke();
+    ctx.setLineDash([]);
   }
 
   /**

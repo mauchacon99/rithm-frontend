@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
-
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -14,7 +15,10 @@ describe('DocumentInfoDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentInfoDrawerComponent],
+      declarations: [
+        DocumentInfoDrawerComponent,
+        MockComponent(LoadingIndicatorComponent)
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }

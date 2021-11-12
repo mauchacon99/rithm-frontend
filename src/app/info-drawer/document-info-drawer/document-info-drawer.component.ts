@@ -27,6 +27,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** Loading in the document name section. */
+  documentNameLoading = false;
+
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -57,14 +60,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   getStatusDocumentEditable(): void {
+    this.documentNameLoading = true;
     this.stationService.getStatusDocumentEditable(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
+          this.documentNameLoading = false;
           if (documentEditableStatus) {
             this.documentNameEditable = documentEditableStatus;
           }
         }, error: (error: unknown) => {
+          this.documentNameLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -76,17 +82,21 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Update status document is editable or not.
    *
+   * @param stationRithmId The stationRithmId.
    * @param newStatus The new status is editable in the change for document.
    */
-  updateStatusDocumentEditable(newStatus: boolean): void {
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): void {
+    this.documentNameLoading = true;
     this.stationService.updateStatusDocumentEditable(this.stationRithmId, newStatus)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
+          this.documentNameLoading = false;
           if (documentEditableStatus) {
             this.documentNameEditable = documentEditableStatus;
           }
         }, error: (error: unknown) => {
+          this.documentNameLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
