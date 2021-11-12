@@ -1,20 +1,16 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { AccessToken } from 'src/helpers';
 import {
   DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
 } from 'src/models';
 import { StationService } from './station.service';
-import { UserService } from './user.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
 describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
-  let userService: UserService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
