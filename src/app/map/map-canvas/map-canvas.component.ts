@@ -517,8 +517,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+      const pixelRatio = window.devicePixelRatio || 1;
       // Clear the canvas
-      this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
+      this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width / pixelRatio, this.mapCanvas.nativeElement.height / pixelRatio);
 
       // Calculate the station canvas points
       this.stations.forEach((station) => {
