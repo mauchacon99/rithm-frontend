@@ -95,7 +95,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
-
+    this.refreshInfoDrawer();
     this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -282,5 +282,50 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStatusStation(statusNew: MatRadioChange): void {
     this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
+  }
+
+  /**
+   * Refresh Info drawer how close modal roster management.
+   */
+  refreshInfoDrawer(): void {
+    this.stationService.refreshDrawer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.getStationInfo();
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get data about the station the document is in.
+   *
+   */
+  getStationInfo(): void {
+    this.stationLoading = true;
+    this.stationService.getStationInfo(this.stationInformation.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stationInfo) => {
+          if (stationInfo) {
+            this.stationInformation = stationInfo;
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }, complete: () => {
+          this.stationLoading = false;
+        }
+      });
   }
 }

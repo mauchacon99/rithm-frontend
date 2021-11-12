@@ -89,13 +89,51 @@ describe('StationInfoDrawerComponent', () => {
     expect(deleteStationSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should update station document generation status', () => {
+  it('should update station document generation status', async () => {
     const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStationDocumentGenerationStatus').and.callThrough();
 
     const newStatus = DocumentGenerationStatus.Manual;
 
-    component.updateStationDocumentGenerationStatus(stationId, newStatus);
+    await component.updateStationDocumentGenerationStatus(stationId, newStatus);
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
+
+  it('should update the component data', async () => {
+    const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
+    await component.getStationInfo();
+    expect(refreshDataComponent).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should show loading-indicators while get data component', () => {
+    component.getStationInfo();
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while get lasted data update', () => {
+    component.getLastUpdated(stationId);
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while get data the status station document', () => {
+    component.getStationDocumentGenerationStatus(stationId);
+    expect(component.docGenLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while update data the status station document', () => {
+    const newStatus = DocumentGenerationStatus.Manual;
+    component.updateStationDocumentGenerationStatus(stationId, newStatus);
+    expect(component.docGenLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+    expect(loadingComponent).toBeTruthy();
+  });
+
 });

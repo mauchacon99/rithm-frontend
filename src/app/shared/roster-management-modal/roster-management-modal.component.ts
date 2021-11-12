@@ -229,7 +229,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param user The user which will change its status.
    * @returns Check badge when user is added or None badge when is removed.
    */
-  getCurrentBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus'{
+  getCurrentBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus' {
     const enableBadge = this.rosterType === 'workers' ? user.isWorker : user.isOwner;
     return enableBadge ? 'check' : 'none';
   }
@@ -244,4 +244,10 @@ export class RosterManagementModalComponent implements OnInit {
     return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
 
+  /**
+   * Refresh to event info drawer.
+   */
+  updateStationInfoDrawerName(): void {
+    this.stationService.refreshInfoDrawer(true);
+  }
 }
