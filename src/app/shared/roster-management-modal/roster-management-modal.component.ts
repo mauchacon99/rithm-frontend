@@ -73,7 +73,6 @@ export class RosterManagementModalComponent implements OnInit {
       .pipe(first())
       .subscribe(() => {
         this.updateStationInfoDrawerName();
-
       });
   }
 
