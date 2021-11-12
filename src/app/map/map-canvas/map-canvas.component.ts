@@ -747,6 +747,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.lastTouchCoords[0].x = moveInput.x;
           station.mapPoint.y -= moveAmountY / this.scale;
           this.lastTouchCoords[0].y = moveInput.y;
+
+          //move map if hit bounding box.
           this.drawElements();
         }
       }
@@ -757,6 +759,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
+
+          //move map if hit bounding box.
           this.drawElements();
         }
       }
