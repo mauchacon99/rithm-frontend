@@ -294,6 +294,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (stationInfo) => {
+          this.stationLoading = false;
           if (stationInfo) {
             this.stationInformation = stationInfo;
           }
