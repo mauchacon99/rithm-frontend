@@ -119,4 +119,24 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+
+  it('should return the document field name array', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const documentId = 'E204F369-386F-4E41';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const documentFieldName = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      },
+    ];
+    service.updateDocumentName(documentId,stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(documentFieldName);
+      });
+  });
 });

@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DocumentService } from '../../core/document.service';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Reusable component for the document information header.
@@ -30,6 +33,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
+    private documentService: DocumentService,
+    private errorService: ErrorService,
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -112,5 +117,27 @@ export class DocumentInfoHeaderComponent implements OnInit {
    */
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem, { rithmId: this.rithmId });
+  }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   */
+   updateDocumentName(documentId: string, stationId: string): void {
+    this.documentService.updateDocumentName(documentId, stationId)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          // eslint-disable-next-line no-console
+          console.log(data);
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

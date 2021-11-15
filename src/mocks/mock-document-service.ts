@@ -1,4 +1,5 @@
-import { Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType
@@ -376,5 +377,35 @@ export class MockDocumentService {
     return of(documentInfo).pipe(delay(1000));
   }
 
-
+  /**
+   * Get the document field name array.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   * @returns A list of field names for document name.
+   */
+   updateDocumentName(documentId: string, stationId: string): Observable<{
+    /** The rithmId from document. */ rithmId: string;
+    /** The prompt from document.*/ prompt: string;
+  }[]> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName = [
+        {
+          prompt: 'SKU',
+          rithmId: '1lk2-as3k-12kk-9s83'
+        },
+        {
+          prompt: '-',
+          rithmId: ''
+        }
+      ];
+      return of(documentFieldName).pipe(delay(1000));
+    }
+  }
 }
