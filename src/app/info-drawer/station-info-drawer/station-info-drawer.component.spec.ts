@@ -89,19 +89,19 @@ describe('StationInfoDrawerComponent', () => {
     expect(deleteStationSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should update station document generation status', async () => {
+  it('should update station document generation status', () => {
     const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStationDocumentGenerationStatus').and.callThrough();
 
     const newStatus = DocumentGenerationStatus.Manual;
 
-    await component.updateStationDocumentGenerationStatus(stationId, newStatus);
+    component.updateStationDocumentGenerationStatus(stationId, newStatus);
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
 
-  it('should update the component data', async () => {
+  it('should update the component data', () => {
     const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
-    await component.getStationInfo();
+    component.getStationInfo();
     expect(refreshDataComponent).toHaveBeenCalledOnceWith(stationId);
   });
 
