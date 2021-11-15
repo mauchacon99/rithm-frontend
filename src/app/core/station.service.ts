@@ -21,9 +21,6 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Refresh the info drawer as BehaviorSubject. */
-  refreshDrawer$ = new BehaviorSubject<boolean>(false);
-
   constructor(
     private http: HttpClient
   ) { }
