@@ -1,17 +1,16 @@
 /**
  * Represents all separator elements of select options.
  */
-export enum SeparatorElement {
+export enum FieldNameSeparator {
+  /** Slash separator type. */
+  Slash = '/',
 
-  /** 'Slash' separator type. */
-  slash = '/',
+  /** Hyphen separator type. */
+  Hyphen = '-',
 
-  /** 'Hyphen' separator type. */
-  hyphen = '-',
-
-  /** 'Plus' separator type. */
-  plusSign = '+',
+  /** Plus separator type. */
+  PlusSign = '+',
 
   /** Ampersand separator type. */
-  ampersand = '&'
+  Ampersand = '&'
 }
