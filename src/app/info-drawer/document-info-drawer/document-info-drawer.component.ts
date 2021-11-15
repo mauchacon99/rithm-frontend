@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { first, takeUntil } from 'rxjs/operators';
+import { first, map, startWith, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 /**
  * Component for document drawer.
@@ -14,6 +15,15 @@ import { Subject } from 'rxjs';
   styleUrls: ['./document-info-drawer.component.scss']
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
+
+  /**Form Control. */
+  fieldNameControl = new FormControl();
+
+  /**Fields Options. */
+  options: string[] = ['SKU', 'Color', 'Other'];
+
+  /**Filtered Form Fields */
+  filteredOptions$: Observable<string[]> | undefined;
 
   /** Is the document name editable. */
   documentNameEditable = false;
@@ -53,6 +63,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
+
+    this.filteredOptions$ = this.fieldNameControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+    );
+  }
+
+  /**
+   * Filtered Values.
+   *
+   * @param value Current String in Field Forms.
+   * @returns Filtered value.
+   */
+   private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   /**
