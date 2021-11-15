@@ -150,12 +150,12 @@ describe('AccountCreateComponent', () => {
 
       const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
         returnValue(throwError(() => error));
-      const errorService = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+      const errorServiceSpy = spyOn(TestBed.inject(Spy), 'displayError').and.callThrough();
 
       component.createAccount();
 
       expect(createAccountSpy).toHaveBeenCalled();
-      expect(errorService).toHaveBeenCalled();
+      expect(errorServiceSpy).toHaveBeenCalled();
     })
   });
 
