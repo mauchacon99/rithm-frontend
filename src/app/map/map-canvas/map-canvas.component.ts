@@ -38,8 +38,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Checks if point is outside the bounding box. */
   outsideBox = false;
 
+  /**Set up interval for bounding box check. */
+  private outsideInterval?: NodeJS.Timeout;
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
+
+  /** The coordinate at which the current mouse point in the overall map. */
+  currentMousePoint: Point = DEFAULT_MOUSE_POINT;
 
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
@@ -118,6 +124,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((count) => {
         this.zoomCount = count;
       });
+
+    this.mapService.currentMousePoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentMousePoint = point;
+        if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
+          this.outsideBox = this.isOutsideBoundingBox(this.currentMousePoint);
+          this.checkAutoPan();
+        }
+      });
   }
 
   /**
@@ -128,9 +144,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
     this.drawElements();
-    while (this.outsideBox) {
-      this.autoMapPan();
-    }
   }
 
   /**
@@ -272,7 +285,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
         const touchPos = this.getMouseCanvasPoint(pointer);
-        //this method has better compatibility with different input types than singleInputMouseMoveLogic.
         this.singleInputMoveLogic(touchPos);
       }
 
@@ -519,6 +531,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Uses a setInterval to continuously check if mouse is outside bounding box.
+   *
+   * @param fps The framerate to animate at.
+   */
+  private checkAutoPan(fps = 60): void {
+    if (!this.outsideInterval && (this.outsideBox === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      this.outsideInterval = setInterval(() => {
+        if ((this.outsideBox === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.outsideInterval) {
+          clearInterval(this.outsideInterval);
+          this.outsideInterval = undefined;
+        }
+        this.autoMapPan();
+        this.drawElements();
+      }, 1000/ fps);
+    }
+  }
+
+  /**
    * Draws all the elements on the canvas.
    */
   private drawElements(): void {
@@ -579,33 +609,49 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Calculates a bounding box around the border of the canvas.
    *
    * @param position The position of the mouse or touch event.
+   * @returns Boolean.
    */
-  private isOutsideBoundingBox(position: Point): void {
+  private isOutsideBoundingBox(position: Point): boolean {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+    const box = () => {
+      if (((window.innerHeight + window.innerWidth) / 2) * .1 > 30) {
+        return ((window.innerHeight + window.innerWidth) / 2) * .05;
+      } else {
+        return 30;
+      }
+    };
 
-    if (position.x < canvasRect.left + 100
-      || position.x > canvasRect.right - 100
-      || position.y < canvasRect.top - 50
-      || position.y > canvasRect.bottom - 200
+    if (position.x < box()
+      || position.x > canvasRect.width - box()
+      || position.y < box()
+      || position.y > canvasRect.height - box() - 36
     ) {
-      this.outsideBox = true;
+      return true;
     }
-    this.outsideBox = false;
+    return false;
   }
 
   /**
    * Pans the map if dragging a station or node and mouse position is outside the bounding box.
-   *
-   * @param position The position of the mouse or touch event.
    */
-     private autoMapPan(): void {
+  private autoMapPan(): void {
+    const xMove = 1;
+    const yMove = 1;
 
-      this.currentCanvasPoint.x -= 10;
-      // this.lastTouchCoords[0].x = position.x + 10;
-      this.currentCanvasPoint.y -= 10;
-      // this.lastTouchCoords[0].y = position.y + 10;
+    this.currentCanvasPoint.x -= xMove;
+    this.currentCanvasPoint.y -= yMove;
 
+    if (this.dragItem === MapDragItem.Station) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          station.mapPoint.x -= xMove;
+          station.mapPoint.y -= yMove;
+          this.drawElements();
+        }
+      }
     }
+
+  }
 
   /**
    * Determines the point on the canvas that the mouse cursor/pointer is positioned.
@@ -776,20 +822,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.lastTouchCoords[0].x = moveInput.x;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
-      this.lastTouchCoords[0].y = moveInput.y;
+      this.lastTouchCoords[0] = moveInput;
       this.drawElements();
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
+          this.mapService.currentMousePoint$.next(moveInput);
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-          station.mapPoint.x -= Math.floor(moveAmountX / this.scale);
-          this.lastTouchCoords[0].x = moveInput.x;
-          station.mapPoint.y -= Math.floor(moveAmountY / this.scale);
-          this.lastTouchCoords[0].y = moveInput.y;
 
-          this.isOutsideBoundingBox(moveInput);
+          station.mapPoint.x -= Math.floor(moveAmountX / this.scale);
+          station.mapPoint.y -= Math.floor(moveAmountY / this.scale);
+
+          this.lastTouchCoords[0] = moveInput;
 
           this.drawElements();
         }
@@ -801,8 +846,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
-
-          this.isOutsideBoundingBox(moveInput);
 
           this.drawElements();
         }

@@ -18,7 +18,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent implements OnDestroy {
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
