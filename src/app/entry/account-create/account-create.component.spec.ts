@@ -127,7 +127,7 @@ describe('AccountCreateComponent', () => {
 
 
 
-    it('should show alert service in the create account', async () => {
+    it('should show alert in service in the create account how show error', async () => {
       const error = {
         error: {
           error: 'This username has already been used.'
@@ -142,12 +142,11 @@ describe('AccountCreateComponent', () => {
       const xService = fixture.debugElement.injector.get(UserService);
       //const spyAlert = spyOn(TestBed.inject(PopupService), 'alert').and.returnValue(Observable.caller(new Error('This username has already been used.')));
       //const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.callThrough(throwError(() => { error }));
-      const spyRegister = spyOn(xService, 'register').and.returnValue(throwError(()=>{
+      const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.returnValue(throwError(() => {
         error
       }));
       await component.createAccount();
-      //expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
-      expect(spyRegister).toBeUndefined();
+      expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
     })
   });
 
