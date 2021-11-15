@@ -17,6 +17,8 @@ import { UserFormComponent } from 'src/app/shared/user-form/user-form.component'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { Observable } from 'rxjs/internal/Observable';
+import { throwError } from 'rxjs';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -119,5 +121,23 @@ describe('AccountCreateComponent', () => {
       });
     });
   });
+
+  it('should show alert service in the create account', async () => {
+    const error = {
+      error: {
+        error: 'This username has already been used.'
+      }
+    };
+    const dataForm = {
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pedro@gmail.com',
+      password: '1234567'
+    }
+    //const spyAlert = spyOn(TestBed.inject(PopupService), 'alert').and.returnValue(Observable.caller(new Error('This username has already been used.')));
+    const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.callThrough();
+    await component.createAccount();
+    expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
+  })
 
 });
