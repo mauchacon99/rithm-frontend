@@ -13,15 +13,16 @@
   </div>
   <div class="w-full py-2">
     <p class="overline">station owners</p>
-    <app-roster [rosterMembers]="stationInformation.stationOwners"
+    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
       [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
       [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline">worker roster</p>
-    <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
-      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
+    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
+      [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
+      [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2">

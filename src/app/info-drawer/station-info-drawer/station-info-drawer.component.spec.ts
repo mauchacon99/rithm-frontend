@@ -136,4 +136,11 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
+  it('should refresher info drawer component after this execute event refresher', () => {
+    const eventRefresher = true;
+    const spyRefresh = spyOn(component, 'getStationInfo').and.callThrough();
+    component.refreshInfoDrawer(eventRefresher);
+    expect(spyRefresh).toHaveBeenCalledOnceWith();
+  });
+
 });

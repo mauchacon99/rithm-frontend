@@ -268,13 +268,4 @@ export class StationService {
       .set('stationRithmId', stationRithmId);
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
-
-  /**
-   * Refresh info drawer component.
-   *
-   * @param refresh Refresh param boolean.
-   */
-  refreshInfoDrawer(refresh: boolean): void {
-    this.refreshDrawer$.next(refresh);
-  }
 }

@@ -243,11 +243,4 @@ export class RosterManagementModalComponent implements OnInit {
   userHadLastError(rithmId: string): boolean {
     return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
-
-  /**
-   * Refresh to event info drawer.
-   */
-  updateStationInfoDrawerName(): void {
-    this.stationService.refreshInfoDrawer(true);
-  }
 }

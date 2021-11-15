@@ -14,9 +14,6 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** Refresh the info drawer as BehaviorSubject. */
-  refreshDrawer$ = new BehaviorSubject<boolean>(false);
-
   /**
    * Gets a station information.
    *
