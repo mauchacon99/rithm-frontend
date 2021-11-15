@@ -120,24 +120,35 @@ describe('AccountCreateComponent', () => {
         message: 'Almost there! Please check your email for a link to validate your Rithm account.'
       });
     });
-  });
 
-  it('should show alert service in the create account', async () => {
-    const error = {
-      error: {
-        error: 'This username has already been used.'
+
+
+
+
+
+
+    it('should show alert service in the create account', async () => {
+      const error = {
+        error: {
+          error: 'This username has already been used.'
+        }
+      };
+      const dataForm = {
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pedro@gmail.com',
+        password: '1234567'
       }
-    };
-    const dataForm = {
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pedro@gmail.com',
-      password: '1234567'
-    }
-    //const spyAlert = spyOn(TestBed.inject(PopupService), 'alert').and.returnValue(Observable.caller(new Error('This username has already been used.')));
-    const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.callThrough();
-    await component.createAccount();
-    expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
-  })
+      const xService = fixture.debugElement.injector.get(UserService);
+      //const spyAlert = spyOn(TestBed.inject(PopupService), 'alert').and.returnValue(Observable.caller(new Error('This username has already been used.')));
+      //const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.callThrough(throwError(() => { error }));
+      const spyRegister = spyOn(xService, 'register').and.returnValue(throwError(()=>{
+        error
+      }));
+      await component.createAccount();
+      //expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
+      expect(spyRegister).toBeUndefined();
+    })
+  });
 
 });
