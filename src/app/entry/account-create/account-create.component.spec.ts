@@ -46,7 +46,7 @@ describe('AccountCreateComponent', () => {
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: ErrorService, useClass: MockErrorService}
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();
@@ -150,13 +150,13 @@ describe('AccountCreateComponent', () => {
 
       const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
         returnValue(throwError(() => error));
-      const errorServiceSpy = spyOn(TestBed.inject(Spy), 'displayError').and.callThrough();
+      const errorServiceSpy = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
 
       component.createAccount();
 
       expect(createAccountSpy).toHaveBeenCalled();
       expect(errorServiceSpy).toHaveBeenCalled();
-    })
+    });
   });
 
 });
