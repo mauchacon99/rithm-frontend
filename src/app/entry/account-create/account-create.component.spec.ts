@@ -17,8 +17,10 @@ import { UserFormComponent } from 'src/app/shared/user-form/user-form.component'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { Observable } from 'rxjs/internal/Observable';
 import { throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from '../../../mocks/mock-error-service';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -43,7 +45,8 @@ describe('AccountCreateComponent', () => {
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService}
       ]
     })
       .compileComponents();
@@ -121,32 +124,38 @@ describe('AccountCreateComponent', () => {
       });
     });
 
-
-
-
-
-
-
-    it('should show alert in service in the create account how show error', async () => {
-      const error = {
+    it('should show alert in service in the create account how show error', () => {
+      const error = new HttpErrorResponse({
         error: {
           error: 'This username has already been used.'
-        }
-      };
-      const dataForm = {
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pedro@gmail.com',
-        password: '1234567'
-      }
-      const xService = fixture.debugElement.injector.get(UserService);
-      //const spyAlert = spyOn(TestBed.inject(PopupService), 'alert').and.returnValue(Observable.caller(new Error('This username has already been used.')));
-      //const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.callThrough(throwError(() => { error }));
-      const spyRegister = spyOn(TestBed.inject(UserService), 'register').and.returnValue(throwError(() => {
-        error
-      }));
-      await component.createAccount();
-      expect(spyRegister).toHaveBeenCalledOnceWith(dataForm.firstName, dataForm.lastName, dataForm.email, dataForm.password);
+        },
+      });
+
+      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
+        returnValue(throwError(() => error));
+      const popUpServiceSpy = spyOn(TestBed.inject(PopupService), 'alert').and.callThrough();
+
+      component.createAccount();
+
+      expect(createAccountSpy).toHaveBeenCalled();
+      expect(popUpServiceSpy).toHaveBeenCalled();
+    });
+
+    it('should show display error the error service if backend not show error', () => {
+      const error = new HttpErrorResponse({
+        error: {
+          error: ''
+        },
+      });
+
+      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
+        returnValue(throwError(() => error));
+      const errorService = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+
+      component.createAccount();
+
+      expect(createAccountSpy).toHaveBeenCalled();
+      expect(errorService).toHaveBeenCalled();
     })
   });
 
