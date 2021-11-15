@@ -12,5 +12,15 @@ export enum FieldNameSeparator {
   PlusSign = '+',
 
   /** Ampersand separator type. */
-  Ampersand = '&'
+  Ampersand = '&',
+
+  /** Vertical bar separator type.  */
+  VerticalBar = '|',
+
+  /** Colon separator type. */
+  Colon = ':',
+
+  /** Semicolon separator type. */
+  Semicolon = ';',
 }
+
