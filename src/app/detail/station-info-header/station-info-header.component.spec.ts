@@ -43,15 +43,15 @@ describe('StationInfoHeaderComponent', () => {
       expect(component.priority).toEqual(1);
     });
 
-    it('should update the station info drawer name', () => {
+    it('should update the station info drawer name', async () => {
       const currentStationName = 'Station 1';
       const stationNameSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText').and.callThrough();
-      component.updStationInfoDrawerName();
+      await component.updStationInfoDrawerName();
 
       expect(stationNameSpy).toHaveBeenCalledOnceWith(currentStationName);
     });
 
-    it('should display/hide the station info drawer in station', () => {
+    it('should display/hide the station info drawer in station', async () => {
       const drawerItem = 'stationInfo';
       const dataInformation: StationInfoDrawerData = {
         stationInformation: {
@@ -94,9 +94,9 @@ describe('StationInfoHeaderComponent', () => {
         stationName: 'Station 1',
         editMode: false,
       };
-      const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
-      component.toggleDrawer(drawerItem);
-      expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, dataInformation);
+      const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+      await component.toggleDrawer(drawerItem);
+      expect(toggleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, dataInformation);
     });
   });
 
