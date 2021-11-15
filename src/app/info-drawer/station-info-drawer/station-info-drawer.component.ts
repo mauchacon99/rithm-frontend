@@ -300,12 +300,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
-        }, complete: () => {
-          this.stationLoading = false;
         }
       });
   }
