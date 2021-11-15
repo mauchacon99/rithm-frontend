@@ -5,7 +5,7 @@ import { StationInfoDrawerComponent } from './station-info-drawer/station-info-d
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentInfoDrawerComponent } from './document-info-drawer/document-info-drawer.component';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
@@ -19,7 +19,8 @@ import { MatRadioModule } from '@angular/material/radio';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatRadioModule
+    MatRadioModule,
+    FormsModule
   ],
   exports: [
     InfoDrawerComponent
