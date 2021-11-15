@@ -4,7 +4,7 @@ import { UserService } from 'src/app/core/user.service';
 import { MockUserService } from 'src/mocks';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
-import { StationService } from '../../core/station.service';
+import { StationService } from 'src/app/core/station.service';
 import { StationInfoDrawerData } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
