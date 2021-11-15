@@ -1,9 +1,9 @@
 /**
- * Represents all information about document name fields.
+ * Represents all information about document field names.
  */
 export interface DocumentNameFields {
-  /** The global Rithm ID for these document name fields. */
+  /** The rithm ID for these document field names. */
   rithmId: string;
-  /** The name/label of the document name fields. */
+  /** The name/label of the document field name. */
   prompt: string;
 }
