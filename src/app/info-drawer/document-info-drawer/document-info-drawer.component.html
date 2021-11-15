@@ -12,7 +12,7 @@
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
       <div class="pt-1" *ngIf="!documentNameLoading">
-        <mat-checkbox>
+        <mat-checkbox (click)="updateStatusDocumentEditable(!documentNameEditable)" [(ngModel)]="documentNameEditable">
           Editable Name
         </mat-checkbox>
       </div>
