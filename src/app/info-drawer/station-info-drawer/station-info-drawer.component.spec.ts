@@ -136,7 +136,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should refresher info drawer component after this execute event refresher', () => {
+  it('should refresher data info drawer component after this execute event refresher the dialog', () => {
     const eventRefresher = true;
     const spyRefresh = spyOn(component, 'getStationInfo').and.callThrough();
     component.refreshInfoDrawer(eventRefresher);
