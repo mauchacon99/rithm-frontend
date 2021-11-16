@@ -37,7 +37,7 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection if context is not defined');
     }
 
-    this.drawConnectionLine(startPoint, endPoint);
+    // this.drawConnectionLine(startPoint, endPoint);
     this.drawConnectionArrow(startPoint, endPoint);
   }
 
@@ -105,6 +105,59 @@ export class ConnectionElementService {
     ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
     ctx.strokeStyle = CONNECTION_DEFAULT_COLOR;
     ctx.stroke();
+  }
+
+  /**
+   * Get the line for a connection.
+   *
+   * @param startPoint The point at which the line starts.
+   * @param endPoint The point at which the line ends.
+   * @returns Connection line between stations.
+   */
+   getConnectionLine(startPoint: Point, endPoint: Point): Path2D {
+    const path = new Path2D();
+    if (startPoint.x - STATION_WIDTH*1.5*this.mapScale < endPoint.x) {
+      const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
+      path.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    } else {
+      //Using trig to get points.
+      const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
+      {
+        x: Math.floor(startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
+        y: Math.floor(startPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
+      } :
+      {
+        x: Math.floor((startPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)) - STATION_WIDTH/1.5*this.mapScale),
+        y: Math.floor(startPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
+      };
+      const endArc: Point = startPoint.y <= endPoint.y ?
+      {
+        x: Math.floor(endPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(1.5*Math.PI)),
+        y: Math.floor(endPoint.y - STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(1.5*Math.PI))
+      } :
+      {
+        x: Math.floor(endPoint.x + STATION_HEIGHT/3*this.mapScale * Math.cos(.5*Math.PI)),
+        y: Math.floor(endPoint.y + STATION_HEIGHT/3*this.mapScale + STATION_HEIGHT/3*this.mapScale * Math.sin(.5*Math.PI))
+      };
+
+      startPoint.y >= endPoint.y + STATION_HEIGHT*this.mapScale
+      || (startPoint.y <= endPoint.y  &&  startPoint.y >= endPoint.y - STATION_HEIGHT*this.mapScale) ?
+        path.arc(
+          startPoint.x, startPoint.y - STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, true) :
+        path.arc(
+          startPoint.x, startPoint.y + STATION_HEIGHT/3*this.mapScale, STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, false);
+        path.bezierCurveTo(
+        startArc.x - STATION_WIDTH*this.mapScale, startArc.y,
+        endArc.x + STATION_WIDTH*this.mapScale, endArc.y,
+        endArc.x, endArc.y);
+      startPoint.y <= endPoint.y ?
+        path.arc(
+          endPoint.x, endPoint.y - STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, 1.5 * Math.PI, .5 * Math.PI, true) :
+        path.arc(
+          endPoint.x, endPoint.y + STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, false);
+    }
+    return path;
   }
 
   /**

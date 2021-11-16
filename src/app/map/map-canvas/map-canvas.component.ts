@@ -5,8 +5,8 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
-  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  BUTTON_RADIUS, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_MOUSE_POINT,
+  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_REDUCED_RENDER, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -64,6 +64,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
+
+  /** Connection line path between stations. */
+  line = new Path2D();
 
   /**
    * Add station mode active.
@@ -327,6 +330,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const pos = this.getMouseCanvasPoint(event);
       this.singleInputMoveLogic(pos);
     }
+    if (this.context.isPointInStroke(this.line, event.offsetX, event.offsetY)) {
+      this.context.strokeStyle = 'green';
+    } else {
+      this.context.strokeStyle = 'red';
+    }
+    this.context.stroke(this.line);
   }
 
   /**
@@ -541,6 +550,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             x: outgoingStation?.canvasPoint.x,
             y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
           };
+          // this.connectionElementService.drawConnection(startPoint, endPoint);
+          const line = this.connectionElementService.getConnectionLine(startPoint, endPoint);
+          const ctx = this.context;
+
+          // Draw connection line
+          ctx.setLineDash([0, 0]);
+
+          // Line
+          ctx.beginPath();
+          ctx.moveTo(startPoint.x, startPoint.y);
+          ctx.lineWidth = this.scale > SCALE_REDUCED_RENDER
+          ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+          ctx.strokeStyle = CONNECTION_DEFAULT_COLOR;
+          ctx.stroke(line);
           this.connectionElementService.drawConnection(startPoint, endPoint);
         }
       }
