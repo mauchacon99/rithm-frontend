@@ -283,4 +283,40 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   updateStatusStation(statusNew: MatRadioChange): void {
     this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
   }
+
+  /**
+   * Get data about the station the document is in.
+   *
+   */
+  getStationInfo(): void {
+    this.stationLoading = true;
+    this.stationService.getStationInfo(this.stationInformation.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stationInfo) => {
+          this.stationLoading = false;
+          if (stationInfo) {
+            this.stationInformation = stationInfo;
+          }
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Refresh the Info drawer after modal is close.
+   *
+   * @param event Result from closing roster management modal.
+   */
+  refreshInfoDrawer(event: boolean): void {
+    if (event === true) {
+      this.getStationInfo();
+    }
+  }
 }
