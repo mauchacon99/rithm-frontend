@@ -383,11 +383,11 @@ export class MockDocumentService {
    *
    * @param documentId The id of document.
    * @param stationId  The id of station.
-   * @param appendedFields  The appended files.
+   * @param appendedFiles  The appended files.
    * @returns A list of field names for document name.
    */
-   updateDocumentName(documentId: string, stationId: string, appendedFields: string[]): Observable<DocumentNameField[]> {
-    if (!documentId || !stationId || !appendedFields) {
+  updateDocumentName(documentId: string, stationId: string, appendedFiles: string[]): Observable<DocumentNameField[]> {
+    if (!documentId || !stationId || !appendedFiles) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'

@@ -56,7 +56,7 @@ export class DocumentService {
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
-      { params: { documentId, stationId }}
+      { params: { documentId, stationId } }
     );
   }
 
@@ -68,7 +68,7 @@ export class DocumentService {
    * @param appendedFiles  The appended files.
    * @returns A list of field names for document name.
    */
-   updateDocumentName(documentId: string, stationId: string, appendedFiles: string[]): Observable<DocumentNameField[]> {
+  updateDocumentName(documentId: string, stationId: string, appendedFiles: string[]): Observable<DocumentNameField[]> {
     if (!documentId || !stationId || !appendedFiles) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -89,5 +89,4 @@ export class DocumentService {
       return of(documentFieldName).pipe(delay(1000));
     }
   }
-
 }

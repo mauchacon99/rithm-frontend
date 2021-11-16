@@ -15,7 +15,7 @@ describe('DocumentService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
-      ]
+      ],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -123,7 +123,7 @@ describe('DocumentService', () => {
   it('should return the document field name array', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
-    const appendFiles: string[] = ['123', '456'];
+    const appendFiles: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const documentFieldName = [
       {
@@ -135,6 +135,7 @@ describe('DocumentService', () => {
         rithmId: ''
       },
     ];
+
     service.updateDocumentName(documentId, stationId, appendFiles)
       .subscribe((response) => {
         expect(response).toEqual(documentFieldName);
@@ -142,76 +143,43 @@ describe('DocumentService', () => {
   });
 
   it('If stationId is empty or missing show error', () => {
-    const stationIdEmpty = '';
-    const documentIdNotEmpty = 'E204F369-386F-4E41';
-    const appendFilesNotEmpty: string[] = ['123'];
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const documentFieldName = [
-      {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
-      },
-      {
-        prompt: '-',
-        rithmId: ''
-      },
-    ];
-    service.updateDocumentName(documentIdNotEmpty, stationIdEmpty, appendFilesNotEmpty)
+    const stationId = '';
+    const documentId = 'E204F369-386F-4E41';
+    const appendFiles: string[] = ['123'];
+    service.updateDocumentName(documentId, stationId, appendFiles)
       .subscribe({
-        next: (responseStationIdEmpty) => {
-          expect(responseStationIdEmpty).toEqual(documentFieldName);
-        }, error: (errorStationIdEmpty: unknown) => {
-          expect(errorStationIdEmpty).toThrow();
+        error: () => {
+          expect(function() {
+            throw new TypeError();
+          }).toThrowError(Error);
         }
       });
   });
 
   it('If documentId is empty or missing show error', () => {
-    const stationIdNotEmpty = 'E204F369-386F-4E41';
-    const documentIdEmpty = '';
-    const appendFilesNotEmpty: string[] = ['123', '456'];
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const documentFieldName = [
-      {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
-      },
-      {
-        prompt: '-',
-        rithmId: ''
-      },
-    ];
-    service.updateDocumentName(documentIdEmpty, stationIdNotEmpty, appendFilesNotEmpty)
+    const stationId = 'E204F369-386F-4E41';
+    const documentId = '';
+    const appendFiles: string[] = ['123'];
+    service.updateDocumentName(documentId, stationId, appendFiles)
       .subscribe({
-        next: (responseDocumentIdEmpty) => {
-          expect(responseDocumentIdEmpty).toEqual(documentFieldName);
-        }, error: (errorDocumentIdEmpty: unknown) => {
-          expect(errorDocumentIdEmpty).toThrow();
+        error: () => {
+          expect(function() {
+            throw new TypeError();
+          }).toThrowError(Error);
         }
       });
   });
 
   it('If appendFiles is empty or missing show error', () => {
-    const stationIdNotEmpty = 'E204F369-386F-4E41';
-    const documentIdNotEmpty = 'E204F369-386F-4E41';
-    const appendFilesEmpty: string[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const documentFieldName3 = [
-      {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
-      },
-      {
-        prompt: '-',
-        rithmId: ''
-      },
-    ];
-    service.updateDocumentName(documentIdNotEmpty, stationIdNotEmpty, appendFilesEmpty)
+    const stationId = 'E204F369-386F-4E41';
+    const documentId = 'E204F369-386F-4E41';
+    const appendFiles: string[] = [];
+    service.updateDocumentName(documentId, stationId, appendFiles)
       .subscribe({
-        next: (responseAppendFilesEmpty) => {
-          expect(responseAppendFilesEmpty).toEqual(documentFieldName3);
-        }, error: (errorAppendFilesEmpty: unknown) => {
-          expect(errorAppendFilesEmpty).toThrow();
+        error: () => {
+          expect(function() {
+            throw new TypeError();
+          }).toThrowError(Error);
         }
       });
   });
