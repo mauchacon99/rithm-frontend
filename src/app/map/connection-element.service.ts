@@ -116,6 +116,7 @@ export class ConnectionElementService {
    */
    getConnectionLine(startPoint: Point, endPoint: Point): Path2D {
     const path = new Path2D();
+    path.moveTo(startPoint.x, startPoint.y);
     if (startPoint.x - STATION_WIDTH*1.5*this.mapScale < endPoint.x) {
       const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
       path.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
