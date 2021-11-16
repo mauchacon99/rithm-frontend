@@ -35,9 +35,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Fields to Document in the station. */
   fieldsToDocument: DocumentNameField[] = [];
 
-  /** Document Id. */
-  documentId = '';
-
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -50,12 +47,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         const dataDrawer = data as {
           /** RithmId station. */
           rithmId: string;
-          /** Document Id. */
-          documentId: string;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
-          this.documentId = dataDrawer.documentId;
         }
       });
   }
@@ -127,7 +121,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get appended fields to document.
    */
   getFieldsToDocument(): void {
-    this.documentService.getFieldsToDocument(this.documentId, this.stationRithmId)
+    this.documentService.getFieldsToDocument(this.stationRithmId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {

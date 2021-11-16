@@ -120,7 +120,6 @@ describe('DocumentService', () => {
   });
 
   it('should return appended fields to document', () => {
-    const documentId = '1234-1234';
     const stationId = '7654-321';
     const expectData: DocumentNameField[] = [
       {
@@ -133,16 +132,15 @@ describe('DocumentService', () => {
       }
     ];
 
-    service.getFieldsToDocument(documentId, stationId).subscribe((data) => {
+    service.getFieldsToDocument(stationId).subscribe((data) => {
       expect(data).toEqual(expectData);
     });
   });
 
   it('should show error if parameters is empty or null', () => {
-    const documentId = '';
     const stationId = '';
 
-    service.getFieldsToDocument(documentId, stationId)
+    service.getFieldsToDocument(stationId)
       .subscribe({
         error: (error: unknown) => {
           expect(error).toThrowError();

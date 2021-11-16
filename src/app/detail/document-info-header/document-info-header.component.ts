@@ -54,7 +54,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
-    this.getFieldsToDocument(this.documentId, this.rithmId);
+    this.getFieldsToDocument(this.rithmId);
   }
 
   /**
@@ -119,15 +119,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
   }
 
   /**
-   * The id of the document.
-   *
-   * @returns The id of the Document.
-   */
-  get documentId(): string {
-    return 'documentRithmId' in this.documentInformation ? this.documentInformation.documentRithmId : '';
-  }
-
-  /**
    * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
@@ -135,8 +126,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId,
-        documentId: this.documentId
+        rithmId: this.rithmId
       }
     );
   }
@@ -144,11 +134,10 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /**
    * Get appended fields to document.
    *
-   * @param documentId The id of document.
    * @param stationId  The id of station.
    */
-  getFieldsToDocument(documentId: string, stationId: string): void {
-    this.documentService.getFieldsToDocument(documentId, stationId)
+  getFieldsToDocument(stationId: string): void {
+    this.documentService.getFieldsToDocument(stationId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {

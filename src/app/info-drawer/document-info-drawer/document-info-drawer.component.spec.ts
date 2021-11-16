@@ -62,13 +62,11 @@ describe('DocumentInfoDrawerComponent', () => {
   });
 
   it('should data the fields in the document', () => {
-    const documentId = '321-654-987';
     component.stationRithmId = stationId;
-    component.documentId = documentId;
     const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getFieldsToDocument').and.callThrough();
 
     component.getFieldsToDocument();
 
-    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.documentId, component.stationRithmId);
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 });

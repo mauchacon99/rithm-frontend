@@ -58,10 +58,8 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    const documentId = 'E204F369-386F-4E41';
     const expectedData = {
-      rithmId: rithmId,
-      documentId: documentId
+      rithmId: rithmId
     };
     const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -70,11 +68,10 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should data the fields in the document', () => {
     const stationId = '1234-1234-123';
-    const documentId = '321-654-987';
     const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getFieldsToDocument').and.callThrough();
 
-    component.getFieldsToDocument(documentId, stationId);
+    component.getFieldsToDocument(stationId);
 
-    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(documentId, stationId);
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 });

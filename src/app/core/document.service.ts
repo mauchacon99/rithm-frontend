@@ -62,15 +62,14 @@ export class DocumentService {
   /**
    * Get appended fields to document.
    *
-   * @param documentId The id of document.
    * @param stationId  The id of station.
    * @returns Array the fields in document.
    */
-  getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
-    if (!documentId || !stationId) {
+  getFieldsToDocument(stationId: string): Observable<DocumentNameField[]> {
+    if (!stationId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Invalid documentId or stationId.'
+          error: 'Invalid stationId.'
         }
       })).pipe(delay(1000));
     } else {
