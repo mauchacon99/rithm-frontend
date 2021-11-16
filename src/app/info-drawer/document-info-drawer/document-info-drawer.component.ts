@@ -4,7 +4,7 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Component for document drawer.
@@ -16,8 +16,8 @@ import { FormControl } from '@angular/forms';
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
-  /**Form Control. */
-  fieldNameControl = new FormControl();
+  /** Organization name form. */
+  appendFieldForm: FormGroup;
 
   /**Fields Options. */
   options: string[] = ['SKU', 'Color', 'Other'];
@@ -41,10 +41,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   documentNameLoading = false;
 
   constructor(
+    private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
   ) {
+    this.appendFieldForm = this.fb.group({
+      appendField: ''
+    });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -64,7 +69,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
 
-    this.filteredOptions$ = this.fieldNameControl.valueChanges.pipe(
+    this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
