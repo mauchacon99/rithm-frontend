@@ -98,4 +98,49 @@ describe('StationInfoDrawerComponent', () => {
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
+
+  it('should update the component data', () => {
+    const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
+    component.getStationInfo();
+    expect(refreshDataComponent).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should show loading-indicators while get data component', () => {
+    component.getStationInfo();
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while get lasted data update', () => {
+    component.getLastUpdated(stationId);
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while get data the status station document', () => {
+    component.getStationDocumentGenerationStatus(stationId);
+    expect(component.docGenLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while update data the status station document', () => {
+    const newStatus = DocumentGenerationStatus.Manual;
+    component.updateStationDocumentGenerationStatus(stationId, newStatus);
+    expect(component.docGenLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should refresher data info drawer component after this execute event refresher the dialog', () => {
+    const eventRefresher = true;
+    const spyRefresh = spyOn(component, 'getStationInfo').and.callThrough();
+    component.refreshInfoDrawer(eventRefresher);
+    expect(spyRefresh).toHaveBeenCalledOnceWith();
+  });
+
 });
