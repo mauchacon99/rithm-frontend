@@ -41,6 +41,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Set up interval for bounding box check. */
   private outsideInterval?: NodeJS.Timeout;
 
+  /**Track what the next pan velocity is. */
+  nextPanVelocity: Point = {x: 0, y: 0};
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
@@ -130,8 +133,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((point) => {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
-          this.outsideBox = this.isOutsideBoundingBox(this.currentMousePoint);
-          this.checkAutoPan(this.currentMousePoint);
+          const velocity = this.setPanVelocity(this.currentMousePoint);
+          if (velocity.x === 0 && velocity.y === 0) {
+            this.outsideBox = false;
+          } else {
+            this.outsideBox = true;
+          }
+          this.nextPanVelocity = velocity;
+          this.checkAutoPan();
         }
       });
   }
@@ -533,17 +542,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Uses a setInterval to continuously check if mouse is outside bounding box.
    *
-   * @param position The position of the pointer, etc event.
    * @param fps The framerate to animate at.
    */
-  private checkAutoPan(position: Point, fps = 60): void {
+  private checkAutoPan(fps = 60): void {
     if (!this.outsideInterval && (this.outsideBox === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
       this.outsideInterval = setInterval(() => {
         if ((this.outsideBox === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.outsideInterval) {
           clearInterval(this.outsideInterval);
           this.outsideInterval = undefined;
         }
-        this.autoMapPan(position);
+        this.autoMapPan(this.nextPanVelocity);
         this.drawElements();
       }, 1000/ fps);
     }
@@ -612,7 +620,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the pointer, etc event.
    * @returns Boolean.
    */
-  private isOutsideBoundingBox(position: Point): Point {
+  private setPanVelocity(position: Point): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     const box = () => {
       //Dynamically set the size of the bounding box based on screen size.
@@ -623,17 +631,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     };
 
+    console.log(box());
+
+    const panVelocity: Point = {x: 0, y: 0};
+
+    //Set direction and speed to pan x.
     if (position.x < box()) {
-
+      const leftPan = Math.floor((box() - position.x) * .1 / this.scale);
+      panVelocity.x = leftPan <= Math.floor(10 / this.scale) ? leftPan : Math.floor(10 / this.scale);
+      console.log(panVelocity.x);
     } else if (position.x > canvasRect.width - box()) {
-
-    } else if (position.y < box()) {
-
-    } else if (position.y > canvasRect.height - box() - 36) {
-
+      // console.log(Math.floor((position.x - box()) * .1));
+      panVelocity.x = -1;
     }
-    //Do not pan.
-    return {x: 0, y: 0};
+
+    //Set direction and speed to pan y.
+    if (position.y < box()) {
+      const topPan = Math.floor((box() - position.y) * .1 / this.scale);
+      panVelocity.y = topPan <= Math.floor(10 / this.scale) ? topPan : Math.floor(10 / this.scale);
+      console.log(panVelocity.y);
+    } else if (position.y > canvasRect.height - box() - 36) {
+      panVelocity.y = -1;
+    }
+
+    return panVelocity;
   }
 
   /**
