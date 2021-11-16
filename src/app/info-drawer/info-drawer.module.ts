@@ -7,6 +7,7 @@ import { DocumentInfoDrawerComponent } from './document-info-drawer/document-inf
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatInputModule,
     ReactiveFormsModule,
     MatRadioModule,
+    MatSelectModule,
     FormsModule
   ],
   exports: [
