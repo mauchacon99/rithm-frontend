@@ -144,7 +144,7 @@ describe('AccountCreateComponent', () => {
     it('should show display error the error service if backend not show error', () => {
       const error = new HttpErrorResponse({
         error: {
-          error: ' '
+          error: ''
         },
       });
 
