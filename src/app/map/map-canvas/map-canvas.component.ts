@@ -584,6 +584,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Determines the point on the canvas context that the mouse cursor/pointer or touch event is positioned. This adjusts for the pixel
+   * ratio in order to report an accurate position when using `context` methods like `isPointInPath` or `isPointInStroke`.
+   *
+   * @param event The event for the cursor or touch information.
+   * @returns An accurate point for the cursor or touch position on the canvas context.
+   */
+   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
+    const canvasPoint = this.getEventCanvasPoint(event);
+    return {
+      x: canvasPoint.x * window.devicePixelRatio,
+      y: canvasPoint.y * window.devicePixelRatio
+    };
+  }
+
+  /**
    * Handles mouseDown and touchStart logic.
    *
    * @param position The position of the mouse or touch event.
