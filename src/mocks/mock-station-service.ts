@@ -14,6 +14,9 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationName$ = new BehaviorSubject<string>('');
+
   /**
    * Gets a station information.
    *
@@ -499,4 +502,15 @@ export class MockStationService {
     const expectedResponse = true;
     return of(expectedResponse).pipe(delay(1000));
   }
+
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+   updatedDocumentStationNameText(documentName: string): void {
+    this.documentStationName$.next(documentName);
+  }
+
 }

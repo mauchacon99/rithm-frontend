@@ -21,6 +21,9 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationName$ = new BehaviorSubject<string>('');
+
   constructor(
     private http: HttpClient
   ) { }
@@ -213,6 +216,15 @@ export class StationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+  updatedDocumentStationNameText(documentName: string): void {
+    this.documentStationName$.next(documentName);
   }
 
   /**
