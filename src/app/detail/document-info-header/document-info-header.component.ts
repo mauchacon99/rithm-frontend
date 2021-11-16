@@ -54,6 +54,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
+    console.log('documentId',this.documentId,'---', this.documentInformation);
+
     this.getFieldsToDocument(this.documentId, this.rithmId);
   }
 

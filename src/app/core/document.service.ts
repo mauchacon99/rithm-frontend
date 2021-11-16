@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { delay, Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { delay, Observable, of, throwError } from 'rxjs';
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -55,7 +55,7 @@ export class DocumentService {
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
-      { params: { documentId, stationId }}
+      { params: { documentId, stationId } }
     );
   }
 
@@ -66,18 +66,26 @@ export class DocumentService {
    * @param stationId  The id of station.
    * @return Array the fields in document.
    */
-   getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
-    const documentFieldName: DocumentNameField[] = [
-      {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
-      },
-      {
-        prompt: '-',
-        rithmId: ''
-      }
-    ];
-    return of(documentFieldName).pipe(delay(1000));
+  getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Invalid documentId or stationId.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName: DocumentNameField[] = [
+        {
+          prompt: 'SKU',
+          rithmId: '1lk2-as3k-12kk-9s83'
+        },
+        {
+          prompt: '-',
+          rithmId: ''
+        }
+      ];
+      return of(documentFieldName).pipe(delay(1000));
+    }
   }
 
 }

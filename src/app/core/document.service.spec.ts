@@ -138,4 +138,16 @@ describe('DocumentService', () => {
     });
   })
 
+  it('should show error if parameters is empty or null', () => {
+    const documentId = '';
+    const stationId = '';
+
+    service.getFieldsToDocument(documentId, stationId)
+      .subscribe({
+        error: (error) => {
+          expect(error).toThrow();
+        }
+      });
+  })
+
 });
