@@ -144,7 +144,7 @@ describe('DocumentService', () => {
     service.getFieldsToDocument(stationId)
       .subscribe({
         error: (error: HttpErrorResponse) => {
-          expect(error).toThrowError();
+          expect(error).toThrowError( );
         }
       });
   });
