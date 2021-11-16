@@ -1,11 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { MockUserService, MockStationService } from 'src/mocks';
 
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { StationService } from 'src/app/core/station.service';
 import { StationInformation } from 'src/models/station-info';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -72,6 +75,12 @@ describe('StationInfoHeaderComponent', () => {
       declarations: [
         StationInfoHeaderComponent,
       ],
+      imports: [
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        BrowserAnimationsModule
+      ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
@@ -84,8 +93,9 @@ describe('StationInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationInfoHeaderComponent);
     component = fixture.componentInstance;
+    component.stationInformation = stationInformation;
+    component.stationEditMode = true;
     fixture.detectChanges();
-
   });
 
   it('should create', () => {
