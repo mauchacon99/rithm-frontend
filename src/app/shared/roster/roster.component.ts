@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { StationRosterMember } from 'src/models';
 import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
+import { first } from 'rxjs';
 
 /**
  * Reusable component for all user/roster selection and display.
@@ -36,7 +37,10 @@ export class RosterComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
-  constructor(private dialog: MatDialog) {}
+  /** Emit the close modal. */
+  @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  constructor(private dialog: MatDialog) { }
 
   /**
    * Set the number of roster members to show when less than 3.
@@ -53,7 +57,7 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
-      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker}
+      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker }
     });
   }
 
@@ -61,10 +65,14 @@ export class RosterComponent implements OnInit {
    * Opens a modal with roster management.
    */
   openManagementRosterModal(): void {
-    this.dialog.open(RosterManagementModalComponent, {
-      panelClass: ['w-5/6','sm:w-4/5'],
+    const dialog = this.dialog.open(RosterManagementModalComponent, {
+      panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: { stationId: this.stationId, type: this.isWorker ? 'workers' : 'owners'  }
+      disableClose: true,
+      data: { stationId: this.stationId, type: this.isWorker ? 'workers' : 'owners' }
+    });
+    dialog.afterClosed().pipe(first()).subscribe(result => {
+      this.modalClosed.emit(result);
     });
   }
 }
