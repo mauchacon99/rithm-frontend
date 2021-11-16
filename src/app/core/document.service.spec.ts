@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -142,7 +143,7 @@ describe('DocumentService', () => {
 
     service.getFieldsToDocument(stationId)
       .subscribe({
-        error: (error: unknown) => {
+        error: (error: HttpErrorResponse) => {
           expect(error).toThrowError();
         }
       });
