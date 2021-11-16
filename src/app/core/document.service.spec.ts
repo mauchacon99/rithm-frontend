@@ -5,6 +5,7 @@ import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, U
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
 import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -136,17 +137,6 @@ describe('DocumentService', () => {
     service.getFieldsToDocument(stationId).subscribe((data) => {
       expect(data).toEqual(expectData);
     });
-  });
-
-  it('should show error if parameters is empty or null', () => {
-    const stationId = '';
-
-    service.getFieldsToDocument(stationId)
-      .subscribe({
-        error: (error: HttpErrorResponse) => {
-          expect(error).toThrowError( );
-        }
-      });
   });
 
 });
