@@ -145,7 +145,7 @@ describe('DocumentService', () => {
     service.getFieldsToDocument(documentId, stationId)
       .subscribe({
         error: (error: unknown) => {
-          expect(error).toThrow();
+          expect(error).toThrowError();
         }
       });
   });
