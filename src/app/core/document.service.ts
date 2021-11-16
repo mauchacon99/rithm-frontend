@@ -66,25 +66,17 @@ export class DocumentService {
    * @returns Array the fields in document.
    */
   getFieldsToDocument(stationId: string): Observable<DocumentNameField[]> {
-    if (!stationId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Invalid stationId.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const documentFieldName: DocumentNameField[] = [
-        {
-          prompt: 'SKU',
-          rithmId: '1lk2-as3k-12kk-9s83'
-        },
-        {
-          prompt: '-',
-          rithmId: ''
-        }
-      ];
-      return of(documentFieldName).pipe(delay(1000));
-    }
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+    return of(documentFieldName).pipe(delay(1000));
   }
 
 }
