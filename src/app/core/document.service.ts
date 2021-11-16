@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { delay, Observable, of, throwError } from 'rxjs';
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
 import { environment } from 'src/environments/environment';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -64,13 +65,11 @@ export class DocumentService {
    *
    * @param documentId The id of document.
    * @param stationId  The id of station.
+   * @param appendedFiles  The appended files.
    * @returns A list of field names for document name.
    */
-   updateDocumentName(documentId: string, stationId: string): Observable<{
-    /** The rithmId from document. */ rithmId: string;
-    /** The prompt from document.*/ prompt: string;
-  }[]> {
-    if (!documentId || !stationId) {
+   updateDocumentName(documentId: string, stationId: string, appendedFiles: string[]): Observable<DocumentNameField[]> {
+    if (!documentId || !stationId || !appendedFiles) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'

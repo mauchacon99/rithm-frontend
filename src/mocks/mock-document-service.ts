@@ -4,6 +4,7 @@ import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType
 } from 'src/models';
+import { DocumentNameField } from 'src/models/document-name-field';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -382,13 +383,11 @@ export class MockDocumentService {
    *
    * @param documentId The id of document.
    * @param stationId  The id of station.
+   * @param appendedFields  The appended files.
    * @returns A list of field names for document name.
    */
-   updateDocumentName(documentId: string, stationId: string): Observable<{
-    /** The rithmId from document. */ rithmId: string;
-    /** The prompt from document.*/ prompt: string;
-  }[]> {
-    if (!documentId || !stationId) {
+   updateDocumentName(documentId: string, stationId: string, appendedFields: string[]): Observable<DocumentNameField[]> {
+    if (!documentId || !stationId || !appendedFields) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'

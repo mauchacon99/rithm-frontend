@@ -14,7 +14,7 @@ import { DocumentTemplateComponent } from 'src/app/document/document-template/do
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockDocumentService, MockErrorService, MockStationService } from 'src/mocks';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
@@ -22,6 +22,7 @@ import { StationTemplateComponent } from '../station-template/station-template.c
 import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -56,7 +57,9 @@ describe('StationComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        {provide: DocumentService,useClass:MockDocumentService},
+        {provide: ErrorService, useClass:MockErrorService}
       ]
     })
     .compileComponents();

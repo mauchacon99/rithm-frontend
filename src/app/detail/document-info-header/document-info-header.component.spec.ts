@@ -4,10 +4,6 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
-import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from '../../../mocks/mock-document-service';
-import { MockErrorService } from '../../../mocks/mock-error-service';
-import { ErrorService } from 'src/app/core/error.service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -20,10 +16,6 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule
-      ],
-      providers:[
-        {provide: DocumentService,useClass:MockDocumentService},
-        {provide: ErrorService, useClass:MockErrorService}
       ]
     })
       .compileComponents();

@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Main component for viewing a station.
@@ -65,6 +66,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private documentService: DocumentService,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -244,4 +246,27 @@ export class StationComponent implements OnInit, OnDestroy {
   //     );
   //   });
   // }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   * @param appendedFields  The appended files.
+   */
+   updateDocumentName(documentId: string, stationId: string, appendedFields: string[]): void {
+    this.documentService.updateDocumentName(documentId, stationId,appendedFields)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const documentName=data;  //this instruction will be modified when data is received and this comment will also be removed
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }
