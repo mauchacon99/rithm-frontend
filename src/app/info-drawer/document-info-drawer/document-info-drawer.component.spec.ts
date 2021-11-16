@@ -5,13 +5,18 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule  } from '@angular/material/input';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
   let fixture: ComponentFixture<DocumentInfoDrawerComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+  const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,11 +26,17 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: FormGroup, useValue: formBuilder },
       ],
       imports: [
         MatCheckboxModule,
-        FormsModule
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        NoopAnimationsModule
       ],
     })
       .compileComponents();
