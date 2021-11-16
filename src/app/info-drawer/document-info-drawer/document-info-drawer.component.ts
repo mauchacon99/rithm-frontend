@@ -36,7 +36,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   fieldsToDocument: DocumentNameField[] = [];
 
   /** Document Id. */
-  documentId: string = '';
+  documentId = '';
 
   constructor(
     private stationService: StationService,
@@ -140,6 +140,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             error
           );
         }
-      })
+      });
   }
 }

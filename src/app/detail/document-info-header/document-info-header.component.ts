@@ -54,8 +54,6 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
-    console.log('documentId',this.documentId,'---', this.documentInformation);
-
     this.getFieldsToDocument(this.documentId, this.rithmId);
   }
 
@@ -123,7 +121,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /**
    * The id of the document.
    *
-   * @return The id of the Document.
+   * @returns The id of the Document.
    */
   get documentId(): string {
     return 'documentRithmId' in this.documentInformation ? this.documentInformation.documentRithmId : '';
@@ -163,7 +161,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
             error
           );
         }
-      })
+      });
   }
 
   /**

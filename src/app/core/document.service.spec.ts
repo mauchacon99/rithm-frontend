@@ -120,8 +120,8 @@ describe('DocumentService', () => {
   });
 
   it('should return appended fields to document', () => {
-    const documentId: string = '1234-1234';
-    const stationId: string = '7654-321';
+    const documentId = '1234-1234';
+    const stationId = '7654-321';
     const expectData: DocumentNameField[] = [
       {
         prompt: 'SKU',
@@ -136,7 +136,7 @@ describe('DocumentService', () => {
     service.getFieldsToDocument(documentId, stationId).subscribe((data) => {
       expect(data).toEqual(expectData);
     });
-  })
+  });
 
   it('should show error if parameters is empty or null', () => {
     const documentId = '';
@@ -144,10 +144,10 @@ describe('DocumentService', () => {
 
     service.getFieldsToDocument(documentId, stationId)
       .subscribe({
-        error: (error) => {
+        error: (error: unknown) => {
           expect(error).toThrow();
         }
       });
-  })
+  });
 
 });

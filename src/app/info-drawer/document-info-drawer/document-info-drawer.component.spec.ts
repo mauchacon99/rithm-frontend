@@ -62,7 +62,6 @@ describe('DocumentInfoDrawerComponent', () => {
   });
 
   it('should data the fields in the document', () => {
-    const stationId = '1234-1234-123';
     const documentId = '321-654-987';
     component.stationRithmId = stationId;
     component.documentId = documentId;
@@ -71,5 +70,5 @@ describe('DocumentInfoDrawerComponent', () => {
     component.getFieldsToDocument();
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.documentId, component.stationRithmId);
-  })
+  });
 });

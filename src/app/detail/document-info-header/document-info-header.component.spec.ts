@@ -76,5 +76,5 @@ describe('DocumentInfoHeaderComponent', () => {
     component.getFieldsToDocument(documentId, stationId);
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(documentId, stationId);
-  })
+  });
 });

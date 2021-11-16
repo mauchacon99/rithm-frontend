@@ -64,7 +64,7 @@ export class DocumentService {
    *
    * @param documentId The id of document.
    * @param stationId  The id of station.
-   * @return Array the fields in document.
+   * @returns Array the fields in document.
    */
   getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
     if (!documentId || !stationId) {
