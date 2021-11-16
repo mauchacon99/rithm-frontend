@@ -131,7 +131,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           this.outsideBox = this.isOutsideBoundingBox(this.currentMousePoint);
-          this.checkAutoPan();
+          this.checkAutoPan(this.currentMousePoint);
         }
       });
   }
@@ -533,16 +533,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Uses a setInterval to continuously check if mouse is outside bounding box.
    *
+   * @param position The position of the pointer, etc event.
    * @param fps The framerate to animate at.
    */
-  private checkAutoPan(fps = 60): void {
+  private checkAutoPan(position: Point, fps = 60): void {
     if (!this.outsideInterval && (this.outsideBox === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
       this.outsideInterval = setInterval(() => {
         if ((this.outsideBox === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.outsideInterval) {
           clearInterval(this.outsideInterval);
           this.outsideInterval = undefined;
         }
-        this.autoMapPan();
+        this.autoMapPan(position);
         this.drawElements();
       }, 1000/ fps);
     }
@@ -606,37 +607,43 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Calculates a bounding box around the border of the canvas.
+   * Calculates a bounding box around the border of the canvas and returns a pan velocity.
    *
-   * @param position The position of the mouse or touch event.
+   * @param position The position of the pointer, etc event.
    * @returns Boolean.
    */
-  private isOutsideBoundingBox(position: Point): boolean {
+  private isOutsideBoundingBox(position: Point): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     const box = () => {
-      if (((window.innerHeight + window.innerWidth) / 2) * .1 > 30) {
+      //Dynamically set the size of the bounding box based on screen size.
+      if (((window.innerHeight + window.innerWidth) / 2) * .05 > 100) {
         return ((window.innerHeight + window.innerWidth) / 2) * .05;
       } else {
-        return 30;
+        return 100;
       }
     };
 
-    if (position.x < box()
-      || position.x > canvasRect.width - box()
-      || position.y < box()
-      || position.y > canvasRect.height - box() - 36
-    ) {
-      return true;
+    if (position.x < box()) {
+
+    } else if (position.x > canvasRect.width - box()) {
+
+    } else if (position.y < box()) {
+
+    } else if (position.y > canvasRect.height - box() - 36) {
+
     }
-    return false;
+    //Do not pan.
+    return {x: 0, y: 0};
   }
 
   /**
    * Pans the map if dragging a station or node and mouse position is outside the bounding box.
+   *
+   * @param panVelocity How much to pan in each direction.
    */
-  private autoMapPan(): void {
-    const xMove = 1;
-    const yMove = 1;
+  private autoMapPan(panVelocity: Point): void {
+    const xMove = panVelocity.x;
+    const yMove = panVelocity.y;
 
     this.currentCanvasPoint.x -= xMove;
     this.currentCanvasPoint.y -= yMove;
@@ -796,6 +803,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
+      //ensure no station has decimals in their coordinates.
+      station.mapPoint.x = Math.floor(station.mapPoint.x);
+      station.mapPoint.y = Math.floor(station.mapPoint.y);
+
       if (station.dragging) {
         station.dragging = false;
         if (station.status === MapItemStatus.Normal) {
@@ -831,8 +842,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapService.currentMousePoint$.next(moveInput);
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
 
-          station.mapPoint.x -= Math.floor(moveAmountX / this.scale);
-          station.mapPoint.y -= Math.floor(moveAmountY / this.scale);
+          station.mapPoint.x -= moveAmountX / this.scale;
+          station.mapPoint.y -= moveAmountY / this.scale;
 
           this.lastTouchCoords[0] = moveInput;
 
