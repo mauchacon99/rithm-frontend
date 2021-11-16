@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatRadioModule,
     MatSelectModule,
+    MatFormFieldModule,
     FormsModule
   ],
   exports: [
