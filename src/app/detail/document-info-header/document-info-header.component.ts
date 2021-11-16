@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { Subject, takeUntil } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Reusable component for the document information header.
@@ -14,6 +18,9 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   providers: [UtcTimeConversion]
 })
 export class DocumentInfoHeaderComponent implements OnInit {
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Type of user looking at a document. */
   @Input() userType!: UserType;
 
@@ -26,10 +33,15 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Document name form. */
   documentNameForm: FormGroup;
 
+  /** Fields to Document in the station. */
+  fieldsToDocument: DocumentNameField[] = [];
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
+    private documentService: DocumentService,
+    private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -42,6 +54,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
+    this.getFieldsToDocument(this.documentId, this.rithmId);
   }
 
   /**
@@ -106,11 +119,56 @@ export class DocumentInfoHeaderComponent implements OnInit {
   }
 
   /**
+   * The id of the document.
+   *
+   * @return The id of the Document.
+   */
+  get documentId(): string {
+    return 'documentRithmId' in this.documentInformation ? this.documentInformation.documentRithmId : '';
+  }
+
+  /**
    * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'documentInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem, { rithmId: this.rithmId });
+    this.sidenavDrawerService.toggleDrawer(drawerItem,
+      {
+        rithmId: this.rithmId,
+        documentId: this.documentId
+      }
+    );
+  }
+
+  /**
+   * Get appended fields to document.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   */
+  getFieldsToDocument(documentId: string, stationId: string): void {
+    this.documentService.getFieldsToDocument(documentId, stationId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.fieldsToDocument = data;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      })
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

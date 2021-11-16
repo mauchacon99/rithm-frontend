@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockDocumentService, MockErrorService, MockStationService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -21,7 +22,8 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
       imports: [
         MatCheckboxModule,
@@ -58,4 +60,16 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });
+
+  it('should data the fields in the document', () => {
+    const stationId = '1234-1234-123';
+    const documentId = '321-654-987';
+    component.stationRithmId = stationId;
+    component.documentId = documentId;
+    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getFieldsToDocument').and.callThrough();
+
+    component.getFieldsToDocument();
+
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.documentId, component.stationRithmId);
+  })
 });

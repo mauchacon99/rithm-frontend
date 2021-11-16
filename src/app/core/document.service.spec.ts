@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
 
@@ -118,5 +118,24 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return appended fields to document', () => {
+    const documentId: string = '1234-1234';
+    const stationId: string = '7654-321';
+    const expectData: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+
+    service.getFieldsToDocument(documentId, stationId).subscribe((data) => {
+      expect(data).toEqual(expectData);
+    });
+  })
 
 });

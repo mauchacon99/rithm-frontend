@@ -1,7 +1,8 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType
+  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
+  QuestionFieldType, StationDocuments, UserType, DocumentNameField
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -376,5 +377,24 @@ export class MockDocumentService {
     return of(documentInfo).pipe(delay(1000));
   }
 
-
+  /**
+   * Get appended fields to document.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   * @return Array the fields in document.
+   */
+  getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
 }

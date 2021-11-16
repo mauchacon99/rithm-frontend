@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
+import { delay, Observable, of } from 'rxjs';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -57,6 +57,27 @@ export class DocumentService {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
       { params: { documentId, stationId }}
     );
+  }
+
+  /**
+   * Get appended fields to document.
+   *
+   * @param documentId The id of document.
+   * @param stationId  The id of station.
+   * @return Array the fields in document.
+   */
+   getFieldsToDocument(documentId: string, stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+    return of(documentFieldName).pipe(delay(1000));
   }
 
 }
