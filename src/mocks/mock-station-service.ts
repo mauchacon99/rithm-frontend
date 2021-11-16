@@ -499,4 +499,13 @@ export class MockStationService {
     const expectedResponse = true;
     return of(expectedResponse).pipe(delay(1000));
   }
+
+  /**
+   * Returns the station name.
+   *
+   * @param stationName The name of the station.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
+  }
 }

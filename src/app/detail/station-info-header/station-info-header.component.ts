@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
-import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
-import { StationService } from '../../core/station.service';
+import { StationInfoDrawerData } from 'src/models/station-info-drawer-data';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Reusable component for the station information header.
