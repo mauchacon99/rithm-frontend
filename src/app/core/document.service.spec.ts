@@ -4,8 +4,6 @@ import { environment } from 'src/environments/environment';
 import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
-import { HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
