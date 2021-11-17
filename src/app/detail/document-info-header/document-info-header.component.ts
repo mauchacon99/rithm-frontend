@@ -136,7 +136,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
    *
    * @param stationId  The id of station.
    */
-   getAppendedFieldsOnDocumentName(stationId: string): void {
+  getAppendedFieldsOnDocumentName(stationId: string): void {
     this.documentService.getAppendedFieldsOnDocumentName(stationId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({

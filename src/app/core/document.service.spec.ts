@@ -153,6 +153,6 @@ describe('DocumentService', () => {
     service.updateDocumentAppendedFields(stationId, appendedFields).subscribe((data) => {
       expect(data).toEqual(appendedFields);
     });
-  })
+  });
 
 });

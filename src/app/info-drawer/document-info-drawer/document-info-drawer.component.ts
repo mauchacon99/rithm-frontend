@@ -102,7 +102,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param value Current String in Field Forms.
    * @returns Filtered value.
    */
-   private _filter(value: string): DocumentNameField[] {
+  private _filter(value: string): DocumentNameField[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.prompt.toLowerCase().includes(filterValue));
   }
