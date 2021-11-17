@@ -21,7 +21,7 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService },
+        { provide: ErrorService, useClass: MockErrorService }
       ],
       imports: [
         MatCheckboxModule,

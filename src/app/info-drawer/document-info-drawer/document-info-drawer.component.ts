@@ -4,7 +4,6 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Subject } from 'rxjs';
-import { DocumentNameField } from 'src/models';
 
 /**
  * Component for document drawer.
@@ -30,9 +29,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading in the document name section. */
   documentNameLoading = false;
-
-  /** Fields to Document in the station. */
-  fieldsToDocument: DocumentNameField[] = [];
 
   constructor(
     private stationService: StationService,
