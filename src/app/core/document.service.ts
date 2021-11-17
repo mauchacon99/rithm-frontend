@@ -63,20 +63,19 @@ export class DocumentService {
   /**
    * Get the document field name array.
    *
-   * @param documentId The id of document.
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    * @returns A list of field names for document name.
    */
-  updateDocumentName(documentId: string, stationId: string, appendedFiles: string[]): Observable<DocumentNameField[]> {
-    if (!documentId || !stationId || !appendedFiles) {
+  updateDocumentName(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFiles) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
-      const documentFieldName = [
+      const documentFieldName: DocumentNameField[]= [
         {
           prompt: 'SKU',
           rithmId: '1lk2-as3k-12kk-9s83'

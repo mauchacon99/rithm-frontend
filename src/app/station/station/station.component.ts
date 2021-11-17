@@ -9,8 +9,9 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
+import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Main component for viewing a station.
@@ -250,17 +251,15 @@ export class StationComponent implements OnInit, OnDestroy {
   /**
    * Get the document field name array.
    *
-   * @param documentId The id of document.
    * @param stationId  The id of station.
-   * @param appendedFields  The appended files.
+   * @param appendedFiles  The appended files.
    */
-   updateDocumentName(documentId: string, stationId: string, appendedFields: string[]): void {
-    this.documentService.updateDocumentName(documentId, stationId,appendedFields)
+  updateDocumentName(stationId: string, appendedFiles: DocumentNameField[]): void {
+    this.documentService.updateDocumentName(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
         next: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const documentName=data;  //this instruction will be modified when data is received and this comment will also be removed
+          const documentName = data;
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
