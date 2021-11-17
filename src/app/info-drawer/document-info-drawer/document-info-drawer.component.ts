@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Component for document drawer.
@@ -20,10 +21,23 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   appendFieldForm: FormGroup;
 
   /**Fields Options. */
-  options: string[] = ['SKU', 'Color', 'Other'];
+  private options: DocumentNameField[] = [
+    {
+      rithmId: '1234-1234-1234',
+      prompt: 'SKU'
+    },
+    {
+      rithmId: '1234-1234-1235',
+      prompt: 'Color'
+    },
+    {
+      rithmId: '1234-1234-1236',
+      prompt: 'Other'
+    }
+  ];
 
   /**Filtered Form Fields */
-  filteredOptions$: Observable<string[]> | undefined;
+  filteredOptions$: Observable<DocumentNameField[]> | undefined;
 
   /** Is the document name editable. */
   documentNameEditable = false;
@@ -81,9 +95,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param value Current String in Field Forms.
    * @returns Filtered value.
    */
-   private _filter(value: string): string[] {
+   private _filter(value: string): DocumentNameField[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option.prompt.toLowerCase().includes(filterValue));
   }
 
   /**

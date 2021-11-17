@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule  } from '@angular/material/input';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -35,7 +35,6 @@ describe('DocumentInfoDrawerComponent', () => {
         MatAutocompleteModule,
         MatFormFieldModule,
         MatInputModule,
-        BrowserAnimationsModule,
         NoopAnimationsModule
       ],
     })

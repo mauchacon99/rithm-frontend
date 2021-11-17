@@ -29,8 +29,8 @@
                  formControlName="appendField"
                  [matAutocomplete]="auto">
           <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class">
-            <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
-              <p>{{option}}</p>
+            <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.prompt">
+              <p>{{option.prompt}}</p>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
