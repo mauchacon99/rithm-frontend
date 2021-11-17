@@ -255,8 +255,8 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-  updateDocumentName(stationId: string, appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentName(stationId, appendedFiles)
+   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
         next: (data) => {
