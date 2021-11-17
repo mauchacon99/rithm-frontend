@@ -1,7 +1,10 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" *ngIf="!isLoading">
   <ng-container *ngIf="questions.length > 0">
     <mat-card class="padding-card" *ngFor="let previousField of questions">
-      {{previousField.prompt}}
+      <div class="flex h-full items-center justify-between">
+        <p>{{previousField.prompt}}</p>
+        <i class="fas fa-cog text-2xl text-accent-500"></i>
+      </div>
     </mat-card>
   </ng-container>
   <ng-container *ngIf="questions.length === 0 && !questionsError">
