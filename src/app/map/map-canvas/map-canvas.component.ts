@@ -35,11 +35,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
-  /** Checks if point is outside the bounding box. */
-  outsideBox = false;
+  /** Checks if map should be automatically panning without active user input. */
+  autoPanning = false;
 
-  /**Set up interval for bounding box check. */
-  private outsideInterval?: NodeJS.Timeout;
+  /**Set up interval for auto pan checks. */
+  private panInterval?: NodeJS.Timeout;
 
   /**Track what the next pan velocity is. */
   nextPanVelocity: Point = {x: 0, y: 0};
@@ -133,14 +133,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe((point) => {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
-          const velocity = this.setPanVelocity(this.currentMousePoint);
+          const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
           if (velocity.x === 0 && velocity.y === 0) {
-            this.outsideBox = false;
+            this.autoPanning = false;
           } else {
-            this.outsideBox = true;
+            this.autoPanning = true;
           }
           this.nextPanVelocity = velocity;
-          this.checkAutoPan();
+          this.checkAutoPan(60);
         }
       });
   }
@@ -540,16 +540,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Uses a setInterval to continuously check if mouse is outside bounding box.
+   * Uses a setInterval to continuously check if the map should be auto panning.
+   * Used when outside the bounding box and dragging.
+   * //TODO: Allow use when middle wheel is active.
    *
    * @param fps The framerate to animate at.
    */
   private checkAutoPan(fps = 60): void {
-    if (!this.outsideInterval && (this.outsideBox === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
-      this.outsideInterval = setInterval(() => {
-        if ((this.outsideBox === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.outsideInterval) {
-          clearInterval(this.outsideInterval);
-          this.outsideInterval = undefined;
+    if (!this.panInterval && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      this.panInterval = setInterval(() => {
+        if ((this.autoPanning === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.panInterval) {
+          clearInterval(this.panInterval);
+          this.panInterval = undefined;
         }
         this.autoMapPan(this.nextPanVelocity);
         this.drawElements();
@@ -620,7 +622,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the pointer, etc event.
    * @returns Boolean.
    */
-  private setPanVelocity(position: Point): Point {
+  private getOutsideBoundingBoxPanVelocity(position: Point): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     const box = () => {
       //Dynamically set the size of the bounding box based on screen size.
@@ -655,7 +657,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Pans the map if dragging a station or node and mouse position is outside the bounding box.
+   * Pans the map a given direction based on panVelocity.
+   * Used when outside the bounding box and dragging.
+   * //TODO: Allow use when middle wheel is active.
    *
    * @param panVelocity How much to pan in each direction.
    */
