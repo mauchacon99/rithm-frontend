@@ -7,6 +7,9 @@ import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -25,6 +28,9 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       imports: [
         MatCheckboxModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NoopAnimationsModule,
         FormsModule
       ],
     })
