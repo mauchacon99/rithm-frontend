@@ -383,7 +383,7 @@ export class MockDocumentService {
    * @param stationId  The id of station.
    * @returns Array the fields in document.
    */
-  getFieldsToDocument(stationId: string): Observable<DocumentNameField[]> {
+  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
     const documentFieldName: DocumentNameField[] = [
       {
         prompt: 'SKU',

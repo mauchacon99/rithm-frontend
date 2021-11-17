@@ -132,7 +132,7 @@ describe('DocumentService', () => {
       }
     ];
 
-    service.getFieldsToDocument(stationId).subscribe((data) => {
+    service.getAppendedFieldsOnDocumentName(stationId).subscribe((data) => {
       expect(data).toEqual(expectData);
     });
   });

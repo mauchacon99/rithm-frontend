@@ -66,7 +66,7 @@ export class DocumentService {
    * @returns Array the fields in document.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getFieldsToDocument(stationId: string): Observable<DocumentNameField[]> {
+  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
     const documentFieldName: DocumentNameField[] = [
       {
         prompt: 'SKU',

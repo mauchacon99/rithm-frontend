@@ -66,11 +66,11 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
   });
 
-  it('should data the fields in the document', () => {
+  it('should get the appended fields in the document name', () => {
     const stationId = '1234-1234-123';
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getFieldsToDocument').and.callThrough();
+    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
 
-    component.getFieldsToDocument(stationId);
+    component.getAppendedFieldsOnDocumentName(stationId);
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });

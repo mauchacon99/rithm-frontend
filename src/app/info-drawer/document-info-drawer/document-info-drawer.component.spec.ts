@@ -61,11 +61,11 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should data the fields in the document', () => {
+  it('should get the appended fields in the document name', () => {
     component.stationRithmId = stationId;
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getFieldsToDocument').and.callThrough();
+    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
 
-    component.getFieldsToDocument();
+    component.getAppendedFieldsOnDocumentName();
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.stationRithmId);
   });

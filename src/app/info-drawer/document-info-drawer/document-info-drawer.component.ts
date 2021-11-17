@@ -59,7 +59,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
-    this.getFieldsToDocument();
+    this.getAppendedFieldsOnDocumentName();
   }
 
   /**
@@ -120,8 +120,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get appended fields to document.
    */
-  getFieldsToDocument(): void {
-    this.documentService.getFieldsToDocument(this.stationRithmId)
+  getAppendedFieldsOnDocumentName(): void {
+    this.documentService.getAppendedFieldsOnDocumentName(this.stationRithmId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {

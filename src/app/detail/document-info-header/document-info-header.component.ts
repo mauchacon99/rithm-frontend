@@ -54,7 +54,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
-    this.getFieldsToDocument(this.rithmId);
+    this.getAppendedFieldsOnDocumentName(this.rithmId);
   }
 
   /**
@@ -136,8 +136,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
    *
    * @param stationId  The id of station.
    */
-  getFieldsToDocument(stationId: string): void {
-    this.documentService.getFieldsToDocument(stationId)
+   getAppendedFieldsOnDocumentName(stationId: string): void {
+    this.documentService.getAppendedFieldsOnDocumentName(stationId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {
