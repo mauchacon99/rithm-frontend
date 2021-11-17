@@ -4,12 +4,11 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { MockStationService, MockUserService } from 'src/mocks';
 import { DocumentStationInformation, StationInfoDrawerData, StationInformation } from 'src/models';
-
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -97,7 +96,7 @@ describe('StationInfoHeaderComponent', () => {
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInputModule,
-        BrowserAnimationsModule
+        NoopAnimationsModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -121,11 +120,11 @@ describe('StationInfoHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the station name from a StationInformation Object', () => {
+  it('should return the station name from a StationInformation Object', () => {
     expect(component.stationName).toEqual(stationInformation.name);
   });
 
-  it('should display the station priority from a StationInformation Object', () => {
+  it('should return the station priority from a StationInformation Object', () => {
     expect(component.priority).toBeTruthy();
     expect(component.priority).toEqual(stationInformation.priority);
   });
@@ -160,7 +159,7 @@ describe('StationInfoHeaderComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should display the station name from a DocumentStationInformation Object', () => {
+    it('should return the station name from a DocumentStationInformation Object', () => {
       expect(component.stationName).toEqual(documentStationInformation.stationName);
     });
 
