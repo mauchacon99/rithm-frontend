@@ -7,7 +7,6 @@ import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { DocumentService } from 'src/app/core/document.service';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -23,7 +22,6 @@ describe('DocumentInfoDrawerComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService },
       ],
       imports: [
         MatCheckboxModule,
@@ -59,14 +57,5 @@ describe('DocumentInfoDrawerComponent', () => {
     await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
-  });
-
-  it('should get the appended fields in the document name', () => {
-    component.stationRithmId = stationId;
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
-
-    component.getAppendedFieldsOnDocumentName();
-
-    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 });

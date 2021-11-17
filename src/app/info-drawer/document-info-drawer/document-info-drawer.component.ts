@@ -4,7 +4,6 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Subject } from 'rxjs';
-import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models';
 
 /**
@@ -38,8 +37,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService,
-    private documentService: DocumentService
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -59,7 +57,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
-    this.getAppendedFieldsOnDocumentName();
   }
 
   /**
@@ -115,25 +112,5 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Get appended fields to document.
-   */
-  getAppendedFieldsOnDocumentName(): void {
-    this.documentService.getAppendedFieldsOnDocumentName(this.stationRithmId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          if (data) {
-            this.fieldsToDocument = data;
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
   }
 }

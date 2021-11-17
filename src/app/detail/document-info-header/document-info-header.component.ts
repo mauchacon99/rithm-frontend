@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
+import { ErrorService } from 'src/app/core/error.service';
 import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
@@ -37,7 +39,9 @@ export class DocumentInfoHeaderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private documentService: DocumentService,
+    private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -50,6 +54,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
+    this.getAppendedFieldsOnDocumentName(this.rithmId);
   }
 
   /**
@@ -124,6 +129,28 @@ export class DocumentInfoHeaderComponent implements OnInit {
         rithmId: this.rithmId
       }
     );
+  }
+
+  /**
+   * Get appended fields to document.
+   *
+   * @param stationId  The id of station.
+   */
+   getAppendedFieldsOnDocumentName(stationId: string): void {
+    this.documentService.getAppendedFieldsOnDocumentName(stationId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.fieldsToDocument = data;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
