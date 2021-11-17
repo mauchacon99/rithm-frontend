@@ -6,7 +6,7 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -624,34 +624,31 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     const box = () => {
       //Dynamically set the size of the bounding box based on screen size.
-      if (((window.innerHeight + window.innerWidth) / 2) * .05 > 100) {
+      if (((window.innerHeight + window.innerWidth) / 2) * .05 > 120) {
         return ((window.innerHeight + window.innerWidth) / 2) * .05;
       } else {
-        return 100;
+        return 120;
       }
     };
-
-    console.log(box());
 
     const panVelocity: Point = {x: 0, y: 0};
 
     //Set direction and speed to pan x.
     if (position.x < box()) {
-      const leftPan = Math.floor((box() - position.x) * .1 / this.scale);
-      panVelocity.x = leftPan <= Math.floor(10 / this.scale) ? leftPan : Math.floor(10 / this.scale);
-      console.log(panVelocity.x);
+      const leftPan = Math.floor((box() - position.x) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.x = leftPan <= Math.floor(MAX_PAN_VELOCITY / this.scale) ? leftPan : Math.floor(MAX_PAN_VELOCITY / this.scale);
     } else if (position.x > canvasRect.width - box()) {
-      // console.log(Math.floor((position.x - box()) * .1));
-      panVelocity.x = -1;
+      const rightPan = Math.floor((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.x = rightPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? rightPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
     //Set direction and speed to pan y.
     if (position.y < box()) {
-      const topPan = Math.floor((box() - position.y) * .1 / this.scale);
-      panVelocity.y = topPan <= Math.floor(10 / this.scale) ? topPan : Math.floor(10 / this.scale);
-      console.log(panVelocity.y);
+      const topPan = Math.floor((box() - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.y = topPan <= Math.floor(MAX_PAN_VELOCITY / this.scale) ? topPan : Math.floor(MAX_PAN_VELOCITY / this.scale);
     } else if (position.y > canvasRect.height - box() - 36) {
-      panVelocity.y = -1;
+      const bottomPan = Math.floor((canvasRect.height - box() - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
     return panVelocity;
