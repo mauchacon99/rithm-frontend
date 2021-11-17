@@ -34,7 +34,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
   documentNameForm: FormGroup;
 
   /** Fields to Document in the station. */
-  fieldsToDocument: DocumentNameField[] = [];
+  appendedFields: DocumentNameField[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -142,7 +142,7 @@ export class DocumentInfoHeaderComponent implements OnInit {
       .subscribe({
         next: (data) => {
           if (data) {
-            this.fieldsToDocument = data;
+            this.appendedFields = data;
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
