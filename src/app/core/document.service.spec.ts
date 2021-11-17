@@ -15,7 +15,7 @@ describe('DocumentService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
-      ]
+      ],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -136,5 +136,23 @@ describe('DocumentService', () => {
       expect(data).toEqual(expectData);
     });
   });
+
+  it('should update appended fields to document', () => {
+    const stationId = '7654-321';
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+
+    service.updateDocumentAppendedFields(stationId, appendedFields).subscribe((data) => {
+      expect(data).toEqual(appendedFields);
+    });
+  })
 
 });
