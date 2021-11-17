@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -259,6 +258,7 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const documentName = data;
         }, error: (error: unknown) => {
           this.errorService.displayError(
