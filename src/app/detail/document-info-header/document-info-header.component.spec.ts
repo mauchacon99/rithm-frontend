@@ -3,11 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from '../../../mocks/mock-document-service';
-import { ErrorService } from '../../core/error.service';
-import { MockErrorService } from '../../../mocks/mock-error-service';
+import { MockDocumentService } from 'src/mocks/mock-document-service';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from 'src/mocks/mock-error-service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
