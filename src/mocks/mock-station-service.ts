@@ -395,24 +395,24 @@ export class MockStationService {
    * @param stationId The id of the given station.
    * @returns A rosterMember array.
    */
-  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]>{
+  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]> {
     const mockRosterMember: StationRosterMember[] = [
-        {
-            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: true,
-            isWorker: false,
-        },
-        {
-            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-            firstName: 'Rithm',
-            lastName: 'User',
-            email: 'rithmuser@inpivota.com',
-            isOwner: true,
-            isWorker: false,
-        },
+      {
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
     ];
     return of(mockRosterMember).pipe(delay(1000));
   }
@@ -424,7 +424,7 @@ export class MockStationService {
    * @param userIds The users ids for assign in station.
    * @returns OwnerRoster in the station.
    */
-   addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+  addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
     const mockOwnerRoster: StationRosterMember[] = [{
       rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
       firstName: 'Marry',

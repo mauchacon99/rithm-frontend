@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { StationMapElement } from 'src/helpers';
 import { FlowMapElement, Point } from 'src/models';
 import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
 import { MapService } from './map.service';
@@ -19,6 +18,9 @@ export class FlowElementService {
     private mapService: MapService
   ) { }
 
+  /**
+   * Test.
+   */
   drawFlows(): void {
     if (!this.mapService.flowElements.length) {
       return; // nothing to draw
@@ -33,7 +35,7 @@ export class FlowElementService {
   /**
    * Draws a flow on the map.
    *
-   * @param stations The station for which to draw the card.
+   * @param flow The station for which to draw the card.
    */
   drawFlow(flow: FlowMapElement): void {
 
@@ -100,9 +102,8 @@ export class FlowElementService {
       ctx.lineTo(point.x, point.y);
     }
     ctx.stroke();
-
-    // If flow doesn't have stations, draw shape
-    }
+    ctx.setLineDash([]);
+  }
 
   /**
    * Gets a new array of points representing the convex hull of the given set of points. The convex hull excludes collinear points.

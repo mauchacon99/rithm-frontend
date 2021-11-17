@@ -5,18 +5,21 @@
   </div>
   <!-- Current roster members -->
   <div class="pt-2 flex justify-center items-center h-full">
-    <div class="gap-2 flex justify-center">
+    <div class="gap-2 flex justify-center" *ngIf="rosterMembers.length > 0 || loadingMembers else rosterMembersEmpty">
       <ng-container *ngIf="!loadingMembers">
         <div class="float-left my-1 mx-px first:ml-0" *ngFor="let member of rosterMembers">
           <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName" [navProfile]="true"
-            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)"></app-user-avatar>
+            [badge]="'check'" (click)="removeMemberFromRoster(member.rithmId)" [hoverEffect]="true"></app-user-avatar>
         </div>
       </ng-container>
       <!-- Loading indicator for current roster members -->
       <div class="w-24 items-center py-2" *ngIf="loadingMembers">
-        <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        <app-loading-indicator id="roster-member-loading" [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
     </div>
+    <ng-template #rosterMembersEmpty>
+      <p class="leading-none text-error-500 my-3">There are no {{rosterType}} roster members</p>
+    </ng-template>
   </div>
   <div class="flex justify-center text-xs" *ngIf="addRemoveRosterError">
     <span class="text-error-500">Error: Unable to add/remove member</span>
@@ -26,7 +29,7 @@
     *ngIf="totalPotentialUsers > 0 || listLoading">
     <!-- Loading indicator for list of members -->
     <div class="h-full w-full flex justify-center items-center pt-2" *ngIf="listLoading">
-      <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+      <app-loading-indicator id="user-organization-loading" class="flex-grow m-auto"></app-loading-indicator>
     </div>
     <!-- List of members -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" *ngIf="!listLoading">
@@ -37,7 +40,8 @@
             class="col-12 cursor-pointer flex py-1 px-3 justify-start border-solid border-2 border-white rounded-md mb-2"
             (click)='toggleSelectedUser(user.rithmId)'>
             <div class="my-1">
-              <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true">
+              <app-user-avatar [firstName]="user.firstName" [lastName]="user.lastName" [hideToolTip]="true"
+                [badge]="getCurrentBadge(user)">
               </app-user-avatar>
             </div>
             <div class="flex flex-col justify-center overflow-hidden">

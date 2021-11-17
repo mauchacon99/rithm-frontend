@@ -173,10 +173,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         if (this.pointerCache.length === 1) {
           const pointer = this.pointerCache[0];
-          this.lastTouchCoords[0] = this.getMouseCanvasPoint(pointer);
-          this.eventStartCoords = this.getMouseCanvasPoint(pointer);
+          this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
+          this.eventStartCoords = this.getEventCanvasPoint(pointer);
 
-          const pointerPos = this.getMouseCanvasPoint(pointer);
+          const pointerPos = this.getEventCanvasPoint(pointer);
           this.eventStartLogic(pointerPos);
         }
 
@@ -184,8 +184,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           const pointer1 = this.pointerCache[0];
           const pointer2 = this.pointerCache[1];
 
-          this.lastTouchCoords = [this.getMouseCanvasPoint(pointer1), this.getMouseCanvasPoint(pointer2)];
-          this.eventStartCoords = this.getMouseCanvasPoint(pointer1);
+          this.lastTouchCoords = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
+          this.eventStartCoords = this.getEventCanvasPoint(pointer1);
         }
 
         if (this.dragItem !== MapDragItem.Default) {
@@ -220,7 +220,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       if (this.pointerCache.length === 0) {
-        const pointerPos = this.getMouseCanvasPoint(event);
+        const pointerPos = this.getEventCanvasPoint(event);
 
         if (this.dragItem !== MapDragItem.Default) {
           const map = document.getElementById('map');
@@ -230,7 +230,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.eventEndLogic(pointerPos);
       } else {
         const pointer = this.pointerCache[0];
-        this.lastTouchCoords[0] = this.getMouseCanvasPoint(pointer);
+        this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
       }
     }
   }
@@ -265,7 +265,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
-        const touchPos = this.getMouseCanvasPoint(pointer);
+        const touchPos = this.getEventCanvasPoint(pointer);
         //this method has better compatibility with different input types than singleInputMouseMoveLogic.
         this.singleInputMoveLogic(touchPos);
       }
@@ -275,7 +275,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const pointer1 = this.pointerCache[0];
         const pointer2 = this.pointerCache[1];
 
-        const pointerPos = [this.getMouseCanvasPoint(pointer1), this.getMouseCanvasPoint(pointer2)];
+        const pointerPos = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
         this.pinchZoomLogic(pointerPos);
       }
     }
@@ -290,11 +290,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      this.eventStartCoords = this.getMouseCanvasPoint(event);
-      this.lastTouchCoords[0] = this.getMouseCanvasPoint(event);
-      this.eventStartCoords = this.getMouseCanvasPoint(event);
+      this.eventStartCoords = this.getEventCanvasPoint(event);
+      this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
+      this.eventStartCoords = this.getEventCanvasPoint(event);
 
-      const mousePos = this.getMouseCanvasPoint(event);
+      const mousePos = this.getEventCanvasPoint(event);
       this.eventStartLogic(mousePos);
     }
   }
@@ -308,8 +308,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   mouseUp(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      const mousePos = this.getMouseCanvasPoint(event);
-      this.lastTouchCoords[0] = this.getMouseCanvasPoint(event);
+      const mousePos = this.getEventCanvasPoint(event);
+      this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
 
       this.eventEndLogic(mousePos);
     }
@@ -324,7 +324,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      const pos = this.getMouseCanvasPoint(event);
+      const pos = this.getEventCanvasPoint(event);
       this.singleInputMoveLogic(pos);
     }
   }
@@ -347,7 +347,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!window.PointerEvent || (is_android && is_firefox)) {
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
-        const touchPos = this.getTouchCanvasPoint(touchPoint);
+        const touchPos = this.getEventCanvasPoint(touchPoint);
 
         this.lastTouchCoords[0] = touchPos;
         this.eventStartCoords = touchPos;
@@ -359,8 +359,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const touchPoint1 = event.touches[0];
         const touchPoint2 = event.touches[1];
 
-        this.lastTouchCoords = [this.getTouchCanvasPoint(touchPoint1), this.getTouchCanvasPoint(touchPoint2)];
-        this.eventStartCoords = this.getTouchCanvasPoint(touchPoint1);
+        this.lastTouchCoords = [this.getEventCanvasPoint(touchPoint1), this.getEventCanvasPoint(touchPoint2)];
+        this.eventStartCoords = this.getEventCanvasPoint(touchPoint1);
       }
     }
   }
@@ -383,7 +383,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
-      const touchPos = this.getTouchCanvasPoint(touchPoint);
+      const touchPos = this.getEventCanvasPoint(touchPoint);
 
       this.eventEndLogic(touchPos);
     }
@@ -408,7 +408,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Single touch.
       if (event.touches.length === 1) {
         const touchPoint = event.changedTouches[0];
-        const touchPos = this.getTouchCanvasPoint(touchPoint);
+        const touchPos = this.getEventCanvasPoint(touchPoint);
 
         this.singleInputMoveLogic(touchPos);
       }
@@ -416,7 +416,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Pinch event.
       if (event.touches.length === 2) {
         const touchPoint = event.changedTouches;
-        const touchPos = [this.getTouchCanvasPoint(touchPoint[0]), this.getTouchCanvasPoint(touchPoint[1])];
+        const touchPos = [this.getEventCanvasPoint(touchPoint[0]), this.getEventCanvasPoint(touchPoint[1])];
 
         this.pinchZoomLogic(touchPos);
       }
@@ -453,7 +453,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('wheel', ['$event'])
   wheel(event: WheelEvent): void {
     event.preventDefault();
-    const mousePoint = this.getMouseCanvasPoint(event);
+    const mousePoint = this.getEventCanvasPoint(event);
     const eventAmount = event.deltaY >= 100
     ? Math.floor(event.deltaY/100)
     : event.deltaY <= -100
@@ -517,13 +517,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+      const pixelRatio = window.devicePixelRatio || 1;
       // Clear the canvas
-      this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width, this.mapCanvas.nativeElement.height);
+      this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width / pixelRatio, this.mapCanvas.nativeElement.height / pixelRatio);
 
       // Calculate the station canvas points
       this.stations.forEach((station) => {
         station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
       });
+
+      // Draw the flows
+      this.flowElementService.drawFlows();
 
       // Draw the connections
       for (const station of this.stations) {
@@ -545,9 +549,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
-
-      // Draw the flows
-      this.flowElementService.drawFlows();
     });
   }
 
@@ -568,12 +569,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines the point on the canvas that the mouse cursor/pointer is positioned.
+   * Determines the point on the canvas that the mouse cursor/pointer or touch event is positioned.
    *
-   * @param event The MouseEvent/PointerEvent for the cursor information.
-   * @returns An accurate point for the mouse position on the canvas.
+   * @param event The event for the cursor or touch information.
+   * @returns An accurate point for the cursor or touch position on the canvas.
    */
-  private getMouseCanvasPoint(event: MouseEvent | PointerEvent): Point {
+  private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,
@@ -582,16 +583,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines the point on the canvas that a finger is positioned.
+   * Determines the point on the canvas context that the mouse cursor/pointer or touch event is positioned. This adjusts for the pixel
+   * ratio in order to report an accurate position when using `context` methods like `isPointInPath` or `isPointInStroke`.
    *
-   * @param event The touch event for the cursor information.
-   * @returns An accurate point for the touch position on the canvas.
+   * @param event The event for the cursor or touch information.
+   * @returns An accurate point for the cursor or touch position on the canvas context.
    */
-  private getTouchCanvasPoint(event: Touch): Point {
-    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
+    const canvasPoint = this.getEventCanvasPoint(event);
     return {
-      x: event.clientX - canvasRect.left,
-      y: event.clientY - canvasRect.top
+      x: canvasPoint.x * window.devicePixelRatio,
+      y: canvasPoint.y * window.devicePixelRatio
     };
   }
 
