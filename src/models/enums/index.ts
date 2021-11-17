@@ -8,3 +8,5 @@ export * from './map-drag-item.enum';
 export * from './dialog-type.enum';
 export * from './document-generation-status.enum';
 export * from './flow-element-hover-type.enum';
+export * from './field-name-separator.enum';
+
