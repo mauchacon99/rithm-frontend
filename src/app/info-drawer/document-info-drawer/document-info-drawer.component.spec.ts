@@ -6,10 +6,11 @@ import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule  } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentInfoDrawerComponent', () => {
@@ -35,7 +36,9 @@ describe('DocumentInfoDrawerComponent', () => {
         MatAutocompleteModule,
         MatFormFieldModule,
         MatInputModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatSelectModule,
+        FormsModule
       ],
     })
       .compileComponents();

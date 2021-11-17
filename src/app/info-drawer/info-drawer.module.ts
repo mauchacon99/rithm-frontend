@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatInputModule,
     ReactiveFormsModule,
     MatRadioModule,
-    FormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    FormsModule
   ],
   exports: [
     InfoDrawerComponent

@@ -6,6 +6,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField } from 'src/models/document-name-field';
+import { FieldNameSeparator } from 'src/models/enums/field-name-separator.enum';
 
 /**
  * Component for document drawer.
@@ -53,6 +54,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading in the document name section. */
   documentNameLoading = false;
+
+  /** Select to store the separator value. */
+  separatorValueSelect = '';
+
+  /** The different options for the separator value. */
+  fieldNameSeparatorOptions = FieldNameSeparator;
 
   constructor(
     private fb: FormBuilder,
