@@ -58,7 +58,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   ngOnInit(): void {
     this.textFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []]
+      [this.field.questionType]: [this.field.value ? this.field.value : '', []]
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
