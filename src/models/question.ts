@@ -35,4 +35,7 @@ export interface Question {
   /** The children for nested questions. */
   children: Question[];
 
+  /** Value of the new field (what do you call your field?). */
+  value?: string;
+
 }

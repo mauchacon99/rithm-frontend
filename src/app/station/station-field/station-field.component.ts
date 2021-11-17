@@ -71,6 +71,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     isRequired: true,
     isPrivate: false,
     children: [],
+    value: ''
   };
 
   /** The field for adding an option to a select field. */
@@ -108,6 +109,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * On component initialization.
    */
   ngOnInit(): void {
+    this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
     if (this.field.questionType === this.fieldType.Select
       || this.field.questionType === this.fieldType.MultiSelect
