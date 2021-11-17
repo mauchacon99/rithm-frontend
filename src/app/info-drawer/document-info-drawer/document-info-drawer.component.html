@@ -17,5 +17,16 @@
         </mat-checkbox>
       </div>
     </div>
+    <div class="col-span-12 py-3">
+      <p class="overline pb-2">Separator Value</p>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Select</mat-label>
+        <mat-select [(ngModel)]="separatorValueSelect">
+          <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
+            {{option.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 </div>
