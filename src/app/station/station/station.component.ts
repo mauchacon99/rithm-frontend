@@ -9,7 +9,7 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
+import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 
 /**
  * Main component for viewing a station.
