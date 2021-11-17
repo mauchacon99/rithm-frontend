@@ -4,6 +4,7 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Subject } from 'rxjs';
+import { FieldNameSeparator } from 'src/models/enums/field-name-separator.enum';
 
 /**
  * Component for document drawer.
@@ -29,6 +30,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Loading in the document name section. */
   documentNameLoading = false;
+
+  /** Select to store the separator value. */
+  separatorValueSelect = '';
+
+  /** The different options for the separator value. */
+  fieldNameSeparatorOptions = FieldNameSeparator;
 
   constructor(
     private stationService: StationService,
