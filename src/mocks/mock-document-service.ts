@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-// eslint-disable-next-line max-len
 import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType } from 'src/models';
 import { DocumentNameField } from 'src/models/document-name-field';
 /* eslint-disable @typescript-eslint/no-unused-vars */
