@@ -4,10 +4,6 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
-import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from '../../../mocks/mock-document-service';
-import { ErrorService } from '../../core/error.service';
-import { MockErrorService } from '../../../mocks/mock-error-service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -20,10 +16,6 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule
-      ],
-      providers: [
-        { provide: DocumentService, useClass: MockDocumentService },
-        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();
@@ -64,14 +56,5 @@ describe('DocumentInfoHeaderComponent', () => {
     const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
     expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
-  });
-
-  it('should get the appended fields in the document name', () => {
-    const stationId = '1234-1234-123';
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
-
-    component.getAppendedFieldsOnDocumentName(stationId);
-
-    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 });
