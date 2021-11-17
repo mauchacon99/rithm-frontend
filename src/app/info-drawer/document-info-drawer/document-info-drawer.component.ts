@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { first, takeUntil } from 'rxjs/operators';
+import { first, map, startWith, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DocumentNameField } from 'src/models/document-name-field';
 import { FieldNameSeparator } from 'src/models/enums/field-name-separator.enum';
 
 /**
@@ -15,6 +17,28 @@ import { FieldNameSeparator } from 'src/models/enums/field-name-separator.enum';
   styleUrls: ['./document-info-drawer.component.scss']
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
+
+  /** Organization name form. */
+  appendFieldForm: FormGroup;
+
+  /**Fields Options. */
+  private options: DocumentNameField[] = [
+    {
+      rithmId: '1234-1234-1234',
+      prompt: 'SKU'
+    },
+    {
+      rithmId: '1234-1234-1235',
+      prompt: 'Color'
+    },
+    {
+      rithmId: '1234-1234-1236',
+      prompt: 'Other'
+    }
+  ];
+
+  /**Filtered Form Fields */
+  filteredOptions$: Observable<DocumentNameField[]> | undefined;
 
   /** Is the document name editable. */
   documentNameEditable = false;
@@ -38,10 +62,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   fieldNameSeparatorOptions = FieldNameSeparator;
 
   constructor(
+    private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService
   ) {
+    this.appendFieldForm = this.fb.group({
+      appendField: ''
+    });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -60,6 +89,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
+
+    this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+    );
+  }
+
+  /**
+   * Filtered Values.
+   *
+   * @param value Current String in Field Forms.
+   * @returns Filtered value.
+   */
+   private _filter(value: string): DocumentNameField[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.prompt.toLowerCase().includes(filterValue));
   }
 
   /**
