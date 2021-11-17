@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
