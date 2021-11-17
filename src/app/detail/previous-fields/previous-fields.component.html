@@ -2,7 +2,7 @@
   <ng-container *ngIf="questions.length > 0">
     <mat-card class="padding-card" *ngFor="let previousField of questions">
       <div class="flex h-full items-center justify-between">
-        <p>{{previousField.prompt}}</p>
+        <p class="truncate">{{previousField.prompt}}</p>
         <i class="fas fa-cog text-2xl text-accent-500"></i>
       </div>
     </mat-card>
