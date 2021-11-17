@@ -14,7 +14,6 @@ import { StationRosterMember } from 'src/models';
   styleUrls: ['./roster-management-modal.component.scss']
 })
 export class RosterManagementModalComponent implements OnInit {
-
   /** List users the organization. */
   listUsersOrganization: StationRosterMember[] = [];
 
@@ -163,6 +162,7 @@ export class RosterManagementModalComponent implements OnInit {
    */
   addUserToRoster(userIds: string): void {
     this.loadingMembers = true;
+    this.addRemoveRosterError = false;
     const addUserToRosterMethod$ = this.rosterType === 'workers'
       ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [userIds])
       : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [userIds]);
@@ -229,7 +229,7 @@ export class RosterManagementModalComponent implements OnInit {
    * @param user The user which will change its status.
    * @returns Check badge when user is added or None badge when is removed.
    */
-  getCurrentBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus'{
+  getCurrentBadge(user: StationRosterMember): 'none' | 'check' | 'minus' | 'plus' {
     const enableBadge = this.rosterType === 'workers' ? user.isWorker : user.isOwner;
     return enableBadge ? 'check' : 'none';
   }
@@ -243,5 +243,4 @@ export class RosterManagementModalComponent implements OnInit {
   userHadLastError(rithmId: string): boolean {
     return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
-
 }

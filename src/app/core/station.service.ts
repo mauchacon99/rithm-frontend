@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError} from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -134,9 +134,9 @@ export class StationService {
   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
     return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
-    {
-      body: usersIds
-    });
+      {
+        body: usersIds
+      });
   }
 
   /**
@@ -201,8 +201,8 @@ export class StationService {
       })).pipe(delay(1000));
     } else {
       const params = new HttpParams()
-      .set('stationRithmId', stationId);
-      return  this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users`,{params});
+        .set('stationRithmId', stationId);
+      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users`, { params });
     }
   }
 
@@ -222,10 +222,10 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns OwnerRoster in the station.
    */
-     addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
-      // eslint-disable-next-line max-len
-      return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
-    }
+  addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    // eslint-disable-next-line max-len
+    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
+  }
 
   /**
    * Remove owner from the station's roster.

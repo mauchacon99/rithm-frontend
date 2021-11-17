@@ -47,10 +47,12 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display/hide the document info drawer in station', ()=>{
-    const drawerItem='documentInfo';
-    const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService),'toggleDrawer');
+  it('should display/hide the document info drawer in station', () => {
+    const drawerItem = 'documentInfo';
+    const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const expectedData = { rithmId: rithmId };
+    const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
-    expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem);
+    expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
   });
 });

@@ -5,7 +5,11 @@ import { MockErrorService, MockStationService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -24,6 +28,10 @@ describe('DocumentInfoDrawerComponent', () => {
       ],
       imports: [
         MatCheckboxModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NoopAnimationsModule,
+        FormsModule
       ],
     })
       .compileComponents();
@@ -41,17 +49,18 @@ describe('DocumentInfoDrawerComponent', () => {
 
   it('should update the editable status of the document in the station', async () => {
     const newStatus = true;
+    component.stationRithmId = stationId;
     const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStatusDocumentEditable').and.callThrough();
 
-    await component.updateStatusDocumentEditable(stationId, newStatus);
+    await component.updateStatusDocumentEditable(newStatus);
 
     expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
   });
 
   it('should get the current editable status of the document', async () => {
+    component.stationRithmId = stationId;
     const getGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
-
-    await component.getStatusDocumentEditable(stationId);
+    await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });
