@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { delay, Observable, of, throwError } from 'rxjs';
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
 import { environment } from 'src/environments/environment';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -55,8 +56,36 @@ export class DocumentService {
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
-      { params: { documentId, stationId }}
+      { params: { documentId, stationId } }
     );
   }
 
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFiles  The appended files.
+   * @returns A list of field names for document name.
+   */
+   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFiles) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName: DocumentNameField[]= [
+        {
+          prompt: 'SKU',
+          rithmId: '1lk2-as3k-12kk-9s83'
+        },
+        {
+          prompt: '-',
+          rithmId: ''
+        }
+      ];
+      return of(documentFieldName).pipe(delay(1000));
+    }
+  }
 }

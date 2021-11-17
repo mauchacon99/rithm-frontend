@@ -15,7 +15,7 @@ describe('DocumentService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
-      ]
+      ],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -118,5 +118,4 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
-
 });
