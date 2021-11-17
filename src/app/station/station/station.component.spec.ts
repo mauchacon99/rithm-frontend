@@ -43,7 +43,7 @@ describe('StationComponent', () => {
         MockComponent(LoadingIndicatorComponent),
         MockComponent(ToolbarComponent),
         MockComponent(StationTemplateComponent)
-       ],
+      ],
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes(
@@ -57,12 +57,11 @@ describe('StationComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService },
-        {provide: DocumentService,useClass:MockDocumentService},
-        {provide: ErrorService, useClass:MockErrorService}
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -136,5 +135,4 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
-
 });
