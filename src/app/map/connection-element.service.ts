@@ -37,7 +37,7 @@ export class ConnectionElementService {
       throw new Error('Cannot draw connection if context is not defined');
     }
 
-    // this.drawConnectionLine(startPoint, endPoint);
+    this.drawConnectionLine(startPoint, endPoint);
     this.drawConnectionArrow(startPoint, endPoint);
   }
 
