@@ -38,8 +38,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Checks if map should be automatically panning without active user input. */
   autoPanning = false;
 
-  /**Set up interval for auto pan checks. */
-  private panInterval?: NodeJS.Timeout;
+  /**Flag for auto pan checks. */
+  private panActive?: boolean;
 
   /**Track what the next pan velocity is. */
   nextPanVelocity: Point = {x: 0, y: 0};
@@ -49,6 +49,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** The coordinate at which the current mouse point in the overall map. */
   currentMousePoint: Point = DEFAULT_MOUSE_POINT;
+
+  /** Requested animation for raf. */
+  private myReq?: number;
 
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
@@ -140,7 +143,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.autoPanning = true;
           }
           this.nextPanVelocity = velocity;
-          this.checkAutoPan(60);
+          this.checkAutoPan();
         }
       });
   }
@@ -544,19 +547,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Uses a setInterval to continuously check if the map should be auto panning.
    * Used when outside the bounding box and dragging.
    * //TODO: Allow use when middle wheel is active.
-   *
-   * @param fps The framerate to animate at.
    */
-  private checkAutoPan(fps = 60): void {
-    if (!this.panInterval && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
-      this.panInterval = setInterval(() => {
-        if ((this.autoPanning === false || this.currentMousePoint === DEFAULT_MOUSE_POINT) && this.panInterval) {
-          clearInterval(this.panInterval);
-          this.panInterval = undefined;
-        }
+  private checkAutoPan(): void {
+    if (!this.panActive && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      const step = (): void => {
+        this.panActive = true;
         this.autoMapPan(this.nextPanVelocity);
-        this.drawElements();
-      }, 1000/ fps);
+        if (this.autoPanning && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
+          this.myReq = requestAnimationFrame(step);
+        } else {
+          cancelAnimationFrame(this.myReq as number);
+          this.panActive = false;
+        }
+      };
+      this.myReq = requestAnimationFrame(step);
     }
   }
 
@@ -676,11 +680,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (station.dragging) {
           station.mapPoint.x -= xMove;
           station.mapPoint.y -= yMove;
-          this.drawElements();
         }
       }
     }
-
+    this.drawElements();
   }
 
   /**
@@ -859,7 +862,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
-      this.drawElements();
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
@@ -870,8 +872,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           station.mapPoint.y -= moveAmountY / this.scale;
 
           this.lastTouchCoords[0] = moveInput;
-
-          this.drawElements();
         }
       }
     } else if (this.dragItem === MapDragItem.Node) {
@@ -881,19 +881,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
-
-          this.drawElements();
         }
       }
     } else {
       //Hovering over different station elements.
       for (const station of this.stations) {
-        const previousHoverState = station.hoverActive;
         station.checkElementHover(moveInput, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
-          if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
-          }
           // eslint-disable-next-line max-len
           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
             this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -903,12 +897,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
           break;
         } else {
-          if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
-          }
           this.mapCanvas.nativeElement.style.cursor = 'default';
         }
       }
+    }
+    if (!this.panActive) {
+      this.drawElements();
     }
   }
 
