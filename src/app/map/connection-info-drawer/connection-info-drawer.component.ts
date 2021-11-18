@@ -51,7 +51,7 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: 'connectionInfo'): void {
+  toggleDrawer(drawerItem: 'connectionInfo' | 'deleteConnection'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 

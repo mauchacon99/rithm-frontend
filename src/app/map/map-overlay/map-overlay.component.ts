@@ -8,6 +8,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDrawer } from '@angular/material/sidenav';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -18,6 +20,10 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./map-overlay.component.scss']
 })
 export class MapOverlayComponent implements OnDestroy {
+
+  /** The component for the drawer that houses comments and history. */
+  @ViewChild('deleteDrawer', { static: true })
+  deleteDrawer!: MatDrawer;
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -94,10 +100,20 @@ export class MapOverlayComponent implements OnDestroy {
     return false;
   }
 
+  /**
+   * Whether to show the backdrop for the comment and history drawers.
+   *
+   * @returns Whether to show the backdrop.
+   */
+     get drawerHasBackdrop(): boolean {
+      return this.sidenavDrawerService.drawerHasBackdrop;
+    }
+
   constructor(
     private mapService: MapService,
     private popupService: PopupService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -145,6 +161,13 @@ export class MapOverlayComponent implements OnDestroy {
         }
       });
   }
+
+  /**
+   * Gets info about the mat-drawer toggle.
+   */
+     ngOnInit(): void {
+      this.sidenavDrawerService.setDrawer(this.deleteDrawer);
+    }
 
   /**
    * Cleans up subscription.
@@ -282,5 +305,14 @@ export class MapOverlayComponent implements OnDestroy {
       this.mapService.removeStationConnection(<StationMapElement>(this.station));
     }
   }
+
+  /**
+   * Toggles the open state of the drawer for station info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+    toggleDrawer(drawerItem: 'deleteConnection'): void {
+      this.sidenavDrawerService.toggleDrawer(drawerItem);
+    }
 
 }

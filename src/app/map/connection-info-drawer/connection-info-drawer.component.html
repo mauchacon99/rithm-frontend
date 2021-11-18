@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1">
+<div class="grid grid-cols-1 hidden">
   <div class="w-full py-2">
     <div class="col-span-12">
       <p class="overline">Connection Information</p>
@@ -17,9 +17,23 @@
     <button mat-stroked-button color="warn" class="priority" (click)="toggleDrawer('connectionInfo')">Remove Connection</button>
   </div>
 </div>
-<div class="flex justify-center">
+<div class="flex justify-center hidden">
   <div class="bottom-0 absolute mb-7">
     <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
       (click)="toggleDrawer('connectionInfo')">Done</button>
+  </div>
+</div>
+
+<div class="p-4">
+  <div class="col-span-12">
+    <p class="overline">Connection Information</p>
+  </div>
+  <div class="col-span-12">
+    <p class="py-2">Previous Station Name <i class="fa fa-long-arrow-right px-2"></i> Next Station Name</p>
+  </div>
+  <div class="flex justify-center">
+    <div class="bottom-0 absolute my-5 btn-done-fixed">
+      <button mat-stroked-button color="warn" class="priority" (click)="toggleDrawer('deleteConnection')">Delete Connection</button>
+    </div>
   </div>
 </div>
