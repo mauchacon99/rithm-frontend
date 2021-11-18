@@ -1,8 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Reusable component for the document information header.
@@ -13,7 +17,11 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   styleUrls: ['./document-info-header.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class DocumentInfoHeaderComponent implements OnInit {
+export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
+
+  /** Subject for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Type of user looking at a document. */
   @Input() userType!: UserType;
 
@@ -23,6 +31,9 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
+  /** Document Appended Fields. */
+  documentAppendedFields: DocumentNameField[] = [];
+
   /** Document name form. */
   documentNameForm: FormGroup;
 
@@ -30,6 +41,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
+    private stationService: StationService,
+    private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -42,6 +55,22 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
+
+    this.stationService.documentStationName$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe({
+      next: (data) => {
+        if (data){
+          this.documentAppendedFields.push(data);
+        }
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 
   /**
@@ -112,5 +141,13 @@ export class DocumentInfoHeaderComponent implements OnInit {
    */
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem, { rithmId: this.rithmId });
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

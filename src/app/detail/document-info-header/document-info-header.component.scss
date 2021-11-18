@@ -7,3 +7,12 @@
     @apply w-7 h-7 leading-6;
   }
 }
+.mat-icon-6{
+  ::ng-deep{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+  }
+}

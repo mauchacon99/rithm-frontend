@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
-  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
+  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -22,7 +22,7 @@ export class StationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** The Name of the Station Document as BehaviorSubject. */
-  documentStationName$ = new BehaviorSubject<string>('');
+  documentStationName$ = new BehaviorSubject<DocumentNameField | null>(null);
 
   constructor(
     private http: HttpClient
@@ -223,7 +223,7 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-  updatedDocumentStationNameText(documentName: string): void {
+  updatedDocumentStationNameField(documentName: DocumentNameField): void {
     this.documentStationName$.next(documentName);
   }
 

@@ -28,7 +28,7 @@
                  matInput
                  formControlName="appendField"
                  [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class">
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class" (optionSelected)="updStationDocumentFieldName($event.option.value)">
             <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.prompt">
               <p>{{option.prompt}}</p>
             </mat-option>
@@ -36,6 +36,7 @@
         </mat-form-field>
       </form>
     </div>
+
     <div class="col-span-12 py-3">
       <p class="overline pb-2">Separator Value</p>
       <mat-form-field class="w-full" appearance="outline">

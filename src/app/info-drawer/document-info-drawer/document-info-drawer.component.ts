@@ -68,7 +68,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
   ) {
     this.appendFieldForm = this.fb.group({
-      appendField: ''
+      appendField: '',
+      testAppendField: '',
     });
 
     this.sidenavDrawerService.drawerData$
@@ -153,6 +154,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  /**
+   * Update Document Name.
+   *
+   * @param field The field selected in autocomplete.
+   */
+   updStationDocumentFieldName(field: string): void{
+     const fieldSelected: DocumentNameField | undefined = this.options.find(value => value.prompt === field);
+    this.stationService.updatedDocumentStationNameField(fieldSelected as DocumentNameField);
+   }
 
   /**
    * Completes all subscriptions.
