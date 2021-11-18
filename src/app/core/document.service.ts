@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation } from 'src/models';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { delay, Observable, of, throwError } from 'rxjs';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -55,8 +55,57 @@ export class DocumentService {
    */
   getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
-      { params: { documentId, stationId }}
+      { params: { documentId, stationId } }
     );
   }
 
+  /**
+   * Get appended fields to document.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the fields in document.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFiles  The appended files.
+   * @returns A list of field names for document name.
+   */
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFiles) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName: DocumentNameField[] = [
+        {
+          prompt: 'SKU',
+          rithmId: '1lk2-as3k-12kk-9s83'
+        },
+        {
+          prompt: '-',
+          rithmId: ''
+        }
+      ];
+      return of(documentFieldName).pipe(delay(1000));
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
 import { DocumentService } from './document.service';
 import { DocumentStationInformation } from 'src/models';
 
@@ -15,7 +15,7 @@ describe('DocumentService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
-      ]
+      ],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -117,6 +117,42 @@ describe('DocumentService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should return appended fields to document', () => {
+    const stationId = '7654-321';
+    const expectData: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+
+    service.getAppendedFieldsOnDocumentName(stationId).subscribe((data) => {
+      expect(data).toEqual(expectData);
+    });
+  });
+
+  it('should update appended fields to document', () => {
+    const stationId = '7654-321';
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+
+    service.updateDocumentAppendedFields(stationId, appendedFields).subscribe((data) => {
+      expect(data).toEqual(appendedFields);
+    });
   });
 
 });
