@@ -1,9 +1,10 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
+  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField
 } from 'src/models';
 
 /**
@@ -15,7 +16,7 @@ export class MockStationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** The Name of the Station Document as BehaviorSubject. */
-  documentStationName$ = new BehaviorSubject<string>('');
+  documentStationName$ = new BehaviorSubject<DocumentNameField|null>(null);
 
   /**
    * Gets a station information.
@@ -509,7 +510,7 @@ export class MockStationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updatedDocumentStationNameText(documentName: string): void {
+   updatedDocumentStationNameField(documentName: DocumentNameField): void {
     this.documentStationName$.next(documentName);
   }
 

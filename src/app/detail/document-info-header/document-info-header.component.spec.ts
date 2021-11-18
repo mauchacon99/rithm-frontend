@@ -3,7 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { MatChipsModule } from '@angular/material/chips';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -15,8 +19,13 @@ describe('DocumentInfoHeaderComponent', () => {
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
-        MatInputModule
-      ]
+        MatInputModule,
+        MatChipsModule
+      ],
+      providers:[
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
     })
       .compileComponents();
   });
