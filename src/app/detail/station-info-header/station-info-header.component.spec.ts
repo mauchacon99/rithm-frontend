@@ -104,7 +104,7 @@ describe('StationInfoHeaderComponent', () => {
         { provide: StationService, useClass: MockStationService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
