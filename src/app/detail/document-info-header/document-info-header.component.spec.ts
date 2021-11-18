@@ -6,8 +6,9 @@ import { DocumentInfoHeaderComponent } from './document-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockErrorService, MockStationService, MockDocumentService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -22,10 +23,11 @@ describe('DocumentInfoHeaderComponent', () => {
         MatInputModule,
         MatChipsModule
       ],
-      providers:[
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService },
-      ],
+        { provide: ErrorService, useClass: MockErrorService }
+      ]
     })
       .compileComponents();
   });
@@ -59,9 +61,20 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    const expectedData = { rithmId: rithmId };
+    const expectedData = {
+      rithmId: rithmId
+    };
     const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
     expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
+  });
+
+  it('should get the appended fields in the document name', () => {
+    const stationId = '1234-1234-123';
+    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
+
+    component.getAppendedFieldsOnDocumentName(stationId);
+
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 });

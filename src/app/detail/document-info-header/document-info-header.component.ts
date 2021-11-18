@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
+import { StationService } from 'src/app/core/station.service';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 
 /**
@@ -36,11 +37,15 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Document name form. */
   documentNameForm: FormGroup;
 
+  /** Fields to Document in the station. */
+  appendedFields: DocumentNameField[] = [];
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
     private stationService: StationService,
+    private documentService: DocumentService,
     private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
@@ -64,6 +69,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
         }
       },
     });
+    this.getAppendedFieldsOnDocumentName(this.rithmId);
   }
 
   /**
@@ -133,13 +139,39 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'documentInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem, { rithmId: this.rithmId });
+    this.sidenavDrawerService.toggleDrawer(drawerItem,
+      {
+        rithmId: this.rithmId
+      }
+    );
+  }
+
+  /**
+   * Get appended fields to document.
+   *
+   * @param stationId  The id of station.
+   */
+  getAppendedFieldsOnDocumentName(stationId: string): void {
+    this.documentService.getAppendedFieldsOnDocumentName(stationId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.appendedFields = data;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }

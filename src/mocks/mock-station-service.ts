@@ -514,4 +514,12 @@ export class MockStationService {
     this.documentStationName$.next(documentName);
   }
 
+  /**
+   * Returns the station name.
+   *
+   * @param stationName The name of the station.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
+  }
 }
