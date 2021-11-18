@@ -99,6 +99,10 @@ export class FlowElementService {
     boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
 
     for (const point of boundaryPoints) {
+      // Draw the flow name on the first boundary point
+      if (boundaryPoints[0] === point) {
+        ctx.fillText(flow.title, point.x, point.y);
+      }
       ctx.lineTo(point.x, point.y);
     }
     ctx.stroke();
