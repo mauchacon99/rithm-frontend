@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-// eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType } from 'src/models';
-import { DocumentNameField } from 'src/models/document-name-field';
+import {
+  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
+  QuestionFieldType, StationDocuments, UserType, DocumentNameField
+} from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -378,13 +379,33 @@ export class MockDocumentService {
   }
 
   /**
+   * Get appended fields to document.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the fields in document.
+   */
+  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'SKU',
+        rithmId: '1lk2-as3k-12kk-9s83'
+      },
+      {
+        prompt: '-',
+        rithmId: ''
+      }
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
+
+  /**
    * Get the document field name array.
    *
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    * @returns A list of field names for document name.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
     if (!stationId || !appendedFiles) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -392,7 +413,7 @@ export class MockDocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const documentFieldName: DocumentNameField[]= [
+      const documentFieldName: DocumentNameField[] = [
         {
           prompt: 'SKU',
           rithmId: '1lk2-as3k-12kk-9s83'
