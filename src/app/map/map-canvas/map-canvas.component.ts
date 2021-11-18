@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionLineInfo } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_MOUSE_POINT,
@@ -66,7 +66,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private zoomInterval?: NodeJS.Timeout;
 
   /** Connection line path between stations. */
-  line = new Path2D();
+  lineItems = Array<ConnectionLineInfo>();
 
   /**
    * Add station mode active.
@@ -231,6 +231,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
 
         this.eventEndLogic(pointerPos);
+        this.openConnectionDrawer(event);
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -330,12 +331,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const pos = this.getEventCanvasPoint(event);
       this.singleInputMoveLogic(pos);
     }
-    if (this.context.isPointInStroke(this.line, event.offsetX, event.offsetY)) {
-      this.context.strokeStyle = 'green';
-    } else {
-      this.context.strokeStyle = 'red';
+    const mousePos = this.getEventContextPoint(event);
+
+    for (const connectionLine of this.lineItems) {
+      if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
+        this.context.strokeStyle = '#00ff00';
+        this.mapCanvas.nativeElement.style.cursor = 'pointer';
+      } else {
+        this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+        this.mapCanvas.nativeElement.style.cursor = 'default';
+      }
+      this.context.lineWidth = this.scale > SCALE_REDUCED_RENDER ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+      this.context.stroke(connectionLine.path);
     }
-    this.context.stroke(this.line);
   }
 
   /**
@@ -534,11 +542,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
       });
-
       // Draw the flows
       this.flowElementService.drawFlow(this.stations);
 
       // Draw the connections
+      this.lineItems.length = 0;
       for (const station of this.stations) {
         for (const connection of station.nextStations) {
           const outgoingStation = this.stations.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
@@ -550,21 +558,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             x: outgoingStation?.canvasPoint.x,
             y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
           };
-          // this.connectionElementService.drawConnection(startPoint, endPoint);
-          const line = this.connectionElementService.getConnectionLine(startPoint, endPoint);
+
+          const path = this.connectionElementService.getConnectionLine(startPoint, endPoint);
+
+          const lineInfo: ConnectionLineInfo = {connectionStartStationName: station.stationName,
+            connectionEndStationName: outgoingStation.stationName, connectionStartStationRithmId: station.rithmId,
+           connectionEndStationRithmId: outgoingStation.rithmId, path: path };
+
+          this.lineItems.push(lineInfo);
           const ctx = this.context;
 
           // Draw connection line
           ctx.setLineDash([0, 0]);
 
-          // Line
           ctx.beginPath();
           ctx.moveTo(startPoint.x, startPoint.y);
-          ctx.lineWidth = this.scale > SCALE_REDUCED_RENDER
-          ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
+          ctx.lineWidth = this.scale > SCALE_REDUCED_RENDER ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
           ctx.strokeStyle = CONNECTION_DEFAULT_COLOR;
-          ctx.stroke(line);
-          this.connectionElementService.drawConnection(startPoint, endPoint);
+          ctx.stroke(path);
         }
       }
 
@@ -598,7 +609,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas.
    */
-  private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch): Point {
+  private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch | PointerEvent): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,
@@ -613,7 +624,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas context.
    */
-   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
+   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch | PointerEvent): Point {
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
       x: canvasPoint.x * window.devicePixelRatio,
@@ -885,6 +896,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
+    }
+  }
+
+  /**
+   * Handles user input when a clicked connection line.
+   *
+   * @param event The click event points that was clicked.
+   */
+   openConnectionDrawer(event: PointerEvent): void {
+    const mousePos = this.getEventContextPoint(event);
+
+    for (const connectionLine of this.lineItems) {
+      if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
+        this.context.strokeStyle = '#00ff00';
+        this.mapCanvas.nativeElement.style.cursor = 'pointer';
+      } else {
+        this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+        this.mapCanvas.nativeElement.style.cursor = 'default';
+      }
+      this.context.stroke(connectionLine.path);
     }
   }
 

@@ -9,8 +9,9 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
-
+import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
+import { DocumentService } from 'src/app/core/document.service';
+import { DocumentNameField } from 'src/models/document-name-field';
 /**
  * Main component for viewing a station.
  */
@@ -65,6 +66,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private documentService: DocumentService,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -244,4 +246,26 @@ export class StationComponent implements OnInit, OnDestroy {
   //     );
   //   });
   // }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFiles  The appended files.
+   */
+   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const documentName = data;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }

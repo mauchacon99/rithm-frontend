@@ -117,6 +117,8 @@ export class ConnectionElementService {
    getConnectionLine(startPoint: Point, endPoint: Point): Path2D {
     const path = new Path2D();
     path.moveTo(startPoint.x, startPoint.y);
+
+    // add path
     if (startPoint.x - STATION_WIDTH*1.5*this.mapScale < endPoint.x) {
       const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint);
       path.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
@@ -158,6 +160,24 @@ export class ConnectionElementService {
         path.arc(
           endPoint.x, endPoint.y + STATION_HEIGHT/3*this.mapScale , STATION_HEIGHT/3*this.mapScale, .5 * Math.PI, 1.5 * Math.PI, false);
     }
+
+    // add arrow
+    const controlPoints = this.getConnectionLineControlPoints(startPoint, endPoint);
+    const ex = endPoint.x;
+    const ey = endPoint.y;
+    const norm = startPoint.x - STATION_WIDTH*1.5*this.mapScale > endPoint.x ?
+    this.getNormalizedVectorPoint({x: endPoint.x - 10, y: endPoint.y}, endPoint)
+    : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
+    const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
+    let x, y;
+    x = (arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
+    y = (arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
+    path.moveTo(ex + x, ey + y);
+    path.lineTo(ex, ey);
+    x = (arrowWidth * -norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * this.mapScale;
+    y = (arrowWidth * -norm.y + CONNECTION_ARROW_LENGTH * norm.x) * this.mapScale;
+    path.lineTo(ex + x, ey + y);
+
     return path;
   }
 
