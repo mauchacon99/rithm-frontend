@@ -425,7 +425,7 @@ export class MapService {
       if (flowsThatContainThisFlow.length > 1) {
         // eslint-disable-next-line no-console
         console.error(`The flow ${flow.rithmId} is contained in ${flowsThatContainThisFlow.length} flows!`);
-      } else if (!flowsThatContainThisFlow.length && flow.rithmId) {
+      } else if (!flowsThatContainThisFlow.length && !flow.isReadOnlyRootFlow) {
         // eslint-disable-next-line no-console
         console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
       }
