@@ -3,7 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DocumentService } from 'src/app/core/document.service';
+import { MockDocumentService } from 'src/mocks/mock-document-service';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from 'src/mocks/mock-error-service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -16,6 +20,10 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule
+      ],
+      providers: [
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();
@@ -50,9 +58,20 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    const expectedData = { rithmId: rithmId };
+    const expectedData = {
+      rithmId: rithmId
+    };
     const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
     expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
+  });
+
+  it('should get the appended fields in the document name', () => {
+    const stationId = '1234-1234-123';
+    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
+
+    component.getAppendedFieldsOnDocumentName(stationId);
+
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 });
