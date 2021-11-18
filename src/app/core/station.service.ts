@@ -219,11 +219,11 @@ export class StationService {
   }
 
   /**
-   * Returns the station document name.
+   * Update the station document name.
    *
    * @param documentName The name of the document in the station.
    */
-  updatedDocumentStationNameField(documentName: DocumentNameField): void {
+   updateDocumentStationNameField(documentName: DocumentNameField): void {
     this.documentStationName$.next(documentName);
   }
 

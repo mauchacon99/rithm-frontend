@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Reusable component for the document information header.
@@ -64,12 +63,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
           this.documentAppendedFields.push(data);
         }
       },
-      error: (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
     });
   }
 

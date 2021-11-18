@@ -162,7 +162,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
    updStationDocumentFieldName(field: string): void{
      const fieldSelected: DocumentNameField | undefined = this.options.find(value => value.prompt === field);
-    this.stationService.updatedDocumentStationNameField(fieldSelected as DocumentNameField);
+    this.stationService.updateDocumentStationNameField(fieldSelected as DocumentNameField);
    }
 
   /**
