@@ -9,6 +9,9 @@ import { MockMapService } from 'src/mocks';
 import { MapService } from '../map.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MapOverlayComponent } from './map-overlay.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -16,12 +19,15 @@ describe('MapOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       declarations: [MapOverlayComponent],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSidenavModule,
+        NoopAnimationsModule
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
