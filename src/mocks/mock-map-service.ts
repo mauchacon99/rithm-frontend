@@ -117,7 +117,8 @@ export class MockMapService {
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
           ],
           subFlows: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          isReadOnlyRootFlow: false
         }
       ]
     };
