@@ -1,11 +1,14 @@
 import { MapItemStatus } from '.';
 
 /**
- * Represents all info about a flow as returned from the API.
+ * Represents all info about a flow as returned from and to be sent to the API.
  */
 export interface FlowMapData {
   /** The global Rithm id for the flow. */
   readonly rithmId: string;
+
+  /** The id of the organization that this flow belongs to. */
+  readonly organizationRithmId: string;
 
   /** The name of the flow. */
   title: string;
