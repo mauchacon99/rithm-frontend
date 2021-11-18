@@ -909,13 +909,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     for (const connectionLine of this.lineItems) {
       if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
-        this.context.strokeStyle = '#00ff00';
-        this.mapCanvas.nativeElement.style.cursor = 'pointer';
-      } else {
-        this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
-        this.mapCanvas.nativeElement.style.cursor = 'default';
+        // TODO: code to open connection info drawer
       }
-      this.context.stroke(connectionLine.path);
     }
   }
 
