@@ -4,9 +4,9 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionLineInfo } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS,
-  BUTTON_RADIUS, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_REDUCED_RENDER, SCALE_RENDER_STATION_ELEMENTS,
+import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR,
+  CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT, DEFAULT_MOUSE_POINT,
+  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, NODE_HOVER_COLOR, SCALE_REDUCED_RENDER, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -335,7 +335,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     for (const connectionLine of this.lineItems) {
       if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
-        this.context.strokeStyle = '#00ff00';
+        this.context.strokeStyle = NODE_HOVER_COLOR;
         this.mapCanvas.nativeElement.style.cursor = 'pointer';
       } else {
         this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
@@ -542,8 +542,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
       });
+
       // Draw the flows
       this.flowElementService.drawFlow(this.stations);
+
+      // Draw the stations
+      this.stations.forEach((station) => {
+        this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
+      });
 
       // Draw the connections
       this.lineItems.length = 0;
@@ -578,11 +584,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           ctx.stroke(path);
         }
       }
-
-      // Draw the stations
-      this.stations.forEach((station) => {
-        this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
-      });
 
     });
   }
