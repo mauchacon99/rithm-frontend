@@ -639,6 +639,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     };
 
     const panVelocity: Point = {x: 0, y: 0};
+    const mobileAdjust = window.innerWidth < 768 ? 36 : 0;
 
     //Set direction and speed to pan x.
     if (position.x < box()) {
@@ -653,8 +654,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (position.y < box()) {
       const topPan = Math.floor((box() - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
       panVelocity.y = topPan <= Math.floor(MAX_PAN_VELOCITY / this.scale) ? topPan : Math.floor(MAX_PAN_VELOCITY / this.scale);
-    } else if (position.y > canvasRect.height - box() - 36) {
-      const bottomPan = Math.floor((canvasRect.height - box() - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
+    } else if (position.y > canvasRect.height - box() - mobileAdjust) {
+      const bottomPan = Math.floor((canvasRect.height - box() - mobileAdjust - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
       panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
