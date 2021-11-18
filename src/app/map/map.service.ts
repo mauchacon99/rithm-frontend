@@ -89,6 +89,9 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
+        if (!environment.production && !environment.testing) {
+          this.validateMapData();
+        }
         this.mapDataReceived$.next(true);
         return data;
       }));
@@ -384,6 +387,49 @@ export class MapService {
       x: this.getMapX(canvasPoint.x),
       y: this.getMapY(canvasPoint.y)
     };
+  }
+
+  /**
+   * Validates that data returned from the API doesn't contain any logical problems.
+   */
+  private validateMapData(): void {
+    this.validateStationsBelongToExactlyOneFlow();
+    this.validateFlowsBelongToExactlyOneFlow();
+  }
+
+  /**
+   * Validates that stations belong to exactly one immediate parent flow.
+   */
+  private validateStationsBelongToExactlyOneFlow(): void {
+    // Each station should belong to exactly one flow.
+    for (const station of this.stationElements) {
+      const flowsThatContainThisStation = this.flowElements.filter((flow) => flow.stations.includes(station.rithmId));
+      if (flowsThatContainThisStation.length > 1) {
+        const flowDetails: string = flowsThatContainThisStation.map((flowInfo) => `${flowInfo.rithmId}: ${flowInfo.title}`).toString();
+        // eslint-disable-next-line no-console
+        console.error(`The station ${station.rithmId} is contained in ${flowsThatContainThisStation.length} flows: ${flowDetails}`);
+      } else if (!flowsThatContainThisStation.length) {
+        // eslint-disable-next-line no-console
+        console.error(`No flows contain the station: ${station.stationName}: ${station.rithmId}`);
+      }
+    }
+  }
+
+  /**
+   * Validates that flows belong to exactly one immediate parent flow.
+   */
+  private validateFlowsBelongToExactlyOneFlow(): void {
+    // Each flow should belong to exactly one flow.
+    for (const flow of this.flowElements) {
+      const flowsThatContainThisFlow = this.flowElements.filter((flowElement) => flowElement.subFlows.includes(flow.rithmId));
+      if (flowsThatContainThisFlow.length > 1) {
+        // eslint-disable-next-line no-console
+        console.error(`The flow ${flow.rithmId} is contained in ${flowsThatContainThisFlow.length} flows!`);
+      } else if (!flowsThatContainThisFlow.length && flow.rithmId) {
+        // eslint-disable-next-line no-console
+        console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
+      }
+    }
   }
 
 }
