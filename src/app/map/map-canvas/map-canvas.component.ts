@@ -339,9 +339,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapCanvas.nativeElement.style.cursor = 'pointer';
       } else {
         this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
-        this.mapCanvas.nativeElement.style.cursor = 'default';
       }
-      this.context.lineWidth = this.scale > SCALE_REDUCED_RENDER ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
       this.context.stroke(connectionLine.path);
     }
   }
