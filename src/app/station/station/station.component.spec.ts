@@ -23,6 +23,8 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
+import { MockUserService } from 'src/mocks/mock-user-service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -33,7 +35,6 @@ describe('StationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationComponent,
-        MockComponent(StationInfoHeaderComponent),
         MockComponent(SubHeaderComponent),
         MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
@@ -58,7 +59,8 @@ describe('StationComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: UserService, useClass: MockUserService }
       ]
     })
       .compileComponents();
@@ -134,5 +136,31 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeFalse();
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
+  });
+
+  it('should show loading-indicators while get data initial the station', () => {
+    component.getStationInfo(component.stationInformation.rithmId);
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#component-station-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show loading-indicators while update all petitions the station', () => {
+    component.saveStationInformation();
+    fixture.detectChanges();
+    expect(component.stationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#component-station-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should execute all petitions how the button save is clicked', () => {
+    const updateStation = spyOn(TestBed.inject(StationService), 'updateStation').and.callThrough();
+    const updateFieldsDocument = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
+
+    component.saveStationInformation();
+
+    expect(updateStation).toHaveBeenCalledOnceWith(component.stationInformation);
+    expect(updateFieldsDocument).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
   });
 });

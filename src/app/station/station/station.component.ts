@@ -144,7 +144,7 @@ export class StationComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-  private getStationInfo(stationId: string): void {
+  getStationInfo(stationId: string): void {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
@@ -193,17 +193,27 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update the Station.
+   * Save the Station.
    *
-   * @param stationInformation This Data global, for set data in update request.
    */
-  updateStation(stationInformation: StationInformation): void {
+  saveStation(): void {
     const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    stationInformation.name = nameStationChange;
+    this.stationInformation.name = nameStationChange;
+    this.saveStationInformation();
+  }
+
+  /**
+   * Save Station information.
+   *
+   */
+  saveStationInformation(): void {
     this.stationLoading = true;
 
     const petitionsUpdateStation = [
-      this.stationService.updateStation(stationInformation).pipe(first()),
+      // Petition for update all station.
+      this.stationService.updateStation(this.stationInformation).pipe(first()),
+
+      // Update appended fields to document.
       // Second parameter appendedFields temporary.
       this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId,
         []).pipe(takeUntil(this.destroyed$))
@@ -217,10 +227,8 @@ export class StationComponent implements OnInit, OnDestroy {
             if (stationUpdated[0]) {
               const dataStationInformation = stationUpdated[0] as StationInformation;
               this.stationInformation = dataStationInformation;
-              console.log(this.stationInformation);
             }
           }
-          console.log(stationUpdated);
         },
         error: (error: unknown) => {
           this.errorService.displayError(
@@ -231,44 +239,6 @@ export class StationComponent implements OnInit, OnDestroy {
           this.stationLoading = false;
         }
       });
-
-    // petitionsUpdateStation.pipe(
-    //   mergeMap(value => value),
-    //   takeUntil(this.destroyed$)
-    // ).subscribe({
-    //   next: (stationUpdated: StationInformation | DocumentNameField[]) => {
-    //     console.log(stationUpdated, typeof (stationUpdated));
-    //     if (!(stationUpdated instanceof Array)) {
-    //       this.stationInformation = stationUpdated as StationInformation;
-    //     }
-    //   }, error: (error: unknown) => {
-    //     this.errorService.displayError(
-    //       'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-    //       error
-    //     );
-    //   }, complete: () => {
-    //     this.stationLoading = false;
-    //   }
-    // });
-
-
-    // this.stationService.updateStation(stationInformation)
-    //   .pipe(first())
-    //   .subscribe({
-    //     next: (stationUpdated) => {
-    //       if (stationUpdated) {
-    //         this.stationInformation = stationUpdated;
-    //       }
-    //       this.stationLoading = false;
-    //     },
-    //     error: (error: unknown) => {
-    //       this.stationLoading = false;
-    //       this.errorService.displayError(
-    //         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-    //         error
-    //       );
-    //     }
-    //   });
   }
 
   /**
