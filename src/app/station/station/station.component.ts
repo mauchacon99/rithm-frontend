@@ -209,10 +209,11 @@ export class StationComponent implements OnInit, OnDestroy {
     );
 
     petitionsUpdateStation.pipe(
-      mergeMap(value => value), takeUntil(this.destroyed$)
+      mergeMap(value => value),
+      takeUntil(this.destroyed$)
     ).subscribe({
       next: (stationUpdated: StationInformation | DocumentNameField[]) => {
-        console.log(stationUpdated);
+        console.log(stationUpdated, typeof (stationUpdated));
         if (!(stationUpdated instanceof Array)) {
           this.stationInformation = stationUpdated as StationInformation;
         }
