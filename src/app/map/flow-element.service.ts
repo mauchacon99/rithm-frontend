@@ -55,7 +55,7 @@ export class FlowElementService {
     let flowPoints: Point[] = [];
 
     // If flow contains stations, calculate the points
-    if (flow.stations) {
+    if (flow.stations.length) {
       const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
 
       // Get all the points within this flow
@@ -71,7 +71,7 @@ export class FlowElementService {
       }
     }
 
-    if (flow.subFlows) {
+    if (flow.subFlows.length) {
       const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
       subFlows.forEach((subFlow) => {
         flowPoints = flowPoints.concat(subFlow.boundaryPoints);
@@ -79,7 +79,7 @@ export class FlowElementService {
     }
 
     // Determine the bounding box points
-    let boundaryPoints = this.getConvexHull(flowPoints);
+    const boundaryPoints = this.getConvexHull(flowPoints);
     flow.boundaryPoints = boundaryPoints;
 
     // Draw the bounding box
@@ -96,11 +96,11 @@ export class FlowElementService {
     ctx.strokeStyle = strokeColor;
 
     ctx.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
-    boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
+    flow.boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
 
-    for (const point of boundaryPoints) {
+    for (const point of flow.boundaryPoints) {
       // Draw the flow name on the first boundary point
-      if (boundaryPoints[0] === point) {
+      if (flow.boundaryPoints[0] === point) {
         ctx.fillText(flow.title, point.x, point.y);
       }
       ctx.lineTo(point.x, point.y);
