@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { Question } from 'src/models';
+import { PreviousFieldModalComponent } from 'src/app/shared/previous-field-modal/previous-field-modal.component';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -29,9 +31,14 @@ questionsError=false;
 /** Whether questions is loading. */
 isLoading = false;
 
+/** Emit the close modal. */
+@Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
+  private dialog: MatDialog,
 ){}
 
 /**
@@ -55,6 +62,26 @@ ngOnInit(): void{
       next: (questions: Question[]) => {
         if (questions) {
           this.questions = questions;
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj4j' + isPrivate,
+            prompt: 'Label #1',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: isPrivate,
+            children: [],
+          });
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj2j' + isPrivate,
+            prompt: 'Label #2',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: isPrivate,
+            children: [],
+          });
         }
         this.isLoading = false;
       }, error: (error: unknown) => {
@@ -65,6 +92,18 @@ ngOnInit(): void{
           error
         );
       }
+    });
+  }
+
+  /**
+   * Open a modal to move a field from all/private to the template area.
+   *
+   * @param previousField  The previous field of questions to move.
+   */
+  openPreviousFieldModal(previousField: Question): void {
+    this.dialog.open(PreviousFieldModalComponent, {
+      minWidth: '325px',
+      data: { rithmId: previousField.rithmId, isPrivate: previousField.isPrivate }
     });
   }
 }

@@ -23,6 +23,9 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
+import { PreviousFieldModalComponent } from './previous-field-modal/previous-field-modal.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -37,7 +40,8 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-    RosterManagementModalComponent
+    RosterManagementModalComponent,
+    PreviousFieldModalComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +58,8 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     MatMenuModule,
     MatTooltipModule,
     MatBadgeModule,
+    MatSelectModule,
+    MatFormFieldModule
   ],
   exports: [
     LoadingIndicatorComponent,

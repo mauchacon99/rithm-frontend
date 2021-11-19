@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -18,7 +19,8 @@ describe('PreviousFieldsComponent', () => {
         MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
-        MatCardModule
+        MatCardModule,
+        MatDialogModule
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
