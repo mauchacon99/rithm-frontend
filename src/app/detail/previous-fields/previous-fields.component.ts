@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { PreviousFieldModalComponent } from 'src/app/shared/previous-field-modal/previous-field-modal.component';
-import { Question } from 'src/models';
+import { DialogType, Question, QuestionFieldType } from 'src/models';
+import { DialogComponent } from '../../shared/dialog/dialog.component';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -62,6 +62,26 @@ ngOnInit(): void{
       next: (questions: Question[]) => {
         if (questions) {
           this.questions = questions;
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+          });
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj2j',
+            prompt: 'Label #2',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+          });
         }
         this.isLoading = false;
       }, error: (error: unknown) => {
@@ -78,12 +98,17 @@ ngOnInit(): void{
   /**
    * Open a modal to move a field from all/private to the template area.
    *
-   * @param previousField  The previous field of questions to move.
    */
-  openPreviousFieldModal(previousField: Question): void {
-    this.dialog.open(PreviousFieldModalComponent, {
+  openPreviousFieldModal(): void {
+    this.dialog.open(DialogComponent, {
       minWidth: '325px',
-      data: { rithmId: previousField.rithmId, isPrivate: previousField.isPrivate }
+      data: {
+        type: DialogType.Confirm,
+        title: 'Move field?',
+        message: 'Are you sure you want to move this field into the template area?',
+        okButtonText: 'Confirm',
+        cancelButtonText: 'Close'
+       }
     });
   }
 }

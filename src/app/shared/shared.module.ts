@@ -23,7 +23,6 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
-import { PreviousFieldModalComponent } from './previous-field-modal/previous-field-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +36,7 @@ import { PreviousFieldModalComponent } from './previous-field-modal/previous-fie
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-    RosterManagementModalComponent,
-    PreviousFieldModalComponent
+    RosterManagementModalComponent
   ],
   imports: [
     CommonModule,
