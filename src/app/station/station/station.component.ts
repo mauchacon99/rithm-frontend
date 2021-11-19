@@ -198,8 +198,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationInformation This Data global, for set data in update request.
    */
   updateStation(stationInformation: StationInformation): void {
-    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    stationInformation.name = nameStationChange;
+    this.updateStationName(stationInformation);
     this.stationLoading = true;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
@@ -267,5 +266,14 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /** Update station name.
+   *
+   * @param stationInformation  Station Information Array.
+   */
+   updateStationName(stationInformation: StationInformation): void{
+    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
+    stationInformation.name = nameStationChange;
   }
 }
