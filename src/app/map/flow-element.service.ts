@@ -49,36 +49,45 @@ export class FlowElementService {
       return; // No need to calculate/render the root flow
     }
 
-    const flowPoints: Point[] = [];
-    flowPoints.push(...this.getStationPointsForFlow(flow));
-    flowPoints.push(...this.getSubFlowPointsForFlow(flow));
+    // Determine the points within the flow
+    const pointsWithinFlow: Point[] = [];
+    pointsWithinFlow.push(...this.getStationPointsForFlow(flow));
+    pointsWithinFlow.push(...this.getSubFlowPointsForFlow(flow));
 
-    // Determine the bounding box points
-    const boundaryPoints = this.getConvexHull(flowPoints);
-    flow.boundaryPoints = boundaryPoints;
+    // Determine the points for the boundary line
+    flow.boundaryPoints = this.getConvexHull(pointsWithinFlow);
 
     // Draw the bounding box
-    const strokeColor = CONNECTION_DEFAULT_COLOR;
+    this.drawFlowBoundaryLine(flow);
+  }
+
+  /**
+   * Draws the boundary line on the map for a flow.
+   *
+   * @param flow The flow for which to draw the flow boundary line.
+   */
+  private drawFlowBoundaryLine(flow: FlowMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw flow if context is not defined');
     }
-
     const ctx = this.canvasContext;
+    const strokeColor = CONNECTION_DEFAULT_COLOR;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle = strokeColor;
 
-    ctx.moveTo(boundaryPoints[0].x, boundaryPoints[0].y);
-    flow.boundaryPoints = boundaryPoints.concat(boundaryPoints.splice(0, 1));
+    ctx.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
+    flow.boundaryPoints = flow.boundaryPoints.concat(flow.boundaryPoints.splice(0, 1)); // Shift the first point to the back
 
-    for (const point of flow.boundaryPoints) {
+    for (const boundaryPoint of flow.boundaryPoints) {
       // Draw the flow name on the first boundary point
-      if (flow.boundaryPoints[0] === point) {
-        ctx.fillText(flow.title, point.x, point.y);
+      // TODO: Update this to be more dynamic
+      if (flow.boundaryPoints[0] === boundaryPoint) {
+        ctx.fillText(flow.title, boundaryPoint.x, boundaryPoint.y);
       }
-      ctx.lineTo(point.x, point.y);
+      ctx.lineTo(boundaryPoint.x, boundaryPoint.y);
     }
     ctx.stroke();
     ctx.setLineDash([]);
