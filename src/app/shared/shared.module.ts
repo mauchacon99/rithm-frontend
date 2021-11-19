@@ -24,9 +24,6 @@ import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
 import { PreviousFieldModalComponent } from './previous-field-modal/previous-field-modal.component';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-
 
 @NgModule({
   declarations: [
@@ -57,9 +54,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCardModule,
     MatMenuModule,
     MatTooltipModule,
-    MatBadgeModule,
-    MatSelectModule,
-    MatFormFieldModule
+    MatBadgeModule
   ],
   exports: [
     LoadingIndicatorComponent,
