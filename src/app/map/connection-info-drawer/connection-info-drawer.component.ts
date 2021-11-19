@@ -22,10 +22,10 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   connectedStations: StationMapElement[] = [];
 
   /** Name of the station where the connection begins. */
-  connectionStartStationName = '';
+  connectionStartStationName = 'StartStationName';
 
   /** Name of the station where the connection ends. */
-  connectionEndStationName = '';
+  connectionEndStationName = 'EndStationName';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
