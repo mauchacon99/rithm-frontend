@@ -19,7 +19,7 @@ export class FlowElementService {
   ) { }
 
   /**
-   * Test.
+   * Draws all the flow boundaries on the map. Starts from the deepest flows and works back to the root.
    */
   drawFlows(): void {
     if (!this.mapService.flowElements.length) {
@@ -33,11 +33,11 @@ export class FlowElementService {
   }
 
   /**
-   * Draws a flow on the map.
+   * Draws a specific flow on the map. Draws any nested flows first through recursion.
    *
-   * @param flow The station for which to draw the card.
+   * @param flow The flow to be drawn on the map.
    */
-  drawFlow(flow: FlowMapElement): void {
+  private drawFlow(flow: FlowMapElement): void {
 
     // If flow has a sub-flow, draw that first
     flow.subFlows.forEach((subFlowId) => {
