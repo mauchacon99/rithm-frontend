@@ -74,7 +74,7 @@ export class FlowElementService {
     if (flow.subFlows.length) {
       const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
       subFlows.forEach((subFlow) => {
-        flowPoints = flowPoints.concat(subFlow.boundaryPoints);
+        flowPoints = flowPoints.concat(this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints));
       });
     }
 
@@ -107,6 +107,43 @@ export class FlowElementService {
     }
     ctx.stroke();
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Adds flow padding to the provided boundary points and returns it.
+   *
+   * @param boundaryPoints The existing flow boundary points for which to add padding.
+   * @returns The padded flow boundary points.
+   */
+  private getPaddedFlowBoundaryPoints(boundaryPoints: Point[]): Point[] {
+    const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
+    const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
+    const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
+    const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
+    const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
+    // Get center average point of boundary
+    // const averageCenterPoint = {
+    //   x: minX + maxX / 2,
+    //   y: minY + maxY / 2
+    // };
+
+    for (const point of updatedBoundaryPoints) {
+
+      if (point.x === maxX) {
+        point.x += FLOW_PADDING * this.mapService.mapScale$.value;
+      } else if (point.x === minX) {
+        point.x -= FLOW_PADDING * this.mapService.mapScale$.value;
+      }
+
+      if (point.y === maxY) {
+        point.y += FLOW_PADDING * this.mapService.mapScale$.value;
+      } else if (point.y === minY) {
+        point.y -= FLOW_PADDING * this.mapService.mapScale$.value;
+      }
+
+    }
+
+    return updatedBoundaryPoints;
   }
 
   /**
