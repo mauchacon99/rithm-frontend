@@ -9,8 +9,9 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from '../../detail/station-info-header/station-info-header.component';
-
+import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
+import { DocumentService } from 'src/app/core/document.service';
+import { DocumentNameField } from 'src/models/document-name-field';
 /**
  * Main component for viewing a station.
  */
@@ -29,7 +30,7 @@ export class StationComponent implements OnInit, OnDestroy {
   stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
-  destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Station form. */
   stationForm: FormGroup;
@@ -65,6 +66,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private documentService: DocumentService,
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -100,17 +102,19 @@ export class StationComponent implements OnInit, OnDestroy {
   private getParams(): void {
     this.route.params
       .pipe(first())
-      .subscribe((params) => {
-        if (!params.stationId) {
-          this.handleInvalidParams();
-        } else {
-          this.getStationInfo(params.stationId);
+      .subscribe({
+        next: (params) => {
+          if (!params.stationId) {
+            this.handleInvalidParams();
+          } else {
+            this.getStationInfo(params.stationId);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-      }, (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -144,18 +148,21 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
-      .subscribe((stationInfo) => {
-        if (stationInfo) {
-          this.stationInformation = stationInfo;
+      .subscribe({
+        next: (stationInfo) => {
+          if (stationInfo) {
+            this.stationInformation = stationInfo;
+          }
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.navigateBack();
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.navigateBack();
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -167,7 +174,7 @@ export class StationComponent implements OnInit, OnDestroy {
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
       rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label',
+      prompt: '',
       instructions: '',
       questionType: fieldType,
       isReadOnly: false,
@@ -196,17 +203,20 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationLoading = true;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
-      .subscribe((stationUpdated) => {
-        if (stationUpdated) {
-          this.stationInformation = stationUpdated;
+      .subscribe({
+        next: (stationUpdated) => {
+          if (stationUpdated) {
+            this.stationInformation = stationUpdated;
+          }
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.stationLoading = false;
-      }, (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
       });
   }
 
@@ -236,4 +246,26 @@ export class StationComponent implements OnInit, OnDestroy {
   //     );
   //   });
   // }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFiles  The appended files.
+   */
+   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const documentName = data;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }

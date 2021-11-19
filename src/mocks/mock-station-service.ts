@@ -2,7 +2,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember } from 'src/models';
+import {
+  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
+} from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -10,7 +12,7 @@ import { Question, QuestionFieldType, Station, StationInformation, DocumentGener
 export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
-    stationName$ = new BehaviorSubject<string>('');
+  stationName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a station information.
@@ -101,7 +103,7 @@ export class MockStationService {
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
     if (!station) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station without defining a station.'
         }
@@ -267,38 +269,42 @@ export class MockStationService {
    * @param pageNum The current page.
    * @returns Users for the organization bind to station.
    */
-  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationRosterMember[]> {
+  // eslint-disable-next-line max-len
+  getPotentialStationRosterMembers(organizationId: string, stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
     if (!organizationId || !pageNum) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Some error message'
         }
       })).pipe(delay(1000));
     } else {
-      const orgUsers: StationRosterMember[] = [{
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      }];
+      const orgUsers: StationPotentialRostersUsers = {
+        users: [{
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        }],
+        totalUsers: 3
+      };
       return of(orgUsers).pipe(delay(1000));
     }
   }
@@ -310,7 +316,7 @@ export class MockStationService {
    */
   deleteStation(stationId: string): Observable<unknown> {
     if (!stationId) {
-      return throwError(new HttpErrorResponse({
+      return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot delete the station without defining a station.'
         }
@@ -318,7 +324,7 @@ export class MockStationService {
     } else {
       return of().pipe(delay(1000));
     }
-   }
+  }
 
   /**
    * Removes users  from the station's workers roster.
@@ -327,31 +333,31 @@ export class MockStationService {
    * @param usersIds The selected users id array to removed.
    * @returns New Station information with worker roster.
    */
-   removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]>{
+  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
     const data: StationRosterMember[] = [{
-        rithmId: '12dasd1-asd12asdasd-asdas',
-        firstName: 'Cesar',
-        lastName: 'Quijada',
-        email: 'strut@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-ffff1',
-        firstName: 'Maria',
-        lastName: 'Quintero',
-        email: 'Maquin@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      },
-      {
-        rithmId: '12dasd1-asd12asdasd-a231',
-        firstName: 'Pedro',
-        lastName: 'Perez',
-        email: 'pperez@gmail.com',
-        isOwner: true,
-        isWorker: true,
-      }];
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    }];
     return of(data).pipe(delay(1000));
   }
 
@@ -361,25 +367,145 @@ export class MockStationService {
    * @param stationId The id of the given station.
    * @returns A rosterMember array.
    */
-  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]>{
+  getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     const mockRosterMember: StationRosterMember[] = [
-        {
-            rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-            firstName: 'Worker',
-            lastName: 'User',
-            email: 'workeruser@inpivota.com',
-            isOwner: true,
-            isWorker: true,
-        },
-        {
-            rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
-            firstName: 'Rithm',
-            lastName: 'User',
-            email: 'rithmuser@inpivota.com',
-            isOwner: true,
-            isWorker: true,
-        },
+      {
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isOwner: true,
+        isWorker: true,
+      },
     ];
     return of(mockRosterMember).pipe(delay(1000));
+  }
+
+  /**
+   * Get Owner Roster for a given Station.
+   *
+   * @param stationId The id of the given station.
+   * @returns A rosterMember array.
+   */
+  getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]> {
+    const mockRosterMember: StationRosterMember[] = [
+      {
+        rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
+        firstName: 'Rithm',
+        lastName: 'User',
+        email: 'rithmuser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
+    return of(mockRosterMember).pipe(delay(1000));
+  }
+
+  /**
+   * Adds users to the owners roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param userIds The users ids for assign in station.
+   * @returns OwnerRoster in the station.
+   */
+  addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+    const mockOwnerRoster: StationRosterMember[] = [{
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+      firstName: 'Marry',
+      lastName: 'Poppins',
+      email: 'marrypoppins@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }, {
+      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+      firstName: 'Worker',
+      lastName: 'User',
+      email: 'workeruser@inpivota.com',
+      isOwner: true,
+      isWorker: false
+    }];
+    return of(mockOwnerRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Remove owner from the station's roster.
+   *
+   * @param stationId The Specific id of station.
+   * @param usersIds The selected owners id array to removed.
+   * @returns New Station information with owners roster.
+   */
+  removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
+    const mockPrevDeleteOwnersRoster: StationRosterMember[] = [{
+      rithmId: '12dasd1-asd12asdasd-asdas',
+      firstName: 'Cesar',
+      lastName: 'Quijada',
+      email: 'strut@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-ffff1',
+      firstName: 'Maria',
+      lastName: 'Quintero',
+      email: 'Maquin@gmail.com',
+      isOwner: true,
+      isWorker: true,
+    },
+    {
+      rithmId: '12dasd1-asd12asdasd-a231',
+      firstName: 'Pedro',
+      lastName: 'Perez',
+      email: 'pperez@gmail.com',
+      isOwner: true,
+      isWorker: false,
+    }];
+    return of(mockPrevDeleteOwnersRoster).pipe(delay(1000));
+  }
+
+  /**
+   * Update status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @param newStatus The new status is editable in the change for document.
+   * @returns New status for document editable.
+   */
+  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+    return of(newStatus).pipe(delay(1000));
+  }
+
+  /**
+   * Get status document is editable or not.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Status for document editable.
+   */
+  getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = true;
+    return of(expectedResponse).pipe(delay(1000));
+  }
+
+  /**
+   * Returns the station name.
+   *
+   * @param stationName The name of the station.
+   */
+  updatedStationNameText(stationName: string): void {
+    this.stationName$.next(stationName);
   }
 }

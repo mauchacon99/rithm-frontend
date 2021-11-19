@@ -16,6 +16,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from 'src/app/shared/user-form/user-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from '../../../mocks/mock-error-service';
 
 describe('AccountCreateComponent', () => {
   let component: AccountCreateComponent;
@@ -26,7 +31,8 @@ describe('AccountCreateComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         AccountCreateComponent,
-        MockComponent(UserFormComponent)
+        MockComponent(UserFormComponent),
+        MockComponent(LoadingIndicatorComponent)
       ],
       imports: [
         RouterTestingModule,
@@ -39,7 +45,8 @@ describe('AccountCreateComponent', () => {
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();
@@ -60,7 +67,7 @@ describe('AccountCreateComponent', () => {
     const notificationsSpy = spyOn(component, 'openTerms');
     const link = fixture.debugElement.nativeElement.querySelector('#terms');
     link.click();
-    expect(notificationsSpy).toHaveBeenCalled();
+    expect(notificationsSpy).toHaveBeenCalledTimes(1);
   });
 
   describe('createAccount button', () => {
@@ -70,7 +77,6 @@ describe('AccountCreateComponent', () => {
     beforeEach(async () => {
       formGroup = component.signUpForm;
       buttonHarness = await loader.getHarness(MatButtonHarness);
-      spyOn(component, 'createAccount');
     });
 
     it('should exist', () => {
@@ -100,24 +106,56 @@ describe('AccountCreateComponent', () => {
       expect(await buttonHarness.isDisabled()).toBeFalse();
     });
 
-    it('should sign in when clicked', async () => {
+    it('should create an account when clicked', async () => {
+      const createAccountSpy = spyOn(component, 'createAccount').and.callFake(() => null);
       formGroup.controls['agreeToTerms'].setValue(true);
       expect(await buttonHarness.isDisabled()).toBeFalse(); // This needs to be present for some reason...
 
-      const spy = spyOn(component, 'openValidateEmailModal');
-      component.openValidateEmailModal();
-      expect(spy).toHaveBeenCalled();
-
       await buttonHarness.click();
-      expect(component.createAccount).toHaveBeenCalled();
+      expect(createAccountSpy).toHaveBeenCalled();
     });
 
-    xit('should open validate email modal', () => {
-      // TODO: figure out why service is undefined
-      const popupService = fixture.debugElement.injector.get(PopupService);
-      const spy = spyOn(popupService, 'alert');
+    it('should open validate email modal', () => {
+      const alertSpy = spyOn(TestBed.inject(PopupService), 'alert').and.callThrough();
       component.openValidateEmailModal();
-      expect(spy).toHaveBeenCalledTimes(1);
+      expect(alertSpy).toHaveBeenCalledOnceWith({
+        title: 'Validate your email address',
+        message: 'Almost there! Please check your email for a link to validate your Rithm account.'
+      });
+    });
+
+    it('should show alert in service in the create account how show error', () => {
+      const error = new HttpErrorResponse({
+        error: {
+          error: 'This username has already been used.'
+        },
+      });
+
+      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
+        returnValue(throwError(() => error));
+      const popUpServiceSpy = spyOn(TestBed.inject(PopupService), 'alert').and.callThrough();
+
+      component.createAccount();
+
+      expect(createAccountSpy).toHaveBeenCalled();
+      expect(popUpServiceSpy).toHaveBeenCalled();
+    });
+
+    it('should show display error the error service if backend not show error', () => {
+      const error = new HttpErrorResponse({
+        error: {
+          error: ''
+        },
+      });
+
+      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
+        returnValue(throwError(() => error));
+      const errorServiceSpy = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+
+      component.createAccount();
+
+      expect(createAccountSpy).toHaveBeenCalled();
+      expect(errorServiceSpy).toHaveBeenCalled();
     });
   });
 

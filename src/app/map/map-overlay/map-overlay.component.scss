@@ -1,0 +1,16 @@
+::ng-deep.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop {
+  display: none;
+}
+
+:host {
+  touch-action: manipulation;
+}
+
+::ng-deep .mat-drawer-container {
+  background-color: transparent;
+}
+
+::ng-deep .deleteDrawer {
+  position: fixed !important;
+  top: 129px;
+}

@@ -41,7 +41,8 @@ export class ErrorService {
     if (important) {
       this.popupService.alert({
         title: 'Error',
-        message: displayMessage
+        message: displayMessage,
+        important
       });
     } else {
       this.popupService.notify(displayMessage, true);

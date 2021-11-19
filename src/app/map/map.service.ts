@@ -24,7 +24,7 @@ export class MapService {
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
-  mapDataRecieved$ = new BehaviorSubject(false);
+  mapDataReceived$ = new BehaviorSubject(false);
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
@@ -47,6 +47,9 @@ export class MapService {
   /** The current scale of the map. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
+  /** The number of zoom levels to increment or decrement. */
+  zoomCount$ = new BehaviorSubject(0);
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
 
@@ -54,7 +57,10 @@ export class MapService {
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
 
   /** Check current mouse click if clicked the station option button. */
-  currentMouseClick$ = new BehaviorSubject(false);
+  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+
+  /** Check if mouse clicked outside of the option menu in canvas area. */
+  matMenuStatus$ = new BehaviorSubject(false);
 
   constructor(private http: HttpClient) { }
 
@@ -83,7 +89,10 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
-        this.mapDataRecieved$.next(true);
+        if (!environment.production && !environment.testing) {
+          this.validateMapData();
+        }
+        this.mapDataReceived$.next(true);
         return data;
       }));
   }
@@ -91,7 +100,7 @@ export class MapService {
   /**
    * Converts station data so it can be drawn on the canvas.
    */
-  useStationData(): void {
+  private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
   }
@@ -115,7 +124,46 @@ export class MapService {
 
     //update the stationElements array.
     this.stationElements.push(newStation);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Updates station status to delete.
+   *
+   * @param station The station for which status has to be set to delete.
+   */
+  deleteStation(station: StationMapElement): void {
+    const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
+    if (index >= 0 ) {
+      this.stationElements[index].status = MapItemStatus.Deleted;
+    }
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
+   *
+   * @param station The station for which connections has to be removed.
+   */
+   removeStationConnection(station: StationMapElement): void {
+    this.stationElements.map((e) => {
+      if (e.rithmId === station.rithmId) {
+        e.previousStations = [];
+        e.nextStations = [];
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.previousStations.includes(station.rithmId)) {
+        e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+
+      if (e.nextStations.includes(station.rithmId)) {
+        e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
+        e.status = MapItemStatus.Updated;
+      }
+    });
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -124,7 +172,7 @@ export class MapService {
    * @param source The array or object to copy.
    * @returns The copied array or object.
    */
-  deepCopy<T>(source: T): T {
+  private deepCopy<T>(source: T): T {
     return Array.isArray(source)
       ? source.map(item => this.deepCopy(item))
       : source instanceof Date
@@ -162,7 +210,7 @@ export class MapService {
       this.storedFlowElements = [];
     }
     this.mapMode$.next(MapMode.View);
-    this.mapDataRecieved$.next(true);
+    this.mapDataReceived$.next(true);
   }
 
   /**
@@ -180,21 +228,58 @@ export class MapService {
   }
 
   /**
+   * Calls the zoom() method a number of times equal to the zoomCount.
+   *
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
+   * @param pinch Remove delay if zoom is a pinch zoom.
+   */
+  handleZoom(zoomOrigin = this.getCanvasCenterPoint(), pinch: boolean): void {
+
+    const zoomLogic = () => {
+      if (this.zoomCount$.value > 0) {
+        this.zoom(true, zoomOrigin);
+        this.zoomCount$.next(this.zoomCount$.value - 1);
+        if (this.zoomCount$.value > 0) {
+          this.handleZoom(zoomOrigin, pinch);
+        }
+      }
+
+      if (this.zoomCount$.value < 0) {
+        this.zoom(false, zoomOrigin);
+        this.zoomCount$.next(this.zoomCount$.value + 1);
+        if (this.zoomCount$.value < 0) {
+          this.handleZoom(zoomOrigin, pinch);
+        }
+      }
+    };
+
+    if (!pinch) {
+      setTimeout(() => {
+        zoomLogic();
+      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10);
+    } else {
+      zoomLogic();
+    }
+  }
+
+  /**
    * Zooms the map by adjusting the map scale and position.
    *
    * @param zoomingIn Zooming in or out?
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
+  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
 
     // Don't zoom if limits are reached
     if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+      this.zoomCount$.next(0);
       return;
     }
 
     // Don't zoom out past a certain point if in build mode
     if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+      this.zoomCount$.next(0);
       return;
     }
 
@@ -302,6 +387,50 @@ export class MapService {
       x: this.getMapX(canvasPoint.x),
       y: this.getMapY(canvasPoint.y)
     };
+  }
+
+  /**
+   * Validates that data returned from the API doesn't contain any logical problems.
+   */
+  private validateMapData(): void {
+    this.validateStationsBelongToExactlyOneFlow();
+    this.validateFlowsBelongToExactlyOneFlow();
+  }
+
+  /**
+   * Validates that stations belong to exactly one immediate parent flow.
+   */
+  private validateStationsBelongToExactlyOneFlow(): void {
+    // Each station should belong to exactly one flow.
+    for (const station of this.stationElements) {
+      const flowsThatContainThisStation = this.flowElements.filter((flow) => flow.stations.includes(station.rithmId));
+      if (flowsThatContainThisStation.length > 1) {
+        const flowDetails: string = flowsThatContainThisStation.map((flowInfo) => `${flowInfo.rithmId}: ${flowInfo.title}`).toString();
+        // eslint-disable-next-line no-console
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${flowsThatContainThisStation.length} flows:
+          ${flowDetails}`);
+      } else if (!flowsThatContainThisStation.length) {
+        // eslint-disable-next-line no-console
+        console.error(`No flows contain the station: ${station.stationName}: ${station.rithmId}`);
+      }
+    }
+  }
+
+  /**
+   * Validates that flows belong to exactly one immediate parent flow.
+   */
+  private validateFlowsBelongToExactlyOneFlow(): void {
+    // Each flow should belong to exactly one flow.
+    for (const flow of this.flowElements) {
+      const flowsThatContainThisFlow = this.flowElements.filter((flowElement) => flowElement.subFlows.includes(flow.rithmId));
+      if (flowsThatContainThisFlow.length > 1) {
+        // eslint-disable-next-line no-console
+        console.error(`The flow ${flow.rithmId}: ${flow.title} is contained in ${flowsThatContainThisFlow.length} flows!`);
+      } else if (!flowsThatContainThisFlow.length && !flow.isReadOnlyRootFlow) {
+        // eslint-disable-next-line no-console
+        console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
+      }
+    }
   }
 
 }

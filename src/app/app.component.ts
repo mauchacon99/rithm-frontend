@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sidenav!: MatSidenav;
 
   /** Destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** Used to show top nav. */
   showTopNav = false;
@@ -88,9 +88,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.setSidenav(this.sidenav);
     this.router.events.pipe(
       takeUntil(this.destroyed$)
-    ).subscribe((e) => {
-      if (e instanceof NavigationEnd) {
-        const path = e.url;
+    ).subscribe((routerEvent) => {
+      if (routerEvent instanceof NavigationEnd) {
+        const path = routerEvent.url;
         this.showTopNav =
           path !== '' &&
           path !== '/' &&

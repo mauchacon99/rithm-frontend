@@ -1,12 +1,16 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point } from 'src/models';
+import { MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { StationMapElement } from 'src/helpers';
 import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDrawer } from '@angular/material/sidenav';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -16,16 +20,32 @@ import { MatMenuTrigger } from '@angular/material/menu';
   templateUrl: './map-overlay.component.html',
   styleUrls: ['./map-overlay.component.scss']
 })
-export class MapOverlayComponent implements OnDestroy {
+export class MapOverlayComponent implements OnInit, OnDestroy {
+
+  /** The current signed in user. */
+  currentUser!: User;
+
+  /** Is the user an admin? */
+  isAdmin = false;
+
+  /** The component for the drawer that houses comments and history. */
+  @ViewChild('deleteDrawer', { static: true })
+  deleteDrawer!: MatDrawer;
 
   /** Subject for when the component is destroyed. */
-  private destroyed$ = new Subject();
+  private destroyed$ = new Subject<void>();
 
   /** The current mode of the map. */
   private currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
-  mapDataLoading = false;
+  mapDataLoading = true;
+
+  /** Data for station card used in the map. */
+  stations: StationMapElement[] = [];
+
+  /** Data of station used in the map. */
+  station?: StationMapElement;
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
@@ -42,6 +62,12 @@ export class MapOverlayComponent implements OnDestroy {
 
   /** Zoom level build enabled. */
   zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
+
+  /**Track zoomCount. */
+  zoomCount = 0;
+
+  /** Option menu button cursor handler. */
+  optionMenuNone = false;
 
   /**
    * Whether the map is in any building mode.
@@ -81,15 +107,39 @@ export class MapOverlayComponent implements OnDestroy {
     return false;
   }
 
-  constructor(private mapService: MapService,
+  /**
+   * Whether to show the backdrop for the comment and history drawers.
+   *
+   * @returns Whether to show the backdrop.
+   */
+     get drawerHasBackdrop(): boolean {
+      return this.sidenavDrawerService.drawerHasBackdrop;
+    }
+
+  constructor(
+    private mapService: MapService,
     private popupService: PopupService,
-    private errorService: ErrorService) {
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
+  ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((mapMode) => {
-        this.currentMode = mapMode;
-      }, (error: unknown) => {
-        throw new Error(`Map overlay subscription error: ${error}`);
+      .subscribe({
+        next: (mapMode) => {
+          this.currentMode = mapMode;
+        }, error: (error: unknown) => {
+          throw new Error(`Map overlay subscription error: ${error}`);
+        }
+      });
+
+    this.mapService.mapDataReceived$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((received) => {
+        if (received === true) {
+          this.mapDataLoading = false;
+        }
+        this.stations = this.mapService.stationElements;
       });
 
     this.mapService.mapScale$
@@ -98,15 +148,38 @@ export class MapOverlayComponent implements OnDestroy {
         this.mapScale = scale;
       });
 
-    this.mapService.currentMouseClick$
+    this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((click) => {
-        if (click) {
+      .subscribe((clickRes) => {
+        if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.mapService.currentMouseClick$.next(false);
+          this.station = clickRes.data as StationMapElement;
+          this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
       });
 
+    this.mapService.zoomCount$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((count) => {
+        this.zoomCount = count;
+      });
+    this.mapService.matMenuStatus$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((click) => {
+        if (click) {
+          this.optionMenuClose();
+          this.mapService.matMenuStatus$.next(false);
+        }
+      });
+  }
+
+  /**
+   * Gets info about the mat-drawer toggle and determines user permissions.
+   */
+  ngOnInit(): void {
+    this.currentUser = this.userService.user;
+    this.isAdmin = this.currentUser.role === 'admin' ? true : false;
+    this.sidenavDrawerService.setDrawer(this.deleteDrawer);
   }
 
   /**
@@ -129,6 +202,7 @@ export class MapOverlayComponent implements OnDestroy {
    * Publishes map changes.
    */
   async publish(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Publish Map Changes',
       // eslint-disable-next-line max-len
@@ -139,17 +213,19 @@ export class MapOverlayComponent implements OnDestroy {
       this.mapDataLoading = true;
       this.mapService.publishMap()
         .pipe(first())
-        .subscribe(() => {
-          this.mapDataLoading = false;
-          this.mapService.mapMode$.next(MapMode.View);
-          this.popupService.notify('Map data published successfully.');
-        }, (error: unknown) => {
-          this.mapDataLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error,
-            true
-          );
+        .subscribe({
+          next: () => {
+            this.mapDataLoading = false;
+            this.mapService.mapMode$.next(MapMode.View);
+            this.popupService.notify('Map data published successfully.');
+          }, error: (error: unknown) => {
+            this.mapDataLoading = false;
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error,
+              true
+            );
+          }
         });
     }
   }
@@ -159,6 +235,7 @@ export class MapOverlayComponent implements OnDestroy {
    *
    */
   async cancel(): Promise<void> {
+    this.mapService.matMenuStatus$.next(true);
     const confirm = await this.popupService.confirm({
       title: 'Confirmation',
       message: `Are you sure you want to cancel these changes? All map changes will be lost`,
@@ -173,14 +250,18 @@ export class MapOverlayComponent implements OnDestroy {
    * Zooms the map in to center.
    */
   zoomIn(): void {
-    this.mapService.zoom(true, undefined, Math.pow(ZOOM_VELOCITY, 5));
+    this.mapService.matMenuStatus$.next(true);
+    this.mapService.zoomCount$.next(this.zoomCount + 50);
+    this.mapService.handleZoom(undefined, false);
   }
 
   /**
    * Zooms the map out from center.
    */
   zoomOut(): void {
-    this.mapService.zoom(false, undefined, Math.pow(ZOOM_VELOCITY, 5));
+    this.mapService.matMenuStatus$.next(true);
+    this.mapService.zoomCount$.next(this.zoomCount - 50);
+    this.mapService.handleZoom(undefined, false);
   }
 
   /**
@@ -189,10 +270,62 @@ export class MapOverlayComponent implements OnDestroy {
    * @param points The points coordinates values.
    */
   optionMenuTrigger(points: Point): void {
+    this.optionMenuNone = false;
     this.menuX = points.x - 15;
     this.menuY = points.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
   }
+
+  /**
+   * Close display menu option to default state.
+   *
+   */
+  optionMenuClose(): void {
+    this.optionMenuNone = true;
+    this.menuX = -1;
+    this.menuY = -1;
+    this.menu.closeMenu();
+  }
+
+  /**
+   * Updates station status to delete.
+   */
+  async deleteStation(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+      this.mapService.deleteStation(<StationMapElement>(this.station));
+    }
+  }
+
+  /**
+   * Removes all connections for a station.
+   */
+  async removeStationConnections(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: `This will remove all connections to and from this station and any associated flow logic. This action cannot be undone.`,
+      okButtonText: 'Confirm',
+      important: true
+    });
+    if (confirm) {
+      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+    }
+  }
+
+  /**
+   * Toggles the open state of the drawer for station info.
+   *
+   * @param drawerItem The drawer item to toggle.
+   */
+    toggleDrawer(drawerItem: 'connectionInfo'): void {
+      this.sidenavDrawerService.toggleDrawer(drawerItem);
+    }
 
 }

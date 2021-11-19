@@ -20,7 +20,7 @@ export class StationElementService {
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
-  /** The rendering this.canvasContext for the canvas element for the map. */
+  /** The rendering ctx for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
   constructor(
@@ -65,6 +65,8 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
+    const ctx = this.canvasContext;
+
     const startingX = station.canvasPoint.x;
     const startingY = station.canvasPoint.y;
 
@@ -74,43 +76,46 @@ export class StationElementService {
 
     const shadowEquation = (num: number) => Math.floor(num * this.mapScale) > 0 ? Math.floor(num * this.mapScale) : 1;
 
-    this.canvasContext.shadowColor = '#ccc';
-    this.canvasContext.shadowBlur = shadowEquation(6);
-    this.canvasContext.shadowOffsetX = shadowEquation(3);
-    this.canvasContext.shadowOffsetY = shadowEquation(3);
+    ctx.save();
+    ctx.shadowColor = '#ccc';
+    ctx.shadowBlur = shadowEquation(6);
+    ctx.shadowOffsetX = shadowEquation(3);
+    ctx.shadowOffsetY = shadowEquation(3);
     if (station.hoverActive === StationElementHoverType.Station
       && dragItem === MapDragItem.Station
-      && station.dragging) {
-      this.canvasContext.shadowOffsetY = shadowEquation(20);
-      this.canvasContext.shadowBlur = shadowEquation(40);
+      && station.dragging
+    ) {
+      ctx.shadowOffsetY = shadowEquation(20);
+      ctx.shadowBlur = shadowEquation(40);
     }
 
-    this.canvasContext.beginPath();
-    this.canvasContext.moveTo(startingX + scaledStationRadius, startingY);
-    this.canvasContext.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledStationRadius, startingY);
+    ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
     // eslint-disable-next-line max-len
-    this.canvasContext.quadraticCurveTo(startingX + scaledStationWidth, startingY, startingX + scaledStationWidth, startingY + scaledStationRadius);
+    ctx.quadraticCurveTo(startingX + scaledStationWidth, startingY, startingX + scaledStationWidth, startingY + scaledStationRadius);
     // eslint-disable-next-line max-len
-    this.canvasContext.lineTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledStationRadius);// line going to bottom right
+    ctx.lineTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledStationRadius);// line going to bottom right
     // eslint-disable-next-line max-len
-    this.canvasContext.quadraticCurveTo(startingX + scaledStationWidth, startingY + scaledStationHeight, startingX + scaledStationWidth - scaledStationRadius, startingY + scaledStationHeight);// bottom right curve to line going to bottom left
-    this.canvasContext.lineTo(startingX + scaledStationRadius, startingY + scaledStationHeight);// line going to bottom left
+    ctx.quadraticCurveTo(startingX + scaledStationWidth, startingY + scaledStationHeight, startingX + scaledStationWidth - scaledStationRadius, startingY + scaledStationHeight);// bottom right curve to line going to bottom left
+    ctx.lineTo(startingX + scaledStationRadius, startingY + scaledStationHeight);// line going to bottom left
     // eslint-disable-next-line max-len
-    this.canvasContext.quadraticCurveTo(startingX, startingY + scaledStationHeight, startingX, startingY + scaledStationHeight - scaledStationRadius); // bottom left curve to line going to top left
-    this.canvasContext.lineTo(startingX, startingY + scaledStationRadius);// line going to top left
-    this.canvasContext.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
+    ctx.quadraticCurveTo(startingX, startingY + scaledStationHeight, startingX, startingY + scaledStationHeight - scaledStationRadius); // bottom left curve to line going to top left
+    ctx.lineTo(startingX, startingY + scaledStationRadius);// line going to top left
+    ctx.quadraticCurveTo(startingX, startingY, startingX + scaledStationRadius, startingY);
     // top left curve to line going top right
-    this.canvasContext.closePath();
-    this.canvasContext.fillStyle = station.hoverActive !== StationElementHoverType.None
-    && dragItem === MapDragItem.Node
-    && !station.dragging
-    ? '#ebebeb' : '#fff';
-    this.canvasContext.strokeStyle = station.hoverActive !== StationElementHoverType.None
-    && dragItem === MapDragItem.Node
-    && !station.dragging
-    ? NODE_HOVER_COLOR : '#fff';
-    this.canvasContext.stroke();
-    this.canvasContext.fill();
+    ctx.closePath();
+    ctx.fillStyle = station.hoverActive !== StationElementHoverType.None
+      && dragItem === MapDragItem.Node
+      && !station.dragging
+        ? '#ebebeb' : '#fff';
+    ctx.strokeStyle = station.hoverActive !== StationElementHoverType.None
+      && dragItem === MapDragItem.Node
+      && !station.dragging
+        ? NODE_HOVER_COLOR : '#fff';
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
   }
 
   /**
@@ -122,28 +127,31 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot reset the stroke if context is not defined');
     }
+    const ctx = this.canvasContext;
+
     const scaledStationPadding = STATION_PADDING * this.mapScale;
 
-    this.canvasContext.shadowBlur = 0;
-    this.canvasContext.shadowColor = 'transparent';
-    this.canvasContext.textAlign = 'left';
-    this.canvasContext.fillStyle = 'black';
-    this.canvasContext.font = this.mapScale > 0.5 ? (this.mapScale > 1 ? 'normal 30px Montserrat' : 'normal 16px Montserrat')
-     : 'normal 8px Montserrat';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'black';
+    const fontSize = Math.ceil(16*this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
     for (const word of sn) {
-      // eslint-disable-next-line max-len
-      if (word.length <= 12 * this.mapScale && firstLineArray.join(' ').length <= 12 * this.mapScale && firstLineArray.join(' ').length + word.length <= 12 * this.mapScale && secondLineArray.length === 0) {
-        firstLineArray.push(word);
+      if (word.length <= 12
+        && firstLineArray.join(' ').length <= 12
+        && firstLineArray.join(' ').length + word.length <= 12
+        && secondLineArray.length === 0) {
+          firstLineArray.push(word);
       } else {
-        // eslint-disable-next-line max-len
-        if (word.length <= 12 * this.mapScale && secondLineArray.join(' ').length <= 12 * this.mapScale && secondLineArray.join(' ').length + word.length <= 12 * this.mapScale) {
-          secondLineArray.push(word);
-        } else if (secondLineArray.join(' ').length + word.length >= 12 * this.mapScale) {
+        if (word.length <= 12
+          && secondLineArray.join(' ').length <= 12
+          && secondLineArray.join(' ').length + word.length <= 12) {
+            secondLineArray.push(word);
+        } else if (secondLineArray.join(' ').length + word.length >= 12) {
           if (word.length > 12) {
             if (firstLineArray.length === 0) {
               firstLineArray.push(word.substring(0, 10));
@@ -167,11 +175,11 @@ export class StationElementService {
       }
     }
 
-    // eslint-disable-next-line max-len
-    this.canvasContext.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 12 + scaledStationPadding, 114 * this.mapScale);
+    ctx.fillText(firstLineArray.join(' '), station.canvasPoint.x + scaledStationPadding,
+    station.canvasPoint.y + 12 * this.mapScale + scaledStationPadding, 114 * this.mapScale);
     if (secondLineArray.join(' ').length > 0) {
-      // eslint-disable-next-line max-len
-      this.canvasContext.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding, station.canvasPoint.y + 32 + scaledStationPadding, 114 * this.mapScale);
+      ctx.fillText(secondLineArray.join(' '), station.canvasPoint.x + scaledStationPadding,
+      station.canvasPoint.y + 32 * this.mapScale + scaledStationPadding, 114 * this.mapScale);
     }
   }
 
@@ -194,20 +202,16 @@ export class StationElementService {
     const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth - scaledBadgeMargin, startingY + scaledBadgeMargin, scaledBadgeRadius, 0, 2 * Math.PI);
     ctx.fillStyle = station.hoverActive === StationElementHoverType.Badge
-    && dragItem !== MapDragItem.Node
-    && !station.dragging
-    ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
+      && dragItem !== MapDragItem.Node
+      && !station.dragging
+        ? BADGE_HOVER_COLOR : BADGE_DEFAULT_COLOR;
     ctx.fill();
-    ctx.font = this.mapScale > 0.5 ? this.mapScale > 1 ? '600 30px Montserrat-SemiBold' : '600 16px Montserrat-SemiBold'
-     : '400 10px Montserrat-SemiBold';
+    const fontSize = Math.ceil(16*this.mapScale);
+    ctx.font = `600 ${fontSize}px Montserrat`;
     ctx.fillStyle = '#fff';
     ctx.textAlign =  'center';
     ctx.fillText(station.noOfDocuments.toString(),
@@ -235,11 +239,6 @@ export class StationElementService {
     const scaledButtonXMargin = BUTTON_X_MARGIN * this.mapScale;
     const scaledButtonYMargin = BUTTON_Y_MARGIN * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-
     const buttonColor = BUTTON_DEFAULT_COLOR;
 
     ctx.beginPath();
@@ -257,11 +256,10 @@ export class StationElementService {
       startingX + scaledButtonXMargin - 2 * 2 - 4 * scaledButtonRadius,
       startingY + scaledButtonYMargin,
       scaledButtonRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = buttonColor;
     ctx.fillStyle = station.hoverActive === StationElementHoverType.Button
-    && dragItem !== MapDragItem.Node
-    && !station.dragging
-    ? BUTTON_HOVER_COLOR : buttonColor;
+      && dragItem !== MapDragItem.Node
+      && !station.dragging
+        ? BUTTON_HOVER_COLOR : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -287,46 +285,22 @@ export class StationElementService {
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
     const scaledNodeYMargin = NODE_Y_MARGIN * this.mapScale;
 
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = dragItem === MapDragItem.Node && station.dragging
-    ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node && dragItem !== MapDragItem.Node
-    ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
+    ctx.fillStyle = dragItem === MapDragItem.Node
+      && station.dragging
+        ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node
+          && dragItem !== MapDragItem.Node
+            ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && station.dragging) {
+    if (cursor.x !== -1 && station.dragging && dragItem === MapDragItem.Node) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = dragItem === MapDragItem.Node && station.dragging
-      ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
+    ctx.strokeStyle = dragItem === MapDragItem.Node
+      && station.dragging
+        ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
-  }
-
-  /**
-   * Resets the shadow on the this.canvasContext.
-   */
-  private resetShadow(): void {
-    if (!this.canvasContext) {
-      throw new Error('Cannot reset the shadow if context is not defined');
-    }
-    this.canvasContext.shadowColor = 'transparent';
-    this.canvasContext.shadowBlur = 0;
-  }
-
-  /**
-   * Resets the stroke on the this.canvasContext.
-   */
-  private resetStroke(): void {
-    if (!this.canvasContext) {
-      throw new Error('Cannot reset the stroke if context is not defined');
-    }
-    this.canvasContext.setLineDash([0, 0]);
-    this.canvasContext.strokeStyle = 'transparent';
   }
 }

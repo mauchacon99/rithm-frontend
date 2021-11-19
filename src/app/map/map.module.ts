@@ -9,6 +9,8 @@ import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connection-info-drawer.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 
@@ -18,14 +20,16 @@ import { MatMenuModule } from '@angular/material/menu';
     MapSearchComponent,
     MapToolbarComponent,
     MapCanvasComponent,
-    MapOverlayComponent
+    MapOverlayComponent,
+    ConnectionInfoDrawerComponent
   ],
   imports: [
     CommonModule,
     MapRoutingModule,
     SharedModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSidenavModule
   ]
 })
 export class MapModule { }

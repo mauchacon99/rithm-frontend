@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss']
 })
-export class UserAvatarComponent{
+export class UserAvatarComponent {
 
   /** The first name of the user. */
   @Input() firstName!: string;
@@ -25,6 +25,9 @@ export class UserAvatarComponent{
   /** Whether to show any badge type or not. */
   @Input() badge: 'none' | 'check' | 'minus' | 'plus' = 'none';
 
+  /** Whether the enabled switching badges on mouseover. */
+  @Input() hoverEffect = false;
+
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;
 
@@ -34,9 +37,21 @@ export class UserAvatarComponent{
    * @returns The initials.
    */
   get initials(): string {
-    const firstInitial = this.firstName.charAt(0);
-    const lastInitial = this.lastName.charAt(0);
+    const firstInitial = this.firstName ? this.firstName.charAt(0) : '';
+    const lastInitial = this.lastName ? this.lastName.charAt(0) : '';
 
     return firstInitial + lastInitial;
+  }
+
+  /**
+   * Gets the unicode badge needed for each case.
+   *
+   * @returns The current badge to be shown.
+   */
+  getBadge(): string{
+    return this.badgeHover ? '\u2212' :
+    this.badge==='check' ? '\u2714' :
+    this.badge==='plus' ? '\u002b' :
+    this.badge==='minus' ? '\u2212' : '';
   }
 }

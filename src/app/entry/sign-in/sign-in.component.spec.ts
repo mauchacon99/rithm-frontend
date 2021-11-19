@@ -1,6 +1,6 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -90,15 +91,16 @@ describe('SignInComponent', () => {
     // TODO: Add test for verify email message
   });
 
-  xit('should navigate to dashboard upon successful sign in', () => {
-    // const routerSpy = spyOn(router, 'navigateByUrl');
+  it('should navigate to dashboard upon successful sign in', fakeAsync(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callFake(async (url) => true);
     component.signInForm.controls['email'].setValue('someone@email.com');
     component.signInForm.controls['password'].setValue('password1234');
     component.signIn();
-    jasmine.clock().tick(1001);
+    tick(1001);
     fixture.detectChanges();
-    // expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
-  });
+    expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
+  }));
 
   // sign in form
   describe('sign in form', () => {
@@ -198,7 +200,7 @@ describe('SignInComponent', () => {
         expect(await buttonHarness.isDisabled()).toBeFalse(); // This needs to be present for some reason...
 
         await buttonHarness.click();
-        expect(component.signIn).toHaveBeenCalled();
+        expect(component.signIn).toHaveBeenCalledOnceWith();
       });
     });
 

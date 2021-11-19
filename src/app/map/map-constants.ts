@@ -7,16 +7,18 @@ export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 
 // Scale
 export const DEFAULT_SCALE = 1;
-export const ZOOM_VELOCITY = .9;
-export const PINCH_ZOOM_TRAVEL_REQ = 10;
-export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,5);
-export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,19);
+export const ZOOM_VELOCITY = .99;
+export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,50);
+export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,190);
 /** Needed to solve a bug related to map zoom. */
 export const ABOVE_MAX = MAX_SCALE/ZOOM_VELOCITY;
 export const BELOW_MIN = MIN_SCALE*ZOOM_VELOCITY;
 /** The scale at which Station Elements are no longer rendered. */
-export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,10);
-export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS/Math.pow(ZOOM_VELOCITY,4);
+export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY,100);
+export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
+
+// Pan
+export const MAX_PAN_VELOCITY = 20;
 
 // Flow
 export const FLOW_PADDING = 20;

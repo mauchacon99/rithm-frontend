@@ -32,3 +32,5 @@ export * from './flow-map-data';
 export * from './flow-map-element';
 export * from './station-info-drawer-data';
 export * from './dialog-options';
+export * from './station-potential-roster-users';
+export * from './document-name-field';

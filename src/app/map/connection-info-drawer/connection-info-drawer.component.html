@@ -1,0 +1,24 @@
+<div class="grid grid-cols-1 p-4">
+  <div class="w-full py-2">
+    <div class="col-span-12 mb-3">
+      <h6 class="text-center">Connection Information</h6>
+    </div>
+    <div class="col-span-12 mb-3">
+      <p class="overline">CONNECTION START</p>
+      <div class="col-span-12">{{connectionStartStationName}}</div>
+    </div>
+    <div class="col-span-12">
+      <p class="overline">CONNECTION END</p>
+      <div class="col-span-12">{{connectionEndStationName}}</div>
+    </div>
+  </div>
+  <div class="w-full py-2 flex">
+    <button mat-stroked-button color="warn" class="priority" (click)="toggleDrawer('connectionInfo')">Delete Connection</button>
+  </div>
+</div>
+<div class="flex justify-center">
+  <div class="bottom-0 absolute mb-7">
+    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
+      (click)="toggleDrawer('connectionInfo')">Done</button>
+  </div>
+</div>
