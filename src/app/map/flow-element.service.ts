@@ -46,7 +46,7 @@ export class FlowElementService {
     });
 
     if (flow.isReadOnlyRootFlow) {
-      return;
+      return; // No need to calculate/render the root flow
     }
 
     const flowPoints: Point[] = [];
