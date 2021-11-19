@@ -92,8 +92,8 @@ export class StationInfoHeaderComponent implements OnInit {
   /**
    * Update InfoDrawer Station Name.
    */
-     updStationInfoDrawerName(): void{
-      this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
-    }
+  updStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+  }
 
 }
