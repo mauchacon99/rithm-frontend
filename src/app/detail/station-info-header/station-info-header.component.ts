@@ -86,13 +86,13 @@ export class StationInfoHeaderComponent implements OnInit {
       editMode: this.stationEditMode
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
-    this.updStationInfoDrawerName();
+    this.updateStationInfoDrawerName();
   }
 
   /**
    * Update InfoDrawer Station Name.
    */
-  updStationInfoDrawerName(): void {
+  updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
   }
 
