@@ -36,13 +36,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mapMode = MapMode.View;
 
   /** Checks if map should be automatically panning without active user input. */
-  autoPanning = false;
+  private autoPanning = false;
 
   /**Flag for auto pan checks. */
   private panActive?: boolean;
 
   /**Track what the next pan velocity is. */
-  nextPanVelocity: Point = {x: 0, y: 0};
+  private nextPanVelocity: Point = { x: 0, y: 0 };
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
@@ -137,11 +137,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
-          if (velocity.x === 0 && velocity.y === 0) {
-            this.autoPanning = false;
-          } else {
-            this.autoPanning = true;
-          }
+          this.autoPanning = !!(velocity.x && velocity.y);
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
