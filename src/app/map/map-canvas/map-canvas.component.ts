@@ -546,8 +546,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private checkAutoPan(): void {
     if (!this.panActive && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      this.panActive = true;
       const step = (): void => {
-        this.panActive = true;
         this.autoMapPan(this.nextPanVelocity);
         if (this.autoPanning && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
           this.myReq = requestAnimationFrame(step);

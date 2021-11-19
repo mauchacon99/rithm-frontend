@@ -18,7 +18,7 @@ export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE * Math.pow(ZOOM_VELOC
 export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
 
 // Pan
-export const MAX_PAN_VELOCITY = 20;
+export const MAX_PAN_VELOCITY = 30;
 
 // Flow
 export const FLOW_PADDING = 20;
