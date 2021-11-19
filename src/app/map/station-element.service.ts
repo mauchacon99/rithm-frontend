@@ -293,7 +293,7 @@ export class StationElementService {
           && dragItem !== MapDragItem.Node
             ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && station.dragging) {
+    if (cursor.x !== -1 && station.dragging && dragItem === MapDragItem.Node) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
