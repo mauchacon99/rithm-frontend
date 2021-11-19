@@ -9,9 +9,12 @@ import { MockMapService } from 'src/mocks';
 import { MapService } from '../map.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MapOverlayComponent } from './map-overlay.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -22,12 +25,15 @@ describe('MapOverlayComponent', () => {
       declarations: [
         MapOverlayComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(ConnectionInfoDrawerComponent)
       ],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSidenavModule,
+        NoopAnimationsModule
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
