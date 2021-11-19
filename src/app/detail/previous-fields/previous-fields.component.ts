@@ -62,26 +62,6 @@ ngOnInit(): void{
       next: (questions: Question[]) => {
         if (questions) {
           this.questions = questions;
-          this.questions.push({
-            rithmId: '3j4k-3h2j-hj4j',
-            prompt: 'Label #1',
-            instructions: '',
-            questionType: QuestionFieldType.ShortText,
-            isReadOnly: false,
-            isRequired: false,
-            isPrivate: false,
-            children: [],
-          });
-          this.questions.push({
-            rithmId: '3j4k-3h2j-hj2j',
-            prompt: 'Label #2',
-            instructions: '',
-            questionType: QuestionFieldType.ShortText,
-            isReadOnly: false,
-            isRequired: false,
-            isPrivate: false,
-            children: [],
-          });
         }
         this.isLoading = false;
       }, error: (error: unknown) => {
