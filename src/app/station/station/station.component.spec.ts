@@ -135,7 +135,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
-  it('should show loading-indicators while get data initial the station', () => {
+  it('should show loading indicator while getting the station data', () => {
     component.getStationInfo(component.stationInformation.rithmId);
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
@@ -143,7 +143,7 @@ describe('StationComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should show loading-indicators while update all petitions the station', () => {
+  it('should show loading indicator while saving the station information', () => {
     component.saveStationInformation();
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
@@ -151,7 +151,7 @@ describe('StationComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should execute all petitions how the button save is clicked', () => {
+  it('should call component methods to make requests when saveStationInformation is called', () => {
     const updateStation = spyOn(TestBed.inject(StationService), 'updateStation').and.callThrough();
     const updateFieldsDocument = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
 
