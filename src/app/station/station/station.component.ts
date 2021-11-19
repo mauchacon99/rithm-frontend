@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { first, takeUntil } from 'rxjs/operators';
+import { first, mergeMap, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -8,7 +8,7 @@ import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
@@ -201,23 +201,55 @@ export class StationComponent implements OnInit, OnDestroy {
     const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
     stationInformation.name = nameStationChange;
     this.stationLoading = true;
-    this.stationService.updateStation(stationInformation)
-      .pipe(first())
+
+    const petitions = of(
+      this.stationService.updateStation(stationInformation).pipe(first()),
+      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId,
+        []).pipe(takeUntil(this.destroyed$))
+    );
+
+    const obsPetitions = petitions.pipe(
+      mergeMap(value => value)
+    );
+
+    obsPetitions
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (stationUpdated) => {
-          if (stationUpdated) {
-            this.stationInformation = stationUpdated;
+          console.log(stationUpdated);
+          if (stationUpdated instanceof Object) {
+            this.stationInformation = stationUpdated as StationInformation;
+            console.log('station');
+
           }
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
+        }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
+        }, complete: () => {
+          this.stationLoading = false;
         }
       });
+
+
+    // this.stationService.updateStation(stationInformation)
+    //   .pipe(first())
+    //   .subscribe({
+    //     next: (stationUpdated) => {
+    //       if (stationUpdated) {
+    //         this.stationInformation = stationUpdated;
+    //       }
+    //       this.stationLoading = false;
+    //     },
+    //     error: (error: unknown) => {
+    //       this.stationLoading = false;
+    //       this.errorService.displayError(
+    //         'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+    //         error
+    //       );
+    //     }
+    //   });
   }
 
   /**
@@ -253,7 +285,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
     this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
