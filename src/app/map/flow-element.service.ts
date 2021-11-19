@@ -57,8 +57,8 @@ export class FlowElementService {
     // Determine the points for the boundary line
     flow.boundaryPoints = this.getConvexHull(pointsWithinFlow);
 
-    // Draw the bounding box
     this.drawFlowBoundaryLine(flow);
+    this.drawFlowName(flow);
   }
 
   /**
@@ -69,7 +69,7 @@ export class FlowElementService {
   private drawFlowBoundaryLine(flow: FlowMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw flow if context is not defined');
+      throw new Error('Cannot draw flow boundary line if context is not defined');
     }
     const ctx = this.canvasContext;
     const strokeColor = CONNECTION_DEFAULT_COLOR;
@@ -82,15 +82,24 @@ export class FlowElementService {
     flow.boundaryPoints = flow.boundaryPoints.concat(flow.boundaryPoints.splice(0, 1)); // Shift the first point to the back
 
     for (const boundaryPoint of flow.boundaryPoints) {
-      // Draw the flow name on the first boundary point
-      // TODO: Update this to be more dynamic
-      if (flow.boundaryPoints[0] === boundaryPoint) {
-        ctx.fillText(flow.title, boundaryPoint.x, boundaryPoint.y);
-      }
       ctx.lineTo(boundaryPoint.x, boundaryPoint.y);
     }
     ctx.stroke();
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Draws the flow name on the map.
+   *
+   * @param flow The flow for which to draw the name.
+   */
+  private drawFlowName(flow: FlowMapElement): void {
+    this.canvasContext = this.mapService.canvasContext;
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw flow name if context is not defined');
+    }
+    // TODO: Update this to be more dynamic
+    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
   }
 
   /**
