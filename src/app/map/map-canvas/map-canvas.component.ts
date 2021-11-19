@@ -654,11 +654,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
-    if (this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
-      return panVelocity;
-    } else {
-      return {x: 0, y: 0};
-    }
+    return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
   }
 
   /**
