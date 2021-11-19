@@ -52,15 +52,9 @@ export class FlowElementService {
       return;
     }
 
-    let flowPoints: Point[] = [];
+    const flowPoints: Point[] = [];
     flowPoints.push(...this.getStationPointsForFlow(flow));
-
-    if (flow.subFlows.length) {
-      const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
-      subFlows.forEach((subFlow) => {
-        flowPoints = flowPoints.concat(this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints));
-      });
-    }
+    flowPoints.push(...this.getSubFlowPointsForFlow(flow));
 
     // Determine the bounding box points
     const boundaryPoints = this.getConvexHull(flowPoints);
@@ -103,12 +97,12 @@ export class FlowElementService {
     if (!flow.stations.length) {
       return []; // Nothing to do here
     }
-    const stationPointsWithinFlow: Point[] = [];
 
     // Get the stations within the flow
     const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
 
     // Get all the station points within this flow
+    const stationPointsWithinFlow: Point[] = [];
     for (const station of flowStations) {
       const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
       const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
@@ -120,6 +114,27 @@ export class FlowElementService {
       stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
     }
     return stationPointsWithinFlow;
+  }
+
+  /**
+   * Gets a list of all the pre-calculated, sub-flow points that are contained within a flow.
+   *
+   * @param flow The flow for which to get the points.
+   * @returns A list of contained points representing the flow boundary of the sub-flows.
+   */
+  private getSubFlowPointsForFlow(flow: FlowMapElement): Point[] {
+    if (!flow.subFlows.length) {
+      return [];
+    }
+    // Get the sub-flows within the flow
+    const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
+
+    // Get all the points for sub-flows
+    const subFlowPointsWithinFlow: Point[] = [];
+    subFlows.forEach((subFlow) => {
+      subFlowPointsWithinFlow.push(...this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints));
+    });
+    return subFlowPointsWithinFlow;
   }
 
   /**
