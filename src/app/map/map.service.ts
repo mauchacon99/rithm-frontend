@@ -407,7 +407,8 @@ export class MapService {
       if (flowsThatContainThisStation.length > 1) {
         const flowDetails: string = flowsThatContainThisStation.map((flowInfo) => `${flowInfo.rithmId}: ${flowInfo.title}`).toString();
         // eslint-disable-next-line no-console
-        console.error(`The station ${station.rithmId} is contained in ${flowsThatContainThisStation.length} flows: ${flowDetails}`);
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${flowsThatContainThisStation.length} flows:
+          ${flowDetails}`);
       } else if (!flowsThatContainThisStation.length) {
         // eslint-disable-next-line no-console
         console.error(`No flows contain the station: ${station.stationName}: ${station.rithmId}`);
@@ -424,7 +425,7 @@ export class MapService {
       const flowsThatContainThisFlow = this.flowElements.filter((flowElement) => flowElement.subFlows.includes(flow.rithmId));
       if (flowsThatContainThisFlow.length > 1) {
         // eslint-disable-next-line no-console
-        console.error(`The flow ${flow.rithmId} is contained in ${flowsThatContainThisFlow.length} flows!`);
+        console.error(`The flow ${flow.rithmId}: ${flow.title} is contained in ${flowsThatContainThisFlow.length} flows!`);
       } else if (!flowsThatContainThisFlow.length && !flow.isReadOnlyRootFlow) {
         // eslint-disable-next-line no-console
         console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
