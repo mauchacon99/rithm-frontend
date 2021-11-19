@@ -6,7 +6,7 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -35,8 +35,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
+  /** Checks if map should be automatically panning without active user input. */
+  private autoPanning = false;
+
+  /**Flag for auto pan checks. */
+  private panActive?: boolean;
+
+  /**Track what the next pan velocity is. */
+  private nextPanVelocity: Point = { x: 0, y: 0 };
+
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
   currentCanvasPoint: Point = { x: 0, y: 0 };
+
+  /** The coordinate at which the current mouse point in the overall map. */
+  currentMousePoint: Point = DEFAULT_MOUSE_POINT;
+
+  /** Requested animation for raf. */
+  private myReq?: number;
 
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
@@ -114,6 +129,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
+      });
+
+    this.mapService.currentMousePoint$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((point) => {
+        this.currentMousePoint = point;
+        if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
+          const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
+          this.autoPanning = !!(velocity.x && velocity.y);
+          this.nextPanVelocity = velocity;
+          this.checkAutoPan();
+        }
       });
   }
 
@@ -513,6 +540,27 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Uses a setInterval to continuously check if the map should be auto panning.
+   * Used when outside the bounding box and dragging.
+   * //TODO: Allow use when middle wheel is active.
+   */
+  private checkAutoPan(): void {
+    if (!this.panActive && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      const step = (): void => {
+        this.panActive = true;
+        this.autoMapPan(this.nextPanVelocity);
+        if (this.autoPanning && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
+          this.myReq = requestAnimationFrame(step);
+        } else {
+          cancelAnimationFrame(this.myReq as number);
+          this.panActive = false;
+        }
+      };
+      this.myReq = requestAnimationFrame(step);
+    }
+  }
+
+  /**
    * Draws all the elements on the canvas.
    */
   private drawElements(): void {
@@ -527,7 +575,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
-      this.flowElementService.drawFlow(this.stations);
+      this.flowElementService.drawFlows();
 
       // Draw the connections
       for (const station of this.stations) {
@@ -549,7 +597,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
-
     });
   }
 
@@ -570,7 +617,73 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines the point on the canvas that the mouse cursor/pointer or touch event is positioned.
+   * Calculates a bounding box around the border of the canvas and returns a pan velocity.
+   *
+   * @param position The position of the pointer, etc event.
+   * @returns Boolean.
+   */
+  private getOutsideBoundingBoxPanVelocity(position: Point): Point {
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+    const box = () => {
+      //Dynamically set the size of the bounding box based on screen size.
+      if (((window.innerHeight + window.innerWidth) / 2) * .05 > 120) {
+        return ((window.innerHeight + window.innerWidth) / 2) * .05;
+      } else {
+        return 120;
+      }
+    };
+
+    const panVelocity: Point = {x: 0, y: 0};
+    const mobileAdjust = window.innerWidth < 768 ? 36 : 0;
+
+    //Set direction and speed to pan x.
+    if (position.x < box()) {
+      const leftPan = Math.floor((box() - position.x) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.x = leftPan <= Math.floor(MAX_PAN_VELOCITY / this.scale) ? leftPan : Math.floor(MAX_PAN_VELOCITY / this.scale);
+    } else if (position.x > canvasRect.width - box()) {
+      const rightPan = Math.floor((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.x = rightPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? rightPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
+    }
+
+    //Set direction and speed to pan y.
+    if (position.y < box()) {
+      const topPan = Math.floor((box() - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.y = topPan <= Math.floor(MAX_PAN_VELOCITY / this.scale) ? topPan : Math.floor(MAX_PAN_VELOCITY / this.scale);
+    } else if (position.y > canvasRect.height - box() - mobileAdjust) {
+      const bottomPan = Math.floor((canvasRect.height - box() - mobileAdjust - position.y) * MAX_PAN_VELOCITY * .01 / this.scale);
+      panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
+    }
+
+    return panVelocity;
+  }
+
+  /**
+   * Pans the map a given direction based on panVelocity.
+   * Used when outside the bounding box and dragging.
+   * //TODO: Allow use when middle wheel is active.
+   *
+   * @param panVelocity How much to pan in each direction.
+   */
+  private autoMapPan(panVelocity: Point): void {
+    const xMove = panVelocity.x;
+    const yMove = panVelocity.y;
+
+    this.currentCanvasPoint.x -= xMove;
+    this.currentCanvasPoint.y -= yMove;
+
+    if (this.dragItem === MapDragItem.Station) {
+      for (const station of this.stations) {
+        if (station.dragging) {
+          station.mapPoint.x -= xMove;
+          station.mapPoint.y -= yMove;
+        }
+      }
+    }
+    this.drawElements();
+  }
+
+  /**
+   * Determines the point on the canvas that the mouse cursor/pointer is positioned.
    *
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas.
@@ -626,6 +739,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       if (this.stations.find( obj => obj.dragging === true)) {
         const draggingStation = this.stations.filter( obj => obj.dragging === true);
@@ -712,6 +826,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
+      //ensure no station has decimals in their coordinates.
+      station.mapPoint.x = Math.floor(station.mapPoint.x);
+      station.mapPoint.y = Math.floor(station.mapPoint.y);
+
       if (station.dragging) {
         station.dragging = false;
         if (station.status === MapItemStatus.Normal) {
@@ -738,19 +856,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.dragItem === MapDragItem.Map) {
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.lastTouchCoords[0].x = moveInput.x;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
-      this.lastTouchCoords[0].y = moveInput.y;
-      this.drawElements();
+      this.lastTouchCoords[0] = moveInput;
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
+          this.mapService.currentMousePoint$.next(moveInput);
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+
           station.mapPoint.x -= moveAmountX / this.scale;
-          this.lastTouchCoords[0].x = moveInput.x;
           station.mapPoint.y -= moveAmountY / this.scale;
-          this.lastTouchCoords[0].y = moveInput.y;
-          this.drawElements();
+
+          this.lastTouchCoords[0] = moveInput;
         }
       }
     } else if (this.dragItem === MapDragItem.Node) {
@@ -760,18 +877,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
-          this.drawElements();
         }
       }
     } else {
       //Hovering over different station elements.
       for (const station of this.stations) {
-        const previousHoverState = station.hoverActive;
         station.checkElementHover(moveInput, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
-          if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
-          }
           // eslint-disable-next-line max-len
           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
             this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -781,12 +893,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
           break;
         } else {
-          if (previousHoverState !== station.hoverActive) {
-            this.drawElements();
-          }
           this.mapCanvas.nativeElement.style.cursor = 'default';
         }
       }
+    }
+    if (!this.panActive) {
+      this.drawElements();
     }
   }
 

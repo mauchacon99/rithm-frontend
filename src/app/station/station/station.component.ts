@@ -174,7 +174,7 @@ export class StationComponent implements OnInit, OnDestroy {
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
       rithmId: '3j4k-3h2j-hj4j',
-      prompt: 'Label',
+      prompt: '',
       instructions: '',
       questionType: fieldType,
       isReadOnly: false,
