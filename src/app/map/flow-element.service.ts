@@ -22,9 +22,6 @@ export class FlowElementService {
    * Draws all the flow boundaries on the map. Starts from the deepest flows and works back to the root.
    */
   drawFlows(): void {
-    if (!this.mapService.flowElements.length) {
-      return; // nothing to draw
-    }
     const rootFlow = this.mapService.flowElements.find((flow) => flow.isReadOnlyRootFlow);
     if (!rootFlow) {
       throw new Error('Root flow could not be found');
