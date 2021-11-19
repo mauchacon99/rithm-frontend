@@ -208,19 +208,13 @@ export class StationComponent implements OnInit, OnDestroy {
         []).pipe(takeUntil(this.destroyed$))
     );
 
-    const obsPetitions = petitions.pipe(
-      mergeMap(value => value)
-    );
-
-    obsPetitions
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
+    petitions.pipe(
+      mergeMap(value => value), takeUntil(this.destroyed$)
+    ).subscribe({
         next: (stationUpdated) => {
           console.log(stationUpdated);
-          if (stationUpdated instanceof Object) {
+          if (!(stationUpdated instanceof Array)) {
             this.stationInformation = stationUpdated as StationInformation;
-            console.log('station');
-
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
