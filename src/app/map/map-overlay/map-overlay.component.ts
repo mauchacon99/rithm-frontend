@@ -1,8 +1,8 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point } from 'src/models';
+import { MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -10,6 +10,7 @@ import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOO
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDrawer } from '@angular/material/sidenav';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for the elements overlaid on top of the map canvas.
@@ -19,7 +20,13 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
   templateUrl: './map-overlay.component.html',
   styleUrls: ['./map-overlay.component.scss']
 })
-export class MapOverlayComponent implements OnDestroy {
+export class MapOverlayComponent implements OnInit, OnDestroy {
+
+  /** The current signed in user. */
+  currentUser!: User;
+
+  /** Is the user an admin? */
+  isAdmin = false;
 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('deleteDrawer', { static: true })
@@ -32,7 +39,7 @@ export class MapOverlayComponent implements OnDestroy {
   private currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
-  mapDataLoading = false;
+  mapDataLoading = true;
 
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
@@ -113,7 +120,8 @@ export class MapOverlayComponent implements OnDestroy {
     private mapService: MapService,
     private popupService: PopupService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -127,7 +135,10 @@ export class MapOverlayComponent implements OnDestroy {
 
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
+      .subscribe((received) => {
+        if (received === true) {
+          this.mapDataLoading = false;
+        }
         this.stations = this.mapService.stationElements;
       });
 
@@ -163,11 +174,13 @@ export class MapOverlayComponent implements OnDestroy {
   }
 
   /**
-   * Gets info about the mat-drawer toggle.
+   * Gets info about the mat-drawer toggle and determines user permissions.
    */
-     ngOnInit(): void {
-      this.sidenavDrawerService.setDrawer(this.deleteDrawer);
-    }
+  ngOnInit(): void {
+    this.currentUser = this.userService.user;
+    this.isAdmin = this.currentUser.role === 'admin' ? true : false;
+    this.sidenavDrawerService.setDrawer(this.deleteDrawer);
+  }
 
   /**
    * Cleans up subscription.

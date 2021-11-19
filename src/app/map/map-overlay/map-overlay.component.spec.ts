@@ -4,7 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockErrorService, MockPopupService } from 'src/mocks';
+import { MockErrorService, MockPopupService, MockUserService } from 'src/mocks';
 import { MockMapService } from 'src/mocks';
 import { MapService } from '../map.service';
 import { MatMenuModule } from '@angular/material/menu';
@@ -12,6 +12,9 @@ import { MapOverlayComponent } from './map-overlay.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { UserService } from 'src/app/core/user.service';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -20,7 +23,10 @@ describe('MapOverlayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-      declarations: [MapOverlayComponent],
+      declarations: [
+        MapOverlayComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
@@ -32,7 +38,8 @@ describe('MapOverlayComponent', () => {
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService }
+        { provide: MapService, useClass: MockMapService },
+        { provide: UserService, useClass: MockUserService }
       ]
     })
       .compileComponents();
