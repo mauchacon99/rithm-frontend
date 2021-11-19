@@ -579,7 +579,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
       // Draw the flows
-      this.flowElementService.drawFlow(this.stations);
+      this.flowElementService.drawFlows();
 
       // Draw the connections
       for (const station of this.stations) {
@@ -601,7 +601,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
-
     });
   }
 
