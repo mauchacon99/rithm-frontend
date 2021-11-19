@@ -8,7 +8,7 @@ export interface FlowMapData {
   readonly rithmId: string;
 
   /** The id of the organization that this flow belongs to. */
-  readonly organizationRithmId: string;
+  readonly organizationRithmId?: string;
 
   /** The name of the flow. */
   title: string;
