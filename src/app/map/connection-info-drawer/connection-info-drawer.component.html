@@ -4,15 +4,15 @@
       <h6 class="text-center">Connection Information</h6>
     </div>
     <div class="col-span-12 mb-3">
-      <p class="overline">PREVIOUS STATION</p>
+      <p class="overline">CONNECTION START</p>
       <div class="col-span-12">{{connectionStartStationName}}</div>
     </div>
     <div class="col-span-12">
-      <p class="overline">NEXT STATION</p>
+      <p class="overline">CONNECTION END</p>
       <div class="col-span-12">{{connectionEndStationName}}</div>
     </div>
   </div>
-  <div class="w-full py-2 flex justify-center">
+  <div class="w-full py-2 flex">
     <button mat-stroked-button color="warn" class="priority" (click)="toggleDrawer('connectionInfo')">Delete Connection</button>
   </div>
 </div>
