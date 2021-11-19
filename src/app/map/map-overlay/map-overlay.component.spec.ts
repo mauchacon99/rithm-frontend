@@ -11,10 +11,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MapOverlayComponent } from './map-overlay.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -22,10 +22,10 @@ describe('MapOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       declarations: [
         MapOverlayComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(ConnectionInfoDrawerComponent)
       ],
       imports: [
         HttpClientTestingModule,
