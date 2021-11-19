@@ -215,8 +215,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
       // Update appended fields to document.
       // Second parameter appendedFields temporary.
-      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId,
-        [])
+      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, [])
     ];
 
     forkJoin(petitionsUpdateStation)
