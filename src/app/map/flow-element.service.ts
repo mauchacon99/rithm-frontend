@@ -53,23 +53,7 @@ export class FlowElementService {
     }
 
     let flowPoints: Point[] = [];
-
-    // If flow contains stations, calculate the points
-    if (flow.stations.length) {
-      const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
-
-      // Get all the points within this flow
-      for (const station of flowStations) {
-        const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
-        const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
-        const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
-
-        flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
-        flowPoints.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
-        flowPoints.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
-        flowPoints.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
-      }
-    }
+    flowPoints.push(...this.getStationPointsForFlow(flow));
 
     if (flow.subFlows.length) {
       const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
@@ -107,6 +91,35 @@ export class FlowElementService {
     }
     ctx.stroke();
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Gets a list of all the station points that are contained within a flow.
+   *
+   * @param flow The flow for which to get the points.
+   * @returns A list of contained points representing the stations.
+   */
+  private getStationPointsForFlow(flow: FlowMapElement): Point[] {
+    if (!flow.stations.length) {
+      return []; // Nothing to do here
+    }
+    const stationPointsWithinFlow: Point[] = [];
+
+    // Get the stations within the flow
+    const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
+
+    // Get all the station points within this flow
+    for (const station of flowStations) {
+      const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
+      const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
+      const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
+
+      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
+      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
+      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
+      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+    }
+    return stationPointsWithinFlow;
   }
 
   /**
