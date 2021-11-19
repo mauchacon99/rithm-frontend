@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { DialogType, Question, QuestionFieldType } from 'src/models';
+import { DialogType, Question } from 'src/models';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
 /**
