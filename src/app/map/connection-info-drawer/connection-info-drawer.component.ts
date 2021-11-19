@@ -22,10 +22,10 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   connectedStations: StationMapElement[] = [];
 
   /** Name of the station where the connection begins. */
-  connectionStartStationName = '';
+  connectionStartStationName = 'StartStationName';
 
   /** Name of the station where the connection ends. */
-  connectionEndStationName = '';
+  connectionEndStationName = 'EndStationName';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -51,7 +51,7 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: 'connectionInfo' | 'deleteConnection'): void {
+  toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 

@@ -311,7 +311,7 @@ export class MapOverlayComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-    toggleDrawer(drawerItem: 'deleteConnection'): void {
+    toggleDrawer(drawerItem: 'connectionInfo'): void {
       this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
 

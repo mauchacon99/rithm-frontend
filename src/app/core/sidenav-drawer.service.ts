@@ -16,8 +16,7 @@ export class SidenavDrawerService {
   private drawerComponent?: MatDrawer;
 
   /** The name of the context for which the drawer is opened. */
-  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo' | 'deleteConnection'
-  > = new ReplaySubject(1);
+  drawerContext$: Subject<'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo' > = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
   drawerData$: ReplaySubject<unknown> = new ReplaySubject(1);
@@ -99,7 +98,7 @@ export class SidenavDrawerService {
    * @param context The name of the context for which the drawer is opened.
    * @param data Any data to optionally pass to the drawer.
    */
-  openDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo' | 'deleteConnection',
+  openDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo',
   data?: unknown): void {
     if (!this.drawerComponent) {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
@@ -126,8 +125,7 @@ export class SidenavDrawerService {
    * @param context The name of the context for which the drawer is opened.
    * @param data Any data to optionally pass to the drawer.
    */
-  toggleDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo' | 'deleteConnection',
-   data?: unknown): void {
+  toggleDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo', data?: unknown): void {
     if (!this.drawerComponent) {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
     }
