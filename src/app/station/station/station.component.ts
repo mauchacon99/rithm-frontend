@@ -211,16 +211,16 @@ export class StationComponent implements OnInit, OnDestroy {
 
     const petitionsUpdateStation = [
       // Petition for update all station.
-      this.stationService.updateStation(this.stationInformation).pipe(first()),
+      this.stationService.updateStation(this.stationInformation),
 
       // Update appended fields to document.
       // Second parameter appendedFields temporary.
       this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId,
-        []).pipe(takeUntil(this.destroyed$))
+        [])
     ];
 
     forkJoin(petitionsUpdateStation)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(first())
       .subscribe({
         next: (stationUpdated) => {
           if (stationUpdated) {
