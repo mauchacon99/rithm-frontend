@@ -136,7 +136,7 @@ describe('StationComponent', () => {
   });
 
   it('should show loading indicator while getting the station data', () => {
-    component.getStationInfo(component.stationInformation.rithmId);
+    (<any>component).getStationInfo(component.stationInformation.rithmId);
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector('#component-station-loading');

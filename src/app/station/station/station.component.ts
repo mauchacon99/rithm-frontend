@@ -144,7 +144,7 @@ export class StationComponent implements OnInit, OnDestroy {
    *
    * @param stationId The id of the station that the document is in.
    */
-  getStationInfo(stationId: string): void {
+  private getStationInfo(stationId: string): void {
     this.stationLoading = true;
     this.stationService.getStationInfo(stationId)
       .pipe(first())
