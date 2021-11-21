@@ -136,6 +136,7 @@ describe('StationComponent', () => {
   });
 
   it('should show loading indicator while getting the station data', () => {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     (<any>component).getStationInfo(component.stationInformation.rithmId);
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
