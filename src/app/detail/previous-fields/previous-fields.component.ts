@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { DialogType, Question } from 'src/models';
-import { DialogComponent } from '../../shared/dialog/dialog.component';
+import { PopupService } from 'src/app/core/popup.service';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -39,6 +39,7 @@ constructor(
   private stationService: StationService,
   private errorService: ErrorService,
   private dialog: MatDialog,
+  private popupService: PopupService
 ){}
 
 /**
@@ -79,16 +80,13 @@ ngOnInit(): void{
    * Open a modal to move a field from all/private to the template area.
    *
    */
-  openPreviousFieldModal(): void {
-    this.dialog.open(DialogComponent, {
-      minWidth: '325px',
-      data: {
-        type: DialogType.Confirm,
-        title: 'Move field?',
-        message: 'Are you sure you want to move this field into the template area?',
-        okButtonText: 'Confirm',
-        cancelButtonText: 'Close'
-       }
+  async openPreviousFieldModal(): Promise<void> {
+
+    await this.popupService.confirm({
+      title: 'Move field?',
+      message: 'Are you sure you want to move this field into the template area?',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close'
     });
   }
 }
