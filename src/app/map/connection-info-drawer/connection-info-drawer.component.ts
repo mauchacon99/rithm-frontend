@@ -3,7 +3,10 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationMapElement } from 'src/helpers';
+import { ConnectionLineInfo } from 'src/models';
 import { MapService } from '../map.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for connection info drawer.
@@ -27,21 +30,30 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** Name of the station where the connection ends. */
   connectionEndStationName = 'EndStationName';
 
+  /** Id of the station where the connection begins. */
+  connectionStartStationId = '';
+
+  /** Id of the station where the connection ends. */
+  connectionEndStationId = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
-    private mapService: MapService
+    private mapService: MapService,
+    private errorService: ErrorService,
+    private popupService: PopupService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const stationIds = data as string[];
+        const stationIds = data as ConnectionLineInfo;
         if (stationIds) {
-          this.connectedStations = this.mapService.stationElements.filter((e) => {
-            e.rithmId === stationIds[0] || stationIds[1];
-          });
-          this.connectedStations.sort((a) => a.rithmId === stationIds[0] ? -1 : 1);
+          this.connectedStations = this.mapService.stationElements.filter(e =>
+            e.rithmId === stationIds.connectionStartStationRithmId || e.rithmId === stationIds.connectionEndStationRithmId);
+          this.connectedStations.sort((a) => a.rithmId === stationIds.connectionStartStationRithmId ? -1 : 1);
           this.connectionStartStationName = this.connectedStations[0].stationName;
           this.connectionEndStationName = this.connectedStations[1].stationName;
+          this.connectionStartStationId = this.connectedStations[0].rithmId;
+          this.connectionEndStationId = this.connectedStations[1].rithmId;
         }
       });
   }
@@ -61,6 +73,22 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
+   *
+   */
+   async removeConnectionLine(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Remove Connection Line',
+      message: `Remove connection line from ${this.connectionStartStationName} to ${this.connectionEndStationName} ?`,
+      okButtonText: 'Remove',
+    });
+    if (confirm) {
+      this.mapService.removeConnectionLine(this.connectionStartStationId, this.connectionEndStationId);
+      this.sidenavDrawerService.toggleDrawer('connectionInfo');
+    }
   }
 
 }

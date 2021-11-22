@@ -13,6 +13,7 @@ import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -97,7 +98,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -1020,7 +1022,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     for (const connectionLine of this.lineItems) {
       if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
-        // TODO: code to open connection info drawer
+        this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
+        break;
       }
     }
   }

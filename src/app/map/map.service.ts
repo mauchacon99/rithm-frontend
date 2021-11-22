@@ -214,6 +214,30 @@ export class MapService {
   }
 
   /**
+   * Removes the single connection between stations.
+   *
+   * @param startStationId The station from which connection starts.
+   * @param endStationId The station for which connection end.
+   */
+  removeConnectionLine(startStationId: string, endStationId: string): void {
+    // Get two stations for which connection line belongs to
+    const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
+    const endStationIndex = this.stationElements.findIndex(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+
+    // Find the index from each stations between nextStations and previousStations
+    const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
+    const prevStationIndex = this.stationElements[endStationIndex].previousStations.findIndex(e => e === startStationId);
+
+    // Remove station rithm ids from nextStations and previousStations properties also update station status
+    this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
+    this.stationElements[endStationIndex].previousStations.splice(prevStationIndex, 1);
+    this.stationElements[startStationIndex].status = MapItemStatus.Updated;
+    this.stationElements[endStationIndex].status = MapItemStatus.Updated;
+
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
    * Publishes local map changes to the server.
    *
    * @returns Observable of publish data.
