@@ -47,24 +47,52 @@ ngOnInit(): void{
    * @param stationId The Specific id of station.
    * @param isPrivate True/false returns private/all questions.
    */
-   getStationPreviousQuestions(stationId: string, isPrivate: boolean): void{
+  getStationPreviousQuestions(stationId: string, isPrivate: boolean): void {
     this.isLoading = true;
     this.stationService.getStationPreviousQuestions(stationId, isPrivate)
-    .pipe(first())
-    .subscribe({
-      next: (questions: Question[]) => {
-        if (questions) {
-          this.questions = questions;
+      .pipe(first())
+      .subscribe({
+        next: (questions: Question[]) => {
+          if (questions) {
+            this.questions = questions;
+          }
+          this.isLoading = false;
+        }, error: (error: unknown) => {
+          this.questionsError = true;
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
         }
-        this.isLoading = false;
-      }, error: (error: unknown) => {
-        this.questionsError=true;
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
-    });
+      });
+  }
+
+ /**
+  * Update all station previous private/all questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The Specific previous question of station.
+  * @param isPrivate True assigns the private questions - False assigns all questions.
+  */
+  updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): void {
+    this.isLoading = true;
+    this.stationService.updateStationPreviousQuestions(stationId, previousQuestion, isPrivate)
+      .pipe(first())
+      .subscribe({
+        next: (questions: Question[]) => {
+          if (questions) {
+            this.questions = questions;
+          }
+          this.isLoading = false;
+        }, error: (error: unknown) => {
+          this.questionsError = true;
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

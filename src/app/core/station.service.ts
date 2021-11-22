@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
-  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
+  DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -110,6 +110,40 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+ /**
+  * Update all station previous private/all questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The Specific previous question of station.
+  * @param isPrivate True assigns the private questions - False assigns all questions.
+  * @returns Station private/all save the questions array.
+  */
+  updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: isPrivate,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: isPrivate,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**

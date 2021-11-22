@@ -276,6 +276,38 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update a list of stations private/all questions', () => {
+    const stationId = 'E204F369-386F-4E41';
+    const isPrivate = true;
+
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    service.updateStationPreviousQuestions(stationId, expectedResponse,isPrivate)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
   it('should add a new member to the worker roster', () => {
     const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const usersIds: string[] = [
