@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { Question } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -57,6 +57,26 @@ ngOnInit(): void{
       next: (questions: Question[]) => {
         if (questions) {
           this.questions = questions;
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj4j',
+            prompt: 'Label #1',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+          });
+          this.questions.push({
+            rithmId: '3j4k-3h2j-hj2j',
+            prompt: 'Label #2',
+            instructions: '',
+            questionType: QuestionFieldType.ShortText,
+            isReadOnly: false,
+            isRequired: false,
+            isPrivate: false,
+            children: [],
+          });
         }
         this.isLoading = false;
       }, error: (error: unknown) => {
