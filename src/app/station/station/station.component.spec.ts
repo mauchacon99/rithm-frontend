@@ -23,8 +23,6 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
-import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 
 describe('StationComponent', () => {
   let component: StationComponent;
