@@ -23,6 +23,7 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
+import { of } from 'rxjs';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -183,4 +184,22 @@ describe('StationComponent', () => {
     expect(form['stationTemplateForm'].value).toBe('');
   });
 
+  it('should param stationId in null and redirect to dashboard', () => {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    const spy = spyOn((<any>component), 'handleInvalidParams');
+
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    (<any>component).getParams();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should compare property stationInformation equal return function getStationInfo', () => {
+    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(of(component.stationInformation));
+
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    (<any>component).getStationInfo(component.stationInformation.rithmId);
+
+    expect(component.stationInformation).toBe(component.stationInformation);
+  });
 });
