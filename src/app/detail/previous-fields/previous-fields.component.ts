@@ -1,10 +1,9 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -38,7 +37,6 @@ isLoading = false;
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
-  private dialog: MatDialog,
   private popupService: PopupService
 ){}
 

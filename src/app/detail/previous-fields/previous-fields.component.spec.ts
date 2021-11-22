@@ -3,9 +3,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import { MockErrorService, MockPopupService, MockStationService } from 'src/mocks';
 
 import { PreviousFieldsComponent } from './previous-fields.component';
 
@@ -24,7 +25,8 @@ describe('PreviousFieldsComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
     .compileComponents();
