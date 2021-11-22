@@ -77,7 +77,19 @@ describe('MapService', () => {
           status: MapItemStatus.Normal
         }
       ],
-      flows: []
+      flows: [
+        {
+          rithmId: '',
+          title: 'Root Flow',
+          stations: [
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+          ],
+          subFlows: [],
+          isReadOnlyRootFlow: true,
+          status: MapItemStatus.Normal
+        }
+      ]
     };
 
     service.getMapElements()

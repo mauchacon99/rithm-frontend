@@ -1,7 +1,7 @@
 import { FlowMapData, StationMapData } from '.';
 
 /**
- * Contains all the elements displayed on the map.
+ * Contains all the data displayed on the map.
  */
 export interface MapData {
 
