@@ -23,6 +23,8 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
+import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -161,4 +163,17 @@ describe('StationComponent', () => {
     expect(updateStation).toHaveBeenCalledOnceWith(component.stationInformation);
     expect(updateFieldsDocument).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
   });
+
+  it('should navigate the user back to the dashboard page and show error', () => {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    const spyNavigate = spyOn((<any>component), 'navigateBack');
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError');
+
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    (<any>component).handleInvalidParams();
+
+    expect(spyNavigate).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
 });
