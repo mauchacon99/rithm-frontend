@@ -137,7 +137,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
-          this.autoPanning = !!(velocity.x && velocity.y);
+          this.autoPanning = !(velocity.x === 0 && velocity.y === 0);
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
@@ -654,7 +654,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
-    return panVelocity;
+    return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
   }
 
   /**
