@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject, takeUntil } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -37,9 +37,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Document name form. */
   documentNameForm: FormGroup;
 
-  /** Fields to Document in the station. */
-  appendedFields: DocumentNameField[] = [];
-
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -51,6 +48,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     this.documentNameForm = this.fb.group({
       name: ['']
     });
+
+    /** Get Document Appended Fields from Behaviour Subject. */
+    this.stationService.documentStationNameFields$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe( appendedFields => {
+      this.documentAppendedFields = appendedFields;
+    });
   }
 
   /**
@@ -59,16 +63,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
-
-    this.stationService.documentStationName$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe({
-      next: (data) => {
-        if (data){
-          this.documentAppendedFields.push(data);
-        }
-      },
-    });
     this.getAppendedFieldsOnDocumentName(this.rithmId);
   }
 
@@ -153,11 +147,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
     this.documentService.getAppendedFieldsOnDocumentName(stationId)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(first())
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.appendedFields = data;
+        next: (appendedFieldsArray) => {
+          if (appendedFieldsArray) {
+            this.documentAppendedFields = appendedFieldsArray;
+            this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -169,10 +164,23 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Remove an appended field from document field names.
+   *
+   * @param index The current index to remove from appendedFields.
+   */
+   removeAppendedFieldFromDocumentName(index: number): void{
+     if (index > 0){
+       this.documentAppendedFields.splice(index-1,2);
+     } else {
+       this.documentAppendedFields.splice(index,2);
+     }
+     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+   }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

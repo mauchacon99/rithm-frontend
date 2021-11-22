@@ -16,7 +16,7 @@ export class MockStationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** The Name of the Station Document as BehaviorSubject. */
-  documentStationName$ = new BehaviorSubject<DocumentNameField|null>(null);
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /**
    * Gets a station information.
@@ -510,8 +510,8 @@ export class MockStationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updatedDocumentStationNameField(documentName: DocumentNameField): void {
-    this.documentStationName$.next(documentName);
+   updatedDocumentStationNameField(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
   }
 
   /**

@@ -22,7 +22,7 @@ export class StationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** The Name of the Station Document as BehaviorSubject. */
-  documentStationName$ = new BehaviorSubject<DocumentNameField | null>(null);
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   constructor(
     private http: HttpClient
@@ -223,8 +223,8 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updateDocumentStationNameField(documentName: DocumentNameField): void {
-    this.documentStationName$.next(documentName);
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
   }
 
   /**

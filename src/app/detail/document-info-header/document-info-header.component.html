@@ -3,19 +3,26 @@
     <h6 class="text-center">Document Information</h6>
   </div>
   <div class="col-span-12 flex justify-between" *ngIf="isStation">
-      <div class="items-center flex">
-        <p>Document Name : </p>
-        <mat-chip-list aria-label="Document Fields Selection">
-          <mat-chip *ngFor="let field of documentAppendedFields">{{field.prompt}}
-            <button mat-icon-button class="mat-icon-6">
+    <div class="items-center flex">
+      <p>Document Name : </p>
+      <mat-chip-list aria-label="Document Fields Selection">
+        <div *ngFor="let field of documentAppendedFields; let last = last; let i = index">
+          <mat-chip *ngIf="field.rithmId">
+            {{field.prompt}}
+            <button mat-icon-button class="mat-icon-6" (click)="removeAppendedFieldFromDocumentName(i)">
               <i class="fas fa-times-circle text-lg text-primary-300"></i>
             </button>
           </mat-chip>
-        </mat-chip-list>
-      </div>
-      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('documentInfo')">
-        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
-      </button>
+          <span *ngIf="!field.rithmId">
+            {{field.prompt}}
+          </span>
+        </div>
+      </mat-chip-list>
+    </div>
+    <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
+      (click)="toggleDrawer('documentInfo')">
+      <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+    </button>
   </div>
 
   <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">

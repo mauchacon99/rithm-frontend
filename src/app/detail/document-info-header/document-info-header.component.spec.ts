@@ -64,9 +64,9 @@ describe('DocumentInfoHeaderComponent', () => {
     const expectedData = {
       rithmId: rithmId
     };
-    const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+    const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
-    expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
+    expect(toggleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
   });
 
   it('should get the appended fields in the document name', () => {

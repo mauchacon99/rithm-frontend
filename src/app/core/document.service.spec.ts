@@ -1,9 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation } from 'src/models';
 import { DocumentService } from './document.service';
-import { DocumentStationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
@@ -123,35 +122,29 @@ describe('DocumentService', () => {
     const stationId = '7654-321';
     const expectData: DocumentNameField[] = [
       {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
-      {
-        prompt: '-',
-        rithmId: ''
-      }
     ];
 
-    service.getAppendedFieldsOnDocumentName(stationId).subscribe((data) => {
-      expect(data).toEqual(expectData);
+    service.getAppendedFieldsOnDocumentName(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectData);
     });
   });
 
-  it('should update appended fields to document', () => {
+  it('should return updated appended fields to document', () => {
     const stationId = '7654-321';
     const appendedFields: DocumentNameField[] = [
       {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
-      {
-        prompt: '-',
-        rithmId: ''
-      }
     ];
 
-    service.updateDocumentAppendedFields(stationId, appendedFields).subscribe((data) => {
-      expect(data).toEqual(appendedFields);
+    service.updateDocumentAppendedFields(stationId, appendedFields)
+    .subscribe((response) => {
+      expect(response).toEqual(appendedFields);
     });
   });
 
