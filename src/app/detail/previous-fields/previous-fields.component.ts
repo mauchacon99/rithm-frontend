@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -29,10 +29,6 @@ questionsError=false;
 
 /** Whether questions is loading. */
 isLoading = false;
-
-/** Emit the close modal. */
-@Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
-
 
 constructor(
   private stationService: StationService,
@@ -79,7 +75,6 @@ ngOnInit(): void{
    *
    */
   async openPreviousFieldModal(): Promise<void> {
-
     await this.popupService.confirm({
       title: 'Move field?',
       message: 'Are you sure you want to move this field into the template area?',
