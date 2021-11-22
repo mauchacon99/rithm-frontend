@@ -810,6 +810,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.fastDrag = true;
         this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
         this.checkAutoPan();
+      } else {
+        this.nextPanVelocity = {x: 0, y: 0};
       }
     }
 
