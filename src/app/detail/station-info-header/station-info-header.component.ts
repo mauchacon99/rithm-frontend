@@ -4,6 +4,8 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { first } from 'rxjs';
 
 /**
  * Reusable component for the station information header.
@@ -29,11 +31,18 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Field to change station name. */
   nameField!: Question;
 
+  /** Whether the request to get the station info is currently underway. */
+  stationLoading = false;
+
+  /** */
+  stationEditMode2 = true;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private errorService: ErrorService,
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
@@ -92,8 +101,31 @@ export class StationInfoHeaderComponent implements OnInit {
   /**
    * Update InfoDrawer Station Name.
    */
-     updStationInfoDrawerName(): void{
-      this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
-    }
+  updStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+  }
+
+  /**
+   * Update station name.
+   *
+   */
+   updateStationName(): void {
+    const nameStationChange = this.stationNameForm.controls.name.value;
+    this.stationEditMode2=false;
+    this.stationService.updateStationName(nameStationChange, this.stationInformation as StationInformation)
+      .pipe(first())
+      .subscribe({
+        next: (stationNameUpdated) => {
+          this.stationInformation = stationNameUpdated;
+          this.stationEditMode2=true;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 
 }

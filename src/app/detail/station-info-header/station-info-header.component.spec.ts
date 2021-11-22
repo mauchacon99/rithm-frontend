@@ -9,6 +9,8 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService } from '../../../mocks/mock-error-service';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -96,12 +98,13 @@ describe('StationInfoHeaderComponent', () => {
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInputModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: StationService, useClass: MockStationService }
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();

@@ -2,7 +2,7 @@
   <div class="col-span-12">
     <h6 class="text-center">Station Information</h6>
   </div>
-  <div  class="col-span-12" [ngClass]="{'md:col-span-12': stationEditMode, 'md:ml-2 md:col-span-4 xl:col-span-5': !stationEditMode}">
+  <div  class="col-span-12" [ngClass]="{'md:col-span-12': stationEditMode, 'md:ml-2 md:col-span-4 xl:col-span-5': !stationEditMode}" *ngIf="stationEditMode2">
     <span *ngIf="!stationEditMode">
       <button *ngIf="type === 'admin'" mat-icon-button color="accent">
         <i class="fas fa-pen"></i>
@@ -12,11 +12,15 @@
     <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>
-        <input data-testid="station-name-field" id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name" autocomplete="off" (keyup)="updStationInfoDrawerName()">
+        <input data-testid="station-name-field" id="stationName" type="text" matInput matNativeControl [value]="stationName" formControlName="name" autocomplete="off" (keyup)="updStationInfoDrawerName()" (blur)="updateStationName()">
         <button data-testid="station-info-drawer" mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('stationInfo')">
           <i class="fas fa-info-circle text-2xl text-primary-500"></i>
         </button>
       </mat-form-field>
     </form>
+  </div>
+  <div  class="col-span-12"*ngIf="!stationEditMode2">
+    <app-loading-indicator *ngIf="!stationEditMode2" class="m-auto self-center w-full" [diameter]="50">
+    </app-loading-indicator>
   </div>
 </section>

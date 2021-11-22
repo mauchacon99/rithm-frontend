@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
+
 /**
  * Main component for viewing a station.
  */
@@ -198,7 +199,6 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationInformation This Data global, for set data in update request.
    */
   updateStation(stationInformation: StationInformation): void {
-    this.updateStationName(stationInformation);
     this.stationLoading = true;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
@@ -252,7 +252,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
     this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
@@ -266,14 +266,5 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
-  }
-
-  /** Update station name.
-   *
-   * @param stationInformation  Station Information Array.
-   */
-   updateStationName(stationInformation: StationInformation): void{
-    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    stationInformation.name = nameStationChange;
   }
 }
