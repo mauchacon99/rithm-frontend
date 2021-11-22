@@ -6,7 +6,7 @@
     <div class="items-center flex">
       <p>Document Name : </p>
       <mat-chip-list aria-label="Document Fields Selection">
-        <div *ngFor="let field of documentAppendedFields; let last = last; let i = index">
+        <div *ngFor="let field of documentAppendedFields; let i = index" class="mx-1">
           <mat-chip *ngIf="field.rithmId">
             {{field.prompt}}
             <button mat-icon-button class="mat-icon-6" (click)="removeAppendedFieldFromDocumentName(i)">

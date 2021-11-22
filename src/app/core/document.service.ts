@@ -72,6 +72,14 @@ export class DocumentService {
         prompt: 'Address',
         rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
     ];
     return of(documentFieldName).pipe(delay(1000));
   }
@@ -94,6 +102,14 @@ export class DocumentService {
       const documentFieldName: DocumentNameField[] = [
         {
           prompt: 'Address',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+        {
+          prompt: '/',
+          rithmId: ''
+        },
+        {
+          prompt: 'Which is best?',
           rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
         },
       ];

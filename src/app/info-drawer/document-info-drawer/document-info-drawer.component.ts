@@ -51,9 +51,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document name section. */
   documentNameLoading = false;
 
-  /** Select to store the separator value. */
-  separatorValueSelect = '-';
-
   /** The different options for the separator value. */
   fieldNameSeparatorOptions = FieldNameSeparator;
 
@@ -68,7 +65,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
-      separatorField: ''
+      separatorField: '/'
     });
 
     this.sidenavDrawerService.drawerData$
@@ -89,7 +86,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     .subscribe( appendedFields => {
       this.options = appendedFields.filter(field => field.rithmId);
       if (this.questions.length > 0){
-        this.filtersFieldsAndQuestions();
+        this.filterFieldsAndQuestions();
       }
     });
   }
@@ -99,14 +96,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
-    this.getAllPreviousQuestion();
+    this.getAllPreviousQuestions();
   }
 
   /**
    * Get all station allSection previous  questions.
    *
    */
-  getAllPreviousQuestion(): void {
+  getAllPreviousQuestions(): void {
     this.stationService.getStationPreviousQuestions(this.stationRithmId, false)
       .pipe(first())
       .subscribe({
@@ -115,7 +112,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
               .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
-            this.filtersFieldsAndQuestions();
+            this.filterFieldsAndQuestions();
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -187,25 +184,31 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Add Document Name Field.
    *
-   * @param field The field selected in autocomplete.
+   * @param fieldPrompt The field prompt selected in autocomplete.
    */
-  addStationDocumentFieldName(field: string): void {
-    const fieldToAppend: DocumentNameField | undefined = this.fieldsToAppend.find( newField => newField.prompt === field );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addStationDocumentFieldName(fieldPrompt: string): void {
+    const fieldToAppend = this.fieldsToAppend.find( newField => newField.prompt === fieldPrompt );
 
-    if ( fieldToAppend !== undefined) {
+    if (fieldToAppend) {
       this.appendedFields.length > 0
-      ? this.appendedFields.push({prompt:this.separatorValueSelect, rithmId:''},fieldToAppend)
+      ? this.appendedFields.push({prompt:this.appendFieldForm.controls.separatorField.value, rithmId:''},fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
       this.stationService.updateDocumentStationNameFields(this.appendedFields);
 
-      this.appendFieldForm.controls.appendField.setValue(' ');
+      this.appendFieldForm.controls.appendField.setValue('');
+    } else {
+      this.errorService.displayError(
+        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+        fieldToAppend
+      );
     }
   }
 
   /**
    * Make filter AutoSearch Field List between Questions And AppendedFields.
    */
-  filtersFieldsAndQuestions(): void {
+  filterFieldsAndQuestions(): void {
     /**Difference between QuestionArray and OptionsArray */
     this.fieldsToAppend =
     this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));

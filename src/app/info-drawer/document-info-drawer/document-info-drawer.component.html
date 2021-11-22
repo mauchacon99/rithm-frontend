@@ -35,7 +35,7 @@
           <p class="overline pb-2">Separator Value</p>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Select</mat-label>
-            <mat-select [(ngModel)]="separatorValueSelect" formControlName="separatorField">
+            <mat-select formControlName="separatorField">
               <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
                 {{option.value}}
               </mat-option>

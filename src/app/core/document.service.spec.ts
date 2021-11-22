@@ -9,6 +9,8 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
 describe('DocumentService', () => {
   let service: DocumentService;
   let httpTestingController: HttpTestingController;
+  const stationId = 'E204F369-386F-4E41';
+  const documentId = 'E204F369-386F-4E41';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,7 +28,6 @@ describe('DocumentService', () => {
   });
 
   it('should return a list of documents for a station', () => {
-    const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
     const expectedResponse: StationDocuments = {
       documents: [
@@ -61,8 +62,6 @@ describe('DocumentService', () => {
   });
 
   it('should return forward and previous stations for a specific document', () => {
-    const stationId = 'E204F369-386F-4E41';
-    const documentId = 'E204F369-386F-4E41';
     const expectedResponse: ForwardPreviousStationsDocument = {
       previousStations: [],
       followingStations: []
@@ -84,8 +83,6 @@ describe('DocumentService', () => {
   });
 
   it('should return document and station information', () => {
-    const stationId = 'E204F369-386F-4E41';
-    const documentId = 'E204F369-386F-4E41';
     const expectedResponse: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
@@ -119,10 +116,17 @@ describe('DocumentService', () => {
   });
 
   it('should return appended fields to document', () => {
-    const stationId = '7654-321';
     const expectData: DocumentNameField[] = [
       {
         prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
         rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
@@ -134,10 +138,17 @@ describe('DocumentService', () => {
   });
 
   it('should return updated appended fields to document', () => {
-    const stationId = '7654-321';
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
         rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];

@@ -219,7 +219,7 @@ export class StationService {
   }
 
   /**
-   * Update the station document name.
+   * Update the station document name template.
    *
    * @param documentName The name of the document in the station.
    */

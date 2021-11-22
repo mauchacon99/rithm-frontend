@@ -9,6 +9,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService, MockDocumentService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { DocumentNameField } from 'src/models';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -77,4 +78,48 @@ describe('DocumentInfoHeaderComponent', () => {
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
+
+  it('should splice one item from appended fields array in and update document name template'), () => {
+    const currentIndex = 0;
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields);
+  };
+
+  it('should splice two item from appended fields array in and update document name template'), () => {
+    const currentIndex = 1;
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields);
+  };
 });

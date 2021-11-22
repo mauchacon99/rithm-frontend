@@ -149,9 +149,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     this.documentService.getAppendedFieldsOnDocumentName(stationId)
       .pipe(first())
       .subscribe({
-        next: (appendedFieldsArray) => {
-          if (appendedFieldsArray) {
-            this.documentAppendedFields = appendedFieldsArray;
+        next: (appendedFields) => {
+          if (appendedFields) {
+            this.documentAppendedFields = appendedFields;
             this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
           }
         }, error: (error: unknown) => {
@@ -169,11 +169,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @param index The current index to remove from appendedFields.
    */
    removeAppendedFieldFromDocumentName(index: number): void{
-     if (index > 0){
-       this.documentAppendedFields.splice(index-1,2);
-     } else {
-       this.documentAppendedFields.splice(index,2);
-     }
+     const removeStartIndex = index > 0 ? index - 1 : index;
+     this.documentAppendedFields.splice(removeStartIndex,2);
      this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
    }
 
@@ -182,5 +179,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
