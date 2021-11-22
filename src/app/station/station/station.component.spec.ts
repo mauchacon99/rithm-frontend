@@ -174,4 +174,13 @@ describe('StationComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should validate to controls in form and value initial', () => {
+    const form = component.stationForm.controls;
+
+    const expectFormFirst = ['stationTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['stationTemplateForm'].value).toBe('');
+  });
+
 });
