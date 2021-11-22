@@ -121,6 +121,7 @@ export class StationService {
   * @returns Station private/all save the questions array.
   */
   updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): Observable<Question[]> {
+    isPrivate = false;
     previousQuestion = [
       {
         prompt: 'Example question#1',

@@ -243,7 +243,7 @@ export class MockStationService {
   * @returns Station private/all save the questions array.
   */
   updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): Observable<Question[]> {
-    const mockPrevQuestions: Question[] = [
+    previousQuestion = [
       {
         prompt: 'Example question#1',
         instructions: 'Example question#1',
@@ -265,7 +265,7 @@ export class MockStationService {
         children: [],
       },
     ];
-    return of(mockPrevQuestions).pipe(delay(1000));
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**
