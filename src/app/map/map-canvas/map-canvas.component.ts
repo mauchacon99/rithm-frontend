@@ -260,7 +260,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
 
         this.eventEndLogic(pointerPos);
-        this.openConnectionDrawer(event);
+        if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+          this.openConnectionDrawer(event);
+        }
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -360,16 +362,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const pos = this.getEventCanvasPoint(event);
       this.singleInputMoveLogic(pos);
     }
-    const mousePos = this.getEventContextPoint(event);
-
-    for (const connectionLine of this.lineItems) {
-      if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
-        this.context.strokeStyle = NODE_HOVER_COLOR;
-        this.mapCanvas.nativeElement.style.cursor = 'pointer';
-      } else {
-        this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+    if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+      const mousePos = this.getEventContextPoint(event);
+      for (const connectionLine of this.lineItems) {
+        if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
+          this.context.strokeStyle = NODE_HOVER_COLOR;
+          this.mapCanvas.nativeElement.style.cursor = 'pointer';
+        } else {
+          this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+        }
+        this.context.stroke(connectionLine.path);
       }
-      this.context.stroke(connectionLine.path);
     }
   }
 
