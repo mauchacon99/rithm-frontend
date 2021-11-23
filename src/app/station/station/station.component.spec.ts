@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,10 +24,15 @@ import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { MockUserService } from '../../../mocks/mock-user-service';
+import { UserService } from 'src/app/core/user.service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
+  let componentChildStationHeader: StationInfoHeaderComponent;
+  let fixtureChildStationHeader: ComponentFixture<StationInfoHeaderComponent>;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -58,13 +63,16 @@ describe('StationComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: UserService, useClass: MockUserService }
       ]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
+    fixtureChildStationHeader = TestBed.createComponent(StationInfoHeaderComponent);
+    componentChildStationHeader = fixtureChildStationHeader.componentInstance;
     fixture = TestBed.createComponent(StationComponent);
     component = fixture.componentInstance;
     component.stationInformation = {
@@ -201,5 +209,19 @@ describe('StationComponent', () => {
     (<any>component).getStationInfo(component.stationInformation.rithmId);
 
     expect(component.stationInformation).toBe(component.stationInformation);
+  });
+
+  it('should executed the petitions how clicked button save', () => {
+    (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
+    component.stationInfoHeader = componentChildStationHeader;
+
+    const spyUpdateStation = spyOn(TestBed.inject(StationService), 'updateStation');
+    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
+    const button = fixture.debugElement.query(By.css('.btn-save'));
+
+    button.triggerEventHandler('click', component.saveStation());
+
+    expect(spyUpdateStation).toHaveBeenCalled();
+    expect(spyUpdateAppendedFields).toHaveBeenCalled();
   });
 });
