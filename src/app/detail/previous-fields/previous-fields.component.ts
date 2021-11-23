@@ -38,18 +38,16 @@ constructor(
  * Load private/all Questions.
  */
 ngOnInit(): void{
-  this.getStationPreviousQuestions(this.stationId, this.isPrivate);
+  this.getStationPreviousQuestions();
 }
 
   /**
    * Get all station previous private/all questions.
    *
-   * @param stationId The Specific id of station.
-   * @param isPrivate True/false returns private/all questions.
    */
-  getStationPreviousQuestions(stationId: string, isPrivate: boolean): void {
+  getStationPreviousQuestions(): void {
     this.isLoading = true;
-    this.stationService.getStationPreviousQuestions(stationId, isPrivate)
+    this.stationService.getStationPreviousQuestions(this.stationId, this.isPrivate)
       .pipe(first())
       .subscribe({
         next: (questions: Question[]) => {
