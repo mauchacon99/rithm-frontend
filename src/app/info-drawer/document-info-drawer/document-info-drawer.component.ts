@@ -111,6 +111,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           if (questions) {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
+              .filter(question => question.prompt && question.rithmId)
               .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
             this.filterFieldsAndQuestions();
           }
@@ -186,23 +187,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addStationDocumentFieldName(fieldPrompt: string): void {
     const fieldToAppend = this.fieldsToAppend.find( newField => newField.prompt === fieldPrompt );
 
-    if (fieldToAppend) {
+    if (!fieldToAppend) {
+      throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
+    }
       this.appendedFields.length > 0
       ? this.appendedFields.push({prompt:this.appendFieldForm.controls.separatorField.value, rithmId:''},fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
       this.stationService.updateDocumentStationNameFields(this.appendedFields);
-
       this.appendFieldForm.controls.appendField.setValue('');
-    } else {
-      this.errorService.displayError(
-        'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-        fieldToAppend
-      );
-    }
   }
 
   /**

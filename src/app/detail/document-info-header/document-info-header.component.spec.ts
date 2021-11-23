@@ -98,7 +98,7 @@ describe('DocumentInfoHeaderComponent', () => {
 
     const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex,2));
   };
 
   it('should splice two item from appended fields array in and update document name template'), () => {
@@ -120,6 +120,6 @@ describe('DocumentInfoHeaderComponent', () => {
 
     const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex-1,2));
   };
 });
