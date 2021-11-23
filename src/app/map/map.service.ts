@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
@@ -89,7 +89,7 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
-        if (!environment.production && !environment.testing) {
+        if (environment.name === EnvironmentName.Dev || environment.name === EnvironmentName.Test) {
           this.validateMapData();
         }
         this.mapDataReceived$.next(true);
