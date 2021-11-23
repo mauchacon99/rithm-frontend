@@ -5,8 +5,8 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
-  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT, DEFAULT_MOUSE_POINT,
+  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -35,8 +35,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
-  /** Checks if map should be automatically panning without active user input. */
-  private autoPanning = false;
+  /** Checks if automatic pan is triggered by being outside the bounding box. */
+  private outsideBox = false;
+
+  /** Checks if automatic pan is triggered by a fast map drag. */
+  private fastDrag = false;
 
   /**Flag for auto pan checks. */
   private panActive?: boolean;
@@ -137,7 +140,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
-          this.autoPanning = !(velocity.x === 0 && velocity.y === 0);
+          this.outsideBox = !(velocity.x === 0 && velocity.y === 0);
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
@@ -545,15 +548,32 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * //TODO: Allow use when middle wheel is active.
    */
   private checkAutoPan(): void {
-    if (!this.panActive && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+    if (!this.panActive && (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      this.panActive = true;
       const step = (): void => {
-        this.panActive = true;
         this.autoMapPan(this.nextPanVelocity);
-        if (this.autoPanning && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
+        if (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
           this.myReq = requestAnimationFrame(step);
         } else {
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
+        }
+      };
+      this.myReq = requestAnimationFrame(step);
+    }
+
+    if (!this.panActive && this.fastDrag) {
+      this.panActive = true;
+      const step = (): void => {
+        this.autoMapPan(this.nextPanVelocity);
+        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1 ) {
+          this.nextPanVelocity = {x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE};
+          this.myReq = requestAnimationFrame(step);
+        } else {
+          cancelAnimationFrame(this.myReq as number);
+          this.panActive = false;
+          this.fastDrag = false;
+          this.nextPanVelocity = DEFAULT_CANVAS_POINT;
         }
       };
       this.myReq = requestAnimationFrame(step);
@@ -783,6 +803,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     }
 
+    //If dragging the map.
+    if (this.dragItem === MapDragItem.Map) {
+      //Check if nextPanVelocity is great enough to trigger autoPan.
+      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT ) {
+        this.fastDrag = true;
+        this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
+        this.checkAutoPan();
+      } else {
+        this.nextPanVelocity = DEFAULT_CANVAS_POINT;
+      }
+    }
+
     //If dragging a connection node.
     if (this.dragItem === MapDragItem.Node) {
       let newNextStationId = '';
@@ -858,6 +890,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
+      this.nextPanVelocity = {x: -moveAmountX, y: -moveAmountY};
     } else if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
@@ -912,19 +945,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
     const xCurrentDiff = Math.abs(position[0].x - position[1].x);
     const yCurrentDiff = Math.abs(position[0].y - position[1].y);
-    const averageDiff = Math.floor((xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2);
+    const averageStart = Math.floor((xBeginDiff + yBeginDiff) / 2);
+    const averageEnd = Math.floor((xCurrentDiff + yCurrentDiff) / 2);
+    const averageDiff = Math.floor(((xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff)) / 2);
 
     const middlePoint = {
       x: (position[0].x + position[1].x) / 2,
       y: (position[0].y + position[1].y) / 2
     };
 
-    if (xCurrentDiff > xBeginDiff || yCurrentDiff > yBeginDiff) {
+    if (averageEnd > averageStart) {
       // Zoom in
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
       this.mapService.handleZoom(middlePoint, true);
-    } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
+    } else if (averageEnd < averageStart) {
       // Zoom out
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
