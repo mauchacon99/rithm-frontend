@@ -147,6 +147,10 @@ describe('DocumentService', () => {
       {
         prompt: '-',
         rithmId: ''
+      },
+      {
+        prompt: 'DEV',
+        rithmId: '1lk2-as3k-12kk-9s83-dev'
       }
     ];
 
