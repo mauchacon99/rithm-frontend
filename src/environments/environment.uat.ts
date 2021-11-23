@@ -4,16 +4,16 @@ export const environment = {
 
   /** The version number for the app. */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  appVersionNumber: `${require('../../package.json').version}`,
+  appVersionNumber: `${require('../../package.json').version}-uat`,
 
   /** The name of the current environment. */
-  name: EnvironmentName.Production,
+  name: EnvironmentName.UAT,
 
   /** The base URL for the Rithm API. */
-  baseApiUrl: 'https://api.rithm.tech', // TODO: Point to actual URL
+  baseApiUrl: 'https://uatapi.rithm.tech',
 
   /** The base URL for the deployed Rithm app. */
-  baseAppUrl: 'https://app.rithm.tech', // TODO: Point to actual URL
+  baseAppUrl: 'https://uatapi.rithm.tech',
 
   /** The lifetime for which an access token is valid in milliseconds. */
   accessTokenLifetime: 900000
