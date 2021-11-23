@@ -595,4 +595,51 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return the station with updated general instructions', () => {
+    const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const instructions = 'This are going to be the new instructions for the current station.';
+    const expectedResponse: StationInformation = {
+      rithmId: stationId,
+      name: 'Station Name',
+      instructions: instructions,
+      nextStations: [{
+        stationName: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        stationName: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }],
+      stationOwners: [{
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      workers: [{
+        rithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 1,
+    };
+
+    service.updateStationGeneralInstruction(stationId, instructions)
+    .subscribe((stationInfo) => {
+      expect(stationInfo).toEqual(expectedResponse);
+    });
+  });
 });

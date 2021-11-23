@@ -26,7 +26,7 @@
               </ng-template>
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
-                <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
+                <app-station-template [fields]="stationInformation.questions" [instructions]="stationInformation.instructions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">

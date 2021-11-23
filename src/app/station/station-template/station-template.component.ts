@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor, FormBuilder, FormGroup,
   NG_VALUE_ACCESSOR, NG_VALIDATORS,
@@ -26,16 +26,19 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class StationTemplateComponent implements ControlValueAccessor, Validator {
+export class StationTemplateComponent implements ControlValueAccessor, Validator, OnInit {
 
   /** The station fields in the template area. */
   @Input() fields!: Question[];
+
+  /** The station instructions in case of need it. */
+  @Input() instructions?: string;
 
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
 
   /** The general instructions field. */
-  readonly stationInstructionsField: Question = {
+  stationInstructionsField: Question = {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'General Instructions',
     instructions: '',
@@ -52,6 +55,13 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     this.stationTemplateForm = this.fb.group({
       stationFieldForm: this.fb.control('')
     });
+
+  }
+
+  /**COmment. */
+  ngOnInit(): void{
+        this.stationInstructionsField.children = this.fields;
+        this.stationInstructionsField.instructions = this.instructions;
   }
 
   /**

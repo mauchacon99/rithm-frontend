@@ -69,7 +69,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private documentService: DocumentService,
   ) {
     this.stationForm = this.fb.group({
-      stationTemplateForm: this.fb.control('')
+      stationTemplateForm: this.fb.control(''),
     });
 
     this.sidenavDrawerService.drawerContext$
