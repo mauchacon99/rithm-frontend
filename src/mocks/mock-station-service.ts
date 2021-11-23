@@ -510,7 +510,7 @@ export class MockStationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updatedDocumentStationNameField(documentName: DocumentNameField[]): void {
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
   }
 
