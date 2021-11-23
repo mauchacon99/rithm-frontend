@@ -60,7 +60,7 @@
     </div>
   </div>
   <div class="w-full py-2">
-    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
+    <button mat-stroked-button color="warn" *ngIf="editMode || (mapMode === 1)" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
       Station</button>
   </div>
 </div>

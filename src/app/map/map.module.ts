@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connection-info-drawer.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 
 
 
@@ -29,7 +30,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     SharedModule,
     MatButtonModule,
     MatMenuModule,
-    MatSidenavModule
+    MatSidenavModule,
+    InfoDrawerModule
   ]
 })
 export class MapModule { }

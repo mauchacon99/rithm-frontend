@@ -8,9 +8,10 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
+import { MapService } from 'src/app/map/map.service';
 
 /**
  * Component for info station.
@@ -62,6 +63,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
+  /** Modes for canvas element used for the map. */
+  mapMode = MapMode.View;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -71,7 +75,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private route: ActivatedRoute,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -83,6 +88,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationName = dataDrawer.stationName;
         }
       });
+
+      this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
+      });
+
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
       name: [this.stationName]

@@ -29,7 +29,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     FormsModule
   ],
   exports: [
-    InfoDrawerComponent
+    InfoDrawerComponent,
+    StationInfoDrawerComponent
   ]
 })
 export class InfoDrawerModule { }

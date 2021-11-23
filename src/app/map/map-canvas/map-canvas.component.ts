@@ -2,7 +2,8 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
+  StationInfoDrawerData, StationInformation } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
@@ -13,6 +14,8 @@ import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -94,7 +97,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sidenavDrawerService: SidenavDrawerService,
+    private stationService: StationService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -939,6 +944,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private clickEventHandler(point: Point) {
     const scaledStationWidth = STATION_WIDTH * this.scale;
+    const scaledStationHeight = STATION_HEIGHT * this.scale;
 
     const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
     const scaledBadgeMargin = BADGE_MARGIN * this.scale;
@@ -974,6 +980,31 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
+      if (point.x >= startingX && point.x <= startingX + scaledStationWidth
+          && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
+            const stationDataInfo: StationInformation = {
+              rithmId: station.rithmId,
+              name: '',
+              instructions: '',
+              nextStations: [],
+              previousStations: [],
+              stationOwners: [],
+              workers: [],
+              createdByRithmId: '',
+              createdDate: '',
+              updatedByRithmId: '',
+              updatedDate: '',
+              questions: [],
+              priority: 1
+            };
+          const dataInformationDrawer: StationInfoDrawerData = {
+            stationInformation: stationDataInfo,
+            stationName: station.stationName,
+            editMode: false
+          };
+          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+          this.stationService.updatedStationNameText(station.stationName);
+        }
     }
   }
 
