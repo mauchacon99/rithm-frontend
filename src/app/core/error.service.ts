@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { EnvironmentName } from 'src/models';
 import { PopupService } from './popup.service';
 
 /**
@@ -20,7 +21,7 @@ export class ErrorService {
    * @param error The error that was encountered.
    */
   logError(error: Error | unknown): void {
-    if (!environment.production) {
+    if (environment.name === EnvironmentName.Dev || environment.name === EnvironmentName.Test) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
