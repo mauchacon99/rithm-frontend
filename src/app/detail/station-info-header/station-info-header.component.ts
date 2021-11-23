@@ -35,7 +35,7 @@ export class StationInfoHeaderComponent implements OnInit {
   stationLoading = false;
 
   /** */
-  stationEditMode2 = true;
+  stationEditNameLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -111,13 +111,13 @@ export class StationInfoHeaderComponent implements OnInit {
    */
    updateStationName(): void {
     const nameStationChange = this.stationNameForm.controls.name.value;
-    this.stationEditMode2=false;
+    this.stationEditNameLoading=false;
     this.stationService.updateStationName(nameStationChange, this.stationInformation as StationInformation)
       .pipe(first())
       .subscribe({
         next: (stationNameUpdated) => {
           this.stationInformation = stationNameUpdated;
-          this.stationEditMode2=true;
+          this.stationEditNameLoading=true;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
