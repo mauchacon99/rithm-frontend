@@ -217,7 +217,7 @@ describe('StationComponent', () => {
 
     const spyUpdateStation = spyOn(TestBed.inject(StationService), 'updateStation');
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
-    const button = fixture.debugElement.query(By.css('.btn-save'));
+    const button = fixture.debugElement.query(By.css('#station-save'));
 
     button.triggerEventHandler('click', component.saveStation());
 
