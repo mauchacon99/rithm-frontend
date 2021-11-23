@@ -25,7 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { MockUserService } from '../../../mocks/mock-user-service';
+import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
 
 describe('StationComponent', () => {
@@ -183,7 +183,7 @@ describe('StationComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should validate to controls in form and value initial', () => {
+  it('should validate the form controls initial value', () => {
     const form = component.stationForm.controls;
 
     const expectFormFirst = ['stationTemplateForm'];
@@ -192,7 +192,7 @@ describe('StationComponent', () => {
     expect(form['stationTemplateForm'].value).toBe('');
   });
 
-  it('should param stationId in null and redirect to dashboard', () => {
+  it('should set stationId param as null and redirect to dashboard', () => {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const spy = spyOn((<any>component), 'handleInvalidParams');
 
@@ -202,7 +202,7 @@ describe('StationComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should compare property stationInformation equal return function getStationInfo', () => {
+  it('should compare the stationInformation object against getStationInfo method returned value', () => {
     spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(of(component.stationInformation));
 
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -211,7 +211,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation).toBe(component.stationInformation);
   });
 
-  it('should executed the petitions how clicked button save', () => {
+  it('should make a request when save button is clicked', () => {
     (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
     component.stationInfoHeader = componentChildStationHeader;
 
