@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationMapElement } from 'src/helpers';
-import { ConnectionLineInfo } from 'src/models';
+import { ConnectionLineInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -36,6 +36,9 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** Id of the station where the connection ends. */
   connectionEndStationId = '';
 
+  /** Modes for canvas element used for the map. */
+  mapMode = MapMode.View;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
@@ -55,6 +58,12 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
           this.connectionStartStationId = this.connectedStations[0].rithmId;
           this.connectionEndStationId = this.connectedStations[1].rithmId;
         }
+      });
+
+    this.mapService.mapMode$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((mapMode) => {
+        this.mapMode = mapMode;
       });
   }
 
