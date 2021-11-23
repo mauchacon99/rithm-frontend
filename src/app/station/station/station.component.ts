@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
-import { PreviousFieldsComponent } from 'src/app/detail/previous-fields/previous-fields.component';
+
 /**
  * Main component for viewing a station.
  */
@@ -59,14 +59,6 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
-
-  /** The component for previous all fields of this station. */
-  @ViewChild('previousAllQuestions')
-  previousAllQuestions!: PreviousFieldsComponent;
-
-  /** The component for previous private fields of this station. */
-  @ViewChild('previousPrivateQuestions')
-  previousPrivateQuestions!: PreviousFieldsComponent;
 
   constructor(
     private stationService: StationService,
@@ -283,16 +275,15 @@ export class StationComponent implements OnInit, OnDestroy {
   *
   * @param stationId The Specific id of station.
   * @param previousQuestion The previous question to be updated.
-  * @param isPrivate True assigns the private questions - False assigns all questions.
   */
-  updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): void {
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
-    this.stationService.updateStationPreviousQuestions(stationId, previousQuestion, isPrivate)
+    this.stationService.updateStationQuestions(stationId, previousQuestion)
       .pipe(first())
       .subscribe({
         next: (questions) => {
           if (questions) {
-            this.stationInformation.questions.push(...questions);
+            this.stationInformation.questions = questions;
           }
           this.stationLoading = false;
         }, error: (error: unknown) => {

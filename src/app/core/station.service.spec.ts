@@ -282,7 +282,7 @@ describe('StationService', () => {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: false,
+        isPrivate: isPrivate,
         children: [],
       },
       {
@@ -292,11 +292,11 @@ describe('StationService', () => {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: false,
+        isPrivate: isPrivate,
         children: [],
       },
     ];
-    service.updateStationPreviousQuestions(stationId, expectedResponse,isPrivate)
+    service.updateStationQuestions(stationId, expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });

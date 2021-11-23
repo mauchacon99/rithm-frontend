@@ -239,10 +239,9 @@ export class MockStationService {
   *
   * @param stationId The Specific id of station.
   * @param previousQuestion The Specific previous question of station.
-  * @param isPrivate True assigns the private questions - False assigns all questions.
   * @returns Station private/all save the questions array.
   */
-  updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): Observable<Question[]> {
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
     previousQuestion = [
       {
         prompt: 'Example question#1',

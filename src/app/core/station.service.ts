@@ -117,11 +117,10 @@ export class StationService {
   *
   * @param stationId The Specific id of station.
   * @param previousQuestion The previous question to be updated.
-  * @param isPrivate True assigns the private questions - False assigns all questions.
   * @returns Station private/all updated previous questions array.
   */
-  updateStationPreviousQuestions(stationId: string, previousQuestion: Question[], isPrivate: boolean): Observable<Question[]> {
-    isPrivate = false;
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    const isPrivate = false;
     previousQuestion = [
       {
         prompt: 'Example question#1',
