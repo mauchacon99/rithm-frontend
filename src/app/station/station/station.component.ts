@@ -292,7 +292,7 @@ export class StationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (questions) => {
           if (questions) {
-            this.stationInformation.questions.concat(questions);
+            this.stationInformation.questions.push(...questions);
           }
           this.stationLoading = false;
         }, error: (error: unknown) => {
