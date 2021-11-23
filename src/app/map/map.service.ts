@@ -330,7 +330,7 @@ export class MapService {
    * @returns The x-coordinate for the canvas.
    */
   getCanvasX(mapX: number): number {
-    return Math.floor((mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value);
+    return (mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value;
   }
 
   /**
@@ -340,7 +340,7 @@ export class MapService {
    * @returns The y-coordinate for the canvas.
    */
   getCanvasY(mapY: number): number {
-    return Math.floor((mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value);
+    return (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value;
   }
 
   /**
