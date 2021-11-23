@@ -63,12 +63,10 @@ describe('PreviousFieldsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open the previous field modal and call the popup of type confirm', async () => {
+  it('should open a confirm popup to move the previous question to template area', async () => {
     component.isLoading = false;
     const popupServiceSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
     expect(component.isLoading).toBe(false);
-    expect(component.questions.length > 0).toBe(true);
-
     fixture.whenStable().then(()=> {
       const popupData: DialogOptions = {
         title: 'Move field?',
