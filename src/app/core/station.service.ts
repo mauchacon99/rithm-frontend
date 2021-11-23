@@ -275,16 +275,8 @@ export class StationService {
    */
   updateStationName(newName: string, station: StationInformation): Observable<StationInformation> {
     const rithmId=station.rithmId;
-    if (!station || newName === '') {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot update station name without defining a station.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
-      // eslint-disable-next-line max-len
-      return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${rithmId}`,JSON.stringify(newName),{headers});
-    }
+    const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
+    // eslint-disable-next-line max-len
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${rithmId}`,JSON.stringify(newName),{headers});
   }
 }

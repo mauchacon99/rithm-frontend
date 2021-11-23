@@ -653,50 +653,15 @@ describe('StationService', () => {
       questions: [],
       priority: 2
     };
-    const expectedResponse: StationInformation = {
-      rithmId: station.rithmId,
-      name: station.name,
-      instructions: 'General instructions',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: [],
-      priority: 1
-    };
     service.updateStationName(newName,station)
       .subscribe((response) => {
-        expect(response).toBe(expectedResponse);
+        expect(response).toBe(station);
       });
+
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
     expect(req.request.method).toEqual('PUT');
-    req.flush(expectedResponse);
+    expect(req.request.body).toEqual(JSON.stringify(newName));
+    req.flush(station);
     httpTestingController.verify();
   });
 });

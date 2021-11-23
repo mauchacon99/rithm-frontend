@@ -2,9 +2,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { MockStationService, MockUserService } from 'src/mocks';
+import { MockStationService, MockUserService, MockErrorService } from 'src/mocks';
 import { DocumentStationInformation, StationInfoDrawerData, StationInformation } from 'src/models';
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -10,7 +10,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService } from '../../../mocks/mock-error-service';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
