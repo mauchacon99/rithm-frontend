@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 
@@ -43,6 +43,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Is component viewed in station edit mode. */
   editMode = false;
+
+  /** If component is being viewed on the map, what mode is the map in? */
+  mapMode?: MapMode;
+
+  /** If component is being viewed on the map, what status does the station have? */
+  stationStatus?: MapItemStatus;
 
   /** Station information object passed from parent. */
   stationInformation!: StationInformation;
@@ -81,6 +87,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
+          if (dataDrawer.mapMode) {
+            this.mapMode = dataDrawer.mapMode;
+          }
+          if (dataDrawer.stationStatus) {
+            this.stationStatus = dataDrawer.stationStatus;
+          }
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
