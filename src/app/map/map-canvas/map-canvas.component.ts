@@ -562,7 +562,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.myReq = requestAnimationFrame(step);
     }
 
-    if (!this.panActive && this.fastDrag === true) {
+    if (!this.panActive && this.fastDrag) {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
