@@ -85,6 +85,7 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.getPreviousAndFollowingStations();
   }
 
   /**
@@ -274,8 +275,8 @@ export class StationComponent implements OnInit, OnDestroy {
    *
    * @param stationRithmId The rithm id actually station.
    */
-  getPreviousAndFollowingStations(stationRithmId: string): void {
-    this.stationService.getPreviousAndFollowingStations(stationRithmId)
+  getPreviousAndFollowingStations(): void {
+    this.stationService.getPreviousAndFollowingStations(this.stationInformation.rithmId)
       .pipe(first())
       .subscribe({
         next: (prevAndFollowStations) => {
