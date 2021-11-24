@@ -103,14 +103,12 @@ describe('StationService', () => {
       name: 'Station Name',
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-321-654'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '159-357-761'
       }],
       stationOwners: [{
         rithmId: '',
@@ -141,14 +139,12 @@ describe('StationService', () => {
       name: station.name,
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-869-742'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '258-635-412'
       }],
       stationOwners: [{
         rithmId: '',

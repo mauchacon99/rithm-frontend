@@ -26,18 +26,15 @@ export class MockStationService {
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '753-962-785'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '789-859-742'
       }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
+        name: 'Station-2',
+        rithmId: '753-951-741'
       }],
       stationOwners: [{
         rithmId: '',
@@ -114,18 +111,15 @@ export class MockStationService {
         name: 'New Station Name',
         instructions: '',
         nextStations: [{
-          stationName: 'Development',
-          totalDocuments: 5,
-          isGenerator: true
+          name: 'Development',
+          rithmId: '756-984-741'
         }],
         previousStations: [{
-          stationName: 'Station-1',
-          totalDocuments: 2,
-          isGenerator: true
+          name: 'Station-1',
+          rithmId: '123-987-357'
         }, {
-          stationName: 'Station-2',
-          totalDocuments: 0,
-          isGenerator: false
+          name: 'Station-2',
+          rithmId: '123-965-745'
         }],
         stationOwners: [{
           rithmId: '',

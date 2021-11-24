@@ -18,18 +18,15 @@ describe('StationInfoHeaderComponent', () => {
     name: 'Dry Goods & Liquids',
     instructions: '',
     nextStations: [{
-      stationName: 'Development',
-      totalDocuments: 5,
-      isGenerator: true
+      name: 'Development',
+      rithmId: '147-852-369'
     }],
     previousStations: [{
-      stationName: 'Station-1',
-      totalDocuments: 2,
-      isGenerator: true
+      name: 'Station-1',
+      rithmId: '963-258-741'
     }, {
-      stationName: 'Station-2',
-      totalDocuments: 0,
-      isGenerator: false
+      name: 'Station-2',
+      rithmId: '753-951-842'
     }],
     stationOwners: [{
       rithmId: '',
@@ -147,7 +144,7 @@ describe('StationInfoHeaderComponent', () => {
 
   it('should update the name in station info drawer', () => {
     formGroup.controls['name'].setValue('Station Name');
-    const updateStationNameSpy = spyOn(TestBed.inject(StationService),'updatedStationNameText');
+    const updateStationNameSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText');
     component.updStationInfoDrawerName();
     expect(updateStationNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
   });

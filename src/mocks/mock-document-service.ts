@@ -87,18 +87,15 @@ export class MockDocumentService {
    */
   getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
     const previousStations: Array<ConnectedStationInfo> = [{
-      stationName: 'Development',
-      totalDocuments: 5,
-      isGenerator: true
+      name: 'Development',
+      rithmId: '753-951-741'
     }];
     const followingStations: Array<ConnectedStationInfo> = [{
-      stationName: 'Station-1',
-      totalDocuments: 2,
-      isGenerator: true
+      name: 'Station-1',
+      rithmId: '789-654-123'
     }, {
-      stationName: 'Station-2',
-      totalDocuments: 0,
-      isGenerator: false
+      name: 'Station-2',
+      rithmId: '753-965-453'
     }];
     const data: ForwardPreviousStationsDocument = {
       previousStations: previousStations,
