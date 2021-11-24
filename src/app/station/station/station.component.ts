@@ -203,7 +203,7 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Save Station information.
+   * Save Station information and executed petitions to api.
    *
    */
   saveStationInformation(): void {
