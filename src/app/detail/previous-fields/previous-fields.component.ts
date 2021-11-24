@@ -74,8 +74,8 @@ ngOnInit(): void{
    * Open a modal to move a field from all/private to the template area.
    *
    */
-  async openPreviousFieldModal(): Promise<void> {
-    await this.popupService.confirm({
+   moveFieldToTemplate(): void {
+     this.popupService.confirm({
       title: 'Move field?',
       message: 'Are you sure you want to move this field into the template area?',
       okButtonText: 'Confirm',

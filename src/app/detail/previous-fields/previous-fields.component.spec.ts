@@ -34,6 +34,7 @@ describe('PreviousFieldsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PreviousFieldsComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     component.questions = [
       {
         rithmId: '3j4k-3h2j-hj4j',
@@ -56,30 +57,33 @@ describe('PreviousFieldsComponent', () => {
         children: [],
       }
     ];
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open a confirm popup to move the previous question to template area', async () => {
-    component.isLoading = false;
-    const popupServiceSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
-    expect(component.isLoading).toBe(false);
-    fixture.whenStable().then(()=> {
-      const popupData: DialogOptions = {
-        title: 'Move field?',
-        message: 'Are you sure you want to move this field into the template area?',
-        okButtonText: 'Confirm',
-        cancelButtonText: 'Close'
-      };
-      const previousQuestionCard = fixture.debugElement.query(By.css('mat-card.padding-card'));
-      expect(previousQuestionCard).toBeTruthy();
-      previousQuestionCard.triggerEventHandler('click', component.openPreviousFieldModal());
-      expect(popupServiceSpy).toHaveBeenCalledWith(popupData);
-    });
+  it('should execute to service popup service',() => {
+    const expectData: DialogOptions = {
+       title: 'Move field?',
+       message: 'Are you sure you want to move this field into the template area?',
+       okButtonText: 'Confirm',
+       cancelButtonText: 'Close'
+     };
+     const popupSpy = spyOn(TestBed.inject(PopupService),'confirm').and.callThrough();
+     component.moveFieldToTemplate();
+     expect(popupSpy).toHaveBeenCalledOnceWith(expectData);
    });
 
+
+  it('should clicked the card previous fields and call dialog confirm',() => {
+    component.isLoading = false;
+    fixture.detectChanges();
+    const previousQuestionCard = fixture.debugElement.query(By.css('#previous-field'));
+    const spyPopUpConfirm = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    expect(previousQuestionCard).toBeTruthy();
+    previousQuestionCard.triggerEventHandler('click', component.moveFieldToTemplate());
+    expect(spyPopUpConfirm).toHaveBeenCalled();
+  });
 
 });
