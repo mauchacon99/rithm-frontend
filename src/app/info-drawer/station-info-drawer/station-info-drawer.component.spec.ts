@@ -15,7 +15,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -36,8 +35,7 @@ describe('StationInfoDrawerComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule,
         MatButtonModule,
-        MatRadioModule,
-        HttpClientModule
+        MatRadioModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
