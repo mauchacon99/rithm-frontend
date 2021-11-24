@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { Question } from 'src/models';
 
 /**
@@ -32,6 +33,7 @@ isLoading = false;
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
+  private popupService: PopupService
 ){}
 
 /**
@@ -65,6 +67,19 @@ ngOnInit(): void{
           error
         );
       }
+    });
+  }
+
+  /**
+   * Open a modal to move a field from all/private to the template area.
+   *
+   */
+   moveFieldToTemplate(): void {
+     this.popupService.confirm({
+      title: 'Move field?',
+      message: 'Are you sure you want to move this field into the template area?',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close'
     });
   }
 }
