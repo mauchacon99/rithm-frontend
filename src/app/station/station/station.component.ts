@@ -210,9 +210,6 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationLoading = true;
 
     const petitionsUpdateStation = [
-      // Petition for update all station.
-      this.stationService.updateStation(this.stationInformation),
-
       // Update appended fields to document.
       // Second parameter appendedFields temporary.
       this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, [])
