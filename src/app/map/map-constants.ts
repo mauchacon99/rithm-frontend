@@ -1,7 +1,6 @@
 import { Point } from 'src/models';
 
 // TODO: refine this file; this is polluting the global namespace a little
-
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 
@@ -18,7 +17,9 @@ export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE * Math.pow(ZOOM_VELOC
 export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
 
 // Pan
-export const MAX_PAN_VELOCITY = 20;
+export const MAX_PAN_VELOCITY = 30;
+export const PAN_TRIGGER_LIMIT = 10;
+export const PAN_DECAY_RATE = .9;
 
 // Flow
 export const FLOW_PADDING = 20;
