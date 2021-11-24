@@ -1,9 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import {
-  DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -653,11 +652,10 @@ describe('StationService', () => {
       questions: [],
       priority: 2
     };
-    service.updateStationName(newName,station)
+    service.updateStationName(newName, station)
       .subscribe((response) => {
         expect(response).toBe(station);
       });
-
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(JSON.stringify(newName));

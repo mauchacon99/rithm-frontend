@@ -17,7 +17,11 @@
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
-            #stationInfoHeader></app-station-info-header>
+            #stationInfoHeader *ngIf='stationEditNameLoading'></app-station-info-header>
+            <div class="col-span-12"*ngIf="!stationEditNameLoading">
+              <app-loading-indicator class="m-auto self-center w-full" [diameter]="50">
+              </app-loading-indicator>
+            </div>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
             <mat-tab>

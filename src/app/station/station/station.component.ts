@@ -60,6 +60,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Loading station updated name. */
+  stationEditNameLoading = true;
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -200,6 +203,8 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   updateStation(stationInformation: StationInformation): void {
     this.stationLoading = true;
+    const newName=this.updateStationName();
+    stationInformation.name=newName;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
       .subscribe({
@@ -217,6 +222,9 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+
+
+
   }
 
   /**
@@ -266,5 +274,30 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Update station name.
+   *
+   * @returns Name Station updated.
+   */
+   updateStationName(): string {
+    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
+     this.stationEditNameLoading=false;
+    this.stationService.updateStationName(nameStationChange, this.stationInformation as StationInformation)
+      .pipe(first())
+      .subscribe({
+        next: (stationNameUpdated) => {
+          this.stationInformation = stationNameUpdated;
+         this.stationEditNameLoading=true;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+      return nameStationChange;
   }
 }

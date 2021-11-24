@@ -31,12 +31,6 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Field to change station name. */
   nameField!: Question;
 
-  /** Whether the request to get the station info is currently underway. */
-  stationLoading = false;
-
-  /** */
-  stationEditNameLoading = true;
-
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -104,28 +98,4 @@ export class StationInfoHeaderComponent implements OnInit {
   updStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
   }
-
-  /**
-   * Update station name.
-   *
-   */
-   updateStationName(): void {
-    const nameStationChange = this.stationNameForm.controls.name.value;
-    this.stationEditNameLoading=false;
-    this.stationService.updateStationName(nameStationChange, this.stationInformation as StationInformation)
-      .pipe(first())
-      .subscribe({
-        next: (stationNameUpdated) => {
-          this.stationInformation = stationNameUpdated;
-          this.stationEditNameLoading=true;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
 }
