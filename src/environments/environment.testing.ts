@@ -1,14 +1,13 @@
+import { EnvironmentName } from 'src/models';
+
 export const environment = {
 
   /** The version number for the app. */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   appVersionNumber: `${require('../../package.json').version}-test`,
 
-  /** Whether the environment is used for testing. */
-  testing: true,
-
-  /** Whether the environment is used for production. */
-  production: false,
+  /** The name of the current environment. */
+  name: EnvironmentName.Test,
 
   /** The base URL for the Rithm API. */
   baseApiUrl: 'https://testapi.rithm.tech',
