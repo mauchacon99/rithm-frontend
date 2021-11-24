@@ -78,12 +78,12 @@ describe('PreviousFieldsComponent', () => {
   it('should clicked the card previous fields and call moveFieldToTemplate', fakeAsync(() => {
     component.isLoading = false;
     fixture.detectChanges();
-    spyOn(component, 'moveFieldToTemplate');
+    const moveFieldToTemplateSpy = spyOn(component, 'moveFieldToTemplate');
     const previousQuestionCard = fixture.debugElement.nativeElement.querySelector('#previous-field');
     expect(previousQuestionCard).toBeTruthy();
     previousQuestionCard.click();
     tick();
-    expect(component.moveFieldToTemplate).toHaveBeenCalled();
+    expect(moveFieldToTemplateSpy).toHaveBeenCalled();
   }));
 
 });
