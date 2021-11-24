@@ -278,13 +278,13 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   updateStationName(): string {
     const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    this.stationLoading = false;
+    this.stationLoading = true;
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
       .pipe(first())
       .subscribe({
         next: (stationNameUpdated) => {
           this.stationInformation = stationNameUpdated;
-          this.stationLoading = true;
+          this.stationLoading = false;
         },
         error: (error: unknown) => {
           this.stationLoading = false;
