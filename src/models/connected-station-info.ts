@@ -9,6 +9,6 @@ export interface ConnectedStationInfo {
   /** Station rithm id. */
   readonly rithmId: string;
 
-  /** Name the Station. */
+  /** The name of the station. */
   readonly name: string;
 }
