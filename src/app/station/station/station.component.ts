@@ -59,6 +59,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -108,6 +111,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
+            this.stationRithmId = params.stationId;
             this.getStationInfo(params.stationId);
           }
         }, error: (error: unknown) => {
@@ -273,10 +277,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /**
    * Get previous and following stations.
    *
-   * @param stationRithmId The rithm id actually station.
    */
   getPreviousAndFollowingStations(): void {
-    this.stationService.getPreviousAndFollowingStations(this.stationInformation.rithmId)
+    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (prevAndFollowStations) => {

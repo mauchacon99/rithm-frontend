@@ -134,8 +134,9 @@ describe('StationComponent', () => {
   });
 
   it('should get previous and following stations', () => {
+    component.stationRithmId = component.stationInformation.rithmId;
     const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
     component.getPreviousAndFollowingStations();
-    expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationInformation.rithmId);
+    expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 });
