@@ -2,9 +2,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, ForwardPreviousStationsDocument } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -501,5 +500,38 @@ export class MockStationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   * @returns Previous and following stations.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const data: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'previous station 1'
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'previous station 2'
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'follow station 1'
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'follow station 2'
+        }
+      ]
+    };
+    return of(data).pipe(delay(1000));
   }
 }

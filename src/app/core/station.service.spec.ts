@@ -1,9 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import {
-  DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -590,5 +589,36 @@ describe('StationService', () => {
     expect(req.request.method).toEqual('GET');
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should return the previous and following stations', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'previous station 1'
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'previous station 2'
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'follow station 1'
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'follow station 2'
+        }
+      ]
+    };
+    service.getPreviousAndFollowingStations(stationRithmId)
+      .subscribe((prevAndFollowStations) => {
+        expect(prevAndFollowStations).toEqual(expectedResponse);
+      });
   });
 });

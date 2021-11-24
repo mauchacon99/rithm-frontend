@@ -65,6 +65,7 @@ describe('DocumentService', () => {
     const stationId = 'E204F369-386F-4E41';
     const documentId = 'E204F369-386F-4E41';
     const expectedResponse: ForwardPreviousStationsDocument = {
+      rithmId: '123-654-789',
       previousStations: [],
       followingStations: []
     };

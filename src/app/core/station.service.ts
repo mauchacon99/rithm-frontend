@@ -1,11 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import {
-  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentGenerationStatus, ForwardPreviousStationsDocument, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -264,5 +263,38 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId);
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
+  }
+
+  /**
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   * @returns Previous and following stations.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const data: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'previous station 1'
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'previous station 2'
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'follow station 1'
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'follow station 2'
+        }
+      ]
+    };
+    return of(data).pipe(delay(1000));
   }
 }

@@ -98,6 +98,7 @@ export class MockDocumentService {
       rithmId: '753-965-453'
     }];
     const data: ForwardPreviousStationsDocument = {
+      rithmId: '123-654-789',
       previousStations: previousStations,
       followingStations: followingStations
     };
