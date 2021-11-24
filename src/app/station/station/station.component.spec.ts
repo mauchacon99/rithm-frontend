@@ -154,8 +154,6 @@ describe('StationComponent', () => {
   });
 
   it('should show loading indicator while saving the station information', () => {
-    (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
-    component.stationInfoHeader = componentChildStationHeader;
     component.saveStationInformation();
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
@@ -164,8 +162,6 @@ describe('StationComponent', () => {
   });
 
   it('should call component methods to make requests when saveStationInformation is called', () => {
-    (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
-    component.stationInfoHeader = componentChildStationHeader;
     const updateFieldsDocument = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
 
     component.saveStationInformation();
@@ -214,8 +210,6 @@ describe('StationComponent', () => {
   });
 
   it('should make a request when save button is clicked', () => {
-    (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
-    component.stationInfoHeader = componentChildStationHeader;
 
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
     const button = fixture.debugElement.query(By.css('#station-save'));
