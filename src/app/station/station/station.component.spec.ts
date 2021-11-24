@@ -72,6 +72,7 @@ describe('StationComponent', () => {
 
   beforeEach(() => {
     fixtureChildStationHeader = TestBed.createComponent(StationInfoHeaderComponent);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     componentChildStationHeader = fixtureChildStationHeader.componentInstance;
     fixture = TestBed.createComponent(StationComponent);
     component = fixture.componentInstance;
