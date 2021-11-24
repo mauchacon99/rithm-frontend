@@ -41,6 +41,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Checks if automatic pan is triggered by a fast map drag. */
   private fastDrag = false;
 
+  /** Used to check if a fast drag should be cancelled. */
+  private holdDrag = false;
+
   /**Flag for auto pan checks. */
   private panActive?: boolean;
 
@@ -752,6 +755,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventStartLogic(position: Point) {
+    if (this.panActive) {
+      cancelAnimationFrame(this.myReq as number);
+      this.panActive = false;
+      this.fastDrag = false;
+      this.nextPanVelocity = { x: 0, y: 0 };
+    }
+
     // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
@@ -795,6 +805,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventEndLogic(position: Point) {
+    this.holdDrag = false;
+
     // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
@@ -821,8 +833,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //If dragging the map.
     if (this.dragItem === MapDragItem.Map) {
       //Check if nextPanVelocity is great enough to trigger autoPan.
-      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT ) {
-        this.fastDrag = true;
+      if ( this.fastDrag ) {
         this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
         this.checkAutoPan();
       } else {
@@ -905,13 +916,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
-      if (this.panActive) {
-        cancelAnimationFrame(this.myReq as number);
-        this.panActive = false;
-        this.fastDrag = false;
-        this.nextPanVelocity = { x: 0, y: 0 };
-      }
       this.nextPanVelocity = {x: -moveAmountX, y: -moveAmountY};
+      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT ) {
+        this.fastDrag = true;
+        this.holdDrag = true;
+        setTimeout(() => {
+          if (this.holdDrag) {
+            this.fastDrag = false;
+            this.nextPanVelocity = { x: 0, y: 0 };
+          }
+        }, 100);
+      }
     } else if (this.dragItem === MapDragItem.Station) {
       const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
       const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
