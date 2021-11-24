@@ -11,4 +11,11 @@ export interface ConnectedStationInfo {
 
   /** The name of the station. */
   readonly name: string;
+
+  /** Total documents currently in the station. */
+  readonly totalDocuments?: number;
+
+  /** Whether the station generates new documents or not. */
+  readonly isGenerator?: boolean;
+
 }
