@@ -273,7 +273,6 @@ describe('StationService', () => {
   });
 
   it('should update the stations private/all questions list', () => {
-    const isPrivate = true;
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
@@ -282,7 +281,7 @@ describe('StationService', () => {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: isPrivate,
+        isPrivate: false,
         children: [],
       },
       {
@@ -292,7 +291,7 @@ describe('StationService', () => {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: isPrivate,
+        isPrivate: false,
         children: [],
       },
     ];

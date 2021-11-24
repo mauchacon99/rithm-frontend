@@ -120,7 +120,6 @@ export class StationService {
   * @returns Station private/all updated previous questions array.
   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    const isPrivate = false;
     previousQuestion = [
       {
         prompt: 'Example question#1',
@@ -129,7 +128,7 @@ export class StationService {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: isPrivate,
+        isPrivate: false,
         children: [],
       },
       {
@@ -139,7 +138,7 @@ export class StationService {
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
-        isPrivate: isPrivate,
+        isPrivate: false,
         children: [],
       },
     ];
