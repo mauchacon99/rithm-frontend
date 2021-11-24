@@ -5,7 +5,7 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
-  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT, DEFAULT_MOUSE_POINT,
+  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
   DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
@@ -573,7 +573,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
           this.fastDrag = false;
-          this.nextPanVelocity = DEFAULT_CANVAS_POINT;
+          this.nextPanVelocity = { x: 0, y: 0 };
+          this.mapService.currentCanvasPoint$.next(this.currentCanvasPoint);
         }
       };
       this.myReq = requestAnimationFrame(step);
@@ -784,6 +785,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
+
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
@@ -800,7 +802,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //Check if click was over document badge.
       this.clickEventHandler(position);
-
     }
 
     //If dragging the map.
@@ -811,7 +812,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
         this.checkAutoPan();
       } else {
-        this.nextPanVelocity = DEFAULT_CANVAS_POINT;
+        this.nextPanVelocity = { x: 0, y: 0 };
       }
     }
 
@@ -882,16 +883,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param moveInput The point of movement.
    */
   private singleInputMoveLogic(moveInput: Point) {
-    const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
-    const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
-
     if (this.dragItem === MapDragItem.Map) {
+      const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
+      const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
+
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
+      if (this.panActive) {
+        cancelAnimationFrame(this.myReq as number);
+        this.panActive = false;
+        this.fastDrag = false;
+        this.nextPanVelocity = { x: 0, y: 0 };
+      }
       this.nextPanVelocity = {x: -moveAmountX, y: -moveAmountY};
     } else if (this.dragItem === MapDragItem.Station) {
+      const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
+      const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
+
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
