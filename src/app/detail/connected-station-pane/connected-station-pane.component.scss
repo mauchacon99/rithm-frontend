@@ -4,7 +4,7 @@ aside {
   height: calc(100vh - 110px);
 
   &.left {
-    @apply items-end;
+    @apply items-start;
   }
 
   &.right {
