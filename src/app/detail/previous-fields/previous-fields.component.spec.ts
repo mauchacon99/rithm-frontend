@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
-import { By } from '@angular/platform-browser';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -76,14 +75,15 @@ describe('PreviousFieldsComponent', () => {
    });
 
 
-  it('should clicked the card previous fields and call dialog confirm',() => {
+  it('should clicked the card previous fields and call moveFieldToTemplate', fakeAsync(() => {
     component.isLoading = false;
     fixture.detectChanges();
-    const previousQuestionCard = fixture.debugElement.query(By.css('#previous-field'));
-    const spyPopUpConfirm = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    spyOn(component, 'moveFieldToTemplate');
+    const previousQuestionCard = fixture.debugElement.nativeElement.querySelector('#previous-field');
     expect(previousQuestionCard).toBeTruthy();
-    previousQuestionCard.triggerEventHandler('click', component.moveFieldToTemplate());
-    expect(spyPopUpConfirm).toHaveBeenCalled();
-  });
+    previousQuestionCard.click();
+    tick();
+    expect(component.moveFieldToTemplate).toHaveBeenCalled();
+  }));
 
 });
