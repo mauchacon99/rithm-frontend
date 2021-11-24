@@ -162,12 +162,10 @@ describe('StationComponent', () => {
   });
 
   it('should call component methods to make requests when saveStationInformation is called', () => {
-    const updateStation = spyOn(TestBed.inject(StationService), 'updateStation').and.callThrough();
     const updateFieldsDocument = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
 
     component.saveStationInformation();
 
-    expect(updateStation).toHaveBeenCalledOnceWith(component.stationInformation);
     expect(updateFieldsDocument).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
   });
 
@@ -215,13 +213,11 @@ describe('StationComponent', () => {
     (componentChildStationHeader.stationNameForm as FormGroup).controls['name'].setValue('Step Dev');
     component.stationInfoHeader = componentChildStationHeader;
 
-    const spyUpdateStation = spyOn(TestBed.inject(StationService), 'updateStation');
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
     const button = fixture.debugElement.query(By.css('#station-save'));
 
     button.triggerEventHandler('click', component.saveStation());
 
-    expect(spyUpdateStation).toHaveBeenCalled();
     expect(spyUpdateAppendedFields).toHaveBeenCalled();
   });
 });
