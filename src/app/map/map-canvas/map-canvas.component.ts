@@ -482,9 +482,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:keypress', ['$event'])
   keyPress(event: KeyboardEvent): void {
-    if (event.key === '+' || event.key === '-') {
+    if (event.key === '+' || event.key === '=' || event.key === '-') {
       this.mapService.matMenuStatus$.next(true);
-      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' ? 50 : -50));
+      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
       this.mapService.handleZoom(undefined, false);
     }
   }
