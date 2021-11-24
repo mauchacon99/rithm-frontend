@@ -652,7 +652,7 @@ describe('StationService', () => {
       questions: [],
       priority: 2
     };
-    service.updateStationName(newName, station)
+    service.updateStationName(newName, station.rithmId)
       .subscribe((response) => {
         expect(response).toBe(station);
       });

@@ -271,12 +271,11 @@ export class StationService {
    *
    * @returns The station name updated.
    * @param newName The new name from station.
-   * @param station The station information that will be update.
+   * @param stationRithmId The stationRithmId to send to service.
    */
-  updateStationName(newName: string, station: StationInformation): Observable<StationInformation> {
-    const rithmId=station.rithmId;
+  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
     const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
     // eslint-disable-next-line max-len
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${rithmId}`,JSON.stringify(newName),{headers});
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`,JSON.stringify(newName),{headers});
   }
 }

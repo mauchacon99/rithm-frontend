@@ -513,11 +513,10 @@ export class MockStationService {
     *
     * @returns The station name updated.
     * @param newName The new name from station.
-    * @param station The station information that will be update.
+    * @param stationRithmId The stationRithmId to send to service.
     */
-   updateStationName(newName: string, station: StationInformation): Observable<StationInformation> {
-    const rithmId=station.rithmId;
-    if (!station || newName === '') {
+   updateStationName(newName: string, stationRithmId: StationInformation): Observable<StationInformation> {
+    if (!stationRithmId || newName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station name without defining a station.'
