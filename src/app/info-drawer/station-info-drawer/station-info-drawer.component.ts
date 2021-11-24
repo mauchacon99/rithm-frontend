@@ -80,19 +80,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const dataDrawer = data as StationInfoDrawerData;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((data: any) => {
+        const dataDrawer = data?.data as StationInfoDrawerData;
         if (dataDrawer) {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
+          this.mapMode = data?.mapMode;
         }
-      });
-
-      this.mapService.mapMode$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((mapMode) => {
-        this.mapMode = mapMode;
       });
 
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
