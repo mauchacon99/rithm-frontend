@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from '../../core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 
@@ -50,6 +50,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Edit Mode. */
   stationName = '';
 
+  /** If component is being viewed on the map, what mode is the map in? */
+  mapMode?: MapMode;
+
+  /** If component is being viewed on the map, what status does the station have? */
+  stationStatus?: MapItemStatus;
+
   /** Station name form. */
   stationNameForm: FormGroup;
 
@@ -81,6 +87,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
+          if (dataDrawer.mapMode) {
+            this.mapMode = dataDrawer.mapMode;
+          }
+          if (dataDrawer.stationStatus) {
+            this.stationStatus = dataDrawer.stationStatus;
+          }
         }
       });
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
@@ -93,21 +105,25 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Gets info about the station as well as forward and previous stations for a specific station.
    */
   ngOnInit(): void {
-    this.getParams();
-    this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+    if (this.stationStatus !== MapItemStatus.Created) {
+      this.getParams();
+      this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
 
-    this.stationService.stationName$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.stationName = data.length > 0 ? data : 'Untitled Station';
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+      this.stationService.stationName$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (data) => {
+            this.stationName = data.length > 0 ? data : 'Untitled Station';
+          }, error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
+        });
+    } else {
+      this.newStationInit();
+    }
 
   }
 
@@ -290,23 +306,28 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   getStationInfo(): void {
     this.stationLoading = true;
-    this.stationService.getStationInfo(this.stationInformation.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (stationInfo) => {
-          this.stationLoading = false;
-          if (stationInfo) {
-            this.stationInformation = stationInfo;
+    if (this.stationStatus !== MapItemStatus.Created) {
+      this.stationService.getStationInfo(this.stationInformation.rithmId)
+        .pipe(first())
+        .subscribe({
+          next: (stationInfo) => {
+            this.stationLoading = false;
+            if (stationInfo) {
+              this.stationInformation = stationInfo;
+            }
+          },
+          error: (error: unknown) => {
+            this.stationLoading = false;
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
           }
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+        });
+    } else {
+      this.stationLoading = false;
+      //Is there any information for a new station that needs to be populated here?
+    }
   }
 
   /**
@@ -319,4 +340,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       this.getStationInfo();
     }
   }
-}
+
+  /**
+   * Handle required information for a locally created station.
+   */
+  newStationInit(): void {
+    this.stationDocumentGenerationStatus = DocumentGenerationStatus.None;
+    this.lastUpdatedDate = 'Publish Map changes to see last updated.';
+  }
+ }

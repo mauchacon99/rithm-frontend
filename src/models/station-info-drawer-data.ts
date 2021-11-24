@@ -1,3 +1,4 @@
+import { MapItemStatus, MapMode } from '.';
 import { StationInformation } from './station-info';
 
 /**
@@ -13,4 +14,10 @@ export interface StationInfoDrawerData {
 
   /** Mode Edit. */
   editMode: boolean;
+
+  /** Map Mode. */
+  mapMode?: MapMode;
+
+  /** Station Status. */
+  stationStatus?: MapItemStatus;
 }
