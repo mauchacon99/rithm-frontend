@@ -476,6 +476,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles user input when a key is pressed. Used for zoom in and zoom out.
+   *
+   * @param event The keyboard event that was triggered.
+   */
+  @HostListener('document:keypress', ['$event'])
+  keyPress(event: KeyboardEvent): void {
+    if (event.key === '+' || event.key === '-') {
+      this.mapService.matMenuStatus$.next(true);
+      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' ? 50 : -50));
+      this.mapService.handleZoom(undefined, false);
+    }
+  }
+
+  /**
    * Handles user input when a mouse wheel is scrolled. Used for zoom.
    *
    * @param event The wheel event that was triggered.
