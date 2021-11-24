@@ -1,17 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
-import { ConnectedStationInfo } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models/document-name-field';
 /**
  * Main component for viewing a station.
  */
@@ -20,7 +18,7 @@ import { DocumentNameField } from 'src/models/document-name-field';
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss'],
 })
-export class StationComponent implements OnInit, OnDestroy {
+export class StationComponent implements OnInit, OnDestroy, AfterContentChecked {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
@@ -67,9 +65,11 @@ export class StationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private documentService: DocumentService,
+    private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
+      generalInstructions: this.fb.control('')
     });
 
     this.sidenavDrawerService.drawerContext$
@@ -85,6 +85,11 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+  }
+
+  /** Comment. */
+  ngAfterContentChecked(): void {
+    this.ref.detectChanges();
   }
 
   /**
@@ -152,6 +157,7 @@ export class StationComponent implements OnInit, OnDestroy {
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
+            this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
           }
           this.stationLoading = false;
         },
@@ -218,6 +224,27 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Update Station General Instructions.
+   */
+  updateStationGeneralInstructions(): void{
+    const generalInstructions = this.stationForm.controls.generalInstructions.value;
+    this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId, generalInstructions)
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        generalInstructions; /**Here is going to be placed the loading indicator functionality */
+      },
+      error: (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 
   /**

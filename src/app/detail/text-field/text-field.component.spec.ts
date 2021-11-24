@@ -11,7 +11,7 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 1',
-    instructions: 'Fake instructions 1',
+    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -41,7 +41,7 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 4',
-    instructions: 'Fake instructions 4',
+    instructions: '',
     questionType: QuestionFieldType.Email,
     isReadOnly: false,
     isRequired: true,

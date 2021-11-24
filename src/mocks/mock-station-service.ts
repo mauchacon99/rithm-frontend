@@ -516,7 +516,7 @@ export class MockStationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-  updateStationGeneralInstruction(rithmId: string, instructions: string): Observable<StationInformation>{
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
     if (!rithmId || !instructions) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -527,7 +527,7 @@ export class MockStationService {
       const data: StationInformation = {
         rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         name: 'Current Station Name',
-        instructions: 'This are going to be the new instructions for the current station.',
+        instructions: 'New Instructions for current Station',
         nextStations: [{
           stationName: 'Development',
           totalDocuments: 5,

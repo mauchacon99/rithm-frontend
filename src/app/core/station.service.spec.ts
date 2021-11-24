@@ -597,12 +597,12 @@ describe('StationService', () => {
   });
 
   it('should return the station with updated general instructions', () => {
-    const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
-    const instructions = 'This are going to be the new instructions for the current station.';
+    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const instructions = 'New Instructions for current Station';
     const expectedResponse: StationInformation = {
-      rithmId: stationId,
-      name: 'Station Name',
-      instructions: instructions,
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'Current Station Name',
+      instructions: 'New Instructions for current Station',
       nextStations: [{
         stationName: 'Development',
         totalDocuments: 5,
@@ -612,20 +612,38 @@ describe('StationService', () => {
         stationName: 'Station-1',
         totalDocuments: 2,
         isGenerator: true
+      }, {
+        stationName: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
       }],
       stationOwners: [{
         rithmId: '',
         firstName: 'Marry',
         lastName: 'Poppins',
         email: 'marrypoppins@inpivota.com',
-        isWorker: true,
-        isOwner: false
+        isWorker: false,
+        isOwner: true
+      }, {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
       }],
       workers: [{
         rithmId: '',
         firstName: 'Harry',
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
+      }, {
+        rithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com',
         isWorker: true,
         isOwner: false
       }],
@@ -634,10 +652,10 @@ describe('StationService', () => {
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      priority: 1,
+      priority: 2
     };
 
-    service.updateStationGeneralInstruction(stationId, instructions)
+    service.updateStationGeneralInstructions(stationId, instructions)
     .subscribe((stationInfo) => {
       expect(stationInfo).toEqual(expectedResponse);
     });
