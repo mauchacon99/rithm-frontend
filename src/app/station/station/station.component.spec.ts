@@ -132,4 +132,10 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
+
+  it('should get previous and following stations', () => {
+    const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
+    component.getPreviousAndFollowingStations(component.stationInformation.rithmId);
+    expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationInformation.rithmId);
+  });
 });

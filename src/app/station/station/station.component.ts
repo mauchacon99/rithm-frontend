@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType, ForwardPreviousStationsDocument } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -253,13 +253,36 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
     this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
         next: (data) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const documentName = data;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): void {
+    this.stationService.getPreviousAndFollowingStations(stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (prevAndFollowStations) => {
+          if (prevAndFollowStations) {
+            this.forwardStations = prevAndFollowStations.followingStations;
+            this.previousStations = prevAndFollowStations.previousStations;
+          }
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
