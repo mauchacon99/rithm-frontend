@@ -3,7 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
+  // eslint-disable-next-line max-len
+  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField
 } from 'src/models';
 
 /**
@@ -13,6 +14,9 @@ export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
+
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /**
    * Gets a station information.
@@ -232,6 +236,39 @@ export class MockStationService {
       },
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
+  }
+
+ /**
+  * Update all station previous private/all questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The Specific previous question of station.
+  * @returns Station private/all save the questions array.
+  */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**
@@ -498,6 +535,16 @@ export class MockStationService {
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
     const expectedResponse = true;
     return of(expectedResponse).pipe(delay(1000));
+  }
+
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
   }
 
   /**

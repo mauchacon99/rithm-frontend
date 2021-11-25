@@ -4,10 +4,12 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from 'src/mocks/mock-document-service';
+import { MatChipsModule } from '@angular/material/chips';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService, MockDocumentService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService } from 'src/mocks/mock-error-service';
+import { DocumentService } from 'src/app/core/document.service';
+import { DocumentNameField } from 'src/models';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -19,10 +21,12 @@ describe('DocumentInfoHeaderComponent', () => {
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        MatChipsModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService }
       ]
     })
@@ -61,9 +65,9 @@ describe('DocumentInfoHeaderComponent', () => {
     const expectedData = {
       rithmId: rithmId
     };
-    const toogleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+    const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
-    expect(toogleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
+    expect(toggleDrawerSpy).toHaveBeenCalledOnceWith(drawerItem, expectedData);
   });
 
   it('should get the appended fields in the document name', () => {
@@ -74,4 +78,48 @@ describe('DocumentInfoHeaderComponent', () => {
 
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
+
+  it('should splice one item from appended fields array in and update document name template'), () => {
+    const currentIndex = 0;
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex,2));
+  };
+
+  it('should splice two item from appended fields array in and update document name template'), () => {
+    const currentIndex = 1;
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    component.removeAppendedFieldFromDocumentName(currentIndex);
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex-1,2));
+  };
 });
