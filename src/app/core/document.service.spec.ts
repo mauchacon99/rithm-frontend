@@ -1,15 +1,16 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType } from 'src/models';
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation } from 'src/models';
 import { DocumentService } from './document.service';
-import { DocumentStationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
 
 describe('DocumentService', () => {
   let service: DocumentService;
   let httpTestingController: HttpTestingController;
+  const stationId = 'E204F369-386F-4E41';
+  const documentId = 'E204F369-386F-4E41';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,7 +28,6 @@ describe('DocumentService', () => {
   });
 
   it('should return a list of documents for a station', () => {
-    const stationId = 'E204F369-386F-4E41';
     const pageNum = 1;
     const expectedResponse: StationDocuments = {
       documents: [
@@ -62,8 +62,6 @@ describe('DocumentService', () => {
   });
 
   it('should return forward and previous stations for a specific document', () => {
-    const stationId = 'E204F369-386F-4E41';
-    const documentId = 'E204F369-386F-4E41';
     const expectedResponse: ForwardPreviousStationsDocument = {
       previousStations: [],
       followingStations: []
@@ -85,8 +83,6 @@ describe('DocumentService', () => {
   });
 
   it('should return document and station information', () => {
-    const stationId = 'E204F369-386F-4E41';
-    const documentId = 'E204F369-386F-4E41';
     const expectedResponse: DocumentStationInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
@@ -120,42 +116,46 @@ describe('DocumentService', () => {
   });
 
   it('should return appended fields to document', () => {
-    const stationId = '7654-321';
     const expectData: DocumentNameField[] = [
       {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
-        prompt: '-',
+        prompt: '/',
         rithmId: ''
-      }
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
     ];
 
-    service.getAppendedFieldsOnDocumentName(stationId).subscribe((data) => {
-      expect(data).toEqual(expectData);
+    service.getAppendedFieldsOnDocumentName(stationId)
+    .subscribe((response) => {
+      expect(response).toEqual(expectData);
     });
   });
 
-  it('should update appended fields to document', () => {
-    const stationId = '7654-321';
+  it('should return updated appended fields to document', () => {
     const appendedFields: DocumentNameField[] = [
       {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
-        prompt: '-',
+        prompt: '/',
         rithmId: ''
       },
       {
-        prompt: 'DEV',
-        rithmId: '1lk2-as3k-12kk-9s83-dev'
-      }
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
     ];
 
-    service.updateDocumentAppendedFields(stationId, appendedFields).subscribe((data) => {
-      expect(data).toEqual(appendedFields);
+    service.updateDocumentAppendedFields(stationId, appendedFields)
+    .subscribe((response) => {
+      expect(response).toEqual(appendedFields);
     });
   });
 
