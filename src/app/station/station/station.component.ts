@@ -205,7 +205,6 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   updateStation(stationInformation: StationInformation): void {
     this.stationLoading = true;
-    this.updateStationName();
     this.stationService.updateStation(stationInformation)
       .pipe(first())
       .subscribe({
