@@ -100,7 +100,7 @@ describe('StationTemplateComponent', () => {
     expect(component.fields.length).toEqual(2);
   });
 
-  xit('should move a field from the template to previous fields', () => {
+  it('should move a field from the template to previous fields', () => {
     const testMoved: Question = {
       rithmId: '3j5k-3h2j-hj5j',
       prompt: 'Fake question 7',
