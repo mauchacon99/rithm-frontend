@@ -1,6 +1,5 @@
 <aside [class]="location">
   <span *ngFor="let station of stations">
-    <app-connected-station-card class="fixed" [ngClass]="{'': location === 'left', 'ml-5': location === 'right'}"
-      [station]="station" [location]='location'></app-connected-station-card>
+    <app-connected-station-card [station]="station" [location]='location'></app-connected-station-card>
   </span>
 </aside>
