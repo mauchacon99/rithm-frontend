@@ -55,6 +55,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Get station name from behaviour subject. */
+  stationName = '';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -72,6 +75,12 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+      this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName)=>{
+        this.stationName = stationName;
       });
   }
 
@@ -148,6 +157,7 @@ export class StationComponent implements OnInit, OnDestroy {
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
+            this.stationName = stationInfo.name;
           }
           this.stationLoading = false;
         },
@@ -195,6 +205,7 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   updateStation(stationInformation: StationInformation): void {
     this.stationLoading = true;
+    this.updateStationName();
     this.stationService.updateStation(stationInformation)
       .pipe(first())
       .subscribe({
@@ -266,23 +277,11 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
-  /** Behavior subject to update name station.
-   *
-   */
-  updateBehaviorSubjectStationName(): void{
-    this.stationService.stationName$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((stationName)=>{
-      this.stationInformation.name=stationName;
-    });
-  }
-
   /**
    * Update station name.
    */
    updateStationName(): void {
-    this.updateBehaviorSubjectStationName();
-    const nameStationChange= this.stationInformation.name;
+    const nameStationChange = this.stationName;
     this.stationLoading = true;
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
       .pipe(first())
