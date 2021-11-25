@@ -11,6 +11,7 @@ aside {
     @apply items-start;
   }
 
+  /* stylelint-disable-next-line */
   &.overflow-y-scroll-none::-webkit-scrollbar {
     @apply hidden;
   }
