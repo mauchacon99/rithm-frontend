@@ -1,5 +1,5 @@
-<div class="flex flex-row h-40 left-0 right-0" *ngIf="location === 'left'">
-  <div class="w-8/12 lg:w-36 xl:w-40 mat-elevation-z2 h-28 rounded bg-white py-1 px-2 m-0 block">
+<div class="flex flex-row h-40" [ngClass]="{'flex-row-reverse ': location === 'right'}">
+  <div class="lg:w-36 xl:w-40 mat-elevation-z2 h-28 rounded bg-white py-1 px-2 m-0 block">
     {{station?.name}}
   </div>
   <div class="w-7 mt-12">
@@ -18,27 +18,5 @@
         </g>
       </g>
     </svg>
-  </div>
-</div>
-<div class="flex flex-row h-40" *ngIf="location === 'right'">
-  <div class="w-7 mt-12">
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <g id="Station_Connection" data-name="Station Connection" transform="translate(1)">
-        <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
-          stroke-linecap="round" stroke-width="2" />
-        <g id="Polygon_1" data-name="Polygon 1" transform="translate(24.5) rotate(90)" fill="#2b3c54"
-          stroke-linecap="round">
-          <path
-            d="M 5.079339981079102 3.999997138977051 L 1.920660018920898 3.999997138977051 C 1.920660018920898 3.999997138977051 1.920660018920898 3.999997138977051 1.920660018920898 3.999997138977051 L 3.499797105789185 1.744077205657959 L 3.499983310699463 1.744077205657959 L 5.079349994659424 3.999997138977051 C 5.079342842102051 3.999991655349731 5.079341411590576 3.999994516372681 5.079339981079102 3.999997138977051 L 5.079339981079102 3.999997138977051 Z"
-            stroke="none" />
-          <path
-            d="M 3.5 0.7437949180603027 C 3.810090065002441 0.7437949180603027 4.120180130004883 0.8859720230102539 4.319230079650879 1.170327186584473 L 5.898580074310303 3.426537275314331 C 6.362520217895508 4.089317321777344 5.888370037078857 4.999997138977051 5.079339981079102 4.999997138977051 L 1.920660018920898 4.999997138977051 C 1.111629962921143 4.999997138977051 0.6374797821044922 4.089317321777344 1.101419925689697 3.426537275314331 L 2.680769920349121 1.170327186584473 C 2.879819869995117 0.8859720230102539 3.189909934997559 0.7437949180603027 3.5 0.7437949180603027 Z"
-            stroke="none" fill="#031023" />
-        </g>
-      </g>
-    </svg>
-  </div>
-  <div class="w-32 lg:w-36 xl:w-40 mat-elevation-z2 h-28 rounded bg-white py-1 px-2 m-0 block">
-    {{station?.name}}
   </div>
 </div>
