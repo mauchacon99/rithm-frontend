@@ -10,6 +10,7 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
 describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
+  const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -25,7 +26,6 @@ describe('StationService', () => {
   });
 
   it('should return station information', () => {
-    const stationId = 'E204F369-386F-4E41';
     const expectedResponse = {
       rithmId: stationId,
       name: 'Dry Goods & Liquids',
@@ -186,7 +186,6 @@ describe('StationService', () => {
   });
 
   it('should return updated date from a specific station', () => {
-    const stationId = 'E204F369-386F-4E41';
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
     service.getLastUpdated(stationId)
@@ -202,7 +201,6 @@ describe('StationService', () => {
   });
 
   it('should return the status of the specific document', () => {
-    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const expectedResponse = DocumentGenerationStatus.None;
 
     service.getStationDocumentGenerationStatus(stationId)
@@ -218,7 +216,6 @@ describe('StationService', () => {
   });
 
   it('should return the status of the specific document once the status is updated', () => {
-    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const statusNew = DocumentGenerationStatus.Manual;
     const paramsExpected = {
       generatorStatus: statusNew
@@ -237,7 +234,6 @@ describe('StationService', () => {
   });
 
   it('should return a list of stations private/all questions', () => {
-    const stationId = 'E204F369-386F-4E41';
     const isPrivate = true;
     const expectedResponse: Question[] = [
       {
@@ -275,8 +271,36 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should update the stations private/all questions list', () => {
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    service.updateStationQuestions(stationId, expectedResponse)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+
   it('should add a new member to the worker roster', () => {
-    const stationId = '3a97bead-e698-45ea-a1d9-51f4513a909a';
     const usersIds: string[] = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
       '49B1A2B4-7B2A-466E-93F9-78F14A672052'
@@ -357,8 +381,6 @@ describe('StationService', () => {
   });
 
   it('should delete a station', () => {
-    const stationId = 'E204F369-386F-4E41';
-
     service.deleteStation(stationId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
@@ -366,7 +388,6 @@ describe('StationService', () => {
   });
 
   it('should remove a member from worker roster', () => {
-    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
     ];
@@ -410,7 +431,6 @@ describe('StationService', () => {
   });
 
   it('should returns a worker roster for a given station', () => {
-    const stationId = 'E204F369-386F-4E41';
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
@@ -437,7 +457,6 @@ describe('StationService', () => {
   });
 
   it('should returns the owner roster for a given station', () => {
-    const stationId = 'E204F369-386F-4E41';
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '495FC055-4472-45FE-A68E-B7A0D060E1C8',
@@ -464,7 +483,6 @@ describe('StationService', () => {
   });
 
   it('should add a new member to the owner roster', () => {
-    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const userIdList: Array<string> = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
     ];
@@ -499,7 +517,6 @@ describe('StationService', () => {
   });
 
   it('should remove a member the owner from the roster', () => {
-    const stationId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
     const expectedResponse: StationRosterMember[] = [{
       rithmId: '12dasd1-asd12asdasd-asdas',
@@ -574,7 +591,6 @@ describe('StationService', () => {
   });
 
   it('should return the station owners roster', () => {
-    const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse: StationRosterMember[] = [
       {
         rithmId: '49B1A2B4-7B2A-466E-93F9-78F14A672052',
