@@ -4,8 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember } from 'src/models';
-
+import { DocumentGenerationStatus, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
