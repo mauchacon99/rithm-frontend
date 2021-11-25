@@ -337,22 +337,6 @@ export class StationService {
         {
           rithmId: '852-963-418',
           name: 'Follow station 2'
-        },
-        {
-          rithmId: '852-963-741',
-          name: 'Follow station 1'
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2'
-        },
-        {
-          rithmId: '852-963-741',
-          name: 'Follow station 1'
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2'
         }
       ]
     };
