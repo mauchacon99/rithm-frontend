@@ -96,7 +96,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    */
   remove(index: number, field: Question): void {
     this.fields.splice(index, 1);
-    if (field.moved){
+    if (typeof field.moved !== 'undefined'){
       this.movingQuestion(field);
     }
   }
@@ -107,6 +107,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @param field The field to be moved.
    */
   movingQuestion( field: Question): void {
+    field.isPrivate =  (field.moved === 'private') ? true : false;
     this.stationService.movingQuestion(field);
   }
 

@@ -145,7 +145,7 @@ describe('StationComponent', () => {
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
-      moved: true,
+      moved: 'private',
       children: [],
     };
     component.movePreviousFieldToTemplate(previousField);

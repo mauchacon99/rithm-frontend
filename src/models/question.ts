@@ -39,5 +39,5 @@ export interface Question {
   value?: string;
 
   /** Whether the question has been moved from the previous fields to the template. */
-  moved?: boolean | null;
+  moved?: string | null;
 }

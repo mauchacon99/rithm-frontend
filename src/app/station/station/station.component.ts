@@ -328,7 +328,6 @@ export class StationComponent implements OnInit, OnDestroy {
   * @param question The question that was moved from private/all.
   */
   movePreviousFieldToTemplate(question: Question): void {
-    question.moved = true;
     this.stationInformation.questions.push(question);
   }
 }
