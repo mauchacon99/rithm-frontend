@@ -12,6 +12,6 @@ aside {
   }
 
   &.overflow-y-scroll-none::-webkit-scrollbar {
-    display: none;
+    @apply hidden;
   }
 }
