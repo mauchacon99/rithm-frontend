@@ -1,7 +1,7 @@
 aside {
   @apply flex flex-col justify-center;
 
-  height: calc(100vh - 110px);
+  height: 100%;
 
   &.left {
     @apply items-end;
