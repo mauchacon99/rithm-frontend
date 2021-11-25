@@ -64,8 +64,26 @@ describe('DocumentService', () => {
   it('should return forward and previous stations for a specific document', () => {
     const expectedResponse: ForwardPreviousStationsDocument = {
       rithmId: '123-654-789',
-      previousStations: [],
-      followingStations: []
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1'
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2'
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1'
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2'
+        }
+      ]
     };
 
     service.getConnectedStationInfo(documentId, stationId)
@@ -133,9 +151,9 @@ describe('DocumentService', () => {
     ];
 
     service.getAppendedFieldsOnDocumentName(stationId)
-    .subscribe((response) => {
-      expect(response).toEqual(expectData);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(expectData);
+      });
   });
 
   it('should return updated appended fields to document', () => {
@@ -155,9 +173,9 @@ describe('DocumentService', () => {
     ];
 
     service.updateDocumentAppendedFields(stationId, appendedFields)
-    .subscribe((response) => {
-      expect(response).toEqual(appendedFields);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(appendedFields);
+      });
   });
 
 });
