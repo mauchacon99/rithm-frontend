@@ -548,7 +548,7 @@ export class MockStationService {
     * @param newName The new name from station.
     * @param stationRithmId The stationRithmId to send to service.
     */
-   updateStationName(newName: string, stationRithmId: StationInformation): Observable<StationInformation> {
+   updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
     if (!stationRithmId || newName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
