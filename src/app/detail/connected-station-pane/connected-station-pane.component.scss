@@ -1,7 +1,5 @@
 aside {
-  @apply flex flex-col justify-center;
-
-  height: 100%;
+  @apply flex flex-col justify-center h-full;
 
   &.left {
     @apply items-end;
