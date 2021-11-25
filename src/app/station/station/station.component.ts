@@ -9,7 +9,6 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
 
@@ -25,10 +24,6 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /** The component for the station info header this name station. */
-  @ViewChild('stationInfoHeader', { static: false })
-  stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();

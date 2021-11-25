@@ -30,8 +30,6 @@ import { UserService } from 'src/app/core/user.service';
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
-  let componentChildStationHeader: StationInfoHeaderComponent;
-  let fixtureChildStationHeader: ComponentFixture<StationInfoHeaderComponent>;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -70,9 +68,6 @@ describe('StationComponent', () => {
   });
 
   beforeEach(() => {
-    fixtureChildStationHeader = TestBed.createComponent(StationInfoHeaderComponent);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    componentChildStationHeader = fixtureChildStationHeader.componentInstance;
     fixture = TestBed.createComponent(StationComponent);
     component = fixture.componentInstance;
     component.stationInformation = {
