@@ -234,6 +234,39 @@ export class MockStationService {
     return of(mockPrevQuestions).pipe(delay(1000));
   }
 
+ /**
+  * Update all station previous private/all questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The Specific previous question of station.
+  * @returns Station private/all save the questions array.
+  */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
+  }
+
   /**
    * Adds users to the worker roster.
    *
