@@ -20,7 +20,7 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 
@@ -134,5 +134,22 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeFalse();
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions.length === 4).toBeTrue();
+  });
+
+  it('should move previous field from private/all to template', () => {
+    const previousField: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Label #1',
+      instructions: '',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      moved: true,
+      children: [],
+    };
+    component.movePreviousFieldToTemplate(previousField);
+    fixture.detectChanges();
+    expect(component.stationInformation.questions).toHaveSize(1);
   });
 });

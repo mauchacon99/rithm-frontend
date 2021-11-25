@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
+import { PreviousFieldsComponent } from 'src/app/detail/previous-fields/previous-fields.component';
 
 /**
  * Main component for viewing a station.
@@ -60,6 +61,15 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** The component for previous all fields of this station. */
+  @ViewChild('previousAllQuestions', { static: false })
+  previousAllQuestions!: PreviousFieldsComponent;
+
+  /** The component for previous private fields of this station. */
+  @ViewChild('previousPrivateQuestions', { static: false })
+  previousPrivateQuestions!: PreviousFieldsComponent;
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -86,6 +96,22 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.stationService.questionToMove$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data) => {
+          const questionData: Question = data;
+          if (JSON.stringify(questionData) !== '{}') {
+            (!questionData.isPrivate) ? this.previousAllQuestions.questions.push(questionData)
+              : this.previousPrivateQuestions.questions.push(questionData);
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -270,12 +296,12 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Update station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  */
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
     this.stationService.updateStationQuestions(stationId, previousQuestion)
@@ -294,5 +320,15 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+ /**
+  * Move previous field from private/all to template.
+  *
+  * @param question The question that was moved from private/all.
+  */
+  movePreviousFieldToTemplate(question: Question): void {
+    question.moved = true;
+    this.stationInformation.questions.push(question);
   }
 }

@@ -4,7 +4,7 @@
   </div>
   <div class="w-full">
     <app-station-field *ngFor="let field of fields; let i = index" formControlName="stationFieldForm" [field]="field"
-      [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" (move)="move($event, i)" (remove)="remove(i)"></app-station-field>
+      [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" (move)="move($event, i)" (remove)="remove(i, field)"></app-station-field>
   </div>
   <!-- TODO: All items expansion panel here -->
 

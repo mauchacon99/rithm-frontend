@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { PopupService } from 'src/app/core/popup.service';
 import { Question } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 
@@ -30,6 +29,9 @@ questionsError=false;
 
 /** Whether questions is loading. */
 isLoading = false;
+
+/** The question that will be moved. */
+@Output() private movingQuestion = new EventEmitter<Question>();
 
 constructor(
   private stationService: StationService,
@@ -72,13 +74,18 @@ ngOnInit(): void{
   /**
    * Open a modal to move a field from all/private to the template area.
    *
+   * @param  previousField The previous field in the questions list.
    */
-   moveFieldToTemplate(): void {
-     this.popupService.confirm({
+  async moveFieldToTemplate(previousField: Question): Promise<void> {
+     const confirm = await this.popupService.confirm({
       title: 'Move field?',
       message: 'Are you sure you want to move this field into the template area?',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close'
     });
+    if (confirm) {
+      this.questions = this.questions.filter((question: Question) => question.rithmId !== previousField.rithmId);
+      this.movingQuestion.emit(previousField);
+    }
   }
 }

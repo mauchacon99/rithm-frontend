@@ -5,6 +5,7 @@ import {
   ValidationErrors, Validator
 } from '@angular/forms';
 import { Question, QuestionFieldType } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the list of fields on the station template.
@@ -47,7 +48,8 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   };
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private stationService: StationService,
   ) {
     this.stationTemplateForm = this.fb.group({
       stationFieldForm: this.fb.control('')
@@ -87,13 +89,27 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   }
 
   /**
-   * Removes a field from the template.
+   * Removes a field from the template and call movingQuestion it uf applicable.
    *
    * @param index The current index of the field in the list.
+   * @param field The field to be moved.
    */
-  remove(index: number): void {
+  remove(index: number, field: Question): void {
     this.fields.splice(index, 1);
+    if (field.moved){
+      this.movingQuestion(field);
+    }
   }
+
+  /**
+   * Moves a field from the template to previous fields.
+   *
+   * @param field The field to be moved.
+   */
+  movingQuestion( field: Question): void {
+    this.stationService.movingQuestion(field);
+  }
+
 
   /**
    * The `onTouched` function.

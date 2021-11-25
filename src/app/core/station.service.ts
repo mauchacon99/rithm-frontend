@@ -21,6 +21,9 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** The Question of the station-template will be moved to previous fields as BehaviorSubject. */
+  questionToMove$ = new BehaviorSubject<Question>({} as Question);
+
   constructor(
     private http: HttpClient
   ) { }
@@ -297,5 +300,14 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId);
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
+  }
+
+ /**
+  * Returns the question to be moved.
+  *
+  * @param question The question of the station-template.
+  */
+  movingQuestion(question: Question): void {
+    this.questionToMove$.next(question);
   }
 }

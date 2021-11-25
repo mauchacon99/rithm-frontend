@@ -14,6 +14,9 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** The Question of the station-template will be moved to previous fields as BehaviorSubject. */
+  questionToMove$ = new BehaviorSubject<Question>({} as Question);
+
   /**
    * Gets a station information.
    *
@@ -540,5 +543,14 @@ export class MockStationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+ /**
+  * Returns the question to be moved.
+  *
+  * @param question The question of the station-template.
+  */
+  movingQuestion(question: Question): void {
+    this.questionToMove$.next(question);
   }
 }
