@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject, takeUntil } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
+import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Reusable component for the document information header.
@@ -17,7 +17,8 @@ import { DocumentNameField } from 'src/models/document-name-field';
   styleUrls: ['./document-info-header.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class DocumentInfoHeaderComponent implements OnInit {
+export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -30,21 +31,29 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
+  /** Document Appended Fields. */
+  documentAppendedFields: DocumentNameField[] = [];
+
   /** Document name form. */
   documentNameForm: FormGroup;
-
-  /** Fields to Document in the station. */
-  appendedFields: DocumentNameField[] = [];
 
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
+    private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
+    });
+
+    /** Get Document Appended Fields from Behaviour Subject. */
+    this.stationService.documentStationNameFields$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe( appendedFields => {
+      this.documentAppendedFields = appendedFields;
     });
   }
 
@@ -138,11 +147,12 @@ export class DocumentInfoHeaderComponent implements OnInit {
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
     this.documentService.getAppendedFieldsOnDocumentName(stationId)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(first())
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.appendedFields = data;
+        next: (appendedFields) => {
+          if (appendedFields) {
+            this.documentAppendedFields = appendedFields;
+            this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -152,6 +162,17 @@ export class DocumentInfoHeaderComponent implements OnInit {
         }
       });
   }
+
+  /**
+   * Remove an appended field from document field names.
+   *
+   * @param index The current index to remove from appendedFields.
+   */
+   removeAppendedFieldFromDocumentName(index: number): void{
+     const removeStartIndex = index > 0 ? index - 1 : index;
+     this.documentAppendedFields.splice(removeStartIndex,2);
+     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+   }
 
   /**
    * Completes all subscriptions.
