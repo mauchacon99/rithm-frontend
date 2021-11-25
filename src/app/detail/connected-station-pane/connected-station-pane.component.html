@@ -1,4 +1,4 @@
-<aside [class]="location" class="fixed">
+<aside [class]="location" class="fixed" [ngClass]="{'w-1/6': location === 'left'}">
   <span *ngFor="let station of stations">
     <app-connected-station-card [station]="station" [location]='location'></app-connected-station-card>
   </span>
