@@ -10,4 +10,8 @@ aside {
   &.right {
     @apply items-start;
   }
+
+  &.overflow-y-scroll-none::-webkit-scrollbar {
+    display: none;
+  }
 }
