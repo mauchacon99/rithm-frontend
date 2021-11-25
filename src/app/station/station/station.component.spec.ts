@@ -24,7 +24,6 @@ import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
-import { By } from '@angular/platform-browser';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
 
@@ -211,12 +210,13 @@ describe('StationComponent', () => {
   });
 
   it('should make a request when save button is clicked', () => {
-
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
-    const button = fixture.debugElement.query(By.css('#station-save'));
+    const spyFunctionSave = spyOn(component, 'saveStationInformation');
+    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
 
-    button.triggerEventHandler('click', component.saveStationInformation());
+    button.click();
 
+    expect(spyFunctionSave).toHaveBeenCalled();
     expect(spyUpdateAppendedFields).toHaveBeenCalled();
   });
 });
