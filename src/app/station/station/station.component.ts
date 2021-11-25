@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
+import { StationInformation, QuestionFieldType, Question } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
+
 /**
  * Main component for viewing a station.
  */
@@ -288,6 +289,32 @@ export class StationComponent implements OnInit, OnDestroy {
             this.previousStations = prevAndFollowStations.previousStations;
           }
         }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
+    this.stationLoading = true;
+    this.stationService.updateStationQuestions(stationId, previousQuestion)
+      .pipe(first())
+      .subscribe({
+        next: (questions) => {
+          if (questions) {
+            this.stationInformation.questions = questions;
+          }
+          this.stationLoading = false;
+        }, error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, ForwardPreviousStationsDocument, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember } from 'src/models';
+import { DocumentGenerationStatus, ForwardPreviousStationsDocument, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -109,6 +109,39 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+ /**
+  * Update the station private/all previous questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The previous question to be updated.
+  * @returns Station private/all updated previous questions array.
+  */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**
