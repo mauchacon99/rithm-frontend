@@ -56,7 +56,7 @@ export class StationComponent implements OnInit, OnDestroy {
   accordionFieldAllExpanded = false;
 
   /** Get station name from behaviour subject. */
-  stationName = '';
+  private stationName = '';
 
   constructor(
     private stationService: StationService,
