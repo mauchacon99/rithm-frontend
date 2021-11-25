@@ -211,7 +211,7 @@ describe('StationComponent', () => {
 
   it('should make a request when save button is clicked', () => {
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
-    const spyFunctionSave = spyOn(component, 'saveStationInformation');
+    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
     const button = fixture.debugElement.nativeElement.querySelector('#station-save');
 
     button.click();
