@@ -69,13 +69,17 @@ export class DocumentService {
   getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
     const documentFieldName: DocumentNameField[] = [
       {
-        prompt: 'SKU',
-        rithmId: '1lk2-as3k-12kk-9s83'
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
-        prompt: '-',
+        prompt: '/',
         rithmId: ''
-      }
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
     ];
     return of(documentFieldName).pipe(delay(1000));
   }
@@ -97,13 +101,17 @@ export class DocumentService {
     } else {
       const documentFieldName: DocumentNameField[] = [
         {
-          prompt: 'SKU',
-          rithmId: '1lk2-as3k-12kk-9s83'
+          prompt: 'Address',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
         },
         {
-          prompt: '-',
+          prompt: '/',
           rithmId: ''
-        }
+        },
+        {
+          prompt: 'Which is best?',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
       ];
       return of(documentFieldName).pipe(delay(1000));
     }
