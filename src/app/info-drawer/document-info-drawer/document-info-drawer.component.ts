@@ -83,9 +83,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
     .pipe(takeUntil(this.destroyed$))
-    .subscribe( appendedFields => {
+    .subscribe(appendedFields => {
       this.options = appendedFields.filter(field => field.rithmId);
-      if (this.questions.length > 0){
+      if (this.questions.length > 0) {
         this.filterFieldsAndQuestions();
       }
     });
@@ -183,21 +183,35 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Change separator value.
+   *
+   * @param separator The field prompt selected in autocomplete.
+   */
+  changeValueSeparatorField(separator: string): void {
+    // search separatorField and replace in all items with ritmId==''
+    for (let i = 0; i < this.appendedFields.length; i++) {
+      if (this.appendedFields[i].rithmId === '') {
+        this.appendedFields[i].prompt = separator;
+      }
+    }
+  }
+
+  /**
    * Add Document Name Field.
    *
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
   addStationDocumentFieldName(fieldPrompt: string): void {
-    const fieldToAppend = this.fieldsToAppend.find( newField => newField.prompt === fieldPrompt );
 
+    const fieldToAppend = this.fieldsToAppend.find(newField => newField.prompt === fieldPrompt);
     if (!fieldToAppend) {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
     }
-      this.appendedFields.length > 0
-      ? this.appendedFields.push({prompt:this.appendFieldForm.controls.separatorField.value, rithmId:''},fieldToAppend)
+    this.appendedFields.length > 0
+      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, rithmId: '' }, fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
-      this.stationService.updateDocumentStationNameFields(this.appendedFields);
-      this.appendFieldForm.controls.appendField.setValue('');
+    this.stationService.updateDocumentStationNameFields(this.appendedFields);
+    this.appendFieldForm.controls.appendField.setValue('');
   }
 
   /**
@@ -205,8 +219,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   filterFieldsAndQuestions(): void {
     /**Difference between QuestionArray and OptionsArray */
-    this.fieldsToAppend =
-    this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));
+    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));
 
     /** Set the filter List for auto searching. */
     this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
