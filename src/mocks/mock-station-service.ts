@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -12,6 +12,9 @@ export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
+
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /**
    * Gets a station information.
@@ -530,6 +533,16 @@ export class MockStationService {
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
     const expectedResponse = true;
     return of(expectedResponse).pipe(delay(1000));
+  }
+
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
   }
 
   /**
