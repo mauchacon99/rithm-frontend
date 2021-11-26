@@ -144,8 +144,8 @@ describe('StationComponent', () => {
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: false,
-      isPrivate: true,
-      moved: 'private',
+      isPrivate: false,
+      moved: 'all',
       children: [],
     };
     component.movePreviousFieldToTemplate(previousField);
