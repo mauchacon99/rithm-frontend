@@ -222,9 +222,6 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
-
-
-
   }
 
   /**
