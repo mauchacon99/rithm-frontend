@@ -35,7 +35,7 @@
           <p class="overline pb-2">Separator Value</p>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Select</mat-label>
-            <mat-select formControlName="separatorField"  (selectionChange)="changeValueSeparatorField($event.value)">
+            <mat-select formControlName="separatorField" (selectionChange)="updateSeparatorFieldValue($event.value)">
               <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
                 {{option.value}}
               </mat-option>

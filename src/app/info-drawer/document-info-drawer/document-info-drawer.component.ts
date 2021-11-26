@@ -187,7 +187,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param separator The field prompt selected in autocomplete.
    */
-  changeValueSeparatorField(separator: string): void {
+   updateSeparatorFieldValue(separator: string): void {
     // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
       if (this.appendedFields[i].rithmId === '') {
