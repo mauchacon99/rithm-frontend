@@ -144,7 +144,7 @@ describe('StationComponent', () => {
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: false,
-      isPrivate: false,
+      isPrivate: true,
       moved: 'private',
       children: [],
     };

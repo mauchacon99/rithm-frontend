@@ -108,7 +108,7 @@ describe('StationTemplateComponent', () => {
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: true,
-      isPrivate: false,
+      isPrivate: true,
       moved: 'private',
       children: [],
     };
