@@ -9,7 +9,6 @@ import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
 
@@ -25,10 +24,6 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /** The component for the station info header this name station. */
-  @ViewChild('stationInfoHeader', { static: false })
-  stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -60,6 +55,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Get station name from behaviour subject. */
+  private stationName = '';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -77,6 +75,12 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+      this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName)=>{
+        this.stationName = stationName;
       });
   }
 
@@ -153,6 +157,7 @@ export class StationComponent implements OnInit, OnDestroy {
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
+            this.stationName = stationInfo.name;
           }
           this.stationLoading = false;
         },
@@ -199,8 +204,6 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationInformation This Data global, for set data in update request.
    */
   updateStation(stationInformation: StationInformation): void {
-    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    stationInformation.name = nameStationChange;
     this.stationLoading = true;
     this.stationService.updateStation(stationInformation)
       .pipe(first())
@@ -254,7 +257,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
+  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
     this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
       .pipe(first())
       .subscribe({
@@ -262,6 +265,29 @@ export class StationComponent implements OnInit, OnDestroy {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const documentName = data;
         }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Update station name.
+   */
+   updateStationName(): void {
+    const nameStationChange = this.stationName;
+    this.stationLoading = true;
+    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stationNameUpdated) => {
+          this.stationInformation = stationNameUpdated;
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
