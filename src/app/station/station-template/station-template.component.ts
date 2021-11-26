@@ -89,7 +89,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   }
 
   /**
-   * Removes a field from the template and call movingQuestion it uf applicable.
+   * Move a previousquestion field in the template area back to its initial expansion panel.
    *
    * @param index The current index of the field in the list.
    * @param field The field to be moved.
