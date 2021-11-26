@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
@@ -312,12 +312,25 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
- /**
-  * Returns the question to be moved.
-  *
-  * @param question The question of the station-template.
-  */
+  /**
+   * Returns the question to be moved.
+   *
+   * @param question The question of the station-template.
+   */
   movingQuestion(question: Question): void {
     this.questionToMove$.next(question);
+  }
+
+  /**
+   * Update station name.
+   *
+   * @returns The station name updated.
+   * @param newName The new name from station.
+   * @param stationRithmId The stationRithmId to send to service.
+   */
+  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
+    // eslint-disable-next-line max-len
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, JSON.stringify(newName), { headers });
   }
 }
