@@ -96,7 +96,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    */
   remove(index: number, field: Question): void {
     this.fields.splice(index, 1);
-    if (typeof field.moved !== 'undefined'){
+    if (field.moved !== undefined){
       this.movingQuestion(field);
     }
   }

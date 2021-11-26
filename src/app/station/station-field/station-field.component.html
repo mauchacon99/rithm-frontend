@@ -15,6 +15,10 @@
     <!-- Field -->
     <!-- added conditions from sohw/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
+      <!--if private/all of previous fields -->
+      <div class="flex justify-start" *ngIf="field.moved !== undefined">
+          <span class="text-secondary-300 text-xs">PREVIOUS FIELD | {{ field.moved  === 'private' ? 'PRIVATE' : 'ALL' }}</span>
+      </div>
        <div *ngIf="field.questionType === 'Instructions'">
         <app-text-field  [field]="instructionField" formControlName="instructionsField" [toolBar]="true"></app-text-field>
          </div>
