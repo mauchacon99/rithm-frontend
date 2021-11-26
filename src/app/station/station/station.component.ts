@@ -245,11 +245,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /**
    * Get the document field name array.
    *
-   * @param stationId  The id of station.
    * @param appendedFiles  The appended files.
    */
-  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
+  updateDocumentAppendedFields(appendedFiles: DocumentNameField[]): void {
+    this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, appendedFiles)
       .pipe(first())
       .subscribe({
         next: (data) => {
@@ -264,15 +263,14 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Update station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param previousQuestion The previous question to be updated.
+   */
+  updateStationQuestions(previousQuestion: Question[]): void {
     this.stationLoading = true;
-    this.stationService.updateStationQuestions(stationId, previousQuestion)
+    this.stationService.updateStationQuestions(this.stationInformation.rithmId, previousQuestion)
       .pipe(first())
       .subscribe({
         next: (questions) => {

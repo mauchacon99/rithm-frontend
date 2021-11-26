@@ -114,15 +114,16 @@ export class StationService {
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
   }
 
- /**
-  * Update the station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  * @returns Station private/all updated previous questions array.
-  */
+  /**
+   * Update the station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   * @returns Station private/all updated previous questions array.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    previousQuestion = [
+    const previousQuestionData: Question[] = [
       {
         prompt: 'Example question#1',
         instructions: 'Example question#1',
@@ -144,7 +145,7 @@ export class StationService {
         children: [],
       },
     ];
-    return of(previousQuestion).pipe(delay(1000));
+    return of(previousQuestionData).pipe(delay(1000));
   }
 
   /**
@@ -255,7 +256,7 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+  updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
   }
 

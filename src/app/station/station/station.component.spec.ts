@@ -20,7 +20,7 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
@@ -213,5 +213,36 @@ describe('StationComponent', () => {
 
     expect(spyFunctionSave).toHaveBeenCalled();
     expect(spyUpdateAppendedFields).toHaveBeenCalled();
+  });
+
+  it('should update questions and call petition in service', () => {
+    const expectedQuestions: Question[] = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    const spyUpdateAppendedFields = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.returnValue(of(expectedQuestions));
+
+    component.updateStationQuestions(expectedQuestions);
+
+    expect(spyUpdateAppendedFields).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, expectedQuestions);
   });
 });
