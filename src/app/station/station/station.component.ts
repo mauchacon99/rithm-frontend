@@ -55,6 +55,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Get station name from behaviour subject. */
+  private stationName = '';
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -72,6 +75,12 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+    this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName) => {
+        this.stationName = stationName;
       });
   }
 
@@ -148,6 +157,7 @@ export class StationComponent implements OnInit, OnDestroy {
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
+            this.stationName = stationInfo.name;
           }
           this.stationLoading = false;
         },
@@ -264,11 +274,35 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update station name.
+   */
+  updateStationName(): void {
+    const nameStationChange = this.stationName;
+    this.stationLoading = true;
+    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stationNameUpdated) => {
+          this.stationInformation = stationNameUpdated;
+          this.stationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.stationLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Update station private/all previous questions.
    *
+   * @param stationId The Specific id of station.
    * @param previousQuestion The previous question to be updated.
    */
-  updateStationQuestions(previousQuestion: Question[]): void {
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
     this.stationService.updateStationQuestions(this.stationInformation.rithmId, previousQuestion)
       .pipe(first())

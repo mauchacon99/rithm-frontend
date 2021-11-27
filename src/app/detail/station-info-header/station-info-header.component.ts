@@ -4,6 +4,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Reusable component for the station information header.
@@ -33,7 +34,8 @@ export class StationInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private errorService: ErrorService,
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
