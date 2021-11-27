@@ -614,21 +614,25 @@ describe('StationService', () => {
       previousStations: [
         {
           rithmId: '789-654-321',
-          name: 'Previous station 1'
+          name: 'Previous station 1',
+          totalDocuments: 5
         },
         {
           rithmId: '789-654-753',
-          name: 'Previous station 2'
+          name: 'Previous station 2',
+          totalDocuments: 2
         }
       ],
       followingStations: [
         {
           rithmId: '852-963-741',
-          name: 'Follow station 1'
+          name: 'Follow station 1',
+          totalDocuments: 2
         },
         {
           rithmId: '852-963-418',
-          name: 'Follow station 2'
+          name: 'Follow station 2',
+          totalDocuments: 1
         }
       ]
     };
