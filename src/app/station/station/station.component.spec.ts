@@ -20,7 +20,7 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from '../station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { Question, QuestionFieldType } from 'src/models';
+import { DocumentNameField, Question, QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
@@ -157,11 +157,34 @@ describe('StationComponent', () => {
   });
 
   it('should call component methods to make requests when saveStationInformation is called', () => {
-    const updateFieldsDocument = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    (<any>component).stationName = 'Station Dev';
+
+    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
+    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
+    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
 
     component.saveStationInformation();
 
-    expect(updateFieldsDocument).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    expect(spyUpdateStationName).toHaveBeenCalledOnceWith((<any>component).stationName, component.stationInformation.rithmId);
+    expect(spyUpdateAppendedFields).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
+    expect(spyUpdateStationQuestions).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
+  });
+
+  it('should make a request when save button is clicked', () => {
+    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName');
+    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
+    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions');
+    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
+
+    button.click();
+
+    expect(spyFunctionSave).toHaveBeenCalled();
+    expect(spyUpdateStationName).toHaveBeenCalled();
+    expect(spyUpdateAppendedFields).toHaveBeenCalled();
+    expect(spyUpdateStationQuestions).toHaveBeenCalled();
   });
 
   it('should navigate the user back to the dashboard page and show error', () => {
@@ -202,47 +225,5 @@ describe('StationComponent', () => {
     (<any>component).getStationInfo(component.stationInformation.rithmId);
 
     expect(component.stationInformation).toBe(component.stationInformation);
-  });
-
-  it('should make a request when save button is clicked', () => {
-    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields');
-    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
-
-    button.click();
-
-    expect(spyFunctionSave).toHaveBeenCalled();
-    expect(spyUpdateAppendedFields).toHaveBeenCalled();
-  });
-
-  it('should update questions and call petition in service', () => {
-    const expectedQuestions: Question[] = [
-      {
-        prompt: 'Example question#1',
-        instructions: 'Example question#1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Example question#2',
-        instructions: 'Example question#2',
-        rithmId: '3j5k-3h2j-hj5j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-
-    const spyUpdateAppendedFields = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.returnValue(of(expectedQuestions));
-
-    component.updateStationQuestions(expectedQuestions);
-
-    expect(spyUpdateAppendedFields).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, expectedQuestions);
   });
 });
