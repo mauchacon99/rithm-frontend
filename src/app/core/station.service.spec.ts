@@ -637,4 +637,76 @@ describe('StationService', () => {
         expect(prevAndFollowStations).toEqual(expectedResponse);
       });
   });
+
+
+  it('should update the station name', () => {
+    const newName = 'Edited Station Name';
+    const station: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [{
+        name: 'Development',
+        rithmId: '123-654-789',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        name: 'Station-1',
+        rithmId: '987-456-321',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        name: 'Station-2',
+        rithmId: '753-951-754',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      stationOwners: [{
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }, {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }],
+      workers: [{
+        rithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
+      }, {
+        rithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+    service.updateStationName(newName, station.rithmId)
+      .subscribe((response) => {
+        expect(response).toBe(station);
+      });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(JSON.stringify(newName));
+    req.flush(station);
+    httpTestingController.verify();
+  });
 });
