@@ -4,13 +4,12 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, Question } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Main component for viewing a station.
@@ -204,11 +203,17 @@ export class StationComponent implements OnInit, OnDestroy {
    */
   saveStationInformation(): void {
     this.stationLoading = true;
-
     const petitionsUpdateStation = [
       // Update appended fields to document.
       // Second parameter appendedFields temporary.
-      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, [])
+      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, []),
+
+      // Update station Name.
+      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
+
+      // Update Questions.
+      // Second parameter previous questions temporary.
+      this.stationService.updateStationQuestions(this.stationInformation.rithmId, [])
     ];
 
     forkJoin(petitionsUpdateStation)
@@ -251,74 +256,4 @@ export class StationComponent implements OnInit, OnDestroy {
   //     );
   //   });
   // }
-
-  /**
-   * Get the document field name array.
-   *
-   * @param appendedFiles  The appended files.
-   */
-  updateDocumentAppendedFields(appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, appendedFiles)
-      .pipe(first())
-      .subscribe({
-        next: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const documentName = data;
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station name.
-   */
-  updateStationName(): void {
-    const nameStationChange = this.stationName;
-    this.stationLoading = true;
-    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (stationNameUpdated) => {
-          this.stationInformation = stationNameUpdated;
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station private/all previous questions.
-   *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The previous question to be updated.
-   */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
-    this.stationLoading = true;
-    this.stationService.updateStationQuestions(this.stationInformation.rithmId, previousQuestion)
-      .pipe(first())
-      .subscribe({
-        next: (questions) => {
-          if (questions) {
-            this.stationInformation.questions = questions;
-          }
-          this.stationLoading = false;
-        }, error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
 }
