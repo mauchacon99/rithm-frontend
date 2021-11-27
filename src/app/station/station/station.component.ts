@@ -57,6 +57,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Station Rithm id. */
   stationRithmId = '';
+
   /** Get station name from behaviour subject. */
   private stationName = '';
 
