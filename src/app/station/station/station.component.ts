@@ -219,13 +219,15 @@ export class StationComponent implements OnInit, OnDestroy {
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.stationInformation.name = this.stationName;
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
         }, complete: () => {
-          this.stationInformation.name = this.stationName;
           this.stationLoading = false;
         }
       });
