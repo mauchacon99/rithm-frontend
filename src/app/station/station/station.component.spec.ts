@@ -158,7 +158,7 @@ describe('StationComponent', () => {
 
   it('should call component methods to make requests when saveStationInformation is called', () => {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).stationName = 'Station Dev';
+    (<any>component).stationName = 'Station Test';
 
     const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
