@@ -87,7 +87,7 @@ export class MockDocumentService {
    */
   getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
     const previousStations: Array<ConnectedStationInfo> = [{
-      rithmId: stationId,
+      rithmId: documentId,
       name: 'Previous station 1',
       totalDocuments: 5
     },
