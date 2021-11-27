@@ -204,12 +204,12 @@ export class StationComponent implements OnInit, OnDestroy {
   saveStationInformation(): void {
     this.stationLoading = true;
     const petitionsUpdateStation = [
+      // Update station Name.
+      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
+
       // Update appended fields to document.
       // Second parameter appendedFields temporary.
       this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, []),
-
-      // Update station Name.
-      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
 
       // Update Questions.
       // Second parameter previous questions temporary.
@@ -225,6 +225,7 @@ export class StationComponent implements OnInit, OnDestroy {
             error
           );
         }, complete: () => {
+          this.stationInformation.name = this.stationName;
           this.stationLoading = false;
         }
       });
