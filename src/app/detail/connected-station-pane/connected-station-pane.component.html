@@ -1,4 +1,4 @@
-<aside [class]="location" class="fixed overflow-x-hidden overflow-y-scroll-none overflow-y-scroll mt-10 pb-20 w-1/6">
+<aside [class]="location" class="fixed overflow-y-auto overflow-y-scroll-none mt-11 pb-20 w-1/6">
   <span *ngFor="let station of stations">
     <app-connected-station-card [station]="station" [location]='location'></app-connected-station-card>
   </span>
