@@ -334,7 +334,7 @@ export class StationComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (response) {
-      this.router.navigate(['dashboard']);
+      this.router.navigateByUrl('dashboard');
     }
   }
 }

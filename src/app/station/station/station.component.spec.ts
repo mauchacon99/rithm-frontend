@@ -25,10 +25,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks/mock-popup-service';
+import { Router } from '@angular/router';
 
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
+  let router: Router;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -150,5 +152,11 @@ describe('StationComponent', () => {
     const popUpConfirmSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
     await component.cancelStation();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+  });
+
+  it('should return to dashboard how clicked button to cancel station to popup confirm', async () => {
+    const routerSpy = spyOn(router, 'navigateByUrl');
+    await component.cancelStation();
+    expect(routerSpy).toHaveBeenCalledOnceWith('');
   });
 });
