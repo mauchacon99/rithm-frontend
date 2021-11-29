@@ -998,7 +998,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-        // const mousePos = this.getEventContextPoint(moveInput);
         for (const connectionLine of this.lineItems) {
           if (this.context.isPointInStroke(connectionLine.path, moveContext.x, moveContext.y)) {
             this.context.strokeStyle = NODE_HOVER_COLOR;
