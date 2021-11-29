@@ -2,10 +2,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  // eslint-disable-next-line max-len
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -571,6 +569,80 @@ export class MockStationService {
         rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
         name: 'Current Station Name',
         instructions: 'New Instructions for current Station',
+        nextStations: [{
+          stationName: 'Development',
+          totalDocuments: 5,
+          isGenerator: true
+        }],
+        previousStations: [{
+          stationName: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true
+        }, {
+          stationName: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false
+        }],
+        stationOwners: [{
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }, {
+          rithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }],
+        workers: [{
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
+        }, {
+          rithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
+        }],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2
+      };
+      return of(data).pipe(delay(1000));
+    }
+  }
+
+   /**
+    * Update station name.
+    *
+    * @returns The station name updated.
+    * @param newName The new name from station.
+    * @param stationRithmId The stationRithmId to send to service.
+    */
+   updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
+    if (!stationRithmId || newName === '') {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station name without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StationInformation = {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'New Station Name',
+        instructions: '',
         nextStations: [{
           stationName: 'Development',
           totalDocuments: 5,
