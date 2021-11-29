@@ -8,8 +8,8 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
-import { PopupService } from '../../core/popup.service';
+import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 
 /**
@@ -62,9 +62,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
-  /** Modes for canvas element used for the map. */
-  mapMode = MapMode.View;
-
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -80,12 +77,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .subscribe((data: any) => {
-        const dataDrawer = data?.data as StationInfoDrawerData;
+        const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
-          this.mapMode = data?.mapMode;
         }
       });
 

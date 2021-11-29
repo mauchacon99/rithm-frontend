@@ -1074,9 +1074,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           const dataInformationDrawer: StationInfoDrawerData = {
             stationInformation: stationDataInfo,
             stationName: station.stationName,
-            editMode: false
+            editMode: this.mapMode === MapMode.Build,
+            locallyCreated: station.status === MapItemStatus.Created
           };
-          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer, this.mapMode, station.status);
+          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
           this.stationService.updatedStationNameText(station.stationName);
         }
     }
