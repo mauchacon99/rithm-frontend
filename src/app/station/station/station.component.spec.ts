@@ -23,6 +23,8 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from '../../core/popup.service';
+import { MockPopupService } from '../../../mocks/mock-popup-service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -58,7 +60,8 @@ describe('StationComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

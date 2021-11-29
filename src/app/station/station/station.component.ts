@@ -11,6 +11,7 @@ import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
+import { PopupService } from '../../core/popup.service';
 
 /**
  * Main component for viewing a station.
@@ -66,6 +67,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private documentService: DocumentService,
+    private popupService: PopupService
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -77,9 +79,9 @@ export class StationComponent implements OnInit, OnDestroy {
         this.drawerContext = context;
       });
 
-      this.stationService.stationName$
+    this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((stationName)=>{
+      .subscribe((stationName) => {
         this.stationName = stationName;
       });
   }
@@ -276,7 +278,7 @@ export class StationComponent implements OnInit, OnDestroy {
   /**
    * Update station name.
    */
-   updateStationName(): void {
+  updateStationName(): void {
     const nameStationChange = this.stationName;
     this.stationLoading = true;
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
@@ -296,12 +298,12 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Update station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  */
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
     this.stationService.updateStationQuestions(stationId, previousQuestion)
@@ -320,5 +322,19 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Cancel to Station',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      this.router.navigate(['dashboard']);
+    }
   }
 }
