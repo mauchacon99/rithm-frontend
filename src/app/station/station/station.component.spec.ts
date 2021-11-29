@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -151,6 +151,14 @@ describe('StationComponent', () => {
     const popUpConfirmSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
     await component.cancelStation();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+  });
+
+  it('should show popup confirm to clicked button to cancel', () => {
+    const methodCalled = spyOn(component, 'cancelStation');
+    const btnCancel = fixture.debugElement.nativeElement.querySelector('#station-cancel');
+    expect(btnCancel).toBeTruthy();
+    btnCancel.click();
+    expect(methodCalled).toHaveBeenCalled();
   });
 
   it('should return to dashboard how clicked button to cancel station to popup confirm', async () => {
