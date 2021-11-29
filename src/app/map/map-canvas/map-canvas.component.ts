@@ -304,8 +304,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
         const touchPos = this.getEventCanvasPoint(pointer);
+        const touchCon = this.getEventContextPoint(pointer);
         //this method has better compatibility with different input types than singleInputMouseMoveLogic.
-        this.singleInputMoveLogic(touchPos);
+        this.singleInputMoveLogic(touchPos, touchCon);
       }
 
       // Pinch event.
@@ -363,19 +364,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mouseMove(event: MouseEvent): void {
     if (!window.PointerEvent) {
       const pos = this.getEventCanvasPoint(event);
-      this.singleInputMoveLogic(pos);
-    }
-    if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-      const mousePos = this.getEventContextPoint(event);
-      for (const connectionLine of this.lineItems) {
-        if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
-          this.context.strokeStyle = NODE_HOVER_COLOR;
-          this.mapCanvas.nativeElement.style.cursor = 'pointer';
-        } else {
-          this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
-        }
-        this.context.stroke(connectionLine.path);
-      }
+      const touchCon = this.getEventContextPoint(event);
+      this.singleInputMoveLogic(pos, touchCon);
     }
   }
 
@@ -459,8 +449,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (event.touches.length === 1) {
         const touchPoint = event.changedTouches[0];
         const touchPos = this.getEventCanvasPoint(touchPoint);
-
-        this.singleInputMoveLogic(touchPos);
+        const touchCon = this.getEventContextPoint(touchPoint);
+        this.singleInputMoveLogic(touchPos, touchCon);
       }
 
       //Pinch event.
@@ -919,8 +909,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Logic for handling panning, dragging, etc on a mobile device.
    *
    * @param moveInput The point of movement.
+   * @param moveContext The point of movement.
    */
-  private singleInputMoveLogic(moveInput: Point) {
+  private singleInputMoveLogic(moveInput: Point, moveContext: Point) {
     if (this.dragItem === MapDragItem.Map) {
       const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
       const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
@@ -975,6 +966,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         } else {
           this.mapCanvas.nativeElement.style.cursor = 'default';
+        }
+      }
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        // const mousePos = this.getEventContextPoint(moveInput);
+        for (const connectionLine of this.lineItems) {
+          if (this.context.isPointInStroke(connectionLine.path, moveContext.x, moveContext.y)) {
+            this.context.strokeStyle = NODE_HOVER_COLOR;
+            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+          } else {
+            this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+          }
+          this.context.stroke(connectionLine.path);
         }
       }
     }
