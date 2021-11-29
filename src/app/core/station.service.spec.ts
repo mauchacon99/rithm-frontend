@@ -239,7 +239,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -249,7 +248,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -276,7 +274,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -286,7 +283,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,

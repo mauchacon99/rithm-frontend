@@ -132,7 +132,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 1',
-          instructions: 'Fake instructions 1',
           questionType: QuestionFieldType.ShortText,
           isReadOnly: false,
           isRequired: false,
@@ -142,7 +141,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 2',
-          instructions: 'Fake instructions 2',
           questionType: QuestionFieldType.LongText,
           isReadOnly: false,
           isRequired: true,
@@ -152,7 +150,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 3',
-          instructions: '',
           questionType: QuestionFieldType.URL,
           isReadOnly: false,
           isRequired: true,
@@ -162,7 +159,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 4',
-          instructions: 'Fake instructions 4',
           questionType: QuestionFieldType.Email,
           isReadOnly: false,
           isRequired: true,
@@ -172,7 +168,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 5',
-          instructions: 'Fake question 5',
           questionType: QuestionFieldType.Number,
           isReadOnly: false,
           isRequired: true,
@@ -182,7 +177,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 6',
-          instructions: '',
           questionType: QuestionFieldType.Phone,
           isReadOnly: false,
           isRequired: true,
@@ -192,7 +186,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 7',
-          instructions: '',
           questionType: QuestionFieldType.Currency,
           isReadOnly: false,
           isRequired: true,
@@ -202,7 +195,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 8',
-          instructions: 'Fake question 8',
           questionType: QuestionFieldType.Date,
           isReadOnly: false,
           isRequired: true,
@@ -212,7 +204,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 9',
-          instructions: 'Fake instructions 9',
           questionType: QuestionFieldType.Select,
           isReadOnly: false,
           isRequired: true,
@@ -240,7 +231,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 10',
-          instructions: 'Fake instructions 10',
           questionType: QuestionFieldType.MultiSelect,
           isReadOnly: false,
           isRequired: true,
@@ -268,7 +258,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 12',
-          instructions: 'Fake instructions 12',
           questionType: QuestionFieldType.CheckList,
           isReadOnly: false,
           isRequired: true,
@@ -296,7 +285,6 @@ export class MockDocumentService {
         {
           rithmId: '3j4k-3h2j-hj4j',
           prompt: 'Fake question 13',
-          instructions: 'Fake instructions 13',
           questionType: QuestionFieldType.Nested,
           isReadOnly: false,
           isRequired: true,
@@ -305,7 +293,6 @@ export class MockDocumentService {
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Address Line 1',
-              instructions: 'Address Line 1',
               questionType: QuestionFieldType.AddressLine,
               isReadOnly: false,
               isRequired: false,
@@ -315,7 +302,6 @@ export class MockDocumentService {
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Address Line 2',
-              instructions: 'Address Line 2',
               questionType: QuestionFieldType.AddressLine,
               isReadOnly: false,
               isRequired: false,
@@ -325,7 +311,6 @@ export class MockDocumentService {
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Fake question 1',
-              instructions: 'Fake instructions 1',
               questionType: QuestionFieldType.City,
               isReadOnly: false,
               isRequired: false,
@@ -335,7 +320,6 @@ export class MockDocumentService {
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Fake question 12',
-              instructions: 'Fake instructions 12',
               questionType: QuestionFieldType.State,
               isReadOnly: false,
               isRequired: true,
@@ -363,7 +347,6 @@ export class MockDocumentService {
             {
               rithmId: '3j4k-3h2j-hj4j',
               prompt: 'Zip',
-              instructions: 'Zip',
               questionType: QuestionFieldType.Zip,
               isReadOnly: false,
               isRequired: true,

@@ -10,7 +10,6 @@ import { SelectFieldComponent } from './select-field.component';
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
   prompt: 'Fake question 9',
-  instructions: 'Fake instructions 9',
   questionType: QuestionFieldType.Select,
   isReadOnly: false,
   isRequired: true,

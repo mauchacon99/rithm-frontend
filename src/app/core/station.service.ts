@@ -125,7 +125,6 @@ export class StationService {
     previousQuestion = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -135,7 +134,6 @@ export class StationService {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -317,8 +315,9 @@ export class StationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
-    if (!rithmId || !instructions) {
+    if (!rithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station without defining a station id or without any instructions in it.'

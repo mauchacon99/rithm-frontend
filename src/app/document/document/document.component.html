@@ -16,7 +16,7 @@
         <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm" class="document-base-form">
           <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
           <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-          <app-document-template class="flex flex-col pb-7" [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
+          <app-document-template class="flex flex-col pb-7" [stationInstructions]="documentInformation.instructions" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer">

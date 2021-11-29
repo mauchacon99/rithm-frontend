@@ -12,7 +12,6 @@ import { NestedFieldComponent } from './nested-field.component';
 const ADDRESS: Question = {
   rithmId: '3j4k-3h2j-hj4j',
   prompt: '',
-  instructions: 'Enter the shipping address',
   questionType: QuestionFieldType.Nested,
   isReadOnly: false,
   isRequired: true,
@@ -21,7 +20,7 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 1',
-      instructions: '',
+
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: true,
@@ -31,7 +30,7 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 2',
-      instructions: '',
+
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: false,
@@ -41,7 +40,7 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'City',
-      instructions: '',
+
       questionType: QuestionFieldType.City,
       isReadOnly: false,
       isRequired: true,
@@ -51,7 +50,7 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'State',
-      instructions: '',
+
       questionType: QuestionFieldType.State,
       isReadOnly: false,
       isRequired: true,
@@ -62,7 +61,7 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Zip',
-      instructions: '',
+
       questionType: QuestionFieldType.Zip,
       isReadOnly: false,
       isRequired: true,

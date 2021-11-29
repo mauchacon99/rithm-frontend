@@ -181,7 +181,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     this.stationInformation.questions.push({
       rithmId: '3j4k-3h2j-hj4j',
       prompt: '',
-      instructions: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
