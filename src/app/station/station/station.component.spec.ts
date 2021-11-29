@@ -153,10 +153,4 @@ describe('StationComponent', () => {
     await component.cancelStation();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
-
-  it('should return to dashboard how clicked button to cancel station to popup confirm', async () => {
-    const routerSpy = spyOn(router, 'navigateByUrl');
-    await component.cancelStation();
-    expect(routerSpy).toHaveBeenCalledOnceWith('');
-  });
 });
