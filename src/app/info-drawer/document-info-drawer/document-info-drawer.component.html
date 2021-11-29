@@ -22,30 +22,27 @@
       <form [formGroup]="appendFieldForm">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Search</mat-label>
-          <input type="text"
-                 placeholder="Pick one"
-                 aria-label="Search"
-                 matInput
-                 formControlName="appendField"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class">
+          <input type="text" placeholder="Pick one" aria-label="Search" matInput formControlName="appendField"
+            [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class" (optionSelected)="addStationDocumentFieldName($event.option.value)">
             <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.prompt">
-              <p>{{option.prompt}}</p>
+              <p *ngIf="option.prompt">{{option.prompt}}</p>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
+
+        <div class="col-span-12 py-3">
+          <p class="overline pb-2">Separator Value</p>
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Select</mat-label>
+            <mat-select formControlName="separatorField">
+              <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
+                {{option.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </form>
-    </div>
-    <div class="col-span-12 py-3">
-      <p class="overline pb-2">Separator Value</p>
-      <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Select</mat-label>
-        <mat-select [(ngModel)]="separatorValueSelect">
-          <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
-            {{option.value}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
   </div>
 </div>
