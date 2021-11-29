@@ -97,16 +97,14 @@ export class SidenavDrawerService {
    *
    * @param context The name of the context for which the drawer is opened.
    * @param data Any data to optionally pass to the drawer.
-   * @param mapMode Any data to optionally pass to the drawer.
-   * @param stationStatus Any data to optionally pass to the drawer.
    */
   openDrawer(context: 'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo',
-  data?: unknown, mapMode?: number, stationStatus?: unknown): void {
+  data?: unknown): void {
     if (!this.drawerComponent) {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
     }
     this.drawerContext$.next(context);
-    this.drawerData$.next({data, mapMode, stationStatus});
+    this.drawerData$.next(data);
     this.sidenavComponent.close();
     this.drawerComponent.open();
   }
