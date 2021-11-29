@@ -25,12 +25,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks/mock-popup-service';
-import { Router } from '@angular/router';
 
 describe('StationComponent', () => {
   let component: StationComponent;
   let fixture: ComponentFixture<StationComponent>;
-  let router: Router;
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
