@@ -75,8 +75,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .subscribe((data: any) => {
+      .subscribe((data) => {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
           this.editMode = dataDrawer.editMode;
