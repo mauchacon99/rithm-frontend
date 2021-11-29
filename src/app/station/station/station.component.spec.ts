@@ -23,8 +23,8 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
-import { PopupService } from '../../core/popup.service';
-import { MockPopupService } from '../../../mocks/mock-popup-service';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks/mock-popup-service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
