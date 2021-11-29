@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
@@ -34,6 +34,9 @@ export class MapService {
 
   /** The flow elements displayed on the map. */
   flowElements: FlowMapElement[] = [];
+
+  /** Data for connection line path between stations. */
+  connections: ConnectionMapElement[] = [];
 
   /** An array that stores a backup of flowElements when buildMap is called. */
   storedFlowElements: FlowMapElement[] = [];
@@ -103,6 +106,17 @@ export class MapService {
   private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
+    this.setConnections();
+  }
+
+  /**
+   * Fills in connections array with info from this.stationElements.
+   */
+  setConnections(): void {
+    //TODO: add unit testing for this method.
+    // for (station of this.stationElements) {
+
+    // }
   }
 
   /**

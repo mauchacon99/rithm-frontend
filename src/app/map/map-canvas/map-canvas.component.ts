@@ -2,11 +2,11 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionLineInfo } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BUTTON_RADIUS, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, DEFAULT_MOUSE_POINT, DEFAULT_SCALE,
-  MAX_SCALE, MIN_SCALE, NODE_HOVER_COLOR, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, SCALE_REDUCED_RENDER, CONNECTION_LINE_WIDTH, CONNECTION_LINE_WIDTH_ZOOM_OUT,
+import { BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT, DEFAULT_SCALE,
+  MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY,
   MAX_PAN_VELOCITY, BADGE_RADIUS, BADGE_MARGIN } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -78,6 +78,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for flow used in the map. */
   flows: FlowMapElement[] = [];
 
+  /** Data for connection line path between stations. */
+  connections: ConnectionMapElement[] = [];
+
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
@@ -87,8 +90,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
 
-  /** Connection line path between stations. */
-  lineItems = Array<ConnectionLineInfo>();
+
 
   /**
    * Add station mode active.
@@ -625,44 +627,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Draw the flows
       this.flowElementService.drawFlows();
 
+      // Draw the connections
+      this.connections.forEach((connection) => {
+        this.connectionElementService.drawConnection(connection);
+      });
+
       // Draw the stations
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
       });
-
-      // Draw the connections
-      this.lineItems.length = 0;
-      for (const station of this.stations) {
-        for (const connection of station.nextStations) {
-          const outgoingStation = this.stations.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
-          const startPoint = {
-            x: station.canvasPoint.x + STATION_WIDTH * this.scale,
-            y: station.canvasPoint.y + STATION_HEIGHT * this.scale / 2
-          };
-          const endPoint = {
-            x: outgoingStation?.canvasPoint.x,
-            y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
-          };
-
-          const path = this.connectionElementService.getConnectionLine(startPoint, endPoint);
-
-          const lineInfo: ConnectionLineInfo = {connectionStartStationName: station.stationName,
-            connectionEndStationName: outgoingStation.stationName, connectionStartStationRithmId: station.rithmId,
-           connectionEndStationRithmId: outgoingStation.rithmId, path: path };
-
-          this.lineItems.push(lineInfo);
-          const ctx = this.context;
-
-          // Draw connection line
-          ctx.setLineDash([0, 0]);
-
-          ctx.beginPath();
-          ctx.moveTo(startPoint.x, startPoint.y);
-          ctx.lineWidth = this.scale > SCALE_REDUCED_RENDER ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;
-          ctx.strokeStyle = CONNECTION_DEFAULT_COLOR;
-          ctx.stroke(path);
-        }
-      }
     });
   }
 
@@ -998,14 +971,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-        for (const connectionLine of this.lineItems) {
-          if (this.context.isPointInStroke(connectionLine.path, moveContext.x, moveContext.y)) {
-            this.context.strokeStyle = NODE_HOVER_COLOR;
+        for (const connection of this.connections) {
+          connection.checkElementHover(moveContext, this.context);
+          if (connection.hoverActive) {
             this.mapCanvas.nativeElement.style.cursor = 'pointer';
+            break;
           } else {
-            this.context.strokeStyle = CONNECTION_DEFAULT_COLOR;
+            this.mapCanvas.nativeElement.style.cursor = 'default';
           }
-          this.context.stroke(connectionLine.path);
         }
       }
     }
@@ -1099,7 +1072,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    openConnectionDrawer(event: PointerEvent): void {
     const mousePos = this.getEventContextPoint(event);
 
-    for (const connectionLine of this.lineItems) {
+    for (const connectionLine of this.connections) {
       if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
         this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
         break;

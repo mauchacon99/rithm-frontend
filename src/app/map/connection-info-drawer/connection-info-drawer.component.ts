@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationMapElement } from 'src/helpers';
-import { ConnectionLineInfo, MapMode } from 'src/models';
+import { ConnectionMapElement, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
@@ -48,11 +48,11 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const stationIds = data as ConnectionLineInfo;
+        const stationIds = data as ConnectionMapElement;
         if (stationIds) {
           this.connectedStations = this.mapService.stationElements.filter(e =>
-            e.rithmId === stationIds.connectionStartStationRithmId || e.rithmId === stationIds.connectionEndStationRithmId);
-          this.connectedStations.sort((a) => a.rithmId === stationIds.connectionStartStationRithmId ? -1 : 1);
+            e.rithmId === stationIds.startStationRithmId || e.rithmId === stationIds.endStationRithmId);
+          this.connectedStations.sort((a) => a.rithmId === stationIds.startStationRithmId ? -1 : 1);
           this.connectionStartStationName = this.connectedStations[0].stationName;
           this.connectionEndStationName = this.connectedStations[1].stationName;
           this.connectionStartStationId = this.connectedStations[0].rithmId;
