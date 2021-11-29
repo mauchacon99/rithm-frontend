@@ -5,8 +5,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField } from 'src/models/document-name-field';
-import { FieldNameSeparator } from 'src/models/enums/field-name-separator.enum';
+import { DocumentNameField, Question } from 'src/models';
+import { FieldNameSeparator } from 'src/models/enums';
 
 /**
  * Component for document drawer.
@@ -21,23 +21,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Organization name form. */
   appendFieldForm: FormGroup;
 
-  /**Fields Options. */
-  private options: DocumentNameField[] = [
-    {
-      rithmId: '1234-1234-1234',
-      prompt: 'SKU'
-    },
-    {
-      rithmId: '1234-1234-1235',
-      prompt: 'Color'
-    },
-    {
-      rithmId: '1234-1234-1236',
-      prompt: 'Other'
-    }
-  ];
+  /**Current fields appended to Document Name. */
+  options: DocumentNameField[] = [];
 
-  /**Filtered Form Fields */
+  /** The list of station allSection previous questions turned into DocumentNameField. */
+  questions: DocumentNameField[] = [];
+
+  /**Fields that can be appended to document name (Diff between optionList and questionList). */
+  fieldsToAppend: DocumentNameField[] = [];
+
+  /**Appended Fields to the document name. */
+  private appendedFields: DocumentNameField[] = [];
+
+  /**Filtered Form Field List */
   filteredOptions$: Observable<DocumentNameField[]> | undefined;
 
   /** Is the document name editable. */
@@ -55,11 +51,11 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document name section. */
   documentNameLoading = false;
 
-  /** Select to store the separator value. */
-  separatorValueSelect = '';
-
   /** The different options for the separator value. */
   fieldNameSeparatorOptions = FieldNameSeparator;
+
+  /** The input field for auto search Value. */
+  autoSearchValue = '';
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +64,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService
   ) {
     this.appendFieldForm = this.fb.group({
-      appendField: ''
+      appendField: '',
+      separatorField: '/'
     });
 
     this.sidenavDrawerService.drawerData$
@@ -82,6 +79,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationRithmId = dataDrawer.rithmId;
         }
       });
+
+    /** Get Document Appended Fields from Behaviour Subject. */
+    this.stationService.documentStationNameFields$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe( appendedFields => {
+      this.options = appendedFields.filter(field => field.rithmId);
+      if (this.questions.length > 0){
+        this.filterFieldsAndQuestions();
+      }
+    });
   }
 
   /**
@@ -89,11 +96,32 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getStatusDocumentEditable();
+    this.getAllPreviousQuestions();
+  }
 
-    this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value)),
-    );
+  /**
+   * Get all station allSection previous  questions.
+   *
+   */
+  getAllPreviousQuestions(): void {
+    this.stationService.getStationPreviousQuestions(this.stationRithmId, false)
+      .pipe(first())
+      .subscribe({
+        next: (questions: Question[]) => {
+          if (questions) {
+            /** Turn Questions objects into DocumentFields Object. */
+            this.questions = questions
+              .filter(question => question.prompt && question.rithmId)
+              .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
+            this.filterFieldsAndQuestions();
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -104,7 +132,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   private _filter(value: string): DocumentNameField[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.prompt.toLowerCase().includes(filterValue));
+    return this.fieldsToAppend.filter(option => option.prompt.toLowerCase().includes(filterValue));
   }
 
   /**
@@ -152,6 +180,39 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Add Document Name Field.
+   *
+   * @param fieldPrompt The field prompt selected in autocomplete.
+   */
+  addStationDocumentFieldName(fieldPrompt: string): void {
+    const fieldToAppend = this.fieldsToAppend.find( newField => newField.prompt === fieldPrompt );
+
+    if (!fieldToAppend) {
+      throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
+    }
+      this.appendedFields.length > 0
+      ? this.appendedFields.push({prompt:this.appendFieldForm.controls.separatorField.value, rithmId:''},fieldToAppend)
+      : this.appendedFields.push(fieldToAppend);
+      this.stationService.updateDocumentStationNameFields(this.appendedFields);
+      this.appendFieldForm.controls.appendField.setValue('');
+  }
+
+  /**
+   * Make filter AutoSearch Field List between Questions And AppendedFields.
+   */
+  filterFieldsAndQuestions(): void {
+    /**Difference between QuestionArray and OptionsArray */
+    this.fieldsToAppend =
+    this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));
+
+    /** Set the filter List for auto searching. */
+    this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+    );
   }
 
   /**

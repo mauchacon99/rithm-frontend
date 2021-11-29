@@ -1,11 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import {
-  DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -20,6 +19,9 @@ export class StationService {
 
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
+
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   constructor(
     private http: HttpClient
@@ -110,6 +112,39 @@ export class StationService {
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+  }
+
+ /**
+  * Update the station private/all previous questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The previous question to be updated.
+  * @returns Station private/all updated previous questions array.
+  */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**
@@ -216,6 +251,15 @@ export class StationService {
   }
 
   /**
+   * Update the station document name template.
+   *
+   * @param documentName The name of the document in the station.
+   */
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
+  }
+
+  /**
    * Adds users to the owners roster.
    *
    * @param stationId The Specific id of station.
@@ -264,5 +308,18 @@ export class StationService {
     const params = new HttpParams()
       .set('stationRithmId', stationRithmId);
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
+  }
+
+  /**
+   * Update station name.
+   *
+   * @returns The station name updated.
+   * @param newName The new name from station.
+   * @param stationRithmId The stationRithmId to send to service.
+   */
+  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
+    const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
+    // eslint-disable-next-line max-len
+    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`,JSON.stringify(newName),{headers});
   }
 }
