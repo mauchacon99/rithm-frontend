@@ -219,6 +219,7 @@ export class StationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.stationLoading = false;
           this.stationInformation.name = this.stationName;
         },
         error: (error: unknown) => {
@@ -227,8 +228,6 @@ export class StationComponent implements OnInit, OnDestroy {
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
-        }, complete: () => {
-          this.stationLoading = false;
         }
       });
   }

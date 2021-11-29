@@ -148,14 +148,6 @@ describe('StationComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should show loading indicator while saving the station information', () => {
-    component.saveStationInformation();
-    fixture.detectChanges();
-    expect(component.stationLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#component-station-loading');
-    expect(loadingComponent).toBeTruthy();
-  });
-
   it('should call component methods to make requests when saveStationInformation is called', () => {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     (<any>component).stationName = 'Station Test';
