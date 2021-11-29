@@ -65,8 +65,8 @@ export class MockMapService {
             x: 12,
             y: 15
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          previousStations: [],
+          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
           status: MapItemStatus.Normal
         },
         {
@@ -78,31 +78,31 @@ export class MockMapService {
             y: 80
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          nextStations: [],
           status: MapItemStatus.Normal
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+          rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
           stationName: 'Step 2',
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
             y: 400
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          previousStations: [],
+          nextStations: [],
           status: MapItemStatus.Normal
         },
         {
-          rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+          rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
           stationName: 'Step 3',
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
             y: 240
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
+          previousStations: [],
+          nextStations: [],
           status: MapItemStatus.Normal
         }
       ],
@@ -116,10 +116,20 @@ export class MockMapService {
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
+            'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
+            'CCAEBE94-AF01-48AB-A7BB-279CC25B0989'
           ],
           subFlows: [],
           status: MapItemStatus.Normal,
           isReadOnlyRootFlow: false
+        },
+        {
+          rithmId: '',
+          title: '',
+          stations: [],
+          subFlows: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+          status: MapItemStatus.Normal,
+          isReadOnlyRootFlow: true
         }
       ]
     };
