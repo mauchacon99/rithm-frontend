@@ -144,8 +144,8 @@ describe('StationComponent', () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
       message: 'Your changes will be lost and you will return to the dashboard.',
-      okButtonText: 'Stay Here',
-      cancelButtonText: 'Cancel Changes',
+      okButtonText: 'Cancel Changes',
+      cancelButtonText: 'Stay Here',
       important: true,
     };
     const popUpConfirmSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
