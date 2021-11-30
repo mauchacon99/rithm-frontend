@@ -23,11 +23,12 @@ import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
-import { of } from 'rxjs';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
 import { PopupService } from '../../core/popup.service';
 import { MockPopupService } from '../../../mocks/mock-popup-service';
+import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { Router } from '@angular/router';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -163,66 +164,22 @@ describe('StationComponent', () => {
     expect(form['stationTemplateForm'].value).toBe('');
   });
 
-  it('should show loading indicator while getting the station data', () => {
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).getStationInfo(component.stationInformation.rithmId);
-    fixture.detectChanges();
-    expect(component.stationLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#component-station-loading');
-    expect(loadingComponent).toBeTruthy();
-  });
-
-  it('should call component methods to make requests when saveStationInformation is called', () => {
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).stationName = 'Station Test';
-
-    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
-    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
-    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
-
-    component.saveStationInformation();
-
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    expect(spyUpdateStationName).toHaveBeenCalledOnceWith((<any>component).stationName, component.stationInformation.rithmId);
-    expect(spyUpdateAppendedFields).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
-    expect(spyUpdateStationQuestions).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
-  });
-
-  it('should navigate the user back to the dashboard page and show error', () => {
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const spyNavigate = spyOn((<any>component), 'navigateBack');
-    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError');
-
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).handleInvalidParams();
-
-    expect(spyNavigate).toHaveBeenCalled();
-    expect(spyError).toHaveBeenCalled();
-  });
-
-  it('should set stationId param as null and redirect to dashboard', () => {
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    const spy = spyOn((<any>component), 'handleInvalidParams');
-
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).getParams();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('should compare the stationInformation object against getStationInfo method returned value', () => {
-    spyOn(TestBed.inject(StationService), 'getStationInfo').and.returnValue(of(component.stationInformation));
-
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    (<any>component).getStationInfo(component.stationInformation.rithmId);
-
-    expect(component.stationInformation).toBe(component.stationInformation);
-  });
-
   it('should get previous and following stations', () => {
     component.stationRithmId = component.stationInformation.rithmId;
     const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
     component.getPreviousAndFollowingStations();
     expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
+  });
+
+  it('should call methods in the init life cycle', () => {
+    const spySideNav = spyOn(TestBed.inject(SidenavDrawerService), 'setDrawer');
+    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
+
+    component.ngOnInit();
+
+    expect(spySideNav).toHaveBeenCalled();
+    expect(spyGetParams).toHaveBeenCalledOnceWith('dashboard');
+    expect(spyMethodPrevAndFollowStation).toHaveBeenCalled();
   });
 });
