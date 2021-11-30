@@ -25,9 +25,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
-import { PopupService } from '../../core/popup.service';
-import { MockPopupService } from '../../../mocks/mock-popup-service';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks/mock-popup-service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -166,6 +166,33 @@ describe('StationComponent', () => {
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
     expect(form['generalInstructions'].value).toBe('');
+  });
+
+  it('should open confirmation popup when canceling', async () => {
+    const dataToConfirmPopup = {
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    };
+    const popUpConfirmSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.cancelStation();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+  });
+
+  it('should show popup confirm when cancel button is clicked', () => {
+    const methodCalled = spyOn(component, 'cancelStation');
+    const btnCancel = fixture.debugElement.nativeElement.querySelector('#station-cancel');
+    expect(btnCancel).toBeTruthy();
+    btnCancel.click();
+    expect(methodCalled).toHaveBeenCalled();
+  });
+
+  it('should return to dashboard after confirming to cancel changes', async () => {
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    await component.cancelStation();
+    expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
   it('should return success when update station general instruction', () => {
