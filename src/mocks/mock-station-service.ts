@@ -558,7 +558,7 @@ export class MockStationService {
    * @returns The updated stationInformation.
    */
    updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
-    if (!rithmId || !instructions) {
+    if (!rithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station without defining a station id or without any instructions in it.'
