@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from 'src/app/core/popup.service';
+
 /**
  * Main component for viewing a station.
  */
@@ -66,6 +68,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private documentService: DocumentService,
+    private popupService: PopupService,
     private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
@@ -371,5 +374,19 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           );
         }
       });
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
   }
 }

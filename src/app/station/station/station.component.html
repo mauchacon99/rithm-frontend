@@ -88,8 +88,8 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span class="mr-3"><button data-testid="station-cancel" mat-stroked-button
-                    color="accent">Cancel</button></span>
+                <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
+                    color="accent" (click)="cancelStation()">Cancel</button></span>
                 <button data-testid="station-save" mat-raised-button color="accent" class="mx-2"
                   (click)="updateStation(stationInformation)">Save</button>
               </div>
