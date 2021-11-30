@@ -7,8 +7,9 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
-import { MockStationService } from 'src/mocks/mock-station-service';
+import { MockStationService } from 'src/mocks';
 import { QuestionFieldType } from 'src/models';
+
 import { StationFieldComponent } from './station-field.component';
 
 describe('StationFieldComponent', () => {
@@ -152,8 +153,6 @@ describe('StationFieldComponent', () => {
 
     it('option should be required', () => {
       const option = component.stationFieldForm.controls['optionField'];
-      const readOnly = component.field.isReadOnly = false;
-      expect(readOnly).toBeFalse();
       expect(option.valid).toBeFalse();
       expect(option.hasError('required')).toBeTrue();
       expect(component.stationFieldForm.valid).toBeFalse();
