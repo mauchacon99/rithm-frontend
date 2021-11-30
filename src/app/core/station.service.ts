@@ -77,10 +77,9 @@ export class StationService {
    * @returns Status the document.
    */
   getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
-    const params = new HttpParams()
-      .set('rithmId', stationId);
-    return this.http.get(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params, responseType: 'text' })
-      .pipe(map((value) => value as DocumentGenerationStatus));
+    const params = new HttpParams().set('rithmId', stationId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params })
+      .pipe(map((response) => response.data as DocumentGenerationStatus));
   }
 
   /**

@@ -211,7 +211,7 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
-    req.flush(expectedResponse);
+    req.flush({ data: expectedResponse });
     httpTestingController.verify();
   });
 
