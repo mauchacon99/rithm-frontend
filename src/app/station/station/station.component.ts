@@ -11,7 +11,7 @@ import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models/document-name-field';
-import { PopupService } from '../../core/popup.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for viewing a station.
@@ -329,8 +329,8 @@ export class StationComponent implements OnInit, OnDestroy {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'Your changes will be lost and you will return to the dashboard.',
-      okButtonText: 'Cancel Changes',
-      cancelButtonText: 'Stay Here',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
       important: true,
     });
     if (response) {
