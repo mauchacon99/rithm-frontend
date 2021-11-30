@@ -1,10 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -79,27 +79,22 @@ export class StationService {
    * @returns Status the document.
    */
   getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
-    const params = new HttpParams()
-      .set('rithmId', stationId);
-    return this.http.get(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params, responseType: 'text' })
-      .pipe(map((value) => value as DocumentGenerationStatus));
+    const params = new HttpParams().set('rithmId', stationId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params })
+      .pipe(map((response) => response.data as DocumentGenerationStatus));
   }
 
   /**
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  // eslint-disable-next-line max-len
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return this.http.put(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
-      {
-        generatorStatus: statusNew
-      },
-      { responseType: 'text' }
-    ).pipe(map(value => value as DocumentGenerationStatus));
+  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    const standardBody = { data: status };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
+      standardBody).pipe(map(response => response.data as DocumentGenerationStatus));
   }
 
   /**
@@ -116,13 +111,13 @@ export class StationService {
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
   }
 
- /**
-  * Update the station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  * @returns Station private/all updated previous questions array.
-  */
+  /**
+   * Update the station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   * @returns Station private/all updated previous questions array.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
     previousQuestion = [
       {
@@ -257,7 +252,7 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+  updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
   }
 
@@ -312,25 +307,25 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
-  /**
-   * Returns the question to be moved.
-   *
-   * @param question The question of the station-template.
-   */
+ /**
+  * Returns the question to be moved.
+  *
+  * @param question The question of the station-template.
+  */
   movingQuestion(question: Question): void {
     this.questionToMove$.next(question);
   }
 
   /**
-   * Update station name.
+   * Updates a station name.
    *
-   * @returns The station name updated.
-   * @param newName The new name from station.
-   * @param stationRithmId The stationRithmId to send to service.
+   * @param name The new name for the station.
+   * @param stationRithmId The id of the station to rename.
+   * @returns The updated station name.
    */
-  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
-    // eslint-disable-next-line max-len
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, JSON.stringify(newName), { headers });
+  updateStationName(name: string, stationRithmId: string): Observable<string> {
+    const standardBody: StandardStringJSON = { data: name };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
+      .pipe(map((response) => response.data));
   }
 }
