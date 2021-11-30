@@ -37,9 +37,6 @@ export class ConnectionElementService {
 
     const ctx = this.canvasContext;
 
-    // Draw connection line
-    ctx.setLineDash([0, 0]);
-
     ctx.beginPath();
     ctx.moveTo(connection.startPoint.x, connection.startPoint.y);
     ctx.lineWidth = this.mapScale > SCALE_REDUCED_RENDER ? CONNECTION_LINE_WIDTH : CONNECTION_LINE_WIDTH_ZOOM_OUT;

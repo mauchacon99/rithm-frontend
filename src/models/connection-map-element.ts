@@ -64,11 +64,17 @@ export class ConnectionMapElement {
    * @param ctx The rendering context for the canvas.
    */
   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+    ctx.save();
+    ctx.lineWidth = 40;
+    ctx.strokeStyle = 'red';
+    ctx.globalAlpha = 0;
+    ctx.stroke(this.path);
     if (ctx.isPointInStroke(this.path, point.x, point.y)) {
       this.hoverActive = true;
     } else {
       this.hoverActive = false;
     }
+    ctx.restore();
   }
 
   /**
