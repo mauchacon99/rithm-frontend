@@ -10,7 +10,7 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
 describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
-  const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -231,7 +231,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -241,7 +240,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -268,7 +266,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -278,7 +275,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -649,6 +645,66 @@ describe('StationService', () => {
 
   it('should update the station name', () => {
     const newName = 'Edited Station Name';
+    const station: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'New Station Name',
+      instructions: '',
+      nextStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      stationOwners: [{
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }, {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }],
+      workers: [{
+        rithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
+      }, {
+        rithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+
+    service.updateStationName(newName, station.rithmId);
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     service.updateStationName(newName, stationRithmId)
       .subscribe((response) => {
@@ -659,5 +715,71 @@ describe('StationService', () => {
     expect(req.request.body).toEqual({ data: newName });
     req.flush({ data: newName });
     httpTestingController.verify();
+  });
+
+  it('should return the station with updated general instructions', () => {
+    const instructions = 'New Instructions for current Station';
+    const expectedResponse: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'Current Station Name',
+      instructions: 'New Instructions for current Station',
+      nextStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      stationOwners: [{
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }, {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }],
+      workers: [{
+        rithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
+      }, {
+        rithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+      service.updateStationGeneralInstructions(stationId, instructions)
+      .subscribe((stationInfo) => {
+        expect(stationInfo).toEqual(expectedResponse);
+      });
   });
 });
