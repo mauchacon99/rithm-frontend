@@ -85,7 +85,6 @@ ngOnInit(): void{
     });
     if (confirm) {
       this.questions = this.questions.filter((question: Question) => question.rithmId !== previousField.rithmId);
-      previousField.moved = this.isPrivate ? 'private' : 'all';
       this.movingQuestion.emit(previousField);
     }
   }

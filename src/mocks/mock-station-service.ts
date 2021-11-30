@@ -19,6 +19,9 @@ export class MockStationService {
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
+  /** The RithmId of the Station as BehaviorSubject. */
+  stationRithmId$ = new BehaviorSubject<string>('');
+
   /**
    * Gets a station information.
    *
@@ -583,5 +586,14 @@ export class MockStationService {
     } else {
       return of(name).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Returns the station rithmid.
+   *
+   * @param stationRithmId The rithmId of the station.
+   */
+  getStationRithmId(stationRithmId: string): void {
+    this.stationRithmId$.next(stationRithmId);
   }
 }

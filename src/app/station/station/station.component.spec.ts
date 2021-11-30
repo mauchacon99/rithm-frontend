@@ -145,8 +145,8 @@ describe('StationComponent', () => {
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
-      moved: 'all',
       children: [],
+      originalStationRithmId: '3j4k-3h2j-hj4j'
     };
     component.movePreviousFieldToTemplate(previousField);
     fixture.detectChanges();

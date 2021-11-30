@@ -1,6 +1,5 @@
 {
     "cSpell.words": [
-      "Timecode",
       "compodoc",
       "datepicker",
       "devapi",
@@ -12,6 +11,8 @@
       "rithm",
       "sassdoc",
       "sidenav",
-      "stylelint"
+      "station",
+      "stylelint",
+      "Timecode"
     ]
 }

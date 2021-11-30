@@ -38,6 +38,7 @@ export interface Question {
   /** Value of the new field (what do you call your field?). */
   value?: string;
 
-  /** Whether the question has been moved from the previous fields to the template. */
-  moved?: string;
+  /** Value of the Rithm ID current station to identify previous field. */
+  originalStationRithmId?: string | null;
+
 }

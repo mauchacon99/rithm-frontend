@@ -25,6 +25,9 @@ export class StationService {
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
+  /** The RithmId of the Station as BehaviorSubject. */
+  stationRithmId$ = new BehaviorSubject<string>('');
+
   constructor(
     private http: HttpClient
   ) { }
@@ -256,6 +259,7 @@ export class StationService {
     this.documentStationNameFields$.next(documentName);
   }
 
+
   /**
    * Adds users to the owners roster.
    *
@@ -327,5 +331,14 @@ export class StationService {
     const standardBody: StandardStringJSON = { data: name };
     return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Returns the station rithmid.
+   *
+   * @param stationRithmId The rithmId of the station.
+   */
+  getStationRithmId(stationRithmId: string): void {
+    this.stationRithmId$.next(stationRithmId);
   }
 }

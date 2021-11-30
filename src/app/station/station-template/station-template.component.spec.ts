@@ -109,8 +109,8 @@ describe('StationTemplateComponent', () => {
       isReadOnly: false,
       isRequired: true,
       isPrivate: true,
-      moved: 'private',
       children: [],
+      originalStationRithmId: '3j5k-3h2j-hj5j'
     };
     const movingQuestionSpy = spyOn(TestBed.inject(StationService), 'movingQuestion');
     component.movingQuestion(testMoved);

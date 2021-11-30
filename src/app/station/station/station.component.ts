@@ -183,6 +183,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
+            this.stationService.getStationRithmId(stationInfo.rithmId);
           }
           this.stationLoading = false;
         },

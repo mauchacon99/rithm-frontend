@@ -5,7 +5,10 @@ import {
   ValidationErrors, Validator, Validators
 } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { StationService } from 'src/app/core/station.service';
 import { Question, QuestionFieldType } from 'src/models';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 /**
  * Station Field Component.
  */
@@ -101,8 +104,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** Get RithmId of the Station from behaviour subject. */
+  stationRithmId = '';
+
   constructor(
     private fb: FormBuilder,
+    private stationService: StationService,
   ) { }
 
   /**
@@ -122,6 +132,12 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       [this.field.questionType]: ['', [Validators.required]],
       optionField: ['', [Validators.required]]
     });
+
+    this.stationService.stationRithmId$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName) => {
+        this.stationRithmId = stationName;
+      });
   }
 
   /**
@@ -175,6 +191,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
+  }
+
+  /**
+   * Sets the read-only status of a field.
+   *
+   * @param ob Observes MatCheckbox changes.
+   */
+  setEditable(ob: MatCheckboxChange): void {
+    this.field.isReadOnly = ob.checked;
   }
 
   /**
