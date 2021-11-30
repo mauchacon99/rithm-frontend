@@ -20,7 +20,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 1',
-
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: true,
@@ -30,7 +29,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 2',
-
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: false,
@@ -40,7 +38,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'City',
-
       questionType: QuestionFieldType.City,
       isReadOnly: false,
       isRequired: true,
@@ -50,7 +47,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'State',
-
       questionType: QuestionFieldType.State,
       isReadOnly: false,
       isRequired: true,
@@ -61,7 +57,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Zip',
-
       questionType: QuestionFieldType.Zip,
       isReadOnly: false,
       isRequired: true,
