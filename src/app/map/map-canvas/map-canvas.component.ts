@@ -769,7 +769,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.mapMode === MapMode.Build) {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
+        station.checkElementHover(position, this.mapMode, this.scale);
         // clicked on a connection node.
         if (station.hoverActive === StationElementHoverType.Node) {
           station.dragging = true;
@@ -847,7 +847,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       let newPreviousStationId = '';
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
+        station.checkElementHover(position, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           newNextStationId = station.rithmId;
         }
@@ -858,7 +858,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
+        station.checkElementHover(position, this.mapMode, this.scale);
         if (station.hoverActive === StationElementHoverType.Station) {
           //ensure we cant get duplicate ids.
           if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
@@ -947,7 +947,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
+        station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
         }
@@ -955,7 +955,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else {
       //Hovering over different station elements.
       for (const station of this.stations) {
-        station.checkElementHover(moveInput, this.scale);
+        station.checkElementHover(moveInput, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           // eslint-disable-next-line max-len
           if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
@@ -969,7 +969,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapCanvas.nativeElement.style.cursor = 'default';
         }
       }
-      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+      //These next two if statements ensure that while a station is being hovered a connection line is not.
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS
+        && this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length === 0) {
         for (const connection of this.connections) {
           connection.checkElementHover(moveContext, this.context);
           if (connection.hoverActive) {
@@ -979,6 +981,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapCanvas.nativeElement.style.cursor = 'default';
           }
         }
+      }
+      if (this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length > 0) {
+        this.connections.map((e) => e.hoverActive = false);
       }
     }
     if (!this.panActive) {

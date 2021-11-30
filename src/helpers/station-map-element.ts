@@ -1,6 +1,6 @@
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT,
          NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
-import { StationMapData, Point, StationElementHoverType } from 'src/models';
+import { StationMapData, Point, StationElementHoverType, MapMode } from 'src/models';
 
 export interface StationMapElement extends StationMapData {
   /** The coordinates for the location of the station as rendered in the viewport. */
@@ -34,9 +34,10 @@ export class StationMapElement {
    * Checks whether an element in the station is being hovered over.
    *
    * @param point The cursor location.
+   * @param mode The current mapMode.
    * @param scale The scale of the map.
    */
-  checkElementHover(point: Point, scale: number): void {
+  checkElementHover(point: Point, mode: MapMode, scale: number): void {
     const startingX = this.canvasPoint.x;
     const startingY = this.canvasPoint.y;
     const scaledStationHeight = STATION_HEIGHT * scale;
@@ -56,6 +57,7 @@ export class StationMapElement {
       && point.x <= startingX + scaledStationWidth + interactiveNodeRadius
       && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
+      && mode !== MapMode.View
     ) {
       this.hoverActive = StationElementHoverType.Node;
     //Option Button.
@@ -63,6 +65,7 @@ export class StationMapElement {
       && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
       && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
       && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+      && mode !== MapMode.View
     ) {
       this.hoverActive = StationElementHoverType.Button;
     //Document badge.
