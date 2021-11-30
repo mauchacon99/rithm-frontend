@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models/document-name-field';
+import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
 
 /**
  * Main component for viewing a station.
@@ -24,6 +24,10 @@ export class StationComponent implements OnInit, OnDestroy {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
+
+  /** The component get the current document name template. */
+  @ViewChild(DocumentInfoHeaderComponent, {static: false})
+  documentNameTemplate!: DocumentInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -45,6 +49,9 @@ export class StationComponent implements OnInit, OnDestroy {
 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
+
+  /** Whether the request to update document name template is currently underway. */
+  documentNameTemplateLoading = false;
 
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
@@ -252,19 +259,18 @@ export class StationComponent implements OnInit, OnDestroy {
   // }
 
   /**
-   * Get the document field name array.
-   *
-   * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
+   * Update the station document name template.
    */
-  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
+  updateDocumentNameTemplate(): void {
+    this.documentNameTemplateLoading = true;
+    const documentAppendedFields = this.documentNameTemplate.documentAppendedFields;
+    this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, documentAppendedFields)
       .pipe(first())
       .subscribe({
-        next: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const documentName = data;
+        next: () => {
+          this.documentNameTemplateLoading = false;
         }, error: (error: unknown) => {
+          this.documentNameTemplateLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

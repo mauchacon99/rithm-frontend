@@ -25,7 +25,12 @@
                 <span data-testid="document-tab">Document</span>
               </ng-template>
               <ng-template matTabContent>
-                <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
+
+                <app-document-info-header #documentNameFields [documentInformation]="stationInformation" *ngIf="!documentNameTemplateLoading"></app-document-info-header>
+                <div class="w-full mt-2" *ngIf="documentNameTemplateLoading">
+                  <app-loading-indicator class="flex-grow mx-auto "></app-loading-indicator>
+                </div>
+
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
