@@ -175,11 +175,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get document name
+   * Get document name.
    *
-   * @param documentId The Specific id of document
+   * @param documentId The Specific id of document.
    */
-  getDocumentName(documentId: string) {
+  getDocumentName(documentId: string): void {
     this.documentService.getDocumentName(documentId)
       .pipe(first())
       .subscribe({

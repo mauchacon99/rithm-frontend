@@ -1,6 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
+// eslint-disable-next-line max-len
 import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -182,13 +183,13 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should return document name', ()=>{
+  it('should return document name', () => {
     const documentName: StandardStringJSON = {
-      data: "Metroid Dread"
-    }
+      data: 'Metroid Dread'
+    };
 
     service.getDocumentName(documentId)
-      .subscribe((response)=>{
+      .subscribe((response) => {
         expect(response).toEqual(documentName);
       });
   });

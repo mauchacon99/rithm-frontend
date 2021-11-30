@@ -443,21 +443,21 @@ export class MockDocumentService {
   }
 
   /**
-   * Get the document name
+   * Get the document name.
    *
-   * @param documentId the specific id of document
-   * @return The document name
+   * @param documentId The specific id of document.
+   * @returns The document name.
    */
-  getDocumentName(documentId:String): Observable<StandardStringJSON> {
-    if(!documentId){
-      return throwError(()=> new HttpErrorResponse({
-        error:{
+  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+    if (!documentId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
           error: 'cannot get document name'
         }
       })).pipe(delay(1000));
-    }else{
-      const documentName:StandardStringJSON = {
-        data: "Metroid Dread"
+    } else {
+      const documentName: StandardStringJSON = {
+        data: 'Metroid Dread'
       };
       return of(documentName).pipe(delay(1000));
     }
