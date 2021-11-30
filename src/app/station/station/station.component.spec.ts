@@ -26,6 +26,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { of } from 'rxjs';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
+import { PopupService } from '../../core/popup.service';
+import { MockPopupService } from '../../../mocks/mock-popup-service';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -61,7 +63,8 @@ describe('StationComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: UserService, useClass: MockUserService }
+        { provide: UserService, useClass: MockUserService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

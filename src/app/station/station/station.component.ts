@@ -4,11 +4,13 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo } from 'src/models';
+import { StationInformation, QuestionFieldType } from 'src/models';
+import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for viewing a station.
@@ -67,6 +69,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private documentService: DocumentService,
+    private popupService: PopupService
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control('')
@@ -205,7 +208,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * Save Station information and executed petitions to api.
    *
    */
-  saveStationInformation(): void {
+   saveStationInformation(): void {
     this.stationLoading = true;
     const petitionsUpdateStation = [
       // Update station Name.
@@ -263,4 +266,40 @@ export class StationComponent implements OnInit, OnDestroy {
   //     );
   //   });
   // }
+
+  /**
+   * Get previous and following stations.
+   *
+   */
+  getPreviousAndFollowingStations(): void {
+    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (prevAndFollowStations) => {
+          if (prevAndFollowStations) {
+            this.forwardStations = prevAndFollowStations.followingStations;
+            this.previousStations = prevAndFollowStations.previousStations;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
+  }
 }
