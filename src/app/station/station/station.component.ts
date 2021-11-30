@@ -62,6 +62,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Get station name from behaviour subject. */
   private stationName = '';
 
@@ -84,9 +87,9 @@ export class StationComponent implements OnInit, OnDestroy {
         this.drawerContext = context;
       });
 
-      this.stationService.stationName$
+    this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((stationName)=>{
+      .subscribe((stationName) => {
         this.stationName = stationName;
       });
   }
@@ -97,6 +100,7 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.getPreviousAndFollowingStations();
   }
 
   /**
@@ -119,6 +123,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
+            this.stationRithmId = params.stationId;
             this.getStationInfo(params.stationId);
           }
         }, error: (error: unknown) => {
@@ -280,9 +285,31 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get previous and following stations.
+   *
+   */
+  getPreviousAndFollowingStations(): void {
+    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (prevAndFollowStations) => {
+          if (prevAndFollowStations) {
+            this.forwardStations = prevAndFollowStations.followingStations;
+            this.previousStations = prevAndFollowStations.previousStations;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Update station name.
    */
-   updateStationName(): void {
+  updateStationName(): void {
     const nameStationChange = this.stationName;
     this.stationLoading = true;
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
@@ -302,12 +329,12 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Update station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  */
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
     this.stationService.updateStationQuestions(stationId, previousQuestion)
