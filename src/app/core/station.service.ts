@@ -1,10 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -114,13 +114,13 @@ export class StationService {
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
   }
 
- /**
-  * Update the station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  * @returns Station private/all updated previous questions array.
-  */
+  /**
+   * Update the station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   * @returns Station private/all updated previous questions array.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
     previousQuestion = [
       {
@@ -255,7 +255,7 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+  updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
   }
 
@@ -311,15 +311,15 @@ export class StationService {
   }
 
   /**
-   * Update station name.
+   * Updates a station name.
    *
-   * @returns The station name updated.
-   * @param newName The new name from station.
-   * @param stationRithmId The stationRithmId to send to service.
+   * @param name The new name for the station.
+   * @param stationRithmId The id of the station to rename.
+   * @returns The updated station name.
    */
-  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
-    const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
-    // eslint-disable-next-line max-len
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`,JSON.stringify(newName),{headers});
+  updateStationName(name: string, stationRithmId: string): Observable<string> {
+    const standardBody: StandardStringJSON = { data: name };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
+      .pipe(map((response) => response.data));
   }
 }

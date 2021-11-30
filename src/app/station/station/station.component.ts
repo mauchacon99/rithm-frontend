@@ -282,8 +282,8 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
       .pipe(first())
       .subscribe({
-        next: (stationNameUpdated) => {
-          this.stationInformation = stationNameUpdated;
+        next: (updatedStationName) => {
+          this.stationInformation.name = updatedStationName;
           this.stationLoading = false;
         },
         error: (error: unknown) => {
