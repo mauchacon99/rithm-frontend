@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
-  QuestionFieldType, StationDocuments, UserType, DocumentNameField
+  QuestionFieldType, StationDocuments, UserType, DocumentNameField, StandardStringJSON
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -439,6 +439,27 @@ export class MockDocumentService {
         },
       ];
       return of(documentFieldName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the document name
+   *
+   * @param documentId the specific id of document
+   * @return The document name
+   */
+  getDocumentName(documentId:String): Observable<StandardStringJSON> {
+    if(!documentId){
+      return throwError(()=> new HttpErrorResponse({
+        error:{
+          error: 'cannot get document name'
+        }
+      })).pipe(delay(1000));
+    }else{
+      const documentName:StandardStringJSON = {
+        data: "Metroid Dread"
+      };
+      return of(documentName).pipe(delay(1000));
     }
   }
 }
