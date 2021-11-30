@@ -216,20 +216,17 @@ describe('StationService', () => {
   });
 
   it('should return the status of the specific document once the status is updated', () => {
-    const statusNew = DocumentGenerationStatus.Manual;
-    const paramsExpected = {
-      generatorStatus: statusNew
-    };
-    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+    const status = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, status)
       .subscribe((response) => {
-        expect(response).toEqual(statusNew);
+        expect(response).toEqual(status);
       });
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(paramsExpected);
+    expect(req.request.body).toEqual({ data: status });
 
-    req.flush(statusNew);
+    req.flush({ data: status });
     httpTestingController.verify();
   });
 

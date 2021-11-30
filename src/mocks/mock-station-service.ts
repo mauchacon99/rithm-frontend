@@ -196,11 +196,11 @@ export class MockStationService {
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return of(statusNew).pipe(delay(1000));
+   updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(status).pipe(delay(1000));
   }
 
   /**

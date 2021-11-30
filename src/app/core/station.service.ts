@@ -87,17 +87,13 @@ export class StationService {
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  // eslint-disable-next-line max-len
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return this.http.put(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
-      {
-        generatorStatus: statusNew
-      },
-      { responseType: 'text' }
-    ).pipe(map(value => value as DocumentGenerationStatus));
+  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    const standardBody = { data: status };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
+      standardBody).pipe(map(response => response.data as DocumentGenerationStatus));
   }
 
   /**
