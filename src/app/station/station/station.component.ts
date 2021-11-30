@@ -291,9 +291,7 @@ export class StationComponent implements OnInit, OnDestroy {
             this.forwardStations = prevAndFollowStations.followingStations;
             this.previousStations = prevAndFollowStations.previousStations;
           }
-          this.stationLoading = false;
         }, error: (error: unknown) => {
-          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
