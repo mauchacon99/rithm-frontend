@@ -601,7 +601,7 @@ describe('StationService', () => {
   });
 
   it('should return the previous and following stations', () => {
-    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const expectedResponse: ForwardPreviousStationsDocument = {
       rithmId: stationRithmId,
       previousStations: [
@@ -635,7 +635,7 @@ describe('StationService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationId}`);
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationRithmId}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
