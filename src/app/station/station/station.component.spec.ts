@@ -140,7 +140,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
-  it('should cancel to station', async () => {
+  it('should open confirmation popup when canceling', async () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
       message: 'Your changes will be lost and you will return to the dashboard.',
@@ -153,7 +153,7 @@ describe('StationComponent', () => {
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 
-  it('should show popup confirm to clicked button to cancel', () => {
+  it('should show popup confirm when cancel button is clicked', () => {
     const methodCalled = spyOn(component, 'cancelStation');
     const btnCancel = fixture.debugElement.nativeElement.querySelector('#station-cancel');
     expect(btnCancel).toBeTruthy();
@@ -161,7 +161,7 @@ describe('StationComponent', () => {
     expect(methodCalled).toHaveBeenCalled();
   });
 
-  it('should return to dashboard how clicked button to cancel station to popup confirm', async () => {
+  it('should return to dashboard after confirming to cancel changes', async () => {
     const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     await component.cancelStation();
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
