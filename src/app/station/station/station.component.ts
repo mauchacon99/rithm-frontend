@@ -208,7 +208,7 @@ export class StationComponent implements OnInit, OnDestroy {
    * Save Station information and executed petitions to api.
    *
    */
-   saveStationInformation(): void {
+  saveStationInformation(): void {
     this.stationLoading = true;
     const petitionsUpdateStation = [
       // Update station Name.
