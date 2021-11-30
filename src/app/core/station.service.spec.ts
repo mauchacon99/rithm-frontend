@@ -211,25 +211,22 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
-    req.flush(expectedResponse);
+    req.flush({ data: expectedResponse });
     httpTestingController.verify();
   });
 
   it('should return the status of the specific document once the status is updated', () => {
-    const statusNew = DocumentGenerationStatus.Manual;
-    const paramsExpected = {
-      generatorStatus: statusNew
-    };
-    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+    const status = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, status)
       .subscribe((response) => {
-        expect(response).toEqual(statusNew);
+        expect(response).toEqual(status);
       });
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(paramsExpected);
+    expect(req.request.body).toEqual({ data: status });
 
-    req.flush(statusNew);
+    req.flush({ data: status });
     httpTestingController.verify();
   });
 
@@ -665,14 +662,16 @@ describe('StationService', () => {
       priority: 2
     };
 
-    service.updateStationName(newName, station.rithmId)
+    service.updateStationName(newName, station.rithmId);
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    service.updateStationName(newName, stationRithmId)
       .subscribe((response) => {
-        expect(response).toBe(station);
+        expect(response).toBe(newName);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(JSON.stringify(newName));
-    req.flush(station);
+    expect(req.request.body).toEqual({ data: newName });
+    req.flush({ data: newName });
     httpTestingController.verify();
   });
 
