@@ -139,6 +139,30 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
+  it('should make a request when save button is clicked', () => {
+    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
+    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
+    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
+    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
+
+    button.click();
+
+    expect(spyFunctionSave).toHaveBeenCalled();
+    expect(spyUpdateStationName).toHaveBeenCalled();
+    expect(spyUpdateAppendedFields).toHaveBeenCalled();
+    expect(spyUpdateStationQuestions).toHaveBeenCalled();
+  });
+
+  it('should validate the form controls initial value', () => {
+    const form = component.stationForm.controls;
+
+    const expectFormFirst = ['stationTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['stationTemplateForm'].value).toBe('');
+  });
+
   it('should show loading indicator while getting the station data', () => {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     (<any>component).getStationInfo(component.stationInformation.rithmId);
@@ -164,21 +188,6 @@ describe('StationComponent', () => {
     expect(spyUpdateStationQuestions).toHaveBeenCalledOnceWith(component.stationInformation.rithmId, []);
   });
 
-  it('should make a request when save button is clicked', () => {
-    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
-    const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
-    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
-    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
-
-    button.click();
-
-    expect(spyFunctionSave).toHaveBeenCalled();
-    expect(spyUpdateStationName).toHaveBeenCalled();
-    expect(spyUpdateAppendedFields).toHaveBeenCalled();
-    expect(spyUpdateStationQuestions).toHaveBeenCalled();
-  });
-
   it('should navigate the user back to the dashboard page and show error', () => {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const spyNavigate = spyOn((<any>component), 'navigateBack');
@@ -189,15 +198,6 @@ describe('StationComponent', () => {
 
     expect(spyNavigate).toHaveBeenCalled();
     expect(spyError).toHaveBeenCalled();
-  });
-
-  it('should validate the form controls initial value', () => {
-    const form = component.stationForm.controls;
-
-    const expectFormFirst = ['stationTemplateForm'];
-
-    expect(Object.keys(form)).toEqual(expectFormFirst);
-    expect(form['stationTemplateForm'].value).toBe('');
   });
 
   it('should set stationId param as null and redirect to dashboard', () => {
