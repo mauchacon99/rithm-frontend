@@ -13,4 +13,7 @@ export interface StationInfoDrawerData {
 
   /** Mode Edit. */
   editMode: boolean;
+
+  /** Whether the station has been created locally and doesn't yet exist (used for the map). */
+  locallyCreated: boolean;
 }
