@@ -637,6 +637,13 @@ describe('StationService', () => {
       .subscribe((prevAndFollowStations) => {
         expect(prevAndFollowStations).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
 
