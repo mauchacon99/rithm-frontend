@@ -161,11 +161,11 @@ describe('StationComponent', () => {
 
   it('should validate the form controls initial value', () => {
     const form = component.stationForm.controls;
-
-    const expectFormFirst = ['stationTemplateForm'];
+    const expectFormFirst = ['stationTemplateForm', 'generalInstructions'];
 
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
+    expect(form['generalInstructions'].value).toBe('');
   });
 
   it('should return success when update station general instruction', () => {
