@@ -4,7 +4,7 @@ import {
   NG_VALUE_ACCESSOR, NG_VALIDATORS,
   ValidationErrors, Validator
 } from '@angular/forms';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
 
 /**
  * Component for the list of fields on the station template.
@@ -33,18 +33,6 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
 
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
-
-  /** The general instructions field. */
-  readonly stationInstructionsField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
-    prompt: 'General Instructions',
-    instructions: '',
-    questionType: QuestionFieldType.LongText,
-    isReadOnly: false,
-    isRequired: false,
-    isPrivate: false,
-    children: [],
-  };
 
   constructor(
     private fb: FormBuilder

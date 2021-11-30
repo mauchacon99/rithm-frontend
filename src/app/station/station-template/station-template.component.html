@@ -1,7 +1,4 @@
 <ng-container [formGroup]="stationTemplateForm">
-  <div class="mt-2">
-    <app-text-field [field]="stationInstructionsField"></app-text-field>
-  </div>
   <div class="w-full">
     <app-station-field *ngFor="let field of fields; let i = index" formControlName="stationFieldForm" [field]="field"
       [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" (move)="move($event, i)" (remove)="remove(i)"></app-station-field>

@@ -152,5 +152,4 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   removeField(field: Question): void {
     this.removeOptionField.emit(field);
   }
-
 }
