@@ -53,6 +53,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Get station name from behaviour subject. */
   private stationName = '';
 
@@ -88,6 +91,7 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.getPreviousAndFollowingStations();
   }
 
   /**
@@ -110,6 +114,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
+            this.stationRithmId = params.stationId;
             this.getStationInfo(params.stationId);
           }
         }, error: (error: unknown) => {
