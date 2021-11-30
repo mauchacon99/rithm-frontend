@@ -24,7 +24,6 @@ import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
 
-
 @NgModule({
   declarations: [
     PasswordRequirementsComponent,
@@ -53,7 +52,7 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     MatCardModule,
     MatMenuModule,
     MatTooltipModule,
-    MatBadgeModule,
+    MatBadgeModule
   ],
   exports: [
     LoadingIndicatorComponent,

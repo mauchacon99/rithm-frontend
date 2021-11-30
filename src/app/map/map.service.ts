@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
@@ -89,7 +89,7 @@ export class MapService {
         });
         this.mapData = data;
         this.useStationData();
-        if (!environment.production && !environment.testing) {
+        if (environment.name === EnvironmentName.Dev || environment.name === EnvironmentName.Test) {
           this.validateMapData();
         }
         this.mapDataReceived$.next(true);
@@ -330,7 +330,7 @@ export class MapService {
    * @returns The x-coordinate for the canvas.
    */
   getCanvasX(mapX: number): number {
-    return Math.floor((mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value);
+    return (mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value;
   }
 
   /**
@@ -340,7 +340,7 @@ export class MapService {
    * @returns The y-coordinate for the canvas.
    */
   getCanvasY(mapY: number): number {
-    return Math.floor((mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value);
+    return (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value;
   }
 
   /**
@@ -393,8 +393,32 @@ export class MapService {
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
+    this.validateConnections();
     this.validateStationsBelongToExactlyOneFlow();
     this.validateFlowsBelongToExactlyOneFlow();
+  }
+
+  /**
+   * Validates that all connections exist and are made in both origin station and destination station.
+   */
+  private validateConnections(): void {
+    for (const station of this.stationElements) {
+      for (const outgoingStationId of station.nextStations) {
+        const outgoingConnectedStation = this.stationElements.find((stationElement) => stationElement.rithmId === outgoingStationId);
+        if (!outgoingConnectedStation) {
+          // eslint-disable-next-line no-console
+          console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
+           but no station element was found with that id.`);
+        } else {
+          if (!outgoingConnectedStation.previousStations.includes(station.rithmId)) {
+            // eslint-disable-next-line no-console
+            console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
+              ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
+              previous stations.`);
+          }
+        }
+      }
+    }
   }
 
   /**

@@ -2,9 +2,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -13,6 +12,9 @@ export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
+
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /**
    * Gets a station information.
@@ -194,11 +196,11 @@ export class MockStationService {
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return of(statusNew).pipe(delay(1000));
+   updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(status).pipe(delay(1000));
   }
 
   /**
@@ -232,6 +234,39 @@ export class MockStationService {
       },
     ];
     return of(mockPrevQuestions).pipe(delay(1000));
+  }
+
+ /**
+  * Update all station previous private/all questions.
+  *
+  * @param stationId The Specific id of station.
+  * @param previousQuestion The Specific previous question of station.
+  * @returns Station private/all save the questions array.
+  */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    previousQuestion = [
+      {
+        prompt: 'Example question#1',
+        instructions: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        instructions: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(previousQuestion).pipe(delay(1000));
   }
 
   /**
@@ -500,6 +535,16 @@ export class MockStationService {
     return of(expectedResponse).pipe(delay(1000));
   }
 
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
+  }
+
   /**
    * Returns the station name.
    *
@@ -507,5 +552,24 @@ export class MockStationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Updates a station name.
+   *
+   * @param name The new name for the station.
+   * @param stationRithmId The id of the station to rename.
+   * @returns The updated station name.
+   */
+   updateStationName(name: string, stationRithmId: string): Observable<string> {
+    if (!stationRithmId || name === '') {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station name without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of(name).pipe(delay(1000));
+    }
   }
 }

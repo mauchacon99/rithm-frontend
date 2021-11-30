@@ -6,13 +6,16 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -35,8 +38,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
-  /** Checks if map should be automatically panning without active user input. */
-  private autoPanning = false;
+  /** Checks if automatic pan is triggered by being outside the bounding box. */
+  private outsideBox = false;
+
+  /** Checks if automatic pan is triggered by a fast map drag. */
+  private fastDrag = false;
+
+  /** Used to check if a fast drag should be cancelled. */
+  private holdDrag = false;
 
   /**Flag for auto pan checks. */
   private panActive?: boolean;
@@ -94,7 +103,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sidenavDrawerService: SidenavDrawerService,
+    private stationService: StationService,
+    private popupService: PopupService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -137,7 +149,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.currentMousePoint = point;
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
-          this.autoPanning = !(velocity.x === 0 && velocity.y === 0);
+          this.outsideBox = !(velocity.x === 0 && velocity.y === 0);
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
@@ -473,6 +485,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles user input when a key is pressed. Used for zoom in and zoom out.
+   *
+   * @param event The keyboard event that was triggered.
+   */
+  @HostListener('document:keypress', ['$event'])
+  keyPress(event: KeyboardEvent): void {
+    if (event.key === '+' || event.key === '=' || event.key === '-') {
+      this.mapService.matMenuStatus$.next(true);
+      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
+      this.mapService.handleZoom(undefined, false);
+    }
+  }
+
+  /**
    * Handles user input when a mouse wheel is scrolled. Used for zoom.
    *
    * @param event The wheel event that was triggered.
@@ -545,15 +571,33 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * //TODO: Allow use when middle wheel is active.
    */
   private checkAutoPan(): void {
-    if (!this.panActive && (this.autoPanning === true && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+    if (!this.panActive && (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
+      this.panActive = true;
       const step = (): void => {
-        this.panActive = true;
         this.autoMapPan(this.nextPanVelocity);
-        if (this.autoPanning && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
+        if (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
           this.myReq = requestAnimationFrame(step);
         } else {
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
+        }
+      };
+      this.myReq = requestAnimationFrame(step);
+    }
+
+    if (!this.panActive && this.fastDrag) {
+      this.panActive = true;
+      const step = (): void => {
+        this.autoMapPan(this.nextPanVelocity);
+        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1 ) {
+          this.nextPanVelocity = {x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE};
+          this.myReq = requestAnimationFrame(step);
+        } else {
+          cancelAnimationFrame(this.myReq as number);
+          this.panActive = false;
+          this.fastDrag = false;
+          this.nextPanVelocity = { x: 0, y: 0 };
+          this.mapService.currentCanvasPoint$.next(this.currentCanvasPoint);
         }
       };
       this.myReq = requestAnimationFrame(step);
@@ -717,6 +761,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventStartLogic(position: Point) {
+    if (this.panActive) {
+      cancelAnimationFrame(this.myReq as number);
+      this.panActive = false;
+      this.fastDrag = false;
+      this.nextPanVelocity = { x: 0, y: 0 };
+    }
+
     // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
@@ -760,10 +811,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventEndLogic(position: Point) {
+    this.holdDrag = false;
+
     // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
+
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
       if (this.mapMode === MapMode.StationAdd) {
@@ -780,7 +834,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //Check if click was over document badge.
       this.clickEventHandler(position);
+    }
 
+    //If dragging the map.
+    if (this.dragItem === MapDragItem.Map) {
+      //Check if nextPanVelocity is great enough to trigger autoPan.
+      if ( this.fastDrag ) {
+        this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
+        this.checkAutoPan();
+      } else {
+        this.nextPanVelocity = { x: 0, y: 0 };
+      }
     }
 
     //If dragging a connection node.
@@ -850,15 +914,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param moveInput The point of movement.
    */
   private singleInputMoveLogic(moveInput: Point) {
-    const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
-    const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
-
     if (this.dragItem === MapDragItem.Map) {
+      const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
+      const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
+
       this.mapCanvas.nativeElement.style.cursor = 'move';
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
+      this.nextPanVelocity = {x: -moveAmountX, y: -moveAmountY};
+      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT ) {
+        this.fastDrag = true;
+        this.holdDrag = true;
+        setTimeout(() => {
+          if (this.holdDrag) {
+            this.fastDrag = false;
+            this.nextPanVelocity = { x: 0, y: 0 };
+          }
+        }, 100);
+      }
     } else if (this.dragItem === MapDragItem.Station) {
+      const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
+      const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
+
       for (const station of this.stations) {
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
@@ -912,19 +990,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const yBeginDiff = Math.abs(this.lastTouchCoords[0].y - this.lastTouchCoords[1].y);
     const xCurrentDiff = Math.abs(position[0].x - position[1].x);
     const yCurrentDiff = Math.abs(position[0].y - position[1].y);
-    const averageDiff = Math.floor((xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff) / 2);
+    const averageStart = Math.floor((xBeginDiff + yBeginDiff) / 2);
+    const averageEnd = Math.floor((xCurrentDiff + yCurrentDiff) / 2);
+    const averageDiff = Math.floor(((xCurrentDiff - xBeginDiff) + (yCurrentDiff - yBeginDiff)) / 2);
 
     const middlePoint = {
       x: (position[0].x + position[1].x) / 2,
       y: (position[0].y + position[1].y) / 2
     };
 
-    if (xCurrentDiff > xBeginDiff || yCurrentDiff > yBeginDiff) {
+    if (averageEnd > averageStart) {
       // Zoom in
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
       this.mapService.handleZoom(middlePoint, true);
-    } else if (xCurrentDiff < xBeginDiff || yCurrentDiff < yBeginDiff) {
+    } else if (averageEnd < averageStart) {
       // Zoom out
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
@@ -939,6 +1019,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private clickEventHandler(point: Point) {
     const scaledStationWidth = STATION_WIDTH * this.scale;
+    const scaledStationHeight = STATION_HEIGHT * this.scale;
 
     const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
     const scaledBadgeMargin = BADGE_MARGIN * this.scale;
@@ -974,6 +1055,43 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
+      if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
+          && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
+            this.popupService.prompt({
+              title: 'Rename Station',
+              message: 'Please provide a name for this station',
+              promptLabel: 'Station name',
+              promptValue: station.stationName
+            }).then((newName) => {
+              if (newName) {
+                station.stationName = newName;
+                this.drawElements();
+              }
+            });
+          //   const stationDataInfo: StationInformation = {
+          //     rithmId: station.rithmId,
+          //     name: '',
+          //     instructions: '',
+          //     nextStations: [],
+          //     previousStations: [],
+          //     stationOwners: [],
+          //     workers: [],
+          //     createdByRithmId: '',
+          //     createdDate: '',
+          //     updatedByRithmId: '',
+          //     updatedDate: '',
+          //     questions: [],
+          //     priority: 1
+          //   };
+          // const dataInformationDrawer: StationInfoDrawerData = {
+          //   stationInformation: stationDataInfo,
+          //   stationName: station.stationName,
+          //   editMode: this.mapMode === MapMode.Build,
+          //   locallyCreated: station.status === MapItemStatus.Created
+          // };
+          // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+          // this.stationService.updatedStationNameText(station.stationName);
+        }
     }
   }
 

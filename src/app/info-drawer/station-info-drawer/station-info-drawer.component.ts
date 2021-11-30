@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
-import { PopupService } from '../../core/popup.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 
 /**
@@ -83,6 +83,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationName = dataDrawer.stationName;
         }
       });
+
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
       name: [this.stationName]
@@ -108,7 +109,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
-
   }
 
   /**
