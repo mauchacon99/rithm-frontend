@@ -83,6 +83,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationName = dataDrawer.stationName;
         }
       });
+
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
       name: [this.stationName]
