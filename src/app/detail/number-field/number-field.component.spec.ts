@@ -12,7 +12,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 5',
-    instructions: 'Fake question 5',
     questionType: QuestionFieldType.Number,
     isReadOnly: false,
     isRequired: true,
@@ -22,7 +21,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 6',
-    instructions: '',
     questionType: QuestionFieldType.Phone,
     isReadOnly: false,
     isRequired: false,
@@ -32,7 +30,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 7',
-    instructions: '',
     questionType: QuestionFieldType.Currency,
     isReadOnly: false,
     isRequired: true,
@@ -149,7 +146,6 @@ describe('NumberFieldComponent', () => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Postal code',
-        instructions: '',
         questionType: QuestionFieldType.Zip,
         isReadOnly: false,
         isRequired: true,
