@@ -9,7 +9,6 @@ import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
 import { MockStationService } from 'src/mocks';
 import { QuestionFieldType } from 'src/models';
-
 import { StationFieldComponent } from './station-field.component';
 
 describe('StationFieldComponent', () => {
