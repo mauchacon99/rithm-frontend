@@ -190,11 +190,11 @@ export class MockStationService {
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return of(statusNew).pipe(delay(1000));
+  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(status).pipe(delay(1000));
   }
 
   /**
@@ -589,76 +589,18 @@ export class MockStationService {
    * Update station name.
    *
    * @returns The station name updated.
-   * @param newName The new name from station.
+   * @param name The new name from station.
    * @param stationRithmId The stationRithmId to send to service.
    */
-  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
-    if (!stationRithmId || newName === '') {
+  updateStationName(name: string, stationRithmId: string): Observable<string> {
+    if (!stationRithmId || name === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update station name without defining a station.'
         }
       })).pipe(delay(1000));
     } else {
-      const data: StationInformation = {
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        name: 'New Station Name',
-        instructions: '',
-        nextStations: [{
-          name: 'Development',
-          rithmId: '123-654-789',
-          totalDocuments: 5,
-          isGenerator: true
-        }],
-        previousStations: [{
-          name: 'Station-1',
-          rithmId: '987-456-321',
-          totalDocuments: 2,
-          isGenerator: true
-        }, {
-          name: 'Station-2',
-          rithmId: '753-951-754',
-          totalDocuments: 0,
-          isGenerator: false
-        }],
-        stationOwners: [{
-          rithmId: '',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }, {
-          rithmId: '',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }],
-        workers: [{
-          rithmId: '',
-          firstName: 'Harry',
-          lastName: 'Potter',
-          email: 'harrypotter@inpivota.com',
-          isWorker: false,
-          isOwner: false
-        }, {
-          rithmId: '',
-          firstName: 'Supervisor',
-          lastName: 'User',
-          email: 'supervisoruser@inpivota.com',
-          isWorker: true,
-          isOwner: false
-        }],
-        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-        createdDate: '2021-07-16T17:26:47.3506612Z',
-        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-        updatedDate: '2021-07-18T17:26:47.3506612Z',
-        questions: [],
-        priority: 2
-      };
-      return of(data).pipe(delay(1000));
+      return of(name).pipe(delay(1000));
     }
   }
 }

@@ -134,7 +134,8 @@ describe('StationInfoHeaderComponent', () => {
     const stationInfoDrawer: StationInfoDrawerData = {
       stationInformation: component.stationInformation as StationInformation,
       stationName: component.stationName,
-      editMode: component.stationEditMode
+      editMode: component.stationEditMode,
+      locallyCreated: false
     };
     const infoDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     const stationSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText');

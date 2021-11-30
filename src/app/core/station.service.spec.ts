@@ -207,25 +207,22 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
-    req.flush(expectedResponse);
+    req.flush({ data: expectedResponse });
     httpTestingController.verify();
   });
 
   it('should return the status of the specific document once the status is updated', () => {
-    const statusNew = DocumentGenerationStatus.Manual;
-    const paramsExpected = {
-      generatorStatus: statusNew
-    };
-    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+    const status = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, status)
       .subscribe((response) => {
-        expect(response).toEqual(statusNew);
+        expect(response).toEqual(status);
       });
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(paramsExpected);
+    expect(req.request.body).toEqual({ data: status });
 
-    req.flush(statusNew);
+    req.flush({ data: status });
     httpTestingController.verify();
   });
 
@@ -645,72 +642,15 @@ describe('StationService', () => {
 
   it('should update the station name', () => {
     const newName = 'Edited Station Name';
-    const station: StationInformation = {
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      name: 'New Station Name',
-      instructions: '',
-      nextStations: [{
-        name: 'Development',
-        rithmId: '123-654-789',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        name: 'Station-1',
-        rithmId: '987-456-321',
-        totalDocuments: 2,
-        isGenerator: true
-      }, {
-        name: 'Station-2',
-        rithmId: '753-951-754',
-        totalDocuments: 0,
-        isGenerator: false
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: false,
-        isOwner: true
-      }, {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isWorker: false,
-        isOwner: true
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: false,
-        isOwner: false
-      }, {
-        rithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-      createdDate: '2021-07-16T17:26:47.3506612Z',
-      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-      updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: [],
-      priority: 2
-    };
-    service.updateStationName(newName, station.rithmId)
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    service.updateStationName(newName, stationRithmId)
       .subscribe((response) => {
-        expect(response).toBe(station);
+        expect(response).toBe(newName);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(JSON.stringify(newName));
-    req.flush(station);
+    expect(req.request.body).toEqual({ data: newName });
+    req.flush({ data: newName });
     httpTestingController.verify();
   });
 });

@@ -116,6 +116,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       return this.sidenavDrawerService.drawerHasBackdrop;
     }
 
+  /** Whether the called info-drawer is documentInfo type or stationInfo. */
+  drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
+
   constructor(
     private mapService: MapService,
     private popupService: PopupService,
@@ -171,6 +174,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.mapService.matMenuStatus$.next(false);
         }
       });
+      this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (data === 'connectionInfo' || data === 'stationInfo') {
+          this.drawerMode = data;
+        }
+      }
+      );
   }
 
   /**
