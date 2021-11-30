@@ -76,18 +76,15 @@ describe('StationComponent', () => {
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '741-258-963'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '963-258-741'
       }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
+        name: 'Station-2',
+        rithmId: '951-753-987'
       }],
       stationOwners: [{
         rithmId: '',
@@ -148,5 +145,12 @@ describe('StationComponent', () => {
     const updateGeneralInstructionSpy = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
     component.updateStationGeneralInstructions();
     expect(updateGeneralInstructionSpy).toHaveBeenCalledOnceWith(stationId, generalInstructions);
+  });
+
+  it('should get previous and following stations', () => {
+    component.stationRithmId = component.stationInformation.rithmId;
+    const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
+    component.getPreviousAndFollowingStations();
+    expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 });

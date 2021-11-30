@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -324,16 +324,19 @@ export class StationService {
         name: 'Current Station Name',
         instructions: 'New Instructions for current Station',
         nextStations: [{
-          stationName: 'Development',
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
           totalDocuments: 5,
           isGenerator: true
         }],
         previousStations: [{
-          stationName: 'Station-1',
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
           totalDocuments: 2,
           isGenerator: true
         }, {
-          stationName: 'Station-2',
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+          name: 'Station-2',
           totalDocuments: 0,
           isGenerator: false
         }],
@@ -380,6 +383,43 @@ export class StationService {
 
   /**
    * Update station name.
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   * @returns Previous and following stations.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const data: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1',
+          totalDocuments: 5
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2',
+          totalDocuments: 2
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1',
+          totalDocuments: 2
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2',
+          totalDocuments: 1
+        }
+      ]
+    };
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
    * Updates a station name.
    *
    * @param name The new name for the station.

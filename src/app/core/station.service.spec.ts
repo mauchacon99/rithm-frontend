@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -102,14 +102,12 @@ describe('StationService', () => {
       name: 'Station Name',
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-321-654'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '159-357-761'
       }],
       stationOwners: [{
         rithmId: '',
@@ -140,14 +138,12 @@ describe('StationService', () => {
       name: station.name,
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-869-742'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '258-635-412'
       }],
       stationOwners: [{
         rithmId: '',
@@ -604,6 +600,42 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should return the previous and following stations', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1',
+          totalDocuments: 5
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2',
+          totalDocuments: 2
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1',
+          totalDocuments: 2
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2',
+          totalDocuments: 1
+        }
+      ]
+    };
+    service.getPreviousAndFollowingStations(stationRithmId)
+      .subscribe((prevAndFollowStations) => {
+        expect(prevAndFollowStations).toEqual(expectedResponse);
+      });
+  });
+
+
   it('should update the station name', () => {
     const newName = 'Edited Station Name';
     const station: StationInformation = {
@@ -611,16 +643,19 @@ describe('StationService', () => {
       name: 'New Station Name',
       instructions: '',
       nextStations: [{
-        stationName: 'Development',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
         totalDocuments: 5,
         isGenerator: true
       }],
       previousStations: [{
-        stationName: 'Station-1',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
         totalDocuments: 2,
         isGenerator: true
       }, {
-        stationName: 'Station-2',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
         totalDocuments: 0,
         isGenerator: false
       }],
@@ -682,16 +717,19 @@ describe('StationService', () => {
       name: 'Current Station Name',
       instructions: 'New Instructions for current Station',
       nextStations: [{
-        stationName: 'Development',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
         totalDocuments: 5,
         isGenerator: true
       }],
       previousStations: [{
-        stationName: 'Station-1',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
         totalDocuments: 2,
         isGenerator: true
       }, {
-        stationName: 'Station-2',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
         totalDocuments: 0,
         isGenerator: false
       }],

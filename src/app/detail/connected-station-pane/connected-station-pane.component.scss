@@ -1,7 +1,5 @@
 aside {
-  @apply flex flex-col justify-center;
-
-  height: calc(100vh - 110px);
+  @apply flex flex-col justify-center h-full;
 
   &.left {
     @apply items-end;
@@ -9,5 +7,10 @@ aside {
 
   &.right {
     @apply items-start;
+  }
+
+  /* stylelint-disable-next-line */
+  &.overflow-y-scroll-none::-webkit-scrollbar {
+    @apply hidden;
   }
 }
