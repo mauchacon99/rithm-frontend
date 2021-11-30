@@ -15,10 +15,10 @@ import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/s
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockDocumentService, MockErrorService, MockStationService } from 'src/mocks';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
-import { StationTemplateComponent } from '../station-template/station-template.component';
+import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
 import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -29,6 +29,8 @@ import { PopupService } from '../../core/popup.service';
 import { MockPopupService } from '../../../mocks/mock-popup-service';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { Router } from '@angular/router';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -51,6 +53,8 @@ describe('StationComponent', () => {
       ],
       imports: [
         NoopAnimationsModule,
+        MatInputModule,
+        MatFormFieldModule,
         RouterTestingModule.withRoutes(
           [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
         ),
@@ -162,6 +166,16 @@ describe('StationComponent', () => {
 
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
+  });
+
+  it('should return success when update station general instruction', () => {
+    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const generalInstructions = 'New Instructions for current Station';
+    component.stationForm.controls.generalInstructions.setValue(generalInstructions);
+    fixture.detectChanges();
+    const updateGeneralInstructionSpy = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
+    component.updateStationGeneralInstructions();
+    expect(updateGeneralInstructionSpy).toHaveBeenCalledOnceWith(stationId, generalInstructions);
   });
 
   it('should get previous and following stations', () => {

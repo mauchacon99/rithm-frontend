@@ -26,6 +26,15 @@
               </ng-template>
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
+                <div class="mt-2">
+                  <mat-form-field class="w-full long-text" appearance="outline">
+                    <mat-label>General Instructions</mat-label>
+                    <div matPrefix class="icon">
+                      <i class="fas fa-paragraph"></i>
+                    </div>
+                    <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3" spellcheck="true" formControlName="generalInstructions"></textarea>
+                  </mat-form-field>
+                </div>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>

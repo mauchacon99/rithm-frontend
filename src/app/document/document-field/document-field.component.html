@@ -1,7 +1,4 @@
 <ng-container [formGroup]="documentFieldForm">
-  <p *ngIf="field.instructions">
-    {{field.instructions}}
-  </p>
 
   <app-text-field *ngIf="
   field.questionType === fieldTypes.ShortText ||
