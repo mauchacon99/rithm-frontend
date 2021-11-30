@@ -62,6 +62,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
+  /** Is station created locally in map. */
+  locallyCreated = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -75,12 +78,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((data: any) => {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
-          this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
+          this.editMode = data.editMode;
+          this.locallyCreated = data.locallyCreated;
         }
       });
 
