@@ -49,16 +49,10 @@ export class ConnectionMapElement {
   constructor(connectionStartStation: StationMapElement, connectionEndStation: StationMapElement, scale: number) {
     this.startStationName = connectionStartStation.stationName;
     this.startStationRithmId = connectionStartStation.rithmId;
-    this.startPoint = {
-      x: connectionStartStation.canvasPoint.x + STATION_WIDTH * scale,
-      y: connectionStartStation.canvasPoint.y + STATION_HEIGHT * scale / 2
-    };
+    this.setStartPoint(connectionStartStation.canvasPoint, scale);
     this.endStationName = connectionEndStation.stationName;
     this.endStationRithmId = connectionEndStation.rithmId;
-    this.endPoint = {
-      x: connectionEndStation.canvasPoint.x,
-      y: connectionEndStation.canvasPoint.y + STATION_HEIGHT * scale / 2
-    };
+    this.setEndPoint(connectionEndStation.canvasPoint, scale);
     this.path = this.getConnectionLine(this.startPoint, this.endPoint, scale);
     this.hoverActive = false;
   }
@@ -75,6 +69,32 @@ export class ConnectionMapElement {
     } else {
       this.hoverActive = false;
     }
+  }
+
+  /**
+   * Sets the startPoint for a connection.
+   *
+   * @param point The point given.
+   * @param scale The current map scale.
+   */
+  setStartPoint(point: Point, scale: number): void {
+    this.startPoint = {
+      x: point.x + STATION_WIDTH * scale,
+      y: point.y + STATION_HEIGHT * scale / 2
+    };
+  }
+
+  /**
+   * Sets the endPoint for a connection.
+   *
+   * @param point The point given.
+   * @param scale The current map scale.
+   */
+  setEndPoint(point: Point, scale: number): void {
+    this.endPoint = {
+      x: point.x,
+      y: point.y + STATION_HEIGHT * scale / 2
+    };
   }
 
   /**

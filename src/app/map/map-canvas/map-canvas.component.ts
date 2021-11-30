@@ -135,6 +135,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
         this.flows = this.mapService.flowElements;
+        this.connections = this.mapService.connectionElements;
         this.drawElements();
       });
 
@@ -619,10 +620,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width / pixelRatio, this.mapCanvas.nativeElement.height / pixelRatio);
 
-      // Calculate the station canvas points
-      this.stations.forEach((station) => {
-        station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
-      });
+      //Update station and connection positions.
+      this.mapService.updateStationCanvasPoints();
 
       // Draw the flows
       this.flowElementService.drawFlows();

@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
-  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
+  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,7 +36,7 @@ export class MapService {
   flowElements: FlowMapElement[] = [];
 
   /** Data for connection line path between stations. */
-  connections: ConnectionMapElement[] = [];
+  connectionElements: ConnectionMapElement[] = [];
 
   /** An array that stores a backup of flowElements when buildMap is called. */
   storedFlowElements: FlowMapElement[] = [];
@@ -107,6 +107,18 @@ export class MapService {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
     this.setConnections();
+    this.updateStationCanvasPoints();
+  }
+
+  /**
+   * Update the canvas points for each station.
+   */
+  updateStationCanvasPoints(): void {
+    this.stationElements.forEach((station) => {
+      station.canvasPoint = this.getCanvasPoint(station.mapPoint);
+      //Update the connection lines as the stations are updated.
+      this.updateConnection(station);
+    });
   }
 
   /**
@@ -114,9 +126,34 @@ export class MapService {
    */
   setConnections(): void {
     //TODO: add unit testing for this method.
-    // for (station of this.stationElements) {
+    for (const station of this.stationElements) {
+      for (const connection of station.nextStations) {
+        const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
 
-    // }
+        const lineInfo: ConnectionMapElement = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
+
+        if (!this.connectionElements.includes(lineInfo)) {
+          this.connectionElements.push(lineInfo);
+        }
+      }
+    }
+  }
+
+  /**
+   * Update connection information.
+   *
+   * @param station The station that is being updated.
+   */
+  updateConnection(station: StationMapElement): void {
+    for (const connection of this.connectionElements) {
+      if (connection.startStationRithmId === station.rithmId) {
+        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      if (connection.endStationRithmId === station.rithmId) {
+        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      connection.path = connection.getConnectionLine(connection.startPoint, connection.endPoint, this.mapScale$.value);
+    }
   }
 
   /**
