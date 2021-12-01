@@ -37,10 +37,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Document name form. */
   documentNameForm: FormGroup;
 
-
-  /** Whether the Station allows edit document name or not. */
-  isDocumentNameEditable!: boolean;
-
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -68,7 +64,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
     this.getAppendedFieldsOnDocumentName(this.rithmId);
-    this.getStatusDocumentEditable();
   }
 
   /**
@@ -178,28 +173,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
      this.documentAppendedFields.splice(removeStartIndex,2);
      this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
    }
-
-  /**
-   * Get the station document name editable status.
-   *
-   */
-   getStatusDocumentEditable(): void {
-     const stationRithmId = 'stationRithmId' in this.documentInformation
-     ? this.documentInformation.stationRithmId
-     : this.documentInformation.rithmId;
-    this.stationService.getStatusDocumentEditable(stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (editableStatus) => {
-            this.isDocumentNameEditable = editableStatus;
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
 
   /**
    * Completes all subscriptions.

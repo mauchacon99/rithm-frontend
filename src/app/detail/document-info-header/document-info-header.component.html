@@ -26,18 +26,13 @@
   </div>
 
   <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">
-    <div class="w-full" *ngIf="isDocumentNameEditable else nonEditableDocName">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Document Name: </mat-label>
-        <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
-        <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top">
-          <i class="fas fa-info-circle text-2xl text-primary-500"></i>
-        </button>
-      </mat-form-field>
-    </div>
-    <ng-template #nonEditableDocName>
-      <p>Document Name: {{documentName}}</p>
-    </ng-template>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Document Name</mat-label>
+      <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name">
+      <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top">
+        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+      </button>
+    </mat-form-field>
   </form>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
