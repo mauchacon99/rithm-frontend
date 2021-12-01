@@ -6,7 +6,8 @@ import {
 } from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 /**
  * Component for the list of fields on the station template.
@@ -36,6 +37,12 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
 
+  /** Get RithmId of the Station from behaviour subject. */
+  stationRithmId = '';
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -43,6 +50,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     this.stationTemplateForm = this.fb.group({
       stationFieldForm: this.fb.control('')
     });
+    this.stationService.stationRithmId$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName) => {
+        this.stationRithmId = stationName;
+      });
   }
 
   /**
@@ -85,7 +97,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    */
   remove(index: number, field: Question): void {
     this.fields.splice(index, 1);
-    if (field.rithmId !== field.originalStationRithmId){
+    if (this.stationRithmId !== field.originalStationRithmId){
       this.movingQuestion(field);
     }
   }
