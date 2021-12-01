@@ -435,7 +435,7 @@ export class MockDocumentService {
     if (!documentId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'cannot get document name'
+          error: 'cannot get document name.'
         }
       })).pipe(delay(1000));
     } else {
