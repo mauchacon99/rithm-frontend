@@ -101,7 +101,6 @@ describe('StationTemplateComponent', () => {
     const testMoved: Question = {
       rithmId: '3j5k-3h2j-hj5j',
       prompt: 'Fake question 7',
-      instructions: '',
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: true,

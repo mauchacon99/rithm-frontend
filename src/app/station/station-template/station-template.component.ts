@@ -4,7 +4,7 @@ import {
   NG_VALUE_ACCESSOR, NG_VALIDATORS,
   ValidationErrors, Validator
 } from '@angular/forms';
-import { Question, QuestionFieldType } from 'src/models';
+import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 
 

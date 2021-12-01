@@ -145,7 +145,6 @@ describe('StationComponent', () => {
     const previousField: Question = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Label #1',
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: false,
