@@ -116,9 +116,7 @@ export class StationService {
    * @returns Station private/all updated previous questions array.
    */
   updateStationQuestions(previousQuestion: Question[]): Observable<Question[]> {
-    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, {
-      ...previousQuestion
-    });
+    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, previousQuestion);
   }
 
   /**
