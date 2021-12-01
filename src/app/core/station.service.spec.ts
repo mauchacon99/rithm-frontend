@@ -636,6 +636,7 @@ describe('StationService', () => {
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationRithmId}`);
+    expect(req.request.params.get('stationRithmId')).toBe('4eca65f1-89ef-4970-8aa5-8a26a5e45628');
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
