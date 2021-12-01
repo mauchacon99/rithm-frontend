@@ -1059,8 +1059,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               promptLabel: 'Station name',
               promptValue: station.stationName
             }).then((newName) => {
-              if (newName) {
+              if (newName && newName !== station.stationName) {
                 station.stationName = newName;
+                station.markAsUpdated();
                 this.drawElements();
               }
             });
