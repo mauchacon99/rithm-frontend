@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { delay, Observable, of, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField } from 'src/models';
+// eslint-disable-next-line max-len
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -114,6 +115,28 @@ export class DocumentService {
         },
       ];
       return of(documentFieldName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the document name.
+   *
+   * @param documentId The specific id of document.
+   * @param documentName The new document name.
+   * @returns The new document name.
+   */
+  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
+    if (!documentId && !documentName) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const newDocumentName: StandardStringJSON = {
+        data: 'Almond Flour'
+      };
+      return of(newDocumentName).pipe(delay(1000));
     }
   }
 }

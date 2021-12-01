@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -37,6 +37,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Document name form. */
   documentNameForm: FormGroup;
 
+  /** Whether the request is underway. */
+  documentLoadingIndicator = false;
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -51,10 +54,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe( appendedFields => {
-      this.documentAppendedFields = appendedFields;
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**
@@ -168,11 +171,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @param index The current index to remove from appendedFields.
    */
-   removeAppendedFieldFromDocumentName(index: number): void{
-     const removeStartIndex = index > 0 ? index - 1 : index;
-     this.documentAppendedFields.splice(removeStartIndex,2);
-     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
-   }
+  removeAppendedFieldFromDocumentName(index: number): void {
+    const removeStartIndex = index > 0 ? index - 1 : index;
+    this.documentAppendedFields.splice(removeStartIndex, 2);
+    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
 
   /**
    * Completes all subscriptions.
@@ -180,5 +183,30 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update the document name.
+   *
+   */
+  private updateDocumentName(): void {
+    this.documentLoadingIndicator = true;
+    const newDocumentName: StandardStringJSON = {
+      data: this.documentNameForm.controls.name.value
+    };
+    this.documentService.updateDocumentName(this.rithmId, newDocumentName)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoadingIndicator = false;
+        },
+        error: (error: unknown) => {
+          this.documentLoadingIndicator = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

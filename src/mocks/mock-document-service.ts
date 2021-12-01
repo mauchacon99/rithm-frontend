@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
-  QuestionFieldType, StationDocuments, UserType, DocumentNameField
+  QuestionFieldType, StationDocuments, UserType, DocumentNameField, StandardStringJSON
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -422,6 +422,28 @@ export class MockDocumentService {
         },
       ];
       return of(documentFieldName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the document name.
+   *
+   * @param documentId The specific id of document.
+   * @param documentName The new document name.
+   * @returns The new document name.
+   */
+  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
+    if (!documentId && !documentName) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const newDocumentName: StandardStringJSON = {
+        data: 'Almond Flour'
+      };
+      return of(newDocumentName).pipe(delay(1000));
     }
   }
 }

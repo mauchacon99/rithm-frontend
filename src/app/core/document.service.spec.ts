@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation } from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -179,6 +180,17 @@ describe('DocumentService', () => {
     service.updateDocumentAppendedFields(stationId, appendedFields)
       .subscribe((response) => {
         expect(response).toEqual(appendedFields);
+      });
+  });
+
+  it('Should return the update of the new document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Almond Flour'
+    };
+
+    service.updateDocumentName(documentId, documentName)
+      .subscribe((newDocumentName) => {
+        expect(newDocumentName).toEqual(documentName);
       });
   });
 
