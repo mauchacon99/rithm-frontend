@@ -289,6 +289,7 @@ describe('StationService', () => {
       });
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`);
     expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedResponse);
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
