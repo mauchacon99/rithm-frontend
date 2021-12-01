@@ -9,6 +9,7 @@ import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Main component for viewing a document.
@@ -51,7 +52,8 @@ export class DocumentComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private stationService: StationService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control('')
@@ -188,4 +190,6 @@ export class DocumentComponent implements OnInit {
       this.router.navigateByUrl('dashboard');
     }
   }
+
+
 }
