@@ -872,9 +872,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               station.previousStations.push(newPreviousStationId);
             }
           }
-          if (station.status === MapItemStatus.Normal) {
-            station.status = MapItemStatus.Updated;
-          }
+          station.status = MapItemStatus.Updated;
         }
         if (station.dragging) {
           //ensure we cant get duplicate ids.
@@ -896,9 +894,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (station.dragging) {
         station.dragging = false;
-        if (station.status === MapItemStatus.Normal) {
-          station.status = MapItemStatus.Updated;
-        }
+        station.markAsUpdated();
         this.drawElements();
       }
     });
