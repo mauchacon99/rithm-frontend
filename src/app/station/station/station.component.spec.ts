@@ -228,7 +228,7 @@ describe('StationComponent', () => {
     expect(spyGetParams).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should call method getPreviousAndFollowingStations in the init life cycle', () => {
+  it('should get previous and following stations on page load', () => {
     const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
 
     component.ngOnInit();
