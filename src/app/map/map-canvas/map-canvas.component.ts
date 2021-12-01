@@ -873,7 +873,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               station.previousStations.push(newPreviousStationId);
             }
           }
-          station.status = MapItemStatus.Updated;
+          station.markAsUpdated();
         }
         if (station.dragging) {
           //ensure we cant get duplicate ids.
