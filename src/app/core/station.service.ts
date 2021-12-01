@@ -125,7 +125,6 @@ export class StationService {
     previousQuestion = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -135,7 +134,6 @@ export class StationService {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -321,6 +319,85 @@ export class StationService {
   }
 
   /**
+   * Update the Station General Instruction.
+   *
+   * @param rithmId The Specific id of station.
+   * @param instructions The general instructions to be updated.
+   * @returns The updated stationInformation.
+   */
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
+    if (!rithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station without defining a station id or without any instructions in it.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StationInformation = {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'Current Station Name',
+        instructions: 'New Instructions for current Station',
+        nextStations: [{
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
+          totalDocuments: 5,
+          isGenerator: true
+        }],
+        previousStations: [{
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true
+        }, {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+          name: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false
+        }],
+        stationOwners: [{
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }, {
+          rithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }],
+        workers: [{
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
+        }, {
+          rithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
+        }],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2
+      };
+      return of(data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update station name.
    * Get previous and following stations.
    *
    * @param stationRithmId The rithm id actually station.

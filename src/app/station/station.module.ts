@@ -9,14 +9,16 @@ import { PowersComponent } from './powers/powers.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
+import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
   declarations: [
     StationComponent,
@@ -38,7 +40,9 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
     SharedModule,
     FormsModule,
     MatExpansionModule,
-    InfoDrawerModule
+    InfoDrawerModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class StationModule { }

@@ -12,7 +12,6 @@ const testStationFields = [
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Instructions',
-        instructions: '',
         questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
@@ -22,7 +21,6 @@ const testStationFields = [
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
-        instructions: '',
         questionType: QuestionFieldType.ShortText,
         isReadOnly: false,
         isRequired: false,
@@ -32,7 +30,6 @@ const testStationFields = [
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Fake question 7',
-        instructions: '',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,

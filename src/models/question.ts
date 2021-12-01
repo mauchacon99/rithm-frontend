@@ -11,9 +11,6 @@ export interface Question {
   /** The name/label of the question. */
   prompt: string;
 
-  /** Instructions for filling out the question. */
-  instructions?: string; // TODO: get this from the back end
-
   /** Type of the question. */
   questionType: QuestionFieldType;
 
