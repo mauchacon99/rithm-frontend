@@ -89,8 +89,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
       });
 
-    console.log(this.isStation, this.userTypeOwnerOrAdmin);
-
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
