@@ -147,6 +147,7 @@ describe('StationComponent', () => {
   it('should call service methods to update data when save button is clicked', () => {
     const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
+    const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
     const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
     const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
     const button = fixture.debugElement.nativeElement.querySelector('#station-save');
@@ -156,6 +157,7 @@ describe('StationComponent', () => {
     expect(spyFunctionSave).toHaveBeenCalled();
     expect(spyUpdateStationName).toHaveBeenCalled();
     expect(spyUpdateAppendedFields).toHaveBeenCalled();
+    expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
     expect(spyUpdateStationQuestions).toHaveBeenCalled();
   });
 
@@ -201,7 +203,7 @@ describe('StationComponent', () => {
     component.stationForm.controls.generalInstructions.setValue(generalInstructions);
     fixture.detectChanges();
     const updateGeneralInstructionSpy = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
-    component.updateStationGeneralInstructions();
+    component.saveStationInformation();
     expect(updateGeneralInstructionSpy).toHaveBeenCalledOnceWith(stationId, generalInstructions);
   });
 

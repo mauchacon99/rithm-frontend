@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -60,6 +60,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Get station name from behaviour subject. */
   private stationName = '';
 
+  /** Appended Fields array. */
+  appendedFields: DocumentNameField[] = [];
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -86,6 +90,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
+      });
+
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appFields) => {
+        this.appendedFields = appFields;
       });
   }
 
@@ -220,8 +230,11 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
 
       // Update appended fields to document.
-      // Second parameter appendedFields temporary.
-      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, []),
+      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, this.appendedFields),
+
+      /** Update general instructions. */
+      this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
+        this.stationForm.controls.generalInstructions.value),
 
       // Update Questions.
       // Second parameter previous questions temporary.
@@ -243,27 +256,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           );
         }
       });
-  }
-
-  /**
-   * Update Station General Instructions.
-   */
-  updateStationGeneralInstructions(): void{
-    const generalInstructions = this.stationForm.controls.generalInstructions.value;
-    this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId, generalInstructions)
-    .pipe(first())
-    .subscribe({
-      next: () => {
-        generalInstructions; /**Here is going to be placed the loading indicator functionality */
-      },
-      error: (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
-    });
   }
 
   /**
