@@ -65,7 +65,7 @@ describe('DocumentComponent', () => {
       documentPriority: 5,
       documentRithmId: 'E204F369-386F-4E41',
       currentAssignedUser: 'NS',
-      flowedTimeUTC: '1943827200000',
+      flowedTimeUTC: '19438272000000',
       lastUpdatedUTC: '1943827200000',
       stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       stationName: 'Development',
