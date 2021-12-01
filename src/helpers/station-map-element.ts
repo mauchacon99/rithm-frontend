@@ -100,6 +100,9 @@ export class StationMapElement {
   markAsDeleted(): void {
     if (this.status !== MapItemStatus.Created) {
       this.status = MapItemStatus.Deleted;
+    } else {
+      throw new Error('You seem to be trying mark a locally created station as deleted. ' +
+        'You should instead remove it from the array of stations.');
     }
   }
 }
