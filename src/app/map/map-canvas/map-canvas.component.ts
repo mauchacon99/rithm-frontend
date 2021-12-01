@@ -2,7 +2,8 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
+  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
@@ -14,6 +15,7 @@ import { FlowElementService } from '../flow-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -107,7 +109,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private connectionElementService: ConnectionElementService,
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private stationService: StationService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -1044,8 +1047,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const scaledStationHeight = STATION_HEIGHT * this.scale;
     const scaledStationWidth = STATION_WIDTH * this.scale;
+    const scaledStationHeight = STATION_HEIGHT * this.scale;
 
     const interactiveNodeRadius = NODE_RADIUS * this.scale + 8;
     const scaledNodeYMargin = NODE_Y_MARGIN * this.scale;
@@ -1098,7 +1101,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         && point.y >= station.canvasPoint.y
         && point.y <= station.canvasPoint.y + scaledStationHeight
       ) {
-        //TODO: Add openStationDrawer method here.
+        this.checkStationClick(station);
         return;
       }
     }
@@ -1121,4 +1124,34 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles user input on a clicked connection line.
+   *
+   * @param station The clicked station.
+   */
+  checkStationClick(station: StationMapElement): void {
+    const stationDataInfo: StationInformation = {
+      rithmId: station.rithmId,
+      name: '',
+      instructions: '',
+      nextStations: [],
+      previousStations: [],
+      stationOwners: [],
+      workers: [],
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: '',
+      questions: [],
+      priority: 1
+    };
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationInformation: stationDataInfo,
+      stationName: station.stationName,
+      editMode: this.mapMode === MapMode.Build,
+      locallyCreated: station.status === MapItemStatus.Created
+    };
+    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    this.stationService.updatedStationNameText(station.stationName);
+  }
 }

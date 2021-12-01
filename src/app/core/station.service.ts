@@ -1,10 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -77,27 +77,22 @@ export class StationService {
    * @returns Status the document.
    */
   getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
-    const params = new HttpParams()
-      .set('rithmId', stationId);
-    return this.http.get(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params, responseType: 'text' })
-      .pipe(map((value) => value as DocumentGenerationStatus));
+    const params = new HttpParams().set('rithmId', stationId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params })
+      .pipe(map((response) => response.data as DocumentGenerationStatus));
   }
 
   /**
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  // eslint-disable-next-line max-len
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return this.http.put(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
-      {
-        generatorStatus: statusNew
-      },
-      { responseType: 'text' }
-    ).pipe(map(value => value as DocumentGenerationStatus));
+  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    const standardBody = { data: status };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
+      standardBody).pipe(map(response => response.data as DocumentGenerationStatus));
   }
 
   /**
@@ -114,18 +109,17 @@ export class StationService {
     return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
   }
 
- /**
-  * Update the station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  * @returns Station private/all updated previous questions array.
-  */
+  /**
+   * Update the station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   * @returns Station private/all updated previous questions array.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
     previousQuestion = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -135,7 +129,6 @@ export class StationService {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -255,7 +248,7 @@ export class StationService {
    *
    * @param documentName The name of the document in the station.
    */
-   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+  updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
   }
 
@@ -311,15 +304,131 @@ export class StationService {
   }
 
   /**
-   * Update station name.
+   * Update the Station General Instruction.
    *
-   * @returns The station name updated.
-   * @param newName The new name from station.
-   * @param stationRithmId The stationRithmId to send to service.
+   * @param rithmId The Specific id of station.
+   * @param instructions The general instructions to be updated.
+   * @returns The updated stationInformation.
    */
-  updateStationName(newName: string, stationRithmId: string): Observable<StationInformation> {
-    const headers=new HttpHeaders().set('Content-Type', 'application/json; charset=utf8');
-    // eslint-disable-next-line max-len
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`,JSON.stringify(newName),{headers});
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
+    if (!rithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station without defining a station id or without any instructions in it.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StationInformation = {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        name: 'Current Station Name',
+        instructions: 'New Instructions for current Station',
+        nextStations: [{
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
+          totalDocuments: 5,
+          isGenerator: true
+        }],
+        previousStations: [{
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true
+        }, {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+          name: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false
+        }],
+        stationOwners: [{
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }, {
+          rithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true
+        }],
+        workers: [{
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false
+        }, {
+          rithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false
+        }],
+        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+        createdDate: '2021-07-16T17:26:47.3506612Z',
+        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+        updatedDate: '2021-07-18T17:26:47.3506612Z',
+        questions: [],
+        priority: 2
+      };
+      return of(data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update station name.
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   * @returns Previous and following stations.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const data: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1',
+          totalDocuments: 5
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2',
+          totalDocuments: 2
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1',
+          totalDocuments: 2
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2',
+          totalDocuments: 1
+        }
+      ]
+    };
+    return of(data).pipe(delay(1000));
+  }
+
+  /**
+   * Updates a station name.
+   *
+   * @param name The new name for the station.
+   * @param stationRithmId The id of the station to rename.
+   * @returns The updated station name.
+   */
+  updateStationName(name: string, stationRithmId: string): Observable<string> {
+    const standardBody: StandardStringJSON = { data: name };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
+      .pipe(map((response) => response.data));
   }
 }

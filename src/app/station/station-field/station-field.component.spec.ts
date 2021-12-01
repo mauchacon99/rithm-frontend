@@ -40,7 +40,6 @@ describe('StationFieldComponent', () => {
     component.field = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'prompt',
-      instructions: 'instructions',
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: false,
@@ -59,7 +58,6 @@ describe('StationFieldComponent', () => {
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'prompt 1',
-        instructions: '',
         questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
@@ -69,7 +67,6 @@ describe('StationFieldComponent', () => {
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Prompt 2',
-        instructions: '',
         questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
@@ -113,7 +110,6 @@ describe('StationFieldComponent', () => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
-        instructions: '',
         questionType: QuestionFieldType.ShortText,
         isReadOnly: false,
         isRequired: false,
@@ -137,7 +133,6 @@ describe('StationFieldComponent', () => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
-        instructions: '',
         questionType: QuestionFieldType.Select,
         isReadOnly: false,
         isRequired: false,

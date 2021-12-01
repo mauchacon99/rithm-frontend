@@ -502,8 +502,32 @@ export class MapService {
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
+    this.validateConnections();
     this.validateStationsBelongToExactlyOneFlow();
     this.validateFlowsBelongToExactlyOneFlow();
+  }
+
+  /**
+   * Validates that all connections exist and are made in both origin station and destination station.
+   */
+  private validateConnections(): void {
+    for (const station of this.stationElements) {
+      for (const outgoingStationId of station.nextStations) {
+        const outgoingConnectedStation = this.stationElements.find((stationElement) => stationElement.rithmId === outgoingStationId);
+        if (!outgoingConnectedStation) {
+          // eslint-disable-next-line no-console
+          console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
+           but no station element was found with that id.`);
+        } else {
+          if (!outgoingConnectedStation.previousStations.includes(station.rithmId)) {
+            // eslint-disable-next-line no-console
+            console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
+              ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
+              previous stations.`);
+          }
+        }
+      }
+    }
   }
 
   /**

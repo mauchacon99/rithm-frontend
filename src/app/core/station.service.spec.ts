@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -10,7 +10,7 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
 describe('StationService', () => {
   let service: StationService;
   let httpTestingController: HttpTestingController;
-  const stationId = '247cf568-27a4-4968-9338-046ccfee24f3';
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -102,14 +102,12 @@ describe('StationService', () => {
       name: 'Station Name',
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-321-654'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '159-357-761'
       }],
       stationOwners: [{
         rithmId: '',
@@ -140,14 +138,12 @@ describe('StationService', () => {
       name: station.name,
       instructions: 'General instructions',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '123-869-742'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '258-635-412'
       }],
       stationOwners: [{
         rithmId: '',
@@ -211,25 +207,22 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
     expect(req.request.method).toEqual('GET');
 
-    req.flush(expectedResponse);
+    req.flush({ data: expectedResponse });
     httpTestingController.verify();
   });
 
   it('should return the status of the specific document once the status is updated', () => {
-    const statusNew = DocumentGenerationStatus.Manual;
-    const paramsExpected = {
-      generatorStatus: statusNew
-    };
-    service.updateStationDocumentGenerationStatus(stationId, statusNew)
+    const status = DocumentGenerationStatus.Manual;
+    service.updateStationDocumentGenerationStatus(stationId, status)
       .subscribe((response) => {
-        expect(response).toEqual(statusNew);
+        expect(response).toEqual(status);
       });
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(paramsExpected);
+    expect(req.request.body).toEqual({ data: status });
 
-    req.flush(statusNew);
+    req.flush({ data: status });
     httpTestingController.verify();
   });
 
@@ -238,7 +231,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -248,7 +240,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -275,7 +266,6 @@ describe('StationService', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
-        instructions: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -285,7 +275,6 @@ describe('StationService', () => {
       },
       {
         prompt: 'Example question#2',
-        instructions: 'Example question#2',
         rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -611,6 +600,42 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+  it('should return the previous and following stations', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1',
+          totalDocuments: 5
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2',
+          totalDocuments: 2
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1',
+          totalDocuments: 2
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2',
+          totalDocuments: 1
+        }
+      ]
+    };
+    service.getPreviousAndFollowingStations(stationRithmId)
+      .subscribe((prevAndFollowStations) => {
+        expect(prevAndFollowStations).toEqual(expectedResponse);
+      });
+  });
+
+
   it('should update the station name', () => {
     const newName = 'Edited Station Name';
     const station: StationInformation = {
@@ -618,16 +643,19 @@ describe('StationService', () => {
       name: 'New Station Name',
       instructions: '',
       nextStations: [{
-        stationName: 'Development',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
         totalDocuments: 5,
         isGenerator: true
       }],
       previousStations: [{
-        stationName: 'Station-1',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
         totalDocuments: 2,
         isGenerator: true
       }, {
-        stationName: 'Station-2',
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
         totalDocuments: 0,
         isGenerator: false
       }],
@@ -668,14 +696,83 @@ describe('StationService', () => {
       questions: [],
       priority: 2
     };
-    service.updateStationName(newName, station.rithmId)
+
+    service.updateStationName(newName, station.rithmId);
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    service.updateStationName(newName, stationRithmId)
       .subscribe((response) => {
-        expect(response).toBe(station);
+        expect(response).toBe(newName);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${station.rithmId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(JSON.stringify(newName));
-    req.flush(station);
+    expect(req.request.body).toEqual({ data: newName });
+    req.flush({ data: newName });
     httpTestingController.verify();
+  });
+
+  it('should return the station with updated general instructions', () => {
+    const instructions = 'New Instructions for current Station';
+    const expectedResponse: StationInformation = {
+      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      name: 'Current Station Name',
+      instructions: 'New Instructions for current Station',
+      nextStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+        name: 'Development',
+        totalDocuments: 5,
+        isGenerator: true
+      }],
+      previousStations: [{
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+        name: 'Station-1',
+        totalDocuments: 2,
+        isGenerator: true
+      }, {
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+        name: 'Station-2',
+        totalDocuments: 0,
+        isGenerator: false
+      }],
+      stationOwners: [{
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }, {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isWorker: false,
+        isOwner: true
+      }],
+      workers: [{
+        rithmId: '',
+        firstName: 'Harry',
+        lastName: 'Potter',
+        email: 'harrypotter@inpivota.com',
+        isWorker: false,
+        isOwner: false
+      }, {
+        rithmId: '',
+        firstName: 'Supervisor',
+        lastName: 'User',
+        email: 'supervisoruser@inpivota.com',
+        isWorker: true,
+        isOwner: false
+      }],
+      createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
+      createdDate: '2021-07-16T17:26:47.3506612Z',
+      updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
+      updatedDate: '2021-07-18T17:26:47.3506612Z',
+      questions: [],
+      priority: 2
+    };
+      service.updateStationGeneralInstructions(stationId, instructions)
+      .subscribe((stationInfo) => {
+        expect(stationInfo).toEqual(expectedResponse);
+      });
   });
 });

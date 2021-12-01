@@ -50,7 +50,6 @@ export class StationInfoHeaderComponent implements OnInit {
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,
@@ -85,7 +84,8 @@ export class StationInfoHeaderComponent implements OnInit {
     const dataInformationDrawer: StationInfoDrawerData = {
       stationInformation: this.stationInformation as StationInformation,
       stationName: this.stationName,
-      editMode: this.stationEditMode
+      editMode: this.stationEditMode,
+      locallyCreated: false
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updStationInfoDrawerName();

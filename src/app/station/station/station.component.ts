@@ -1,16 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, Question } from 'src/models';
-import { ConnectedStationInfo } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models/document-name-field';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for viewing a station.
@@ -20,7 +19,7 @@ import { DocumentNameField } from 'src/models/document-name-field';
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss'],
 })
-export class StationComponent implements OnInit, OnDestroy {
+export class StationComponent implements OnInit, OnDestroy, AfterContentChecked {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
@@ -55,6 +54,9 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
   /** Get station name from behaviour subject. */
   private stationName = '';
 
@@ -66,9 +68,12 @@ export class StationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private documentService: DocumentService,
+    private popupService: PopupService,
+    private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
-      stationTemplateForm: this.fb.control('')
+      stationTemplateForm: this.fb.control(''),
+      generalInstructions: this.fb.control('')
     });
 
     this.sidenavDrawerService.drawerContext$
@@ -77,9 +82,9 @@ export class StationComponent implements OnInit, OnDestroy {
         this.drawerContext = context;
       });
 
-      this.stationService.stationName$
+    this.stationService.stationName$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((stationName)=>{
+      .subscribe((stationName) => {
         this.stationName = stationName;
       });
   }
@@ -90,6 +95,12 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.getPreviousAndFollowingStations();
+  }
+
+  /** Comment. */
+  ngAfterContentChecked(): void {
+    this.ref.detectChanges();
   }
 
   /**
@@ -112,6 +123,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
+            this.stationRithmId = params.stationId;
             this.getStationInfo(params.stationId);
           }
         }, error: (error: unknown) => {
@@ -181,7 +193,6 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationInformation.questions.push({
       rithmId: '3j4k-3h2j-hj4j',
       prompt: '',
-      instructions: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
@@ -222,6 +233,27 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Update Station General Instructions.
+   */
+  updateStationGeneralInstructions(): void{
+    const generalInstructions = this.stationForm.controls.generalInstructions.value;
+    this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId, generalInstructions)
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        generalInstructions; /**Here is going to be placed the loading indicator functionality */
+      },
+      error: (error: unknown) => {
+        this.stationLoading = false;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 
   /**
@@ -274,16 +306,38 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get previous and following stations.
+   *
+   */
+  getPreviousAndFollowingStations(): void {
+    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (prevAndFollowStations) => {
+          if (prevAndFollowStations) {
+            this.forwardStations = prevAndFollowStations.followingStations;
+            this.previousStations = prevAndFollowStations.previousStations;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Update station name.
    */
-   updateStationName(): void {
+  updateStationName(): void {
     const nameStationChange = this.stationName;
     this.stationLoading = true;
     this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
       .pipe(first())
       .subscribe({
-        next: (stationNameUpdated) => {
-          this.stationInformation = stationNameUpdated;
+        next: (updatedStationName) => {
+          this.stationInformation.name = updatedStationName;
           this.stationLoading = false;
         },
         error: (error: unknown) => {
@@ -296,12 +350,12 @@ export class StationComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Update station private/all previous questions.
-  *
-  * @param stationId The Specific id of station.
-  * @param previousQuestion The previous question to be updated.
-  */
+  /**
+   * Update station private/all previous questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The previous question to be updated.
+   */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
     this.stationLoading = true;
     this.stationService.updateStationQuestions(stationId, previousQuestion)
@@ -320,5 +374,19 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
   }
 }
