@@ -135,8 +135,18 @@ export class MapService {
   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
-      this.stationElements[index].status = MapItemStatus.Deleted;
+      if (this.stationElements[index].status === MapItemStatus.Created) {
+        this.stationElements.splice(index, 1);
+      } else {
+        this.stationElements[index].markAsDeleted();
+      }
     }
+    this.flowElements.map((e) => {
+      if (e.stations.includes(station.rithmId)) {
+        e.stations = e.stations.filter(stn => stn !== station.rithmId);
+        e.markAsUpdated();
+      }
+    });
     this.mapDataReceived$.next(true);
   }
 
@@ -150,17 +160,17 @@ export class MapService {
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
 
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
 
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
     });
     this.mapDataReceived$.next(true);
