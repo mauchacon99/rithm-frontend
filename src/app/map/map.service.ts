@@ -135,7 +135,11 @@ export class MapService {
   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
-      this.stationElements[index].markAsDeleted();
+      if (this.stationElements[index].status === MapItemStatus.Created) {
+        this.stationElements.splice(index, 1);
+      } else {
+        this.stationElements[index].markAsDeleted();
+      }
     }
     this.mapDataReceived$.next(true);
   }
