@@ -129,10 +129,13 @@ export class MapService {
    * Fills in connections array with info from this.stationElements.
    */
   setConnections(): void {
-    //TODO: add unit testing for this method.
     for (const station of this.stationElements) {
       for (const connection of station.nextStations) {
-        const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
+        const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
+
+        if (!outgoingStation) {
+          throw new Error('no outgoing station found.');
+        }
 
         const lineInfo: ConnectionMapElement = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
 
@@ -190,7 +193,11 @@ export class MapService {
   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
-      this.stationElements[index].status = MapItemStatus.Deleted;
+      if (this.stationElements[index].status !== MapItemStatus.Created) {
+        this.stationElements[index].status = MapItemStatus.Deleted;
+      } else {
+        this.stationElements.splice(index, 1);
+      }
     }
     this.mapDataReceived$.next(true);
   }
@@ -206,19 +213,25 @@ export class MapService {
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
-        e.status = MapItemStatus.Updated;
+        if (station.status === MapItemStatus.Normal) {
+          e.status = MapItemStatus.Updated;
+        }
       }
 
       //Remove the station from the previousStation arrays of all connecting stations.
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        if (station.status === MapItemStatus.Normal) {
+          e.status = MapItemStatus.Updated;
+        }
       }
 
       //Remove the station from the nextStation arrays of all connecting stations.
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        if (station.status === MapItemStatus.Normal) {
+          e.status = MapItemStatus.Updated;
+        }
       }
     });
     //Remove the connections from this.connectionElements.

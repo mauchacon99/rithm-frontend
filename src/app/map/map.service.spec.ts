@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { MapData, MapItemStatus } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
+import { StationMapElement } from 'src/helpers';
+import { v4 as uuidv4 } from 'uuid';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 const MICROSERVICE_PATH = '/mapservice/api/map';
@@ -103,6 +105,41 @@ describe('MapService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should populate this.connectionElements', () => {
+    expect(service.connectionElements.length).toEqual(0);
+
+    const stationElementsArray: StationMapElement[] = [];
+    for (let i = 0; i < 4; i++) {
+      const newStation = new StationMapElement({
+        rithmId: uuidv4(),
+        stationName: 'Untitled Station',
+        mapPoint: {
+          x: 12,
+          y: 15
+        },
+        noOfDocuments: 0,
+        previousStations: [],
+        nextStations: [],
+        status: MapItemStatus.Created,
+      });
+      stationElementsArray.push(newStation);
+    }
+
+    stationElementsArray[0].nextStations.push(stationElementsArray[1].rithmId);
+    stationElementsArray[1].nextStations.push(stationElementsArray[2].rithmId);
+    stationElementsArray[2].nextStations.push(stationElementsArray[3].rithmId);
+
+    stationElementsArray[3].previousStations.push(stationElementsArray[2].rithmId);
+    stationElementsArray[2].previousStations.push(stationElementsArray[1].rithmId);
+    stationElementsArray[1].previousStations.push(stationElementsArray[0].rithmId);
+
+    service.stationElements = stationElementsArray;
+
+    service.setConnections();
+
+    expect(service.connectionElements.length).toEqual(3);
   });
 
   xit('should restore previous data when cancelled', () => {
