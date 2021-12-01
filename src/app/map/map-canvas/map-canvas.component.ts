@@ -2,8 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
@@ -16,6 +15,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -105,7 +105,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService
+    private stationService: StationService,
+    private popupService: PopupService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -1054,31 +1055,42 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (point.x >= startingX && point.x <= startingX + scaledStationWidth
+      if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
           && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
-            const stationDataInfo: StationInformation = {
-              rithmId: station.rithmId,
-              name: '',
-              instructions: '',
-              nextStations: [],
-              previousStations: [],
-              stationOwners: [],
-              workers: [],
-              createdByRithmId: '',
-              createdDate: '',
-              updatedByRithmId: '',
-              updatedDate: '',
-              questions: [],
-              priority: 1
-            };
-          const dataInformationDrawer: StationInfoDrawerData = {
-            stationInformation: stationDataInfo,
-            stationName: station.stationName,
-            editMode: this.mapMode === MapMode.Build,
-            locallyCreated: station.status === MapItemStatus.Created
-          };
-          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-          this.stationService.updatedStationNameText(station.stationName);
+            this.popupService.prompt({
+              title: 'Rename Station',
+              message: 'Please provide a name for this station',
+              promptLabel: 'Station name',
+              promptValue: station.stationName
+            }).then((newName) => {
+              if (newName) {
+                station.stationName = newName;
+                this.drawElements();
+              }
+            });
+          //   const stationDataInfo: StationInformation = {
+          //     rithmId: station.rithmId,
+          //     name: '',
+          //     instructions: '',
+          //     nextStations: [],
+          //     previousStations: [],
+          //     stationOwners: [],
+          //     workers: [],
+          //     createdByRithmId: '',
+          //     createdDate: '',
+          //     updatedByRithmId: '',
+          //     updatedDate: '',
+          //     questions: [],
+          //     priority: 1
+          //   };
+          // const dataInformationDrawer: StationInfoDrawerData = {
+          //   stationInformation: stationDataInfo,
+          //   stationName: station.stationName,
+          //   editMode: this.mapMode === MapMode.Build,
+          //   locallyCreated: station.status === MapItemStatus.Created
+          // };
+          // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+          // this.stationService.updatedStationNameText(station.stationName);
         }
     }
   }
