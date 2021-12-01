@@ -8,6 +8,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Main component for viewing a document.
@@ -49,7 +50,8 @@ export class DocumentComponent implements OnInit {
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private popupService: PopupService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control('')
@@ -173,4 +175,17 @@ export class DocumentComponent implements OnInit {
       });
   }
 
+  /** This cancel button clicked show alert. */
+  async cancelDocument(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
+  }
 }
