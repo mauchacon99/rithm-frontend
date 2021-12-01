@@ -51,10 +51,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe( appendedFields => {
-      this.documentAppendedFields = appendedFields;
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**
@@ -168,11 +168,31 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @param index The current index to remove from appendedFields.
    */
-   removeAppendedFieldFromDocumentName(index: number): void{
-     const removeStartIndex = index > 0 ? index - 1 : index;
-     this.documentAppendedFields.splice(removeStartIndex,2);
-     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
-   }
+  removeAppendedFieldFromDocumentName(index: number): void {
+    const removeStartIndex = index > 0 ? index - 1 : index;
+    this.documentAppendedFields.splice(removeStartIndex, 2);
+    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
+
+  /**
+   * Get document name.
+   *
+   * @param documentId The Specific id of document.
+   */
+  getDocumentName(documentId: string): void {
+    this.documentService.getDocumentName(documentId)
+      .pipe(first())
+      .subscribe({
+        next: (documentName) => {
+          this.documentNameForm.controls.name.setValue(documentName.data);
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 
   /**
    * Completes all subscriptions.

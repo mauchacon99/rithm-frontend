@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { delay, Observable, of, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField } from 'src/models';
+// eslint-disable-next-line max-len
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -114,6 +115,27 @@ export class DocumentService {
         },
       ];
       return of(documentFieldName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the document name.
+   *
+   * @param documentId The Specific id of document.
+   * @returns The document name.
+   */
+  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+    if (!documentId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'cannot get document name'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentName: StandardStringJSON = {
+        data: 'Metroid Dread'
+      };
+      return of(documentName).pipe(delay(1000));
     }
   }
 }
