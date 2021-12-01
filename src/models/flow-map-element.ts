@@ -39,7 +39,7 @@ export class FlowMapElement {
   }
 
   /**
-   * Marks the status of the station element as updated.
+   * Marks the status of the flow element as updated.
    */
    markAsUpdated(): void {
     if (this.status !== MapItemStatus.Created && this.status !== MapItemStatus.Deleted) {
@@ -48,7 +48,7 @@ export class FlowMapElement {
   }
 
   /**
-   * Marks the status of the station element as deleted.
+   * Marks the status of the flow element as deleted.
    */
   markAsDeleted(): void {
     if (this.status !== MapItemStatus.Created) {
