@@ -61,9 +61,11 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
+    const isStation = false;
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const expectedData = {
-      rithmId: rithmId
+      rithmId: rithmId,
+      isStation: isStation
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -96,9 +98,9 @@ describe('DocumentInfoHeaderComponent', () => {
       },
     ];
 
-    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService), 'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex,2));
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex, 2));
   };
 
   it('should splice two item from appended fields array in and update document name template'), () => {
@@ -118,8 +120,8 @@ describe('DocumentInfoHeaderComponent', () => {
       },
     ];
 
-    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService), 'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex-1,2));
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex - 1, 2));
   };
 });

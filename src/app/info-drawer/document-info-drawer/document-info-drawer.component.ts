@@ -6,7 +6,8 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
-import { FieldNameSeparator } from 'src/models/enums';
+import { FieldNameSeparator, UserType } from 'src/models/enums';
+import { UserService } from '../../core/user.service';
 
 /**
  * Component for document drawer.
@@ -57,11 +58,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The input field for auto search Value. */
   autoSearchValue = '';
 
+  /** Comes from station or not. */
+  isStation = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -74,21 +79,27 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         const dataDrawer = data as {
           /** RithmId station. */
           rithmId: string;
+
+          /** Comes from station or not. */
+          isStation: boolean;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
+          this.isStation = dataDrawer.isStation;
         }
       });
 
+    console.log(this.isStation, this.userTypeOwnerOrAdmin);
+
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe(appendedFields => {
-      this.options = appendedFields.filter(field => field.rithmId);
-      if (this.questions.length > 0) {
-        this.filterFieldsAndQuestions();
-      }
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.options = appendedFields.filter(field => field.rithmId);
+        if (this.questions.length > 0) {
+          this.filterFieldsAndQuestions();
+        }
+      });
   }
 
   /**
@@ -187,7 +198,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param separator The field prompt selected in autocomplete.
    */
-   updateSeparatorFieldValue(separator: string): void {
+  updateSeparatorFieldValue(separator: string): void {
     // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
       if (this.appendedFields[i].rithmId === '') {
@@ -234,5 +245,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get User type owner or admin.
+   *
+   * @returns Validate user actually is owner or admin.
+   */
+  get userTypeOwnerOrAdmin(): boolean {
+    return (this.userService.user.role === UserType.Admin || this.userService.user.role === UserType.StationOwner) ? true : false;
   }
 }

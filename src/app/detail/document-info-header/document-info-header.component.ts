@@ -51,10 +51,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe( appendedFields => {
-      this.documentAppendedFields = appendedFields;
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**
@@ -135,7 +135,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId
+        rithmId: this.rithmId,
+        isStation: this.isStation
       }
     );
   }
@@ -168,11 +169,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @param index The current index to remove from appendedFields.
    */
-   removeAppendedFieldFromDocumentName(index: number): void{
-     const removeStartIndex = index > 0 ? index - 1 : index;
-     this.documentAppendedFields.splice(removeStartIndex,2);
-     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
-   }
+  removeAppendedFieldFromDocumentName(index: number): void {
+    const removeStartIndex = index > 0 ? index - 1 : index;
+    this.documentAppendedFields.splice(removeStartIndex, 2);
+    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
 
   /**
    * Completes all subscriptions.

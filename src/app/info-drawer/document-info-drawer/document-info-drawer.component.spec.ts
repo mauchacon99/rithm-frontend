@@ -12,6 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { UserService } from '../../core/user.service';
+import { MockUserService } from '../../../mocks/mock-user-service';
 
 
 describe('DocumentInfoDrawerComponent', () => {
@@ -30,6 +32,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
+        { provide: UserService, useClass: MockUserService }
       ],
       imports: [
         MatCheckboxModule,
@@ -71,5 +74,12 @@ describe('DocumentInfoDrawerComponent', () => {
     await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should return boolean to method userTypeOwnerOrAdmin', () => {
+    const userType = { role: 'admin' };
+    localStorage.setItem('refreshTokenGuid', 'ee5655c8-5896-4ba8-9420-c14f28bf5b1f');
+    localStorage.setItem('user', JSON.stringify(userType));
+    expect(component.userTypeOwnerOrAdmin).toBe(false);
   });
 });
