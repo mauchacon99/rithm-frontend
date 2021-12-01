@@ -36,11 +36,14 @@ export class MapService {
   /** The flow elements displayed on the map. */
   flowElements: FlowMapElement[] = [];
 
+  /** An array that stores a backup of flowElements when buildMap is called. */
+  storedFlowElements: FlowMapElement[] = [];
+
   /** Data for connection line path between stations. */
   connectionElements: ConnectionMapElement[] = [];
 
-  /** An array that stores a backup of flowElements when buildMap is called. */
-  storedFlowElements: FlowMapElement[] = [];
+  /** An array that stores a backup of connectionElements when buildMap is called. */
+  storedConnectionElements: ConnectionMapElement[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -197,24 +200,31 @@ export class MapService {
    *
    * @param station The station for which connections has to be removed.
    */
-   removeStationConnection(station: StationMapElement): void {
+  removeAllStationConnections(station: StationMapElement): void {
     this.stationElements.map((e) => {
+      //Remove the previous and next stations from the station.
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
         e.status = MapItemStatus.Updated;
       }
 
+      //Remove the station from the previousStation arrays of all connecting stations.
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
         e.status = MapItemStatus.Updated;
       }
 
+      //Remove the station from the nextStation arrays of all connecting stations.
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
         e.status = MapItemStatus.Updated;
       }
     });
+    //Remove the connections from this.connectionElements.
+    const filteredConnections = this.connectionElements.filter(
+      (e) => e.startStationRithmId !== station.rithmId && e.endStationRithmId !== station.rithmId);
+    this.connectionElements = filteredConnections;
     this.mapDataReceived$.next(true);
   }
 
@@ -246,6 +256,7 @@ export class MapService {
   buildMap(): void {
     this.storedStationElements = this.deepCopy(this.stationElements);
     this.storedFlowElements = this.deepCopy(this.flowElements);
+    this.storedConnectionElements = this.deepCopy(this.connectionElements);
     this.mapMode$.next(MapMode.Build);
   }
 
@@ -260,6 +271,10 @@ export class MapService {
     if (this.storedFlowElements.length > 0) {
       this.flowElements = this.deepCopy(this.storedFlowElements);
       this.storedFlowElements = [];
+    }
+    if (this.storedConnectionElements.length > 0) {
+      this.connectionElements = this.deepCopy(this.storedConnectionElements);
+      this.storedConnectionElements = [];
     }
     this.mapMode$.next(MapMode.View);
     this.mapDataReceived$.next(true);
@@ -285,6 +300,11 @@ export class MapService {
     this.stationElements[endStationIndex].previousStations.splice(prevStationIndex, 1);
     this.stationElements[startStationIndex].status = MapItemStatus.Updated;
     this.stationElements[endStationIndex].status = MapItemStatus.Updated;
+
+    //Remove the connection from this.connectionElements.
+    const filteredConnections = this.connectionElements.filter(
+      (e) => e.startStationRithmId !== startStationId && e.endStationRithmId !== endStationId);
+    this.connectionElements = filteredConnections;
 
     this.mapDataReceived$.next(true);
   }

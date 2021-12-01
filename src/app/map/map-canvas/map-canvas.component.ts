@@ -7,7 +7,7 @@ import { ConnectionElementService } from '../connection-element.service';
 import { BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY,
-  MAX_PAN_VELOCITY, BADGE_RADIUS, BADGE_MARGIN } from '../map-constants';
+  MAX_PAN_VELOCITY, BADGE_RADIUS, BADGE_MARGIN, NODE_RADIUS, NODE_Y_MARGIN } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -262,16 +262,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (this.pointerCache.length === 0) {
         const pointerPos = this.getEventCanvasPoint(event);
+        const touchCon = this.getEventContextPoint(event);
 
         if (this.dragItem !== MapDragItem.Default) {
           const map = document.getElementById('map');
           map?.releasePointerCapture(event.pointerId);
         }
 
-        this.eventEndLogic(pointerPos);
-        if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-          this.openConnectionDrawer(event);
-        }
+        this.eventEndLogic(pointerPos, touchCon);
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -311,7 +309,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const pointer = this.pointerCache[0];
         const touchPos = this.getEventCanvasPoint(pointer);
         const touchCon = this.getEventContextPoint(pointer);
-        //this method has better compatibility with different input types than singleInputMouseMoveLogic.
+
         this.singleInputMoveLogic(touchPos, touchCon);
       }
 
@@ -355,8 +353,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!window.PointerEvent) {
       const mousePos = this.getEventCanvasPoint(event);
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
+      const touchCon = this.getEventContextPoint(event);
 
-      this.eventEndLogic(mousePos);
+      this.eventEndLogic(mousePos, touchCon);
     }
   }
 
@@ -430,8 +429,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
       const touchPos = this.getEventCanvasPoint(touchPoint);
+      const touchCon = this.getEventContextPoint(touchPoint);
 
-      this.eventEndLogic(touchPos);
+      this.eventEndLogic(touchPos, touchCon);
     }
   }
 
@@ -803,8 +803,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles mouseUp and touchEnd logic.
    *
    * @param position The position of the mouse or touch event.
+   * @param contextPoint Calculated position of click.
    */
-  private eventEndLogic(position: Point) {
+  private eventEndLogic(position: Point, contextPoint: Point) {
     this.holdDrag = false;
 
     // Overlay option menu close state.
@@ -814,20 +815,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
-      if (this.mapMode === MapMode.StationAdd) {
-        const coords: Point = { x: 0, y: 0 };
-        coords.x = position.x - STATION_WIDTH / 2 * this.scale;
-        coords.y = position.y - STATION_HEIGHT / 2 * this.scale;
-
-        //create a new station at click.
-        this.mapService.createNewStation(coords);
-
-        //After clicking, set to build mode.
-        this.mapService.mapMode$.next(MapMode.Build);
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        this.clickEventHandler(position, contextPoint);
       }
-
-      //Check if click was over document badge.
-      this.clickEventHandler(position);
     }
 
     //If dragging the map.
@@ -843,40 +833,48 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If dragging a connection node.
     if (this.dragItem === MapDragItem.Node) {
-      let newNextStationId = '';
-      let newPreviousStationId = '';
+      let newNextStation: StationMapElement | undefined;
+      let newPreviousStation: StationMapElement | undefined;
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
-          newNextStationId = station.rithmId;
+          newNextStation = station;
         }
         if (station.dragging) {
-          newPreviousStationId = station.rithmId;
+          newPreviousStation = station;
         }
       }
 
-      for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.mapMode, this.scale);
-        if (station.hoverActive === StationElementHoverType.Station) {
-          //ensure we cant get duplicate ids.
-          if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
-            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
-              station.previousStations.push(newPreviousStationId);
+      if (newNextStation && newPreviousStation) {
+        for (const station of this.stations) {
+          // Check if clicked on an interactive station element.
+          station.checkElementHover(position, this.mapMode, this.scale);
+          if (station.hoverActive === StationElementHoverType.Station) {
+            //ensure we cant get duplicate ids.
+            if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
+              if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
+                station.previousStations.push(newPreviousStation.rithmId);
+              }
+            }
+            if (station.status === MapItemStatus.Normal) {
+              station.status = MapItemStatus.Updated;
             }
           }
-          if (station.status === MapItemStatus.Normal) {
-            station.status = MapItemStatus.Updated;
+          if (station.dragging) {
+            //ensure we cant get duplicate ids.
+            if (!station.nextStations.includes(newNextStation.rithmId) && station.rithmId !== newNextStation.rithmId) {
+              if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
+                station.nextStations.push(newNextStation.rithmId);
+              }
+            }
           }
         }
-        if (station.dragging) {
-          //ensure we cant get duplicate ids.
-          if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
-            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
-              station.nextStations.push(newNextStationId);
-            }
-          }
+
+        const lineInfo: ConnectionMapElement = new ConnectionMapElement(newPreviousStation, newNextStation, this.scale);
+
+        if (!this.mapService.connectionElements.includes(lineInfo)) {
+          this.mapService.connectionElements.push(lineInfo);
         }
       }
     }
@@ -953,37 +951,39 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     } else {
-      //Hovering over different station elements.
-      for (const station of this.stations) {
-        station.checkElementHover(moveInput, this.mapMode, this.scale);
-        if (station.hoverActive !== StationElementHoverType.None) {
-          // eslint-disable-next-line max-len
-          if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
-            this.mapCanvas.nativeElement.style.cursor = 'pointer';
-          }
-          if (this.mapMode === MapMode.Build) {
-            this.mapCanvas.nativeElement.style.cursor = 'pointer';
-          }
-          break;
-        } else {
-          this.mapCanvas.nativeElement.style.cursor = 'default';
-        }
-      }
-      //These next two if statements ensure that while a station is being hovered a connection line is not.
-      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS
-        && this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length === 0) {
-        for (const connection of this.connections) {
-          connection.checkElementHover(moveContext, this.context);
-          if (connection.hoverActive) {
-            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+      // Only trigger when station elements are visible.
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        //Hovering over different station elements.
+        for (const station of this.stations) {
+          station.checkElementHover(moveInput, this.mapMode, this.scale);
+          if (station.hoverActive !== StationElementHoverType.None) {
+            // eslint-disable-next-line max-len
+            if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+            }
+            if (this.mapMode === MapMode.Build) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+            }
             break;
           } else {
             this.mapCanvas.nativeElement.style.cursor = 'default';
           }
         }
-      }
-      if (this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length > 0) {
-        this.connections.map((e) => e.hoverActive = false);
+        //These next two if statements ensure that while a station is being hovered a connection line is not.
+        if (this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length === 0) {
+          for (const connection of this.connections) {
+            connection.checkElementHover(moveContext, this.context);
+            if (connection.hoverActive) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+              break;
+            } else {
+              this.mapCanvas.nativeElement.style.cursor = 'default';
+            }
+          }
+        }
+        if (this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length > 0) {
+          this.connections.map((e) => e.hoverActive = false);
+        }
       }
     }
     if (!this.panActive) {
@@ -1024,25 +1024,65 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle click events when click on station document badge, option button.
+   * Handle click events.
    *
    * @param point The position of mouse click event.
+   * @param contextPoint Calculated position of click.
    */
-  private clickEventHandler(point: Point) {
+  private clickEventHandler(point: Point, contextPoint: Point) {
+    //Add station.
+    if (this.mapMode === MapMode.StationAdd) {
+      const coords: Point = { x: 0, y: 0 };
+      coords.x = point.x - STATION_WIDTH / 2 * this.scale;
+      coords.y = point.y - STATION_HEIGHT / 2 * this.scale;
+
+      //create a new station at click.
+      this.mapService.createNewStation(coords);
+
+      //After clicking, set to build mode.
+      this.mapService.mapMode$.next(MapMode.Build);
+      return;
+    }
+
+    const scaledStationHeight = STATION_HEIGHT * this.scale;
     const scaledStationWidth = STATION_WIDTH * this.scale;
 
-    const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
-    const scaledBadgeMargin = BADGE_MARGIN * this.scale;
+    const interactiveNodeRadius = NODE_RADIUS * this.scale + 8;
+    const scaledNodeYMargin = NODE_Y_MARGIN * this.scale;
 
     const interactiveButtonRadius = BUTTON_RADIUS * this.scale + 9;
     const scaledButtonYMargin = BUTTON_Y_MARGIN * this.scale;
     const scaledButtonMargin = BADGE_MARGIN * this.scale;
+    const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
+    const scaledBadgeMargin = BADGE_MARGIN * this.scale;
 
+    //Check if click was in a station. If so any code under this for loop will not run.
     for (const station of this.stations) {
       const startingX = station.canvasPoint.x;
       const startingY = station.canvasPoint.y;
 
-      if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
+       //Connection node.
+      if (point.x >= startingX + scaledStationWidth - interactiveNodeRadius
+        && point.x <= startingX + scaledStationWidth + interactiveNodeRadius
+        && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
+        && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
+        && this.mapMode !== MapMode.View
+      ) {
+        //TODO: Add functionality to allow clicking a node.
+        //You would then click on a station to create a new connection instead of dragging.
+        return;
+      //Option Button.
+      } else if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
+        && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
+        && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
+        && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+        && this.mapMode !== MapMode.View
+      ) {
+        this.mapService.currentMousePoint$.next(point);
+        this.mapService.stationButtonClick$.next({ click: true, data: station });
+        return;
+      //Document badge.
+      } else if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
         && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
         && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
         && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
@@ -1051,33 +1091,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           minWidth: '370px',
           data: { stationName: station.stationName, stationId: station.rithmId }
         });
-        break;
-      }
-      //Check if click was over option menu in build mode.
-      if (this.mapMode === MapMode.Build) {
-        if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
-          && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
-          && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
-          && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-        ) {
-          this.mapService.currentMousePoint$.next(point);
-          this.mapService.stationButtonClick$.next({ click: true, data: station });
-          break;
-        }
+        return;
+      //station itself.
+      } else if (point.x >= station.canvasPoint.x
+        && point.x <= station.canvasPoint.x + scaledStationWidth
+        && point.y >= station.canvasPoint.y
+        && point.y <= station.canvasPoint.y + scaledStationHeight
+      ) {
+        //TODO: Add openStationDrawer method here.
+        return;
       }
     }
+    //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
+    this.checkConnectionClick(contextPoint);
   }
 
   /**
-   * Handles user input when a clicked connection line.
+   * Handles user input on a clicked connection line.
    *
-   * @param event The click event points that was clicked.
+   * @param contextPoint Calculated position of click.
    */
-   openConnectionDrawer(event: PointerEvent): void {
-    const mousePos = this.getEventContextPoint(event);
-
+   checkConnectionClick(contextPoint: Point): void {
     for (const connectionLine of this.connections) {
-      if (this.context.isPointInStroke(connectionLine.path, mousePos.x, mousePos.y)) {
+      connectionLine.checkElementHover(contextPoint, this.context);
+      if (connectionLine.hoverActive) {
         this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
         break;
       }
