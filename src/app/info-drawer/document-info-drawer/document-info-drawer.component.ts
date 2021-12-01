@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator, UserType } from 'src/models/enums';
-import { UserService } from '../../core/user.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for document drawer.
