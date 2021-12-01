@@ -137,6 +137,12 @@ export class MapService {
     if (index >= 0 ) {
       this.stationElements[index].status = MapItemStatus.Deleted;
     }
+    this.flowElements.map((e) => {
+      if (e.stations.includes(station.rithmId)) {
+        e.stations = e.stations.filter(stn => stn !== station.rithmId);
+        e.status = MapItemStatus.Updated;
+      }
+    });
     this.mapDataReceived$.next(true);
   }
 
