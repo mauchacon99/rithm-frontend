@@ -144,7 +144,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
-  it('should make a request when save button is clicked', () => {
+  it('should call service methods to update data when save button is clicked', () => {
     const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
     const spyUpdateAppendedFields = spyOn(TestBed.inject(DocumentService), 'updateDocumentAppendedFields').and.callThrough();
     const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
@@ -212,15 +212,27 @@ describe('StationComponent', () => {
     expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
-  it('should call methods in the init life cycle', () => {
+  it('should call sidenav service in the init life cycle', () => {
     const spySideNav = spyOn(TestBed.inject(SidenavDrawerService), 'setDrawer');
-    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl');
-    const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
 
     component.ngOnInit();
 
     expect(spySideNav).toHaveBeenCalled();
+  });
+
+  it('should redirect to dashboard if param stationId is empty in the init life cycle', () => {
+    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl');
+
+    component.ngOnInit();
+
     expect(spyGetParams).toHaveBeenCalledOnceWith('dashboard');
+  });
+
+  it('should call method getPreviousAndFollowingStations in the init life cycle', () => {
+    const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
+
+    component.ngOnInit();
+
     expect(spyMethodPrevAndFollowStation).toHaveBeenCalled();
   });
 });
