@@ -353,12 +353,11 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /**
    * Update station private/all previous questions.
    *
-   * @param stationId The Specific id of station.
    * @param previousQuestion The previous question to be updated.
    */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
+  updateStationQuestions(previousQuestion: Question[]): void {
     this.stationLoading = true;
-    this.stationService.updateStationQuestions(stationId, previousQuestion)
+    this.stationService.updateStationQuestions(previousQuestion)
       .pipe(first())
       .subscribe({
         next: (questions) => {

@@ -231,11 +231,10 @@ export class MockStationService {
   /**
    * Update all station previous private/all questions.
    *
-   * @param stationId The Specific id of station.
    * @param previousQuestion The Specific previous question of station.
    * @returns Station private/all save the questions array.
    */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+  updateStationQuestions(previousQuestion: Question[]): Observable<Question[]> {
     previousQuestion = [
       {
         prompt: 'Example question#1',
