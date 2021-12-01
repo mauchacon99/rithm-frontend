@@ -232,7 +232,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       // Update appended fields to document.
       this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, this.appendedFields),
 
-      /** Update general instructions. */
+      // Update general instructions.
       this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value),
 

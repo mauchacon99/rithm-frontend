@@ -92,7 +92,7 @@
                 <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
                     color="accent" (click)="cancelStation()">Cancel</button></span>
                 <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" id="station-save"
-                  (click)="saveStationInformation()">Save</button>
+                  (click)="saveStationInformation()" [disabled]="!stationForm.valid" >Save</button>
               </div>
             </div>
           </div>
