@@ -1,4 +1,4 @@
-import { FlowElementHoverType, FlowMapData, Point } from '.';
+import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '.';
 
 export interface FlowMapElement extends FlowMapData {
 
@@ -36,6 +36,27 @@ export class FlowMapElement {
    */
   get isEmpty(): boolean {
     return !this.stations && !this.subFlows;
+  }
+
+  /**
+   * Marks the status of the flow element as updated.
+   */
+   markAsUpdated(): void {
+    if (this.status !== MapItemStatus.Created && this.status !== MapItemStatus.Deleted) {
+      this.status = MapItemStatus.Updated;
+    }
+  }
+
+  /**
+   * Marks the status of the flow element as deleted.
+   */
+  markAsDeleted(): void {
+    if (this.status !== MapItemStatus.Created) {
+      this.status = MapItemStatus.Deleted;
+    } else {
+      throw new Error('You seem to be trying mark a locally created flow group as deleted. ' +
+        'You should instead remove it from the array of flows.');
+    }
   }
 
 }
