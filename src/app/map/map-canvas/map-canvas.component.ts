@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 // eslint-disable-next-line max-len
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInformation, StationInfoDrawerData } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
@@ -1055,41 +1055,41 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
           && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
             // TODO: Remove this test rename prompt once renaming in the drawer is done
-            // this.popupService.prompt({
-            //   title: 'Rename Station',
-            //   message: 'Please provide a name for this station',
-            //   promptLabel: 'Station name',
-            //   promptValue: station.stationName
-            // }).then((newName) => {
-            //   if (newName && newName !== station.stationName) {
-            //     station.stationName = newName;
-            //     station.markAsUpdated();
-            //     this.drawElements();
-            //   }
-            // });
-            const stationDataInfo: StationInformation = {
-              rithmId: station.rithmId,
-              name: '',
-              instructions: '',
-              nextStations: [],
-              previousStations: [],
-              stationOwners: [],
-              workers: [],
-              createdByRithmId: '',
-              createdDate: '',
-              updatedByRithmId: '',
-              updatedDate: '',
-              questions: [],
-              priority: 1
-            };
-          const dataInformationDrawer: StationInfoDrawerData = {
-            stationInformation: stationDataInfo,
-            stationName: station.stationName,
-            editMode: this.mapMode === MapMode.Build,
-            locallyCreated: station.status === MapItemStatus.Created
-          };
-          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-          this.stationService.updatedStationNameText(station.stationName);
+            this.popupService.prompt({
+              title: 'Rename Station',
+              message: 'Please provide a name for this station',
+              promptLabel: 'Station name',
+              promptValue: station.stationName
+            }).then((newName) => {
+              if (newName && newName !== station.stationName) {
+                station.stationName = newName;
+                station.markAsUpdated();
+                this.drawElements();
+              }
+            });
+          //   const stationDataInfo: StationInformation = {
+          //     rithmId: station.rithmId,
+          //     name: '',
+          //     instructions: '',
+          //     nextStations: [],
+          //     previousStations: [],
+          //     stationOwners: [],
+          //     workers: [],
+          //     createdByRithmId: '',
+          //     createdDate: '',
+          //     updatedByRithmId: '',
+          //     updatedDate: '',
+          //     questions: [],
+          //     priority: 1
+          //   };
+          // const dataInformationDrawer: StationInfoDrawerData = {
+          //   stationInformation: stationDataInfo,
+          //   stationName: station.stationName,
+          //   editMode: this.mapMode === MapMode.Build,
+          //   locallyCreated: station.status === MapItemStatus.Created
+          // };
+          // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+          // this.stationService.updatedStationNameText(station.stationName);
         }
     }
   }
