@@ -250,7 +250,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @returns Validate user actually is owner or admin.
    */
-  get userTypeOwnerOrAdmin(): boolean {
+  get isUserAnAdmin(): boolean {
     return (this.userService.user.role === UserType.Admin || this.userService.user.role === UserType.StationOwner) ? true : false;
   }
 }
