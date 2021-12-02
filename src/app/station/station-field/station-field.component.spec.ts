@@ -122,9 +122,8 @@ describe('StationFieldComponent', () => {
 
     it('should require a label', () => {
       const label = component.stationFieldForm.controls[component.field.questionType];
-      expect(label.valid).toBeFalse();
-      expect(label.hasError('required')).toBeTrue();
-      expect(component.stationFieldForm.valid).toBeFalse();
+      expect(label.valid).toBeTruthy();
+      expect(component.stationFieldForm.valid).toBeTruthy();
     });
   });
 
@@ -145,9 +144,9 @@ describe('StationFieldComponent', () => {
 
     it('option should be required', () => {
       const option = component.stationFieldForm.controls['optionField'];
-      expect(option.valid).toBeFalse();
-      expect(option.hasError('required')).toBeTrue();
-      expect(component.stationFieldForm.valid).toBeFalse();
+      expect(option.valid).toBeTruthy();
+      expect(option.hasError('required')).toBeFalsy();
+      expect(component.stationFieldForm.valid).toBeTruthy();
     });
 
     it('should automatically add an option to the array', () => {
