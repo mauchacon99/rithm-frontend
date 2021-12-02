@@ -190,13 +190,13 @@ export class MapService {
    *
    * @param station The station for which status has to be set to delete.
    */
-  deleteStation(station: StationMapElement): void {
+   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
-      if (this.stationElements[index].status !== MapItemStatus.Created) {
-        this.stationElements[index].status = MapItemStatus.Deleted;
-      } else {
+      if (this.stationElements[index].status === MapItemStatus.Created) {
         this.stationElements.splice(index, 1);
+      } else {
+        this.stationElements[index].markAsDeleted();
       }
     }
     this.mapDataReceived$.next(true);
@@ -207,31 +207,25 @@ export class MapService {
    *
    * @param station The station for which connections has to be removed.
    */
-  removeAllStationConnections(station: StationMapElement): void {
+   removeAllStationConnections(station: StationMapElement): void {
     this.stationElements.map((e) => {
       //Remove the previous and next stations from the station.
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
-        if (station.status === MapItemStatus.Normal) {
-          e.status = MapItemStatus.Updated;
-        }
+        e.markAsUpdated();
       }
 
       //Remove the station from the previousStation arrays of all connecting stations.
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
-        if (station.status === MapItemStatus.Normal) {
-          e.status = MapItemStatus.Updated;
-        }
+        e.markAsUpdated();
       }
 
       //Remove the station from the nextStation arrays of all connecting stations.
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
-        if (station.status === MapItemStatus.Normal) {
-          e.status = MapItemStatus.Updated;
-        }
+        e.markAsUpdated();
       }
     });
     //Remove the connections from this.connectionElements.

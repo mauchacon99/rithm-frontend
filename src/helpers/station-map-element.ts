@@ -1,6 +1,6 @@
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT,
          NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
-import { StationMapData, Point, StationElementHoverType, MapMode } from 'src/models';
+import { StationMapData, Point, StationElementHoverType, MapMode, MapItemStatus } from 'src/models';
 
 export interface StationMapElement extends StationMapData {
   /** The coordinates for the location of the station as rendered in the viewport. */
@@ -85,6 +85,27 @@ export class StationMapElement {
     //No hover.
     } else {
       this.hoverActive = StationElementHoverType.None;
+    }
+  }
+
+  /**
+   * Marks the status of the station element as updated.
+   */
+  markAsUpdated(): void {
+    if (this.status !== MapItemStatus.Created && this.status !== MapItemStatus.Deleted) {
+      this.status = MapItemStatus.Updated;
+    }
+  }
+
+  /**
+   * Marks the status of the station element as deleted.
+   */
+  markAsDeleted(): void {
+    if (this.status !== MapItemStatus.Created) {
+      this.status = MapItemStatus.Deleted;
+    } else {
+      throw new Error('You seem to be trying mark a locally created station as deleted. ' +
+        'You should instead remove it from the array of stations.');
     }
   }
 }
