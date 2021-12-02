@@ -682,11 +682,11 @@ export class MockStationService {
    * Get the document field name array.
    *
    * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
+   * @param appendedFields  The appended fields.
    * @returns A list of field names for document name.
    */
-   updateDocumentNameTemplate(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
-    if (!stationId || !appendedFiles) {
+   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFields) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'

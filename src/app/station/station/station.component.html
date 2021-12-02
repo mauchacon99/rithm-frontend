@@ -26,10 +26,7 @@
               </ng-template>
               <ng-template matTabContent>
 
-                <app-document-info-header #documentNameFields [documentInformation]="stationInformation" *ngIf="!documentNameTemplateLoading"></app-document-info-header>
-                <div class="w-full mt-2" *ngIf="documentNameTemplateLoading">
-                  <app-loading-indicator class="flex-grow mx-auto "></app-loading-indicator>
-                </div>
+                <app-document-info-header #documentNameFields [documentInformation]="stationInformation" *ngIf="!stationLoading"></app-document-info-header>
                 <div class="mt-2">
                   <mat-form-field class="w-full long-text" appearance="outline">
                     <mat-label>General Instructions</mat-label>

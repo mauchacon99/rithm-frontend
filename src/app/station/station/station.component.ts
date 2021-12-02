@@ -50,9 +50,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
-  /** Whether the request to update document name template is currently underway. */
-  documentNameTemplateLoading = false;
-
   /** Show Hidden accordion field private. */
   accordionFieldPrivateExpanded = false;
 
@@ -295,15 +292,15 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * Update the station document name template.
    */
   updateDocumentNameTemplate(): void {
-    this.documentNameTemplateLoading = true;
+    this.stationLoading = true;
     const documentAppendedFields = this.documentNameTemplate.documentAppendedFields;
     this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, documentAppendedFields)
       .pipe(first())
       .subscribe({
         next: () => {
-          this.documentNameTemplateLoading = false;
+          this.stationLoading = false;
         }, error: (error: unknown) => {
-          this.documentNameTemplateLoading = false;
+          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
