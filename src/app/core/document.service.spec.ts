@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation } from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -157,6 +158,17 @@ describe('DocumentService', () => {
     service.getAppendedFieldsOnDocumentName(stationId)
       .subscribe((response) => {
         expect(response).toEqual(expectData);
+      });
+  });
+
+  it('should return document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Metroid Dread'
+    };
+
+    service.getDocumentName(documentId)
+      .subscribe((response) => {
+        expect(response).toEqual(documentName);
       });
   });
 
