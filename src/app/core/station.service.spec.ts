@@ -713,11 +713,17 @@ describe('StationService', () => {
   it('should return the station with updated general instructions', () => {
     const instructions = 'New Instructions for current Station';
     const expectedResponse: StandardStringJSON = {
-      data: 'updated instructions'
+      data: 'New Instructions for current Station'
     };
       service.updateStationGeneralInstructions(stationId, instructions)
       .subscribe((stationInfo) => {
         expect(stationInfo).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual({data: instructions});
+    req.flush({data: instructions});
+    httpTestingController.verify();
   });
 });
