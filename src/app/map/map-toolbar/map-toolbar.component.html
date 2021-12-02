@@ -4,9 +4,12 @@
     <app-loading-indicator class="pt-1 text-accent-500" *ngIf="isLoading" [inlineText]="'Loading...'"></app-loading-indicator>
     <h6 *ngIf="!isLoading" class="text-accent-500">{{orgInfo?.name}}</h6>
   </div>
-  <div *ngIf="isBuilding" class="flex justify-between items-center px-2 mr-1">
-    <button mat-button color="accent" data-testid="flow" class="w-16 mr-1 max-h-12 flex flex-col items-center group">
-      <i class="block far fa-plus-square text-2xl text-secondary-500 group-hover:text-secondary-300"></i>
+  <div *ngIf="isBuilding" class="flex justify-between items-center px-1 w-36 mr-2">
+    <button mat-button color="accent" data-testid="flow"
+    [ngClass]="{'bg-secondary-50 group-hover:bg-secondary-100': stationAddActive}"
+    class="w-16 mr-1 max-h-12 flex flex-col items-center group" (click)="addFlow()">
+      <i [ngClass]="{'text-secondary-500 group-hover:text-secondary-300': !stationAddActive, 'text-accent-500 group-hover:text-accent-600': stationAddActive}"
+      class="block far fa-plus-square text-2xl"></i>
       <span class="block text-sm leading-3 pb-1.5 font-semibold text-secondary-500 group-hover:text-secondary-300">Flow</span>
     </button>
     <button mat-button color="accent" data-testid="station"

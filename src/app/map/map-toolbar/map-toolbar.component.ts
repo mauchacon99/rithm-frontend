@@ -74,6 +74,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * Sets the map to add flow mode in preparation for a flow to be selected.
    */
   addFlow(): void {
+    this.mapService.mapMode$.next(MapMode.StationAdd);
     // TODO: Implement add flow
   }
 
