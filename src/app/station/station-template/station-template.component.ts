@@ -6,8 +6,6 @@ import {
 } from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 
 /**
  * Component for the list of fields on the station template.
@@ -37,11 +35,8 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
 
-  /** Get RithmId of the Station from behaviour subject. */
-  stationRithmId = '';
-
-  /** Observable for when the component is destroyed. */
-  private destroyed$ = new Subject<void>();
+  /** The RithmId of the Station. */
+  @Input() stationRithmId = '';
 
   constructor(
     private fb: FormBuilder,
@@ -50,11 +45,6 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     this.stationTemplateForm = this.fb.group({
       stationFieldForm: this.fb.control('')
     });
-    this.stationService.stationRithmId$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((stationName) => {
-        this.stationRithmId = stationName;
-      });
   }
 
   /**
@@ -92,10 +82,10 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /**
    * Move a previousquestion field in the template area back to its initial expansion panel.
    *
-   * @param index The current index of the field in the list.
    * @param field The field to be moved.
    */
-  remove(index: number, field: Question): void {
+  remove(field: Question): void {
+    const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
     if (this.stationRithmId !== field.originalStationRithmId){
       this.movingQuestion(field);
@@ -108,7 +98,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @param field The field to be moved.
    */
   movingQuestion( field: Question): void {
-    this.stationService.movingQuestion(field);
+    this.stationService.moveQuestion(field);
   }
 
 

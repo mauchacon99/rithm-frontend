@@ -47,7 +47,9 @@ describe('StationFieldComponent', () => {
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4'
     };
+    component.stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c4';
     fixture.detectChanges();
   });
 

@@ -84,4 +84,15 @@ describe('PreviousFieldsComponent', () => {
     expect(moveFieldToTemplateSpy).toHaveBeenCalledOnceWith(component.questions[0]);
   }));
 
+  it('should clicked the card previous fields and call moveFieldToTemplate', fakeAsync(() => {
+    component.isLoading = false;
+    fixture.detectChanges();
+    const moveFieldToTemplateSpy = spyOn(component, 'moveFieldToTemplate');
+    const previousQuestionCard = fixture.debugElement.nativeElement.querySelector('#previous-field');
+    expect(previousQuestionCard).toBeTruthy();
+    previousQuestionCard.click();
+    tick();
+    expect(moveFieldToTemplateSpy).toHaveBeenCalledOnceWith(component.questions[0]);
+  }));
+
 });

@@ -93,11 +93,12 @@ describe('StationTemplateComponent', () => {
   });
 
   it('should remove a field', () => {
-    component.remove(2, testStationFields[2]);
+    expect(component.fields.length).toEqual(3);
+    component.remove(testStationFields[2]);
     expect(component.fields.length).toEqual(2);
   });
 
-  it('should move a field from the template to previous fields', () => {
+  it('should report a moved a field from the template to previous fields', () => {
     const testMoved: Question = {
       rithmId: '3j5k-3h2j-hj5j',
       prompt: 'Fake question 7',
@@ -108,7 +109,7 @@ describe('StationTemplateComponent', () => {
       children: [],
       originalStationRithmId: '3j5k-3h2j-hj5j'
     };
-    const movingQuestionSpy = spyOn(TestBed.inject(StationService), 'movingQuestion');
+    const movingQuestionSpy = spyOn(TestBed.inject(StationService), 'moveQuestion');
     component.movingQuestion(testMoved);
     expect(movingQuestionSpy).toHaveBeenCalledOnceWith(testMoved);
   });

@@ -9,7 +9,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
-import { PreviousFieldsComponent } from 'src/app/detail/previous-fields/previous-fields.component';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
@@ -55,14 +54,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
-  /** The component for previous all fields of this station. */
-  @ViewChild('previousAllQuestions', { static: false })
-  previousAllQuestions!: PreviousFieldsComponent;
-
-  /** The component for previous private fields of this station. */
-  @ViewChild('previousPrivateQuestions', { static: false })
-  previousPrivateQuestions!: PreviousFieldsComponent;
-
   /** Station Rithm id. */
   stationRithmId = '';
 
@@ -104,22 +95,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-    this.stationService.questionToMove$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          const questionData: Question = data;
-          if (JSON.stringify(questionData) !== '{}') {
-            (!questionData.isPrivate) ? this.previousAllQuestions.questions.push(questionData)
-              : this.previousPrivateQuestions.questions.push(questionData);
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
     this.getPreviousAndFollowingStations();
   }
 
@@ -195,7 +170,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
-            this.stationService.getStationRithmId(stationInfo.rithmId);
           }
           this.stationLoading = false;
         },
@@ -217,13 +191,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
-      rithmId: '3j4k-3h2j-hj4j',
+      rithmId: '',
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: this.stationRithmId
     });
   }
 

@@ -35,7 +35,7 @@
                     <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3" spellcheck="true" formControlName="generalInstructions"></textarea>
                   </mat-form-field>
                 </div>
-                <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
+                <app-station-template [stationRithmId]="stationRithmId" [fields]="stationInformation.questions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">

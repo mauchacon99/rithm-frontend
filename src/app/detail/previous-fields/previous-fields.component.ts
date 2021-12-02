@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { Question } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
+import { Subject } from 'rxjs';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -33,6 +34,9 @@ isLoading = false;
 /** The question that will be moved. */
 @Output() private movingQuestion = new EventEmitter<Question>();
 
+/** Observable for when the component is destroyed. */
+private destroyed$ = new Subject<void>();
+
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
@@ -44,6 +48,23 @@ constructor(
  */
 ngOnInit(): void{
   this.getStationPreviousQuestions();
+  this.stationService.questionToMove$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe({
+      next: (data) => {
+        const questionData: Question = data;
+        if (JSON.stringify(questionData) !== '{}') {
+          if (questionData.isPrivate === this.isPrivate){
+            this.questions.push(questionData);
+          }
+        }
+      }, error: (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
 }
 
   /**
