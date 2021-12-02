@@ -144,7 +144,9 @@ export class MapService {
     this.flowElements.map((flow) => {
       if (flow.stations.includes(station.rithmId)) {
         flow.stations = flow.stations.filter(stn => stn !== station.rithmId);
-        flow.status = MapItemStatus.Updated;
+        if (flow.status === MapItemStatus.Normal) {
+          flow.status = MapItemStatus.Updated;
+        }
       }
     });
     this.mapDataReceived$.next(true);
