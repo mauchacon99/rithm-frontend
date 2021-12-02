@@ -76,9 +76,6 @@ describe('DocumentInfoDrawerComponent', () => {
   });
 
   it('should return boolean to method userTypeOwnerOrAdmin', () => {
-    const userType = { role: 'admin' };
-    localStorage.setItem('refreshTokenGuid', 'ee5655c8-5896-4ba8-9420-c14f28bf5b1f');
-    localStorage.setItem('user', JSON.stringify(userType));
     expect(component.isUserAnAdmin).toBe(false);
   });
 });
