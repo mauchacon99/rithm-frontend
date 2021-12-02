@@ -7,16 +7,20 @@
   <mat-drawer-content>
     <div class="textured-bg grid grid-cols-12 mt-12">
       <!-- Left column -->
-      <app-connected-station-pane [location]='"left"' [stations]="previousStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"left"' [stations]="previousStations"
+        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white px-5 pb-12 relative">
         <div class="loading" *ngIf="documentLoading">
           <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
         </div>
         <form *ngIf="!documentLoading" autocomplete="off" [formGroup]="documentForm" class="document-base-form">
-          <app-station-info-header  [stationInformation]="documentInformation" [stationEditMode]="false"></app-station-info-header>
+          <app-station-info-header [stationInformation]="documentInformation" [stationEditMode]="false">
+          </app-station-info-header>
           <app-document-info-header [documentInformation]="documentInformation"></app-document-info-header>
-          <app-document-template class="flex flex-col pb-7" [stationInstructions]="documentInformation.stationInstruction" [documentFields]="documentInformation.questions" formControlName="documentTemplateForm"></app-document-template>
+          <app-document-template class="flex flex-col pb-7" [stationInstructions]="documentInformation.instructions"
+            [documentFields]="documentInformation.questions" formControlName="documentTemplateForm">
+          </app-document-template>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer">
@@ -26,27 +30,30 @@
                       <i class="fas fa-exclamation-circle text-3xl text-primary-500" matTooltip="Escalate Document"></i>
                     </button>
                   </span>
-                  <span class="mr-3"><button mat-stroked-button color="accent">Cancel</button></span>
-                  <button mat-stroked-button color="accent" class="mx-2">Save</button>
+                  <span class="mr-3"><button mat-stroked-button color="accent" (click)="cancelDocument()"
+                      data-testid="document-cancel" id="document-cancel">Cancel</button></span>
+                  <button mat-stroked-button color="accent" class="mx-2" data-testid="document-save"
+                    id="document-save">Save</button>
                 </div>
-                <button mat-raised-button color="accent">Flow</button>
+                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow">Flow</button>
               </div>
               <div class="relative hidden lg:block">
                 <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
                   <g id="escalation_line" data-name="escalation_line" transform="translate(1)">
-                    <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none" stroke="#031023"
-                      stroke-linecap="round" stroke-width="2" />
+                    <line id="Line_95" data-name="Line 95" x2="20" transform="translate(0 3.5)" fill="none"
+                      stroke="#031023" stroke-linecap="round" stroke-width="2" />
                   </g>
                 </svg>
-                <i class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500" matTooltip="Escalate Document"></i>
+                <i class="fas fa-exclamation-circle absolute left-5 top-1 text-4xl text-primary-500"
+                  matTooltip="Escalate Document"></i>
               </div>
             </div>
           </div>
         </form>
       </div>
       <!-- Right column -->
-      <app-connected-station-pane [location]='"right"' [stations]="forwardStations" class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane [location]='"right"' [stations]="forwardStations"
+        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
-
