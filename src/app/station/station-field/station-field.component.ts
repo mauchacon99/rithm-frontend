@@ -1,9 +1,6 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
-} from '@angular/forms';
+// eslint-disable-next-line max-len
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
