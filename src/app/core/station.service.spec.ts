@@ -262,7 +262,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the stations private/all questions list', () => {
+  it('should update the station questions list', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
