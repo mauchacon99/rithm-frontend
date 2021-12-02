@@ -128,7 +128,7 @@ export class DocumentService {
     if (!documentId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'cannot get document name'
+          error: 'Cannot get document name.'
         }
       })).pipe(delay(1000));
     } else {
