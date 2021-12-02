@@ -135,7 +135,8 @@ describe('StationInfoHeaderComponent', () => {
       stationInformation: component.stationInformation as StationInformation,
       stationName: component.stationName,
       editMode: component.stationEditMode,
-      locallyCreated: false
+      locallyCreated: false,
+      openedFromMap: false
     };
     const infoDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     const stationSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText');

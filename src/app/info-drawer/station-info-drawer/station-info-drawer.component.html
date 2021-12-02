@@ -60,7 +60,13 @@
     </div>
   </div>
   <div class="w-full py-2">
+    <button mat-stroked-button color="accent" *ngIf="openedFromMap && !locallyCreated" (click)="gotoStation()">
+      View Station
+    </button>
+  </div>
+  <div class="w-full py-2">
     <button mat-stroked-button color="warn" *ngIf="editMode" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
-      Station</button>
+      Station
+    </button>
   </div>
 </div>
