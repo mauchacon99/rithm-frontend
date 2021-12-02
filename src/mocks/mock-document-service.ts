@@ -436,7 +436,7 @@ export class MockDocumentService {
     if (!documentId && !documentName) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'cannot update document name.'
+          error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
