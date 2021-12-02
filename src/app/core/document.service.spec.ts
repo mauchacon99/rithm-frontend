@@ -194,4 +194,15 @@ describe('DocumentService', () => {
       });
   });
 
+  it('should return document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Metroid Dread'
+    };
+
+    service.getDocumentName(documentId)
+      .subscribe((response) => {
+        expect(response).toEqual(documentName);
+      });
+  });
+
 });

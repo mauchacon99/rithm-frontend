@@ -139,4 +139,25 @@ export class DocumentService {
       return of(newDocumentName).pipe(delay(1000));
     }
   }
+
+  /**
+   * Get the document name.
+   *
+   * @param documentId The Specific id of document.
+   * @returns The document name.
+   */
+  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+    if (!documentId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentName: StandardStringJSON = {
+        data: 'Metroid Dread'
+      };
+      return of(documentName).pipe(delay(1000));
+    }
+  }
 }
