@@ -122,4 +122,12 @@ describe('DocumentInfoHeaderComponent', () => {
     component.removeAppendedFieldFromDocumentName(currentIndex);
     expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex-1,2));
   };
+
+  it('should return the station document name editable status', () => {
+    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const editableName = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
+    component.getStatusDocumentEditable();
+    expect(editableName).toHaveBeenCalledOnceWith(stationId);
+  });
+
 });

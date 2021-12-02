@@ -171,10 +171,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
    getStatusDocumentEditable(): void {
-    const stationRithmId = 'stationRithmId' in this.documentInformation
-    ? this.documentInformation.stationRithmId
-    : this.documentInformation.rithmId;
-   this.stationService.getStatusDocumentEditable(stationRithmId)
+    this.stationService.getStatusDocumentEditable(this.rithmId)
      .pipe(first())
      .subscribe({
        next: (editableStatus) => {
