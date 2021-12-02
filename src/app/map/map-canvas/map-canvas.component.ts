@@ -2,8 +2,8 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation } from 'src/models';
+// eslint-disable-next-line max-len
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { BADGE_MARGIN, BADGE_RADIUS,
   BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
@@ -16,6 +16,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -105,7 +106,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService
+    private stationService: StationService,
+    private popupService: PopupService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -871,9 +873,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               station.previousStations.push(newPreviousStationId);
             }
           }
-          if (station.status === MapItemStatus.Normal) {
-            station.status = MapItemStatus.Updated;
-          }
+          station.markAsUpdated();
         }
         if (station.dragging) {
           //ensure we cant get duplicate ids.
@@ -895,9 +895,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (station.dragging) {
         station.dragging = false;
-        if (station.status === MapItemStatus.Normal) {
-          station.status = MapItemStatus.Updated;
-        }
+        station.markAsUpdated();
         this.drawElements();
       }
     });
@@ -1054,8 +1052,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (point.x >= startingX && point.x <= startingX + scaledStationWidth
+      if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
           && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
+            // TODO: Remove this test rename prompt once renaming in the drawer is done
+            // this.popupService.prompt({
+            //   title: 'Rename Station',
+            //   message: 'Please provide a name for this station',
+            //   promptLabel: 'Station name',
+            //   promptValue: station.stationName
+            // }).then((newName) => {
+            //   if (newName && newName !== station.stationName) {
+            //     station.stationName = newName;
+            //     station.markAsUpdated();
+            //     this.drawElements();
+            //   }
+            // });
             const stationDataInfo: StationInformation = {
               rithmId: station.rithmId,
               name: '',

@@ -8,18 +8,17 @@ describe('StationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConnectedStationCardComponent ]
+      declarations: [ConnectedStationCardComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectedStationCardComponent);
     component = fixture.componentInstance;
     component.station = {
-      stationName: 'New Station',
-      totalDocuments: 5,
-      isGenerator: true
+      name: 'New Station',
+      rithmId: '123-896-876'
     };
     fixture.detectChanges();
   });

@@ -26,6 +26,15 @@
               </ng-template>
               <ng-template matTabContent>
                 <app-document-info-header [documentInformation]="stationInformation"></app-document-info-header>
+                <div class="mt-2">
+                  <mat-form-field class="w-full long-text" appearance="outline">
+                    <mat-label>General Instructions</mat-label>
+                    <div matPrefix class="icon">
+                      <i class="fas fa-paragraph"></i>
+                    </div>
+                    <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3" spellcheck="true" formControlName="generalInstructions"></textarea>
+                  </mat-form-field>
+                </div>
                 <app-station-template [fields]="stationInformation.questions" formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
@@ -54,7 +63,7 @@
                         </mat-panel-title>
                         <mat-panel-description>
                           <div class="hidden sm:flex justify-start w-full">
-                          View all private items on this document
+                            View all private items on this document
                           </div>
                         </mat-panel-description>
                       </mat-expansion-panel-header>
@@ -79,8 +88,8 @@
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span class="mr-3"><button data-testid="station-cancel" mat-stroked-button
-                    color="accent">Cancel</button></span>
+                <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
+                    color="accent" (click)="cancelStation()">Cancel</button></span>
                 <button data-testid="station-save" mat-raised-button color="accent" class="mx-2"
                   (click)="updateStation(stationInformation)">Save</button>
               </div>
