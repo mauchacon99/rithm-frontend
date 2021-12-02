@@ -114,9 +114,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     }
 
     this.stationFieldForm = this.fb.group({
-      instructionsField: ['', []],
-      [this.field.questionType]: ['', [Validators.required]],
-      optionField: ['', [Validators.required]]
+      instructionsField: [''],
+      [this.field.questionType]: [''],
+      optionField: ['']
     });
   }
 
@@ -186,7 +186,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.stationFieldForm.setValue(val, { emitEvent: false });
+    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**
