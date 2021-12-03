@@ -22,7 +22,7 @@ export class MockUserService {
     isEmailVerified: true,
     notificationSettings: null,
     createdDate: '1/2/34',
-    role: null,
+    role: 'admin',
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
   };
 
