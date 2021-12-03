@@ -35,3 +35,4 @@ export * from './dialog-options';
 export * from './station-potential-roster-users';
 export * from './document-name-field';
 export * from './standard-string-json';
+export * from './document-answer';
