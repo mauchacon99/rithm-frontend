@@ -6,8 +6,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
-import { FieldNameSeparator, UserType } from 'src/models/enums';
-import { UserService } from 'src/app/core/user.service';
+import { FieldNameSeparator } from 'src/models/enums';
 
 /**
  * Component for document drawer.
@@ -61,12 +60,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Comes from station or not. */
   isStation = false;
 
+  /** User actually is owner to actually station. */
+  userLoginIsOwner = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -82,10 +83,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
           /** Comes from station or not. */
           isStation: boolean;
+
+          /** User actually is owner to actually station. */
+          userLoginIsOwner: boolean;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
           this.isStation = dataDrawer.isStation;
+          this.userLoginIsOwner = dataDrawer.userLoginIsOwner;
         }
       });
 
@@ -243,14 +248,5 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Get User type owner or admin.
-   *
-   * @returns Validate user actually is owner or admin.
-   */
-  get isUserAnAdmin(): boolean {
-    return (this.userService.user.role === UserType.Admin || this.userService.user.role === UserType.StationOwner) ? true : false;
   }
 }

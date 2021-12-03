@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo, UserType } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -22,7 +22,7 @@ export class MockUserService {
     isEmailVerified: true,
     notificationSettings: null,
     createdDate: '1/2/34',
-    role: UserType.Admin,
+    role: null,
     organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
   };
 
