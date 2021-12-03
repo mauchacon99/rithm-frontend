@@ -116,8 +116,9 @@ export class StationService {
    * @param previousQuestion The previous question to be updated.
    * @returns Station private/all updated previous questions array.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    previousQuestion = [
+    const previousQuestionData: Question[] = [
       {
         prompt: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
@@ -137,7 +138,7 @@ export class StationService {
         children: [],
       },
     ];
-    return of(previousQuestion).pipe(delay(1000));
+    return of(previousQuestionData).pipe(delay(1000));
   }
 
   /**
@@ -378,6 +379,6 @@ export class StationService {
    */
    updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     // eslint-disable-next-line max-len
-    return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?rithmId=${stationId}`, appendedFields);
+    return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
   }
 }
