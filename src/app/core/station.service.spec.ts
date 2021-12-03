@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
+import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument, StandardStringJSON, DocumentNameField } from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -325,7 +325,6 @@ describe('StationService', () => {
   });
 
   it('should return the potential roster members of the station', () => {
-    const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const pageNum = 1;
     const pageSize = 20;
     const expectedResponse: StationPotentialRostersUsers = {
@@ -356,13 +355,13 @@ describe('StationService', () => {
       totalUsers: 3
     };
 
-    service.getPotentialStationRosterMembers(stationRithmId, pageNum)
+    service.getPotentialStationRosterMembers(stationId, pageNum)
       .subscribe((users) => {
         expect(users).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationRithmId}&pageNum=${pageNum}&pageSize=${pageSize}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`);
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -635,7 +634,6 @@ describe('StationService', () => {
       });
   });
 
-
   it('should update the station name', () => {
     const newName = 'Edited Station Name';
     const station: StationInformation = {
@@ -707,6 +705,35 @@ describe('StationService', () => {
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual({ data: newName });
     req.flush({ data: newName });
+    httpTestingController.verify();
+  });
+
+  it('should return updated appended fields to document', () => {
+    const appendedFields: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    service.updateDocumentNameTemplate(stationId, appendedFields)
+    .subscribe((response) => {
+      expect(response).toEqual(appendedFields);
+    });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?rithmId=${stationId}`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(appendedFields);
+    req.flush(appendedFields);
     httpTestingController.verify();
   });
 
