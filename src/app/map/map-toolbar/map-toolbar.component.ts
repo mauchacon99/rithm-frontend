@@ -50,6 +50,15 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     return this.mapMode === MapMode.StationAdd;
   }
 
+  /**
+   * Add flow mode active.
+   *
+   * @returns Boolean.
+   */
+  get flowAddActive(): boolean {
+    return this.mapMode === MapMode.FlowAdd;
+  }
+
   constructor(
     private userService: UserService,
     private organizationService: OrganizationService,
@@ -74,6 +83,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * Sets the map to add flow mode in preparation for a flow to be selected.
    */
   addFlow(): void {
+    if (!this.flowAddActive) {
+      this.mapService.mapMode$.next(MapMode.FlowAdd);
+      this.mapService.matMenuStatus$.next(true);
+    } else {
+      this.mapService.mapMode$.next(MapMode.Build);
+    }
     // TODO: Implement add flow
   }
 
