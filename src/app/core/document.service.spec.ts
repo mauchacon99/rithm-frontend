@@ -161,6 +161,18 @@ describe('DocumentService', () => {
       });
   });
 
+
+  it('Should return the update of the new document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Almond Flour'
+    };
+
+    service.updateDocumentName(documentId, documentName)
+      .subscribe((newDocumentName) => {
+        expect(newDocumentName).toEqual(documentName);
+      });
+  });
+
   it('should return document name', () => {
     const documentName: StandardStringJSON = {
       data: 'Metroid Dread'
