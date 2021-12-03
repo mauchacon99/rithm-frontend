@@ -85,6 +85,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   addFlow(): void {
     if (!this.flowAddActive) {
       this.mapService.mapMode$.next(MapMode.FlowAdd);
+      this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }
