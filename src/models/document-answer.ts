@@ -25,7 +25,7 @@ export interface DocumentAnswer {
   /** Type the answer. */
   type: string;
 
-  /** Id to Answer. */
+  /** Id to answer. */
   rithmId: string;
 
   /** Question is updated or not. */
