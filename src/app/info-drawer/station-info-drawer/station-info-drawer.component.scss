@@ -20,3 +20,7 @@
     color: map-get($error-palette, 300);
   }
 }
+
+::ng-deep.mat-form-field-wrapper {
+  padding: 0;
+}

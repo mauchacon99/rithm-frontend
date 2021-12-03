@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation } from 'src/models';
+// eslint-disable-next-line max-len
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -160,25 +161,26 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should return updated appended fields to document', () => {
-    const appendedFields: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
 
-    service.updateDocumentAppendedFields(stationId, appendedFields)
+  it('Should return the update of the new document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Almond Flour'
+    };
+
+    service.updateDocumentName(documentId, documentName)
+      .subscribe((newDocumentName) => {
+        expect(newDocumentName).toEqual(documentName);
+      });
+  });
+
+  it('should return document name', () => {
+    const documentName: StandardStringJSON = {
+      data: 'Metroid Dread'
+    };
+
+    service.getDocumentName(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(appendedFields);
+        expect(response).toEqual(documentName);
       });
   });
 

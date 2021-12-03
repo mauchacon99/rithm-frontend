@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
+import { MapService } from 'src/app/map/map.service';
 
 /**
  * Component for info station.
@@ -77,7 +78,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private route: ActivatedRoute,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -329,11 +331,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigate to station edit page.
+   * Navigate to station edit page upon confirmation.
    *
    */
-  gotoStation(): void {
-    this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+  async gotoStation(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Warning: Any local changes to the map erased.',
+      message: `If you want to save your work you need to click “Publish”. Proceed without publishing?`,
+      okButtonText: 'Proceed',
+    });
+    if (confirm) {
+      this.mapService.cancelMapChanges();
+      this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+    }
   }
 
 }
