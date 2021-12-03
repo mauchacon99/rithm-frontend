@@ -393,39 +393,6 @@ export class MockDocumentService {
   }
 
   /**
-   * Get the document field name array.
-   *
-   * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
-   * @returns A list of field names for document name.
-   */
-  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
-    if (!stationId || !appendedFiles) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot update document name.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const documentFieldName: DocumentNameField[] = [
-        {
-          prompt: 'Address',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-        {
-          prompt: '/',
-          rithmId: ''
-        },
-        {
-          prompt: 'Which is best?',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-      ];
-      return of(documentFieldName).pipe(delay(1000));
-    }
-  }
-
-  /**
    * Update the document name.
    *
    * @param documentId The specific id of document.
