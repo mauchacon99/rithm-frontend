@@ -38,6 +38,9 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** Modes for canvas element used for the map. */
   mapMode = MapMode.View;
 
+  /** The different modes available. */
+  mapModeEnum = MapMode;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
@@ -46,11 +49,11 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        const stationIds = data as ConnectionMapElement;
-        if (stationIds) {
+        const connection = data as ConnectionMapElement;
+        if (connection) {
           this.connectedStations = this.mapService.stationElements.filter(e =>
-            e.rithmId === stationIds.startStationRithmId || e.rithmId === stationIds.endStationRithmId);
-          this.connectedStations.sort((a) => a.rithmId === stationIds.startStationRithmId ? -1 : 1);
+            e.rithmId === connection.startStationRithmId || e.rithmId === connection.endStationRithmId);
+          this.connectedStations.sort((a) => a.rithmId === connection.startStationRithmId ? -1 : 1);
           this.connectionStartStationName = this.connectedStations[0].stationName;
           this.connectionEndStationName = this.connectedStations[1].stationName;
           this.connectionStartStationId = this.connectedStations[0].rithmId;
@@ -89,7 +92,7 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
    async removeConnectionLine(): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Remove Connection Line',
-      message: `Remove connection line from ${this.connectionStartStationName} to ${this.connectionEndStationName} ?`,
+      message: `Remove connection line from ${this.connectionStartStationName} to ${this.connectionEndStationName}?`,
       okButtonText: 'Remove',
     });
     if (confirm) {

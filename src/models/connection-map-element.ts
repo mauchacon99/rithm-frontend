@@ -66,11 +66,7 @@ export class ConnectionMapElement {
   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.lineWidth = 30;
-    if (ctx.isPointInStroke(this.path, point.x, point.y)) {
-      this.hoverActive = true;
-    } else {
-      this.hoverActive = false;
-    }
+    this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y);
     ctx.restore();
   }
 

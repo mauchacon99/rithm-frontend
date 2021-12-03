@@ -137,7 +137,7 @@ export class MapService {
           throw new Error('no outgoing station found.');
         }
 
-        const lineInfo: ConnectionMapElement = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
+        const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
 
         if (!this.connectionElements.includes(lineInfo)) {
           this.connectionElements.push(lineInfo);
