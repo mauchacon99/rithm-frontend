@@ -141,7 +141,7 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
-  it('should move previous field from private/all to template', () => {
+  it('should move previous field from private/all expansion panel to the template area', () => {
     const previousField: Question = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Label #1',

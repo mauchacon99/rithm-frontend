@@ -31,7 +31,7 @@ questionsError=false;
 /** Whether questions is loading. */
 isLoading = false;
 
-/** The question that will be moved. */
+/** The question that will be moved to the template area. */
 @Output() private movingQuestion = new EventEmitter<Question>();
 
 /** Observable for when the component is destroyed. */
@@ -53,7 +53,7 @@ ngOnInit(): void{
     .subscribe({
       next: (data) => {
         const questionData: Question = data;
-        if (JSON.stringify(questionData) !== '{}') {
+        if (Object.keys(questionData).length !== 0) {
           if (questionData.isPrivate === this.isPrivate){
             this.questions.push(questionData);
           }

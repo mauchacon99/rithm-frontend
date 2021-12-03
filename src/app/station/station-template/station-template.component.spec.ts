@@ -98,7 +98,7 @@ describe('StationTemplateComponent', () => {
     expect(component.fields.length).toEqual(2);
   });
 
-  it('should report a moved a field from the template to previous fields', () => {
+  it('should move back an addedField from the template area to the expansion panel', () => {
     const testMoved: Question = {
       rithmId: '3j5k-3h2j-hj5j',
       prompt: 'Fake question 7',

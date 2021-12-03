@@ -60,7 +60,7 @@ describe('PreviousFieldsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should execute to service popup service', () => {
+  it('should open a confirm dialog to move the previous field to template area', async () => {
     const dialogExpectData: DialogOptions = {
       title: 'Move field?',
       message: 'Are you sure you want to move this field into the template area?',
@@ -68,12 +68,12 @@ describe('PreviousFieldsComponent', () => {
       cancelButtonText: 'Close'
     };
     const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
-    component.moveFieldToTemplate(component.questions[0]);
+    await component.moveFieldToTemplate(component.questions[0]);
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
 
-  it('should clicked the card previous fields and call moveFieldToTemplate', fakeAsync(() => {
+  it('should move the previous field to the template area once confirm the popup', fakeAsync(() => {
     component.isLoading = false;
     fixture.detectChanges();
     const moveFieldToTemplateSpy = spyOn(component, 'moveFieldToTemplate');

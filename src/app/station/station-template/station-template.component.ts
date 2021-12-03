@@ -93,7 +93,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   }
 
   /**
-   * Moves a field from the template to previous fields.
+   * Moves a field from the template area to previous fields.
    *
    * @param field The field to be moved.
    */

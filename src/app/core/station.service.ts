@@ -19,7 +19,7 @@ export class StationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
-  /** The Question of the station-template will be moved to previous fields as BehaviorSubject. */
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
   questionToMove$ = new BehaviorSubject<Question>({} as Question);
 
   /** The Name of the Station Document as BehaviorSubject. */

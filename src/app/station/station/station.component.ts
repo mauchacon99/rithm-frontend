@@ -378,7 +378,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   }
 
  /**
-  * Move previous field from private/all to template.
+  * Move previous field from private/all expansion panel to the template area.
   *
   * @param question The question that was moved from private/all.
   */
