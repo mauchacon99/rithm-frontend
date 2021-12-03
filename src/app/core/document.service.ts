@@ -119,6 +119,28 @@ export class DocumentService {
   }
 
   /**
+   * Update the document name.
+   *
+   * @param documentId The specific id of document.
+   * @param documentName The new document name.
+   * @returns The new document name.
+   */
+  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
+    if (!documentId && !documentName) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const newDocumentName: StandardStringJSON = {
+        data: 'Almond Flour'
+      };
+      return of(newDocumentName).pipe(delay(1000));
+    }
+  }
+
+  /**
    * Get the document name.
    *
    * @param documentId The Specific id of document.
