@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
-  QuestionFieldType, StationDocuments, UserType, DocumentNameField
+  QuestionFieldType, StationDocuments, UserType, DocumentNameField, StandardStringJSON
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -393,35 +393,45 @@ export class MockDocumentService {
   }
 
   /**
-   * Get the document field name array.
+   * Update the document name.
    *
-   * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
-   * @returns A list of field names for document name.
+   * @param documentId The specific id of document.
+   * @param documentName The new document name.
+   * @returns The new document name.
    */
-  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): Observable<DocumentNameField[]> {
-    if (!stationId || !appendedFiles) {
+  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
+    if (!documentId && !documentName) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
-      const documentFieldName: DocumentNameField[] = [
-        {
-          prompt: 'Address',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-        {
-          prompt: '/',
-          rithmId: ''
-        },
-        {
-          prompt: 'Which is best?',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-      ];
-      return of(documentFieldName).pipe(delay(1000));
+      const newDocumentName: StandardStringJSON = {
+        data: 'Almond Flour'
+      };
+      return of(newDocumentName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the document name.
+   *
+   * @param documentId The specific id of document.
+   * @returns The document name.
+   */
+  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+    if (!documentId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentName: StandardStringJSON = {
+        data: 'Metroid Dread'
+      };
+      return of(documentName).pipe(delay(1000));
     }
   }
 }

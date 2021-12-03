@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument } from 'src/models';
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -550,7 +550,7 @@ export class MockStationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON>{
     if (!rithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -558,63 +558,8 @@ export class MockStationService {
         }
       })).pipe(delay(1000));
     } else {
-      const data: StationInformation = {
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        name: 'Current Station Name',
-        instructions: 'New Instructions for current Station',
-        nextStations: [{
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
-          name: 'Development',
-          totalDocuments: 5,
-          isGenerator: true
-        }],
-        previousStations: [{
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
-          name: 'Station-1',
-          totalDocuments: 2,
-          isGenerator: true
-        }, {
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
-          name: 'Station-2',
-          totalDocuments: 0,
-          isGenerator: false
-        }],
-        stationOwners: [{
-          rithmId: '',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }, {
-          rithmId: '',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }],
-        workers: [{
-          rithmId: '',
-          firstName: 'Harry',
-          lastName: 'Potter',
-          email: 'harrypotter@inpivota.com',
-          isWorker: false,
-          isOwner: false
-        }, {
-          rithmId: '',
-          firstName: 'Supervisor',
-          lastName: 'User',
-          email: 'supervisoruser@inpivota.com',
-          isWorker: true,
-          isOwner: false
-        }],
-        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-        createdDate: '2021-07-16T17:26:47.3506612Z',
-        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-        updatedDate: '2021-07-18T17:26:47.3506612Z',
-        questions: [],
-        priority: 2
+      const data: StandardStringJSON = {
+        data: 'updated instructions'
       };
       return of(data).pipe(delay(1000));
     }
@@ -674,6 +619,39 @@ export class MockStationService {
       })).pipe(delay(1000));
     } else {
       return of(name).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFields  The appended fields.
+   * @returns A list of field names for document name.
+   */
+   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFields) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName: DocumentNameField[] = [
+        {
+          prompt: 'Address',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+        {
+          prompt: '/',
+          rithmId: ''
+        },
+        {
+          prompt: 'Which is best?',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+      ];
+      return of(documentFieldName).pipe(delay(1000));
     }
   }
 }
