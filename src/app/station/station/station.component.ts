@@ -8,8 +8,6 @@ import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNa
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
-import { DocumentService } from 'src/app/core/document.service';
-import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
@@ -24,10 +22,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /** The component get the current document name template. */
-  @ViewChild(DocumentInfoHeaderComponent, {static: false})
-  documentNameTemplate!: DocumentInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -76,7 +70,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private documentService: DocumentService,
     private popupService: PopupService,
     private ref: ChangeDetectorRef
   ) {
@@ -235,7 +228,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
 
       // Update appended fields to document.
-      this.documentService.updateDocumentAppendedFields(this.stationInformation.rithmId, this.appendedFields),
+      this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, this.appendedFields),
 
       // Update general instructions.
       this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
