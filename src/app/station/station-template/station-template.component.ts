@@ -97,7 +97,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    *
    * @param field The field to be moved.
    */
-  movingQuestion( field: Question): void {
+  movingQuestion(field: Question): void {
     this.stationService.moveQuestion(field);
   }
 

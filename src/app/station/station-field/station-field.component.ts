@@ -185,6 +185,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = checkboxEvent.checked;
+    if (!this.field.isReadOnly) {
+       this.field.isRequired = false;
+    }
   }
 
   /**
