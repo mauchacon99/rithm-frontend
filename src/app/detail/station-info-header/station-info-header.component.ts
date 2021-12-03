@@ -59,7 +59,8 @@ export class StationInfoHeaderComponent implements OnInit {
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
-  /** Get name of station from StationInformation based on type.
+  /**
+   * Get name of station from StationInformation based on type.
    *
    * @returns The Station Name.
    */
@@ -67,7 +68,8 @@ export class StationInfoHeaderComponent implements OnInit {
     return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
-  /** Get the priority from StationInformation model.
+  /**
+   * Get the priority from StationInformation model.
    *
    * @returns The Priority of station.
    */
