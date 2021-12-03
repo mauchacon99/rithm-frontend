@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -296,54 +296,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
             this.previousStations = prevAndFollowStations.previousStations;
           }
         }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station name.
-   */
-  updateStationName(): void {
-    const nameStationChange = this.stationName;
-    this.stationLoading = true;
-    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (updatedStationName) => {
-          this.stationInformation.name = updatedStationName;
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station questions.
-   *
-   * @param questions The questions of station to be updated.
-   */
-  updateStationQuestions(questions: Question[]): void {
-    this.stationLoading = true;
-    this.stationService.updateStationQuestions(questions)
-      .pipe(first())
-      .subscribe({
-        next: (questionsRes) => {
-          if (questionsRes) {
-            this.stationInformation.questions = questionsRes;
-          }
-          this.stationLoading = false;
-        }, error: (error: unknown) => {
-          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
