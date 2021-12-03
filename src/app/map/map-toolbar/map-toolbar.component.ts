@@ -56,7 +56,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get flowAddActive(): boolean {
-    return this.mapMode === MapMode.StationAdd;
+    return this.mapMode === MapMode.FlowAdd;
   }
 
   constructor(
@@ -85,7 +85,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   addFlow(): void {
     if (!this.flowAddActive) {
       this.mapService.mapMode$.next(MapMode.FlowAdd);
-      this.mapService.mapMode$.next(MapMode.StationAdd);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }
