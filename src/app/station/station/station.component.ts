@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
@@ -23,6 +24,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
+
+  /** The component get the current document name template. */
+  @ViewChild(DocumentInfoHeaderComponent, {static: false})
+  documentNameTemplate!: DocumentInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();

@@ -20,7 +20,7 @@ import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType } from 'src/models';
+import { QuestionFieldType, DocumentNameField } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockUserService } from 'src/mocks/mock-user-service';
@@ -69,6 +69,7 @@ describe('StationComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
+        { provide: DocumentInfoHeaderComponent, useClass: DocumentInfoHeaderComponent },
         { provide: PopupService, useClass: MockPopupService }
       ]
     })
@@ -130,6 +131,7 @@ describe('StationComponent', () => {
       questions: [],
       priority: 2
     };
+
     fixture.detectChanges();
   });
 
@@ -237,4 +239,36 @@ describe('StationComponent', () => {
 
     expect(spyMethodPrevAndFollowStation).toHaveBeenCalled();
   });
+
+  describe('ChildDocumentInfoHeader', () => {
+    let childDocumentInfoHeader: DocumentInfoHeaderComponent;
+    let childDocumentInfoHeaderFixture: ComponentFixture<DocumentInfoHeaderComponent>;
+
+    beforeEach(() => {
+      childDocumentInfoHeaderFixture = TestBed.createComponent(DocumentInfoHeaderComponent);
+      childDocumentInfoHeader = childDocumentInfoHeaderFixture.componentInstance;
+    });
+
+    it('should update the station document name template', async () => {
+      childDocumentInfoHeader.documentAppendedFields = [
+        {
+          prompt: 'Address',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+        {
+          prompt: '/',
+          rithmId: ''
+        },
+        {
+          prompt: 'Which is best?',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+      ];
+      component.documentNameTemplate = childDocumentInfoHeader;
+      const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+      const documentAppendedFields: DocumentNameField[] = childDocumentInfoHeader.documentAppendedFields;
+      const updateTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentNameTemplate').and.callThrough();
+      component.updateDocumentNameTemplate();
+      expect(updateTemplateSpy).toHaveBeenCalledOnceWith(stationRithmId, documentAppendedFields);
+    });
 });
