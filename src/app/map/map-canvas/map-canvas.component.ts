@@ -876,7 +876,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         const lineInfo: ConnectionMapElement = new ConnectionMapElement(newPreviousStation, newNextStation, this.scale);
 
-        if (!this.mapService.connectionElements.includes(lineInfo)) {
+        if (!this.mapService.connectionElements.includes(lineInfo) && (newPreviousStation.rithmId !== newNextStation.rithmId)) {
           this.mapService.connectionElements.push(lineInfo);
         }
       }
