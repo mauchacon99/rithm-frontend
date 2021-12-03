@@ -309,10 +309,11 @@ export class MapService {
     this.stationElements[endStationIndex].status = MapItemStatus.Updated;
 
     //Remove the connection from this.connectionElements.
-    const filteredConnections = this.connectionElements.filter(
-      (e) => e.startStationRithmId !== startStationId && e.endStationRithmId !== endStationId);
-    this.connectionElements = filteredConnections;
-
+    const filteredConnectionIndex = this.connectionElements.findIndex(
+      (e) => e.startStationRithmId === startStationId && e.endStationRithmId === endStationId);
+      if (filteredConnectionIndex !== -1) {
+        this.connectionElements.splice(filteredConnectionIndex, 1);
+      }
     this.mapDataReceived$.next(true);
   }
 

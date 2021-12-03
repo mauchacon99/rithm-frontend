@@ -973,6 +973,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         if (this.stations.filter((e) => e.hoverActive !== StationElementHoverType.None).length === 0) {
           for (const connection of this.connections) {
+            this.connections.map(con => {
+              con.hoverActive = false;
+            });
             connection.checkElementHover(moveContext, this.context);
             if (connection.hoverActive) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1114,6 +1117,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
    checkConnectionClick(contextPoint: Point): void {
     for (const connectionLine of this.connections) {
+      this.connections.map(con => {
+        con.hoverActive = false;
+      });
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hoverActive) {
         this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
