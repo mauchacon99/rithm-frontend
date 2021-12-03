@@ -443,4 +443,16 @@ export class StationService {
     return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
       .pipe(map((response) => response.data));
   }
+
+  /**
+   * Update the document naming template.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFields  The appended fields.
+   * @returns The updated document name template in the station.
+   */
+   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+    // eslint-disable-next-line max-len
+    return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?rithmId=${stationId}`, appendedFields);
+  }
 }
