@@ -77,8 +77,7 @@ export class StationMapElement {
       && point.x <= startingX + scaledStationWidth + interactiveNodeRadius
       && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
-      && mode !== MapMode.View
-        ? true : false;
+      && mode !== MapMode.View;
   }
 
   /**
@@ -102,8 +101,7 @@ export class StationMapElement {
     && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
     && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
     && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-    && mode !== MapMode.View
-      ? true : false;
+    && mode !== MapMode.View;
   }
 
   /**
@@ -125,8 +123,7 @@ export class StationMapElement {
     return point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
     && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
     && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
-    && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
-      ? true : false;
+    && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius;
   }
 
   /**
@@ -144,8 +141,7 @@ export class StationMapElement {
     return point.x >= this.canvasPoint.x
     && point.x <= this.canvasPoint.x + scaledStationWidth
     && point.y >= this.canvasPoint.y
-    && point.y <= this.canvasPoint.y + scaledStationHeight
-      ? true : false;
+    && point.y <= this.canvasPoint.y + scaledStationHeight;
   }
 
   /**
