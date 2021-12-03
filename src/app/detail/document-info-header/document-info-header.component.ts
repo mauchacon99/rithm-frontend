@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -36,6 +36,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Document name form. */
   documentNameForm: FormGroup;
+
+  /** Whether the request is underway. */
+  documentLoadingIndicator = false;
 
   constructor(
     private fb: FormBuilder,
@@ -199,5 +202,30 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update the document name.
+   *
+   */
+  private updateDocumentName(): void {
+    this.documentLoadingIndicator = true;
+    const newDocumentName: StandardStringJSON = {
+      data: this.documentNameForm.controls.name.value
+    };
+    this.documentService.updateDocumentName(this.rithmId, newDocumentName)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoadingIndicator = false;
+        },
+        error: (error: unknown) => {
+          this.documentLoadingIndicator = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
