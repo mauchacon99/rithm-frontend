@@ -197,18 +197,6 @@ describe('StationComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should return success when update station general instruction', () => {
-    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
-    const spyUpdateNameTemplate = spyOn(TestBed.inject(StationService), 'updateDocumentNameTemplate').and.callThrough();
-    const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
-    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
-    component.saveStationInformation();
-    expect(spyUpdateStationName).toHaveBeenCalled();
-    expect(spyUpdateNameTemplate).toHaveBeenCalled();
-    expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
-    expect(spyUpdateStationQuestions).toHaveBeenCalled();
-  });
-
   it('should get previous and following stations', () => {
     component.stationRithmId = component.stationInformation.rithmId;
     const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();

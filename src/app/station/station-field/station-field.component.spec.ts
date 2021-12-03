@@ -119,12 +119,6 @@ describe('StationFieldComponent', () => {
       component.ngOnInit();
       fixture.detectChanges();
     });
-
-    it('should require a label', () => {
-      const label = component.stationFieldForm.controls[component.field.questionType];
-      expect(label.valid).toBeTruthy();
-      expect(component.stationFieldForm.valid).toBeTruthy();
-    });
   });
 
   describe('handle field options', () => {
@@ -140,13 +134,6 @@ describe('StationFieldComponent', () => {
       };
       component.ngOnInit();
       fixture.detectChanges();
-    });
-
-    it('option should be required', () => {
-      const option = component.stationFieldForm.controls['optionField'];
-      expect(option.valid).toBeTruthy();
-      expect(option.hasError('required')).toBeFalsy();
-      expect(component.stationFieldForm.valid).toBeTruthy();
     });
 
     it('should automatically add an option to the array', () => {
