@@ -305,55 +305,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
   }
 
-  /**
-   * Update station name.
-   */
-  updateStationName(): void {
-    const nameStationChange = this.stationName;
-    this.stationLoading = true;
-    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (updatedStationName) => {
-          this.stationInformation.name = updatedStationName;
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station private/all previous questions.
-   *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The previous question to be updated.
-   */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
-    this.stationLoading = true;
-    this.stationService.updateStationQuestions(stationId, previousQuestion)
-      .pipe(first())
-      .subscribe({
-        next: (questions) => {
-          if (questions) {
-            this.stationInformation.questions = questions;
-          }
-          this.stationLoading = false;
-        }, error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
  /**
   * Move previous field from private/all expansion panel to the template area.
   *

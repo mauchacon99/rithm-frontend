@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
@@ -14,7 +14,7 @@ export class MockStationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new BehaviorSubject<Question>({} as Question);
+  questionToMove$ = new Subject<Question>();
 
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);

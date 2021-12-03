@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
@@ -20,7 +20,7 @@ export class StationService {
   stationName$ = new BehaviorSubject<string>('');
 
   /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
-  questionToMove$ = new BehaviorSubject<Question>({} as Question);
+  questionToMove$ = new Subject<Question>();
 
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);

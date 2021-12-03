@@ -50,19 +50,10 @@ ngOnInit(): void{
   this.getStationPreviousQuestions();
   this.stationService.questionToMove$
     .pipe(takeUntil(this.destroyed$))
-    .subscribe({
-      next: (data) => {
-        const questionData: Question = data;
-        if (Object.keys(questionData).length !== 0) {
-          if (questionData.isPrivate === this.isPrivate){
-            this.questions.push(questionData);
-          }
-        }
-      }, error: (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+    .subscribe((data) => {
+      const questionData: Question = data;
+      if (questionData.isPrivate === this.isPrivate) {
+        this.questions.push(questionData);
       }
     });
 }
