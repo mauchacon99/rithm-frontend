@@ -5,7 +5,6 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationMapElement } from 'src/helpers';
 import { ConnectionMapElement, MapMode } from 'src/models';
 import { MapService } from '../map.service';
-import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 
 /**
