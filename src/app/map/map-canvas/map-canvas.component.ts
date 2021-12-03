@@ -1052,7 +1052,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
+      if (point.x >= startingX && point.x <= startingX + scaledStationWidth
           && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
             // TODO: Remove this test rename prompt once renaming in the drawer is done
             // this.popupService.prompt({
