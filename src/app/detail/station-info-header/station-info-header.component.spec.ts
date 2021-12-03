@@ -147,8 +147,8 @@ describe('StationInfoHeaderComponent', () => {
 
   it('should update the name in station info drawer', () => {
     formGroup.controls['name'].setValue('Station Name');
-    const updateStationNameSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText');
-    component.updStationInfoDrawerName();
+    const updateStationNameSpy = spyOn(TestBed.inject(StationService),'updatedStationNameText');
+    component.updateStationInfoDrawerName();
     expect(updateStationNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
   });
 

@@ -333,7 +333,8 @@ export class MockStationService {
     }
   }
 
-  /** Deletes a specified station.
+  /**
+   * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.

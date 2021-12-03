@@ -735,7 +735,7 @@ describe('StationService', () => {
     });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?rithmId=${stationId}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(appendedFields);
     req.flush(appendedFields);
