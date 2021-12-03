@@ -708,29 +708,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return the station Document name template', () => {
-    const expectData: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
-
-    service.getDocumentNameTemplate(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectData);
-      });
-  });
-
-  it('should return the updated station document name template', () => {
+  it('should return updated appended fields to document', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',

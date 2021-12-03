@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
+import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -138,6 +138,29 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return appended fields to document', () => {
+    const expectData: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    service.getAppendedFieldsOnDocumentName(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectData);
+      });
+  });
+
 
   it('Should return the update of the new document name', () => {
     const documentName: StandardStringJSON = {

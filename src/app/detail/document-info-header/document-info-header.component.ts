@@ -149,7 +149,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
-    this.stationService.getDocumentNameTemplate(stationId)
+    this.documentService.getAppendedFieldsOnDocumentName(stationId)
       .pipe(first())
       .subscribe({
         next: (appendedFields) => {
