@@ -5,13 +5,13 @@
 export interface DocumentAnswer {
 
   /** The id the question. */
-  questionRithmId: string;
+  readonly questionRithmId: string;
 
   /** The id the document. */
-  documentRithmId: string;
+  readonly documentRithmId: string;
 
   /** The id station. */
-  stationRithmId: string;
+  readonly stationRithmId: string;
 
   /** Value the answer to question. */
   value: string;
