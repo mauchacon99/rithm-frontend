@@ -731,7 +731,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas.
    */
-  private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch | PointerEvent): Point {
+  private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
       x: event.clientX - canvasRect.left,
@@ -746,7 +746,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas context.
    */
-   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch | PointerEvent): Point {
+   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
       x: canvasPoint.x * window.devicePixelRatio,
