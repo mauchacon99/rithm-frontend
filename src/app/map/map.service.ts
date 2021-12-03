@@ -199,6 +199,12 @@ export class MapService {
         this.stationElements[index].markAsDeleted();
       }
     }
+    this.flowElements.map((flow) => {
+      if (flow.stations.includes(station.rithmId)) {
+        flow.stations = flow.stations.filter(stn => stn !== station.rithmId);
+        flow.markAsUpdated();
+      }
+    });
     this.mapDataReceived$.next(true);
   }
 

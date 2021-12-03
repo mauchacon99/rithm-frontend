@@ -14,15 +14,17 @@ import { DocumentTemplateComponent } from 'src/app/document/document-template/do
 import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
 import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockDocumentService, MockErrorService, MockStationService } from 'src/mocks';
+import { MockErrorService, MockStationService } from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType, DocumentNameField } from 'src/models';
+import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DocumentService } from 'src/app/core/document.service';
+import { MockUserService } from 'src/mocks/mock-user-service';
+import { UserService } from 'src/app/core/user.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks/mock-popup-service';
 import { Router } from '@angular/router';
@@ -38,7 +40,6 @@ describe('StationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         StationComponent,
-        MockComponent(StationInfoHeaderComponent),
         MockComponent(SubHeaderComponent),
         MockComponent(DetailDrawerComponent),
         MockComponent(ConnectedStationPaneComponent),
@@ -64,8 +65,8 @@ describe('StationComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-        { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: UserService, useClass: MockUserService },
         { provide: DocumentInfoHeaderComponent, useClass: DocumentInfoHeaderComponent },
         { provide: PopupService, useClass: MockPopupService }
       ]
@@ -143,6 +144,32 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
+  it('should call service methods to update data when save button is clicked ', () => {
+    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
+    const spyUpdateNameTemplate = spyOn(TestBed.inject(StationService), 'updateDocumentNameTemplate').and.callThrough();
+    const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
+    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
+    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
+
+    button.click();
+
+    expect(spyFunctionSave).toHaveBeenCalled();
+    expect(spyUpdateStationName).toHaveBeenCalled();
+    expect(spyUpdateNameTemplate).toHaveBeenCalled();
+    expect(spyUpdateGeneralInstructions).toHaveBeenCalled();
+    expect(spyUpdateStationQuestions).toHaveBeenCalled();
+  });
+
+  it('should validate the form controls initial value', () => {
+    const form = component.stationForm.controls;
+    const expectFormFirst = ['stationTemplateForm', 'generalInstructions'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['stationTemplateForm'].value).toBe('');
+    expect(form['generalInstructions'].value).toBe('');
+  });
+
   it('should open confirmation popup when canceling', async () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
@@ -170,16 +197,6 @@ describe('StationComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should return success when update station general instruction', () => {
-    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    const generalInstructions = 'New Instructions for current Station';
-    component.stationForm.controls.generalInstructions.setValue(generalInstructions);
-    fixture.detectChanges();
-    const updateGeneralInstructionSpy = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
-    component.updateStationGeneralInstructions();
-    expect(updateGeneralInstructionSpy).toHaveBeenCalledOnceWith(stationId, generalInstructions);
-  });
-
   it('should get previous and following stations', () => {
     component.stationRithmId = component.stationInformation.rithmId;
     const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
@@ -187,36 +204,27 @@ describe('StationComponent', () => {
     expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
-  describe('ChildDocumentInfoHeader', () => {
-    let childDocumentInfoHeader: DocumentInfoHeaderComponent;
-    let childDocumentInfoHeaderFixture: ComponentFixture<DocumentInfoHeaderComponent>;
+  it('should call sidenav service in the init life cycle', () => {
+    const spySideNav = spyOn(TestBed.inject(SidenavDrawerService), 'setDrawer');
 
-    beforeEach(() => {
-      childDocumentInfoHeaderFixture = TestBed.createComponent(DocumentInfoHeaderComponent);
-      childDocumentInfoHeader = childDocumentInfoHeaderFixture.componentInstance;
-    });
+    component.ngOnInit();
 
-    it('should update the station document name template', async () => {
-      childDocumentInfoHeader.documentAppendedFields = [
-        {
-          prompt: 'Address',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-        {
-          prompt: '/',
-          rithmId: ''
-        },
-        {
-          prompt: 'Which is best?',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-        },
-      ];
-      component.documentNameTemplate = childDocumentInfoHeader;
-      const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-      const documentAppendedFields: DocumentNameField[] = childDocumentInfoHeader.documentAppendedFields;
-      const updateTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentNameTemplate').and.callThrough();
-      component.updateDocumentNameTemplate();
-      expect(updateTemplateSpy).toHaveBeenCalledOnceWith(stationRithmId, documentAppendedFields);
-    });
+    expect(spySideNav).toHaveBeenCalled();
+  });
+
+  it('should redirect to dashboard if param stationId is empty in the init life cycle', () => {
+    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl');
+
+    component.ngOnInit();
+
+    expect(spyGetParams).toHaveBeenCalledOnceWith('dashboard');
+  });
+
+  it('should get previous and following stations on page load', () => {
+    const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
+
+    component.ngOnInit();
+
+    expect(spyMethodPrevAndFollowStation).toHaveBeenCalled();
   });
 });
