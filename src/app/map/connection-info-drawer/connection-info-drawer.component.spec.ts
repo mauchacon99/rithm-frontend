@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
+import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
-import { MockMapService } from 'src/mocks';
+import { MockErrorService, MockMapService, MockPopupService } from 'src/mocks';
 import { MapItemStatus, StationMapData } from 'src/models';
 import { MapService } from '../map.service';
 
@@ -47,6 +49,8 @@ describe('ConnectionInfoDrawerComponent', () => {
         MatButtonModule,
       ],
       providers:[
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
         { provide: MapService, useClass: MockMapService }
       ]
     })

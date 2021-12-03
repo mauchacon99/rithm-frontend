@@ -1,6 +1,6 @@
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT,
          NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
-import { StationMapData, Point, StationElementHoverType, MapItemStatus } from 'src/models';
+import { StationMapData, Point, StationElementHoverType, MapMode, MapItemStatus } from 'src/models';
 
 export interface StationMapElement extends StationMapData {
   /** The coordinates for the location of the station as rendered in the viewport. */
@@ -34,9 +34,37 @@ export class StationMapElement {
    * Checks whether an element in the station is being hovered over.
    *
    * @param point The cursor location.
+   * @param mode The current mapMode.
    * @param scale The scale of the map.
    */
-  checkElementHover(point: Point, scale: number): void {
+  checkElementHover(point: Point, mode: MapMode, scale: number): void {
+    //Connection node.
+    if (this.isPointInConnectionNode(point, mode, scale)) {
+      this.hoverActive = StationElementHoverType.Node;
+    //Option Button.
+    } else if (this.isPointInOptionButton(point, mode, scale)) {
+      this.hoverActive = StationElementHoverType.Button;
+    //Document badge.
+    } else if (this.isPointInDocumentBadge(point, mode, scale)) {
+      this.hoverActive = StationElementHoverType.Badge;
+    //station itself.
+    } else if (this.isPointInStation(point, mode, scale)) {
+      this.hoverActive = StationElementHoverType.Station;
+    //No hover.
+    } else {
+      this.hoverActive = StationElementHoverType.None;
+    }
+  }
+
+  /**
+   * Checks whether point is in a connection node.
+   *
+   * @param point The cursor location.
+   * @param mode The current mapMode.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInConnectionNode(point: Point, mode: MapMode, scale: number): boolean {
     const startingX = this.canvasPoint.x;
     const startingY = this.canvasPoint.y;
     const scaledStationHeight = STATION_HEIGHT * scale;
@@ -45,44 +73,75 @@ export class StationMapElement {
     const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
 
-    const interactiveButtonRadius = BUTTON_RADIUS * scale + 9;
-    const scaledButtonYMargin = BUTTON_Y_MARGIN * scale;
-    const scaledButtonMargin = BADGE_MARGIN * scale;
-    const interactiveBadgeRadius = BADGE_RADIUS * scale;
-    const scaledBadgeMargin = BADGE_MARGIN * scale;
-
-    //Connection node.
-    if (point.x >= startingX + scaledStationWidth - interactiveNodeRadius
+    return point.x >= startingX + scaledStationWidth - interactiveNodeRadius
       && point.x <= startingX + scaledStationWidth + interactiveNodeRadius
       && point.y >= startingY + scaledStationHeight - scaledNodeYMargin - interactiveNodeRadius
       && point.y <= startingY + scaledStationHeight - scaledNodeYMargin + interactiveNodeRadius
-    ) {
-      this.hoverActive = StationElementHoverType.Node;
-    //Option Button.
-    } else if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
-      && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
-      && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
-      && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-    ) {
-      this.hoverActive = StationElementHoverType.Button;
-    //Document badge.
-    } else if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
-      && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
-      && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
-      && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
-    ) {
-      this.hoverActive = StationElementHoverType.Badge;
-    //station itself.
-    } else if (point.x >= this.canvasPoint.x
-      && point.x <= this.canvasPoint.x + scaledStationWidth
-      && point.y >= this.canvasPoint.y
-      && point.y <= this.canvasPoint.y + scaledStationHeight
-    ) {
-      this.hoverActive = StationElementHoverType.Station;
-    //No hover.
-    } else {
-      this.hoverActive = StationElementHoverType.None;
-    }
+      && mode !== MapMode.View;
+  }
+
+  /**
+   * Checks whether point is in an option button.
+   *
+   * @param point The cursor location.
+   * @param mode The current mapMode.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInOptionButton(point: Point, mode: MapMode, scale: number): boolean {
+    const startingX = this.canvasPoint.x;
+    const startingY = this.canvasPoint.y;
+    const scaledStationWidth = STATION_WIDTH * scale;
+
+    const interactiveButtonRadius = BUTTON_RADIUS * scale + 9;
+    const scaledButtonYMargin = BUTTON_Y_MARGIN * scale;
+    const scaledButtonMargin = BADGE_MARGIN * scale;
+
+    return point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
+    && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
+    && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
+    && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
+    && mode !== MapMode.View;
+  }
+
+  /**
+   * Checks whether point is in a document badge.
+   *
+   * @param point The cursor location.
+   * @param mode The current mapMode.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInDocumentBadge(point: Point, mode: MapMode, scale: number): boolean {
+    const startingX = this.canvasPoint.x;
+    const startingY = this.canvasPoint.y;
+    const scaledStationWidth = STATION_WIDTH * scale;
+
+    const interactiveBadgeRadius = BADGE_RADIUS * scale;
+    const scaledBadgeMargin = BADGE_MARGIN * scale;
+
+    return point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
+    && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
+    && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
+    && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius;
+  }
+
+  /**
+   * Checks whether point is in a station.
+   *
+   * @param point The cursor location.
+   * @param mode The current mapMode.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInStation(point: Point, mode: MapMode, scale: number): boolean {
+    const scaledStationHeight = STATION_HEIGHT * scale;
+    const scaledStationWidth = STATION_WIDTH * scale;
+
+    return point.x >= this.canvasPoint.x
+    && point.x <= this.canvasPoint.x + scaledStationWidth
+    && point.y >= this.canvasPoint.y
+    && point.y <= this.canvasPoint.y + scaledStationHeight;
   }
 
   /**
