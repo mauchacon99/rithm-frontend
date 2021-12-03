@@ -42,7 +42,6 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
-    private errorService: ErrorService,
     private popupService: PopupService
   ) {
     this.sidenavDrawerService.drawerData$
