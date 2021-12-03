@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
-  QuestionFieldType, StationDocuments, UserType, DocumentNameField, StandardStringJSON
+  QuestionFieldType, StationDocuments, UserType, StandardStringJSON
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -366,30 +366,6 @@ export class MockDocumentService {
       instructions: 'General instructions'
     };
     return of(documentInfo).pipe(delay(1000));
-  }
-
-  /**
-   * Get appended fields to document.
-   *
-   * @param stationId  The id of station.
-   * @returns Array the fields in document.
-   */
-  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
-    const documentFieldName: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
-    return of(documentFieldName).pipe(delay(1000));
   }
 
   /**
