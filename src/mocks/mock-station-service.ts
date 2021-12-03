@@ -236,7 +236,7 @@ export class MockStationService {
    * @returns Station private/all save the questions array.
    */
   updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    previousQuestion = [
+    const mockPrevQuestions: Question[] = [
       {
         prompt: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
@@ -256,7 +256,7 @@ export class MockStationService {
         children: [],
       },
     ];
-    return of(previousQuestion).pipe(delay(1000));
+    return of(mockPrevQuestions).pipe(delay(1000));
   }
 
   /**
@@ -334,7 +334,8 @@ export class MockStationService {
     }
   }
 
-  /** Deletes a specified station.
+  /**
+   * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
