@@ -679,10 +679,10 @@ export class MockStationService {
   }
 
   /**
-   * Get appended fields to document.
+   * Get appended fields to document name template.
    *
    * @param stationId  The id of station.
-   * @returns Array the fields in document.
+   * @returns Array the appended fields in document name.
    */
    getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
     const documentFieldName: DocumentNameField[] = [
@@ -703,11 +703,11 @@ export class MockStationService {
   }
 
   /**
-   * Get appended fields to document name template.
+   * Update the document name template.
    *
    * @param stationId  The id of station.
    * @param appendedFields  The appended fields.
-   * @returns A list of field names for document name.
+   * @returns A list of field names for document name template.
    */
    updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     if (!stationId || !appendedFields) {
