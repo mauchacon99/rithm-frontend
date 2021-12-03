@@ -254,7 +254,6 @@ export class StationService {
     this.documentStationNameFields$.next(documentName);
   }
 
-
   /**
    * Adds users to the owners roster.
    *
