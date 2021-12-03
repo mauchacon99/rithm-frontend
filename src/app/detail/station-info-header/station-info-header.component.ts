@@ -4,6 +4,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Reusable component for the station information header.
@@ -33,7 +34,8 @@ export class StationInfoHeaderComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private errorService: ErrorService,
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
@@ -48,7 +50,6 @@ export class StationInfoHeaderComponent implements OnInit {
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,
@@ -58,7 +59,8 @@ export class StationInfoHeaderComponent implements OnInit {
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
-  /** Get name of station from StationInformation based on type.
+  /**
+   * Get name of station from StationInformation based on type.
    *
    * @returns The Station Name.
    */
@@ -66,7 +68,8 @@ export class StationInfoHeaderComponent implements OnInit {
     return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
   }
 
-  /** Get the priority from StationInformation model.
+  /**
+   * Get the priority from StationInformation model.
    *
    * @returns The Priority of station.
    */
@@ -83,17 +86,18 @@ export class StationInfoHeaderComponent implements OnInit {
     const dataInformationDrawer: StationInfoDrawerData = {
       stationInformation: this.stationInformation as StationInformation,
       stationName: this.stationName,
-      editMode: this.stationEditMode
+      editMode: this.stationEditMode,
+      locallyCreated: false
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
-    this.updStationInfoDrawerName();
+    this.updateStationInfoDrawerName();
   }
 
   /**
    * Update InfoDrawer Station Name.
    */
-     updStationInfoDrawerName(): void{
-      this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
-    }
+  updateStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+  }
 
 }

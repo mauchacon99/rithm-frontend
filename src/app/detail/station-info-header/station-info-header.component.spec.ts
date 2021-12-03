@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { MockStationService, MockUserService } from 'src/mocks';
+import { MockStationService, MockUserService, MockErrorService } from 'src/mocks';
 import { DocumentStationInformation, StationInfoDrawerData, StationInformation } from 'src/models';
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -18,18 +19,15 @@ describe('StationInfoHeaderComponent', () => {
     name: 'Dry Goods & Liquids',
     instructions: '',
     nextStations: [{
-      stationName: 'Development',
-      totalDocuments: 5,
-      isGenerator: true
+      name: 'Development',
+      rithmId: '147-852-369'
     }],
     previousStations: [{
-      stationName: 'Station-1',
-      totalDocuments: 2,
-      isGenerator: true
+      name: 'Station-1',
+      rithmId: '963-258-741'
     }, {
-      stationName: 'Station-2',
-      totalDocuments: 0,
-      isGenerator: false
+      name: 'Station-2',
+      rithmId: '753-951-842'
     }],
     stationOwners: [{
       rithmId: '',
@@ -96,12 +94,13 @@ describe('StationInfoHeaderComponent', () => {
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInputModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: StationService, useClass: MockStationService }
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService }
       ]
     })
       .compileComponents();
@@ -135,7 +134,8 @@ describe('StationInfoHeaderComponent', () => {
     const stationInfoDrawer: StationInfoDrawerData = {
       stationInformation: component.stationInformation as StationInformation,
       stationName: component.stationName,
-      editMode: component.stationEditMode
+      editMode: component.stationEditMode,
+      locallyCreated: false
     };
     const infoDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     const stationSpy = spyOn(TestBed.inject(StationService), 'updatedStationNameText');
@@ -148,7 +148,7 @@ describe('StationInfoHeaderComponent', () => {
   it('should update the name in station info drawer', () => {
     formGroup.controls['name'].setValue('Station Name');
     const updateStationNameSpy = spyOn(TestBed.inject(StationService),'updatedStationNameText');
-    component.updStationInfoDrawerName();
+    component.updateStationInfoDrawerName();
     expect(updateStationNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
   });
 

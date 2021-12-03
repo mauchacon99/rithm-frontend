@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
-
 import { StationInfoHeaderComponent } from './station-info-header/station-info-header.component';
 import { DocumentInfoHeaderComponent } from './document-info-header/document-info-header.component';
 import { ConnectedStationPaneComponent } from './connected-station-pane/connected-station-pane.component';
@@ -27,6 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { NestedFieldComponent } from './nested-field/nested-field.component';
 import { PreviousFieldsComponent } from './previous-fields/previous-fields.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -63,7 +63,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     NgxMaskModule.forRoot(),
     MatSelectModule,
     MatButtonModule,
-
+    MatChipsModule,
   ],
   exports: [
     SubHeaderComponent,

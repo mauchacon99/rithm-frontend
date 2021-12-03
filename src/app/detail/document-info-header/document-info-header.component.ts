@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { Subject, takeUntil } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
+import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentNameField } from 'src/models/document-name-field';
 
 /**
  * Reusable component for the document information header.
@@ -17,7 +17,8 @@ import { DocumentNameField } from 'src/models/document-name-field';
   styleUrls: ['./document-info-header.component.scss'],
   providers: [UtcTimeConversion]
 })
-export class DocumentInfoHeaderComponent implements OnInit {
+export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
+
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -30,22 +31,33 @@ export class DocumentInfoHeaderComponent implements OnInit {
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
+  /** Document Appended Fields. */
+  documentAppendedFields: DocumentNameField[] = [];
+
   /** Document name form. */
   documentNameForm: FormGroup;
 
-  /** Fields to Document in the station. */
-  appendedFields: DocumentNameField[] = [];
+  /** Whether the request is underway. */
+  documentLoadingIndicator = false;
 
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
     private utcTimeConversion: UtcTimeConversion,
+    private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
     });
+
+    /** Get Document Appended Fields from Behaviour Subject. */
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**
@@ -70,7 +82,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     );
   }
 
-  /** Station or Document looking at document header.
+  /**
+   * Station or Document looking at document header.
    *
    * @returns Station edit mode or document mode. TRUE if station mode and FALSE if document mode.
    */
@@ -78,7 +91,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return !('documentName' in this.documentInformation);
   }
 
-  /** Get Document Priority of document from DocumentStationInformation based on type.
+  /**
+   * Get Document Priority of document from DocumentStationInformation based on type.
    *
    * @returns The Document Priority.
    */
@@ -86,7 +100,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
   }
 
-  /** Get flowed time UTC of document from DocumentStationInformation based on type.
+  /**
+   * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
    */
@@ -94,7 +109,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
   }
 
-  /** Get last updated UTC of document from DocumentStationInformation based on type.
+  /**
+   * Get last updated UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Last Updated UTC.
    */
@@ -102,7 +118,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
   }
 
-  /** Get name of document from DocumentStationInformation based on type.
+  /**
+   * Get name of document from DocumentStationInformation based on type.
    *
    * @returns The Document Name.
    */
@@ -110,7 +127,8 @@ export class DocumentInfoHeaderComponent implements OnInit {
     return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 
-  /** The id of the station or document.
+  /**
+   * The id of the station or document.
    *
    * @returns The id of the station or document.
    */
@@ -138,12 +156,43 @@ export class DocumentInfoHeaderComponent implements OnInit {
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
     this.documentService.getAppendedFieldsOnDocumentName(stationId)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(first())
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.appendedFields = data;
+        next: (appendedFields) => {
+          if (appendedFields) {
+            this.documentAppendedFields = appendedFields;
+            this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
           }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Remove an appended field from document field names.
+   *
+   * @param index The current index to remove from appendedFields.
+   */
+  removeAppendedFieldFromDocumentName(index: number): void {
+    const removeStartIndex = index > 0 ? index - 1 : index;
+    this.documentAppendedFields.splice(removeStartIndex, 2);
+    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
+
+  /**
+   * Get document name.
+   *
+   */
+  private getDocumentName(): void {
+    this.documentService.getDocumentName(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentName) => {
+          this.documentNameForm.controls.name.setValue(documentName.data);
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -159,5 +208,30 @@ export class DocumentInfoHeaderComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Update the document name.
+   *
+   */
+  private updateDocumentName(): void {
+    this.documentLoadingIndicator = true;
+    const newDocumentName: StandardStringJSON = {
+      data: this.documentNameForm.controls.name.value
+    };
+    this.documentService.updateDocumentName(this.rithmId, newDocumentName)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoadingIndicator = false;
+        },
+        error: (error: unknown) => {
+          this.documentLoadingIndicator = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

@@ -1,9 +1,6 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
-} from '@angular/forms';
+// eslint-disable-next-line max-len
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
@@ -53,7 +50,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   instructionField: Question = {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Instructions',
-    instructions: '',
     questionType: QuestionFieldType.Instructions,
     isReadOnly: false,
     isRequired: true,
@@ -65,7 +61,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   labelField: Question = {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Name your field',
-    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -78,7 +73,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   selectOptionField: Question = {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Add Option',
-    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -90,7 +84,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   checklistOptionField: Question = {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Add Item',
-    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -118,9 +111,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     }
 
     this.stationFieldForm = this.fb.group({
-      instructionsField: ['', []],
-      [this.field.questionType]: ['', [Validators.required]],
-      optionField: ['', [Validators.required]]
+      instructionsField: [''],
+      [this.field.questionType]: [''],
+      optionField: ['']
     });
   }
 
@@ -190,7 +183,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.stationFieldForm.setValue(val, { emitEvent: false });
+    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**

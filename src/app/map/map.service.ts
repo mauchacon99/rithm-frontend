@@ -135,8 +135,18 @@ export class MapService {
   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
-      this.stationElements[index].status = MapItemStatus.Deleted;
+      if (this.stationElements[index].status === MapItemStatus.Created) {
+        this.stationElements.splice(index, 1);
+      } else {
+        this.stationElements[index].markAsDeleted();
+      }
     }
+    this.flowElements.map((flow) => {
+      if (flow.stations.includes(station.rithmId)) {
+        flow.stations = flow.stations.filter(stn => stn !== station.rithmId);
+        flow.markAsUpdated();
+      }
+    });
     this.mapDataReceived$.next(true);
   }
 
@@ -150,17 +160,17 @@ export class MapService {
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
 
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
 
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
-        e.status = MapItemStatus.Updated;
+        e.markAsUpdated();
       }
     });
     this.mapDataReceived$.next(true);
@@ -393,8 +403,32 @@ export class MapService {
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
+    this.validateConnections();
     this.validateStationsBelongToExactlyOneFlow();
     this.validateFlowsBelongToExactlyOneFlow();
+  }
+
+  /**
+   * Validates that all connections exist and are made in both origin station and destination station.
+   */
+  private validateConnections(): void {
+    for (const station of this.stationElements) {
+      for (const outgoingStationId of station.nextStations) {
+        const outgoingConnectedStation = this.stationElements.find((stationElement) => stationElement.rithmId === outgoingStationId);
+        if (!outgoingConnectedStation) {
+          // eslint-disable-next-line no-console
+          console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
+           but no station element was found with that id.`);
+        } else {
+          if (!outgoingConnectedStation.previousStations.includes(station.rithmId)) {
+            // eslint-disable-next-line no-console
+            console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
+              ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
+              previous stations.`);
+          }
+        }
+      }
+    }
   }
 
   /**

@@ -1,17 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType } from 'src/models';
-import { ConnectedStationInfo } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
-import { Subject } from 'rxjs';
-import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
-import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models/document-name-field';
+import { forkJoin, Subject } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
+
 /**
  * Main component for viewing a station.
  */
@@ -20,14 +18,10 @@ import { DocumentNameField } from 'src/models/document-name-field';
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss'],
 })
-export class StationComponent implements OnInit, OnDestroy {
+export class StationComponent implements OnInit, OnDestroy, AfterContentChecked {
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
-
-  /** The component for the station info header this name station. */
-  @ViewChild('stationInfoHeader', { static: false })
-  stationInfoHeader!: StationInfoHeaderComponent;
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -59,6 +53,16 @@ export class StationComponent implements OnInit, OnDestroy {
   /** Show Hidden accordion all field. */
   accordionFieldAllExpanded = false;
 
+  /** Station Rithm id. */
+  stationRithmId = '';
+
+  /** Get station name from behaviour subject. */
+  private stationName = '';
+
+  /** Appended Fields array. */
+  appendedFields: DocumentNameField[] = [];
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -66,16 +70,30 @@ export class StationComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private documentService: DocumentService,
+    private popupService: PopupService,
+    private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
-      stationTemplateForm: this.fb.control('')
+      stationTemplateForm: this.fb.control(''),
+      generalInstructions: this.fb.control('')
     });
 
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+    this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((stationName) => {
+        this.stationName = stationName;
+      });
+
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appFields) => {
+        this.appendedFields = appFields;
       });
   }
 
@@ -85,6 +103,12 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
+    this.getPreviousAndFollowingStations();
+  }
+
+  /** Comment. */
+  ngAfterContentChecked(): void {
+    this.ref.detectChanges();
   }
 
   /**
@@ -107,6 +131,7 @@ export class StationComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
+            this.stationRithmId = params.stationId;
             this.getStationInfo(params.stationId);
           }
         }, error: (error: unknown) => {
@@ -152,6 +177,7 @@ export class StationComponent implements OnInit, OnDestroy {
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
+            this.stationName = stationInfo.name;
           }
           this.stationLoading = false;
         },
@@ -175,7 +201,6 @@ export class StationComponent implements OnInit, OnDestroy {
     this.stationInformation.questions.push({
       rithmId: '3j4k-3h2j-hj4j',
       prompt: '',
-      instructions: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
@@ -193,22 +218,32 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update the Station.
+   * Save Station information and executed petitions to api.
    *
-   * @param stationInformation This Data global, for set data in update request.
    */
-  updateStation(stationInformation: StationInformation): void {
-    const nameStationChange = this.stationInfoHeader.stationNameForm.value.name;
-    stationInformation.name = nameStationChange;
+  saveStationInformation(): void {
     this.stationLoading = true;
-    this.stationService.updateStation(stationInformation)
+    const petitionsUpdateStation = [
+      // Update station Name.
+      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
+
+      // Update appended fields to document.
+      this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, this.appendedFields),
+
+      // Update general instructions.
+      this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
+        this.stationForm.controls.generalInstructions.value),
+
+      // Update Questions.
+      this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
+    ];
+
+    forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (stationUpdated) => {
-          if (stationUpdated) {
-            this.stationInformation = stationUpdated;
-          }
+        next: () => {
           this.stationLoading = false;
+          this.stationInformation.name = this.stationName;
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -248,18 +283,18 @@ export class StationComponent implements OnInit, OnDestroy {
   // }
 
   /**
-   * Get the document field name array.
+   * Get previous and following stations.
    *
-   * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
    */
-   updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
+  getPreviousAndFollowingStations(): void {
+    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const documentName = data;
+        next: (prevAndFollowStations) => {
+          if (prevAndFollowStations) {
+            this.forwardStations = prevAndFollowStations.followingStations;
+            this.previousStations = prevAndFollowStations.previousStations;
+          }
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -267,5 +302,19 @@ export class StationComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
   }
 }

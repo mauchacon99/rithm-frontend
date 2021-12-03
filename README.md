@@ -10,7 +10,7 @@
 
 Clone the repo and perform an `npm i` in the base directory to install all of the dependencies for the project.
 
-Ensure that you are running the latest LTS version of Node.js (v14.15.1 or greater) by running the command `node --version`. The latest version is required for ESLint support.
+Ensure that you are running the latest current LTS version of Node.js (v16.13.1 or greater) by running the command `node --version`. The latest version is required for ESLint support.
 
 You can run the web app by using the command `npm start` and opening Google Chrome to the specified localhost address (usually [https://localhost:4200/](https://localhost:4200/)).
 

@@ -2,9 +2,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
 
 /**
  * Mocks methods of the `StationService`.
@@ -13,6 +12,9 @@ export class MockStationService {
 
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
+
+  /** The Name of the Station Document as BehaviorSubject. */
+  documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
   /**
    * Gets a station information.
@@ -26,18 +28,15 @@ export class MockStationService {
       name: 'Dry Goods & Liquids',
       instructions: '',
       nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
+        name: 'Development',
+        rithmId: '753-962-785'
       }],
       previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
+        name: 'Station-1',
+        rithmId: '789-859-742'
       }, {
-        stationName: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
+        name: 'Station-2',
+        rithmId: '753-951-741'
       }],
       stationOwners: [{
         rithmId: '',
@@ -114,18 +113,15 @@ export class MockStationService {
         name: 'New Station Name',
         instructions: '',
         nextStations: [{
-          stationName: 'Development',
-          totalDocuments: 5,
-          isGenerator: true
+          name: 'Development',
+          rithmId: '756-984-741'
         }],
         previousStations: [{
-          stationName: 'Station-1',
-          totalDocuments: 2,
-          isGenerator: true
+          name: 'Station-1',
+          rithmId: '123-987-357'
         }, {
-          stationName: 'Station-2',
-          totalDocuments: 0,
-          isGenerator: false
+          name: 'Station-2',
+          rithmId: '123-965-745'
         }],
         stationOwners: [{
           rithmId: '',
@@ -194,11 +190,11 @@ export class MockStationService {
    * Update station document generation status.
    *
    * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
-    return of(statusNew).pipe(delay(1000));
+  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+    return of(status).pipe(delay(1000));
   }
 
   /**
@@ -212,7 +208,6 @@ export class MockStationService {
     const mockPrevQuestions: Question[] = [
       {
         prompt: 'Fake question 1',
-        instructions: 'Fake question 1',
         rithmId: '3j4k-3h2j-hj4j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
@@ -222,8 +217,38 @@ export class MockStationService {
       },
       {
         prompt: 'Fake question 2',
-        instructions: 'Fake question 2',
         rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    return of(mockPrevQuestions).pipe(delay(1000));
+  }
+
+  /**
+   * Update all station previous private/all questions.
+   *
+   * @param stationId The Specific id of station.
+   * @param previousQuestion The Specific previous question of station.
+   * @returns Station private/all save the questions array.
+   */
+  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
+    const mockPrevQuestions: Question[] = [
+      {
+        prompt: 'Example question#1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Example question#2',
+        rithmId: '3j5k-3h2j-hj5j',
         questionType: QuestionFieldType.Number,
         isReadOnly: false,
         isRequired: true,
@@ -309,7 +334,8 @@ export class MockStationService {
     }
   }
 
-  /** Deletes a specified station.
+  /**
+   * Deletes a specified station.
    *
    * @param stationId The Specific id of station.
    * @returns Returns an empty observable.
@@ -500,6 +526,16 @@ export class MockStationService {
     return of(expectedResponse).pipe(delay(1000));
   }
 
+
+  /**
+   * Returns the station document name.
+   *
+   * @param documentName The name of the document in the station.
+   */
+  updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
+    this.documentStationNameFields$.next(documentName);
+  }
+
   /**
    * Returns the station name.
    *
@@ -507,5 +543,117 @@ export class MockStationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Update the Station General Instruction.
+   *
+   * @param rithmId The Specific id of station.
+   * @param instructions The general instructions to be updated.
+   * @returns The updated stationInformation.
+   */
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON>{
+    if (!rithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station without defining a station id or without any instructions in it.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const data: StandardStringJSON = {
+        data: 'updated instructions'
+      };
+      return of(data).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Updates a station name.
+   * Get previous and following stations.
+   *
+   * @param stationRithmId The rithm id actually station.
+   * @returns Previous and following stations.
+   */
+  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const mockDataFollowAndPrevStations: ForwardPreviousStationsDocument = {
+      rithmId: stationRithmId,
+      previousStations: [
+        {
+          rithmId: '789-654-321',
+          name: 'Previous station 1',
+          totalDocuments: 5
+        },
+        {
+          rithmId: '789-654-753',
+          name: 'Previous station 2',
+          totalDocuments: 2
+        }
+      ],
+      followingStations: [
+        {
+          rithmId: '852-963-741',
+          name: 'Follow station 1',
+          totalDocuments: 2
+        },
+        {
+          rithmId: '852-963-418',
+          name: 'Follow station 2',
+          totalDocuments: 1
+        }
+      ]
+    };
+    return of(mockDataFollowAndPrevStations).pipe(delay(1000));
+  }
+
+  /**
+   * Update station name.
+   *
+   * @returns The station name updated.
+   * @param name The new name from station.
+   * @param stationRithmId The stationRithmId to send to service.
+   */
+  updateStationName(name: string, stationRithmId: string): Observable<string> {
+    if (!stationRithmId || name === '') {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update station name without defining a station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of(name).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the document field name array.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFields  The appended fields.
+   * @returns A list of field names for document name.
+   */
+   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+    if (!stationId || !appendedFields) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot update document name.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentFieldName: DocumentNameField[] = [
+        {
+          prompt: 'Address',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+        {
+          prompt: '/',
+          rithmId: ''
+        },
+        {
+          prompt: 'Which is best?',
+          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        },
+      ];
+      return of(documentFieldName).pipe(delay(1000));
+    }
   }
 }
