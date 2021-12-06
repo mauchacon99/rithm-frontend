@@ -1,9 +1,6 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
-} from '@angular/forms';
+// eslint-disable-next-line max-len
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Question, QuestionFieldType } from 'src/models';
 /**
@@ -114,9 +111,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     }
 
     this.stationFieldForm = this.fb.group({
-      instructionsField: ['', []],
-      [this.field.questionType]: ['', [Validators.required]],
-      optionField: ['', [Validators.required]]
+      instructionsField: [''],
+      [this.field.questionType]: [''],
+      optionField: ['']
     });
   }
 
@@ -186,7 +183,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.stationFieldForm.setValue(val, { emitEvent: false });
+    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
-  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
+  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
+  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,6 +38,12 @@ export class MapService {
 
   /** An array that stores a backup of flowElements when buildMap is called. */
   storedFlowElements: FlowMapElement[] = [];
+
+  /** Data for connection line path between stations. */
+  connectionElements: ConnectionMapElement[] = [];
+
+  /** An array that stores a backup of connectionElements when buildMap is called. */
+  storedConnectionElements: ConnectionMapElement[] = [];
 
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
@@ -103,6 +110,57 @@ export class MapService {
   private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
+    this.setConnections();
+    this.updateStationCanvasPoints();
+  }
+
+  /**
+   * Update the canvas points for each station.
+   */
+  updateStationCanvasPoints(): void {
+    this.stationElements.forEach((station) => {
+      station.canvasPoint = this.getCanvasPoint(station.mapPoint);
+      //Update the connection lines as the stations are updated.
+      this.updateConnection(station);
+    });
+  }
+
+  /**
+   * Fills in connections array with info from this.stationElements.
+   */
+  setConnections(): void {
+    for (const station of this.stationElements) {
+      for (const connection of station.nextStations) {
+        const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
+
+        if (!outgoingStation) {
+          throw new Error('no outgoing station found.');
+        }
+
+        const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
+
+        if (!this.connectionElements.includes(lineInfo)) {
+          this.connectionElements.push(lineInfo);
+        }
+      }
+    }
+  }
+
+  /**
+   * Update connection information.
+   *
+   * @param station The station that is being updated.
+   */
+  updateConnection(station: StationMapElement): void {
+    for (const connection of this.connectionElements) {
+      if (connection.startStationRithmId === station.rithmId) {
+        connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      if (connection.endStationRithmId === station.rithmId) {
+        connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
+      }
+      connection.path = connection.getConnectionLine(connection.startPoint, connection.endPoint, this.mapScale$.value);
+    }
   }
 
   /**
@@ -132,7 +190,7 @@ export class MapService {
    *
    * @param station The station for which status has to be set to delete.
    */
-  deleteStation(station: StationMapElement): void {
+   deleteStation(station: StationMapElement): void {
     const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
     if (index >= 0 ) {
       if (this.stationElements[index].status === MapItemStatus.Created) {
@@ -141,6 +199,12 @@ export class MapService {
         this.stationElements[index].markAsDeleted();
       }
     }
+    this.flowElements.map((flow) => {
+      if (flow.stations.includes(station.rithmId)) {
+        flow.stations = flow.stations.filter(stn => stn !== station.rithmId);
+        flow.markAsUpdated();
+      }
+    });
     this.mapDataReceived$.next(true);
   }
 
@@ -149,24 +213,31 @@ export class MapService {
    *
    * @param station The station for which connections has to be removed.
    */
-   removeStationConnection(station: StationMapElement): void {
+   removeAllStationConnections(station: StationMapElement): void {
     this.stationElements.map((e) => {
+      //Remove the previous and next stations from the station.
       if (e.rithmId === station.rithmId) {
         e.previousStations = [];
         e.nextStations = [];
         e.markAsUpdated();
       }
 
+      //Remove the station from the previousStation arrays of all connecting stations.
       if (e.previousStations.includes(station.rithmId)) {
         e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
         e.markAsUpdated();
       }
 
+      //Remove the station from the nextStation arrays of all connecting stations.
       if (e.nextStations.includes(station.rithmId)) {
         e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
         e.markAsUpdated();
       }
     });
+    //Remove the connections from this.connectionElements.
+    const filteredConnections = this.connectionElements.filter(
+      (e) => e.startStationRithmId !== station.rithmId && e.endStationRithmId !== station.rithmId);
+    this.connectionElements = filteredConnections;
     this.mapDataReceived$.next(true);
   }
 
@@ -198,6 +269,7 @@ export class MapService {
   buildMap(): void {
     this.storedStationElements = this.deepCopy(this.stationElements);
     this.storedFlowElements = this.deepCopy(this.flowElements);
+    this.storedConnectionElements = this.deepCopy(this.connectionElements);
     this.mapMode$.next(MapMode.Build);
   }
 
@@ -213,7 +285,41 @@ export class MapService {
       this.flowElements = this.deepCopy(this.storedFlowElements);
       this.storedFlowElements = [];
     }
+    if (this.storedConnectionElements.length > 0) {
+      this.connectionElements = this.deepCopy(this.storedConnectionElements);
+      this.storedConnectionElements = [];
+    }
     this.mapMode$.next(MapMode.View);
+    this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Removes the single connection between stations.
+   *
+   * @param startStationId The station from which connection starts.
+   * @param endStationId The station for which connection end.
+   */
+  removeConnectionLine(startStationId: string, endStationId: string): void {
+    // Get two stations for which connection line belongs to
+    const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
+    const endStationIndex = this.stationElements.findIndex(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+
+    // Find the index from each stations between nextStations and previousStations
+    const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
+    const prevStationIndex = this.stationElements[endStationIndex].previousStations.findIndex(e => e === startStationId);
+
+    // Remove station rithm ids from nextStations and previousStations properties also update station status
+    this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
+    this.stationElements[endStationIndex].previousStations.splice(prevStationIndex, 1);
+    this.stationElements[startStationIndex].status = MapItemStatus.Updated;
+    this.stationElements[endStationIndex].status = MapItemStatus.Updated;
+
+    //Remove the connection from this.connectionElements.
+    const filteredConnectionIndex = this.connectionElements.findIndex(
+      (e) => e.startStationRithmId === startStationId && e.endStationRithmId === endStationId);
+      if (filteredConnectionIndex !== -1) {
+        this.connectionElements.splice(filteredConnectionIndex, 1);
+      }
     this.mapDataReceived$.next(true);
   }
 
