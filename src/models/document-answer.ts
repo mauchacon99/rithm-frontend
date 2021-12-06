@@ -2,6 +2,8 @@
  * Represents the answers to the document questions.
  */
 
+import { QuestionFieldType } from "./enums";
+
 export interface DocumentAnswer {
 
   /** The id the question. */
@@ -23,7 +25,7 @@ export interface DocumentAnswer {
   filename: string;
 
   /** Type the answer. */
-  type: string;
+  type: QuestionFieldType;
 
   /** Id to answer. */
   rithmId: string;
