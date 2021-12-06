@@ -708,7 +708,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return the station Document name template', () => {
+  it('should test connection to get the station Document name template', () => {
     const expectData: DocumentNameField[] = [
       {
         prompt: 'Address',
