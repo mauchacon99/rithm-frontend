@@ -75,7 +75,7 @@ describe('DocumentInfoHeaderComponent', () => {
     const expectedData = {
       rithmId: rithmId,
       isStation: isStation,
-      userLoginIsOwner: true
+      isUserAdminOrOwner: true
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -136,7 +136,7 @@ describe('DocumentInfoHeaderComponent', () => {
   };
 
   it('should test method get userLoginIsOwner and return boolean', () => {
-    const valueExpected = component.userLoginIsOwner;
+    const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBe(true);
   });
 });
