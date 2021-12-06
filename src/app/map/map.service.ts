@@ -427,29 +427,32 @@ export class MapService {
     const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
 
     //Arrange all this.stationElements Y coords in order.
-    const topToBottom = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
+    const topToBottom = this.stationElements.map((station) => station.canvasPoint.y).sort((a, b) => a - b);
     const top = topToBottom[0];
     const bottom = topToBottom[topToBottom.length - 1] + STATION_HEIGHT;
 
     //Arrange all this.stationElements X coords in order.
-    const leftToRight = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
+    const leftToRight = this.stationElements.map((station) => station.canvasPoint.x).sort((a, b) => a - b);
     const left = leftToRight[0];
     const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
 
-    //Need to check if currentCanvasPoint.y is greater than top.
-    // this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value is less than bottom.
-    // this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value is greater than right.
-    // this.currentCanvasPoint$.value.x is less than left.
-
-    //if true, increase scale.
+    console.log(this.currentCanvasPoint$.value.y);
+    console.log(top);
+    console.log(this.currentCanvasPoint$.value.y < top);
+    console.log(this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value > bottom);
+    console.log(this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value > right);
+    console.log(this.currentCanvasPoint$.value.x < left);
 
     if (this.currentCanvasPoint$.value.y > top
       && this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value < bottom
       && this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value > right
       && this.currentCanvasPoint$.value.x < left
     ) {
-      // scale
-      this.mapScale$.next(Math.min(ABOVE_MAX, this.mapScale$.value/ZOOM_VELOCITY));
+      setTimeout(() => {
+        // scale
+        this.mapScale$.next(Math.min(ABOVE_MAX, this.mapScale$.value/ZOOM_VELOCITY));
+        this.setCenterScale();
+      }, 10);
     }
   }
 
@@ -464,6 +467,7 @@ export class MapService {
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
     };
     this.currentCanvasPoint$.next(adjustedCenter);
+    this.setCenterScale();
   }
 
   /**
