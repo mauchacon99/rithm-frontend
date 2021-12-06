@@ -1,3 +1,4 @@
+# High-level rules (these will be overridden by later rules)
 *.scss @belugasanity
 *.css @belugasanity
 .stylelintrc.json @belugasanity

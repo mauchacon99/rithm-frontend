@@ -9,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DocumentFieldComponent } from './document-field/document-field.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
+import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { DocumentTemplateComponent } from './document-template/document-template
     MatSidenavModule,
     DetailModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InfoDrawerModule
   ]
 })
 export class DocumentModule { }
