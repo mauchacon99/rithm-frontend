@@ -336,7 +336,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     let confirmNavigation = false;
     if (this.editMode) {
       const confirm = await this.popupService.confirm({
-        title: 'Local Changes Not Saved.',
+        title: 'Local Changes Not Saved',
         message: `Leave without publishing any changes made to the map?`,
         okButtonText: 'Proceed',
       });
