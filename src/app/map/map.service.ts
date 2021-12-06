@@ -467,6 +467,32 @@ export class MapService {
   }
 
   /**
+   * Find's the center of a user's map by looking at the mapPoints of the furthest left, top, right and bottom stations.
+   *
+   * @returns The center point of the map.
+   */
+  getMapCenterPoint(): Point {
+    //Arrange all this.stationElements Y coords in order.
+    const topToBottom = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
+    const top = topToBottom[0];
+    const bottom = topToBottom[topToBottom.length - 1];
+
+    //Arrange all this.stationElements X coords in order.
+    const leftToRight = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
+    const left = leftToRight[0];
+    const right = leftToRight[leftToRight.length - 1];
+
+    const center: Point = {x: (left + right)/2, y: (top + bottom)/2};
+
+    console.log(this.stationElements);
+    console.log(topToBottom);
+    console.log(leftToRight);
+    console.log(center);
+
+    return center;
+  }
+
+  /**
    * Gets the x-coordinate on the map for a given canvas x-coordinate.
    *
    * @param canvasX The x-coordinate on the canvas.

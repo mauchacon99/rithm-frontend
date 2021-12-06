@@ -258,7 +258,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Zooms the map in to center.
+   * Center the map on its center point.
+   */
+  center(): void {
+    this.mapService.getMapCenterPoint;
+  }
+
+  /**
+   * Zooms the map in to center of screen.
    */
   zoomIn(): void {
     this.mapService.matMenuStatus$.next(true);
@@ -267,7 +274,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Zooms the map out from center.
+   * Zooms the map out from center of screen.
    */
   zoomOut(): void {
     this.mapService.matMenuStatus$.next(true);
