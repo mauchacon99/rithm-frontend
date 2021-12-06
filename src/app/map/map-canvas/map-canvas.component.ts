@@ -2,13 +2,13 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-// eslint-disable-next-line max-len
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { BADGE_MARGIN, BADGE_RADIUS,
-  BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY } from '../map-constants';
+import {
+  DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
+  PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY
+} from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -81,6 +81,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for flow used in the map. */
   flows: FlowMapElement[] = [];
 
+  /** Data for connection line path between stations. */
+  connections: ConnectionMapElement[] = [];
+
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
@@ -89,6 +92,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
+
+
 
   /**
    * Add station mode active.
@@ -135,6 +140,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
         this.flows = this.mapService.flowElements;
+        this.connections = this.mapService.connectionElements;
         this.drawElements();
       });
 
@@ -197,43 +203,43 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
     if (window.PointerEvent && !(is_android && is_firefox)) {
-        event.preventDefault();
-        //If event exists in pointerCache, update event in cache.
-        for (let i = 0; i < this.pointerCache.length; i++) {
-          if (this.pointerCache[i].pointerId === event.pointerId) {
-            this.pointerCache.splice(i, 1, event);
-            break;
-          }
-        }
-
-        //If event doesn't exist in pointerCache, add it.
-        if (!this.pointerCache.includes(event)) {
-          this.pointerCache.push(event);
-        }
-
-        if (this.pointerCache.length === 1) {
-          const pointer = this.pointerCache[0];
-          this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
-          this.eventStartCoords = this.getEventCanvasPoint(pointer);
-
-          const pointerPos = this.getEventCanvasPoint(pointer);
-          this.eventStartLogic(pointerPos);
-        }
-
-        if (this.pointerCache.length === 2) {
-          const pointer1 = this.pointerCache[0];
-          const pointer2 = this.pointerCache[1];
-
-          this.lastTouchCoords = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
-          this.eventStartCoords = this.getEventCanvasPoint(pointer1);
-        }
-
-        if (this.dragItem !== MapDragItem.Default) {
-          const map = document.getElementById('map');
-          map?.setPointerCapture(event.pointerId);
+      event.preventDefault();
+      //If event exists in pointerCache, update event in cache.
+      for (let i = 0; i < this.pointerCache.length; i++) {
+        if (this.pointerCache[i].pointerId === event.pointerId) {
+          this.pointerCache.splice(i, 1, event);
+          break;
         }
       }
+
+      //If event doesn't exist in pointerCache, add it.
+      if (!this.pointerCache.includes(event)) {
+        this.pointerCache.push(event);
+      }
+
+      if (this.pointerCache.length === 1) {
+        const pointer = this.pointerCache[0];
+        this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
+        this.eventStartCoords = this.getEventCanvasPoint(pointer);
+
+        const pos = this.getEventCanvasPoint(pointer);
+        this.eventStartLogic(pos);
+      }
+
+      if (this.pointerCache.length === 2) {
+        const pointer1 = this.pointerCache[0];
+        const pointer2 = this.pointerCache[1];
+
+        this.lastTouchCoords = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
+        this.eventStartCoords = this.getEventCanvasPoint(pointer1);
+      }
+
+      if (this.dragItem !== MapDragItem.Default) {
+        const map = document.getElementById('map');
+        map?.setPointerCapture(event.pointerId);
+      }
     }
+  }
 
   /**
    * Handles user input when releasing and a pointer event is fired.
@@ -260,14 +266,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       if (this.pointerCache.length === 0) {
-        const pointerPos = this.getEventCanvasPoint(event);
+        const pos = this.getEventCanvasPoint(event);
+        const con = this.getEventContextPoint(event);
 
         if (this.dragItem !== MapDragItem.Default) {
           const map = document.getElementById('map');
           map?.releasePointerCapture(event.pointerId);
         }
 
-        this.eventEndLogic(pointerPos);
+        this.eventEndLogic(pos, con);
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -305,9 +312,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
-        const touchPos = this.getEventCanvasPoint(pointer);
-        //this method has better compatibility with different input types than singleInputMouseMoveLogic.
-        this.singleInputMoveLogic(touchPos);
+        const pos = this.getEventCanvasPoint(pointer);
+        const con = this.getEventContextPoint(pointer);
+
+        this.singleInputMoveLogic(pos, con);
       }
 
       // Pinch event.
@@ -315,8 +323,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const pointer1 = this.pointerCache[0];
         const pointer2 = this.pointerCache[1];
 
-        const pointerPos = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
-        this.pinchZoomLogic(pointerPos);
+        const pos = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
+        this.pinchZoomLogic(pos);
       }
     }
   }
@@ -334,8 +342,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
       this.eventStartCoords = this.getEventCanvasPoint(event);
 
-      const mousePos = this.getEventCanvasPoint(event);
-      this.eventStartLogic(mousePos);
+      const pos = this.getEventCanvasPoint(event);
+      this.eventStartLogic(pos);
     }
   }
 
@@ -348,10 +356,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   mouseUp(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      const mousePos = this.getEventCanvasPoint(event);
+      const pos = this.getEventCanvasPoint(event);
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
+      const con = this.getEventContextPoint(event);
 
-      this.eventEndLogic(mousePos);
+      this.eventEndLogic(pos, con);
     }
   }
 
@@ -365,7 +374,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   mouseMove(event: MouseEvent): void {
     if (!window.PointerEvent) {
       const pos = this.getEventCanvasPoint(event);
-      this.singleInputMoveLogic(pos);
+      const con = this.getEventContextPoint(event);
+      this.singleInputMoveLogic(pos, con);
     }
   }
 
@@ -387,12 +397,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!window.PointerEvent || (is_android && is_firefox)) {
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
-        const touchPos = this.getEventCanvasPoint(touchPoint);
+        const pos = this.getEventCanvasPoint(touchPoint);
 
-        this.lastTouchCoords[0] = touchPos;
-        this.eventStartCoords = touchPos;
+        this.lastTouchCoords[0] = pos;
+        this.eventStartCoords = pos;
 
-        this.eventStartLogic(touchPos);
+        this.eventStartLogic(pos);
       }
 
       if (event.touches.length === 2) {
@@ -423,9 +433,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
-      const touchPos = this.getEventCanvasPoint(touchPoint);
+      const pos = this.getEventCanvasPoint(touchPoint);
+      const con = this.getEventContextPoint(touchPoint);
 
-      this.eventEndLogic(touchPos);
+      this.eventEndLogic(pos, con);
     }
   }
 
@@ -448,17 +459,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Single touch.
       if (event.touches.length === 1) {
         const touchPoint = event.changedTouches[0];
-        const touchPos = this.getEventCanvasPoint(touchPoint);
-
-        this.singleInputMoveLogic(touchPos);
+        const pos = this.getEventCanvasPoint(touchPoint);
+        const con = this.getEventContextPoint(touchPoint);
+        this.singleInputMoveLogic(pos, con);
       }
 
       //Pinch event.
       if (event.touches.length === 2) {
         const touchPoint = event.changedTouches;
-        const touchPos = [this.getEventCanvasPoint(touchPoint[0]), this.getEventCanvasPoint(touchPoint[1])];
+        const pos = [this.getEventCanvasPoint(touchPoint[0]), this.getEventCanvasPoint(touchPoint[1])];
 
-        this.pinchZoomLogic(touchPos);
+        this.pinchZoomLogic(pos);
       }
     }
   }
@@ -509,10 +520,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     const mousePoint = this.getEventCanvasPoint(event);
     const eventAmount = event.deltaY >= 100
-    ? Math.floor(event.deltaY/100)
-    : event.deltaY <= -100
-      ? Math.ceil(event.deltaY/100)
-      : event.deltaY/3;
+      ? Math.floor(event.deltaY / 100)
+      : event.deltaY <= -100
+        ? Math.ceil(event.deltaY / 100)
+        : event.deltaY / 3;
 
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
@@ -524,21 +535,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.zoomCount < 0) {
         this.mapService.zoomCount$.next(0);
       }
-      this.mapService.zoomCount$.next(this.zoomCount + Math.floor(10*-eventAmount));
+      this.mapService.zoomCount$.next(this.zoomCount + Math.floor(10 * -eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     } else {
       // Do nothing if already at min zoom.
       if (this.scale <= MIN_SCALE
         || this.mapService.mapMode$.value !== MapMode.View
-        && this.scale <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY) {
-          this.mapService.zoomCount$.next(0);
-          return;
-        }
+        && this.scale <= SCALE_RENDER_STATION_ELEMENTS / ZOOM_VELOCITY) {
+        this.mapService.zoomCount$.next(0);
+        return;
+      }
       // Zoom out
       if (this.zoomCount > 0) {
         this.mapService.zoomCount$.next(0);
       }
-      this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10*eventAmount));
+      this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10 * eventAmount));
       this.mapService.handleZoom(mousePoint, false);
     }
     // Overlay option menu close state.
@@ -553,7 +564,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param fps The framerate to animate at.
    */
   private scaleChangeDraw(fps = 60): void {
-    if (this.zoomCount !== 0){
+    if (this.zoomCount !== 0) {
       if (!this.zoomInterval) {
         this.zoomInterval = setInterval(() => {
           if (this.zoomCount === 0 && this.zoomInterval) {
@@ -561,7 +572,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.zoomInterval = undefined;
           }
           this.drawElements();
-        }, 1000/ fps);
+        }, 1000 / fps);
       }
     }
   }
@@ -590,8 +601,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
-        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1 ) {
-          this.nextPanVelocity = {x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE};
+        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1) {
+          this.nextPanVelocity = { x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE };
           this.myReq = requestAnimationFrame(step);
         } else {
           cancelAnimationFrame(this.myReq as number);
@@ -614,29 +625,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Clear the canvas
       this.context.clearRect(0, 0, this.mapCanvas.nativeElement.width / pixelRatio, this.mapCanvas.nativeElement.height / pixelRatio);
 
-      // Calculate the station canvas points
-      this.stations.forEach((station) => {
-        station.canvasPoint = this.mapService.getCanvasPoint(station.mapPoint);
-      });
+      //Update station and connection positions.
+      this.mapService.updateStationCanvasPoints();
 
       // Draw the flows
       this.flowElementService.drawFlows();
 
       // Draw the connections
-      for (const station of this.stations) {
-        for (const connection of station.nextStations) {
-          const outgoingStation = this.stations.find((foundStation) => foundStation.rithmId === connection) as StationMapElement;
-          const startPoint = {
-            x: station.canvasPoint.x + STATION_WIDTH * this.scale,
-            y: station.canvasPoint.y + STATION_HEIGHT * this.scale / 2
-          };
-          const endPoint = {
-            x: outgoingStation?.canvasPoint.x,
-            y: outgoingStation?.canvasPoint.y + STATION_HEIGHT * this.scale / 2
-          };
-          this.connectionElementService.drawConnection(startPoint, endPoint);
-        }
-      }
+      this.connections.forEach((connection) => {
+        this.connectionElementService.drawConnection(connection);
+      });
 
       // Draw the stations
       this.stations.forEach((station) => {
@@ -678,7 +676,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     };
 
-    const panVelocity: Point = {x: 0, y: 0};
+    const panVelocity: Point = { x: 0, y: 0 };
     const mobileAdjust = window.innerWidth < 768 ? 36 : 0;
 
     //Set direction and speed to pan x.
@@ -748,7 +746,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas context.
    */
-   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
+  private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
       x: canvasPoint.x * window.devicePixelRatio,
@@ -776,13 +774,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.mapMode === MapMode.Build) {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
+        station.checkElementHover(position, this.mapMode, this.scale);
         // clicked on a connection node.
         if (station.hoverActive === StationElementHoverType.Node) {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
-        // Check for drag start on station
+          // Check for drag start on station
         } else if (station.hoverActive !== StationElementHoverType.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
@@ -793,9 +791,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       //This ensures that when dragging a station or node connection, it will always display above other stations.
-      if (this.stations.find( obj => obj.dragging === true)) {
-        const draggingStation = this.stations.filter( obj => obj.dragging === true);
-        this.stations = this.stations.filter( obj => obj.dragging !== true);
+      if (this.stations.find(obj => obj.dragging === true)) {
+        const draggingStation = this.stations.filter(obj => obj.dragging === true);
+        this.stations = this.stations.filter(obj => obj.dragging !== true);
         this.stations.push(draggingStation[0]);
       }
     }
@@ -810,8 +808,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles mouseUp and touchEnd logic.
    *
    * @param position The position of the mouse or touch event.
+   * @param contextPoint Calculated position of click.
    */
-  private eventEndLogic(position: Point) {
+  private eventEndLogic(position: Point, contextPoint: Point) {
     this.holdDrag = false;
 
     // Overlay option menu close state.
@@ -821,27 +820,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
-      if (this.mapMode === MapMode.StationAdd) {
-        const coords: Point = { x: 0, y: 0 };
-        coords.x = position.x - STATION_WIDTH / 2 * this.scale;
-        coords.y = position.y - STATION_HEIGHT / 2 * this.scale;
-
-        //create a new station at click.
-        this.mapService.createNewStation(coords);
-
-        //After clicking, set to build mode.
-        this.mapService.mapMode$.next(MapMode.Build);
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        this.clickEventHandler(position, contextPoint);
       }
-
-      //Check if click was over document badge.
-      this.clickEventHandler(position);
     }
 
     //If dragging the map.
     if (this.dragItem === MapDragItem.Map) {
       //Check if nextPanVelocity is great enough to trigger autoPan.
-      if ( this.fastDrag ) {
-        this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
+      if (this.fastDrag) {
+        this.nextPanVelocity = { x: this.nextPanVelocity.x / this.scale, y: this.nextPanVelocity.y / this.scale };
         this.checkAutoPan();
       } else {
         this.nextPanVelocity = { x: 0, y: 0 };
@@ -850,38 +838,46 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If dragging a connection node.
     if (this.dragItem === MapDragItem.Node) {
-      let newNextStationId = '';
-      let newPreviousStationId = '';
+      let newNextStation: StationMapElement | undefined;
+      let newPreviousStation: StationMapElement | undefined;
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
+        station.checkElementHover(position, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
-          newNextStationId = station.rithmId;
+          newNextStation = station;
         }
         if (station.dragging) {
-          newPreviousStationId = station.rithmId;
+          newPreviousStation = station;
         }
       }
 
-      for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.scale);
-        if (station.hoverActive === StationElementHoverType.Station) {
-          //ensure we cant get duplicate ids.
-          if (!station.previousStations.includes(newPreviousStationId) && station.rithmId !== newPreviousStationId) {
-            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
-              station.previousStations.push(newPreviousStationId);
+      if (newNextStation && newPreviousStation) {
+        for (const station of this.stations) {
+          // Check if clicked on an interactive station element.
+          station.checkElementHover(position, this.mapMode, this.scale);
+          if (station.hoverActive === StationElementHoverType.Station) {
+            //ensure we cant get duplicate ids.
+            if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
+              if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
+                station.previousStations.push(newPreviousStation.rithmId);
+              }
+            }
+            station.markAsUpdated();
+          }
+          if (station.dragging) {
+            //ensure we cant get duplicate ids.
+            if (!station.nextStations.includes(newNextStation.rithmId) && station.rithmId !== newNextStation.rithmId) {
+              if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
+                station.nextStations.push(newNextStation.rithmId);
+              }
             }
           }
-          station.markAsUpdated();
         }
-        if (station.dragging) {
-          //ensure we cant get duplicate ids.
-          if (!station.nextStations.includes(newNextStationId) && station.rithmId !== newNextStationId) {
-            if (newPreviousStationId.length > 0 && newNextStationId.length > 0) {
-              station.nextStations.push(newNextStationId);
-            }
-          }
+
+        const lineInfo: ConnectionMapElement = new ConnectionMapElement(newPreviousStation, newNextStation, this.scale);
+
+        if (!this.mapService.connectionElements.includes(lineInfo) && (newPreviousStation.rithmId !== newNextStation.rithmId)) {
+          this.mapService.connectionElements.push(lineInfo);
         }
       }
     }
@@ -909,8 +905,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Logic for handling panning, dragging, etc on a mobile device.
    *
    * @param moveInput The point of movement.
+   * @param moveContext The point of movement.
    */
-  private singleInputMoveLogic(moveInput: Point) {
+  private singleInputMoveLogic(moveInput: Point, moveContext: Point) {
     if (this.dragItem === MapDragItem.Map) {
       const moveAmountX = this.lastTouchCoords[0].x - moveInput.x;
       const moveAmountY = this.lastTouchCoords[0].y - moveInput.y;
@@ -919,8 +916,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
       this.lastTouchCoords[0] = moveInput;
-      this.nextPanVelocity = {x: -moveAmountX, y: -moveAmountY};
-      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT ) {
+      this.nextPanVelocity = { x: -moveAmountX, y: -moveAmountY };
+      if (Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT || Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT) {
         this.fastDrag = true;
         this.holdDrag = true;
         setTimeout(() => {
@@ -949,26 +946,49 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(this.mapService.currentMousePoint$.value, this.scale);
+        station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
         if (station.dragging) {
           this.mapService.currentMousePoint$.next(moveInput);
         }
       }
     } else {
-      //Hovering over different station elements.
-      for (const station of this.stations) {
-        station.checkElementHover(moveInput, this.scale);
-        if (station.hoverActive !== StationElementHoverType.None) {
-          // eslint-disable-next-line max-len
-          if (!(this.mapMode === MapMode.View && (station.hoverActive === StationElementHoverType.Button || station.hoverActive === StationElementHoverType.Node))) {
-            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+      // Only trigger when station elements are visible.
+      if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        //Hovering over different station elements.
+        for (const station of this.stations) {
+          station.checkElementHover(moveInput, this.mapMode, this.scale);
+          if (station.hoverActive !== StationElementHoverType.None) {
+            if (!(this.mapMode === MapMode.View
+              && (station.hoverActive === StationElementHoverType.Button
+                || station.hoverActive === StationElementHoverType.Node))) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+            }
+            if (this.mapMode === MapMode.Build) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+            }
+            break;
+          } else {
+            this.mapCanvas.nativeElement.style.cursor = 'default';
           }
-          if (this.mapMode === MapMode.Build) {
-            this.mapCanvas.nativeElement.style.cursor = 'pointer';
+        }
+        //These next two if statements ensure that while a station is being hovered a connection line is not.
+        const stationHoverCount = this.stations.filter((station) => station.hoverActive !== StationElementHoverType.None).length;
+        if (stationHoverCount === 0) {
+          for (const connection of this.connections) {
+            this.connections.map(con => {
+              con.hoverActive = false;
+            });
+            connection.checkElementHover(moveContext, this.context);
+            if (connection.hoverActive) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+              break;
+            } else {
+              this.mapCanvas.nativeElement.style.cursor = 'default';
+            }
           }
-          break;
-        } else {
-          this.mapCanvas.nativeElement.style.cursor = 'default';
+        }
+        if (stationHoverCount > 0) {
+          this.connections.map((con) => con.hoverActive = false);
         }
       }
     }
@@ -1010,88 +1030,115 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle click events when click on station document badge, option button.
+   * Handle click events.
    *
    * @param point The position of mouse click event.
+   * @param contextPoint Calculated position of click.
    */
-  private clickEventHandler(point: Point) {
-    const scaledStationWidth = STATION_WIDTH * this.scale;
-    const scaledStationHeight = STATION_HEIGHT * this.scale;
+  private clickEventHandler(point: Point, contextPoint: Point) {
+    //Add station.
+    if (this.mapMode === MapMode.StationAdd) {
+      const coords: Point = { x: 0, y: 0 };
+      coords.x = point.x - STATION_WIDTH / 2 * this.scale;
+      coords.y = point.y - STATION_HEIGHT / 2 * this.scale;
 
-    const interactiveBadgeRadius = BADGE_RADIUS * this.scale;
-    const scaledBadgeMargin = BADGE_MARGIN * this.scale;
+      //create a new station at click.
+      this.mapService.createNewStation(coords);
 
-    const interactiveButtonRadius = BUTTON_RADIUS * this.scale + 9;
-    const scaledButtonYMargin = BUTTON_Y_MARGIN * this.scale;
-    const scaledButtonMargin = BADGE_MARGIN * this.scale;
+      //After clicking, set to build mode.
+      this.mapService.mapMode$.next(MapMode.Build);
+      return;
+    }
 
+    //Check if click was in a station. If so any code under this for loop will not run.
     for (const station of this.stations) {
-      const startingX = station.canvasPoint.x;
-      const startingY = station.canvasPoint.y;
-
-      if (point.x >= startingX + scaledStationWidth - scaledBadgeMargin - interactiveBadgeRadius
-        && point.x <= startingX + scaledStationWidth - scaledBadgeMargin + interactiveBadgeRadius
-        && point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius
-        && point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+      //Connection node.
+      if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
+        //TODO: Add functionality to allow clicking a node.
+        //You would then click on a station to create a new connection instead of dragging.
+        return;
+        //Option Button.
+      } else if (station.isPointInOptionButton(point, this.mapMode, this.scale)
       ) {
+        this.mapService.currentMousePoint$.next(point);
+        this.mapService.stationButtonClick$.next({ click: true, data: station });
+        return;
+        //Document badge.
+      } else if (station.isPointInDocumentBadge(point, this.mapMode, this.scale)) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',
           data: { stationName: station.stationName, stationId: station.rithmId }
         });
+        return;
+        //station itself.
+      } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
+        this.checkStationClick(station);
+        return;
+      }
+    }
+    //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
+    this.checkConnectionClick(contextPoint);
+  }
+
+  /**
+   * Handles user input on a clicked connection line.
+   *
+   * @param contextPoint Calculated position of click.
+   */
+  checkConnectionClick(contextPoint: Point): void {
+    for (const connectionLine of this.connections) {
+      connectionLine.checkElementHover(contextPoint, this.context);
+      if (connectionLine.hoverActive) {
+        this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
         break;
       }
-      //Check if click was over option menu in build mode.
-      if (this.mapMode === MapMode.Build) {
-        if (point.x >= startingX + scaledStationWidth - scaledButtonMargin - interactiveButtonRadius
-          && point.x <= startingX + scaledStationWidth - scaledButtonMargin + interactiveButtonRadius
-          && point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius
-          && point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius
-        ) {
-          this.mapService.currentMousePoint$.next(point);
-          this.mapService.stationButtonClick$.next({ click: true, data: station });
-          break;
-        }
-      }
-      if (this.mapMode === MapMode.Build && point.x >= startingX && point.x <= startingX + scaledStationWidth
-          && point.y >= startingY && point.y <= startingY + scaledStationHeight) {
-            // TODO: Remove this test rename prompt once renaming in the drawer is done
-            this.popupService.prompt({
-              title: 'Rename Station',
-              message: 'Please provide a name for this station',
-              promptLabel: 'Station name',
-              promptValue: station.stationName
-            }).then((newName) => {
-              if (newName && newName !== station.stationName) {
-                station.stationName = newName;
-                station.markAsUpdated();
-                this.drawElements();
-              }
-            });
-          //   const stationDataInfo: StationInformation = {
-          //     rithmId: station.rithmId,
-          //     name: '',
-          //     instructions: '',
-          //     nextStations: [],
-          //     previousStations: [],
-          //     stationOwners: [],
-          //     workers: [],
-          //     createdByRithmId: '',
-          //     createdDate: '',
-          //     updatedByRithmId: '',
-          //     updatedDate: '',
-          //     questions: [],
-          //     priority: 1
-          //   };
-          // const dataInformationDrawer: StationInfoDrawerData = {
-          //   stationInformation: stationDataInfo,
-          //   stationName: station.stationName,
-          //   editMode: this.mapMode === MapMode.Build,
-          //   locallyCreated: station.status === MapItemStatus.Created
-          // };
-          // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-          // this.stationService.updatedStationNameText(station.stationName);
-        }
     }
   }
 
+  /**
+   * Handles user input on a clicked connection line.
+   *
+   * @param station The clicked station.
+   */
+  checkStationClick(station: StationMapElement): void {
+    // TODO: Remove this test rename prompt once renaming in the drawer is done
+    if (this.mapMode === MapMode.Build) {
+      this.popupService.prompt({
+        title: 'Rename Station',
+        message: 'Please provide a name for this station',
+        promptLabel: 'Station name',
+        promptValue: station.stationName
+      }).then((newName) => {
+        if (newName && newName !== station.stationName) {
+          station.stationName = newName;
+          this.stationService.updatedStationNameText(station.stationName);
+          station.markAsUpdated();
+          this.drawElements();
+        }
+      });
+    }
+    //   const stationDataInfo: StationInformation = {
+    //     rithmId: station.rithmId,
+    //     name: '',
+    //     instructions: '',
+    //     nextStations: [],
+    //     previousStations: [],
+    //     stationOwners: [],
+    //     workers: [],
+    //     createdByRithmId: '',
+    //     createdDate: '',
+    //     updatedByRithmId: '',
+    //     updatedDate: '',
+    //     questions: [],
+    //     priority: 1
+    //   };
+    // const dataInformationDrawer: StationInfoDrawerData = {
+    //   stationInformation: stationDataInfo,
+    //   stationName: station.stationName,
+    //   editMode: this.mapMode === MapMode.Build,
+    //   locallyCreated: station.status === MapItemStatus.Created
+    // };
+    // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    // this.stationService.updatedStationNameText(station.stationName);
+  }
 }

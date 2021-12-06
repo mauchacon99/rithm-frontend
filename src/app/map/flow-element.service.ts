@@ -60,6 +60,7 @@ export class FlowElementService {
     // Determine the points for the boundary line
     flow.boundaryPoints = this.getConvexHull(pointsWithinFlow);
 
+    // TODO: Render an empty flow
     if (flow.boundaryPoints.length > 0) {
       this.drawFlowBoundaryLine(flow);
       this.drawFlowName(flow);

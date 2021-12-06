@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -110,34 +110,13 @@ export class StationService {
   }
 
   /**
-   * Update the station private/all previous questions.
+   * Update the station questions.
    *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The previous question to be updated.
-   * @returns Station private/all updated previous questions array.
+   * @param questions The question to be updated.
+   * @returns Station updated questions array.
    */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    previousQuestion = [
-      {
-        prompt: 'Example question#1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Example question#2',
-        rithmId: '3j5k-3h2j-hj5j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-    return of(previousQuestion).pipe(delay(1000));
+  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, questions);
   }
 
   /**
@@ -310,75 +289,12 @@ export class StationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StationInformation>{
-    if (!rithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot update station without defining a station id or without any instructions in it.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const data: StationInformation = {
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-        name: 'Current Station Name',
-        instructions: 'New Instructions for current Station',
-        nextStations: [{
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
-          name: 'Development',
-          totalDocuments: 5,
-          isGenerator: true
-        }],
-        previousStations: [{
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
-          name: 'Station-1',
-          totalDocuments: 2,
-          isGenerator: true
-        }, {
-          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
-          name: 'Station-2',
-          totalDocuments: 0,
-          isGenerator: false
-        }],
-        stationOwners: [{
-          rithmId: '',
-          firstName: 'Marry',
-          lastName: 'Poppins',
-          email: 'marrypoppins@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }, {
-          rithmId: '',
-          firstName: 'Worker',
-          lastName: 'User',
-          email: 'workeruser@inpivota.com',
-          isWorker: false,
-          isOwner: true
-        }],
-        workers: [{
-          rithmId: '',
-          firstName: 'Harry',
-          lastName: 'Potter',
-          email: 'harrypotter@inpivota.com',
-          isWorker: false,
-          isOwner: false
-        }, {
-          rithmId: '',
-          firstName: 'Supervisor',
-          lastName: 'User',
-          email: 'supervisoruser@inpivota.com',
-          isWorker: true,
-          isOwner: false
-        }],
-        createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
-        createdDate: '2021-07-16T17:26:47.3506612Z',
-        updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
-        updatedDate: '2021-07-18T17:26:47.3506612Z',
-        questions: [],
-        priority: 2
-      };
-      return of(data).pipe(delay(1000));
-    }
+   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON>{
+    const generalInstructions: StandardStringJSON = {
+      data: instructions
+    };
+    // eslint-disable-next-line max-len
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${rithmId}`, generalInstructions);
   }
 
   /**
@@ -430,5 +346,42 @@ export class StationService {
     const standardBody: StandardStringJSON = { data: name };
     return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get appended fields to document name template.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the appended fields in document name.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
+
+  /**
+   * Update the document naming template.
+   *
+   * @param stationId  The id of station.
+   * @param appendedFields  The appended fields.
+   * @returns The updated document name template in the station.
+   */
+   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+    // eslint-disable-next-line max-len
+    return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
   }
 }

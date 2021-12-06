@@ -39,12 +39,21 @@ describe('MapToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle mapMode', () => {
+  it('should toggle mapMode add station', () => {
     component.addStation();
     expect(component.stationAddActive).toBeTrue();
     expect(component.mapMode).toEqual(MapMode.StationAdd);
     component.addStation();
     expect(component.stationAddActive).toBeFalse();
+    expect(component.mapMode).toEqual(MapMode.Build);
+  });
+
+  it('should toggle mapMode add flow', () => {
+    component.addFlow();
+    expect(component.flowAddActive).toBeTrue();
+    expect(component.mapMode).toEqual(MapMode.FlowAdd);
+    component.addFlow();
+    expect(component.flowAddActive).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);
   });
 });
