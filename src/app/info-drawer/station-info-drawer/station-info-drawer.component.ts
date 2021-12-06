@@ -126,6 +126,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  /**
    * Get station document generation status.
    *
    * @param stationId The id of the station return status document.
@@ -279,14 +287,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           }
         });
     }
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
