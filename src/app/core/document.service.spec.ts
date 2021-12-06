@@ -160,6 +160,7 @@ describe('DocumentService', () => {
         expect(response).toEqual(expectData);
       });
 
+    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${documentId}`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toEqual(null);
