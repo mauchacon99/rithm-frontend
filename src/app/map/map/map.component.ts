@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
 import { MapService } from '../map.service';
 
 /**
@@ -11,11 +12,17 @@ import { MapService } from '../map.service';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent {
-  constructor(private mapService: MapService) {
+  constructor(private mapService: MapService,
+    private errorService: ErrorService) {
     this.mapService.getMapElements()
     .pipe(first())
     .subscribe({ next: () => null, error: (error: unknown) => {
-        throw new Error(`Unable to get map data: ${error}`);
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error,
+          true
+        );
+        this.mapService.mapDataReceived$.next(true);
       }
     });
   }
