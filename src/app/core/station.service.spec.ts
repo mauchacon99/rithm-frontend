@@ -730,7 +730,7 @@ describe('StationService', () => {
       });
   });
 
-  it('should return the updated station document name template', () => {
+  it('should test connection to service to update station document name template', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
