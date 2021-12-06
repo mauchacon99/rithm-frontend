@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for document drawer.
@@ -67,7 +68,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -90,7 +92,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
           this.isStation = dataDrawer.isStation;
-          this.userLoginIsOwner = dataDrawer.userLoginIsOwner;
+          this.userLoginIsOwner = (this.userService.user.role === 'admin' || dataDrawer.userLoginIsOwner) ? true : false;
         }
       });
 
