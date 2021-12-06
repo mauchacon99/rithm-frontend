@@ -197,11 +197,11 @@ describe('StationComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should get previous and following stations', () => {
+  it('should get previous and next stations', () => {
     component.stationRithmId = component.stationInformation.rithmId;
-    const prevAndFollowStations = spyOn(TestBed.inject(StationService), 'getPreviousAndFollowingStations').and.callThrough();
-    component.getPreviousAndFollowingStations();
-    expect(prevAndFollowStations).toHaveBeenCalledOnceWith(component.stationRithmId);
+    const prevAndNextStations = spyOn(TestBed.inject(StationService), 'getPreviousAndNextStations').and.callThrough();
+    component.getPreviousAndNextStations();
+    expect(prevAndNextStations).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
   it('should call sidenav service in the init life cycle', () => {
@@ -220,11 +220,11 @@ describe('StationComponent', () => {
     expect(spyGetParams).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should get previous and following stations on page load', () => {
-    const spyMethodPrevAndFollowStation = spyOn(component, 'getPreviousAndFollowingStations');
+  it('should get previous and next stations on page load', () => {
+    const spyMethodPrevAndNextStation = spyOn(component, 'getPreviousAndNextStations');
 
     component.ngOnInit();
 
-    expect(spyMethodPrevAndFollowStation).toHaveBeenCalled();
+    expect(spyMethodPrevAndNextStation).toHaveBeenCalled();
   });
 });

@@ -620,7 +620,7 @@ describe('StationService', () => {
           totalDocuments: 2
         }
       ],
-      followingStations: [
+      nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
@@ -633,9 +633,9 @@ describe('StationService', () => {
         }
       ]
     };
-    service.getPreviousAndFollowingStations(stationRithmId)
-      .subscribe((prevAndFollowStations) => {
-        expect(prevAndFollowStations).toEqual(expectedResponse);
+    service.getPreviousAndNextStations(stationRithmId)
+      .subscribe((prevAndNextStations) => {
+        expect(prevAndNextStations).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(

@@ -96,7 +96,7 @@ export class MockDocumentService {
       name: 'Previous station 2',
       totalDocuments: 2
     }];
-    const followingStations: Array<ConnectedStationInfo> = [{
+    const nextStations: Array<ConnectedStationInfo> = [{
       rithmId: '852-963-741',
       name: 'Follow station 1',
       totalDocuments: 2
@@ -109,7 +109,7 @@ export class MockDocumentService {
     const data: ForwardPreviousStationsDocument = {
       rithmId: '123-654-789',
       previousStations: previousStations,
-      followingStations: followingStations
+      nextStations: nextStations
     };
     return of(data).pipe(delay(1000));
   }
