@@ -11,7 +11,6 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
-import { MapService } from 'src/app/map/map.service';
 
 /**
  * Component for info station.
@@ -78,8 +77,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private route: ActivatedRoute,
     private popupService: PopupService,
-    private router: Router,
-    private mapService: MapService
+    private router: Router
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
