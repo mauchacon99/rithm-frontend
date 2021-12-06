@@ -331,17 +331,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigate to station edit page upon confirmation.
+   * Navigate to station edit page upon confirmation in Map build mode and without any confirmation in Map view mode.
    *
    */
-  async gotoStation(): Promise<void> {
-    const confirm = await this.popupService.confirm({
-      title: 'Warning: Any local changes to the map erased.',
-      message: `If you want to save your work you need to click “Publish”. Proceed without publishing?`,
-      okButtonText: 'Proceed',
-    });
-    if (confirm) {
-      this.mapService.cancelMapChanges();
+  async goToStation(): Promise<void> {
+    if (this.editMode) {
+      const confirm = await this.popupService.confirm({
+        title: 'Local changes not saved.',
+        message: `You will navigate away from the map, and any changes you've made will be erased. Proceed without publishing?`,
+        okButtonText: 'Proceed',
+      });
+      if (confirm) {
+        this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+      }
+    } else {
       this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
     }
   }
