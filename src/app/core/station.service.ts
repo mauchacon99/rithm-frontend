@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, QuestionFieldType, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
+import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -110,35 +110,13 @@ export class StationService {
   }
 
   /**
-   * Update the station private/all previous questions.
+   * Update the station questions.
    *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The previous question to be updated.
-   * @returns Station private/all updated previous questions array.
+   * @param questions The question to be updated.
+   * @returns Station updated questions array.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    const previousQuestionData: Question[] = [
-      {
-        prompt: 'Example question#1',
-        rithmId: '3j4k-3h2j-hj4j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        prompt: 'Example question#2',
-        rithmId: '3j5k-3h2j-hj5j',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
-    return of(previousQuestionData).pipe(delay(1000));
+  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, questions);
   }
 
   /**
@@ -368,6 +346,31 @@ export class StationService {
     const standardBody: StandardStringJSON = { data: name };
     return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
       .pipe(map((response) => response.data));
+  }
+
+  /**
+   * Get appended fields to document name template.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the appended fields in document name.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+    return of(documentFieldName).pipe(delay(1000));
   }
 
   /**
