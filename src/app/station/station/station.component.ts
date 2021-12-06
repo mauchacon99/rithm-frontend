@@ -236,7 +236,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         this.stationForm.controls.generalInstructions.value),
 
       // Update Questions.
-      this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
+      this.stationService.updateStationQuestions(this.stationInformation.questions)
     ];
 
     forkJoin(petitionsUpdateStation)
