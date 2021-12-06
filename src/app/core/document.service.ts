@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { delay, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -58,21 +58,6 @@ export class DocumentService {
     return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
       { params: { documentId, stationId } }
     );
-  }
-
-  /**
-   * Get appended fields to document.
-   *
-   * @param stationId  The id of station.
-   * @returns Array the fields in document.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
-    const params = new HttpParams()
-      .set('stationRithmId', stationId);
-    return this.http.get<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template`, {
-      params
-    });
   }
 
   /**

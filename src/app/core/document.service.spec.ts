@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { DocumentNameField, ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -22,7 +22,6 @@ describe('DocumentService', () => {
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
-
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -138,37 +137,6 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
-
-  it('should return appended fields to document', () => {
-    const expectData: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
-
-    service.getAppendedFieldsOnDocumentName(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectData);
-      });
-
-    // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${documentId}`);
-    expect(req.request.method).toEqual('GET');
-    expect(req.request.body).toEqual(null);
-
-    req.flush(expectData);
-    httpTestingController.verify();
-  });
-
 
   it('Should return the update of the new document name', () => {
     const documentName: StandardStringJSON = {

@@ -262,7 +262,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the stations private/all questions list', () => {
+  it('should update the station questions list', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
@@ -283,10 +283,15 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.updateStationQuestions(stationId, expectedResponse)
+    service.updateStationQuestions(expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedResponse);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should add a new member to the worker roster', () => {
@@ -708,7 +713,37 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return updated appended fields to document', () => {
+  it('should test connection to get the station Document name template', () => {
+    const expectData: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    service.getDocumentNameTemplate(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectData);
+      });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+
+    req.flush(expectData);
+    httpTestingController.verify();
+
+  });
+
+  it('should test connection to service to update station document name template', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
@@ -725,9 +760,9 @@ describe('StationService', () => {
     ];
 
     service.updateDocumentNameTemplate(stationId, appendedFields)
-    .subscribe((response) => {
-      expect(response).toEqual(appendedFields);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(appendedFields);
+      });
 
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
@@ -737,20 +772,24 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+
+
   it('should return the station with updated general instructions', () => {
     const instructions = 'New Instructions for current Station';
     const expectedResponse: StandardStringJSON = {
       data: 'New Instructions for current Station'
     };
-      service.updateStationGeneralInstructions(stationId, instructions)
+    service.updateStationGeneralInstructions(stationId, instructions)
       .subscribe((stationInfo) => {
         expect(stationInfo).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual({data: instructions});
-    req.flush({data: instructions});
+    expect(req.request.body).toEqual({ data: instructions });
+    req.flush({ data: instructions });
     httpTestingController.verify();
   });
 });
+
+
