@@ -229,14 +229,13 @@ export class MockStationService {
   }
 
   /**
-   * Update all station previous private/all questions.
+   * Update the station questions.
    *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The Specific previous question of station.
-   * @returns Station private/all save the questions array.
+   * @param questions The Specific questions of station.
+   * @returns Station save the questions array.
    */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    const mockPrevQuestions: Question[] = [
+  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+    questions = [
       {
         prompt: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
@@ -256,7 +255,7 @@ export class MockStationService {
         children: [],
       },
     ];
-    return of(mockPrevQuestions).pipe(delay(1000));
+    return of(questions).pipe(delay(1000));
   }
 
   /**
