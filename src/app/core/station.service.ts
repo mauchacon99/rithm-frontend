@@ -349,6 +349,31 @@ export class StationService {
   }
 
   /**
+   * Get appended fields to document name template.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the appended fields in document name.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
+
+  /**
    * Update the document naming template.
    *
    * @param stationId  The id of station.
