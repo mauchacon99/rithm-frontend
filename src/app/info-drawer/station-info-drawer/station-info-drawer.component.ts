@@ -333,16 +333,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   async goToStation(): Promise<void> {
+    let confirmNavigation = false;
     if (this.editMode) {
       const confirm = await this.popupService.confirm({
-        title: 'Local changes not saved.',
+        title: 'Local Changes Not Saved.',
         message: `Leave without publishing any changes made to the map?`,
         okButtonText: 'Proceed',
       });
-      if (confirm) {
-        this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
-      }
-    } else {
+      confirmNavigation = confirm;
+    }
+    if (confirmNavigation || !this.editMode) {
       this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
     }
   }
