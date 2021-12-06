@@ -67,6 +67,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     this.documentNameForm.controls['name'].setValue(this.documentName);
     this.getAppendedFieldsOnDocumentName(this.rithmId);
+    this.getStatusDocumentEditable();
   }
 
   /**
@@ -144,12 +145,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get appended fields to document.
+   * Get appended fields to document name template.
    *
    * @param stationId  The id of station.
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
-    this.documentService.getAppendedFieldsOnDocumentName(stationId)
+    this.stationService.getDocumentNameTemplate(stationId)
       .pipe(first())
       .subscribe({
         next: (appendedFields) => {
@@ -170,7 +171,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Get the station document name editable status.
    *
    */
-   getStatusDocumentEditable(): void {
+   private getStatusDocumentEditable(): void {
     this.stationService.getStatusDocumentEditable(this.rithmId)
      .pipe(first())
      .subscribe({

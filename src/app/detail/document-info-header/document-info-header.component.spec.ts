@@ -72,7 +72,7 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should get the appended fields in the document name', () => {
     const stationId = '1234-1234-123';
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
+    const getDataFieldsDocument = spyOn(TestBed.inject(StationService), 'getDocumentNameTemplate').and.callThrough();
 
     component.getAppendedFieldsOnDocumentName(stationId);
 
@@ -126,7 +126,7 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should return the station document name editable status', () => {
     const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const editableName = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
-    component.getStatusDocumentEditable();
+    component.ngOnInit();
     expect(editableName).toHaveBeenCalledOnceWith(stationId);
   });
 
