@@ -61,8 +61,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Comes from station or not. */
   isStation = false;
 
-  /** User actually is owner to actually station. */
-  userLoginIsOwner = false;
+  /** Is the signed in user an Admin or station owner. */
+  isUserAdminOrOwner = false;
 
   constructor(
     private fb: FormBuilder,
@@ -87,12 +87,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           isStation: boolean;
 
           /** User actually is owner to actually station. */
-          userLoginIsOwner: boolean;
+          isUserAdminOrOwner: boolean;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
           this.isStation = dataDrawer.isStation;
-          this.userLoginIsOwner = (this.userService.user.role === 'admin' || dataDrawer.userLoginIsOwner) ? true : false;
+          this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
         }
       });
 

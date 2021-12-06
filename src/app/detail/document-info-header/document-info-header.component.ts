@@ -148,7 +148,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       {
         rithmId: this.rithmId,
         isStation: this.isStation,
-        userLoginIsOwner: this.userLoginIsOwner
+        isUserAdminOrOwner: this.isUserAdminOrOwner
       }
     );
   }
@@ -244,7 +244,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns Validate if user actually is owner to actually station.
    */
-  get userLoginIsOwner(): boolean {
+  get isUserAdminOrOwner(): boolean {
     return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
       ? true : false;
   }
