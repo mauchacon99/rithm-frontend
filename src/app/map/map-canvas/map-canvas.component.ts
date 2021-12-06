@@ -2,8 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
@@ -1101,40 +1100,41 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   checkStationClick(station: StationMapElement): void {
     // TODO: Remove this test rename prompt once renaming in the drawer is done
-            // this.popupService.prompt({
-            //   title: 'Rename Station',
-            //   message: 'Please provide a name for this station',
-            //   promptLabel: 'Station name',
-            //   promptValue: station.stationName
-            // }).then((newName) => {
-            //   if (newName && newName !== station.stationName) {
-            //     station.stationName = newName;
-            //     station.markAsUpdated();
-            //     this.drawElements();
-            //   }
-            // });
-            const stationDataInfo: StationInformation = {
-              rithmId: station.rithmId,
-              name: '',
-              instructions: '',
-              nextStations: [],
-              previousStations: [],
-              stationOwners: [],
-              workers: [],
-              createdByRithmId: '',
-              createdDate: '',
-              updatedByRithmId: '',
-              updatedDate: '',
-              questions: [],
-              priority: 1
-            };
-          const dataInformationDrawer: StationInfoDrawerData = {
-            stationInformation: stationDataInfo,
-            stationName: station.stationName,
-            editMode: this.mapMode === MapMode.Build,
-            locallyCreated: station.status === MapItemStatus.Created
-          };
-          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-          this.stationService.updatedStationNameText(station.stationName);
+            this.popupService.prompt({
+              title: 'Rename Station',
+              message: 'Please provide a name for this station',
+              promptLabel: 'Station name',
+              promptValue: station.stationName
+            }).then((newName) => {
+              if (newName && newName !== station.stationName) {
+                station.stationName = newName;
+                this.stationService.updatedStationNameText(station.stationName);
+                station.markAsUpdated();
+                this.drawElements();
+              }
+            });
+          //   const stationDataInfo: StationInformation = {
+          //     rithmId: station.rithmId,
+          //     name: '',
+          //     instructions: '',
+          //     nextStations: [],
+          //     previousStations: [],
+          //     stationOwners: [],
+          //     workers: [],
+          //     createdByRithmId: '',
+          //     createdDate: '',
+          //     updatedByRithmId: '',
+          //     updatedDate: '',
+          //     questions: [],
+          //     priority: 1
+          //   };
+          // const dataInformationDrawer: StationInfoDrawerData = {
+          //   stationInformation: stationDataInfo,
+          //   stationName: station.stationName,
+          //   editMode: this.mapMode === MapMode.Build,
+          //   locallyCreated: station.status === MapItemStatus.Created
+          // };
+          // this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+          // this.stationService.updatedStationNameText(station.stationName);
   }
 }
