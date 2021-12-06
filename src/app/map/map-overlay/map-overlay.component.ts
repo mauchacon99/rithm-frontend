@@ -310,7 +310,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       important: true
     });
     if (confirm) {
-      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
       this.mapService.deleteStation(<StationMapElement>(this.station));
     }
   }
@@ -326,7 +326,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       important: true
     });
     if (confirm) {
-      this.mapService.removeStationConnection(<StationMapElement>(this.station));
+      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
     }
   }
 
@@ -335,8 +335,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-    toggleDrawer(drawerItem: 'connectionInfo'): void {
-      this.sidenavDrawerService.toggleDrawer(drawerItem);
-    }
+  toggleDrawer(drawerItem: 'connectionInfo'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
 
 }
