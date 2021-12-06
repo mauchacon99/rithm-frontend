@@ -159,6 +159,13 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectData);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${documentId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+
+    req.flush(expectData);
+    httpTestingController.verify();
   });
 
 

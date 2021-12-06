@@ -68,21 +68,11 @@ export class DocumentService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAppendedFieldsOnDocumentName(stationId: string): Observable<DocumentNameField[]> {
-    const documentFieldName: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
-    return of(documentFieldName).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('stationRithmId', stationId);
+    return this.http.get<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template`, {
+      params
+    });
   }
 
   /**
