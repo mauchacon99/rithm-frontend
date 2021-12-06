@@ -262,7 +262,7 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should update the stations private/all questions list', () => {
+  it('should update the station questions list', () => {
     const expectedResponse: Question[] = [
       {
         prompt: 'Example question#1',
@@ -283,10 +283,15 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.updateStationQuestions(stationId, expectedResponse)
+    service.updateStationQuestions(expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedResponse);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should add a new member to the worker roster', () => {
@@ -708,7 +713,29 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
-  it('should return updated appended fields to document', () => {
+  it('should test connection to get the station Document name template', () => {
+    const expectData: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+
+    service.getDocumentNameTemplate(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectData);
+      });
+  });
+
+  it('should test connection to service to update station document name template', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',

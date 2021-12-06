@@ -72,7 +72,7 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should get the appended fields in the document name', () => {
     const stationId = '1234-1234-123';
-    const getDataFieldsDocument = spyOn(TestBed.inject(DocumentService), 'getAppendedFieldsOnDocumentName').and.callThrough();
+    const getDataFieldsDocument = spyOn(TestBed.inject(StationService), 'getDocumentNameTemplate').and.callThrough();
 
     component.getAppendedFieldsOnDocumentName(stationId);
 

@@ -229,14 +229,13 @@ export class MockStationService {
   }
 
   /**
-   * Update all station previous private/all questions.
+   * Update the station questions.
    *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The Specific previous question of station.
-   * @returns Station private/all save the questions array.
+   * @param questions The Specific questions of station.
+   * @returns Station save the questions array.
    */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): Observable<Question[]> {
-    const mockPrevQuestions: Question[] = [
+  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+    questions = [
       {
         prompt: 'Example question#1',
         rithmId: '3j4k-3h2j-hj4j',
@@ -256,7 +255,7 @@ export class MockStationService {
         children: [],
       },
     ];
-    return of(mockPrevQuestions).pipe(delay(1000));
+    return of(questions).pipe(delay(1000));
   }
 
   /**
@@ -625,11 +624,35 @@ export class MockStationService {
   }
 
   /**
-   * Get the document field name array.
+   * Get appended fields to document name template.
+   *
+   * @param stationId  The id of station.
+   * @returns Array the appended fields in document name.
+   */
+   getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
+    const documentFieldName: DocumentNameField[] = [
+      {
+        prompt: 'Address',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+      {
+        prompt: '/',
+        rithmId: ''
+      },
+      {
+        prompt: 'Which is best?',
+        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+      },
+    ];
+    return of(documentFieldName).pipe(delay(1000));
+  }
+
+  /**
+   * Update the document name template.
    *
    * @param stationId  The id of station.
    * @param appendedFields  The appended fields.
-   * @returns A list of field names for document name.
+   * @returns A list of field names for document name template.
    */
    updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     if (!stationId || !appendedFields) {
