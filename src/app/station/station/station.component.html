@@ -13,7 +13,7 @@
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 py-12">
         <div class="loading" *ngIf="stationLoading">
-          <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+          <app-loading-indicator id="component-station-loading" class="flex-grow m-auto"></app-loading-indicator>
         </div>
         <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
@@ -33,7 +33,8 @@
                     <div matPrefix class="icon">
                       <i class="fas fa-paragraph"></i>
                     </div>
-                    <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3" spellcheck="true" formControlName="generalInstructions"></textarea>
+                    <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3"
+                      spellcheck="true" formControlName="generalInstructions"></textarea>
                   </mat-form-field>
                 </div>
 
@@ -92,8 +93,8 @@
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
                 <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
                     color="accent" (click)="cancelStation()">Cancel</button></span>
-                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2"
-                  (click)="updateStation(stationInformation)">Save</button>
+                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" id="station-save"
+                  (click)="saveStationInformation()" [disabled]="!stationForm.valid" >Save</button>
               </div>
             </div>
           </div>
