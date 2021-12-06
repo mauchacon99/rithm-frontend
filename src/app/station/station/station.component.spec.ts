@@ -20,7 +20,7 @@ import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType } from 'src/models';
+import { QuestionFieldType, Question } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
@@ -145,6 +145,7 @@ describe('StationComponent', () => {
   });
 
   it('should call service methods to update data when save button is clicked ', () => {
+    component.formQuestionsIsTouched = true;
     const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
     const spyUpdateNameTemplate = spyOn(TestBed.inject(StationService), 'updateDocumentNameTemplate').and.callThrough();
     const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
