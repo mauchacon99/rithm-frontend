@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 
@@ -110,18 +110,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       this.getParams();
       this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
 
-    this.stationService.stationName$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.stationName = data.length > 0 ? data : 'Untitled Station';
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+      this.stationService.stationName$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (data) => {
+            this.stationName = data.length > 0 ? data : 'Untitled Station';
+          }, error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
+        });
+    }
   }
 
   /**
@@ -345,4 +346,4 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.stationDocumentGenerationStatus = DocumentGenerationStatus.None;
     this.lastUpdatedDate = 'Publish Map changes to see last updated.';
   }
- }
+}
