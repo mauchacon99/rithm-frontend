@@ -20,7 +20,7 @@ import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
