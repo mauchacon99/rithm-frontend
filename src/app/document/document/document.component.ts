@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -8,6 +8,8 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PopupService } from 'src/app/core/popup.service';
+import { Subject } from 'rxjs';
 
 /**
  * Main component for viewing a document.
@@ -17,12 +19,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss']
 })
-export class DocumentComponent implements OnInit {
+export class DocumentComponent implements OnInit, OnDestroy {
   /** Document form. */
   documentForm: FormGroup;
 
   /** The component for the drawer that houses comments and history. */
-  @ViewChild('detailDrawer', {static: true})
+  @ViewChild('detailDrawer', { static: true })
   detailDrawer!: MatDrawer;
 
   /** The information about the document within a station. */
@@ -43,17 +45,30 @@ export class DocumentComponent implements OnInit {
   /** Whether the request to get connected stations is currently underway. */
   connectedStationsLoading = true;
 
+  /** The context of what is open in the drawer. */
+  drawerContext = 'comments';
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
     private errorService: ErrorService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private popupService: PopupService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control('')
     });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((context) => {
+        this.drawerContext = context;
+      });
   }
 
   /**
@@ -173,4 +188,25 @@ export class DocumentComponent implements OnInit {
       });
   }
 
+  /** This cancel button clicked show alert. */
+  async cancelDocument(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }

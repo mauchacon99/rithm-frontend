@@ -4,11 +4,12 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
-import { Subject } from 'rxjs';
-import { DocumentService } from 'src/app/core/document.service';
+import { forkJoin, Subject } from 'rxjs';
+import { PopupService } from 'src/app/core/popup.service';
+
 /**
  * Main component for viewing a station.
  */
@@ -58,6 +59,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Get station name from behaviour subject. */
   private stationName = '';
 
+  /** Appended Fields array. */
+  appendedFields: DocumentNameField[] = [];
+
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -65,7 +70,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private documentService: DocumentService,
+    private popupService: PopupService,
     private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
@@ -83,6 +88,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .pipe(takeUntil(this.destroyed$))
       .subscribe((stationName) => {
         this.stationName = stationName;
+      });
+
+    this.stationService.documentStationNameFields$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((appFields) => {
+        this.appendedFields = appFields;
       });
   }
 
@@ -207,20 +218,32 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   }
 
   /**
-   * Update the Station.
+   * Save Station information and executed petitions to api.
    *
-   * @param stationInformation This Data global, for set data in update request.
    */
-  updateStation(stationInformation: StationInformation): void {
+  saveStationInformation(): void {
     this.stationLoading = true;
-    this.stationService.updateStation(stationInformation)
+    const petitionsUpdateStation = [
+      // Update station Name.
+      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
+
+      // Update appended fields to document.
+      this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, this.appendedFields),
+
+      // Update general instructions.
+      this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
+        this.stationForm.controls.generalInstructions.value),
+
+      // Update Questions.
+      this.stationService.updateStationQuestions(this.stationInformation.questions)
+    ];
+
+    forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: (stationUpdated) => {
-          if (stationUpdated) {
-            this.stationInformation = stationUpdated;
-          }
+        next: () => {
           this.stationLoading = false;
+          this.stationInformation.name = this.stationName;
         },
         error: (error: unknown) => {
           this.stationLoading = false;
@@ -230,27 +253,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           );
         }
       });
-  }
-
-  /**
-   * Update Station General Instructions.
-   */
-  updateStationGeneralInstructions(): void{
-    const generalInstructions = this.stationForm.controls.generalInstructions.value;
-    this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId, generalInstructions)
-    .pipe(first())
-    .subscribe({
-      next: () => {
-        generalInstructions; /**Here is going to be placed the loading indicator functionality */
-      },
-      error: (error: unknown) => {
-        this.stationLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
-    });
   }
 
   /**
@@ -281,28 +283,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   // }
 
   /**
-   * Get the document field name array.
-   *
-   * @param stationId  The id of station.
-   * @param appendedFiles  The appended files.
-   */
-  updateDocumentAppendedFields(stationId: string, appendedFiles: DocumentNameField[]): void {
-    this.documentService.updateDocumentAppendedFields(stationId, appendedFiles)
-      .pipe(first())
-      .subscribe({
-        next: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const documentName = data;
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
    * Get previous and following stations.
    *
    */
@@ -324,52 +304,17 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
   }
 
-  /**
-   * Update station name.
-   */
-  updateStationName(): void {
-    const nameStationChange = this.stationName;
-    this.stationLoading = true;
-    this.stationService.updateStationName(nameStationChange, this.stationInformation.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (updatedStationName) => {
-          this.stationInformation.name = updatedStationName;
-          this.stationLoading = false;
-        },
-        error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Update station private/all previous questions.
-   *
-   * @param stationId The Specific id of station.
-   * @param previousQuestion The previous question to be updated.
-   */
-  updateStationQuestions(stationId: string, previousQuestion: Question[]): void {
-    this.stationLoading = true;
-    this.stationService.updateStationQuestions(stationId, previousQuestion)
-      .pipe(first())
-      .subscribe({
-        next: (questions) => {
-          if (questions) {
-            this.stationInformation.questions = questions;
-          }
-          this.stationLoading = false;
-        }, error: (error: unknown) => {
-          this.stationLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+  /** This cancel button clicked show alert. */
+  async cancelStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Your changes will be lost and you will return to the dashboard.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+      important: true,
+    });
+    if (response) {
+      this.router.navigateByUrl('dashboard');
+    }
   }
 }
