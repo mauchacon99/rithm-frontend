@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
-  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
+  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -418,6 +418,55 @@ export class MapService {
   }
 
   /**
+   * Sets the map scale to allow as many stations as possible to be visible on the map.
+   */
+  setCenterScale(): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot get center point of canvas when canvas context is not set');
+    }
+    const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
+
+    //Arrange all this.stationElements Y coords in order.
+    const topToBottom = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
+    const top = topToBottom[0];
+    const bottom = topToBottom[topToBottom.length - 1] + STATION_HEIGHT;
+
+    //Arrange all this.stationElements X coords in order.
+    const leftToRight = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
+    const left = leftToRight[0];
+    const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
+
+    //Need to check if currentCanvasPoint.y is greater than top.
+    // this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value is less than bottom.
+    // this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value is greater than right.
+    // this.currentCanvasPoint$.value.x is less than left.
+
+    //if true, increase scale.
+
+    if (this.currentCanvasPoint$.value.y > top
+      && this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value < bottom
+      && this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value > right
+      && this.currentCanvasPoint$.value.x < left
+    ) {
+      // scale
+      this.mapScale$.next(Math.min(ABOVE_MAX, this.mapScale$.value/ZOOM_VELOCITY));
+    }
+  }
+
+  /**
+   * Centers the map by changing this.currentCanvasPoint to the map center point.
+   */
+  center(): void {
+    let adjustedCenter = this.getMapCenterPoint();
+    const canvasCenter = this.getCanvasCenterPoint();
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    };
+    this.currentCanvasPoint$.next(adjustedCenter);
+  }
+
+  /**
    * Gets the center point of the canvas.
    *
    * @returns The center point of the canvas.
@@ -475,20 +524,14 @@ export class MapService {
     //Arrange all this.stationElements Y coords in order.
     const topToBottom = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
     const top = topToBottom[0];
-    const bottom = topToBottom[topToBottom.length - 1];
+    const bottom = topToBottom[topToBottom.length - 1] + STATION_HEIGHT;
 
     //Arrange all this.stationElements X coords in order.
     const leftToRight = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
     const left = leftToRight[0];
-    const right = leftToRight[leftToRight.length - 1];
+    const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
 
-    const center: Point = {x: (left + right)/2, y: (top + bottom)/2};
-
-    console.log(this.stationElements);
-    console.log(topToBottom);
-    console.log(leftToRight);
-    console.log(center);
-
+    const center: Point = {x: Math.floor((left + right)/2), y: Math.floor((top + bottom)/2)};
     return center;
   }
 
