@@ -161,7 +161,7 @@ describe('DocumentService', () => {
   });
 
 
-  it('should test method to save document answer', () => {
+  it('should make request to save document answer', () => {
     const expectedAnswers: DocumentAnswer[] = [{
       questionRithmId: 'Dev 1',
       documentRithmId: '123-654-789',
