@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
-  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT } from './map-constants';
+  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT, SCALE_REDUCED_RENDER, CENTER_ZOOM_BUFFER } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -419,12 +419,22 @@ export class MapService {
 
   /**
    * Sets the map scale to allow as many stations as possible to be visible on the map.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
    */
-  setCenterScale(): void {
+  setCenterScale(onInit = false): void {
     if (!this.canvasContext) {
       throw new Error('Cannot get center point of canvas when canvas context is not set');
     }
     const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
+    const box = () => {
+      //Dynamically set the size of the bounding box based on screen size.
+      if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
+        return ((window.innerHeight + window.innerWidth) / 2) * .01;
+      } else {
+        return 30;
+      }
+    };
 
     //Arrange all this.stationElements Y coords in order.
     const topToBottom = this.stationElements.map((station) => station.canvasPoint.y).sort((a, b) => a - b);
@@ -436,30 +446,60 @@ export class MapService {
     const left = leftToRight[0];
     const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
 
-    console.log(this.currentCanvasPoint$.value.y);
-    console.log(top);
-    console.log(this.currentCanvasPoint$.value.y < top);
-    console.log(this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value > bottom);
-    console.log(this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value > right);
-    console.log(this.currentCanvasPoint$.value.x < left);
+    const zoomLogic = () => {
+      //Zoom in.
+      if ((box() - CENTER_ZOOM_BUFFER < top
+        && canvasBoundingRect.height - box() - CENTER_ZOOM_BUFFER > bottom + STATION_HEIGHT
+        && canvasBoundingRect.width - box() - CENTER_ZOOM_BUFFER > right + STATION_WIDTH
+        && box() - CENTER_ZOOM_BUFFER < left) || this.mapScale$.value < SCALE_REDUCED_RENDER
+      ) {
+        this.zoomCount$.next(this.zoomCount$.value + 1);
+        this.handleZoom(undefined, onInit);
+        if ((box() - CENTER_ZOOM_BUFFER < top
+          && canvasBoundingRect.height - box() - CENTER_ZOOM_BUFFER > bottom + STATION_HEIGHT
+          && canvasBoundingRect.width - box() - CENTER_ZOOM_BUFFER > right + STATION_WIDTH
+          && box() - CENTER_ZOOM_BUFFER < left) || this.mapScale$.value < SCALE_REDUCED_RENDER
+        ) {
+          this.setCenterScale(false);
+        }
+        return;
+      }
 
-    if (this.currentCanvasPoint$.value.y > top
-      && this.currentCanvasPoint$.value.y + canvasBoundingRect.height / this.mapScale$.value < bottom
-      && this.currentCanvasPoint$.value.x + canvasBoundingRect.width / this.mapScale$.value > right
-      && this.currentCanvasPoint$.value.x < left
-    ) {
+      //Zoom out.
+      if ((box() + CENTER_ZOOM_BUFFER > top
+        || canvasBoundingRect.height - box() + CENTER_ZOOM_BUFFER < bottom + STATION_HEIGHT
+        || canvasBoundingRect.width - box() + CENTER_ZOOM_BUFFER < right + STATION_WIDTH
+        || box() + CENTER_ZOOM_BUFFER > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+      ) {
+        this.zoomCount$.next(this.zoomCount$.value - 1);
+        this.handleZoom(undefined, onInit);
+        if ((box() + CENTER_ZOOM_BUFFER > top
+          || canvasBoundingRect.height - box() + CENTER_ZOOM_BUFFER < bottom + STATION_HEIGHT
+          || canvasBoundingRect.width - box() + CENTER_ZOOM_BUFFER < right + STATION_WIDTH
+          || box() + CENTER_ZOOM_BUFFER > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+        ) {
+          this.setCenterScale(onInit);
+        }
+        return;
+      }
+      return;
+    };
+
+    if (onInit) {
+      zoomLogic();
+    } else {
       setTimeout(() => {
-        // scale
-        this.mapScale$.next(Math.min(ABOVE_MAX, this.mapScale$.value/ZOOM_VELOCITY));
-        this.setCenterScale();
-      }, 10);
+        zoomLogic();
+      }, 4);
     }
   }
 
   /**
    * Centers the map by changing this.currentCanvasPoint to the map center point.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
    */
-  center(): void {
+  center(onInit = false): void {
     let adjustedCenter = this.getMapCenterPoint();
     const canvasCenter = this.getCanvasCenterPoint();
     adjustedCenter = {
@@ -467,7 +507,7 @@ export class MapService {
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
     };
     this.currentCanvasPoint$.next(adjustedCenter);
-    this.setCenterScale();
+    this.setCenterScale(onInit);
   }
 
   /**

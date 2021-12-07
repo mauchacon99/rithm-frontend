@@ -21,6 +21,9 @@ export const MAX_PAN_VELOCITY = 25;
 export const PAN_TRIGGER_LIMIT = 10;
 export const PAN_DECAY_RATE = .9;
 
+// Center
+export const CENTER_ZOOM_BUFFER = 10;
+
 // Flow
 export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;

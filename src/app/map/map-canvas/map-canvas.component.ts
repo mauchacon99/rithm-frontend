@@ -83,6 +83,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for connection line path between stations. */
   connections: ConnectionMapElement[] = [];
 
+  /** Initial Data Load. */
+  initLoad = true;
+
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
@@ -136,10 +139,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
+      .subscribe((data) => {
         this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
         this.flows = this.mapService.flowElements;
         this.connections = this.mapService.connectionElements;
+        if (data) {
+          this.mapService.center(true);
+        }
         this.drawElements();
       });
 
