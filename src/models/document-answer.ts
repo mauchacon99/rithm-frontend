@@ -1,8 +1,8 @@
+import { QuestionFieldType } from "./enums";
+
 /**
  * Represents the answers to the document questions.
  */
-
-import { QuestionFieldType } from "./enums";
 
 export interface DocumentAnswer {
 
