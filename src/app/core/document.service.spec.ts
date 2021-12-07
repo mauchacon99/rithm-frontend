@@ -147,6 +147,12 @@ describe('DocumentService', () => {
       .subscribe((newDocumentName) => {
         expect(newDocumentName).toEqual(documentName);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`);
+    expect(req.request.method).toEqual('PUT');
+
+    req.flush(documentName);
+    httpTestingController.verify();
   });
 
   it('should return document name', () => {

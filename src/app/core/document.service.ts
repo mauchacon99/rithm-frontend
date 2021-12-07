@@ -68,18 +68,9 @@ export class DocumentService {
    * @returns The new document name.
    */
   updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
-    if (!documentId && !documentName) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot update document name.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const newDocumentName: StandardStringJSON = {
-        data: 'Almond Flour'
-      };
-      return of(newDocumentName).pipe(delay(1000));
-    }
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, {
+      params: { rithmId: documentId, documentName }
+    });
   }
 
   /**
