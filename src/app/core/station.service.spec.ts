@@ -733,6 +733,14 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectData);
       });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.body).toEqual(null);
+
+    req.flush(expectData);
+    httpTestingController.verify();
+
   });
 
   it('should test connection to service to update station document name template', () => {
@@ -752,9 +760,9 @@ describe('StationService', () => {
     ];
 
     service.updateDocumentNameTemplate(stationId, appendedFields)
-    .subscribe((response) => {
-      expect(response).toEqual(appendedFields);
-    });
+      .subscribe((response) => {
+        expect(response).toEqual(appendedFields);
+      });
 
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
@@ -764,20 +772,24 @@ describe('StationService', () => {
     httpTestingController.verify();
   });
 
+
+
   it('should return the station with updated general instructions', () => {
     const instructions = 'New Instructions for current Station';
     const expectedResponse: StandardStringJSON = {
       data: 'New Instructions for current Station'
     };
-      service.updateStationGeneralInstructions(stationId, instructions)
+    service.updateStationGeneralInstructions(stationId, instructions)
       .subscribe((stationInfo) => {
         expect(stationInfo).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${stationId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual({data: instructions});
-    req.flush({data: instructions});
+    expect(req.request.body).toEqual({ data: instructions });
+    req.flush({ data: instructions });
     httpTestingController.verify();
   });
 });
+
+
