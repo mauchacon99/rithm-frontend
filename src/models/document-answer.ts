@@ -3,7 +3,6 @@ import { QuestionFieldType } from './enums';
 /**
  * Represents the answers to the document questions.
  */
-
 export interface DocumentAnswer {
 
   /** The id the question. */
@@ -19,10 +18,10 @@ export interface DocumentAnswer {
   value: string;
 
   /** File to answer. */
-  file: string;
+  file?: string;
 
   /** Name to file answer. */
-  filename: string;
+  filename?: string;
 
   /** Type the answer. */
   type: QuestionFieldType;
