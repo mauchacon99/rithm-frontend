@@ -1,12 +1,12 @@
 <app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation"></app-sub-header>
-<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="h-full">
   <mat-drawer #drawer mode="over" position="end">
     <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
     <app-info-drawer *ngIf="drawerContext === 'stationInfo' || drawerContext === 'documentInfo'"></app-info-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="textured-bg grid grid-cols-12">
+    <div class="textured-bg grid grid-cols-12 h-full">
       <!-- Left column -->
       <app-connected-station-pane [location]='"left"' [stations]="previousStations"
         class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
@@ -15,7 +15,7 @@
         <div class="loading" *ngIf="stationLoading">
           <app-loading-indicator id="component-station-loading" class="flex-grow m-auto"></app-loading-indicator>
         </div>
-        <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
+        <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form h-full">
           <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
             #stationInfoHeader></app-station-info-header>
           <!-- Tabs -->
