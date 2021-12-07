@@ -1,4 +1,4 @@
-import { QuestionFieldType } from "./enums";
+import { QuestionFieldType } from './enums';
 
 /**
  * Represents the answers to the document questions.
