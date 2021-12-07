@@ -6,10 +6,11 @@ import { DocumentInfoHeaderComponent } from './document-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService, MockDocumentService } from 'src/mocks';
+import { MockErrorService, MockStationService, MockDocumentService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models';
+import { UserService } from 'src/app/core/user.service';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -27,7 +28,8 @@ describe('DocumentInfoHeaderComponent', () => {
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
+        { provide: UserService, useClass: MockUserService }
       ]
     })
       .compileComponents();
@@ -47,7 +49,14 @@ describe('DocumentInfoHeaderComponent', () => {
       stationName: 'Development',
       stationPriority: 2,
       stationInstruction: 'This is an instruction',
-      stationOwners: [],
+      stationOwners: [
+        {
+          rithmId: '123',
+          firstName: 'Dev',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com'
+        },
+      ],
       workers: [],
       questions: [],
       instructions: 'General instructions'
@@ -61,9 +70,12 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
+    const isStation = false;
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const expectedData = {
-      rithmId: rithmId
+      rithmId: rithmId,
+      isStation: isStation,
+      isUserAdminOrOwner: true
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -96,9 +108,9 @@ describe('DocumentInfoHeaderComponent', () => {
       },
     ];
 
-    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService), 'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex,2));
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex, 2));
   };
 
   it('should splice two item from appended fields array in and update document name template'), () => {
@@ -118,9 +130,9 @@ describe('DocumentInfoHeaderComponent', () => {
       },
     ];
 
-    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService),'updateDocumentStationNameFields').and.callThrough();
+    const documentNameTemplateSpy = spyOn(TestBed.inject(StationService), 'updateDocumentStationNameFields').and.callThrough();
     component.removeAppendedFieldFromDocumentName(currentIndex);
-    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex-1,2));
+    expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex - 1, 2));
   };
 
   it('should return the station document name editable status', () => {
@@ -130,4 +142,8 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(editableName).toHaveBeenCalledOnceWith(stationId);
   });
 
+  it('should test method get userLoginIsOwner and return boolean', () => {
+    const valueExpected = component.isUserAdminOrOwner;
+    expect(valueExpected).toBe(true);
+  });
 });
