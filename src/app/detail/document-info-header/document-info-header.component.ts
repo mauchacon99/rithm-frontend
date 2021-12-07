@@ -83,7 +83,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     );
   }
 
-  /** Station or Document looking at document header.
+  /**
+   * Station or Document looking at document header.
    *
    * @returns Station edit mode or document mode. TRUE if station mode and FALSE if document mode.
    */
@@ -91,7 +92,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return !('documentName' in this.documentInformation);
   }
 
-  /** Get Document Priority of document from DocumentStationInformation based on type.
+  /**
+   * Get Document Priority of document from DocumentStationInformation based on type.
    *
    * @returns The Document Priority.
    */
@@ -99,7 +101,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
   }
 
-  /** Get flowed time UTC of document from DocumentStationInformation based on type.
+  /**
+   * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
    */
@@ -107,7 +110,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
   }
 
-  /** Get last updated UTC of document from DocumentStationInformation based on type.
+  /**
+   * Get last updated UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Last Updated UTC.
    */
@@ -115,7 +119,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
   }
 
-  /** Get name of document from DocumentStationInformation based on type.
+  /**
+   * Get name of document from DocumentStationInformation based on type.
    *
    * @returns The Document Name.
    */
@@ -123,7 +128,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
   }
 
-  /** The id of the station or document.
+  /**
+   * The id of the station or document.
    *
    * @returns The id of the station or document.
    */
