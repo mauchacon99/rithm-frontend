@@ -375,18 +375,15 @@ export class MockDocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
-    if (!documentId && !documentName) {
+  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+    if (!documentId && documentName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
-      const newDocumentName: StandardStringJSON = {
-        data: 'Almond Flour'
-      };
-      return of(newDocumentName).pipe(delay(1000));
+      return of(documentName).pipe(delay(1000));
     }
   }
 

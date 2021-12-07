@@ -148,8 +148,12 @@ describe('DocumentService', () => {
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
     expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual({ data: documentName });
-    req.flush({ data: documentName });
+
+    const newDocumentName: StandardStringJSON = {
+      data: documentName
+    };
+    expect(req.request.body).toEqual(newDocumentName);
+    req.flush(newDocumentName);
     httpTestingController.verify();
   });
 
