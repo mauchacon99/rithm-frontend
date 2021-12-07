@@ -62,9 +62,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
 
-  /** Form the questions is touched. */
-  formQuestionsIsTouched = false;
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -96,12 +93,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .pipe(takeUntil(this.destroyed$))
       .subscribe((appFields) => {
         this.appendedFields = appFields;
-      });
-
-    this.stationForm.get('stationTemplateForm')?.valueChanges
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.formQuestionsIsTouched = true;
       });
   }
 
@@ -243,9 +234,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         this.stationForm.controls.generalInstructions.value),
     ];
 
-    this.formQuestionsIsTouched ? petitionsUpdateStation.push(
-      // Update Questions.
-      this.stationService.updateStationQuestions(this.stationInformation.questions)) : '';
+    if (this.stationForm.get('stationTemplateForm')?.dirty || this.stationForm.get('stationTemplateForm')?.touched) {
+      petitionsUpdateStation.push(
+        // Update Questions.
+        this.stationService.updateStationQuestions(this.stationInformation.questions)
+      );
+    }
 
     forkJoin(petitionsUpdateStation)
       .pipe(first())
