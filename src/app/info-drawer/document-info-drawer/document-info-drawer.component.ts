@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for document drawer.
@@ -57,11 +58,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The input field for auto search Value. */
   autoSearchValue = '';
 
+  /** Comes from station or not. */
+  isStation = false;
+
+  /** Is the signed in user an Admin or station owner. */
+  isUserAdminOrOwner = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private userService: UserService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -74,21 +82,29 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         const dataDrawer = data as {
           /** RithmId station. */
           rithmId: string;
+
+          /** Comes from station or not. */
+          isStation: boolean;
+
+          /** User actually is owner to actually station. */
+          isUserAdminOrOwner: boolean;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
+          this.isStation = dataDrawer.isStation;
+          this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
         }
       });
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe(appendedFields => {
-      this.options = appendedFields.filter(field => field.rithmId);
-      if (this.questions.length > 0) {
-        this.filterFieldsAndQuestions();
-      }
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.options = appendedFields.filter(field => field.rithmId);
+        if (this.questions.length > 0) {
+          this.filterFieldsAndQuestions();
+        }
+      });
   }
 
   /**
@@ -187,7 +203,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param separator The field prompt selected in autocomplete.
    */
-   updateSeparatorFieldValue(separator: string): void {
+  updateSeparatorFieldValue(separator: string): void {
     // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
       if (this.appendedFields[i].rithmId === '') {

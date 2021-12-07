@@ -7,6 +7,7 @@ import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Reusable component for the document information header.
@@ -46,7 +47,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     private utcTimeConversion: UtcTimeConversion,
     private stationService: StationService,
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private userService: UserService
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -144,7 +146,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId
+        rithmId: this.rithmId,
+        isStation: this.isStation,
+        isUserAdminOrOwner: this.isUserAdminOrOwner
       }
     );
   }
@@ -231,5 +235,15 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Get User type owner to actually station.
+   *
+   * @returns Validate if user actually is owner to actually station.
+   */
+  get isUserAdminOrOwner(): boolean {
+    return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
+      ? true : false;
   }
 }
