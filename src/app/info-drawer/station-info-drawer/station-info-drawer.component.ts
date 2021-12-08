@@ -134,6 +134,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether the station is locally created on the map.
+   *
+   * @returns True if locally created, false otherwise.
+   */
+  get locallyCreated(): boolean {
+    return this.stationStatus === MapItemStatus.Created;
+  }
+
+  /**
    * Get station document generation status.
    *
    * @param stationId The id of the station return status document.
