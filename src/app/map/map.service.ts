@@ -571,15 +571,15 @@ export class MapService {
   getMapCenterPoint(): Point {
     //Arrange all this.stationElements Y coords in order.
     const topToBottom = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
-    const top = topToBottom[0];
-    const bottom = topToBottom[topToBottom.length - 1] + STATION_HEIGHT;
+    const minY = topToBottom[0];
+    const maxY = topToBottom[topToBottom.length - 1] + STATION_HEIGHT;
 
     //Arrange all this.stationElements X coords in order.
     const leftToRight = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
-    const left = leftToRight[0];
-    const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
+    const minX = leftToRight[0];
+    const maxX = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
 
-    const center: Point = {x: Math.floor((left + right)/2), y: Math.floor((top + bottom)/2)};
+    const center: Point = { x: Math.floor((minX + maxX) / 2), y: Math.floor((minY + maxY) / 2) };
     return center;
   }
 
