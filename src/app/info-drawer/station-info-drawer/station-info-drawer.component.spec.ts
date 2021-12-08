@@ -42,7 +42,7 @@ describe('StationInfoDrawerComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: PopupService, useClass: MockPopupService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

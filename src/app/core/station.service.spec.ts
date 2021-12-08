@@ -283,11 +283,11 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.updateStationQuestions(expectedResponse)
+    service.updateStationQuestions(stationId, expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedResponse);
     req.flush(expectedResponse);
