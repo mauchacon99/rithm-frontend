@@ -111,7 +111,7 @@ export class DocumentService {
    * @returns The document answers.
    */
   saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
-    if (!documentRithmId || answerDocument) {
+    if (!documentRithmId || !answerDocument) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot get the name of the document or its answers.'
