@@ -11,6 +11,6 @@ export interface ForwardPreviousStationsDocument {
   /** The list of previous stations. */
   previousStations: ConnectedStationInfo[];
 
-  /** The list of following stations. */
-  followingStations: ConnectedStationInfo[];
+  /** The list of next stations. */
+  nextStations: ConnectedStationInfo[];
 }

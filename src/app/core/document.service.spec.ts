@@ -76,7 +76,7 @@ describe('DocumentService', () => {
           totalDocuments: 2
         }
       ],
-      followingStations: [
+      nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
