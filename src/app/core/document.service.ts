@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { delay, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -14,6 +14,10 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
   providedIn: 'root'
 })
 export class DocumentService {
+
+  /** The Name of the Document as BehaviorSubject. */
+  documentName$ = new BehaviorSubject<string>('');
+
   constructor(
     private http: HttpClient) { }
 

@@ -53,6 +53,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** The all document answers the document actually. */
   documentAnswer: DocumentAnswer[] = [];
 
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -70,6 +73,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((documentName) => {
+        this.documentName = documentName;
       });
   }
 
@@ -207,9 +216,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /**
    * Update the document name.
    */
-   private updateDocumentName(): void {
+  private updateDocumentName(): void {
     this.documentLoading = true;
-    const newDocumentName: StandardStringJSON = {data:'Provisional Name while BSubject is done'};
+    const newDocumentName: StandardStringJSON = { data: 'Provisional Name while BSubject is done' };
     this.documentService.updateDocumentName(this.documentInformation.documentRithmId, newDocumentName)
       .pipe(first())
       .subscribe({

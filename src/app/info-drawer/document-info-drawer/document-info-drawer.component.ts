@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for document drawer.
@@ -64,12 +65,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is the signed in user an Admin or station owner. */
   isUserAdminOrOwner = false;
 
+  /** The Document Name. */
+  documentName = '';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService
+    private userService: UserService,
+    private documentService: DocumentService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -113,6 +118,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (documentName) => {
+          this.documentName = documentName.length > 0 ? documentName : 'Untitled Document';
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { MockDocumentService, MockErrorService, MockStationService, MockUserService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 
 describe('DocumentInfoDrawerComponent', () => {
@@ -31,7 +32,8 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
-        { provide: UserService, useClass: MockUserService }
+        { provide: UserService, useClass: MockUserService },
+        { provide: DocumentService, useClass: MockDocumentService }
       ],
       imports: [
         MatCheckboxModule,
