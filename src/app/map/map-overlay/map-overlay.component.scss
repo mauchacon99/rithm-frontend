@@ -15,5 +15,14 @@
   top: 129px;
 }
 
+::ng-deep mat-drawer-container {
+  mat-drawer.mapStationInfo {
+    @apply mt-0;
+
+    position: absolute !important;
+    height: 100%;
+  }
+}
+
 //Needed for the center-map icon.
 .fa-stack-1x { font-size: 0.5rem; }
