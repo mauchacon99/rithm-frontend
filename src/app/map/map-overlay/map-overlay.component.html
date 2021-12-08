@@ -29,18 +29,26 @@
     View only. Zoom in to edit.
   </div>
 </div>
-<button class="bg-white absolute shadow-md p-1.5 text-xl rounded border border-solid flex flex-col right-2 bottom-36 md:bottom-24 md:mb-1 md:mb-0">
-  <span class="reCenterIcon block h-7 w-7"></span></button>
-<div
-  class="bg-white absolute shadow-md rounded border border-solid flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
-  <button [disabled]="enableZoom(1)"
-    [ngClass]="enableZoom(1) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
-    class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300" data-testid="zoomin"
-    (click)="zoomIn()"> <i class="fas fa-search-plus"></i></button>
-  <button [disabled]="enableZoom(0)"
-    [ngClass]="enableZoom(0) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
-    class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300" data-testid="zoomout" (click)="zoomOut()"> <i
-      class="fas fa-search-minus"></i></button>
+<div class="absolute flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
+  <div class="bg-white shadow-md rounded border border-solid mb-2">
+    <button class="py-1 text-secondary-500 hover:text-secondary-300">
+      <span class="fa-stack">
+        <i class="fas fa-circle fa-stack-1x"></i>
+        <i class="far fa-square fa-stack-2x"></i>
+      </span>
+    </button>
+  </div>
+  <div
+    class="bg-white  shadow-md rounded border border-solid flex flex-col">
+    <button [disabled]="enableZoom(1)"
+      [ngClass]="enableZoom(1) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
+      class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300" data-testid="zoomin"
+      (click)="zoomIn()"> <i class="fas fa-search-plus"></i></button>
+    <button [disabled]="enableZoom(0)"
+      [ngClass]="enableZoom(0) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
+      class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300" data-testid="zoomout" (click)="zoomOut()"> <i
+        class="fas fa-search-minus"></i></button>
+  </div>
 </div>
 <mat-menu #optionMenu>
   <div>
