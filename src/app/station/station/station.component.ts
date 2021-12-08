@@ -237,7 +237,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     if (this.stationForm.get('stationTemplateForm')?.dirty || this.stationForm.get('stationTemplateForm')?.touched) {
       petitionsUpdateStation.push(
         // Update Questions.
-        this.stationService.updateStationQuestions(this.stationInformation.questions)
+        this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
       );
     }
 
