@@ -59,10 +59,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe( appendedFields => {
-      this.documentAppendedFields = appendedFields;
-    });
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(appendedFields => {
+        this.documentAppendedFields = appendedFields;
+      });
   }
 
   /**
@@ -139,7 +139,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns Validate if user is owner or admin of current station.
    */
-   get isUserAdminOrOwner(): boolean {
+  get isUserAdminOrOwner(): boolean {
     return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
       ? true : false;
   }
@@ -205,36 +205,36 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Get the station document name editable status.
    *
    */
-   private getStatusDocumentEditable(): void {
+  private getStatusDocumentEditable(): void {
     this.stationService.getStatusDocumentEditable(this.rithmId)
-     .pipe(first())
-     .subscribe({
-       next: (editableStatus) => {
-           this.isDocumentNameEditable = editableStatus;
-       }, error: (error: unknown) => {
-         this.errorService.displayError(
-           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-           error
-         );
-       }
-     });
- }
+      .pipe(first())
+      .subscribe({
+        next: (editableStatus) => {
+          this.isDocumentNameEditable = editableStatus;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 
   /**
    * Remove an appended field from document field names.
    *
    * @param index The current index to remove from appendedFields.
    */
-   removeAppendedFieldFromDocumentName(index: number): void{
-     const removeStartIndex = index > 0 ? index - 1 : index;
-     this.documentAppendedFields.splice(removeStartIndex,2);
-     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
-   }
+  removeAppendedFieldFromDocumentName(index: number): void {
+    const removeStartIndex = index > 0 ? index - 1 : index;
+    this.documentAppendedFields.splice(removeStartIndex, 2);
+    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
 
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }

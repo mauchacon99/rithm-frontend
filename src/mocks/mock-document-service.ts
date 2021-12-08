@@ -97,7 +97,7 @@ export class MockDocumentService {
       name: 'Previous station 2',
       totalDocuments: 2
     }];
-    const followingStations: Array<ConnectedStationInfo> = [{
+    const nextStations: Array<ConnectedStationInfo> = [{
       rithmId: '852-963-741',
       name: 'Follow station 1',
       totalDocuments: 2
@@ -109,8 +109,8 @@ export class MockDocumentService {
     }];
     const data: ForwardPreviousStationsDocument = {
       rithmId: '123-654-789',
-      previousStations: previousStations,
-      followingStations: followingStations
+      previousStations,
+      nextStations
     };
     return of(data).pipe(delay(1000));
   }
@@ -376,18 +376,15 @@ export class MockDocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
-    if (!documentId && !documentName) {
+  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+    if (!documentId && documentName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
-      const newDocumentName: StandardStringJSON = {
-        data: 'Almond Flour'
-      };
-      return of(newDocumentName).pipe(delay(1000));
+      return of(documentName).pipe(delay(1000));
     }
   }
 
