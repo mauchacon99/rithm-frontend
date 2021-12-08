@@ -114,11 +114,12 @@ export class StationService {
   /**
    * Update the station questions.
    *
+   * @param stationId The Specific id of station.
    * @param questions The question to be updated.
    * @returns Station updated questions array.
    */
-  updateStationQuestions(questions: Question[]): Observable<Question[]> {
-    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, questions);
+  updateStationQuestions(stationId: string, questions: Question[]): Observable<Question[]> {
+    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`, questions);
   }
 
   /**

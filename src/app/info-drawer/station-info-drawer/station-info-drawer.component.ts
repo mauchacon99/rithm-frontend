@@ -62,6 +62,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Color message LastUpdated. */
   colorMessage = '';
 
+  /** Determine if a station is created locally. */
+  locallyCreated = false;
+
+  /** Whether the station drawer is opened from map or not. */
+  openedFromMap = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -81,6 +87,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
+          this.locallyCreated = dataDrawer.locallyCreated;
+          this.openedFromMap = dataDrawer.openedFromMap;
         }
       });
 
@@ -319,4 +327,24 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       this.getStationInfo();
     }
   }
+
+  /**
+   * Navigate to station edit page upon confirmation in Map build mode and without any confirmation in Map view mode.
+   *
+   */
+  async goToStation(): Promise<void> {
+    let confirmNavigation = false;
+    if (this.editMode) {
+      const confirm = await this.popupService.confirm({
+        title: 'Local Changes Not Saved',
+        message: `Leave without publishing any changes made to the map?`,
+        okButtonText: 'Proceed',
+      });
+      confirmNavigation = confirm;
+    }
+    if (confirmNavigation || !this.editMode) {
+      this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+    }
+  }
+
 }

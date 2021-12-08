@@ -234,10 +234,11 @@ export class MockStationService {
   /**
    * Update the station questions.
    *
+   * @param stationId The Specific id of station.
    * @param questions The Specific questions of station.
    * @returns Station save the questions array.
    */
-  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+  updateStationQuestions(stationId: string, questions: Question[]): Observable<Question[]> {
     questions = [
       {
         prompt: 'Example question#1',
