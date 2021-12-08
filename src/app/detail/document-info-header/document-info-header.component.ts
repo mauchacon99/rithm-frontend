@@ -135,9 +135,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
 
   /**
-   * Get User type owner to actually station.
+   * Is the current user an owner or an admin for this station.
    *
-   * @returns Validate if user actually is owner to actually station.
+   * @returns Validate if user is owner or admin of current station.
    */
    get isUserAdminOrOwner(): boolean {
     return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
