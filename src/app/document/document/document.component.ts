@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation } from 'src/models';
 import { ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
@@ -50,6 +50,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
+
+  /** The all document answers the document actually. */
+  documentAnswer: DocumentAnswer[] = [];
 
   constructor(
     private documentService: DocumentService,
@@ -208,5 +211,29 @@ export class DocumentComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Save the document answers.
+   *
+   * @param answerDocument The answers so document.
+   */
+  saveAnswerToDocument(answerDocument: DocumentAnswer[]): void {
+    this.documentService.saveAnswerToDocument(this.documentInformation.documentRithmId, answerDocument)
+      .pipe(first())
+      .subscribe({
+        next: (docAnswers) => {
+          if (docAnswers) {
+            this.documentAnswer = docAnswers;
+          }
+          this.documentLoading = false;
+        }, error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
