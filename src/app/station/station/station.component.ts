@@ -62,7 +62,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
 
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -103,7 +102,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-    this.getPreviousAndFollowingStations();
+    this.getPreviousAndNextStations();
   }
 
   /** Comment. */
@@ -233,10 +232,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       // Update general instructions.
       this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value),
-
-      // Update Questions.
-      this.stationService.updateStationQuestions(this.stationInformation.questions)
     ];
+
+    if (this.stationForm.get('stationTemplateForm')?.dirty || this.stationForm.get('stationTemplateForm')?.touched) {
+      petitionsUpdateStation.push(
+        // Update Questions.
+        this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
+      );
+    }
 
     forkJoin(petitionsUpdateStation)
       .pipe(first())
@@ -286,14 +289,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * Get previous and following stations.
    *
    */
-  getPreviousAndFollowingStations(): void {
-    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+  getPreviousAndNextStations(): void {
+    this.stationService.getPreviousAndNextStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (prevAndFollowStations) => {
-          if (prevAndFollowStations) {
-            this.forwardStations = prevAndFollowStations.followingStations;
-            this.previousStations = prevAndFollowStations.previousStations;
+        next: (prevAndNextStations) => {
+          if (prevAndNextStations) {
+            this.forwardStations = prevAndNextStations.nextStations;
+            this.previousStations = prevAndNextStations.previousStations;
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(

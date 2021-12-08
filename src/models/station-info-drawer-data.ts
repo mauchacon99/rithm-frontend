@@ -20,4 +20,7 @@ export interface StationInfoDrawerData {
 
   /** The status of the station (used for the map). */
   stationStatus?: MapItemStatus;
+
+  /** Whether the station drawer is opened from map or not (used for the map). */
+  openedFromMap: boolean;
 }

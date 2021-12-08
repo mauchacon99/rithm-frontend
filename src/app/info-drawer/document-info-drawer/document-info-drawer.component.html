@@ -11,13 +11,13 @@
       <div class="w-24 items-center py-2" *ngIf="documentNameLoading">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
-      <div class="pt-1" *ngIf="!documentNameLoading">
+      <div class="pt-1" *ngIf="!documentNameLoading && isStation">
         <mat-checkbox (click)="updateStatusDocumentEditable(!documentNameEditable)" [(ngModel)]="documentNameEditable">
           Editable Name
         </mat-checkbox>
       </div>
     </div>
-    <div class="col-span-12 pt-4">
+    <div class="col-span-12 pt-4" *ngIf="isStation">
       <p class="overline mb-2">Append fields to name</p>
       <form [formGroup]="appendFieldForm">
         <mat-form-field class="w-full" appearance="outline">
@@ -44,5 +44,19 @@
         </div>
       </form>
     </div>
+    <ng-container *ngIf="!isStation">
+      <div class="col-span-12 pt-4">
+        <p class="overline mb-2">Assigned to</p>
+      </div>
+      <div class="col-span-12 pt-4">
+        <p class="overline mb-2">Document Priority</p>
+      </div>
+      <div class="col-span-12 pt-4">
+        <p class="overline mb-2">Time in station</p>
+      </div>
+      <div class="col-span-12 pt-4">
+        <p class="overline mb-2">Last Updated</p>
+      </div>
+    </ng-container>
   </div>
 </div>
