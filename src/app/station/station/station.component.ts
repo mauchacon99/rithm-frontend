@@ -102,7 +102,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-    this.getPreviousAndFollowingStations();
+    this.getPreviousAndNextStations();
   }
 
   /** Comment. */
@@ -290,14 +290,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * Get previous and following stations.
    *
    */
-  getPreviousAndFollowingStations(): void {
-    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+  getPreviousAndNextStations(): void {
+    this.stationService.getPreviousAndNextStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (prevAndFollowStations) => {
-          if (prevAndFollowStations) {
-            this.forwardStations = prevAndFollowStations.followingStations;
-            this.previousStations = prevAndFollowStations.previousStations;
+        next: (prevAndNextStations) => {
+          if (prevAndNextStations) {
+            this.forwardStations = prevAndNextStations.nextStations;
+            this.previousStations = prevAndNextStations.previousStations;
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(

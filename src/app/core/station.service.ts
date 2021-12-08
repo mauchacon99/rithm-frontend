@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
@@ -311,40 +311,15 @@ export class StationService {
 
   /**
    * Update station name.
-   * Get previous and following stations.
+   * Get previous and next stations.
    *
    * @param stationRithmId The rithm id actually station.
-   * @returns Previous and following stations.
+   * @returns Previous and next stations.
    */
-  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
-    const data: ForwardPreviousStationsDocument = {
-      rithmId: stationRithmId,
-      previousStations: [
-        {
-          rithmId: '789-654-321',
-          name: 'Previous station 1',
-          totalDocuments: 5
-        },
-        {
-          rithmId: '789-654-753',
-          name: 'Previous station 2',
-          totalDocuments: 2
-        }
-      ],
-      followingStations: [
-        {
-          rithmId: '852-963-741',
-          name: 'Follow station 1',
-          totalDocuments: 2
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2',
-          totalDocuments: 1
-        }
-      ]
-    };
-    return of(data).pipe(delay(1000));
+  getPreviousAndNextStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId);
+    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations`, { params });
   }
 
   /**

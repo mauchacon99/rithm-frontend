@@ -175,7 +175,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.forwardStations = connectedStations.followingStations;
+          this.forwardStations = connectedStations.nextStations;
           this.previousStations = connectedStations.previousStations;
           this.connectedStationsLoading = false;
         }, error: (error: unknown) => {

@@ -581,36 +581,28 @@ export class MockStationService {
 
   /**
    * Updates a station name.
-   * Get previous and following stations.
+   * Get previous and next stations.
    *
    * @param stationRithmId The rithm id actually station.
-   * @returns Previous and following stations.
+   * @returns Previous and next stations.
    */
-  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+  getPreviousAndNextStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
     const mockDataFollowAndPrevStations: ForwardPreviousStationsDocument = {
       rithmId: stationRithmId,
       previousStations: [
         {
-          rithmId: '789-654-321',
-          name: 'Previous station 1',
-          totalDocuments: 5
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          name: 'Step 1'
         },
         {
-          rithmId: '789-654-753',
-          name: 'Previous station 2',
-          totalDocuments: 2
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+          name: 'Step 2'
         }
       ],
-      followingStations: [
+      nextStations: [
         {
-          rithmId: '852-963-741',
-          name: 'Follow station 1',
-          totalDocuments: 2
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2',
-          totalDocuments: 1
+          rithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          name: 'Step 4'
         }
       ]
     };
