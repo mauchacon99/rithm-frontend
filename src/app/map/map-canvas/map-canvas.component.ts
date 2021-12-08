@@ -1101,40 +1101,41 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   checkStationClick(station: StationMapElement): void {
     // TODO: Remove this test rename prompt once renaming in the drawer is done
-            // this.popupService.prompt({
-            //   title: 'Rename Station',
-            //   message: 'Please provide a name for this station',
-            //   promptLabel: 'Station name',
-            //   promptValue: station.stationName
-            // }).then((newName) => {
-            //   if (newName && newName !== station.stationName) {
-            //     station.stationName = newName;
-            //     station.markAsUpdated();
-            //     this.drawElements();
-            //   }
-            // });
-            const stationDataInfo: StationInformation = {
-              rithmId: station.rithmId,
-              name: '',
-              instructions: '',
-              nextStations: [],
-              previousStations: [],
-              stationOwners: [],
-              workers: [],
-              createdByRithmId: '',
-              createdDate: '',
-              updatedByRithmId: '',
-              updatedDate: '',
-              questions: [],
-              priority: 1
-            };
-          const dataInformationDrawer: StationInfoDrawerData = {
-            stationInformation: stationDataInfo,
-            stationName: station.stationName,
-            editMode: this.mapMode === MapMode.Build,
-            locallyCreated: station.status === MapItemStatus.Created
-          };
-          this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-          this.stationService.updatedStationNameText(station.stationName);
+    // this.popupService.prompt({
+    //   title: 'Rename Station',
+    //   message: 'Please provide a name for this station',
+    //   promptLabel: 'Station name',
+    //   promptValue: station.stationName
+    // }).then((newName) => {
+    //   if (newName && newName !== station.stationName) {
+    //     station.stationName = newName;
+    //     station.markAsUpdated();
+    //     this.drawElements();
+    //   }
+    // });
+    const stationDataInfo: StationInformation = {
+      rithmId: station.rithmId,
+      name: '',
+      instructions: '',
+      nextStations: [],
+      previousStations: [],
+      stationOwners: [],
+      workers: [],
+      createdByRithmId: '',
+      createdDate: '',
+      updatedByRithmId: '',
+      updatedDate: '',
+      questions: [],
+      priority: 1
+    };
+    const dataInformationDrawer: StationInfoDrawerData = {
+      stationInformation: stationDataInfo,
+      stationName: station.stationName,
+      editMode: this.mapMode === MapMode.Build,
+      locallyCreated: station.status === MapItemStatus.Created,
+      openedFromMap: true
+    };
+    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    this.stationService.updatedStationNameText(station.stationName);
   }
 }
