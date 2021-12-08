@@ -59,8 +59,14 @@
       <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
   </div>
-  <div class="w-full py-2">
-    <button mat-stroked-button color="warn" *ngIf="editMode" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
-      Station</button>
+  <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
+    <button mat-stroked-button color="accent" (click)="goToStation()">
+      View Station
+    </button>
+  </div>
+  <div class="w-full py-2" *ngIf="editMode">
+    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
+      Station
+    </button>
   </div>
 </div>
