@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { delay, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -118,29 +118,9 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const expectAnswerDocument: DocumentAnswer[] = [{
-        questionRithmId: 'Dev 1',
-        documentRithmId: '123-654-789',
-        stationRithmId: '741-951-753',
-        value: 'Answer Dev',
-        file: 'dev.txt',
-        filename: 'dev',
-        type: QuestionFieldType.Email,
-        rithmId: '789-321-456',
-        questionUpdated: true,
-      },
-      {
-        questionRithmId: 'Dev 2',
-        documentRithmId: '123-654-789-856',
-        stationRithmId: '741-951-753-741',
-        value: 'Answer Dev2',
-        file: 'dev2.txt',
-        filename: 'dev2',
-        type: QuestionFieldType.City,
-        rithmId: '789-321-456-789',
-        questionUpdated: false,
-      }];
-      return of(expectAnswerDocument).pipe(delay(1000));
+      return this.http.post<DocumentAnswer[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
+        answerDocument
+      );
     }
   }
 }

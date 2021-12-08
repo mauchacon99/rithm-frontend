@@ -189,5 +189,13 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedAnswers);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedAnswers);
+
+    req.flush(expectedAnswers);
+    httpTestingController.verify();
   });
 });
