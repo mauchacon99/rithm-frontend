@@ -144,7 +144,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.flows = this.mapService.flowElements;
         this.connections = this.mapService.connectionElements;
         if (data) {
-          this.mapService.center(true);
+          if (this.initLoad) {
+            this.mapService.center(data);
+            this.initLoad = false;
+          }
         }
         this.drawElements();
       });

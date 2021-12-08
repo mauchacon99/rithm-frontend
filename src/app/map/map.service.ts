@@ -430,7 +430,7 @@ export class MapService {
     const box = () => {
       //Dynamically set the size of the bounding box based on screen size.
       if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
-        return ((window.innerHeight + window.innerWidth) / 2) * .01;
+        return Math.floor(((window.innerHeight + window.innerWidth) / 2) * .01);
       } else {
         return 30;
       }
@@ -447,36 +447,40 @@ export class MapService {
     const right = leftToRight[leftToRight.length - 1] + STATION_WIDTH;
 
     const zoomLogic = () => {
+      const zoomInBox = box() + CENTER_ZOOM_BUFFER;
+      const zoomOutBox = box() - CENTER_ZOOM_BUFFER;
       //Zoom in.
-      if ((box() - CENTER_ZOOM_BUFFER < top
-        && canvasBoundingRect.height - box() - CENTER_ZOOM_BUFFER > bottom + STATION_HEIGHT
-        && canvasBoundingRect.width - box() - CENTER_ZOOM_BUFFER > right + STATION_WIDTH
-        && box() - CENTER_ZOOM_BUFFER < left) || this.mapScale$.value < SCALE_REDUCED_RENDER
+      if ((zoomInBox < top
+        && canvasBoundingRect.height - zoomInBox > bottom + STATION_HEIGHT
+        && canvasBoundingRect.width - zoomInBox > right + STATION_WIDTH
+        && zoomInBox < left &&
+        this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
       ) {
         this.zoomCount$.next(this.zoomCount$.value + 1);
         this.handleZoom(undefined, onInit);
-        if ((box() - CENTER_ZOOM_BUFFER < top
-          && canvasBoundingRect.height - box() - CENTER_ZOOM_BUFFER > bottom + STATION_HEIGHT
-          && canvasBoundingRect.width - box() - CENTER_ZOOM_BUFFER > right + STATION_WIDTH
-          && box() - CENTER_ZOOM_BUFFER < left) || this.mapScale$.value < SCALE_REDUCED_RENDER
+        if ((zoomInBox < top
+          && canvasBoundingRect.height - zoomInBox > bottom + STATION_HEIGHT
+          && canvasBoundingRect.width - zoomInBox > right + STATION_WIDTH
+          && zoomInBox < left &&
+          this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
         ) {
-          this.setCenterScale(false);
+          this.setCenterScale(onInit);
         }
         return;
       }
 
       //Zoom out.
-      if ((box() + CENTER_ZOOM_BUFFER > top
-        || canvasBoundingRect.height - box() + CENTER_ZOOM_BUFFER < bottom + STATION_HEIGHT
-        || canvasBoundingRect.width - box() + CENTER_ZOOM_BUFFER < right + STATION_WIDTH
-        || box() + CENTER_ZOOM_BUFFER > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+      if ((zoomOutBox > top
+        || canvasBoundingRect.height - zoomOutBox < bottom + STATION_HEIGHT
+        || canvasBoundingRect.width - zoomOutBox < right + STATION_WIDTH
+        || zoomOutBox > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
       ) {
         this.zoomCount$.next(this.zoomCount$.value - 1);
         this.handleZoom(undefined, onInit);
-        if ((box() + CENTER_ZOOM_BUFFER > top
-          || canvasBoundingRect.height - box() + CENTER_ZOOM_BUFFER < bottom + STATION_HEIGHT
-          || canvasBoundingRect.width - box() + CENTER_ZOOM_BUFFER < right + STATION_WIDTH
-          || box() + CENTER_ZOOM_BUFFER > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+        if ((zoomOutBox > top
+          || canvasBoundingRect.height - zoomOutBox < bottom + STATION_HEIGHT
+          || canvasBoundingRect.width - zoomOutBox < right + STATION_WIDTH
+          || zoomOutBox > left) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
         ) {
           this.setCenterScale(onInit);
         }
