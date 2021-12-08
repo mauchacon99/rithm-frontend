@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { delay, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -100,6 +100,27 @@ export class DocumentService {
         data: 'Metroid Dread'
       };
       return of(documentName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Save the document answers.
+   *
+   * @param documentRithmId The specific document id.
+   * @param answerDocument The answers so document.
+   * @returns The document answers.
+   */
+  saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+    if (!documentRithmId || !answerDocument) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get the name of the document or its answers.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return this.http.post<DocumentAnswer[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
+        answerDocument
+      );
     }
   }
 }
