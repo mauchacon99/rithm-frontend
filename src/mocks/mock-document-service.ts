@@ -106,8 +106,8 @@ export class MockDocumentService {
     }];
     const data: ForwardPreviousStationsDocument = {
       rithmId: '123-654-789',
-      previousStations: previousStations,
-      nextStations: nextStations
+      previousStations,
+      nextStations
     };
     return of(data).pipe(delay(1000));
   }
