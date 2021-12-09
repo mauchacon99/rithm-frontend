@@ -37,6 +37,9 @@ isLoading = false;
 /** Observable for when the component is destroyed. */
 private destroyed$ = new Subject<void>();
 
+/** List of current template questions. */
+@Input() currentQuestions: Question[] = [];
+
 constructor(
   private stationService: StationService,
   private errorService: ErrorService,
@@ -70,6 +73,8 @@ ngOnInit(): void{
         next: (questions: Question[]) => {
           if (questions) {
             this.questions = questions;
+            this.questions = this.questions.filter((question: Question) =>
+            !this.currentQuestions.some((currentQ: Question) => currentQ.rithmId === question.rithmId));
           }
           this.isLoading = false;
         }, error: (error: unknown) => {

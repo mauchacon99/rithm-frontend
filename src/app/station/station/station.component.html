@@ -54,7 +54,7 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" #previousAllQuestions [isPrivate]="false" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [currentQuestions]="stationInformation.questions" [isPrivate]="false" (movingQuestion)="movePreviousFieldToTemplate($event)">
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
@@ -70,7 +70,7 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" #previousPrivateQuestions [isPrivate]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [currentQuestions]="stationInformation.questions" [isPrivate]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
