@@ -162,10 +162,18 @@ describe('DocumentService', () => {
       data: 'Metroid Dread'
     };
 
+
     service.getDocumentName(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(documentName);
+        expect(response).toEqual(documentName.data);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(documentName);
+    httpTestingController.verify();
+
   });
 
 

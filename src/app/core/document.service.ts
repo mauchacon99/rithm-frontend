@@ -81,19 +81,11 @@ export class DocumentService {
    * @param documentId The Specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<StandardStringJSON> {
-    if (!documentId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get document name.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const documentName: StandardStringJSON = {
-        data: 'Metroid Dread'
-      };
-      return of(documentName).pipe(delay(1000));
-    }
+  getDocumentName(documentId: string): Observable<string> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params })
+      .pipe(map((response) => response.data));
   }
 
   /**

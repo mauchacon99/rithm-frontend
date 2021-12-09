@@ -1,3 +1,4 @@
+
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
@@ -167,8 +168,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (documentName) => {
-          this.documentNameForm.controls.name.setValue(documentName.data);
-          this.documentName = documentName.data;
+          this.documentNameForm.controls.name.setValue(documentName);
+          this.documentName = documentName;
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
