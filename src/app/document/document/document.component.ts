@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, StandardStringJSON } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject } from 'rxjs';
@@ -207,9 +207,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /**
    * Update the document name.
    */
-   private updateDocumentName(): void {
+  private updateDocumentName(): void {
     this.documentLoading = true;
-    const newDocumentName: StandardStringJSON = {data:'Provisional Name while BSubject is done'};
+    const newDocumentName = 'Provisional Name while BSubject is done';
     this.documentService.updateDocumentName(this.documentInformation.documentRithmId, newDocumentName)
       .pipe(first())
       .subscribe({
