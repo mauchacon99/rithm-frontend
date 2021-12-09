@@ -363,8 +363,8 @@ describe('DocumentComponent', () => {
       questionUpdated: false,
     }];
 
-    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveAnswerToDocument').and.callThrough();
-    component.saveAnswerToDocument(expectedAnswers);
+    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    component.saveDocumentAnswer(expectedAnswers);
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
   });
 });
