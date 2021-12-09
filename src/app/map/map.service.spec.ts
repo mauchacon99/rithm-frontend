@@ -40,7 +40,8 @@ describe('MapService', () => {
           },
           previousStations: [],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -52,7 +53,8 @@ describe('MapService', () => {
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
@@ -64,7 +66,8 @@ describe('MapService', () => {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
@@ -76,7 +79,8 @@ describe('MapService', () => {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         }
       ],
       flows: [
@@ -136,6 +140,7 @@ describe('MapService', () => {
         previousStations: [],
         nextStations: [],
         status: MapItemStatus.Created,
+        notes: ''
       });
       stationElementsArray.push(newStation);
     }
@@ -289,7 +294,8 @@ describe('MapService', () => {
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         }
       ], flows: []
     };
