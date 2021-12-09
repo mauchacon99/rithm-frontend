@@ -13,6 +13,7 @@
 ::ng-deep .deleteDrawer {
   position: fixed !important;
   top: 129px;
+  left: calc(100% - 20rem);
 }
 
 ::ng-deep mat-drawer-container {
