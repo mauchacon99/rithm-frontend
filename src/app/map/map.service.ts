@@ -129,6 +129,7 @@ export class MapService {
    * Fills in connections array with info from this.stationElements.
    */
   setConnections(): void {
+    this.connectionElements = [];
     for (const station of this.stationElements) {
       for (const connection of station.nextStations) {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
