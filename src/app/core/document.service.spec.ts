@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -76,7 +76,7 @@ describe('DocumentService', () => {
           totalDocuments: 2
         }
       ],
-      followingStations: [
+      nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
@@ -139,14 +139,22 @@ describe('DocumentService', () => {
   });
 
   it('Should return the update of the new document name', () => {
-    const documentName: StandardStringJSON = {
-      data: 'Almond Flour'
-    };
+    const documentName = 'Almond Flour';
 
     service.updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
         expect(newDocumentName).toEqual(documentName);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
+    expect(req.request.method).toEqual('PUT');
+
+    const newDocumentName: StandardStringJSON = {
+      data: documentName
+    };
+    expect(req.request.body).toEqual(newDocumentName);
+    req.flush(newDocumentName);
+    httpTestingController.verify();
   });
 
   it('should return document name', () => {
@@ -160,4 +168,42 @@ describe('DocumentService', () => {
       });
   });
 
+
+  it('should make request to save document answer', () => {
+    const expectedAnswers: DocumentAnswer[] = [{
+      questionRithmId: 'Dev 1',
+      documentRithmId: '123-654-789',
+      stationRithmId: '741-951-753',
+      value: 'Answer Dev',
+      file: 'dev.txt',
+      filename: 'dev',
+      type: QuestionFieldType.Email,
+      rithmId: '789-321-456',
+      questionUpdated: true,
+    },
+    {
+      questionRithmId: 'Dev 2',
+      documentRithmId: '123-654-789-856',
+      stationRithmId: '741-951-753-741',
+      value: 'Answer Dev2',
+      file: 'dev2.txt',
+      filename: 'dev2',
+      type: QuestionFieldType.City,
+      rithmId: '789-321-456-789',
+      questionUpdated: false,
+    }];
+
+    service.saveAnswerToDocument(documentId, expectedAnswers)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedAnswers);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedAnswers);
+
+    req.flush(expectedAnswers);
+    httpTestingController.verify();
+  });
 });
