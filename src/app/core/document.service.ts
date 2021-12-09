@@ -120,4 +120,13 @@ export class DocumentService {
       );
     }
   }
+
+  /**
+   * Update the Document Name Behavior Subject.
+   *
+   * @param documentName The Document Name.
+   */
+  updateDocumentNameBS(documentName: string): void {
+    this.documentName$.next(documentName);
+  }
 }
