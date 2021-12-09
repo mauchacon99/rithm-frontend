@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { delay, Observable, of, throwError } from 'rxjs';
+import { delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -67,19 +67,12 @@ export class DocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
-    if (!documentId && !documentName) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot update document name.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const newDocumentName: StandardStringJSON = {
-        data: 'Almond Flour'
-      };
-      return of(newDocumentName).pipe(delay(1000));
-    }
+  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+    const newDocumentName: StandardStringJSON = {
+      data: documentName
+    };
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`, newDocumentName)
+      .pipe(map(response => response.data));
   }
 
   /**
@@ -121,6 +114,26 @@ export class DocumentService {
       return this.http.post<DocumentAnswer[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
         answerDocument
       );
+    }
+  }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   * @param stationRithmId The id station actually.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
+    if (!documentRithmId || !stationRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get of id the document or id the station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockDate = '2021-12-09T17:26:47.3506612Z';
+      return of(mockDate).pipe(delay(1000));
     }
   }
 }

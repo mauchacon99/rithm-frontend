@@ -1,3 +1,4 @@
+import { MapItemStatus, MapMode } from '.';
 import { StationInformation } from './station-info';
 
 /**
@@ -14,8 +15,11 @@ export interface StationInfoDrawerData {
   /** Mode Edit. */
   editMode: boolean;
 
-  /** Whether the station has been created locally and doesn't yet exist (used for the map). */
-  locallyCreated: boolean;
+  /** Map Mode. */
+  mapMode?: MapMode;
+
+  /** The status of the station (used for the map). */
+  stationStatus?: MapItemStatus;
 
   /** Whether the station drawer is opened from map or not (used for the map). */
   openedFromMap: boolean;

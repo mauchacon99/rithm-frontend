@@ -76,7 +76,7 @@ describe('DocumentService', () => {
           totalDocuments: 2
         }
       ],
-      followingStations: [
+      nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
@@ -139,14 +139,22 @@ describe('DocumentService', () => {
   });
 
   it('Should return the update of the new document name', () => {
-    const documentName: StandardStringJSON = {
-      data: 'Almond Flour'
-    };
+    const documentName = 'Almond Flour';
 
     service.updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
         expect(newDocumentName).toEqual(documentName);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
+    expect(req.request.method).toEqual('PUT');
+
+    const newDocumentName: StandardStringJSON = {
+      data: documentName
+    };
+    expect(req.request.body).toEqual(newDocumentName);
+    req.flush(newDocumentName);
+    httpTestingController.verify();
   });
 
   it('should return document name', () => {
@@ -197,5 +205,14 @@ describe('DocumentService', () => {
 
     req.flush(expectedAnswers);
     httpTestingController.verify();
+  });
+
+  it('should return updated date from a specific document', () => {
+    const expectedResponse = '2021-12-09T17:26:47.3506612Z';
+
+    service.getLastUpdated(documentId, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
   });
 });
