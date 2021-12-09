@@ -17,7 +17,8 @@ import { UtcTimeConversion } from 'src/helpers';
 @Component({
   selector: 'app-document-info-drawer',
   templateUrl: './document-info-drawer.component.html',
-  styleUrls: ['./document-info-drawer.component.scss']
+  styleUrls: ['./document-info-drawer.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
@@ -263,10 +264,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): void {
-    this.documentService.getLastUpdated(documentRithmId, stationRithmId)
+  getLastUpdated(documentRithmId: string): void {
+    this.documentService.getLastUpdated(documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {

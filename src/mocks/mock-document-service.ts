@@ -451,11 +451,10 @@ export class MockDocumentService {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
-    if (!documentRithmId || !stationRithmId) {
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    if (!documentRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot get of id the document or id the station.'

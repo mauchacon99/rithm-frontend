@@ -124,16 +124,18 @@ export class DocumentService {
    * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
-    if (!documentRithmId || !stationRithmId) {
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    if (!documentRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get of id the document or id the station.'
+          error: 'Cannot get of id the document.'
         }
       })).pipe(delay(1000));
     } else {
-      const mockDate = '2021-12-09T17:26:47.3506612Z';
-      return of(mockDate).pipe(delay(1000));
+      const params = new HttpParams()
+        .set('documentRithmId', documentRithmId);
+      return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
+        .pipe(map(response => response.data));
     }
   }
 }
