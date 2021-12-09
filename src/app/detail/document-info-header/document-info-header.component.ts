@@ -234,7 +234,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Update the Document Name Behavior Subject.
-   *
    */
   updateDocumentNameBS(): void {
     this.documentService.updateDocumentNameBS(this.documentNameForm.controls.name.value);
