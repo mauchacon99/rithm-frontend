@@ -20,7 +20,8 @@ const STATIONS: StationMapData[] = [
     },
     previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
     nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
-    status: MapItemStatus.Normal
+    status: MapItemStatus.Normal,
+    notes: ''
   },
   {
     rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -32,7 +33,8 @@ const STATIONS: StationMapData[] = [
     },
     previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
     nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
-    status: MapItemStatus.Normal
+    status: MapItemStatus.Normal,
+    notes: ''
   }
 ];
 
