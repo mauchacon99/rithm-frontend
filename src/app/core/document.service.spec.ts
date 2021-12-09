@@ -208,11 +208,13 @@ describe('DocumentService', () => {
   });
 
   it('should return updated date from a specific document', () => {
-    const expectedResponse = '2021-12-09T17:26:47.3506612Z';
+    const expectedResponse: StandardStringJSON = {
+      data: '2021-12-09T17:26:47.3506612Z'
+    };
 
     service.getLastUpdated(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
+        expect(response).toEqual(expectedResponse.data);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?documentRithmId=${documentId}`);

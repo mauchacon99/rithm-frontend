@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentService } from '../../core/document.service';
+import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**

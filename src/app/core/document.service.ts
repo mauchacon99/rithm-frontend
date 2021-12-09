@@ -121,21 +121,12 @@ export class DocumentService {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
   getLastUpdated(documentRithmId: string): Observable<string> {
-    if (!documentRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get of id the document.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const params = new HttpParams()
-        .set('documentRithmId', documentRithmId);
-      return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
-        .pipe(map(response => response.data));
-    }
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
+      .pipe(map(response => response.data));
   }
 }

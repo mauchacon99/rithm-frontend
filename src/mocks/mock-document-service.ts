@@ -454,15 +454,7 @@ export class MockDocumentService {
    * @returns Formatted Updated Date.
    */
   getLastUpdated(documentRithmId: string): Observable<string> {
-    if (!documentRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get of id the document.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const mockDate = '2021-12-09T17:26:47.3506612Z';
-      return of(mockDate).pipe(delay(1000));
-    }
+    const mockDate = '2021-12-09T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
   }
 }
