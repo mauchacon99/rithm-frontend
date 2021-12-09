@@ -81,11 +81,11 @@ export class MapService {
   }
 
   /**
-   * Gets all map elements for a given organization.
+   * Gets all data for the map for a given organization.
    *
-   * @returns Retrieves all map elements for a given organization.
+   * @returns The map data for the organization.
    */
-  getMapElements(): Observable<MapData> {
+  getMapData(): Observable<MapData> {
     return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
       .pipe(map((data) => {
         data.stations.map((e) => {

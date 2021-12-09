@@ -14,7 +14,7 @@ import { MapService } from '../map.service';
 export class MapComponent {
   constructor(private mapService: MapService,
     private errorService: ErrorService) {
-    this.mapService.getMapElements()
+    this.mapService.getMapData()
     .pipe(first())
     .subscribe({ error: (error: unknown) => {
         this.errorService.displayError(

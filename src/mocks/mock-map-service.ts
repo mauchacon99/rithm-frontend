@@ -54,7 +54,7 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
+   getMapData(): Observable<MapData> {
     const data: MapData = {
       stations: [
         {
