@@ -111,7 +111,7 @@ describe('MapService', () => {
       ]
     };
 
-    service.getMapElements()
+    service.getMapData()
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
