@@ -82,11 +82,11 @@ export class MapService {
   }
 
   /**
-   * Gets all map elements for a given organization.
+   * Gets all data for the map for a given organization.
    *
-   * @returns Retrieves all map elements for a given organization.
+   * @returns The map data for the organization.
    */
-  getMapElements(): Observable<MapData> {
+  getMapData(): Observable<MapData> {
     return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
       .pipe(map((data) => {
         data.stations.map((e) => {
@@ -130,6 +130,7 @@ export class MapService {
    * Fills in connections array with info from this.stationElements.
    */
   setConnections(): void {
+    this.connectionElements = [];
     for (const station of this.stationElements) {
       for (const connection of station.nextStations) {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
@@ -179,6 +180,7 @@ export class MapService {
       previousStations: [],
       nextStations: [],
       status: MapItemStatus.Created,
+      notes: '',
     });
 
     //update the stationElements array.

@@ -15,7 +15,6 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
-import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -113,8 +112,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService,
-    private popupService: PopupService
+    private stationService: StationService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -1141,7 +1139,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       stationInformation: stationDataInfo,
       stationName: station.stationName,
       editMode: this.mapMode === MapMode.Build,
-      locallyCreated: station.status === MapItemStatus.Created,
+      stationStatus: station.status,
       openedFromMap: true
     };
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
