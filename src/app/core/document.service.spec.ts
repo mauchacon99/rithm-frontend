@@ -206,4 +206,13 @@ describe('DocumentService', () => {
     req.flush(expectedAnswers);
     httpTestingController.verify();
   });
+
+  it('should return updated date from a specific document', () => {
+    const expectedResponse = '2021-12-09T17:26:47.3506612Z';
+
+    service.getLastUpdated(documentId, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });
