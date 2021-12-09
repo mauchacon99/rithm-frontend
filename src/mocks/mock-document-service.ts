@@ -458,4 +458,24 @@ export class MockDocumentService {
   updateDocumentNameBS(documentName: string): void {
     this.documentName$.next(documentName);
   }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   * @param stationRithmId The id station actually.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
+    if (!documentRithmId || !stationRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get of id the document or id the station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockDate = '2021-12-09T17:26:47.3506612Z';
+      return of(mockDate).pipe(delay(1000));
+    }
+  }
 }

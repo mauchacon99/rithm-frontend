@@ -8,7 +8,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentService } from 'src/app/core/document.service';
+import { DocumentService } from '../../core/document.service';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Component for document drawer.
@@ -68,13 +69,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Document Name. */
   documentName = '';
 
+  /** Last updated time for document. */
+  lastUpdatedDate = '';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private utcTimeConversion: UtcTimeConversion
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -268,5 +273,36 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   * @param stationRithmId The id station actually.
+   */
+  getLastUpdated(documentRithmId: string, stationRithmId: string): void {
+    this.documentService.getLastUpdated(documentRithmId, stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (lastUpdated) => {
+          if (lastUpdated && lastUpdated !== 'Unknown') {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+            if (this.lastUpdatedDate === '1 day') {
+              this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          } else {
+            this.lastUpdatedDate = 'Unable to retrieve time';
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

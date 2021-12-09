@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDocumentService, MockErrorService, MockStationService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockStationService, MockUserService, MockDocumentService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -14,12 +14,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { UtcTimeConversion } from 'src/helpers';
 
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
   let fixture: ComponentFixture<DocumentInfoDrawerComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+  const documentId = 'E204F369-386F-4E41';
   const formBuilder = new FormBuilder();
 
   beforeEach(async () => {
@@ -33,7 +35,8 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: UtcTimeConversion, useClass: UtcTimeConversion }
       ],
       imports: [
         MatCheckboxModule,
@@ -75,5 +78,13 @@ describe('DocumentInfoDrawerComponent', () => {
     await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should get document last updated date', () => {
+    const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
+
+    component.getLastUpdated(documentId, stationId);
+
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
 });
