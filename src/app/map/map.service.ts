@@ -437,7 +437,7 @@ export class MapService {
   /**
    * Finds the mapPoints and canvasPoints of the furthest top, right, bottom and left stations.
    *
-   * @returns an object with the points.
+   * @returns An object with the points.
    */
   edgeStationPoints(): MapEdgeData {
     //Arrange all this.stationElements Y mapPoint coords in order.
@@ -473,7 +473,7 @@ export class MapService {
         minY: minCanvasY,
         maxY: maxCanvasY
       }
-    }
+    };
   }
 
   /**

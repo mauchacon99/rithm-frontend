@@ -1,4 +1,4 @@
-import { MapEdgeStations } from "./map-edge-stations";
+import { MapEdgeStations } from './map-edge-stations';
 
 /**
  * Represents the data needed to calculate the edge of the map.
