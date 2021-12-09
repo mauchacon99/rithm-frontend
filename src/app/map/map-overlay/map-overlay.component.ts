@@ -270,7 +270,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   zoomIn(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount + 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**
@@ -279,7 +279,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   zoomOut(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount - 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**

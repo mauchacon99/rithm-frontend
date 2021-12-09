@@ -22,6 +22,7 @@ export const PAN_TRIGGER_LIMIT = 10;
 export const PAN_DECAY_RATE = .9;
 
 // Center
+/** Needed to solve a bug related to setting the scale when centering the map. */
 export const CENTER_ZOOM_BUFFER = 10;
 
 // Flow
