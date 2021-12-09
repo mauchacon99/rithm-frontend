@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { delay, map, Observable, of, throwError } from 'rxjs';
+import { delay, map, Observable, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
