@@ -53,7 +53,7 @@
       </div>
     </div>
   </div>
-  <div class="w-full py-2" *ngIf="!locallyCreated">
+  <div class="w-full py-2" *ngIf="!openedFromMap">
     <p class="overline">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
