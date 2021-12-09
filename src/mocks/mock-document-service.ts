@@ -457,7 +457,7 @@ export class MockDocumentService {
     if (!documentRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get of id the document or id the station.'
+          error: 'Cannot get of id the document.'
         }
       })).pipe(delay(1000));
     } else {
