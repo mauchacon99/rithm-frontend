@@ -178,6 +178,7 @@ export class MapService {
       previousStations: [],
       nextStations: [],
       status: MapItemStatus.Created,
+      notes: '',
     });
 
     //update the stationElements array.
