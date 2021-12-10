@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
   templateUrl: './previous-fields.component.html',
   styleUrls: ['./previous-fields.component.scss']
 })
-export class PreviousFieldsComponent implements OnInit {
+export class PreviousFieldsComponent implements OnInit, OnDestroy {
 
 /** The station id used to get previous fields. */
 @Input() stationId!: string;
@@ -99,5 +99,13 @@ ngOnInit(): void{
       this.questions = this.questions.filter((question: Question) => question.rithmId !== previousField.rithmId);
       this.movingQuestion.emit(previousField);
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

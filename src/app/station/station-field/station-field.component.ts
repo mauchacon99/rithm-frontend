@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 // eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -27,7 +27,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -127,7 +127,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     });
     this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-        // eslint-disable-next-line no-console
        this.stationService.touchStationForm();
       });
   }
@@ -258,5 +257,13 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
         message: 'Station field is invalid'
       }
     };
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
