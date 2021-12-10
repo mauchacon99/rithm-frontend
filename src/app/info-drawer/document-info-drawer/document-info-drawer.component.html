@@ -7,7 +7,7 @@
       <h6 class="text-center">Document Information</h6>
     </div>
     <div class="col-span-12 pt-2">
-      <p class="overline">Document Name</p>
+      <p class="overline-font">Document Name</p>
       <div class="w-24 items-center py-2" *ngIf="documentNameLoading">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-span-12 pt-4" *ngIf="isStation">
-      <p class="overline mb-2">Append fields to name</p>
+      <p class="overline-font mb-2">Append fields to name</p>
       <form [formGroup]="appendFieldForm">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Search</mat-label>
@@ -33,7 +33,7 @@
         </mat-form-field>
 
         <div class="col-span-12 py-3">
-          <p class="overline pb-2">Separator Value</p>
+          <p class="overline-font pb-2">Separator Value</p>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Select</mat-label>
             <mat-select formControlName="separatorField" (selectionChange)="updateSeparatorFieldValue($event.value)">
@@ -47,13 +47,13 @@
     </div>
     <ng-container *ngIf="!isStation">
       <div class="col-span-12 pt-4">
-        <p class="overline mb-2">Assigned to</p>
+        <p class="overline-font mb-2">Assigned to</p>
       </div>
       <div class="col-span-12 pt-4">
-        <p class="overline mb-2">Document Priority</p>
+        <p class="overline-font mb-2">Document Priority</p>
       </div>
       <div class="col-span-12 pt-4">
-        <p class="overline mb-2">Time in station</p>
+        <p class="overline-font mb-2">Time in station</p>
       </div>
       <div class="w-full py-2">
         <p class="overline">last updated</p>
