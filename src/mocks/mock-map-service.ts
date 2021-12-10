@@ -54,7 +54,7 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
+  getMapData(): Observable<MapData> {
     const data: MapData = {
       stations: [
         {
@@ -67,7 +67,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -79,7 +80,8 @@ export class MockMapService {
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
@@ -91,7 +93,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
@@ -103,7 +106,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         }
       ],
       flows: [

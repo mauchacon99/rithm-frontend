@@ -344,13 +344,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
-  publishEnable(): boolean {
-    const updatedStation = this.mapService.stationElements.findIndex(e => e.status === MapItemStatus.Updated
-       || e.status === MapItemStatus.Created || e.status === MapItemStatus.Deleted);
-    if (updatedStation >= 0) {
-      return false;
-    }
-    return true;
+   get mapHasChanges(): boolean {
+    return this.mapService.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }
