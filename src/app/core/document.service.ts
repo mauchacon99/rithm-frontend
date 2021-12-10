@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -14,6 +14,10 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
   providedIn: 'root'
 })
 export class DocumentService {
+
+  /** The Name of the Document as BehaviorSubject. */
+  documentName$ = new BehaviorSubject<string>('');
+
   constructor(
     private http: HttpClient) { }
 
@@ -106,6 +110,35 @@ export class DocumentService {
       return this.http.post<DocumentAnswer[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
         answerDocument
       );
+    }
+  }
+
+  /**
+   * Update the Document Name Behavior Subject.
+   *
+   * @param documentName The Document Name.
+   */
+  updateDocumentNameBS(documentName: string): void {
+    this.documentName$.next(documentName);
+  }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   * @param stationRithmId The id station actually.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
+    if (!documentRithmId || !stationRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get of id the document or id the station.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const mockDate = '2021-12-09T17:26:47.3506612Z';
+      return of(mockDate).pipe(delay(1000));
     }
   }
 }

@@ -8,7 +8,8 @@ const TEST_STATION_MAP_DATA: StationMapData = {
   nextStations: [],
   previousStations: [],
   noOfDocuments: 5,
-  status: MapItemStatus.Normal
+  status: MapItemStatus.Normal,
+  notes: ''
 };
 
 describe('StationMapElement', () => {

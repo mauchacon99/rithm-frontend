@@ -170,6 +170,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
         next: (documentName) => {
           this.documentNameForm.controls.name.setValue(documentName);
           this.documentName = documentName;
+          this.documentService.updateDocumentNameBS(documentName);
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -230,6 +231,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     const removeStartIndex = index > 0 ? index - 1 : index;
     this.documentAppendedFields.splice(removeStartIndex, 2);
     this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+  }
+
+  /**
+   * Update the Document Name Behavior Subject.
+   */
+  updateDocumentNameBS(): void {
+    this.documentService.updateDocumentNameBS(this.documentNameForm.controls.name.value);
   }
 
   /**
