@@ -201,7 +201,7 @@ describe('DocumentService', () => {
       questionUpdated: false,
     }];
 
-    service.saveAnswerToDocument(documentId, expectedAnswers)
+    service.saveDocumentAnswer(documentId, expectedAnswers)
       .subscribe((response) => {
         expect(response).toEqual(expectedAnswers);
       });

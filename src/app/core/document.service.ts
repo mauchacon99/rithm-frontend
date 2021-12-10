@@ -99,7 +99,7 @@ export class DocumentService {
    * @param answerDocument The answers so document.
    * @returns The document answers.
    */
-  saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
     if (!documentRithmId || !answerDocument) {
       return throwError(() => new HttpErrorResponse({
         error: {

@@ -248,8 +248,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
    *
    * @param answerDocument The answers so document.
    */
-  saveAnswerToDocument(answerDocument: DocumentAnswer[]): void {
-    this.documentService.saveAnswerToDocument(this.documentInformation.documentRithmId, answerDocument)
+  saveDocumentAnswer(answerDocument: DocumentAnswer[]): void {
+    this.documentLoading = true;
+    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, answerDocument)
       .pipe(first())
       .subscribe({
         next: (docAnswers) => {
