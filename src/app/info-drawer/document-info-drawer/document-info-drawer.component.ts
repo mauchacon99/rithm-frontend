@@ -98,7 +98,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as {
           /** RithmId station. */
-          rithmId: string;
+          stationRithmId: string;
 
           /** Comes from station or not. */
           isStation: boolean;
@@ -110,7 +110,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           documentRithmId: string;
         };
         if (dataDrawer) {
-          this.stationRithmId = dataDrawer.rithmId;
+          this.stationRithmId = dataDrawer.stationRithmId;
           this.documentRithmId = dataDrawer.documentRithmId;
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
