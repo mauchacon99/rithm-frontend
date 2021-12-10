@@ -53,6 +53,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** The all document answers the document actually. */
   documentAnswer: DocumentAnswer[] = [];
 
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -70,6 +73,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((documentName) => {
+        this.documentName = documentName;
       });
   }
 

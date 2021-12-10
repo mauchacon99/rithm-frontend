@@ -66,6 +66,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is the signed in user an Admin or station owner. */
   isUserAdminOrOwner = false;
 
+  /** The Document Name. */
+  documentName = '';
+
   /** Last updated time for document. */
   lastUpdatedDate = '';
 
@@ -76,7 +79,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private documentService: DocumentService,
-    private utcTimeConversion: UtcTimeConversion,
+    private utcTimeConversion: UtcTimeConversion
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -120,6 +123,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (documentName) => {
+          this.documentName = documentName;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
