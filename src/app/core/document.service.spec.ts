@@ -170,7 +170,7 @@ describe('DocumentService', () => {
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
     expect(req.request.method).toEqual('GET');
-
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
     req.flush(documentName);
     httpTestingController.verify();
 
