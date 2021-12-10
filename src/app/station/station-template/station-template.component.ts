@@ -77,6 +77,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     const questionToMove = this.fields.splice(index, 1);
     const directionToMove = direction === 'up' ? -1 : 1;
     this.fields.splice(index + directionToMove, 0, questionToMove[0]);
+    this.stationService.touchStationForm();
   }
 
   /**
