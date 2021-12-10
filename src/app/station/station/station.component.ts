@@ -177,6 +177,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
+            this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
           }
           this.stationLoading = false;
         },
