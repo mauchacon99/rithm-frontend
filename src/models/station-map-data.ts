@@ -25,4 +25,7 @@ export interface StationMapData {
 
   /** The status of the station (what should happen to this flow). */
   status: MapItemStatus;
+
+  /** The notes on a station for an admin. */
+  notes: string;
 }
