@@ -14,9 +14,9 @@ import { MapService } from '../map.service';
 export class MapComponent {
   constructor(private mapService: MapService,
     private errorService: ErrorService) {
-    this.mapService.getMapElements()
+    this.mapService.getMapData()
     .pipe(first())
-    .subscribe({ next: () => null, error: (error: unknown) => {
+    .subscribe({ error: (error: unknown) => {
         this.errorService.displayError(
           'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
           error,
