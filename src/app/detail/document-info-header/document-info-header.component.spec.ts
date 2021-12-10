@@ -100,15 +100,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -122,15 +122,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 

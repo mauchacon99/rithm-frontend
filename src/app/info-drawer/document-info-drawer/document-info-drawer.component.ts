@@ -111,7 +111,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(appendedFields => {
-        this.options = appendedFields.filter(field => field.rithmId);
+        this.options = appendedFields.filter(field => field.questionRithmId);
         if (this.questions.length > 0) {
           this.filterFieldsAndQuestions();
         }
@@ -230,7 +230,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   updateSeparatorFieldValue(separator: string): void {
     // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
-      if (this.appendedFields[i].rithmId === '') {
+      if (this.appendedFields[i].questionRithmId === '') {
         this.appendedFields[i].prompt = separator;
       }
     }
@@ -248,7 +248,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
     }
     this.appendedFields.length > 0
-      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, rithmId: '' }, fieldToAppend)
+      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: '' }, fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -259,7 +259,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   filterFieldsAndQuestions(): void {
     /**Difference between QuestionArray and OptionsArray */
-    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));
+    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.questionRithmId === field2.questionRithmId));
 
     /** Set the filter List for auto searching. */
     this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(

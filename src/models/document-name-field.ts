@@ -3,7 +3,7 @@
  */
 export interface DocumentNameField {
   /** The rithm ID for this document field name. */
-  rithmId?: string;
+  questionRithmId?: string;
 
   /** The name/label of the document field name. */
   prompt: string;
