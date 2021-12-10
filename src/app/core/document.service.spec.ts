@@ -193,7 +193,7 @@ describe('DocumentService', () => {
       questionUpdated: false,
     }];
 
-    service.saveAnswerToDocument(documentId, expectedAnswers)
+    service.saveDocumentAnswer(documentId, expectedAnswers)
       .subscribe((response) => {
         expect(response).toEqual(expectedAnswers);
       });
@@ -208,11 +208,19 @@ describe('DocumentService', () => {
   });
 
   it('should return updated date from a specific document', () => {
-    const expectedResponse = '2021-12-09T17:26:47.3506612Z';
+    const expectedResponse: StandardStringJSON = {
+      data: '2021-12-09T17:26:47.3506612Z'
+    };
 
-    service.getLastUpdated(documentId, stationId)
+    service.getLastUpdated(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
+        expect(response).toEqual(expectedResponse.data);
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?documentRithmId=${documentId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
