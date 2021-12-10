@@ -78,10 +78,13 @@ describe('DocumentInfoHeaderComponent', () => {
     const drawerItem = 'documentInfo';
     const isStation = false;
     const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211';
+    component.documentRithmId = documentRithmId;
     const expectedData = {
       rithmId: rithmId,
       isStation: isStation,
-      isUserAdminOrOwner: true
+      isUserAdminOrOwner: true,
+      documentRithmId: documentRithmId
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);

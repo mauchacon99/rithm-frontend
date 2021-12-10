@@ -73,6 +73,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Last updated time for document. */
   lastUpdatedDate = '';
 
+  /** Document rithmId. */
+  documentRithmId = '';
+
+  /** Color message LastUpdated. */
+  colorMessage = '';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -99,11 +105,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
           /** User actually is owner to actually station. */
           isUserAdminOrOwner: boolean;
+
+          /** RithmId document. */
+          documentRithmId: string;
         };
         if (dataDrawer) {
           this.stationRithmId = dataDrawer.rithmId;
+          this.documentRithmId = dataDrawer.documentRithmId;
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
+        }
+        if (this.documentRithmId) {
+          this.getLastUpdated();
         }
       });
 
@@ -124,7 +137,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
-
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -278,26 +290,27 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get last updated time for document.
-   *
-   * @param documentRithmId The id of the document to get the last updated date.
    */
-  getLastUpdated(documentRithmId: string): void {
-    this.documentService.getLastUpdated(documentRithmId)
+  getLastUpdated(): void {
+    this.documentService.getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
           if (lastUpdated && lastUpdated !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+            this.colorMessage = 'text-accent-500';
             if (this.lastUpdatedDate === '1 day') {
               this.lastUpdatedDate = ' Yesterday';
             } else {
               this.lastUpdatedDate += ' ago';
             }
           } else {
+            this.colorMessage = 'text-error-500';
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
         }, error: (error: unknown) => {
+          this.colorMessage = 'text-error-500';
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

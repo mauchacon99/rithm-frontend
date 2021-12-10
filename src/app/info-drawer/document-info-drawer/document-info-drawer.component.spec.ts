@@ -53,6 +53,7 @@ describe('DocumentInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoDrawerComponent);
     component = fixture.componentInstance;
+    component.documentRithmId = documentId;
     fixture.detectChanges();
   });
 
@@ -81,8 +82,8 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should get document last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(documentId);
+    component.getLastUpdated();
 
-    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(component.documentRithmId);
   });
 });

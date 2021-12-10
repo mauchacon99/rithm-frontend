@@ -77,7 +77,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
-    this.documentRithmId ? this.getDocumentName() : '';
+    if (this.documentRithmId) {
+      this.getDocumentName();
+    }
     this.getAppendedFieldsOnDocumentName(this.rithmId);
     this.getStatusDocumentEditable();
   }
@@ -181,7 +183,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       {
         rithmId: this.rithmId,
         isStation: this.isStation,
-        isUserAdminOrOwner: this.isUserAdminOrOwner
+        isUserAdminOrOwner: this.isUserAdminOrOwner,
+        documentRithmId: this.documentRithmId
       }
     );
   }

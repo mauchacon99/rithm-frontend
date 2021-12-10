@@ -24,7 +24,8 @@
           <mat-label>Search</mat-label>
           <input type="text" placeholder="Pick one" aria-label="Search" matInput formControlName="appendField"
             [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class" (optionSelected)="addStationDocumentFieldName($event.option.value)">
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class"
+            (optionSelected)="addStationDocumentFieldName($event.option.value)">
             <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.prompt">
               <p *ngIf="option.prompt">{{option.prompt}}</p>
             </mat-option>
@@ -54,8 +55,11 @@
       <div class="col-span-12 pt-4">
         <p class="overline mb-2">Time in station</p>
       </div>
-      <div class="col-span-12 pt-4">
-        <p class="overline mb-2">Last Updated</p>
+      <div class="w-full py-2">
+        <p class="overline">last updated</p>
+        <div class="col-span-8 md:col-span-4 text-left text-xs py-2">
+          <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
+        </div>
       </div>
     </ng-container>
   </div>
