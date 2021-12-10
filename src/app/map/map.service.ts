@@ -441,7 +441,7 @@ export class MapService {
    *
    * @returns An object with the points.
    */
-  edgeStationPoints(): MapEdgeData {
+  private edgeStationPoints(): MapEdgeData {
     //Arrange all this.stationElements Y mapPoint coords in order.
     const orderedMapPointsY = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
     const minMapY = orderedMapPointsY[0];
@@ -479,11 +479,11 @@ export class MapService {
   }
 
   /**
-   * Sets the map scale to allow as many stations as possible to be visible on the map.
+   * Scales the map when center method is called to allow as many stations as possible to be visible.
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
-  setCenterScale(onInit = false): void {
+  private centerScale(onInit = false): void {
     if (!this.canvasContext) {
       throw new Error('Cannot get center point of canvas when canvas context is not set');
     }
@@ -492,58 +492,45 @@ export class MapService {
     //We use the canvas points of each station here.
     const edge = this.edgeStationPoints().canvasPoints;
 
-    const zoomLogic = () => {
-      //Zooming in and zooming out need to have different sized bounding boxes to work.
-      const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
-      const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
+    //Zooming in and zooming out need to have different sized bounding boxes to work.
+    const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
+    const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
 
-      //Zoom in.
-      if ((zoomInBox < edge.minY
-        && canvasBoundingRect.height - zoomInBox > edge.maxY + STATION_HEIGHT
-        && canvasBoundingRect.width - zoomInBox > edge.maxX + STATION_WIDTH
-        && zoomInBox < edge.minX &&
-        this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
-      ) {
-        this.zoomCount$.next(this.zoomCount$.value + 1);
-        this.handleZoom(onInit);
-        // Should method be recursively called after mapScale has changed?
-        if ((zoomInBox < edge.minY
-          && canvasBoundingRect.height - zoomInBox > edge.maxY + STATION_HEIGHT
-          && canvasBoundingRect.width - zoomInBox > edge.maxX + STATION_WIDTH
-          && zoomInBox < edge.minX &&
-          this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
-        ) {
-          this.setCenterScale(onInit);
-        }
-        return;
-      }
-
+    //Zoom in.
+    if ((zoomInBox < edge.minY
+      && canvasBoundingRect.height - zoomInBox > edge.maxY + STATION_HEIGHT
+      && canvasBoundingRect.width - zoomInBox > edge.maxX + STATION_WIDTH
+      && zoomInBox < edge.minX &&
+      this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
+    ) {
+      this.zoomCount$.next(this.zoomCount$.value + 1);
+      this.handleZoom(onInit);
+      this.setCenterPanAndScale(onInit);
       //Zoom out.
-      if ((zoomOutBox > edge.minY
-        || canvasBoundingRect.height - zoomOutBox < edge.maxY + STATION_HEIGHT
-        || canvasBoundingRect.width - zoomOutBox < edge.maxX + STATION_WIDTH
-        || zoomOutBox > edge.minX) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
-      ) {
-        this.zoomCount$.next(this.zoomCount$.value - 1);
-        this.handleZoom(onInit);
-        // Should method be recursively called after mapScale has changed?
-        if ((zoomOutBox > edge.minY
-          || canvasBoundingRect.height - zoomOutBox < edge.maxY + STATION_HEIGHT
-          || canvasBoundingRect.width - zoomOutBox < edge.maxX + STATION_WIDTH
-          || zoomOutBox > edge.minX) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
-        ) {
-          this.setCenterScale(onInit);
-        }
-        return;
-      }
-      return;
-    };
+    } else if ((zoomOutBox > edge.minY
+      || canvasBoundingRect.height - zoomOutBox < edge.maxY + STATION_HEIGHT
+      || canvasBoundingRect.width - zoomOutBox < edge.maxX + STATION_WIDTH
+      || zoomOutBox > edge.minX) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+    ) {
+      this.zoomCount$.next(this.zoomCount$.value - 1);
+      this.handleZoom(onInit);
+      this.setCenterPanAndScale(onInit);
+    }
+  }
 
+  /**
+   * Smoothly sets the scale and pans the map to center.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  setCenterPanAndScale(onInit: boolean): void {
     if (onInit) {
-      zoomLogic();
+      this.centerScale(onInit);
+      //TODO: set canvaspoint to map center.
     } else {
       setTimeout(() => {
-        zoomLogic();
+        this.centerScale(onInit);
+        //TODO: incrementally pan map to center.
       }, 4);
     }
   }
@@ -561,7 +548,7 @@ export class MapService {
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
     };
     this.currentCanvasPoint$.next(adjustedCenter);
-    this.setCenterScale(onInit);
+    this.setCenterPanAndScale(onInit);
   }
 
   /**
