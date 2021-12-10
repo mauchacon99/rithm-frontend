@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentService } from '../../core/document.service';
+import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 
 /**
@@ -17,7 +17,8 @@ import { UtcTimeConversion } from 'src/helpers';
 @Component({
   selector: 'app-document-info-drawer',
   templateUrl: './document-info-drawer.component.html',
-  styleUrls: ['./document-info-drawer.component.scss']
+  styleUrls: ['./document-info-drawer.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
@@ -66,8 +67,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is the signed in user an Admin or station owner. */
   isUserAdminOrOwner = false;
 
+  /** The Document Name. */
+  documentName = '';
+
   /** Last updated time for document. */
   lastUpdatedDate = '';
+
+  /** The held time in station for document. */
+  documentTimeInStation = '';
 
   constructor(
     private fb: FormBuilder,
@@ -76,7 +83,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private documentService: DocumentService,
-    private utcTimeConversion: UtcTimeConversion,
+    private utcTimeConversion: UtcTimeConversion
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -120,6 +127,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (documentName) => {
+          this.documentName = documentName;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -263,10 +283,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): void {
-    this.documentService.getLastUpdated(documentRithmId, stationRithmId)
+  getLastUpdated(documentRithmId: string): void {
+    this.documentService.getLastUpdated(documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
@@ -282,6 +301,37 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
         }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentRithmId The id of the document.
+   */
+  getDocumentTimeInStation(documentRithmId: string): void {
+    this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentTimeInStation) => {
+          if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
+            this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
+            if (this.documentTimeInStation === '1 day') {
+              this.documentTimeInStation = ' Yesterday';
+            } else {
+              this.documentTimeInStation += ' ago';
+            }
+          } else {
+            this.documentTimeInStation = 'Unable to retrieve time';
+          }
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

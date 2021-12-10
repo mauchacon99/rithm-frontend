@@ -14,7 +14,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { UtcTimeConversion } from 'src/helpers';
 
 
 describe('DocumentInfoDrawerComponent', () => {
@@ -35,8 +34,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: DocumentService, useClass: MockDocumentService },
-        { provide: UtcTimeConversion, useClass: UtcTimeConversion }
+        { provide: DocumentService, useClass: MockDocumentService }
       ],
       imports: [
         MatCheckboxModule,
@@ -83,8 +81,17 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should get document last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(documentId, stationId);
+    component.getLastUpdated(documentId);
 
-    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
+  it('should get held time in station for document', () => {
+    const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
+    component.stationRithmId = stationId;
+
+    component.getDocumentTimeInStation(documentId);
+
+    expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
 });
