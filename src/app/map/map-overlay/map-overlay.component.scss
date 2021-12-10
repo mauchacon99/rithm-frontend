@@ -13,7 +13,6 @@
 ::ng-deep .deleteDrawer {
   position: fixed !important;
   top: 129px;
-
   @media screen and (min-width: 992px) {
   left: calc(100% - 20rem);
   }
