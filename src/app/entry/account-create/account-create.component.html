@@ -14,7 +14,7 @@
       <!-- right column -->
       <div class="flex flex-col bg-white pt-1 md:rounded-r">
         <span *ngIf="!isLoading" class="flex-grow">
-          <a class="overline text-accent-400 ml-5" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
+          <a class="overline-font text-accent-400 ml-5" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
           <h4 class="mt-3 ml-5">Create Account</h4>
           <p class="mt-1 ml-5">Enter your info to create your account.</p>
           <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2 entry-form">
