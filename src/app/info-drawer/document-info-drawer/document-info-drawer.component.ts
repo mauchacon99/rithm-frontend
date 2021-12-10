@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentNameField, Question } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Component for document drawer.
@@ -15,7 +17,8 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-document-info-drawer',
   templateUrl: './document-info-drawer.component.html',
-  styleUrls: ['./document-info-drawer.component.scss']
+  styleUrls: ['./document-info-drawer.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
@@ -64,12 +67,20 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is the signed in user an Admin or station owner. */
   isUserAdminOrOwner = false;
 
+  /** The Document Name. */
+  documentName = '';
+
+  /** Last updated time for document. */
+  lastUpdatedDate = '';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService
+    private userService: UserService,
+    private documentService: DocumentService,
+    private utcTimeConversion: UtcTimeConversion
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -113,6 +124,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (documentName) => {
+          this.documentName = documentName;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -250,5 +274,35 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   */
+  getLastUpdated(documentRithmId: string): void {
+    this.documentService.getLastUpdated(documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (lastUpdated) => {
+          if (lastUpdated && lastUpdated !== 'Unknown') {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+            if (this.lastUpdatedDate === '1 day') {
+              this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          } else {
+            this.lastUpdatedDate = 'Unable to retrieve time';
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
