@@ -11,6 +11,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -25,7 +26,8 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule,
-        MatChipsModule
+        MatChipsModule,
+        RouterTestingModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -100,15 +102,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -122,15 +124,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
