@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
 import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, StandardStringJSON, DocumentAnswer } from 'src/models';
@@ -9,6 +9,9 @@ import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStatio
  * Mocks methods of the `DocumentService`.
  */
 export class MockDocumentService {
+
+  /** The Name of the Document as BehaviorSubject. */
+  documentName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a list of documents for a given station.
@@ -413,7 +416,7 @@ export class MockDocumentService {
    * @param answerDocument The answers so document.
    * @returns The document answers.
    */
-  saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
     if (!documentRithmId || !answerDocument) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -448,22 +451,22 @@ export class MockDocumentService {
   }
 
   /**
+   * Update the Document Name Behavior Subject.
+   *
+   * @param documentName The Document Name.
+   */
+  updateDocumentNameBS(documentName: string): void {
+    this.documentName$.next(documentName);
+  }
+
+  /**
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
-    if (!documentRithmId || !stationRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get of id the document or id the station.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const mockDate = '2021-12-09T17:26:47.3506612Z';
-      return of(mockDate).pipe(delay(1000));
-    }
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    const mockDate = '2021-12-09T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
   }
 }
