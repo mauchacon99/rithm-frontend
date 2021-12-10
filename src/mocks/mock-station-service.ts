@@ -19,6 +19,9 @@ export class MockStationService {
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
+
   /**
    * Gets a station information.
    *
@@ -683,5 +686,10 @@ export class MockStationService {
       ];
       return of(documentFieldName).pipe(delay(1000));
     }
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }

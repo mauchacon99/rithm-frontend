@@ -94,6 +94,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .subscribe((appFields) => {
         this.appendedFields = appFields;
       });
+
+    this.stationService.stationFormTouched$
+    .pipe(first())
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -208,6 +214,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       children: [],
       originalStationRithmId: this.stationRithmId
     });
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -236,7 +243,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         this.stationForm.controls.generalInstructions.value),
     ];
 
-    if (this.stationForm.get('stationTemplateForm')?.dirty || this.stationForm.get('stationTemplateForm')?.touched) {
+    if (this.stationForm.get('stationTemplateForm')?.touched) {
       petitionsUpdateStation.push(
         // Update Questions.
         this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
@@ -316,6 +323,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   */
   movePreviousFieldToTemplate(question: Question): void {
     this.stationInformation.questions.push(question);
+    this.stationService.touchStationForm();
   }
 
   /** This cancel button clicked show alert. */
@@ -331,4 +339,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       this.router.navigateByUrl('dashboard');
     }
   }
+
+
 }

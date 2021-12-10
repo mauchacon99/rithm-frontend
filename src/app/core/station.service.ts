@@ -25,6 +25,9 @@ export class StationService {
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
 
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
+
   constructor(
     private http: HttpClient
   ) { }
@@ -360,5 +363,10 @@ export class StationService {
   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     // eslint-disable-next-line max-len
     return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }

@@ -90,6 +90,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     if (this.stationRithmId !== field.originalStationRithmId){
       this.movingQuestion(field);
     }
+    this.stationService.touchStationForm();
   }
 
   /**

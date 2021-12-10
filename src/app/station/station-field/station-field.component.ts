@@ -2,6 +2,8 @@ import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@ang
 // eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { Question, QuestionFieldType } from 'src/models';
 
@@ -99,6 +101,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /** The RithmId of the Station. */
   @Input() stationRithmId = '';
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -120,6 +125,11 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       [this.field.questionType]: [''],
       optionField: ['']
     });
+    this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        // eslint-disable-next-line no-console
+       this.stationService.touchStationForm();
+      });
   }
 
   /**
@@ -164,6 +174,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setRequired(checkboxEvent: MatCheckboxChange): void {
     this.field.isRequired = checkboxEvent.checked;
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -173,6 +184,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -185,6 +197,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     if (!this.field.isReadOnly) {
        this.field.isRequired = false;
     }
+    this.stationService.touchStationForm();
   }
 
   /**
