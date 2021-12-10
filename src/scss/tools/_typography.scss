@@ -59,7 +59,7 @@ button {
 
 /// Overline font styling.
 /// All caps 10px regular Montserrat.
-.overline {
+.overline-font {
   @apply font-normal leading-none tracking-normal uppercase;
 
   font-size: font-calc(10) !important;
