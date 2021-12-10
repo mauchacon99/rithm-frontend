@@ -93,6 +93,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.mapMode = dataDrawer.mapMode;
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
+          if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
+            this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+            this.getStationInfo();
+          }
         }
       });
 
