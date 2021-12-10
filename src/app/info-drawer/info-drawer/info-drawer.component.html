@@ -3,7 +3,5 @@
   <app-document-info-drawer *ngIf="drawerMode === 'documentInfo'"></app-document-info-drawer>
 </div>
 <div class="flex justify-center border-t border-solid border-secondary-50">
-  <div class="bottom-0 absolute my-3">
-    <button mat-stroked-button color="accent" (click)="toggleDrawer(drawerMode)">Done</button>
-  </div>
+  <button mat-button color="accent" (click)="toggleDrawer(drawerMode)">Done</button>
 </div>
