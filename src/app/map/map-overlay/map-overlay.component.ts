@@ -331,6 +331,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Creates a new station with connection line from the current/selected station.
+   */
+  createConnectedStation(): void {
+    this.mapService.mapMode$.next(MapMode.StationAddConnected);
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
