@@ -73,6 +73,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Last updated time for document. */
   lastUpdatedDate = '';
 
+  /** The held time in station for document. */
+  documentTimeInStation = '';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -298,6 +301,37 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
         }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentRithmId The id of the document.
+   */
+  getDocumentTimeInStation(documentRithmId: string): void {
+    this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentTimeInStation) => {
+          if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
+            this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
+            if (this.documentTimeInStation === '1 day') {
+              this.documentTimeInStation = ' Yesterday';
+            } else {
+              this.documentTimeInStation += ' ago';
+            }
+          } else {
+            this.documentTimeInStation = 'Unable to retrieve time';
+          }
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
