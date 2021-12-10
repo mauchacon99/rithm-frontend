@@ -310,6 +310,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
         }, error: (error: unknown) => {
+          this.lastUpdatedDate = 'Unable to retrieve time';
           this.colorMessage = 'text-error-500';
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
