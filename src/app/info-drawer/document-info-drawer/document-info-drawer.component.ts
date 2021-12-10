@@ -115,7 +115,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
         }
-        if (this.documentRithmId) {
+        if (!this.isStation) {
           this.getLastUpdated();
         }
       });
