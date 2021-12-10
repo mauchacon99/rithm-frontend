@@ -79,8 +79,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
     if (!this.isStation) {
       this.getDocumentName();
+    } else {
+      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
     }
-    this.getAppendedFieldsOnDocumentName(this.stationRithmId);
     this.getStatusDocumentEditable();
   }
 
