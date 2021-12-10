@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -133,5 +133,25 @@ export class DocumentService {
       .set('documentRithmId', documentRithmId);
     return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
       .pipe(map(response => response.data));
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @returns The document time in station.
+   */
+  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get held time in station for document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
+      return of(documentTimeInStation).pipe(delay(1000));
+    }
   }
 }
