@@ -79,7 +79,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Loading in held time in station. */
   documentTimeInStationLoading = false;
 
-  /** The document Rithm. */
+  /** The document RithmId. */
   documentRithmId = 'E204F369-386F-4E41';
 
   constructor(
