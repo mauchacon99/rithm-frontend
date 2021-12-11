@@ -8,6 +8,7 @@
     </div>
     <div class="col-span-12 pt-2">
       <p class="overline-font">Document Name</p>
+      <p>{{documentName}}</p>
       <div class="w-24 items-center py-2" *ngIf="documentNameLoading">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
