@@ -76,6 +76,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
+  /** The Loading in held time in station. */
+  documentTimeInStationLoading = false;
+
+  /** The document Rithm. */
+  documentRithmId = 'E204F369-386F-4E41';
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -140,6 +146,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
+    this.getDocumentTimeInStation(this.documentRithmId);
   }
 
   /**
@@ -315,6 +322,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param documentRithmId The id of the document.
    */
   getDocumentTimeInStation(documentRithmId: string): void {
+    this.documentTimeInStationLoading = true;
     this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
@@ -330,12 +338,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           } else {
             this.documentTimeInStation = 'Unable to retrieve time';
           }
+          this.documentTimeInStationLoading = false;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
+          this.documentTimeInStation = 'Unable to retrieve time';
+          this.documentTimeInStationLoading = false;
         }
       });
   }
