@@ -85,4 +85,13 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
   });
+
+  it('should get held time in station for document', () => {
+    const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
+    component.stationRithmId = stationId;
+
+    component.getDocumentTimeInStation(documentId);
+
+    expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+  });
 });

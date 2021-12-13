@@ -231,4 +231,15 @@ describe('DocumentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return held time in station for document', () => {
+    const expectedResponse: StandardStringJSON = {
+      data: '2021-12-09T17:26:47.3506612Z'
+    };
+
+    service.getDocumentTimeInStation(documentId, stationId)
+      .subscribe((documentTimeInStation) => {
+        expect(documentTimeInStation).toEqual(expectedResponse.data);
+      });
+  });
 });

@@ -16,11 +16,10 @@ import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.compone
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
-
 import { StationComponent } from './station.component';
 import { StationTemplateComponent } from 'src/app/station/station-template/station-template.component';
 import { StationService } from 'src/app/core/station.service';
-import { QuestionFieldType } from 'src/models';
+import { Question, QuestionFieldType } from 'src/models';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockUserService } from 'src/mocks/mock-user-service';
 import { UserService } from 'src/app/core/user.service';
@@ -144,8 +143,24 @@ describe('StationComponent', () => {
     expect(component.stationInformation.questions.length === 4).toBeTrue();
   });
 
+  it('should move previous field from private/all expansion panel to the template area', () => {
+    const previousField: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Label #1',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      children: [],
+      originalStationRithmId: '3j4k-3h2j-hj4j'
+    };
+    component.movePreviousFieldToTemplate(previousField);
+    fixture.detectChanges();
+    expect(component.stationInformation.questions).toHaveSize(1);
+  });
+
   it('should call service methods to update data when save button is clicked ', () => {
-    component.stationForm.get('stationTemplateForm')?.markAsDirty();
+    component.stationForm.get('stationTemplateForm')?.markAsTouched();
     const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
     const spyUpdateNameTemplate = spyOn(TestBed.inject(StationService), 'updateDocumentNameTemplate').and.callThrough();
     const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
