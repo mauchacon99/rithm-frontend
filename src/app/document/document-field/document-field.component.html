@@ -1,42 +1,30 @@
 <ng-container [formGroup]="documentFieldForm">
-  <ng-container *ngIf="field.children.length >0 else singleFieldType">
-      <ng-container *ngFor="let childField of field.children">
-        <ng-container [ngTemplateOutlet]="fieldType"
-          [ngTemplateOutletContext]="{field:childField}">
-        </ng-container>
-      </ng-container>
-  </ng-container>
-  <ng-template #singleFieldType>
-      <ng-container [ngTemplateOutlet]="fieldType" [ngTemplateOutletContext]="{field:field}">
-      </ng-container>
-  </ng-template>
-  <ng-template #fieldType let-field="field">
-    <app-text-field *ngIf="
-      field.questionType === fieldTypes.ShortText ||
-      field.questionType === fieldTypes.LongText ||
-      field.questionType === fieldTypes.URL ||
-      field.questionType === fieldTypes.AddressLine ||
-      field.questionType === fieldTypes.Instructions ||
-      field.questionType === fieldTypes.LongTextLabel ||
-      field.questionType === fieldTypes.State ||
-      field.questionType === fieldTypes.City ||
-      field.questionType === fieldTypes.Email" [field]="field" formControlName="textFieldForm"></app-text-field>
-    <app-number-field *ngIf="
-      field.questionType === fieldTypes.Number ||
-      field.questionType === fieldTypes.Phone ||
-      field.questionType === fieldTypes.Zip ||
-      field.questionType === fieldTypes.CreditCard ||
-      field.questionType === fieldTypes.Currency" [field]="field" formControlName="numberFieldForm"></app-number-field>
-    <app-date-field *ngIf="
-      field.questionType === fieldTypes.Date ||
-      field.questionType === fieldTypes.DateTime" [field]="field" formControlName="dateFieldForm"></app-date-field>
-    <app-select-field *ngIf="
-      field.questionType === fieldTypes.Select ||
-      field.questionType === fieldTypes.MultiSelect" [field]="field" formControlName="selectFieldForm"></app-select-field>
-    <app-check-field *ngIf="field.questionType === fieldTypes.CheckList" [field]="field" formControlName="checkFieldForm">
-    </app-check-field>
-    <app-nested-field *ngIf="field.questionType === fieldTypes.Nested" [field]="field" formControlName="nestedFieldForm">
-    </app-nested-field>
-  </ng-template>
-
+  <p *ngIf="field.questionType === fieldTypes.AddressLine" class="pb-1 italic">{{field.prompt}}</p>
+  <app-text-field *ngIf="
+    field.questionType === fieldTypes.ShortText ||
+    field.questionType === fieldTypes.LongText ||
+    field.questionType === fieldTypes.URL ||
+    field.questionType === fieldTypes.AddressLine ||
+    field.questionType === fieldTypes.Instructions ||
+    field.questionType === fieldTypes.LongTextLabel ||
+    field.questionType === fieldTypes.State ||
+    field.questionType === fieldTypes.City ||
+    field.questionType === fieldTypes.Email" [field]="field" formControlName="textFieldForm"></app-text-field>
+  <app-number-field *ngIf="
+    field.questionType === fieldTypes.Number ||
+    field.questionType === fieldTypes.Phone ||
+    field.questionType === fieldTypes.Zip ||
+    field.questionType === fieldTypes.CreditCard ||
+    field.questionType === fieldTypes.Currency" [field]="field" formControlName="numberFieldForm"></app-number-field>
+  <app-date-field *ngIf="
+    field.questionType === fieldTypes.Date ||
+    field.questionType === fieldTypes.DateTime" [field]="field" formControlName="dateFieldForm"></app-date-field>
+  <app-select-field *ngIf="
+    field.questionType === fieldTypes.Select ||
+    field.questionType === fieldTypes.MultiSelect" [field]="field" formControlName="selectFieldForm">
+  </app-select-field>
+  <app-check-field *ngIf="field.questionType === fieldTypes.CheckList" [field]="field" formControlName="checkFieldForm">
+  </app-check-field>
+  <app-nested-field *ngIf="field.children.length > 0" [field]="field" formControlName="nestedFieldForm">
+  </app-nested-field>
 </ng-container>
