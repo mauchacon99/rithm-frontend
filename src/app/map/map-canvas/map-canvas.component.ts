@@ -824,9 +824,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
+      this.dragItem = MapDragItem.Default;
+      this.stations.forEach((station) => {
+        station.dragging = false;
+      });
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
         this.clickEventHandler(position, contextPoint);
       }
+      return;
     }
 
     //If dragging the map.

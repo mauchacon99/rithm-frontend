@@ -7,32 +7,32 @@
       <h6 class="text-center">Station Information</h6>
     </div>
     <div class="col-span-12 pt-2">
-      <p class="overline">Station Name</p>
+      <p class="overline-font">Station Name</p>
       <p>{{stationName}}</p>
     </div>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station owners</p>
+    <p class="overline-font">station owners</p>
     <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
       [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
       [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline">worker roster</p>
+    <p class="overline-font">worker roster</p>
     <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
       [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
       [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station priority</p>
+    <p class="overline-font">station priority</p>
     <button mat-mini-fab color="warn" class="priority">
       1
     </button>
   </div>
   <div class="w-full py-2">
-    <p class="overline">document generation</p>
+    <p class="overline-font">document generation</p>
     <div class="w-24 items-center py-2" *ngIf="docGenLoading">
       <app-loading-indicator id="loading-indicator-status" [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
@@ -51,7 +51,7 @@
     </div>
   </div>
   <div class="w-full py-2">
-    <p class="overline">last updated</p>
+    <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
     </div>

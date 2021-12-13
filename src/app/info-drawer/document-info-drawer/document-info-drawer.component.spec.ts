@@ -14,12 +14,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { UtcTimeConversion } from 'src/helpers';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
   let fixture: ComponentFixture<DocumentInfoDrawerComponent>;
+  let sideNavService: SidenavDrawerService;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
   const formBuilder = new FormBuilder();
@@ -36,7 +37,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: FormGroup, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: UtcTimeConversion, useClass: UtcTimeConversion }
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService }
       ],
       imports: [
         MatCheckboxModule,
@@ -55,6 +56,8 @@ describe('DocumentInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoDrawerComponent);
     component = fixture.componentInstance;
+    sideNavService = TestBed.inject(SidenavDrawerService);
+    component.documentRithmId = documentId;
     fixture.detectChanges();
   });
 
@@ -83,8 +86,20 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should get document last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(documentId, stationId);
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
 
-    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
+  it('should get held time in station for document', () => {
+    const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
+    component.stationRithmId = stationId;
+
+    component.getDocumentTimeInStation(documentId);
+
+    expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
 });
