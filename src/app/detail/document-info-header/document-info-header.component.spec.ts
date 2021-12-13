@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
@@ -11,10 +11,13 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
+  const formBuilder = new FormBuilder();
+  let formGroup: FormGroup;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,13 +26,15 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule,
-        MatChipsModule
+        MatChipsModule,
+        RouterTestingModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: UserService, useClass: MockUserService }
+        { provide: UserService, useClass: MockUserService },
+        { provide: FormBuilder, useValue: formBuilder }
       ]
     })
       .compileComponents();
@@ -61,6 +66,7 @@ describe('DocumentInfoHeaderComponent', () => {
       questions: [],
       instructions: 'General instructions'
     };
+    formGroup = component.documentNameForm;
     fixture.detectChanges();
   });
 
@@ -96,15 +102,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -118,15 +124,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -145,5 +151,12 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should test method get userLoginIsOwner and return boolean', () => {
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBe(true);
+  });
+
+  it('should update the name in document info drawer', () => {
+    formGroup.controls['name'].setValue('Document Name');
+    const updateDocumentNameSpy = spyOn(TestBed.inject(DocumentService), 'updateDocumentNameBS');
+    component.updateDocumentNameBS();
+    expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
   });
 });
