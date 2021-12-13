@@ -50,7 +50,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Edit Mode. */
   stationName = '';
 
-  /** Edit mode.*/
+  /** Notes for the station. */
   stationNotes?: string;
 
   /** If component is being viewed on the map, what mode is the map in? */

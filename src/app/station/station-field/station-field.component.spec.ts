@@ -5,9 +5,10 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
+import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
+import { MockStationService } from 'src/mocks';
 import { QuestionFieldType } from 'src/models';
-
 import { StationFieldComponent } from './station-field.component';
 
 describe('StationFieldComponent', () => {
@@ -27,7 +28,8 @@ describe('StationFieldComponent', () => {
         ReactiveFormsModule
       ],
       providers: [
-        { provide: FormBuilder, useValue: formBuilder }
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
       ]
     })
     .compileComponents();
@@ -45,7 +47,9 @@ describe('StationFieldComponent', () => {
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4'
     };
+    component.stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c4';
     fixture.detectChanges();
   });
 
