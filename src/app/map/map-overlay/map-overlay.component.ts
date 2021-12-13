@@ -117,11 +117,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Disabled publish & cancel button until publish changes in map.
+   * Disabled cancel publish & build button until map data changes/updated in map.
    *
-   * @returns Returns true if publish changes updated and false if publishing.
+   * @returns Returns true if map data changes/updated and false if getting map data.
    */
-   get mapPublishChanges(): boolean {
+   get mapDataChanges(): boolean {
     return this.mapDataLoading;
   }
 
