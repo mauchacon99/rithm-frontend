@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -94,6 +94,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .subscribe((appFields) => {
         this.appendedFields = appFields;
       });
+
+    this.stationService.stationFormTouched$
+    .pipe(first())
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -177,6 +183,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
+            this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
           }
           this.stationLoading = false;
         },
@@ -198,14 +205,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
-      rithmId: '3j4k-3h2j-hj4j',
+      rithmId: '',
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: this.stationRithmId
     });
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -234,7 +243,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         this.stationForm.controls.generalInstructions.value),
     ];
 
-    if (this.stationForm.get('stationTemplateForm')?.dirty || this.stationForm.get('stationTemplateForm')?.touched) {
+    if (this.stationForm.get('stationTemplateForm')?.touched) {
       petitionsUpdateStation.push(
         // Update Questions.
         this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
@@ -307,6 +316,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
   }
 
+ /**
+  * Move previous field from private/all expansion panel to the template area.
+  *
+  * @param question The question that was moved from private/all.
+  */
+  movePreviousFieldToTemplate(question: Question): void {
+    this.stationInformation.questions.push(question);
+    this.stationService.touchStationForm();
+  }
+
   /** This cancel button clicked show alert. */
   async cancelStation(): Promise<void> {
     const response = await this.popupService.confirm({
@@ -320,4 +339,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       this.router.navigateByUrl('dashboard');
     }
   }
+
+
 }

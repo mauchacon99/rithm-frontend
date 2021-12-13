@@ -1,8 +1,12 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 // eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StationService } from 'src/app/core/station.service';
 import { Question, QuestionFieldType } from 'src/models';
+
 /**
  * Station Field Component.
  */
@@ -23,7 +27,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
 
   /** The document field to display. */
   @Input() field!: Question;
@@ -94,8 +98,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
+  /** The RithmId of the Station. */
+  @Input() stationRithmId = '';
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
+    private stationService: StationService,
   ) { }
 
   /**
@@ -109,12 +120,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       || this.field.questionType === this.fieldType.CheckList) {
       this.addOption(this.field.questionType);
     }
-
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
       optionField: ['']
     });
+    this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+       this.stationService.touchStationForm();
+      });
   }
 
   /**
@@ -155,10 +169,11 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   /**
    * Sets the required status of a field.
    *
-   * @param ob Observes MatCheckbox changes.
+   * @param checkboxEvent Event fired when the checkbox changes.
    */
-  setRequired(ob: MatCheckboxChange): void {
-    this.field.isRequired = ob.checked;
+  setRequired(checkboxEvent: MatCheckboxChange): void {
+    this.field.isRequired = checkboxEvent.checked;
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -168,6 +183,20 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
+    this.stationService.touchStationForm();
+  }
+
+  /**
+   * Sets the read-only status of a field.
+   *
+   * @param checkboxEvent Event fired when the checkbox changes.
+   */
+  setEditable(checkboxEvent: MatCheckboxChange): void {
+    this.field.isReadOnly = checkboxEvent.checked;
+    if (!this.field.isReadOnly) {
+       this.field.isRequired = false;
+    }
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -228,5 +257,13 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
         message: 'Station field is invalid'
       }
     };
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -5,6 +5,7 @@ import {
   ValidationErrors, Validator
 } from '@angular/forms';
 import { Question } from 'src/models';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the list of fields on the station template.
@@ -34,8 +35,12 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /** The form to add to station. */
   stationTemplateForm: FormGroup;
 
+  /** The RithmId of the Station. */
+  @Input() stationRithmId = '';
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private stationService: StationService,
   ) {
     this.stationTemplateForm = this.fb.group({
       stationFieldForm: this.fb.control('')
@@ -72,16 +77,32 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     const questionToMove = this.fields.splice(index, 1);
     const directionToMove = direction === 'up' ? -1 : 1;
     this.fields.splice(index + directionToMove, 0, questionToMove[0]);
+    this.stationService.touchStationForm();
   }
 
   /**
-   * Removes a field from the template.
+   * Move a previousquestion field in the template area back to its initial expansion panel.
    *
-   * @param index The current index of the field in the list.
+   * @param field The field to be moved.
    */
-  remove(index: number): void {
+  remove(field: Question): void {
+    const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
+    if (this.stationRithmId !== field.originalStationRithmId){
+      this.movingQuestion(field);
+    }
+    this.stationService.touchStationForm();
   }
+
+  /**
+   * Moves a field from the template area to previous fields.
+   *
+   * @param field The field to be moved.
+   */
+  movingQuestion(field: Question): void {
+    this.stationService.moveQuestion(field);
+  }
+
 
   /**
    * The `onTouched` function.
