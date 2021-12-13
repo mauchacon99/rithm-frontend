@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import {StationInfoDrawerData, StationInformation} from "../../../models";
+import { StationInfoDrawerData } from 'src/models';
 
 /**
  * Component for info drawer.
