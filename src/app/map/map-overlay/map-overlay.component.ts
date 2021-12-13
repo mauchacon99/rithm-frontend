@@ -116,15 +116,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
-  /**
-   * Disabled cancel publish & build button until map data changes/updated in map.
-   *
-   * @returns Returns true if map data changes/updated and false if getting map data.
-   */
-   get mapDataChanges(): boolean {
-    return this.mapDataLoading;
-  }
-
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
 
