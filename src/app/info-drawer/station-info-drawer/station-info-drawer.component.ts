@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
+import { MapService } from 'src/app/map/map.service';
 
 /**
  * Component for info station.
@@ -86,7 +87,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private route: ActivatedRoute,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -380,6 +382,23 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (confirmNavigation || !this.editMode) {
       this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
     }
+  }
+
+  /**
+   * Reporting if the name or notes on a station changed.
+   */
+  reportNewStationMapChange(): void {
+    if (this.stationNotes === undefined) {
+      throw new Error('Station notes not found');
+    }
+    const openStation = this.mapService.stationElements.find((station) => this.stationInformation.rithmId === station.rithmId);
+    if (openStation === undefined) {
+      throw new Error('Station was not found.');
+    }
+    openStation.stationName = this.stationName;
+    openStation.notes = this.stationNotes;
+    openStation.markAsUpdated();
+    this.mapService.stationElementsChanged$.next(true);
   }
 
 }

@@ -141,6 +141,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    this.mapService.stationElementsChanged$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
+        this.drawElements();
+      });
+
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
