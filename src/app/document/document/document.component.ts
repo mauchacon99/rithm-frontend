@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentStationInformation } from 'src/models';
-import { ConnectedStationInfo } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject } from 'rxjs';
@@ -51,6 +50,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
+  /** The all document answers the document actually. */
+  documentAnswer: DocumentAnswer[] = [];
+
+  /** Get Document Name from BehaviorSubject. */
+  private documentName = '';
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -68,6 +73,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
         this.drawerContext = context;
+      });
+
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((documentName) => {
+        this.documentName = documentName;
       });
   }
 
@@ -173,7 +184,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.forwardStations = connectedStations.followingStations;
+          this.forwardStations = connectedStations.nextStations;
           this.previousStations = connectedStations.previousStations;
           this.connectedStationsLoading = false;
         }, error: (error: unknown) => {
@@ -203,10 +214,57 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update the document name.
+   */
+  private updateDocumentName(): void {
+    this.documentLoading = true;
+    const newDocumentName = 'Provisional Name while BSubject is done';
+    this.documentService.updateDocumentName(this.documentInformation.documentRithmId, newDocumentName)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoading = false;
+        },
+        error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Save the document answers.
+   *
+   * @param answerDocument The answers so document.
+   */
+  saveDocumentAnswer(answerDocument: DocumentAnswer[]): void {
+    this.documentLoading = true;
+    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, answerDocument)
+      .pipe(first())
+      .subscribe({
+        next: (docAnswers) => {
+          if (docAnswers) {
+            this.documentAnswer = docAnswers;
+          }
+          this.documentLoading = false;
+        }, error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

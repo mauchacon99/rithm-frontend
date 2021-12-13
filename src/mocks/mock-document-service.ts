@@ -1,16 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument,
-  QuestionFieldType, StationDocuments, UserType, StandardStringJSON
-} from 'src/models';
+// eslint-disable-next-line max-len
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, StandardStringJSON, DocumentAnswer } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `DocumentService`.
  */
 export class MockDocumentService {
+
+  /** The Name of the Document as BehaviorSubject. */
+  documentName$ = new BehaviorSubject<string>('');
 
   /**
    * Gets a list of documents for a given station.
@@ -96,7 +97,7 @@ export class MockDocumentService {
       name: 'Previous station 2',
       totalDocuments: 2
     }];
-    const followingStations: Array<ConnectedStationInfo> = [{
+    const nextStations: Array<ConnectedStationInfo> = [{
       rithmId: '852-963-741',
       name: 'Follow station 1',
       totalDocuments: 2
@@ -108,8 +109,8 @@ export class MockDocumentService {
     }];
     const data: ForwardPreviousStationsDocument = {
       rithmId: '123-654-789',
-      previousStations: previousStations,
-      followingStations: followingStations
+      previousStations,
+      nextStations
     };
     return of(data).pipe(delay(1000));
   }
@@ -375,18 +376,15 @@ export class MockDocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: StandardStringJSON): Observable<StandardStringJSON> {
-    if (!documentId && !documentName) {
+  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+    if (!documentId && documentName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot update document name.'
         }
       })).pipe(delay(1000));
     } else {
-      const newDocumentName: StandardStringJSON = {
-        data: 'Almond Flour'
-      };
-      return of(newDocumentName).pipe(delay(1000));
+      return of(documentName).pipe(delay(1000));
     }
   }
 
@@ -408,6 +406,87 @@ export class MockDocumentService {
         data: 'Metroid Dread'
       };
       return of(documentName).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Save the document answers.
+   *
+   * @param documentRithmId The specific document id.
+   * @param answerDocument The answers so document.
+   * @returns The document answers.
+   */
+  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+    if (!documentRithmId || !answerDocument) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get the name of the document or its answers.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const expectAnswerDocument: DocumentAnswer[] = [{
+        questionRithmId: 'Dev 1',
+        documentRithmId: '123-654-789',
+        stationRithmId: '741-951-753',
+        value: 'Answer Dev',
+        file: 'dev.txt',
+        filename: 'dev',
+        type: QuestionFieldType.Email,
+        rithmId: '789-321-456',
+        questionUpdated: true,
+      },
+      {
+        questionRithmId: 'Dev 2',
+        documentRithmId: '123-654-789-856',
+        stationRithmId: '741-951-753-741',
+        value: 'Answer Dev2',
+        file: 'dev2.txt',
+        filename: 'dev2',
+        type: QuestionFieldType.City,
+        rithmId: '789-321-456-789',
+        questionUpdated: false,
+      }];
+      return of(expectAnswerDocument).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Update the Document Name Behavior Subject.
+   *
+   * @param documentName The Document Name.
+   */
+  updateDocumentNameBS(documentName: string): void {
+    this.documentName$.next(documentName);
+  }
+
+  /**
+   * Get last updated time for document.
+   *
+   * @param documentRithmId The id of the document to get the last updated date.
+   * @returns Formatted Updated Date.
+   */
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    const mockDate = '2021-12-09T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @returns The document time in station.
+   */
+  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get held time in station for document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
+      return of(documentTimeInStation).pipe(delay(1000));
     }
   }
 }

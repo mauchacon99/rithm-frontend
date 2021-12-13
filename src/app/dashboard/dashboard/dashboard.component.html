@@ -5,7 +5,7 @@
     <app-previously-started-documents class="lg:col-span-3"></app-previously-started-documents>
     <app-my-stations class="lg:col-span-6"></app-my-stations>
     <div *ngIf="isAdmin" class="lg:col-span-6">
-      <h6>TEMPORARY TESTING USE - Stations for Admin</h6>
+      <h6 class="text-orange-500">TEMPORARY TESTING USE - Stations for Admin</h6>
       <ul>
       <li *ngFor="let station of stations">
       <a [routerLink]="['/station', station.rithmId]">

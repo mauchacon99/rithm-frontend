@@ -87,7 +87,7 @@ export class StationInfoHeaderComponent implements OnInit {
       stationInformation: this.stationInformation as StationInformation,
       stationName: this.stationName,
       editMode: this.stationEditMode,
-      locallyCreated: false
+      openedFromMap: false
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updateStationInfoDrawerName();

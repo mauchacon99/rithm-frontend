@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
@@ -16,12 +16,17 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
 })
 export class StationService {
 
-
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
+
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
+
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
 
   constructor(
     private http: HttpClient
@@ -112,11 +117,12 @@ export class StationService {
   /**
    * Update the station questions.
    *
+   * @param stationId The Specific id of station.
    * @param questions The question to be updated.
    * @returns Station updated questions array.
    */
-  updateStationQuestions(questions: Question[]): Observable<Question[]> {
-    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, questions);
+  updateStationQuestions(stationId: string, questions: Question[]): Observable<Question[]> {
+    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`, questions);
   }
 
   /**
@@ -282,6 +288,15 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
+ /**
+  * Reports a new question to be moved.
+  *
+  * @param question The question of the station-template to be moved.
+  */
+  moveQuestion(question: Question): void {
+    this.questionToMove$.next(question);
+  }
+
   /**
    * Update the Station General Instruction.
    *
@@ -289,7 +304,7 @@ export class StationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON>{
+  updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON> {
     const generalInstructions: StandardStringJSON = {
       data: instructions
     };
@@ -299,40 +314,15 @@ export class StationService {
 
   /**
    * Update station name.
-   * Get previous and following stations.
+   * Get previous and next stations.
    *
    * @param stationRithmId The rithm id actually station.
-   * @returns Previous and following stations.
+   * @returns Previous and next stations.
    */
-  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
-    const data: ForwardPreviousStationsDocument = {
-      rithmId: stationRithmId,
-      previousStations: [
-        {
-          rithmId: '789-654-321',
-          name: 'Previous station 1',
-          totalDocuments: 5
-        },
-        {
-          rithmId: '789-654-753',
-          name: 'Previous station 2',
-          totalDocuments: 2
-        }
-      ],
-      followingStations: [
-        {
-          rithmId: '852-963-741',
-          name: 'Follow station 1',
-          totalDocuments: 2
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2',
-          totalDocuments: 1
-        }
-      ]
-    };
-    return of(data).pipe(delay(1000));
+  getPreviousAndNextStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId);
+    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations`, { params });
   }
 
   /**
@@ -356,21 +346,11 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
-    const documentFieldName: DocumentNameField[] = [
-      {
-        prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-      {
-        prompt: '/',
-        rithmId: ''
-      },
-      {
-        prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
-      },
-    ];
-    return of(documentFieldName).pipe(delay(1000));
+    const params = new HttpParams()
+      .set('stationRithmId', stationId);
+    return this.http.get<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template`, {
+      params
+    });
   }
 
   /**
@@ -380,8 +360,13 @@ export class StationService {
    * @param appendedFields  The appended fields.
    * @returns The updated document name template in the station.
    */
-   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+  updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     // eslint-disable-next-line max-len
     return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }
