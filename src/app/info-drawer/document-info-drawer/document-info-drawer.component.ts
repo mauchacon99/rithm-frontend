@@ -118,7 +118,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
         }
-        if (this.isStation === false) {
+        if (!this.isStation) {
           this.getLastUpdated();
         }
       });
@@ -294,7 +294,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get last updated time for document.
    */
-  getLastUpdated(): void {
+  private getLastUpdated(): void {
     this.documentService.getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
