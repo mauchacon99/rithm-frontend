@@ -94,4 +94,12 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
+
+  it('should delete a document', async () => {
+    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+
+    await component.deleteDocument(documentId);
+
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
+  });
 });
