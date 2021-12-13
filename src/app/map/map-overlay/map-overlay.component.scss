@@ -13,6 +13,19 @@
 ::ng-deep .deleteDrawer {
   position: fixed !important;
   top: 129px;
+
+  @media screen and (min-width: 992px) {
+    left: calc(100% - 20rem);
+  }
+}
+
+::ng-deep mat-drawer-container {
+  mat-drawer.mapStationInfo {
+    @apply mt-0;
+
+    position: absolute !important;
+    height: 100%;
+  }
 }
 
 //Needed for the center-map icon.
