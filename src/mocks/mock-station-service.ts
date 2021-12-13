@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
@@ -13,8 +13,14 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
+
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
+
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
 
   /**
    * Gets a station information.
@@ -545,6 +551,15 @@ export class MockStationService {
     this.stationName$.next(stationName);
   }
 
+ /**
+  * Reports a new question to be moved.
+  *
+  * @param question The question of the station-template to be moved.
+  */
+  moveQuestion(question: Question): void {
+    this.questionToMove$.next(question);
+  }
+
   /**
    * Update the Station General Instruction.
    *
@@ -671,5 +686,10 @@ export class MockStationService {
       ];
       return of(documentFieldName).pipe(delay(1000));
     }
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }

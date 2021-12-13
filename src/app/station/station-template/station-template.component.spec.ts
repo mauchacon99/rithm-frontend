@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
+import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
-import { QuestionFieldType } from 'src/models';
+import { MockStationService } from 'src/mocks';
+import { Question, QuestionFieldType } from 'src/models';
 import { StationFieldComponent } from '../station-field/station-field.component';
-
 import { StationTemplateComponent } from './station-template.component';
 
 const testStationFields = [
@@ -34,7 +35,7 @@ const testStationFields = [
         isRequired: true,
         isPrivate: false,
         children: [],
-      }
+      },
     ];
 
 describe('StationTemplateComponent', () => {
@@ -53,7 +54,8 @@ describe('StationTemplateComponent', () => {
         ReactiveFormsModule
       ],
       providers: [
-        { provide: FormBuilder, useValue: formBuilder }
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
       ]
     })
     .compileComponents();
@@ -91,7 +93,25 @@ describe('StationTemplateComponent', () => {
   });
 
   it('should remove a field', () => {
-    component.remove(2);
+    expect(component.fields.length).toEqual(3);
+    component.remove(testStationFields[2]);
     expect(component.fields.length).toEqual(2);
   });
+
+  it('should move back an addedField from the template area to the expansion panel', () => {
+    const testMoved: Question = {
+      rithmId: '3j5k-3h2j-hj5j',
+      prompt: 'Fake question 7',
+      questionType: QuestionFieldType.Number,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: true,
+      children: [],
+      originalStationRithmId: '3j5k-3h2j-hj5j'
+    };
+    const movingQuestionSpy = spyOn(TestBed.inject(StationService), 'moveQuestion');
+    component.movingQuestion(testMoved);
+    expect(movingQuestionSpy).toHaveBeenCalledOnceWith(testMoved);
+  });
+
 });
