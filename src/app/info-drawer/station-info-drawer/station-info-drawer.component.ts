@@ -71,6 +71,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Whether the station drawer is opened from map or not. */
   openedFromMap = false;
 
+  /** Allowing access to all MapMode enums in HTML.*/
+  mapModeEnum = MapMode;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,

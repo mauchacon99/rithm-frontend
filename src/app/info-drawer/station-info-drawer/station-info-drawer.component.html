@@ -14,15 +14,15 @@
   <div class="w-full py-2">
     <p class="overline-font">station owners</p>
     <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
-      [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
-      [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
+                [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
+                [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline-font">worker roster</p>
     <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
-      [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
-      [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
+                [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
+                [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2">
@@ -38,7 +38,7 @@
     </div>
     <div class="py-1" *ngIf="!docGenLoading">
       <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)"
-        *ngIf="!showDocumentGenerationError">
+                       *ngIf="!showDocumentGenerationError">
         <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'">
           None
         </mat-radio-button>
@@ -58,6 +58,12 @@
     <div class="col-span-8 md:col-span-4 text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
       <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
+  </div>
+  <div class="w-full" *ngIf="mapMode === mapModeEnum.Build">
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea matInput></textarea>
+    </mat-form-field>
   </div>
   <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
     <button mat-stroked-button color="accent" (click)="goToStation()">
