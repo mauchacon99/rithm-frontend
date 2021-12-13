@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { StationMapElement } from 'src/helpers';
-import { MapEdgeData } from 'src/models/map-edge-data';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
@@ -431,51 +430,65 @@ export class MapService {
       //Set the size of the box based on screen size.
       return Math.floor(((window.innerHeight + window.innerWidth) / 2) * .01);
     } else {
-      //If a screen is about a certain size just return 30.
+      //If a screen is above a certain size just return 30.
       return 30;
     }
   }
 
   /**
-   * Finds the mapPoints and canvasPoints of the furthest top, right, bottom and left stations.
+   * Logic for finding top-left or bottom-right canvas or map points.
    *
+   * @param pointType A mapPoint or a canvasPoint.
+   * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
    * @returns An object with the points.
    */
-  private edgeStationPoints(): MapEdgeData {
-    //Arrange all this.stationElements Y mapPoint coords in order.
-    const orderedMapPointsY = this.stationElements.map((station) => station.mapPoint.y).sort((a, b) => a - b);
-    const minMapY = orderedMapPointsY[0];
-    const maxMapY = orderedMapPointsY[orderedMapPointsY.length - 1] + STATION_HEIGHT;
+  private getEdgePoint(pointType: 'mapPoint' | 'canvasPoint', isMax: boolean): Point {
+    const orderedYPoints = this.stationElements.map((station) => station[pointType].y).sort((a, b) => a - b);
+    const orderedXPoints = this.stationElements.map((station) => station[pointType].x).sort((a, b) => a - b);
 
-    //Arrange all this.stationElements X mapPoints coords in order.
-    const orderedMapPointsX = this.stationElements.map((station) => station.mapPoint.x).sort((a, b) => a - b);
-    const minMapX = orderedMapPointsX[0];
-    const maxMapX = orderedMapPointsX[orderedMapPointsX.length - 1] + STATION_WIDTH;
-
-    //Arrange all this.stationElements Y canvasPoints coords in order.
-    const orderedCanvasPointsY = this.stationElements.map((station) => station.canvasPoint.y).sort((a, b) => a - b);
-    const minCanvasY = orderedCanvasPointsY[0];
-    const maxCanvasY = orderedCanvasPointsY[orderedCanvasPointsY.length - 1] + STATION_HEIGHT;
-
-    //Arrange all this.stationElements X canvasPoints coords in order.
-    const orderedCanvasPointsX = this.stationElements.map((station) => station.canvasPoint.x).sort((a, b) => a - b);
-    const minCanvasX = orderedCanvasPointsX[0];
-    const maxCanvasX = orderedCanvasPointsX[orderedCanvasPointsX.length - 1] + STATION_WIDTH;
+    const x = isMax ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH : orderedXPoints[0];
+    const y = isMax ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT : orderedYPoints[0];
 
     return {
-      mapPoints: {
-        minX: minMapX,
-        maxX: maxMapX,
-        minY: minMapY,
-        maxY: maxMapY
-      },
-      canvasPoints: {
-        minX: minCanvasX,
-        maxX: maxCanvasX,
-        minY: minCanvasY,
-        maxY: maxCanvasY
-      }
+      x: x,
+      y: y
     };
+  }
+
+  /**
+   * Gets the top-left mapPoint.
+   *
+   * @returns A point.
+   */
+  getMinMapPoint(): Point {
+    return this.getEdgePoint('mapPoint', false);
+  }
+
+  /**
+   * Gets the bottom-left mapPoint.
+   *
+   * @returns A point.
+   */
+  getMaxMapPoint(): Point {
+    return this.getEdgePoint('mapPoint', true);
+  }
+
+  /**
+   * Gets the top-left canvasPoint.
+   *
+   * @returns A point.
+   */
+  getMinCanvasPoint(): Point {
+    return this.getEdgePoint('canvasPoint', false);
+  }
+
+  /**
+   * Gets the bottom-right canvasPoint.
+   *
+   * @returns A point.
+   */
+  getMaxCanvasPoint(): Point {
+    return this.getEdgePoint('canvasPoint', true);
   }
 
   /**
@@ -490,27 +503,28 @@ export class MapService {
     const canvasBoundingRect = this.canvasContext.canvas.getBoundingClientRect();
 
     //We use the canvas points of each station here.
-    const edge = this.edgeStationPoints().canvasPoints;
+    const minPoint = this.getMinCanvasPoint();
+    const maxPoint = this.getMaxCanvasPoint();
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
     const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
     const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
 
     //Zoom in.
-    if ((zoomInBox < edge.minY
-      && canvasBoundingRect.height - zoomInBox > edge.maxY + STATION_HEIGHT
-      && canvasBoundingRect.width - zoomInBox > edge.maxX + STATION_WIDTH
-      && zoomInBox < edge.minX &&
-      this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
+    if ((zoomInBox < minPoint.y
+      && canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT
+      && canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH
+      && zoomInBox < minPoint.y
+      && this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
       this.handleZoom(onInit);
       this.setCenterPanAndScale(onInit);
       //Zoom out.
-    } else if ((zoomOutBox > edge.minY
-      || canvasBoundingRect.height - zoomOutBox < edge.maxY + STATION_HEIGHT
-      || canvasBoundingRect.width - zoomOutBox < edge.maxX + STATION_WIDTH
-      || zoomOutBox > edge.minX) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+    } else if ((zoomOutBox > minPoint.y
+      || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
+      || canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH
+      || zoomOutBox > minPoint.y) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
       this.handleZoom(onInit);
@@ -606,11 +620,11 @@ export class MapService {
    * @returns The center point of the map.
    */
   getMapCenterPoint(): Point {
-
     //We use the map points of each station here.
-    const edge = this.edgeStationPoints().mapPoints;
+    const minPoint = this.getMinMapPoint();
+    const maxPoint = this.getMaxMapPoint();
 
-    const center: Point = { x: Math.floor((edge.minX + edge.maxX) / 2), y: Math.floor((edge.minY + edge.maxY) / 2) };
+    const center: Point = { x: Math.floor((minPoint.x + maxPoint.x) / 2), y: Math.floor((minPoint.y + maxPoint.y) / 2) };
     return center;
   }
 

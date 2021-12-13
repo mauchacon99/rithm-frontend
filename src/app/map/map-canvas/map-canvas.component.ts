@@ -135,21 +135,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
-    this.mapService.mapDataReceived$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((dataReceived) => {
-        this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
-        this.flows = this.mapService.flowElements;
-        this.connections = this.mapService.connectionElements;
-        if (dataReceived) {
-          if (this.initLoad) {
-            this.mapService.center(dataReceived);
-            this.initLoad = false;
-          }
-        }
-        this.drawElements();
-      });
-
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
@@ -176,6 +161,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
+    this.mapService.mapDataReceived$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((dataReceived) => {
+      this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
+      this.flows = this.mapService.flowElements;
+      this.connections = this.mapService.connectionElements;
+      if (dataReceived && this.initLoad) {
+        this.mapService.center(dataReceived);
+        this.initLoad = false;
+      }
+      this.drawElements();
+    });
     this.drawElements();
   }
 
