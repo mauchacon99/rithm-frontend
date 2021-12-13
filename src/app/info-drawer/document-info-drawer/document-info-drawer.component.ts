@@ -85,9 +85,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The Loading in held time in station. */
   documentTimeInStationLoading = false;
 
-  /** The document RithmId. */
-  documentRithmId = 'E204F369-386F-4E41';
-
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -158,7 +155,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
-    this.getDocumentTimeInStation(this.documentRithmId);
+    if (!this.isStation) {
+      this.getDocumentTimeInStation();
+    }
   }
 
   /**
@@ -332,12 +331,10 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get held time in station for document.
-   *
-   * @param documentRithmId The id of the document.
    */
-  getDocumentTimeInStation(documentRithmId: string): void {
+  private getDocumentTimeInStation(): void {
     this.documentTimeInStationLoading = true;
-    this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
+    this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {

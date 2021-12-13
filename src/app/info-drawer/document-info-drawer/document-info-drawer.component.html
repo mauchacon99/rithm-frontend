@@ -58,7 +58,7 @@
         <div class="w-24 items-center py-2" *ngIf="documentTimeInStationLoading">
           <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
         </div>
-        <div class="col-span-8 md:col-span-4 text-left text-xs py-2" *ngIf="!documentTimeInStationLoading">
+        <div class="text-left text-xs py-2" *ngIf="!documentTimeInStationLoading">
           <span class="text-accent-500">{{documentTimeInStation}} </span>
         </div>
       </div>
