@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, StandardStringJSON, DocumentAnswer } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -394,7 +394,7 @@ export class MockDocumentService {
    * @param documentId The specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+  getDocumentName(documentId: string): Observable<string> {
     if (!documentId) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -402,9 +402,7 @@ export class MockDocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const documentName: StandardStringJSON = {
-        data: 'Metroid Dread'
-      };
+      const documentName = 'Metroid Dread';
       return of(documentName).pipe(delay(1000));
     }
   }
