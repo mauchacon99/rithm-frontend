@@ -38,4 +38,7 @@ export interface Question {
   /** Value of the Rithm ID current station to identify previous field. */
   originalStationRithmId?: string | null;
 
+  /** Whether the added item is a possibleAnswer (FrontEndOnly). */
+  isPossibleAnswer?: boolean;
+
 }
