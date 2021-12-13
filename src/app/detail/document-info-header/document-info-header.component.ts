@@ -1,7 +1,7 @@
 
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, DocumentName } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -48,6 +48,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Id the document actually. */
   documentRithmId = '';
+
+  /** Appended Document name. */
+  appendedDocumentName = '';
 
   constructor(
     private fb: FormBuilder,
@@ -194,8 +197,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (documentName) => {
-          this.documentNameForm.controls.name.setValue(documentName);
-          this.documentName = documentName;
+          this.documentNameForm.controls.name.setValue(documentName.baseName);
+          this.documentName = documentName.baseName;
+          this.appendedDocumentName = documentName.appendedName;
           this.documentService.updateDocumentNameBS(documentName);
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -263,7 +267,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Update the Document Name Behavior Subject.
    */
   updateDocumentNameBS(): void {
-    this.documentService.updateDocumentNameBS(this.documentNameForm.controls.name.value);
+    const documentName: DocumentName = {
+      baseName: this.documentNameForm.controls.name.value,
+      appendedName: this.appendedDocumentName
+    };
+    this.documentService.updateDocumentNameBS(documentName);
   }
 
   /**

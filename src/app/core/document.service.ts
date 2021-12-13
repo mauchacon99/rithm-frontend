@@ -16,7 +16,7 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
 export class DocumentService {
 
   /** The Name of the Document as BehaviorSubject. */
-  documentName$ = new BehaviorSubject<string>('');
+  documentName$ = new BehaviorSubject<DocumentName>({ baseName: '', appendedName: '' });
 
   constructor(
     private http: HttpClient) { }
@@ -72,12 +72,11 @@ export class DocumentService {
    * @returns The new document name.
    */
   updateDocumentName(documentId: string, documentName: string): Observable<string> {
-    const newDocumentName: DocumentName = {
-      baseName: documentName,
-      appendedName: ''
+    const newDocumentName: StandardStringJSON = {
+      data: documentName
     };
-    return this.http.put<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`, newDocumentName)
-      .pipe(map(response => response.baseName));
+    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`, newDocumentName)
+      .pipe(map(response => response.data));
   }
 
   /**
@@ -86,11 +85,10 @@ export class DocumentService {
    * @param documentId The Specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<string> {
+  getDocumentName(documentId: string): Observable<DocumentName> {
     const params = new HttpParams()
       .set('documentRithmId', documentId);
-    return this.http.get<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params })
-      .pipe(map((response) => response.baseName));
+    return this.http.get<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params });
   }
 
   /**
@@ -119,7 +117,7 @@ export class DocumentService {
    *
    * @param documentName The Document Name.
    */
-  updateDocumentNameBS(documentName: string): void {
+  updateDocumentNameBS(documentName: DocumentName): void {
     this.documentName$.next(documentName);
   }
 

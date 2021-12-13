@@ -140,6 +140,9 @@ describe('DocumentService', () => {
 
   it('Should return the update of the new document name', () => {
     const documentName = 'Almond Flour';
+    const expectDocumentName: StandardStringJSON = {
+      data: documentName
+    };
 
     service.updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
@@ -149,12 +152,8 @@ describe('DocumentService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
     expect(req.request.method).toEqual('PUT');
 
-    const newDocumentName: DocumentName = {
-      baseName: documentName,
-      appendedName: ''
-    };
-    expect(req.request.body).toEqual(newDocumentName);
-    req.flush(newDocumentName);
+    expect(req.request.body).toEqual(expectDocumentName);
+    req.flush(expectDocumentName);
     httpTestingController.verify();
   });
 
@@ -167,7 +166,7 @@ describe('DocumentService', () => {
 
     service.getDocumentName(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(documentName.baseName);
+        expect(response).toEqual(documentName);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
