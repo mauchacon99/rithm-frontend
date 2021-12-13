@@ -79,6 +79,12 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
+  it('should get document last updated date', () => {
+    const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
+
+    expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
   it('should get held time in station for document', () => {
     const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
     component.stationRithmId = stationId;
