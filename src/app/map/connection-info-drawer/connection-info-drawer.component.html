@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 p-4 w-72">
+<div class="grid grid-cols-1 p-4 w-72 overflow-y-auto drawer-content-h-map">
   <div class="w-full py-2">
     <div class="col-span-12 mb-3">
       <h6 class="text-center">Connection Information</h6>
@@ -16,9 +16,6 @@
     <button *ngIf="mapMode !== mapModeEnum.View" mat-stroked-button color="warn" class="priority" (click)="removeConnectionLine()">Delete Connection</button>
   </div>
 </div>
-<div class="flex justify-center">
-  <div class="bottom-0 absolute mb-7">
-    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
-      (click)="toggleDrawer('connectionInfo')">Done</button>
+  <div class="flex justify-center border-t border-solid border-secondary-50">
+    <button mat-button color="accent" (click)="toggleDrawer('connectionInfo')">Done</button>
   </div>
-</div>
