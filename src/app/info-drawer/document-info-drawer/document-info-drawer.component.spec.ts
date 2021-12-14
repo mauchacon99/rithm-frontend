@@ -106,7 +106,7 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should delete a document', () => {
     const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
 
-    component.deleteDocument(documentId);
+    component['deleteDocument'](documentId);
 
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
   });

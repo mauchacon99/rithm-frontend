@@ -359,7 +359,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param documentRithmId The Specific id of document.
    */
-  deleteDocument(documentRithmId: string): void {
+  private deleteDocument(documentRithmId: string): void {
     this.documentService.deleteDocument(documentRithmId)
       .pipe(first())
       .subscribe({
