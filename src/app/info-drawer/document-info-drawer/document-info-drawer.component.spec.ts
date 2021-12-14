@@ -102,4 +102,15 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
+
+  it('should show loading-last-update while get data last updated', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
+    fixture.detectChanges();
+    expect(component.lastUpdatedLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-last-update');
+    expect(loadingComponent).toBeTruthy();
+  });
 });
