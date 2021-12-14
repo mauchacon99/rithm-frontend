@@ -49,7 +49,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Id the document actually. */
   documentRithmId = '';
 
-  /** Appended Document name. */
+  /** Fields appended to the document name. */
   appendedDocumentName = '';
 
   constructor(
