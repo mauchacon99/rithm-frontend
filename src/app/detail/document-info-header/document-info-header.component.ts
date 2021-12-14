@@ -131,30 +131,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Document Priority of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Priority.
-   */
-  get documentPriority(): number {
-    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
-  }
-
-  /**
    * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
    */
   get flowedTimeUTC(): string {
     return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
-  }
-
-  /**
-   * Get last updated UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Last Updated UTC.
-   */
-  get lastUpdatedUTC(): string {
-    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
   }
 
   /**
@@ -165,7 +147,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
   }
-
 
   /**
    * Is the current user an owner or an admin for this station.
