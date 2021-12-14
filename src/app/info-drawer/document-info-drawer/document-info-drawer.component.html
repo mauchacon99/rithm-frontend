@@ -55,11 +55,8 @@
       </div>
       <div class="col-span-12 pt-4">
         <p class="overline-font mb-2">Time in station</p>
-        <div class="w-24 items-center py-2" *ngIf="documentTimeInStationLoading">
-          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
-        </div>
-        <div class="text-left text-xs py-2" *ngIf="!documentTimeInStationLoading">
-          <span class="text-accent-500">{{documentTimeInStation}} </span>
+        <div class="text-left text-xs py-2">
+          <span class="{{colorMessageDocumentTime}}">{{documentTimeInStation}} </span>
         </div>
       </div>
       <div class="w-full py-2">

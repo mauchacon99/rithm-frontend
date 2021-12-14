@@ -82,8 +82,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
-  /** The Loading in held time in station. */
-  documentTimeInStationLoading = false;
+  /** Color message the held time in station for document. */
+  colorMessageDocumentTime = '';
 
   constructor(
     private fb: FormBuilder,
@@ -123,6 +123,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
         if (!this.isStation) {
           this.getLastUpdated();
+          this.getDocumentTimeInStation();
         }
       });
 
@@ -155,9 +156,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
-    if (!this.isStation) {
-      this.getDocumentTimeInStation();
-    }
   }
 
   /**
@@ -333,7 +331,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get held time in station for document.
    */
   private getDocumentTimeInStation(): void {
-    this.documentTimeInStationLoading = true;
     this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
@@ -341,15 +338,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
+            this.colorMessageDocumentTime = 'text-accent-500';
             if (this.documentTimeInStation === '1 day') {
               this.documentTimeInStation = ' Yesterday';
             } else {
               this.documentTimeInStation += ' ago';
             }
           } else {
+            this.colorMessageDocumentTime = 'text-error-500';
             this.documentTimeInStation = 'Unable to retrieve time';
           }
-          this.documentTimeInStationLoading = false;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
@@ -357,7 +355,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             error
           );
           this.documentTimeInStation = 'Unable to retrieve time';
-          this.documentTimeInStationLoading = false;
+          this.colorMessageDocumentTime = 'text-error-500';
         }
       });
   }
