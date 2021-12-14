@@ -182,6 +182,21 @@ export class MapService {
       notes: '',
     });
 
+    // Connected station create changes
+    const index = this.stationElements.findIndex(station => station.isAddingConnected === true);
+    if (index >= 0) {
+      this.stationElements[index].isAddingConnected = false;
+      this.stationElements[index].nextStations.push(newStation.rithmId);
+      newStation.previousStations.push(this.stationElements[index].rithmId);
+
+      const lineInfo = new ConnectionMapElement(this.stationElements[index], newStation, this.mapScale$.value);
+      if (!this.connectionElements.includes(lineInfo)) {
+        this.connectionElements.push(lineInfo);
+      }
+      this.mapMode$.next(MapMode.Build);
+      this.stationElements[index].markAsUpdated();
+    }
+
     //update the stationElements array.
     this.stationElements.push(newStation);
     this.mapDataReceived$.next(true);
