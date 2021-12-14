@@ -10,6 +10,7 @@ import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for document drawer.
@@ -92,7 +93,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private documentService: DocumentService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private popupService: PopupService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -365,16 +367,26 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param documentRithmId The Specific id of document.
    */
-  private deleteDocument(documentRithmId: string): void {
-    this.documentService.deleteDocument(documentRithmId)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+  async deleteDocument(documentRithmId: string): Promise<void> {
+    const deleteDoc = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'The document will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true
+    });
+    if (deleteDoc){
+      this.documentService.deleteDocument(documentRithmId)
+        .pipe(first())
+        .subscribe({
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
+        });
+    }
+
   }
 }

@@ -65,6 +65,11 @@
           <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
         </div>
       </div>
+      <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
+        <button mat-stroked-button color="warn" class="priority" (click)="deleteDocument(documentRithmId)">
+          Delete Document
+        </button>
+      </div>
     </ng-container>
   </div>
 </div>
