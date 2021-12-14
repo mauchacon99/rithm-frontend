@@ -128,15 +128,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Document Priority of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Priority.
-   */
-  get documentPriority(): number {
-    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
-  }
-
-  /**
    * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
