@@ -2,11 +2,32 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
-  STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING,
-  BADGE_RADIUS, BADGE_MARGIN, BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR,
-  NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, BUTTON_HOVER_COLOR,
-  SCALE_RENDER_STATION_ELEMENTS, CONNECTION_DEFAULT_COLOR,
+  STATION_HEIGHT,
+  STATION_WIDTH,
+  STATION_RADIUS,
+  DEFAULT_SCALE,
+  STATION_PADDING,
+  BADGE_RADIUS,
+  BADGE_MARGIN,
+  BADGE_DEFAULT_COLOR,
+  BADGE_HOVER_COLOR,
+  NODE_RADIUS,
+  NODE_Y_MARGIN,
+  NODE_DEFAULT_COLOR,
+  NODE_HOVER_COLOR,
+  BUTTON_RADIUS,
+  BUTTON_X_MARGIN,
+  BUTTON_Y_MARGIN,
+  BUTTON_DEFAULT_COLOR,
+  BUTTON_HOVER_COLOR,
+  SCALE_RENDER_STATION_ELEMENTS,
+  CONNECTION_DEFAULT_COLOR,
+  ICON_X_MARGIN,
+  ICON_Y_MARGIN,
+  ICON_FULL_HEIGHT,
+  ICON_MID_HEIGHT,
+  ICON_MID_WIDTH,
+  ICON_FULL_WIDTH,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -51,6 +72,7 @@ export class StationElementService {
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
+        this.drawStationNoteIcon(station);
       }
     }
   }
@@ -302,5 +324,39 @@ export class StationElementService {
         ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
+  }
+
+  /**
+   * Draws a note icon in build mode if notes are on the station.
+   *
+   * @param station The station for which to draw the note.
+   */
+  private drawStationNoteIcon(station: StationMapElement): void{
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the connection node when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+
+    const scaledIconXMargin = ICON_X_MARGIN * this.mapScale;
+    const scaledIconYMargin = ICON_Y_MARGIN * this.mapScale;
+    const scaledIconMidWidth = ICON_MID_WIDTH * this.mapScale;
+    const scaledIconFullWidth = ICON_FULL_WIDTH * this.mapScale;
+    const scaledIconMidHeight = ICON_MID_HEIGHT * this.mapScale;
+    const scaledIconFullHeight = ICON_FULL_HEIGHT * this.mapScale;
+
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin);
+    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconYMargin); //across the top
+    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight); //down the side to triangle
+    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconMidHeight); //in to center
+    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconFullHeight); //from center down to bottom
+    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconFullHeight); //from center bottom back to x start
+    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin); //back to start
+    ctx.fill();
+    // ctx.stroke();
   }
 }
