@@ -102,7 +102,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should update the component data', () => {
     const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
     component.getStationInfo();
-    expect(refreshDataComponent).toHaveBeenCalledOnceWith(stationId);
+    expect(refreshDataComponent).toHaveBeenCalled();
   });
 
   it('should show loading-indicators while get data component', () => {

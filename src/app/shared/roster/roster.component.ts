@@ -4,12 +4,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { StationRosterMember } from 'src/models';
 import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
 import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Reusable component for all user/roster selection and display.
  */
 @Component({
-  selector: 'app-roster[rosterMembers][rosterSize][stationName][stationId][isWorker]',
+  selector: 'app-roster[stationId][isWorker]',
   templateUrl: './roster.component.html',
   styleUrls: ['./roster.component.scss']
 })
@@ -17,13 +19,7 @@ export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
 
   /** The list of members on the roster. */
-  @Input() rosterMembers!: StationRosterMember[];
-
-  /** The roster size. */
-  @Input() rosterSize!: number;
-
-  /** Station name. Needed for openRosterModal. */
-  @Input() stationName!: string;
+  rosterMembers: StationRosterMember[] = [];
 
   /** Station ID. Needed for openRosterModal. */
   @Input() stationId!: string;
@@ -34,21 +30,26 @@ export class RosterComponent implements OnInit {
   /** Determines if this is a roster being viewed in edit mode. */
   @Input() editMode?: boolean;
 
+  /** Whether the request is underway. */
+  loadingRoster = false;
+
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
   /** Emit the close modal. */
   @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private stationService: StationService,
+    private errorService: ErrorService
+    ) { }
 
   /**
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    if (this.rosterSize <= 3) {
-      this.slices = this.rosterSize;
-    }
+    this.getStationUsersRoster();
   }
 
   /**
@@ -57,7 +58,7 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
-      data: { stationName: this.stationName, stationId: this.stationId, isWorker: this.isWorker }
+      data: { stationId: this.stationId, isWorker: this.isWorker }
     });
   }
 
@@ -74,5 +75,33 @@ export class RosterComponent implements OnInit {
     dialog.afterClosed().pipe(first()).subscribe(result => {
       this.modalClosed.emit(result);
     });
+  }
+
+  /**
+   * Get Users Roster for a given Station.
+   */
+   getStationUsersRoster(): void {
+     this.loadingRoster = true;
+    const stationUserRoster$ = this.isWorker
+      ? this.stationService.getStationWorkerRoster(this.stationId)
+      : this.stationService.getStationOwnerRoster(this.stationId);
+
+    stationUserRoster$
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.rosterMembers = data;
+            this.slices = this.rosterMembers.length > 3 ? this.rosterMembers.length : 2;
+          }
+          this.loadingRoster = false;
+        }, error: (error: unknown) => {
+          this.loadingRoster = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

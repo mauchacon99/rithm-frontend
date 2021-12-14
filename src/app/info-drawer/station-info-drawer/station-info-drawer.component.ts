@@ -44,8 +44,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is component viewed in station edit mode. */
   editMode = false;
 
-  /** Station information object passed from parent. */
+  /** Station information object. */
   stationInformation!: StationInformation;
+
+  /** Station Id passed from parent. */
+  stationRithmId = '';
 
   /** Edit Mode. */
   stationName = '';
@@ -91,7 +94,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
           this.editMode = dataDrawer.editMode;
-          this.stationInformation = dataDrawer.stationInformation as StationInformation;
+          this.stationRithmId = dataDrawer.stationRithmId;
           this.stationName = dataDrawer.stationName;
           this.mapMode = dataDrawer.mapMode;
           this.stationStatus = dataDrawer.stationStatus;
@@ -110,8 +113,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.getParams();
-      this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+      if (!this.openedFromMap){
+        this.getParams();
+      }
+      this.getStationDocumentGenerationStatus(this.stationRithmId);
 
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
@@ -208,7 +213,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (!params.stationId) {
             this.handleInvalidParams();
           } else {
-            this.getLastUpdated(params.stationId);
+              this.getLastUpdated(params.stationId);
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -307,7 +312,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param statusNew New status the station update.
    */
   updateStatusStation(statusNew: MatRadioChange): void {
-    this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
+    this.updateStationDocumentGenerationStatus(this.stationRithmId, statusNew.value);
   }
 
   /**
@@ -317,7 +322,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getStationInfo(): void {
     this.stationLoading = true;
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.stationService.getStationInfo(this.stationInformation.rithmId)
+      this.stationService.getStationInfo(this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: (stationInfo) => {
@@ -374,7 +379,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       confirmNavigation = confirm;
     }
     if (confirmNavigation || !this.editMode) {
-      this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+      this.router.navigate([`/station/${this.stationRithmId}`]);
     }
   }
 

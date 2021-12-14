@@ -13,16 +13,12 @@
   </div>
   <div class="w-full py-2">
     <p class="overline-font">station owners</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
-                [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
-                [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
+    <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="false" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline-font">worker roster</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
-                [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
-                [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
+    <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="true" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2">
@@ -37,8 +33,7 @@
       <app-loading-indicator id="loading-indicator-status" [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
     <div class="py-1" *ngIf="!docGenLoading">
-      <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)"
-                       *ngIf="!showDocumentGenerationError">
+      <mat-radio-group *ngIf="!showDocumentGenerationError" class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)">
         <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'">
           None
         </mat-radio-button>
@@ -50,7 +45,7 @@
       </div>
     </div>
   </div>
-  <div class="w-full py-2">
+  <div class="w-full py-2" *ngIf="!openedFromMap">
     <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
@@ -71,7 +66,7 @@
     </button>
   </div>
   <div class="w-full py-2" *ngIf="editMode">
-    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
+    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation(stationRithmId)">Delete
       Station
     </button>
   </div>
