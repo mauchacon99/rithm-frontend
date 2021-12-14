@@ -11,6 +11,9 @@ export interface StationMapElement extends StationMapData {
 
   /** Whether the station is currently hovering? */
   hoverActive: StationElementHoverType;
+
+  /** Whether a connected station is being added from this station or not. */
+  isAddingConnected: boolean;
 }
 
 /**
@@ -27,6 +30,7 @@ export class StationMapElement {
     this.canvasPoint = DEFAULT_CANVAS_POINT;
     this.dragging = false;
     this.hoverActive = StationElementHoverType.None;
+    this.isAddingConnected = false;
     Object.assign(this, stationMapData);
   }
 
