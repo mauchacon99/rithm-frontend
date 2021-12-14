@@ -82,11 +82,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
-  /** The current station only.*/
-  getOnlyCurrentStation = true;
-
   /** The assigned user of document information. */
-  assignedUser: StationRosterMember[] = [];
+  documentAssignedUser: StationRosterMember[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -361,17 +358,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
  /**
-  * Get assigned user for document information.
+  * Get the user assigned to the document.
   *
   * @param documentRithmId The id of the document.
   */
-  getAssignedUser(documentRithmId: string): void {
-    this.documentService.getAssignedUser(documentRithmId, this.stationRithmId, this.getOnlyCurrentStation)
+  getAssignedUserToDocument(documentRithmId: string): void {
+    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
           if (assignedUser) {
-            this.assignedUser = assignedUser;
+            this.documentAssignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {

@@ -156,14 +156,14 @@ export class DocumentService {
   }
 
  /**
-  * Get assigned user for document information.
+  * Get the user assigned to the document.
   *
   * @param documentId The specific id of document.
   * @param stationId The specific id of station.
   * @param getOnlyCurrentStation The specific current station only.
   * @returns The assigned user.
   */
-  getAssignedUser(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
+  getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
     if (!documentId || (!stationId && getOnlyCurrentStation)) {
       return throwError(() => new HttpErrorResponse({
         error: {
