@@ -1,9 +1,7 @@
-<div class="p-4 w-72">
+<div class="p-4 w-72 drawer-content-h overflow-y-auto">
   <app-station-info-drawer *ngIf="drawerMode === 'stationInfo'"></app-station-info-drawer>
   <app-document-info-drawer *ngIf="drawerMode === 'documentInfo'"></app-document-info-drawer>
-  <div class="flex justify-center">
-    <div class="bottom-0 absolute my-5 btn-done-fixed">
-      <button mat-stroked-button color="accent" (click)="toggleDrawer(drawerMode)">Done</button>
-    </div>
-  </div>
+</div>
+<div class="flex justify-center border-t border-solid border-secondary-50">
+  <button mat-button color="accent" (click)="toggleDrawer(drawerMode)">Done</button>
 </div>
