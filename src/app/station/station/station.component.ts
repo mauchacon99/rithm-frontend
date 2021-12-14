@@ -111,11 +111,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     this.getPreviousAndNextStations();
   }
 
-  /**COmment.*/
-  test(): void {
-    console.log(this.appendedFields);
-  }
-
   /** Comment. */
   ngAfterContentChecked(): void {
     this.ref.detectChanges();
