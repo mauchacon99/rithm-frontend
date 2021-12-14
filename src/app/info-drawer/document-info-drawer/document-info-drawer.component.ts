@@ -359,4 +359,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   */
+  private deleteDocument(documentRithmId: string): void {
+    this.documentService.deleteDocument(documentRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }
