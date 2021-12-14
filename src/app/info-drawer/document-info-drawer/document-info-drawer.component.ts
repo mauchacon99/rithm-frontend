@@ -85,6 +85,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The assigned user of document information. */
   documentAssignedUser: StationRosterMember[] = [];
 
+  /** Loading in last updated section. */
+  lastUpdatedLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -298,10 +301,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get last updated time for document.
    */
   private getLastUpdated(): void {
+    this.lastUpdatedLoading = true;
     this.documentService.getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
+          this.lastUpdatedLoading = false;
           if (lastUpdated && lastUpdated !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
@@ -318,6 +323,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }, error: (error: unknown) => {
           this.lastUpdatedDate = 'Unable to retrieve time';
           this.colorMessage = 'text-error-500';
+          this.lastUpdatedLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
