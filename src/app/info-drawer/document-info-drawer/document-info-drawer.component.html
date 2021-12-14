@@ -61,7 +61,7 @@
         <div class="text-left py-2" *ngIf="lastUpdatedLoading" id="loading-last-update">
           <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
         </div>
-        <div class="text-left text-xs py-2">
+        <div class="text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
           <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
         </div>
       </div>
