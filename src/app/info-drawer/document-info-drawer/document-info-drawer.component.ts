@@ -368,7 +368,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param documentRithmId The id of the document.
    */
-  getAssignedUserToDocument(documentRithmId: string): void {
+  private getAssignedUserToDocument(documentRithmId: string): void {
     this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
