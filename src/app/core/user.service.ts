@@ -252,6 +252,14 @@ export class UserService {
     return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`, { responseType: 'text' });
   }
 
+  /**
+   * Sets user data to an observable.
+   */
+   setUserData(): void {
+    const user = localStorage.getItem('user');
+    this.userData$.next(JSON.parse(<string>user));
+  }
+
   // TODO: Re-enable when addressing notification settings
   /**
    * Attempts to reset notification settings.
@@ -263,13 +271,5 @@ export class UserService {
   //   return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
   //     notificationSettings);
   // }
-
-  /**
-   * Sets user data to an observable.
-   */
-  setUserData(): void {
-    const user = localStorage.getItem('user');
-    this.userData$.next(JSON.parse(<string>user));
-  }
 
 }
