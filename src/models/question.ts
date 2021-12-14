@@ -1,5 +1,6 @@
 import { QuestionFieldType } from '.';
 import { PossibleAnswer } from './possible-answer';
+import { QuestionAnswer } from './question-answer';
 
 /**
  * Represents a question/field on a station or document.
@@ -38,4 +39,6 @@ export interface Question {
   /** Value of the Rithm ID current station to identify previous field. */
   originalStationRithmId?: string | null;
 
+  /** The answers to each question.*/
+  answer?: QuestionAnswer;
 }

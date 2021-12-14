@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, Question } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -240,6 +240,44 @@ describe('DocumentService', () => {
     service.getDocumentTimeInStation(documentId, stationId)
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse.data);
+      });
+  });
+
+  it('should return previous questions', () => {
+    const expectPreviousQuestions: Question[] = [
+      {
+        rithmId: '',
+        questionType: QuestionFieldType.City,
+        prompt: 'string',
+        isPrivate: true,
+        isEncrypted: true,
+        isReadOnly: true,
+        isRequired: true,
+        possibleAnswers: [
+          {
+            text: 'string',
+            default: true
+          }
+        ],
+        answer: {
+          questionRithmId: 'string',
+          referAttribute: 'string',
+          asArray: [],
+          asInt: 0,
+          asDecimal: 0,
+          asString: 'string',
+          asDate: '2021-12-14T14:10:31.030Z',
+          value: 'string'
+        },
+        children: []
+      }
+    ];
+
+    const getPrivate = true;
+
+    service.getPreviousQuestions(documentId, stationId, getPrivate)
+      .subscribe((responsePreviousQuestion) => {
+        expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });
   });
 });
