@@ -645,7 +645,7 @@ export class MockStationService {
       },
       {
         prompt: '/',
-        questionRithmId: ''
+        questionRithmId: null
       },
       {
         prompt: 'Which is best?',
@@ -677,7 +677,7 @@ export class MockStationService {
         },
         {
           prompt: '/',
-          questionRithmId: ''
+          questionRithmId: null
         },
         {
           prompt: 'Which is best?',
