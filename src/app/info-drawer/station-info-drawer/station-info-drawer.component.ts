@@ -395,6 +395,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (openStation === undefined) {
       throw new Error('Station was not found.');
     }
+    this.stationName = this.stationNameForm.value.name;
     openStation.stationName = this.stationName;
     openStation.notes = this.stationNotes;
     openStation.markAsUpdated();
