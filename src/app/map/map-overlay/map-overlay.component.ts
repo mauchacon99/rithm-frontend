@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point, User } from 'src/models';
+import { MapMode, Point, User, MapItemStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -337,6 +337,15 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+   get mapHasChanges(): boolean {
+    return this.mapService.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }
