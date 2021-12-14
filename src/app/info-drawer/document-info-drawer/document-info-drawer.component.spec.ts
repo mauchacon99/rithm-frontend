@@ -14,11 +14,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
   let fixture: ComponentFixture<DocumentInfoDrawerComponent>;
+  let sideNavService: SidenavDrawerService;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
   const formBuilder = new FormBuilder();
@@ -34,7 +36,8 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService }
       ],
       imports: [
         MatCheckboxModule,
@@ -53,6 +56,8 @@ describe('DocumentInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoDrawerComponent);
     component = fixture.componentInstance;
+    sideNavService = TestBed.inject(SidenavDrawerService);
+    component.documentRithmId = documentId;
     fixture.detectChanges();
   });
 
@@ -81,7 +86,10 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should get document last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(documentId);
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
   });
@@ -93,5 +101,13 @@ describe('DocumentInfoDrawerComponent', () => {
     component.getDocumentTimeInStation(documentId);
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+  });
+
+  it('should delete a document', () => {
+    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+
+    component['deleteDocument'](documentId);
+
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
   });
 });

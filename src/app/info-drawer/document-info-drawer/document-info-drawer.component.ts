@@ -73,6 +73,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Last updated time for document. */
   lastUpdatedDate = '';
 
+  /** Document rithmId. */
+  documentRithmId = '';
+
+  /** Color message LastUpdated. */
+  colorMessage = '';
+
   /** The held time in station for document. */
   documentTimeInStation = '';
 
@@ -95,18 +101,25 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as {
           /** RithmId station. */
-          rithmId: string;
+          stationRithmId: string;
 
           /** Comes from station or not. */
           isStation: boolean;
 
           /** User actually is owner to actually station. */
           isUserAdminOrOwner: boolean;
+
+          /** RithmId document. */
+          documentRithmId: string;
         };
         if (dataDrawer) {
-          this.stationRithmId = dataDrawer.rithmId;
+          this.stationRithmId = dataDrawer.stationRithmId;
+          this.documentRithmId = dataDrawer.documentRithmId;
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
+        }
+        if (!this.isStation) {
+          this.getLastUpdated();
         }
       });
 
@@ -127,7 +140,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
-
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -281,26 +293,28 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get last updated time for document.
-   *
-   * @param documentRithmId The id of the document to get the last updated date.
    */
-  getLastUpdated(documentRithmId: string): void {
-    this.documentService.getLastUpdated(documentRithmId)
+  private getLastUpdated(): void {
+    this.documentService.getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
           if (lastUpdated && lastUpdated !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+            this.colorMessage = 'text-accent-500';
             if (this.lastUpdatedDate === '1 day') {
               this.lastUpdatedDate = ' Yesterday';
             } else {
               this.lastUpdatedDate += ' ago';
             }
           } else {
+            this.colorMessage = 'text-error-500';
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
         }, error: (error: unknown) => {
+          this.lastUpdatedDate = 'Unable to retrieve time';
+          this.colorMessage = 'text-error-500';
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -331,6 +345,24 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.documentTimeInStation = 'Unable to retrieve time';
           }
         },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   */
+  private deleteDocument(documentRithmId: string): void {
+    this.documentService.deleteDocument(documentRithmId)
+      .pipe(first())
+      .subscribe({
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
