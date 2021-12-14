@@ -146,15 +146,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get last updated UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Last Updated UTC.
-   */
-  get lastUpdatedUTC(): string {
-    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
-  }
-
-  /**
    * The id of the station or document.
    *
    * @returns The id of the station or document.
@@ -162,7 +153,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
   }
-
 
   /**
    * Is the current user an owner or an admin for this station.
