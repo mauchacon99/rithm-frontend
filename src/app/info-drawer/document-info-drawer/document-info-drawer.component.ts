@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, Question } from 'src/models';
+import { DocumentNameField, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
@@ -81,6 +81,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** The held time in station for document. */
   documentTimeInStation = '';
+
+  /** The current station only.*/
+  getOnlyCurrentStation = true;
+
+  /** The assigned user of document information. */
+  assignedUser: StationRosterMember[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -343,6 +349,29 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             }
           } else {
             this.documentTimeInStation = 'Unable to retrieve time';
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+ /**
+  * Get assigned user for document information.
+  *
+  * @param documentRithmId The id of the document.
+  */
+  getAssignedUser(documentRithmId: string): void {
+    this.documentService.getAssignedUser(documentRithmId, this.stationRithmId, this.getOnlyCurrentStation)
+      .pipe(first())
+      .subscribe({
+        next: (assignedUser) => {
+          if (assignedUser) {
+            this.assignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {
