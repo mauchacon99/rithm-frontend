@@ -248,5 +248,10 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentId}`);
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
   });
 });

@@ -169,7 +169,7 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
     }
   }
 }
