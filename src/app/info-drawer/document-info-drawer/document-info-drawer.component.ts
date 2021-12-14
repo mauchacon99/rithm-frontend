@@ -357,11 +357,11 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
-  * Get the user assigned to the document.
-  *
-  * @param documentRithmId The id of the document.
-  */
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentRithmId The id of the document.
+   */
   getAssignedUserToDocument(documentRithmId: string): void {
     this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
       .pipe(first())
@@ -371,6 +371,24 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.documentAssignedUser = assignedUser;
           }
         },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   */
+  private deleteDocument(documentRithmId: string): void {
+    this.documentService.deleteDocument(documentRithmId)
+      .pipe(first())
+      .subscribe({
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

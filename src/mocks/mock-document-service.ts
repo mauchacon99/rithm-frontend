@@ -499,7 +499,6 @@ export class MockDocumentService {
   * @returns The assigned user.
   */
   getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
-
     if (!documentId || (!stationId && getOnlyCurrentStation) ) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -515,6 +514,24 @@ export class MockDocumentService {
         isAssigned: true
       }];
       return of(assignedUser).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  deleteDocument(documentRithmId: string): Observable<unknown> {
+    if (!documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot delete the document without defining a document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
     }
   }
 }
