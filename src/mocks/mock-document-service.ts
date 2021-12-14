@@ -416,7 +416,7 @@ export class MockDocumentService {
    * @param answerDocument The answers so document.
    * @returns The document answers.
    */
-  saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
     if (!documentRithmId || !answerDocument) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -463,19 +463,30 @@ export class MockDocumentService {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
-    if (!documentRithmId || !stationRithmId) {
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    const mockDate = '2021-12-09T17:26:47.3506612Z';
+    return of(mockDate).pipe(delay(1000));
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @returns The document time in station.
+   */
+  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+    if (!documentId || !stationId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get of id the document or id the station.'
+          error: 'Cannot get held time in station for document.'
         }
       })).pipe(delay(1000));
     } else {
-      const mockDate = '2021-12-09T17:26:47.3506612Z';
-      return of(mockDate).pipe(delay(1000));
+      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
+      return of(documentTimeInStation).pipe(delay(1000));
     }
   }
 }

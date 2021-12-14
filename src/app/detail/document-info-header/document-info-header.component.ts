@@ -1,3 +1,4 @@
+
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
@@ -8,6 +9,7 @@ import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
@@ -44,6 +46,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /**Current document name */
   documentName = '';
 
+  /** Id the document actually. */
+  documentRithmId = '';
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -51,7 +56,8 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -69,10 +75,34 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Disable document input element in station edit mode.
    */
   ngOnInit(): void {
+    this.getParams();
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
-    this.getDocumentName();
-    this.getAppendedFieldsOnDocumentName(this.rithmId);
+    if (!this.isStation) {
+      this.getDocumentName();
+    } else {
+      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
+    }
     this.getStatusDocumentEditable();
+  }
+
+  /**
+   * Attempts to retrieve the document info from the query params in the URL and make the requests.
+   */
+  private getParams(): void {
+    this.route.params
+      .pipe(first())
+      .subscribe({
+        next: (params) => {
+          if (params.docName) {
+            this.documentRithmId = params.docName;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -129,7 +159,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns The id of the station or document.
    */
-  get rithmId(): string {
+  get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
   }
 
@@ -152,9 +182,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId,
+        stationRithmId: this.stationRithmId,
         isStation: this.isStation,
-        isUserAdminOrOwner: this.isUserAdminOrOwner
+        isUserAdminOrOwner: this.isUserAdminOrOwner,
+        documentRithmId: this.documentRithmId
       }
     );
   }
@@ -163,13 +194,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Get document name.
    */
   private getDocumentName(): void {
-    this.documentService.getDocumentName(this.rithmId)
+    this.documentService.getDocumentName(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentName) => {
-          this.documentNameForm.controls.name.setValue(documentName.data);
-          this.documentName = documentName.data;
-          this.documentService.updateDocumentNameBS(documentName.data);
+          this.documentNameForm.controls.name.setValue(documentName);
+          this.documentName = documentName;
+          this.documentService.updateDocumentNameBS(documentName);
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -207,7 +238,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   private getStatusDocumentEditable(): void {
-    this.stationService.getStatusDocumentEditable(this.rithmId)
+    this.stationService.getStatusDocumentEditable(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (editableStatus) => {

@@ -85,19 +85,11 @@ export class DocumentService {
    * @param documentId The Specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<StandardStringJSON> {
-    if (!documentId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get document name.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const documentName: StandardStringJSON = {
-        data: 'Metroid Dread'
-      };
-      return of(documentName).pipe(delay(1000));
-    }
+  getDocumentName(documentId: string): Observable<string> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params })
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -107,7 +99,7 @@ export class DocumentService {
    * @param answerDocument The answers so document.
    * @returns The document answers.
    */
-  saveAnswerToDocument(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
     if (!documentRithmId || !answerDocument) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -134,19 +126,32 @@ export class DocumentService {
    * Get last updated time for document.
    *
    * @param documentRithmId The id of the document to get the last updated date.
-   * @param stationRithmId The id station actually.
    * @returns Formatted Updated Date.
    */
-  getLastUpdated(documentRithmId: string, stationRithmId: string): Observable<string> {
-    if (!documentRithmId || !stationRithmId) {
+  getLastUpdated(documentRithmId: string): Observable<string> {
+    const params = new HttpParams()
+      .set('documentRithmId', documentRithmId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
+      .pipe(map(response => response.data));
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @returns The document time in station.
+   */
+  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+    if (!documentId || !stationId) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get of id the document or id the station.'
+          error: 'Cannot get held time in station for document.'
         }
       })).pipe(delay(1000));
     } else {
-      const mockDate = '2021-12-09T17:26:47.3506612Z';
-      return of(mockDate).pipe(delay(1000));
+      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
+      return of(documentTimeInStation).pipe(delay(1000));
     }
   }
 }

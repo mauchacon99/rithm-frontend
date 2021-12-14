@@ -7,13 +7,13 @@
       <p>Document Name: </p>
       <mat-chip-list aria-label="Document Fields Selection">
         <div *ngFor="let field of documentAppendedFields; let i = index" class="mx-1">
-          <mat-chip *ngIf="field.rithmId">
+          <mat-chip *ngIf="field.questionRithmId">
             {{field.prompt}}
             <button mat-icon-button class="mat-icon-6" (click)="removeAppendedFieldFromDocumentName(i)">
               <i class="fas fa-times-circle text-lg text-primary-300"></i>
             </button>
           </mat-chip>
-          <span *ngIf="!field.rithmId">
+          <span *ngIf="!field.questionRithmId">
             {{field.prompt}}
           </span>
         </div>
@@ -42,9 +42,6 @@
   </form>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
-    <button mat-mini-fab [disabled]="userType === userTypeEnum.Worker" color="warn" class="priority">
-      1
-    </button>
     <div *ngIf="userType === userTypeEnum.Admin || userType === userTypeEnum.StationOwner">
       <button mat-icon-button color="accent">
         <!-- TODO: Display if not locked -->
