@@ -12,7 +12,7 @@ export interface StationMapElement extends StationMapData {
   /** Whether the station is currently hovering? */
   hoverActive: StationElementHoverType;
 
-  /** Whether the station is currently adding a new station or not? */
+  /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
 }
 
