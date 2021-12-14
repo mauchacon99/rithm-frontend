@@ -58,7 +58,7 @@
       </div>
       <div class="w-full py-2">
         <p class="overline-font">last updated</p>
-        <div class="text-left py-2" *ngIf="lastUpdatedLoading" id="loading-last-update">
+        <div class="items-center py-2" *ngIf="lastUpdatedLoading">
           <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
         </div>
         <div class="text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
