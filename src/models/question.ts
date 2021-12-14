@@ -1,6 +1,5 @@
-import { QuestionFieldType } from '.';
+import { QuestionFieldType, QuestionAnswer } from '.';
 import { PossibleAnswer } from './possible-answer';
-import { QuestionAnswer } from './question-answer';
 
 /**
  * Represents a question/field on a station or document.

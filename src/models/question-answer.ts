@@ -10,19 +10,19 @@ export interface QuestionAnswer {
   referAttribute: string;
 
   /** Whether the current question has multiple answers in it.*/
-  asArray: [];
+  asArray?: [];
 
   /** Whether the current question has int answer.*/
-  asInt: number;
+  asInt?: number;
 
   /** Whether the current question has decimal answer.*/
-  asDecimal: number;
+  asDecimal?: number;
 
   /** Whether the current question has string answer.*/
-  asString: string;
+  asString?: string;
 
   /** Whether the current question has date answer.*/
-  asDate: string;
+  asDate?: string;
 
   /** The value of the Answer.*/
   value: string;

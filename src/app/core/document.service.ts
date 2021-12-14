@@ -164,10 +164,10 @@ export class DocumentService {
    * @returns The array with previous questions.
    */
   getPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): Observable<Question[]> {
-    if (!documentId || !stationId) {
+    if (!documentId || !stationId || getPrivate === null) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get Previous Questions'
+          error: 'Invalid station or document id.'
         }
       })).pipe(delay(1000));
     } else {
