@@ -280,4 +280,11 @@ describe('DocumentService', () => {
         expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });
   });
+
+  it('should delete a document', () => {
+    service.deleteDocument(documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
 });

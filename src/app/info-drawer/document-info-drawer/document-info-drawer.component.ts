@@ -82,6 +82,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
+  /** Loading in last updated section. */
+  lastUpdatedLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -295,10 +298,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Get last updated time for document.
    */
   private getLastUpdated(): void {
+    this.lastUpdatedLoading = true;
     this.documentService.getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
+          this.lastUpdatedLoading = false;
           if (lastUpdated && lastUpdated !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
@@ -315,6 +320,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }, error: (error: unknown) => {
           this.lastUpdatedDate = 'Unable to retrieve time';
           this.colorMessage = 'text-error-500';
+          this.lastUpdatedLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -345,6 +351,24 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.documentTimeInStation = 'Unable to retrieve time';
           }
         },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   */
+  private deleteDocument(documentRithmId: string): void {
+    this.documentService.deleteDocument(documentRithmId)
+      .pipe(first())
+      .subscribe({
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
