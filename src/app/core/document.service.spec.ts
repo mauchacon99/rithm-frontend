@@ -242,4 +242,11 @@ describe('DocumentService', () => {
         expect(documentTimeInStation).toEqual(expectedResponse.data);
       });
   });
+
+  it('should delete a document', () => {
+    service.deleteDocument(documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
 });
