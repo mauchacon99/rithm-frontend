@@ -13,8 +13,5 @@
   StationAdd,
 
   /** The map is waiting for a location to be selected for a new flow. */
-  FlowAdd,
-
-  /** The map is waiting for a location to be selected for a new station also creates connection line from the station it's selected. */
-  StationAddConnected
+  FlowAdd
 }

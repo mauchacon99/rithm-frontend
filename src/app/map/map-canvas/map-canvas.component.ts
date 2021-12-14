@@ -817,9 +817,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //If it is a click and not a drag.
     if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
+      this.dragItem = MapDragItem.Default;
+      this.stations.forEach((station) => {
+        station.dragging = false;
+      });
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
         this.clickEventHandler(position, contextPoint);
       }
+      return;
     }
 
     //If dragging the map.
@@ -1131,6 +1136,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       stationName: station.stationName,
       editMode: this.mapMode === MapMode.Build,
       stationStatus: station.status,
+      mapMode: this.mapMode,
       openedFromMap: true
     };
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);

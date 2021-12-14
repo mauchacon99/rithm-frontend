@@ -7,13 +7,13 @@
       <p>Document Name: </p>
       <mat-chip-list aria-label="Document Fields Selection">
         <div *ngFor="let field of documentAppendedFields; let i = index" class="mx-1">
-          <mat-chip *ngIf="field.rithmId">
+          <mat-chip *ngIf="field.questionRithmId">
             {{field.prompt}}
             <button mat-icon-button class="mat-icon-6" (click)="removeAppendedFieldFromDocumentName(i)">
               <i class="fas fa-times-circle text-lg text-primary-300"></i>
             </button>
           </mat-chip>
-          <span *ngIf="!field.rithmId">
+          <span *ngIf="!field.questionRithmId">
             {{field.prompt}}
           </span>
         </div>

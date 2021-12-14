@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
@@ -16,12 +16,17 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
 })
 export class StationService {
 
-
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
+
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
+
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
 
   constructor(
     private http: HttpClient
@@ -283,6 +288,15 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
+ /**
+  * Reports a new question to be moved.
+  *
+  * @param question The question of the station-template to be moved.
+  */
+  moveQuestion(question: Question): void {
+    this.questionToMove$.next(question);
+  }
+
   /**
    * Update the Station General Instruction.
    *
@@ -349,5 +363,10 @@ export class StationService {
   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     // eslint-disable-next-line max-len
     return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }
