@@ -149,7 +149,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (documentName) => {
-          this.documentName = documentName;
+          this.documentName = `${documentName.baseName} ${documentName.appendedName}`;
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

@@ -38,4 +38,4 @@ export * from './document-name-field';
 export * from './standard-string-json';
 export * from './document-answer';
 export * from './document-name';
-
+export * from './document-auto-flow';
