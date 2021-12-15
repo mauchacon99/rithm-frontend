@@ -142,16 +142,11 @@ export class DocumentService {
    * @returns The document time in station.
    */
   getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
-    if (!documentId || !stationId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get held time in station for document.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
-      return of(documentTimeInStation).pipe(delay(1000));
-    }
+    const params = new HttpParams()
+      .set('documentRithmId', documentId)
+      .set('stationRithmId', stationId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time`, { params })
+      .pipe(map(response => response.data));
   }
 
   /**
