@@ -46,10 +46,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Used to check if a fast drag should be cancelled. */
   private holdDrag = false;
 
-  /**Flag for auto pan checks. */
+  /** Flag for auto pan checks. */
   private panActive?: boolean;
 
-  /**Track what the next pan velocity is. */
+  /** Track what the next pan velocity is. */
   private nextPanVelocity: Point = { x: 0, y: 0 };
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
@@ -93,8 +93,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
-
-
 
   /**
    * Add station mode active.
@@ -148,6 +146,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
           this.outsideBox = !(velocity.x === 0 && velocity.y === 0);
+          this.nextPanVelocity = velocity;
+          this.checkAutoPan();
+        }
+      });
+
+    this.mapService.centerPanVelocity$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((velocity) => {
+        if (this.mapService.centerPan$.value) {
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
@@ -586,6 +593,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * //TODO: Allow use when middle wheel is active.
    */
   private checkAutoPan(): void {
+    //If panning is due to being outside the station dragging bounding box.
     if (!this.panActive && (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT)) {
       this.panActive = true;
       const step = (): void => {
@@ -600,6 +608,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.myReq = requestAnimationFrame(step);
     }
 
+    //If panning is due to a fast drag.
     if (!this.panActive && this.fastDrag) {
       this.panActive = true;
       const step = (): void => {
@@ -613,6 +622,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.fastDrag = false;
           this.nextPanVelocity = { x: 0, y: 0 };
           this.mapService.currentCanvasPoint$.next(this.currentCanvasPoint);
+        }
+      };
+      this.myReq = requestAnimationFrame(step);
+    }
+
+    //If panning is due to center button being pressed.
+    if (!this.panActive && !this.initLoad && this.mapService.centerPan$.value) {
+      this.panActive = true;
+      const step = (): void => {
+        this.autoMapPan(this.nextPanVelocity);
+        if (this.mapService.centerPan$.value) {
+          this.myReq = requestAnimationFrame(step);
+        } else {
+          cancelAnimationFrame(this.myReq as number);
+          this.panActive = false;
         }
       };
       this.myReq = requestAnimationFrame(step);

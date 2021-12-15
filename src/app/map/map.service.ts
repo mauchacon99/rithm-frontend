@@ -69,6 +69,13 @@ export class MapService {
   /** Check if mouse clicked outside of the option menu in canvas area. */
   matMenuStatus$ = new BehaviorSubject(false);
 
+  /** Checks if there should be panning towards the center of the map. */
+  centerPan$ = new BehaviorSubject(false);
+
+  /** Passes pan info to the map-canvas. */
+  centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
+
+
   constructor(private http: HttpClient) { }
 
   /**
