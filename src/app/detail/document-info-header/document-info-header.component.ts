@@ -1,7 +1,7 @@
 
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, DocumentName } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -48,6 +48,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Id the document actually. */
   documentRithmId = '';
+
+  /** Fields appended to the document name. */
+  appendedDocumentName = '';
 
   constructor(
     private fb: FormBuilder,
@@ -128,30 +131,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Document Priority of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Priority.
-   */
-  get documentPriority(): number {
-    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
-  }
-
-  /**
    * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
    */
   get flowedTimeUTC(): string {
     return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
-  }
-
-  /**
-   * Get last updated UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Last Updated UTC.
-   */
-  get lastUpdatedUTC(): string {
-    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
   }
 
   /**
@@ -162,7 +147,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
   }
-
 
   /**
    * Is the current user an owner or an admin for this station.
@@ -198,8 +182,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (documentName) => {
-          this.documentNameForm.controls.name.setValue(documentName);
-          this.documentName = documentName;
+          this.documentNameForm.controls.name.setValue(documentName.baseName);
+          this.documentName = documentName.baseName;
+          this.appendedDocumentName = documentName.appendedName;
           this.documentService.updateDocumentNameBS(documentName);
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -267,7 +252,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Update the Document Name Behavior Subject.
    */
   updateDocumentNameBS(): void {
-    this.documentService.updateDocumentNameBS(this.documentNameForm.controls.name.value);
+    const documentName: DocumentName = {
+      baseName: this.documentNameForm.controls.name.value,
+      appendedName: this.appendedDocumentName
+    };
+    this.documentService.updateDocumentNameBS(documentName);
   }
 
   /**

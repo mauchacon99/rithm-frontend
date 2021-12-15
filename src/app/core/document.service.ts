@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -16,7 +16,7 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
 export class DocumentService {
 
   /** The Name of the Document as BehaviorSubject. */
-  documentName$ = new BehaviorSubject<string>('');
+  documentName$ = new BehaviorSubject<DocumentName>({ baseName: '', appendedName: '' });
 
   constructor(
     private http: HttpClient) { }
@@ -85,11 +85,10 @@ export class DocumentService {
    * @param documentId The Specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<string> {
+  getDocumentName(documentId: string): Observable<DocumentName> {
     const params = new HttpParams()
       .set('documentRithmId', documentId);
-    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params })
-      .pipe(map((response) => response.data));
+    return this.http.get<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params });
   }
 
   /**
@@ -118,7 +117,7 @@ export class DocumentService {
    *
    * @param documentName The Document Name.
    */
-  updateDocumentNameBS(documentName: string): void {
+  updateDocumentNameBS(documentName: DocumentName): void {
     this.documentName$.next(documentName);
   }
 
@@ -143,15 +142,47 @@ export class DocumentService {
    * @returns The document time in station.
    */
   getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
-    if (!documentId || !stationId) {
+    const params = new HttpParams()
+      .set('documentRithmId', documentId)
+      .set('stationRithmId', stationId);
+    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time`, { params })
+      .pipe(map(response => response.data));
+  }
+
+ /**
+  * Get the user assigned to the document.
+  *
+  * @param documentId The specific id of document.
+  * @param stationId The specific id of station.
+  * @param getOnlyCurrentStation The specific current station only.
+  * @returns The assigned user.
+  */
+  getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
+    if (!documentId || (!stationId && getOnlyCurrentStation)) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Cannot get held time in station for document.'
+          error: 'Cannot get the user assigned for document.'
         }
       })).pipe(delay(1000));
     } else {
-      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
-      return of(documentTimeInStation).pipe(delay(1000));
+      const assignedUser: StationRosterMember[] = [{
+        rithmId: '789-321-456-789',
+        firstName: 'John',
+        lastName: 'Christopher',
+        email: 'johnny.depp@gmail.com',
+        isAssigned: true
+      }];
+      return of(assignedUser).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  deleteDocument(documentRithmId: string): Observable<unknown> {
+    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
   }
 }

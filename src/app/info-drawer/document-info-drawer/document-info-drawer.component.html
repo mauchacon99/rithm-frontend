@@ -8,7 +8,7 @@
     </div>
     <div class="col-span-12 pt-2">
       <p class="overline-font">Document Name</p>
-      <p>{{documentName}}</p>
+      <p class="break-words">{{documentName}}</p>
       <div class="w-24 items-center py-2" *ngIf="documentNameLoading">
         <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
       </div>
@@ -58,7 +58,10 @@
       </div>
       <div class="w-full py-2">
         <p class="overline-font">last updated</p>
-        <div class="text-left text-xs py-2">
+        <div class="items-center py-2" *ngIf="lastUpdatedLoading" id="loading-last-update">
+          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        </div>
+        <div class="text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
           <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
         </div>
       </div>
