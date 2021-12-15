@@ -163,7 +163,7 @@ export class DocumentService {
    * @param getPrivate Will fetch only private or non private questions.
    * @returns The array with previous questions.
    */
-  getPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): Observable<Question[]> {
+  getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): Observable<Question[]> {
     if (!documentId || !stationId || getPrivate === null) {
       return throwError(() => new HttpErrorResponse({
         error: {
