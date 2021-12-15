@@ -2,33 +2,11 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
-  STATION_HEIGHT,
-  STATION_WIDTH,
-  STATION_RADIUS,
-  DEFAULT_SCALE,
-  STATION_PADDING,
-  BADGE_RADIUS,
-  BADGE_MARGIN,
-  BADGE_DEFAULT_COLOR,
-  BADGE_HOVER_COLOR,
-  NODE_RADIUS,
-  NODE_Y_MARGIN,
-  NODE_DEFAULT_COLOR,
-  NODE_HOVER_COLOR,
-  BUTTON_RADIUS,
-  BUTTON_X_MARGIN,
-  BUTTON_Y_MARGIN,
-  BUTTON_DEFAULT_COLOR,
-  BUTTON_HOVER_COLOR,
-  SCALE_RENDER_STATION_ELEMENTS,
-  CONNECTION_DEFAULT_COLOR,
-  ICON_X_MARGIN,
-  ICON_Y_MARGIN,
-  ICON_FULL_HEIGHT,
-  ICON_MID_HEIGHT,
-  ICON_MID_WIDTH,
-  ICON_FULL_WIDTH,
-  ICON_RADIUS, ICON_FOLD,
+  STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING, BADGE_RADIUS, BADGE_MARGIN,
+  BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR,
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, BUTTON_HOVER_COLOR,
+  SCALE_RENDER_STATION_ELEMENTS, CONNECTION_DEFAULT_COLOR, ICON_X_MARGIN, ICON_Y_MARGIN, ICON_FULL_HEIGHT,
+  ICON_MID_HEIGHT, ICON_MID_WIDTH, ICON_FULL_WIDTH, ICON_RADIUS, ICON_FOLD,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -352,6 +330,8 @@ export class StationElementService {
     const scaledIconMidHeight = ICON_MID_HEIGHT * this.mapScale;
     const scaledIconFullHeight = ICON_FULL_HEIGHT * this.mapScale;
 
+    const iconColor = BUTTON_DEFAULT_COLOR;
+
     ctx.beginPath(); //square with missing corner
     ctx.moveTo(startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
     ctx.lineTo(startingX + scaledIconFullWidth - scaledIconRadius, startingY + scaledIconYMargin); //across the top
@@ -368,6 +348,7 @@ export class StationElementService {
     ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin + scaledIconRadius); //left line
     ctx.quadraticCurveTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin,
       startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
+    ctx.fillStyle = iconColor;
     ctx.fill();
 
     ctx.beginPath(); //triangle
@@ -379,6 +360,7 @@ export class StationElementService {
       startingX + scaledIconMidWidth + scaledIconRadius + scaledIconFold,
       startingY + scaledIconMidHeight + scaledIconRadius);
     ctx.closePath();
+    ctx.fillStyle = iconColor;
     ctx.fill();
   }
 }
