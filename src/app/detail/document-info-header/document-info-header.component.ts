@@ -2,7 +2,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DocumentStationInformation, UserType, StationInformation, DocumentNameField } from 'src/models';
-import { UtcTimeConversion } from 'src/helpers';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
@@ -18,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-document-info-header[documentInformation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: []
 })
 export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
@@ -52,7 +51,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
-    private utcTimeConversion: UtcTimeConversion,
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -106,34 +104,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Uses the helper: UtcTimeConversion.
-   * Tells how long a document has been in a station for.
-   *
-   * @param timeEntered Reflects the date we're calculating against.
-   * @returns A string reading something like "4 days" or "32 minutes".
-   */
-  getElapsedTime(timeEntered: string): string {
-    return this.utcTimeConversion.getElapsedTimeText(
-      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
-    );
-  }
-
-  /**
    * Station or Document looking at document header.
    *
    * @returns Station edit mode or document mode. TRUE if station mode and FALSE if document mode.
    */
   get isStation(): boolean {
     return !('documentName' in this.documentInformation);
-  }
-
-  /**
-   * Get flowed time UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Flowed time UTC.
-   */
-  get flowedTimeUTC(): string {
-    return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
   }
 
   /**
