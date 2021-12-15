@@ -78,7 +78,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.documentService.documentName$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((documentName) => {
-        this.documentName = documentName;
+        this.documentName = documentName.baseName;
       });
   }
 
