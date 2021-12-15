@@ -364,10 +364,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Delete a specified document.
-   *
-   * @param documentRithmId The Specific id of document.
    */
-  async deleteDocument(documentRithmId: string): Promise<void> {
+  async deleteDocument(): Promise<void> {
     const deleteDoc = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'The document will be deleted.',
@@ -376,7 +374,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       important: true
     });
     if (deleteDoc){
-      this.documentService.deleteDocument(documentRithmId)
+      this.documentService.deleteDocument(this.documentRithmId)
         .pipe(first())
         .subscribe({
           error: (error: unknown) => {

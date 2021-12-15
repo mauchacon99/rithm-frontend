@@ -117,6 +117,15 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
+  it('should delete a document', async () => {
+    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+
+    await component.deleteDocument();
+
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
+
   it('should open a confirm dialog to delete the document', async () => {
     const dialogExpectData: DialogOptions = {
       title: 'Are you sure?',
@@ -126,10 +135,10 @@ describe('DocumentInfoDrawerComponent', () => {
       important: true
     };
     const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
-    const deleteDocumentServiceSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
-    await component.deleteDocument(documentId);
+
+    await component.deleteDocument();
+
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
-    expect(deleteDocumentServiceSpy).toHaveBeenCalledOnceWith(documentId);
   });
 
   it('should call the confirm dialog when clicking the delete button of document', fakeAsync(() => {
@@ -140,7 +149,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(buttonDelete).toBeTruthy();
     buttonDelete.click();
     tick();
-    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
   }));
 
 });
