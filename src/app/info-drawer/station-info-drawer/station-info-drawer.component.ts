@@ -100,6 +100,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
         }
+        if (dataDrawer.openedFromMap) {
+          /** Works in map section to refresh the information each time the info-drawer is opened with a different station. */
+          this.getStationInfo();
+        }
       });
 
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
@@ -113,10 +117,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     if (this.stationStatus !== MapItemStatus.Created) {
-      if (!this.openedFromMap){
-        this.getParams();
-      }
-      this.getStationDocumentGenerationStatus(this.stationRithmId);
+      this.getLastUpdated();
+      this.getStationDocumentGenerationStatus();
 
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
@@ -134,14 +136,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Completes all subscriptions.
-   */
-   ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
    * Whether the station is locally created on the map.
    *
    * @returns True if locally created, false otherwise.
@@ -152,12 +146,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get station document generation status.
-   *
-   * @param stationId The id of the station return status document.
    */
-  getStationDocumentGenerationStatus(stationId: string): void {
+  getStationDocumentGenerationStatus(): void {
     this.docGenLoading = true;
-    this.stationService.getStationDocumentGenerationStatus(stationId)
+    this.stationService.getStationDocumentGenerationStatus(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (status: DocumentGenerationStatus) => {
@@ -203,36 +195,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Attempts to retrieve the station info from the query params in the URL and make the requests.
-   */
-  private getParams(): void {
-    this.route.params
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (!params.stationId) {
-            this.handleInvalidParams();
-          } else {
-              this.getLastUpdated(params.stationId);
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
    * Get the last updated date for a specific station.
-   *
-   * @param stationId The id of the station that the document is in.
    */
-  getLastUpdated(stationId: string): void {
+  getLastUpdated(): void {
     this.stationLoading = true;
     this.lastUpdatedLoading = true;
-    this.stationService.getLastUpdated(stationId)
+    this.stationService.getLastUpdated(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (updatedDate) => {
@@ -266,22 +234,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigates the user back to dashboard and displays a message about the invalid params.
-   */
-  private handleInvalidParams(): void {
-    this.errorService.displayError(
-      'Unable to retrieve the last updated time.',
-      new Error('Invalid params for document')
-    );
-  }
-
-  /**
    * This will delete the current station.
-   *
-   * @param stationId Target station to be deleted.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async deleteStation(stationId: string): Promise<void> {
+  async deleteStation(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
@@ -290,7 +246,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (response) {
-      this.stationService.deleteStation(stationId)
+      this.stationService.deleteStation(this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: () => {
@@ -383,4 +339,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }

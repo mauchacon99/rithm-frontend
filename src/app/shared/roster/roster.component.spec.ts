@@ -11,6 +11,7 @@ import { RosterComponent } from './roster.component';
 describe('RosterComponent', () => {
   let component: RosterComponent;
   let fixture: ComponentFixture<RosterComponent>;
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,5 +59,27 @@ describe('RosterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display a loading indicator when calling getStationRoster method', () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.loadingRoster).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-roster-indicator');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should return the station owners roster members', async () => {
+    const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
+    component.isWorker = false;
+    component.ngOnInit();
+    expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should return the station workers roster members', async () => {
+    const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationWorkerRoster').and.callThrough();
+    component.isWorker = true;
+    component.ngOnInit();
+    expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });
 });

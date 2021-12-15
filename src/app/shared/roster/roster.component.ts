@@ -80,7 +80,7 @@ export class RosterComponent implements OnInit {
   /**
    * Get Users Roster for a given Station.
    */
-   getStationUsersRoster(): void {
+   private getStationUsersRoster(): void {
      this.loadingRoster = true;
     const stationUserRoster$ = this.isWorker
       ? this.stationService.getStationWorkerRoster(this.stationId)
