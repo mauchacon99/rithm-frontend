@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, DocumentAutoFlow } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject } from 'rxjs';
@@ -260,6 +260,24 @@ export class DocumentComponent implements OnInit, OnDestroy {
           this.documentLoading = false;
         }, error: (error: unknown) => {
           this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Save to flow a document.
+   *
+   * @param documentAutoFlow Params for add flow to Document.
+   */
+  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): void {
+    this.documentService.saveToFlowADocument(documentAutoFlow)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

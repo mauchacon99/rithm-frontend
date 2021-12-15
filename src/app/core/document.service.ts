@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, DocumentAutoFlow } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -157,5 +157,23 @@ export class DocumentService {
    */
   deleteDocument(documentRithmId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
+  }
+
+  /**
+   * Save to flow a document.
+   *
+   * @param documentAutoFlow Params for add flow to Document.
+   * @returns Returns an empty observable.
+   */
+  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
+    if (!documentAutoFlow) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Unable to set document flow, parameters not sent.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
   }
 }

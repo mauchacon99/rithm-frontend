@@ -19,7 +19,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAnswer, QuestionFieldType } from 'src/models';
+import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -366,5 +366,19 @@ describe('DocumentComponent', () => {
     const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     component.saveDocumentAnswer(expectedAnswers);
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
+  });
+
+  it('should add flow a document specific and call service', () => {
+    const expectedData: DocumentAutoFlow = {
+      stationRithmId: component.documentInformation.stationRithmId,
+      documentRithmId: component.documentInformation.documentRithmId,
+      testMode: true
+    };
+
+    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'saveToFlowADocument').and.callThrough();
+
+    component.saveToFlowADocument(expectedData);
+
+    expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
   });
 });

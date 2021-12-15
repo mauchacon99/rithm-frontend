@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, DocumentAutoFlow } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -506,6 +506,24 @@ export class MockDocumentService {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot delete the document without defining a document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Save to flow a document.
+   *
+   * @param documentAutoFlow Params for add flow to Document.
+   * @returns Returns an empty observable.
+   */
+  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
+    if (!documentAutoFlow) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Unable to set document flow, parameters not sent.'
         }
       })).pipe(delay(1000));
     } else {
