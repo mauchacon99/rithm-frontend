@@ -269,12 +269,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Save to flow a document.
+   * Flow a document.
    *
    * @param documentAutoFlow Params for add flow to Document.
    */
-  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): void {
-    this.documentService.saveToFlowADocument(documentAutoFlow)
+   autoFlowDocument(documentAutoFlow: DocumentAutoFlow): void {
+    this.documentService.autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {

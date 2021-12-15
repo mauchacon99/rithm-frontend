@@ -495,16 +495,16 @@ export class MockDocumentService {
     }
   }
 
- /**
-  * Get the user assigned to the document.
-  *
-  * @param documentId The specific id of document.
-  * @param stationId The specific id of station.
-  * @param getOnlyCurrentStation The specific current station only.
-  * @returns The assigned user.
-  */
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @param getOnlyCurrentStation The specific current station only.
+   * @returns The assigned user.
+   */
   getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
-    if (!documentId || (!stationId && getOnlyCurrentStation) ) {
+    if (!documentId || (!stationId && getOnlyCurrentStation)) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Cannot get the user assigned for document.'
@@ -541,12 +541,12 @@ export class MockDocumentService {
   }
 
   /**
-   * Save to flow a document.
+   * Flow a document.
    *
    * @param documentAutoFlow Params for add flow to Document.
    * @returns Returns an empty observable.
    */
-  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
+  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
     if (!documentAutoFlow) {
       return throwError(() => new HttpErrorResponse({
         error: {

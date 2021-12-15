@@ -375,9 +375,9 @@ describe('DocumentComponent', () => {
       testMode: true
     };
 
-    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'saveToFlowADocument').and.callThrough();
+    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
 
-    component.saveToFlowADocument(expectedData);
+    component.autoFlowDocument(expectedData);
 
     expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
   });

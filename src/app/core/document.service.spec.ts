@@ -287,7 +287,7 @@ describe('DocumentService', () => {
       testMode: true
     };
 
-    service.saveToFlowADocument(expectedData)
+    service.autoFlowDocument(expectedData)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });

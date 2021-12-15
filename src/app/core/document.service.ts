@@ -149,14 +149,14 @@ export class DocumentService {
       .pipe(map(response => response.data));
   }
 
- /**
-  * Get the user assigned to the document.
-  *
-  * @param documentId The specific id of document.
-  * @param stationId The specific id of station.
-  * @param getOnlyCurrentStation The specific current station only.
-  * @returns The assigned user.
-  */
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @param getOnlyCurrentStation The specific current station only.
+   * @returns The assigned user.
+   */
   getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
     if (!documentId || (!stationId && getOnlyCurrentStation)) {
       return throwError(() => new HttpErrorResponse({
@@ -187,16 +187,16 @@ export class DocumentService {
   }
 
   /**
-   * Save to flow a document.
+   * Flow a document.
    *
    * @param documentAutoFlow Params for add flow to Document.
    * @returns Returns an empty observable.
    */
-  saveToFlowADocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
+  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
     if (!documentAutoFlow) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Unable to set document flow, parameters not sent.'
+          error: 'Flow the document, invalid parameters.'
         }
       })).pipe(delay(1000));
     } else {
