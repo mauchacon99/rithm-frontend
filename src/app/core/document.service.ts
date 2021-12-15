@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -16,7 +16,7 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
 export class DocumentService {
 
   /** The Name of the Document as BehaviorSubject. */
-  documentName$ = new BehaviorSubject<string>('');
+  documentName$ = new BehaviorSubject<DocumentName>({ baseName: '', appendedName: '' });
 
   constructor(
     private http: HttpClient) { }
@@ -85,11 +85,10 @@ export class DocumentService {
    * @param documentId The Specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<string> {
+  getDocumentName(documentId: string): Observable<DocumentName> {
     const params = new HttpParams()
       .set('documentRithmId', documentId);
-    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params })
-      .pipe(map((response) => response.data));
+    return this.http.get<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params });
   }
 
   /**
@@ -118,7 +117,7 @@ export class DocumentService {
    *
    * @param documentName The Document Name.
    */
-  updateDocumentNameBS(documentName: string): void {
+  updateDocumentNameBS(documentName: DocumentName): void {
     this.documentName$.next(documentName);
   }
 

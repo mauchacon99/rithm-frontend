@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -140,6 +140,9 @@ describe('DocumentService', () => {
 
   it('Should return the update of the new document name', () => {
     const documentName = 'Almond Flour';
+    const expectDocumentName: StandardStringJSON = {
+      data: documentName
+    };
 
     service.updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
@@ -149,23 +152,21 @@ describe('DocumentService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
     expect(req.request.method).toEqual('PUT');
 
-    const newDocumentName: StandardStringJSON = {
-      data: documentName
-    };
-    expect(req.request.body).toEqual(newDocumentName);
-    req.flush(newDocumentName);
+    expect(req.request.body).toEqual(expectDocumentName);
+    req.flush(expectDocumentName);
     httpTestingController.verify();
   });
 
   it('should return document name', () => {
-    const documentName: StandardStringJSON = {
-      data: 'Metroid Dread'
+    const documentName: DocumentName = {
+      baseName: 'Metroid Dread',
+      appendedName: ''
     };
 
 
     service.getDocumentName(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(documentName.data);
+        expect(response).toEqual(documentName);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
