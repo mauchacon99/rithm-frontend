@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError, of } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -149,14 +149,14 @@ export class DocumentService {
       .pipe(map(response => response.data));
   }
 
- /**
-  * Get the user assigned to the document.
-  *
-  * @param documentId The specific id of document.
-  * @param stationId The specific id of station.
-  * @param getOnlyCurrentStation The specific current station only.
-  * @returns The assigned user.
-  */
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @param getOnlyCurrentStation The specific current station only.
+   * @returns The assigned user.
+   */
   getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
     if (!documentId || (!stationId && getOnlyCurrentStation)) {
       return throwError(() => new HttpErrorResponse({
