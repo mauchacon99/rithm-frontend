@@ -241,6 +241,14 @@ describe('DocumentService', () => {
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse.data);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time?documentRithmId=${documentId}&stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should delete a document', () => {
