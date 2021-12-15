@@ -15,6 +15,9 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
+import {StationMapElement} from 'src/helpers';
+import {v4 as uuidv4} from 'uuid';
+import {MapItemStatus} from 'src/models';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -56,6 +59,25 @@ describe('MapOverlayComponent', () => {
   });
 
   it('should display confirmation prompt when cancel', () => {
+    const stationElementsArray: StationMapElement[] = [];
+    for (let i = 0; i < 4; i++) {
+      const newStation = new StationMapElement({
+        rithmId: uuidv4(),
+        stationName: 'Untitled Station',
+        mapPoint: {
+          x: 12,
+          y: 15
+        },
+        noOfDocuments: 0,
+        previousStations: [],
+        nextStations: [],
+        status: MapItemStatus.Created,
+        notes: ''
+      });
+      stationElementsArray.push(newStation);
+    }
+    component.stations = stationElementsArray;
+
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
     component.cancel();
     expect(dialogSpy).toHaveBeenCalledWith({
