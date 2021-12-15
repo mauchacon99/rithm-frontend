@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
-  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT } from './map-constants';
+  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT, SCALE_REDUCED_RENDER, CENTER_ZOOM_BUFFER } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -135,7 +135,8 @@ export class MapService {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
 
         if (!outgoingStation) {
-          throw new Error('no outgoing station found.');
+          throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
+            nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
         const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
@@ -342,17 +343,17 @@ export class MapService {
   /**
    * Calls the zoom() method a number of times equal to the zoomCount.
    *
-   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param pinch Remove delay if zoom is a pinch zoom.
+   * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
-  handleZoom(zoomOrigin = this.getCanvasCenterPoint(), pinch: boolean): void {
+  handleZoom(pinch: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
 
     const zoomLogic = () => {
       if (this.zoomCount$.value > 0) {
         this.zoom(true, zoomOrigin);
         this.zoomCount$.next(this.zoomCount$.value - 1);
         if (this.zoomCount$.value > 0) {
-          this.handleZoom(zoomOrigin, pinch);
+          this.handleZoom(pinch, zoomOrigin);
         }
       }
 
@@ -360,7 +361,7 @@ export class MapService {
         this.zoom(false, zoomOrigin);
         this.zoomCount$.next(this.zoomCount$.value + 1);
         if (this.zoomCount$.value < 0) {
-          this.handleZoom(zoomOrigin, pinch);
+          this.handleZoom(pinch, zoomOrigin);
         }
       }
     };
@@ -420,6 +421,152 @@ export class MapService {
   }
 
   /**
+   * Set a bounding box around the edge of the map.
+   *
+   * @returns A number representing how for out from the edge of the screen a box should be.
+   */
+  boundingBox(): number {
+    //Dynamically set the size of the bounding box based on screen size.
+    if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
+      //Set the size of the box based on screen size.
+      return Math.floor(((window.innerHeight + window.innerWidth) / 2) * .01);
+    } else {
+      //If a screen is above a certain size just return 30.
+      return 30;
+    }
+  }
+
+  /**
+   * Logic for finding top-left or bottom-right canvas or map points.
+   *
+   * @param pointType A mapPoint or a canvasPoint.
+   * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
+   * @returns An object with the points.
+   */
+  private getEdgePoint(pointType: 'mapPoint' | 'canvasPoint', isMax: boolean): Point {
+    const orderedYPoints = this.stationElements.map((station) => station[pointType].y).sort((a, b) => a - b);
+    const orderedXPoints = this.stationElements.map((station) => station[pointType].x).sort((a, b) => a - b);
+
+    const x = isMax ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH : orderedXPoints[0];
+    const y = isMax ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT : orderedYPoints[0];
+
+    return {
+      x: x,
+      y: y
+    };
+  }
+
+  /**
+   * Gets the top-left mapPoint.
+   *
+   * @returns A point.
+   */
+  getMinMapPoint(): Point {
+    return this.getEdgePoint('mapPoint', false);
+  }
+
+  /**
+   * Gets the bottom-left mapPoint.
+   *
+   * @returns A point.
+   */
+  getMaxMapPoint(): Point {
+    return this.getEdgePoint('mapPoint', true);
+  }
+
+  /**
+   * Gets the top-left canvasPoint.
+   *
+   * @returns A point.
+   */
+  getMinCanvasPoint(): Point {
+    return this.getEdgePoint('canvasPoint', false);
+  }
+
+  /**
+   * Gets the bottom-right canvasPoint.
+   *
+   * @returns A point.
+   */
+  getMaxCanvasPoint(): Point {
+    return this.getEdgePoint('canvasPoint', true);
+  }
+
+  /**
+   * Scales the map when center method is called to allow as many stations as possible to be visible.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  private centerScale(onInit = false): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot get center point of canvas when canvas context is not set');
+    }
+    const canvasBoundingRect = this.canvasContext.canvas.getBoundingClientRect();
+
+    //We use the canvas points of each station here.
+    const minPoint = this.getMinCanvasPoint();
+    const maxPoint = this.getMaxCanvasPoint();
+
+    //Zooming in and zooming out need to have different sized bounding boxes to work.
+    const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
+    const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
+
+    //Zoom in.
+    if ((zoomInBox < minPoint.y
+      && canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT
+      && canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH
+      && zoomInBox < minPoint.y
+      && this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
+    ) {
+      this.zoomCount$.next(this.zoomCount$.value + 1);
+      this.handleZoom(onInit);
+      this.setCenterPanAndScale(onInit);
+      //Zoom out.
+    } else if ((zoomOutBox > minPoint.y
+      || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
+      || canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH
+      || zoomOutBox > minPoint.y) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+    ) {
+      this.zoomCount$.next(this.zoomCount$.value - 1);
+      this.handleZoom(onInit);
+      this.setCenterPanAndScale(onInit);
+    }
+  }
+
+  /**
+   * Smoothly sets the scale and pans the map to center.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  setCenterPanAndScale(onInit: boolean): void {
+    if (onInit) {
+      this.centerScale(onInit);
+      //TODO: set canvaspoint to map center.
+    } else {
+      setTimeout(() => {
+        this.centerScale(onInit);
+        //TODO: incrementally pan map to center.
+      }, 4);
+    }
+  }
+
+  /**
+   * Centers the map by changing this.currentCanvasPoint to the map center point.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  center(onInit = false): void {
+    let adjustedCenter = this.getMapCenterPoint();
+    const canvasCenter = this.getCanvasCenterPoint();
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    };
+    this.currentCanvasPoint$.next(adjustedCenter);
+    this.setCenterPanAndScale(onInit);
+  }
+
+  /**
    * Gets the center point of the canvas.
    *
    * @returns The center point of the canvas.
@@ -466,6 +613,20 @@ export class MapService {
       x: this.getCanvasX(mapPoint.x),
       y: this.getCanvasY(mapPoint.y)
     };
+  }
+
+  /**
+   * Find's the center of a user's map by looking at the mapPoints of the furthest left, top, right and bottom stations.
+   *
+   * @returns The center point of the map.
+   */
+  getMapCenterPoint(): Point {
+    //We use the map points of each station here.
+    const minPoint = this.getMinMapPoint();
+    const maxPoint = this.getMaxMapPoint();
+
+    const center: Point = { x: Math.floor((minPoint.x + maxPoint.x) / 2), y: Math.floor((minPoint.y + maxPoint.y) / 2) };
+    return center;
   }
 
   /**
