@@ -142,7 +142,8 @@ export class MapService {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
 
         if (!outgoingStation) {
-          throw new Error('no outgoing station found.');
+          throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
+            nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
         const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
