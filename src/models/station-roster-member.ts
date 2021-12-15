@@ -23,4 +23,7 @@ export interface StationRosterMember {
 
   /** Is owner or not. */
   isOwner?: boolean;
+
+  /** The user is assigned.  */
+  isAssigned?: boolean;
 }
