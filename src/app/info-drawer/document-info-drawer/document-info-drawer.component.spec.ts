@@ -102,4 +102,23 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
+
+  it('should delete a document', () => {
+    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+
+    component['deleteDocument'](documentId);
+
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
+  it('should show loading-last-update while get data last updated', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
+    fixture.detectChanges();
+    expect(component.lastUpdatedLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-last-update');
+    expect(loadingComponent).toBeTruthy();
+  });
 });

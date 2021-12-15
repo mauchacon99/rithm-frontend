@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, StandardStringJSON, DocumentAnswer } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -376,7 +376,7 @@ export class MockDocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+  updateDocumentName(documentId: string, documentName: string): Observable<DocumentName> {
     if (!documentId && documentName === '') {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -384,7 +384,11 @@ export class MockDocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      return of(documentName).pipe(delay(1000));
+      const updateDocumentName: DocumentName = {
+        baseName: documentName,
+        appendedName: ''
+      };
+      return of(updateDocumentName).pipe(delay(1000));
     }
   }
 
@@ -394,7 +398,7 @@ export class MockDocumentService {
    * @param documentId The specific id of document.
    * @returns The document name.
    */
-  getDocumentName(documentId: string): Observable<StandardStringJSON> {
+  getDocumentName(documentId: string): Observable<DocumentName> {
     if (!documentId) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -402,8 +406,9 @@ export class MockDocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const documentName: StandardStringJSON = {
-        data: 'Metroid Dread'
+      const documentName: DocumentName = {
+        baseName: 'Metroid Dread',
+        appendedName: ''
       };
       return of(documentName).pipe(delay(1000));
     }
@@ -487,6 +492,24 @@ export class MockDocumentService {
     } else {
       const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
       return of(documentTimeInStation).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  deleteDocument(documentRithmId: string): Observable<unknown> {
+    if (!documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot delete the document without defining a document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
     }
   }
 }
