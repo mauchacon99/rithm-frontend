@@ -345,11 +345,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
             this.colorMessageDocumentTime = 'text-accent-500';
-            if (this.documentTimeInStation === '1 day') {
-              this.documentTimeInStation = ' Yesterday';
-            } else {
-              this.documentTimeInStation += ' ago';
-            }
           } else {
             this.colorMessageDocumentTime = 'text-error-500';
             this.documentTimeInStation = 'Unable to retrieve time';
