@@ -161,14 +161,6 @@ export class DocumentService {
    * @returns Returns an empty observable.
    */
   deleteDocument(documentRithmId: string): Observable<unknown> {
-    if (!documentRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot delete the document without defining a document.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
-    }
+    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
   }
 }
