@@ -28,6 +28,7 @@ import {
   ICON_MID_HEIGHT,
   ICON_MID_WIDTH,
   ICON_FULL_WIDTH,
+  ICON_RADIUS, ICON_FOLD,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -72,7 +73,9 @@ export class StationElementService {
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
-        this.drawStationNoteIcon(station);
+        if (station.notes) {
+          this.drawStationNoteIcon(station);
+        }
       }
     }
   }
@@ -340,7 +343,8 @@ export class StationElementService {
     const startingX = station.canvasPoint.x;
     const startingY = station.canvasPoint.y;
 
-
+    const scaledIconRadius = ICON_RADIUS * this.mapScale;
+    const scaledIconFold = ICON_FOLD * this.mapScale;
     const scaledIconXMargin = ICON_X_MARGIN * this.mapScale;
     const scaledIconYMargin = ICON_Y_MARGIN * this.mapScale;
     const scaledIconMidWidth = ICON_MID_WIDTH * this.mapScale;
@@ -348,15 +352,33 @@ export class StationElementService {
     const scaledIconMidHeight = ICON_MID_HEIGHT * this.mapScale;
     const scaledIconFullHeight = ICON_FULL_HEIGHT * this.mapScale;
 
-    ctx.beginPath();
-    ctx.moveTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin);
-    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconYMargin); //across the top
-    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight); //down the side to triangle
-    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconMidHeight); //in to center
-    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconFullHeight); //from center down to bottom
-    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconFullHeight); //from center bottom back to x start
-    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin); //back to start
+    ctx.beginPath(); //square with missing corner
+    ctx.moveTo(startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
+    ctx.lineTo(startingX + scaledIconFullWidth - scaledIconRadius, startingY + scaledIconYMargin); //across the top
+    ctx.quadraticCurveTo(startingX + scaledIconFullWidth, startingY + scaledIconYMargin,
+      startingX + scaledIconFullWidth, startingY + scaledIconYMargin + scaledIconRadius); //top right curve
+    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight); //down the side to triangle no curve
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconMidHeight); //in to center
+    ctx.quadraticCurveTo(startingX + scaledIconMidWidth, startingY + scaledIconMidHeight,
+      startingX + scaledIconMidWidth, startingY + scaledIconMidHeight + scaledIconRadius); //curve in center
+    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconFullHeight); //from center down to bottom no curve
+    ctx.lineTo(startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconFullHeight); //bottom line
+    ctx.quadraticCurveTo(startingX + scaledIconXMargin, startingY + scaledIconFullHeight,
+      startingX + scaledIconXMargin, startingY + scaledIconFullHeight - scaledIconRadius); //bottom left curve
+    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin + scaledIconRadius); //left line
+    ctx.quadraticCurveTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin,
+      startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
     ctx.fill();
-    // ctx.stroke();
+
+    ctx.beginPath(); //triangle
+    ctx.moveTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight + scaledIconRadius);
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconFullHeight); // slanted line
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius,
+      startingY + scaledIconMidHeight + scaledIconRadius + scaledIconFold); // line up to middle
+    ctx.quadraticCurveTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconMidHeight + scaledIconRadius,
+      startingX + scaledIconMidWidth + scaledIconRadius + scaledIconFold,
+      startingY + scaledIconMidHeight + scaledIconRadius);
+    ctx.closePath();
+    ctx.fill();
   }
 }
