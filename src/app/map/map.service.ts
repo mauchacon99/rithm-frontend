@@ -183,18 +183,22 @@ export class MapService {
     });
 
     // Connected station create changes
-    const index = this.stationElements.findIndex(station => station.isAddingConnected === true);
-    if (index >= 0) {
-      this.stationElements[index].isAddingConnected = false;
-      this.stationElements[index].nextStations.push(newStation.rithmId);
-      newStation.previousStations.push(this.stationElements[index].rithmId);
+    const connectedStations = this.stationElements.filter(station => station.isAddingConnected === true);
+    if (connectedStations.length === 1) {
+      const index = this.stationElements.findIndex(station => station.rithmId === connectedStations[0].rithmId);
+      if (index >= 0) {
+        this.stationElements[index].isAddingConnected = false;
+        this.stationElements[index].nextStations.push(newStation.rithmId);
+        newStation.previousStations.push(this.stationElements[index].rithmId);
 
-      const lineInfo = new ConnectionMapElement(this.stationElements[index], newStation, this.mapScale$.value);
-      if (!this.connectionElements.includes(lineInfo)) {
-        this.connectionElements.push(lineInfo);
+        const lineInfo = new ConnectionMapElement(this.stationElements[index], newStation, this.mapScale$.value);
+        if (!this.connectionElements.includes(lineInfo)) {
+          this.connectionElements.push(lineInfo);
+        }
+        this.mapMode$.next(MapMode.Build);
+        this.stationElements[index].markAsUpdated();
+        this.disableConnectedStationMode();
       }
-      this.mapMode$.next(MapMode.Build);
-      this.stationElements[index].markAsUpdated();
     }
 
     //update the stationElements array.
@@ -674,6 +678,16 @@ export class MapService {
       x: this.getMapX(canvasPoint.x),
       y: this.getMapY(canvasPoint.y)
     };
+  }
+
+  /**
+   * Set's isAddingConnected property of station to false if it's true.
+   */
+  disableConnectedStationMode(): void {
+    this.stationElements.filter(station => station.isAddingConnected === true)
+    .map(connectedStation => {
+      connectedStation.isAddingConnected = false;
+    });
   }
 
   /**
