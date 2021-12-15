@@ -110,7 +110,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.getParams();
+      this.getLastUpdated(this.stationInformation.rithmId);
       this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
 
       this.stationService.stationName$
@@ -126,14 +126,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           }
         });
     }
-  }
-
-  /**
-   * Completes all subscriptions.
-   */
-   ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   /**
@@ -189,28 +181,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           }
         }, error: (error: unknown) => {
           this.docGenLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Attempts to retrieve the station info from the query params in the URL and make the requests.
-   */
-  private getParams(): void {
-    this.route.params
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (!params.stationId) {
-            this.handleInvalidParams();
-          } else {
-            this.getLastUpdated(params.stationId);
-          }
-        }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -376,6 +346,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (confirmNavigation || !this.editMode) {
       this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
     }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }
