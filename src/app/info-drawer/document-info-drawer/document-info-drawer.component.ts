@@ -373,10 +373,13 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancel',
       important: true
     });
-    if (deleteDoc){
+    if (deleteDoc) {
       this.documentService.deleteDocument(this.documentRithmId)
         .pipe(first())
         .subscribe({
+          next: () => {
+            this.popupService.notify('The document has been deleted.');
+          },
           error: (error: unknown) => {
             this.errorService.displayError(
               'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -385,6 +388,5 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           }
         });
     }
-
   }
 }
