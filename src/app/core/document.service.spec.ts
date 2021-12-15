@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -262,5 +262,21 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should return the user assigned to the document', () => {
+
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '789-321-456-789',
+      firstName: 'John',
+      lastName: 'Christopher',
+      email: 'johnny.depp@gmail.com',
+      isAssigned: true
+    }];
+
+    service.getAssignedUserToDocument(documentId, stationId, true)
+      .subscribe((documentTimeInStation) => {
+        expect(documentTimeInStation).toEqual(expectedResponse);
+      });
   });
 });

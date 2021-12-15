@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -147,6 +147,33 @@ export class DocumentService {
       .set('stationRithmId', stationId);
     return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time`, { params })
       .pipe(map(response => response.data));
+  }
+
+ /**
+  * Get the user assigned to the document.
+  *
+  * @param documentId The specific id of document.
+  * @param stationId The specific id of station.
+  * @param getOnlyCurrentStation The specific current station only.
+  * @returns The assigned user.
+  */
+  getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
+    if (!documentId || (!stationId && getOnlyCurrentStation)) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get the user assigned for document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const assignedUser: StationRosterMember[] = [{
+        rithmId: '789-321-456-789',
+        firstName: 'John',
+        lastName: 'Christopher',
+        email: 'johnny.depp@gmail.com',
+        isAssigned: true
+      }];
+      return of(assignedUser).pipe(delay(1000));
+    }
   }
 
   /**
