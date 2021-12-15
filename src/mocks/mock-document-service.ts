@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, DocumentAutoFlow } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, DocumentAutoFlow } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -492,6 +492,33 @@ export class MockDocumentService {
     } else {
       const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
       return of(documentTimeInStation).pipe(delay(1000));
+    }
+  }
+
+ /**
+  * Get the user assigned to the document.
+  *
+  * @param documentId The specific id of document.
+  * @param stationId The specific id of station.
+  * @param getOnlyCurrentStation The specific current station only.
+  * @returns The assigned user.
+  */
+  getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
+    if (!documentId || (!stationId && getOnlyCurrentStation) ) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get the user assigned for document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const assignedUser: StationRosterMember[] = [{
+        rithmId: '789-321-456-789',
+        firstName: 'John',
+        lastName: 'Christopher',
+        email: 'johnny.depp@gmail.com',
+        isAssigned: true
+      }];
+      return of(assignedUser).pipe(delay(1000));
     }
   }
 
