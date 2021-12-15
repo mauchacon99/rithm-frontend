@@ -469,4 +469,42 @@ export class MockDocumentService {
     const mockDate = '2021-12-09T17:26:47.3506612Z';
     return of(mockDate).pipe(delay(1000));
   }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @returns The document time in station.
+   */
+  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot get held time in station for document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const documentTimeInStation = '2021-12-09T17:26:47.3506612Z';
+      return of(documentTimeInStation).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  deleteDocument(documentRithmId: string): Observable<unknown> {
+    if (!documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Cannot delete the document without defining a document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
 }

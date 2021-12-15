@@ -77,11 +77,14 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const isStation = false;
-    const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211';
+    component.documentRithmId = documentRithmId;
     const expectedData = {
-      rithmId: rithmId,
+      stationRithmId: stationRithmId,
       isStation: isStation,
-      isUserAdminOrOwner: true
+      isUserAdminOrOwner: true,
+      documentRithmId: documentRithmId
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -102,15 +105,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -124,15 +127,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 

@@ -77,8 +77,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getParams();
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
-    this.documentRithmId ? this.getDocumentName() : '';
-    this.getAppendedFieldsOnDocumentName(this.rithmId);
+    if (!this.isStation) {
+      this.getDocumentName();
+    } else {
+      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
+    }
     this.getStatusDocumentEditable();
   }
 
@@ -125,15 +128,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Document Priority of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Priority.
-   */
-  get documentPriority(): number {
-    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
-  }
-
-  /**
    * Get flowed time UTC of document from DocumentStationInformation based on type.
    *
    * @returns The Flowed time UTC.
@@ -143,23 +137,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get last updated UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Last Updated UTC.
-   */
-  get lastUpdatedUTC(): string {
-    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
-  }
-
-  /**
    * The id of the station or document.
    *
    * @returns The id of the station or document.
    */
-  get rithmId(): string {
+  get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
   }
-
 
   /**
    * Is the current user an owner or an admin for this station.
@@ -179,9 +163,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId,
+        stationRithmId: this.stationRithmId,
         isStation: this.isStation,
-        isUserAdminOrOwner: this.isUserAdminOrOwner
+        isUserAdminOrOwner: this.isUserAdminOrOwner,
+        documentRithmId: this.documentRithmId
       }
     );
   }
@@ -234,7 +219,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   private getStatusDocumentEditable(): void {
-    this.stationService.getStatusDocumentEditable(this.rithmId)
+    this.stationService.getStatusDocumentEditable(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (editableStatus) => {
