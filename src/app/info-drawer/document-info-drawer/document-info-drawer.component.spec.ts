@@ -106,6 +106,14 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
 
+  it('should return the user assigned to the document', () => {
+    const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
+    component.stationRithmId = stationId;
+    component['getAssignedUserToDocument'](documentId);
+
+    expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
+  });
+
   it('should show loading-last-update while get data last updated', () => {
     sideNavService.drawerData$.next({
       isStation: false,
