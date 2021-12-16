@@ -11,7 +11,7 @@ jobs:
 
   # Deploys the web app
   web-app:
-    runs-on: [self-hosted, test]
+    runs-on: [self-hosted, testvm]
     timeout-minutes: 15
 
     steps:
@@ -23,14 +23,8 @@ jobs:
     - name: Installing dependencies
       run: npm ci --no-audit
 
-    - name: Stopping IIS pool
-      run: c:\batch\elevate Stop-WebAppPool -Name testapp.rithm.tech
-
     - name: Compiling app
       run: npm run build-test
 
     - name: Deploying app
       run: Copy-Item ./dist/rithm/* D:/inetpub/testapp.rithm.tech -Recurse -Force
-
-    - name: Starting IIS pool
-      run: c:\batch\elevate Start-WebAppPool -Name testapp.rithm.tech
