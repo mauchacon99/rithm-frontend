@@ -319,6 +319,9 @@ describe('DocumentService', () => {
     // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user?documentId=${documentId}&stationId=${stationId}&getOnlyCurrentStation=true`);
     expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentId')).toBe(documentId);
+    expect(req.request.params.get('stationId')).toBe(stationId);
+    expect(req.request.params.get('getOnlyCurrentStation')).toBeTruthy();
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
