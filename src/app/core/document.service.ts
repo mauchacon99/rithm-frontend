@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -165,14 +165,11 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const assignedUser: StationRosterMember[] = [{
-        rithmId: '789-321-456-789',
-        firstName: 'John',
-        lastName: 'Christopher',
-        email: 'johnny.depp@gmail.com',
-        isAssigned: true
-      }];
-      return of(assignedUser).pipe(delay(1000));
+      const params = new HttpParams()
+        .set('documentId', documentId)
+        .set('stationId', stationId)
+        .set('getOnlyCurrentStation', getOnlyCurrentStation);
+      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user`, { params });
     }
   }
 

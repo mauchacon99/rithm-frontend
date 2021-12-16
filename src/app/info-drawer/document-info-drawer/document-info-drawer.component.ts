@@ -126,6 +126,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
         if (!this.isStation) {
           this.getLastUpdated();
+          this.getAssignedUserToDocument();
         }
       });
 
@@ -366,10 +367,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the user assigned to the document.
    *
-   * @param documentRithmId The id of the document.
    */
-  private getAssignedUserToDocument(documentRithmId: string): void {
-    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
+  private getAssignedUserToDocument(): void {
+    this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
