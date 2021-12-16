@@ -260,7 +260,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
-      //remove event from cache.
+      // remove event from cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1);
