@@ -82,7 +82,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
-  /** Color message the held time in station for document. */
+  /** The color of documentTimeInStation text.*/
   colorMessageDocumentTime = '';
 
   /** The assigned user of document information. */
