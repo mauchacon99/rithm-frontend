@@ -4,7 +4,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField } from 'src/models';
+import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -62,7 +62,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
 
-
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -95,6 +94,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .subscribe((appFields) => {
         this.appendedFields = appFields;
       });
+
+    this.stationService.stationFormTouched$
+    .pipe(first())
+      .subscribe(() => {
+        this.stationForm.get('stationTemplateForm')?.markAsTouched();
+      });
   }
 
   /**
@@ -103,7 +108,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
-    this.getPreviousAndFollowingStations();
+    this.getPreviousAndNextStations();
   }
 
   /** Comment. */
@@ -178,6 +183,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
+            this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
           }
           this.stationLoading = false;
         },
@@ -199,14 +205,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
-      rithmId: '3j4k-3h2j-hj4j',
+      rithmId: '',
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: this.stationRithmId
     });
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -233,10 +241,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       // Update general instructions.
       this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
         this.stationForm.controls.generalInstructions.value),
-
-      // Update Questions.
-      this.stationService.updateStationQuestions(this.stationInformation.questions)
     ];
+
+    if (this.stationForm.get('stationTemplateForm')?.touched) {
+      petitionsUpdateStation.push(
+        // Update Questions.
+        this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
+      );
+    }
 
     forkJoin(petitionsUpdateStation)
       .pipe(first())
@@ -286,14 +298,14 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * Get previous and following stations.
    *
    */
-  getPreviousAndFollowingStations(): void {
-    this.stationService.getPreviousAndFollowingStations(this.stationRithmId)
+  getPreviousAndNextStations(): void {
+    this.stationService.getPreviousAndNextStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (prevAndFollowStations) => {
-          if (prevAndFollowStations) {
-            this.forwardStations = prevAndFollowStations.followingStations;
-            this.previousStations = prevAndFollowStations.previousStations;
+        next: (prevAndNextStations) => {
+          if (prevAndNextStations) {
+            this.forwardStations = prevAndNextStations.nextStations;
+            this.previousStations = prevAndNextStations.previousStations;
           }
         }, error: (error: unknown) => {
           this.errorService.displayError(
@@ -302,6 +314,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           );
         }
       });
+  }
+
+ /**
+  * Move previous field from private/all expansion panel to the template area.
+  *
+  * @param question The question that was moved from private/all.
+  */
+  movePreviousFieldToTemplate(question: Question): void {
+    this.stationInformation.questions.push(question);
+    this.stationService.touchStationForm();
   }
 
   /** This cancel button clicked show alert. */
@@ -317,4 +339,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       this.router.navigateByUrl('dashboard');
     }
   }
+
+
 }

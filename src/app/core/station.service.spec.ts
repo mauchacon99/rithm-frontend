@@ -283,11 +283,11 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.updateStationQuestions(expectedResponse)
+    service.updateStationQuestions(stationId, expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedResponse);
     req.flush(expectedResponse);
@@ -605,7 +605,7 @@ describe('StationService', () => {
   });
 
   it('should return the previous and following stations', () => {
-    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const stationRithmId = '4eca65f1-89ef-4970-8aa5-8a26a5e45628';
     const expectedResponse: ForwardPreviousStationsDocument = {
       rithmId: stationRithmId,
       previousStations: [
@@ -620,7 +620,7 @@ describe('StationService', () => {
           totalDocuments: 2
         }
       ],
-      followingStations: [
+      nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
@@ -633,10 +633,18 @@ describe('StationService', () => {
         }
       ]
     };
-    service.getPreviousAndFollowingStations(stationRithmId)
-      .subscribe((prevAndFollowStations) => {
-        expect(prevAndFollowStations).toEqual(expectedResponse);
+    service.getPreviousAndNextStations(stationRithmId)
+      .subscribe((prevAndNextStations) => {
+        expect(prevAndNextStations).toEqual(expectedResponse);
       });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationRithmId}`);
+    expect(req.request.params.get('stationRithmId')).toBe('4eca65f1-89ef-4970-8aa5-8a26a5e45628');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should update the station name', () => {
@@ -717,15 +725,15 @@ describe('StationService', () => {
     const expectData: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -747,15 +755,15 @@ describe('StationService', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -790,6 +798,7 @@ describe('StationService', () => {
     req.flush({ data: instructions });
     httpTestingController.verify();
   });
+
 });
 
 

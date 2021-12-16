@@ -5,9 +5,11 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, Question } from 'src/models';
+import { DocumentNameField, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
+import { DocumentService } from 'src/app/core/document.service';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Component for document drawer.
@@ -15,7 +17,8 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-document-info-drawer',
   templateUrl: './document-info-drawer.component.html',
-  styleUrls: ['./document-info-drawer.component.scss']
+  styleUrls: ['./document-info-drawer.component.scss'],
+  providers: [UtcTimeConversion]
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
@@ -64,12 +67,35 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is the signed in user an Admin or station owner. */
   isUserAdminOrOwner = false;
 
+  /** The Document Name. */
+  documentName = '';
+
+  /** Last updated time for document. */
+  lastUpdatedDate = '';
+
+  /** Document rithmId. */
+  documentRithmId = '';
+
+  /** Color message LastUpdated. */
+  colorMessage = '';
+
+  /** The held time in station for document. */
+  documentTimeInStation = '';
+
+  /** The assigned user of document information. */
+  documentAssignedUser: StationRosterMember[] = [];
+
+  /** Loading in last updated section. */
+  lastUpdatedLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private userService: UserService
+    private userService: UserService,
+    private documentService: DocumentService,
+    private utcTimeConversion: UtcTimeConversion
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -81,18 +107,25 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         const dataDrawer = data as {
           /** RithmId station. */
-          rithmId: string;
+          stationRithmId: string;
 
           /** Comes from station or not. */
           isStation: boolean;
 
           /** User actually is owner to actually station. */
           isUserAdminOrOwner: boolean;
+
+          /** RithmId document. */
+          documentRithmId: string;
         };
         if (dataDrawer) {
-          this.stationRithmId = dataDrawer.rithmId;
+          this.stationRithmId = dataDrawer.stationRithmId;
+          this.documentRithmId = dataDrawer.documentRithmId;
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
+        }
+        if (!this.isStation) {
+          this.getLastUpdated();
         }
       });
 
@@ -100,7 +133,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(appendedFields => {
-        this.options = appendedFields.filter(field => field.rithmId);
+        this.options = appendedFields.filter(field => field.questionRithmId);
         if (this.questions.length > 0) {
           this.filterFieldsAndQuestions();
         }
@@ -113,6 +146,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getStatusDocumentEditable();
     this.getAllPreviousQuestions();
+    this.documentService.documentName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (documentName) => {
+          this.documentName = `${documentName.baseName} ${documentName.appendedName}`;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -206,7 +251,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   updateSeparatorFieldValue(separator: string): void {
     // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
-      if (this.appendedFields[i].rithmId === '') {
+      if (this.appendedFields[i].questionRithmId === '') {
         this.appendedFields[i].prompt = separator;
       }
     }
@@ -224,7 +269,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
     }
     this.appendedFields.length > 0
-      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, rithmId: '' }, fieldToAppend)
+      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: '' }, fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -235,7 +280,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   filterFieldsAndQuestions(): void {
     /**Difference between QuestionArray and OptionsArray */
-    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.rithmId === field2.rithmId));
+    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.questionRithmId === field2.questionRithmId));
 
     /** Set the filter List for auto searching. */
     this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
@@ -250,5 +295,112 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get last updated time for document.
+   */
+  private getLastUpdated(): void {
+    this.lastUpdatedLoading = true;
+    this.documentService.getLastUpdated(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (lastUpdated) => {
+          this.lastUpdatedLoading = false;
+          if (lastUpdated && lastUpdated !== 'Unknown') {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+            this.colorMessage = 'text-accent-500';
+            if (this.lastUpdatedDate === '1 day') {
+              this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          } else {
+            this.colorMessage = 'text-error-500';
+            this.lastUpdatedDate = 'Unable to retrieve time';
+          }
+        }, error: (error: unknown) => {
+          this.lastUpdatedDate = 'Unable to retrieve time';
+          this.colorMessage = 'text-error-500';
+          this.lastUpdatedLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get held time in station for document.
+   *
+   * @param documentRithmId The id of the document.
+   */
+  getDocumentTimeInStation(documentRithmId: string): void {
+    this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentTimeInStation) => {
+          if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
+            this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
+            if (this.documentTimeInStation === '1 day') {
+              this.documentTimeInStation = ' Yesterday';
+            } else {
+              this.documentTimeInStation += ' ago';
+            }
+          } else {
+            this.documentTimeInStation = 'Unable to retrieve time';
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentRithmId The id of the document.
+   */
+  private getAssignedUserToDocument(documentRithmId: string): void {
+    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
+      .pipe(first())
+      .subscribe({
+        next: (assignedUser) => {
+          if (assignedUser) {
+            this.documentAssignedUser = assignedUser;
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Delete a specified document.
+   *
+   * @param documentRithmId The Specific id of document.
+   */
+  private deleteDocument(documentRithmId: string): void {
+    this.documentService.deleteDocument(documentRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
