@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -140,6 +140,9 @@ describe('DocumentService', () => {
 
   it('Should return the update of the new document name', () => {
     const documentName = 'Almond Flour';
+    const expectDocumentName: StandardStringJSON = {
+      data: documentName
+    };
 
     service.updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
@@ -149,23 +152,21 @@ describe('DocumentService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
     expect(req.request.method).toEqual('PUT');
 
-    const newDocumentName: StandardStringJSON = {
-      data: documentName
-    };
-    expect(req.request.body).toEqual(newDocumentName);
-    req.flush(newDocumentName);
+    expect(req.request.body).toEqual(expectDocumentName);
+    req.flush(expectDocumentName);
     httpTestingController.verify();
   });
 
   it('should return document name', () => {
-    const documentName: StandardStringJSON = {
-      data: 'Metroid Dread'
+    const documentName: DocumentName = {
+      baseName: 'Metroid Dread',
+      appendedName: ''
     };
 
 
     service.getDocumentName(documentId)
       .subscribe((response) => {
-        expect(response).toEqual(documentName.data);
+        expect(response).toEqual(documentName);
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
@@ -240,6 +241,42 @@ describe('DocumentService', () => {
     service.getDocumentTimeInStation(documentId, stationId)
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse.data);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time?documentRithmId=${documentId}&stationRithmId=${stationId}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should delete a document', () => {
+    service.deleteDocument(documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentId}`);
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should return the user assigned to the document', () => {
+
+    const expectedResponse: StationRosterMember[] = [{
+      rithmId: '789-321-456-789',
+      firstName: 'John',
+      lastName: 'Christopher',
+      email: 'johnny.depp@gmail.com',
+      isAssigned: true
+    }];
+
+    service.getAssignedUserToDocument(documentId, stationId, true)
+      .subscribe((documentTimeInStation) => {
+        expect(documentTimeInStation).toEqual(expectedResponse);
       });
   });
 });
