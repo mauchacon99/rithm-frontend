@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FlowMapElement, Point } from 'src/models';
-import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH } from './map-constants';
+import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH } from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -79,6 +79,7 @@ export class FlowElementService {
     }
     const ctx = this.canvasContext;
     const strokeColor = CONNECTION_DEFAULT_COLOR;
+    const defaultLineWidth = CONNECTION_LINE_WIDTH;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
@@ -90,6 +91,7 @@ export class FlowElementService {
     for (const boundaryPoint of flow.boundaryPoints) {
       ctx.lineTo(boundaryPoint.x, boundaryPoint.y);
     }
+    ctx.lineWidth = defaultLineWidth;
     ctx.stroke();
     ctx.setLineDash([]);
   }
