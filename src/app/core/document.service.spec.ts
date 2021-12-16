@@ -321,7 +321,7 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentId')).toBe(documentId);
     expect(req.request.params.get('stationId')).toBe(stationId);
-    expect(req.request.params.get('getOnlyCurrentStation')).toBeTruthy();
+    expect(req.request.params.get('getOnlyCurrentStation')).toBeTrue();
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
