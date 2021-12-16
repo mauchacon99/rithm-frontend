@@ -550,7 +550,7 @@ export class MockDocumentService {
     if (!documentAutoFlow) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Unable to set document flow, parameters not sent.'
+          error: 'Unable to flow the document, invalid parameters.'
         }
       })).pipe(delay(1000));
     } else {

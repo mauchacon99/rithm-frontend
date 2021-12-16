@@ -280,7 +280,7 @@ describe('DocumentService', () => {
       });
   });
 
-  it('should add flow a document specific', () => {
+  it('should flow a document', () => {
     const expectedData: DocumentAutoFlow = {
       stationRithmId: stationId,
       documentRithmId: documentId,

@@ -368,7 +368,7 @@ describe('DocumentComponent', () => {
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
   });
 
-  it('should add flow a document specific and call service', () => {
+  it('should flow a document by calling the service', () => {
     const expectedData: DocumentAutoFlow = {
       stationRithmId: component.documentInformation.stationRithmId,
       documentRithmId: component.documentInformation.documentRithmId,

@@ -196,7 +196,7 @@ export class DocumentService {
     if (!documentAutoFlow) {
       return throwError(() => new HttpErrorResponse({
         error: {
-          error: 'Flow the document, invalid parameters.'
+          error: 'Unable to flow the document, invalid parameters.'
         }
       })).pipe(delay(1000));
     } else {
