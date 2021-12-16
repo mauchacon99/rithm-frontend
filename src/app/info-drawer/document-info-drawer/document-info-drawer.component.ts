@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, Question } from 'src/models';
+import { DocumentNameField, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
@@ -82,6 +82,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
+  /** The assigned user of document information. */
+  documentAssignedUser: StationRosterMember[] = [];
+
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
@@ -147,7 +150,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (documentName) => {
-          this.documentName = documentName;
+          this.documentName = `${documentName.baseName} ${documentName.appendedName}`;
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -349,6 +352,29 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             }
           } else {
             this.documentTimeInStation = 'Unable to retrieve time';
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get the user assigned to the document.
+   *
+   * @param documentRithmId The id of the document.
+   */
+  private getAssignedUserToDocument(documentRithmId: string): void {
+    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
+      .pipe(first())
+      .subscribe({
+        next: (assignedUser) => {
+          if (assignedUser) {
+            this.documentAssignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {
