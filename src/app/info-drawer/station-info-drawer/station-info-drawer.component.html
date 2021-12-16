@@ -73,7 +73,7 @@
   <div class="w-full" *ngIf="mapMode === mapModeEnum.Build">
     <mat-form-field appearance="outline">
       <mat-label>Notes</mat-label>
-      <textarea matInput></textarea>
+      <textarea matInput [(ngModel)]="stationNotes"></textarea>
     </mat-form-field>
   </div>
   <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
