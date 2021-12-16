@@ -376,7 +376,7 @@ describe('DocumentComponent', () => {
     expect(form['documentTemplateForm'].value).toBe('');
   });
 
-  it('should button flow disabled if form is not valid', () => {
+  it('should disable the button if form is not valid', () => {
     component.documentLoading = false;
     component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
     fixture.detectChanges();
@@ -384,7 +384,7 @@ describe('DocumentComponent', () => {
     expect(btnFlow.disabled).toBeTruthy();
   });
 
-  it('should button flow enabled if form is valid', () => {
+  it('should show button as enabled if form is valid', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
     fixture.detectChanges();
