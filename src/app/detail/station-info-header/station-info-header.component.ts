@@ -73,6 +73,15 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether to show the backdrop for the drawer.
+   *
+   * @returns Whether to show the backdrop.
+   */
+   get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
    * Get name of station from StationInformation based on type.
    *
    * @returns The Station Name.
