@@ -24,6 +24,9 @@ export class SidenavDrawerService {
   /** Whether to show the backdrop for an opened drawer. */
   private _drawerHasBackdrop!: boolean;
 
+  /** Whether the info-drawer has been opened/closed. */
+  isDrawerOpen$ = new Subject<boolean>();
+
   /**
    * Whether to show the backdrop for an opened drawer (readonly).
    *
@@ -107,6 +110,7 @@ export class SidenavDrawerService {
     this.drawerData$.next(data);
     this.sidenavComponent.close();
     this.drawerComponent.open();
+    this.isDrawerOpen$.next(true);
   }
 
   /**
@@ -117,6 +121,7 @@ export class SidenavDrawerService {
       throw new Error('The drawer component is not defined. Did you forget to set it?');
     }
     this.drawerComponent.close();
+    this.isDrawerOpen$.next(false);
   }
 
   /**

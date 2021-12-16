@@ -52,6 +52,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Fields appended to the document name. */
   appendedDocumentName = '';
 
+  /** Whether the info-drawer has been opened/closed. */
+  isDrawerOpen = false;
+
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
@@ -72,6 +75,12 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
       .subscribe(appendedFields => {
         this.documentAppendedFields = appendedFields;
       });
+
+    this.sidenavDrawerService.isDrawerOpen$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((isOpened) => {
+      this.isDrawerOpen = isOpened;
+    });
   }
 
   /**

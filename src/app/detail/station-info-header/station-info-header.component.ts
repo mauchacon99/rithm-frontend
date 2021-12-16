@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { ErrorService } from 'src/app/core/error.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Reusable component for the station information header.
@@ -14,7 +15,11 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss']
 })
-export class StationInfoHeaderComponent implements OnInit {
+export class StationInfoHeaderComponent implements OnInit, OnDestroy {
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Is component viewed in station edit mode? */
   @Input() stationEditMode!: boolean;
 
@@ -30,17 +35,25 @@ export class StationInfoHeaderComponent implements OnInit {
   /** Field to change station name. */
   nameField!: Question;
 
+  /** Whether the info-drawer has been opened/closed. */
+  isDrawerOpen = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
-    private errorService: ErrorService,
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
     this.stationNameForm = this.fb.group({
       name: ['']
+    });
+
+    this.sidenavDrawerService.isDrawerOpen$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((isOpened) => {
+      this.isDrawerOpen = isOpened;
     });
   }
 
@@ -98,6 +111,14 @@ export class StationInfoHeaderComponent implements OnInit {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }
