@@ -1,4 +1,4 @@
-<div class="h-full w-full flex justify-center items-center absolute" *ngIf="stationLoading">
+<div class="h-full w-full flex justify-center items-center" *ngIf="stationLoading">
   <app-loading-indicator id="loading-drawer-component"></app-loading-indicator>
 </div>
 <div class="grid grid-cols-1" *ngIf="!stationLoading">
@@ -21,30 +21,33 @@
   </div>
   <div class="w-full py-2">
     <p class="overline-font">station owners</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
+    <div class="pt-1" *ngIf="locallyCreated || stationInformation.stationOwners.length === 0">No station owners</div>
+    <app-roster *ngIf="!locallyCreated && stationInformation.stationOwners.length !== 0" (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
                 [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
                 [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
     <p class="overline-font">worker roster</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
+    <div class="pt-1" *ngIf="locallyCreated || stationInformation.workers.length === 0">No workers</div>
+    <app-roster *ngIf="!locallyCreated && stationInformation.workers.length !== 0" (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
                 [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
                 [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
     </app-roster>
   </div>
   <div class="w-full py-2">
     <p class="overline-font">station priority</p>
-    <button mat-mini-fab color="warn" class="priority">
+    <button [ngClass]="!locallyCreated ? 'mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn' : 'pt-1 cursor-text outline-none'">
       {{stationInformation.priority}}
     </button>
   </div>
   <div class="w-full py-2">
     <p class="overline-font">document generation</p>
-    <div class="w-24 items-center py-2" *ngIf="docGenLoading">
+    <div class="py-1 text-sm" *ngIf="locallyCreated">None</div>
+    <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
       <app-loading-indicator id="loading-indicator-status" [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
-    <div class="py-1" *ngIf="!docGenLoading">
+    <div class="py-1" *ngIf="!docGenLoading && !locallyCreated">
       <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)"
                        *ngIf="!showDocumentGenerationError">
         <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'">
@@ -58,7 +61,7 @@
       </div>
     </div>
   </div>
-  <div class="w-full py-2">
+  <div class="w-full py-2" *ngIf="!openedFromMap">
     <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
