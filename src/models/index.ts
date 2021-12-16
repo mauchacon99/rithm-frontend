@@ -38,5 +38,9 @@ export * from './document-name-field';
 export * from './standard-string-json';
 export * from './document-answer';
 export * from './document-name';
+<<<<<<< HEAD
 export * from './question-answer';
 
+=======
+export * from './document-auto-flow';
+>>>>>>> dev
