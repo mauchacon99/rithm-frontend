@@ -9,7 +9,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService, MockDocumentService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models';
+import { DocumentName, DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -77,11 +77,14 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const isStation = false;
-    const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211';
+    component.documentRithmId = documentRithmId;
     const expectedData = {
-      rithmId: rithmId,
+      stationRithmId: stationRithmId,
       isStation: isStation,
-      isUserAdminOrOwner: true
+      isUserAdminOrOwner: true,
+      documentRithmId: documentRithmId
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -155,8 +158,14 @@ describe('DocumentInfoHeaderComponent', () => {
 
   it('should update the name in document info drawer', () => {
     formGroup.controls['name'].setValue('Document Name');
+    component.appendedDocumentName = 'Appended Name';
+
     const updateDocumentNameSpy = spyOn(TestBed.inject(DocumentService), 'updateDocumentNameBS');
     component.updateDocumentNameBS();
-    expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
+    const documentName: DocumentName = {
+      baseName: formGroup.controls['name'].value,
+      appendedName: component.appendedDocumentName
+    };
+    expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(documentName);
   });
 });
