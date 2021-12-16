@@ -69,14 +69,14 @@ describe('RosterComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should return the station owners roster members', async () => {
+  it('should return the station owners roster members', () => {
     const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
     component.isWorker = false;
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
-  it('should return the station workers roster members', async () => {
+  it('should return the station workers roster members', () => {
     const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationWorkerRoster').and.callThrough();
     component.isWorker = true;
     component.ngOnInit();

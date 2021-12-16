@@ -92,7 +92,7 @@ export class RosterComponent implements OnInit {
         next: (data) => {
           if (data) {
             this.rosterMembers = data;
-            this.slices = this.rosterMembers.length > 3 ? this.rosterMembers.length : 2;
+            this.slices = this.rosterMembers.length > 3 ? 2 : this.rosterMembers.length;
           }
           this.loadingRoster = false;
         }, error: (error: unknown) => {
