@@ -2,7 +2,8 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement } from 'src/models';
+// eslint-disable-next-line max-len
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, ConnectionMapElement, StationInformation, StationInfoDrawerData } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
@@ -15,7 +16,7 @@ import { FlowElementService } from '../flow-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { PopupService } from 'src/app/core/popup.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -113,7 +114,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private popupService: PopupService
+    private stationService: StationService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
