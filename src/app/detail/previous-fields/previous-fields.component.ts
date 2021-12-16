@@ -23,6 +23,12 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /** The type of fields requested private/true - all/false. */
   @Input() isPrivate!: boolean;
 
+  /** The document id used to get document previous questions.*/
+  @Input() documentId!: string;
+
+  /** Comes from station or not. */
+  @Input() isStation = true;
+
   /** The list of station private/all questions. */
   questions: Question[] = [];
 
@@ -52,22 +58,26 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    * Load private/all Questions.
    */
   ngOnInit(): void {
-    this.getStationPreviousQuestions();
-    this.stationService.questionToMove$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        const questionData: Question = data;
-        if (questionData.isPrivate === this.isPrivate) {
-          this.questions.push(questionData);
-        }
-      });
+    if (this.isStation) {
+      this.getStationPreviousQuestions();
+      this.stationService.questionToMove$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((data) => {
+          const questionData: Question = data;
+          if (questionData.isPrivate === this.isPrivate) {
+            this.questions.push(questionData);
+          }
+        });
+    } else {
+      this.getDocumentPreviousQuestions();
+    }
   }
 
   /**
    * Get all station previous private/all questions.
    *
    */
-  getStationPreviousQuestions(): void {
+  private getStationPreviousQuestions(): void {
     this.isLoading = true;
     this.stationService.getStationPreviousQuestions(this.stationId, this.isPrivate)
       .pipe(first())
@@ -117,12 +127,9 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /**
    * Get Previous Questions.
    *
-   * @param documentId The specific id of document.
-   * @param stationId The specific id of station.
-   * @param getPrivate Will fetch only private or non private questions.
    */
-  private getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): void {
-    this.documentService.getDocumentPreviousQuestions(documentId, stationId, getPrivate)
+  private getDocumentPreviousQuestions(): void {
+    this.documentService.getDocumentPreviousQuestions(this.documentId, this.stationId, this.isPrivate)
       .pipe(first())
       .subscribe({
         next: (previousQuestions) => {

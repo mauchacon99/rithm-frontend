@@ -275,7 +275,7 @@ describe('DocumentService', () => {
 
     const getPrivate = true;
 
-    service.getPreviousQuestions(documentId, stationId, getPrivate)
+    service.getDocumentPreviousQuestions(documentId, stationId, getPrivate)
       .subscribe((responsePreviousQuestion) => {
         expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });

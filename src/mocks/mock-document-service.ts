@@ -498,7 +498,7 @@ export class MockDocumentService {
    * @param getPrivate Will fetch only private or non private questions.
    * @returns The array with previous questions.
    */
-  getPreviousQuestions(documentId: string, stationId: string, getPrivate = false): Observable<Question[]> {
+  getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate = false): Observable<Question[]> {
     if (!documentId || !stationId) {
       return throwError(() => new HttpErrorResponse({
         error: {
