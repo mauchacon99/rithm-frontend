@@ -87,15 +87,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((data: any) => {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
-          this.editMode = dataDrawer.editMode;
           this.stationInformation = dataDrawer.stationInformation as StationInformation;
           this.stationName = dataDrawer.stationName;
           this.mapMode = dataDrawer.mapMode;
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
+          this.editMode = dataDrawer.editMode;
+          if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
+            this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+            this.getStationInfo();
+          }
         }
       });
 
