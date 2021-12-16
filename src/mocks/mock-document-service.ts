@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, DocumentAutoFlow } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -519,6 +519,55 @@ export class MockDocumentService {
         isAssigned: true
       }];
       return of(assignedUser).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get Previous Questions.
+   *
+   * @param documentId The specific id of document.
+   * @param stationId The specific id of station.
+   * @param getPrivate Will fetch only private or non private questions.
+   * @returns The array with previous questions.
+   */
+  getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate = false): Observable<Question[]> {
+    if (!documentId || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Invalid station or document id.'
+        }
+      })).pipe(delay(1000));
+    } else {
+
+      const previousQuestions: Question[] = [
+        {
+          rithmId: '',
+          questionType: QuestionFieldType.City,
+          prompt: 'string',
+          isPrivate: getPrivate,
+          isEncrypted: true,
+          isReadOnly: true,
+          isRequired: true,
+          possibleAnswers: [
+            {
+              text: 'string',
+              default: true
+            }
+          ],
+          answer: {
+            questionRithmId: 'string',
+            referAttribute: 'string',
+            asArray: [],
+            asInt: 0,
+            asDecimal: 0,
+            asString: 'string',
+            asDate: '2021-12-14T14:10:31.030Z',
+            value: 'string'
+          },
+          children: []
+        }
+      ];
+      return of(previousQuestions).pipe(delay(1000));
     }
   }
 

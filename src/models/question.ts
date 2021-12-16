@@ -1,4 +1,4 @@
-import { QuestionFieldType } from '.';
+import { QuestionFieldType, QuestionAnswer } from '.';
 import { PossibleAnswer } from './possible-answer';
 
 /**
@@ -38,4 +38,6 @@ export interface Question {
   /** Value of the Rithm ID current station to identify previous field. */
   originalStationRithmId?: string | null;
 
+  /** The answers to each question.*/
+  answer?: QuestionAnswer;
 }

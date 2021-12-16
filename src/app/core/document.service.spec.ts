@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, DocumentAutoFlow } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -250,6 +250,44 @@ describe('DocumentService', () => {
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should return previous questions', () => {
+    const expectPreviousQuestions: Question[] = [
+      {
+        rithmId: '',
+        questionType: QuestionFieldType.City,
+        prompt: 'string',
+        isPrivate: true,
+        isEncrypted: true,
+        isReadOnly: true,
+        isRequired: true,
+        possibleAnswers: [
+          {
+            text: 'string',
+            default: true
+          }
+        ],
+        answer: {
+          questionRithmId: 'string',
+          referAttribute: 'string',
+          asArray: [],
+          asInt: 0,
+          asDecimal: 0,
+          asString: 'string',
+          asDate: '2021-12-14T14:10:31.030Z',
+          value: 'string'
+        },
+        children: []
+      }
+    ];
+
+    const getPrivate = true;
+
+    service.getDocumentPreviousQuestions(documentId, stationId, getPrivate)
+      .subscribe((responsePreviousQuestion) => {
+        expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
+      });
   });
 
   it('should delete a document', () => {
