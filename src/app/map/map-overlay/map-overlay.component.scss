@@ -31,8 +31,14 @@
 //Needed for the center-map icon.
 .fa-stack-1x { font-size: 0.5rem; }
 
-.mat-raised-button.mat-button-base.mat-accent.mat-button-disabled {
+.mat-accent.mat-button-disabled {
   background-color: #1b4387;
-  opacity: 0.7;
   color: #fff;
+  opacity: 0.7;
+}
+
+.mat-basic.mat-button-disabled {
+  background-color: #fff;
+  color: #000000de;
+  opacity: 0.7;
 }

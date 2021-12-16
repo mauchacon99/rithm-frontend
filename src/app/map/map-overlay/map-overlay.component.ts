@@ -112,9 +112,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @returns Whether to show the backdrop.
    */
-     get drawerHasBackdrop(): boolean {
-      return this.sidenavDrawerService.drawerHasBackdrop;
-    }
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
@@ -174,7 +174,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.mapService.matMenuStatus$.next(false);
         }
       });
-      this.sidenavDrawerService.drawerContext$
+    this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (data === 'connectionInfo' || data === 'stationInfo') {
