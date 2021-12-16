@@ -302,7 +302,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should return the user assigned to the document', () => {
+  it('should return the user assigned to the document ', () => {
 
     const expectedResponse: StationRosterMember[] = [{
       rithmId: '789-321-456-789',
