@@ -50,6 +50,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Edit Mode. */
   stationName = '';
 
+  /** Notes for the station. */
+  stationNotes?: string;
+
   /** If component is being viewed on the map, what mode is the map in? */
   mapMode?: MapMode;
 
@@ -96,7 +99,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.mapMode = dataDrawer.mapMode;
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
+          this.stationNotes = dataDrawer.notes;
           this.editMode = dataDrawer.editMode;
+          if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
+            this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+            this.getStationInfo();
+          }
         }
       });
 
