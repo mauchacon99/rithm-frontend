@@ -79,7 +79,6 @@ export class FlowElementService {
     }
     const ctx = this.canvasContext;
     const strokeColor = CONNECTION_DEFAULT_COLOR;
-    const defaultLineWidth = CONNECTION_LINE_WIDTH;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
@@ -91,7 +90,7 @@ export class FlowElementService {
     for (const boundaryPoint of flow.boundaryPoints) {
       ctx.lineTo(boundaryPoint.x, boundaryPoint.y);
     }
-    ctx.lineWidth = defaultLineWidth;
+    ctx.lineWidth = CONNECTION_LINE_WIDTH;
     ctx.stroke();
     ctx.setLineDash([]);
   }
