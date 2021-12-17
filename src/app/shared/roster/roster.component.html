@@ -3,7 +3,7 @@
     (click)="openRosterModal()" class="float-left my-1 mx-px first:ml-0">
       <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName"></app-user-avatar>
   </div>
-    <p *ngIf="!editMode && rosterMembers.length === 0" class="overline-font py-2 text-secondary-300">No members added</p>
+    <p *ngIf="!editMode && rosterMembers.length === 0" class="overline-font py-2 text-secondary-300">No station {{isWorker ? 'workers' : 'owners'}}</p>
   <div *ngIf="!editMode && rosterMembers.length > 3" class="float-left my-1 mx-px first:ml-0 circle-30-secondary" (click)="openRosterModal()">
     +{{rosterMembers.length - 2}}</div>
   <!-- The custom add/remove user icon. -->
