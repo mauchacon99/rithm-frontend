@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -316,5 +316,24 @@ describe('DocumentService', () => {
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse);
       });
+  });
+
+  it('should flow a document', () => {
+    const expectedData: DocumentAutoFlow = {
+      stationRithmId: stationId,
+      documentRithmId: documentId,
+      testMode: true
+    };
+
+    service.autoFlowDocument(expectedData)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedData);
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
