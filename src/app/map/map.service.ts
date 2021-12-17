@@ -762,4 +762,13 @@ export class MapService {
     }
   }
 
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
+  }
+
 }
