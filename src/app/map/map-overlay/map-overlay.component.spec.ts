@@ -15,9 +15,6 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
-import {StationMapElement} from 'src/helpers';
-import {v4 as uuidv4} from 'uuid';
-import {MapItemStatus} from 'src/models';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
