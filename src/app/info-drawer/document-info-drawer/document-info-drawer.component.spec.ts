@@ -163,7 +163,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
   }));
 
-  it('should show loading-indicators while get held time in station ', () => {
+  it('should show loading-indicators while get held time in station', () => {
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
