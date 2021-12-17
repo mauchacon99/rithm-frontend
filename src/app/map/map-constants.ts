@@ -65,3 +65,13 @@ export const BUTTON_Y_MARGIN = 90;
 export const BUTTON_RADIUS = 4;
 export const BUTTON_DEFAULT_COLOR = '#667080';
 export const BUTTON_HOVER_COLOR = '#7D8593';
+
+// Note Icon
+export const ICON_X_MARGIN = 8;
+export const ICON_Y_MARGIN = 82;
+export const ICON_MID_WIDTH = 18;
+export const ICON_FULL_WIDTH = 28;
+export const ICON_MID_HEIGHT = 92;
+export const ICON_FULL_HEIGHT = 102;
+export const ICON_RADIUS = 2;
+export const ICON_FOLD = 1;

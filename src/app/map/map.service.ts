@@ -27,6 +27,9 @@ export class MapService {
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -728,6 +731,15 @@ export class MapService {
         console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
       }
     }
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }
