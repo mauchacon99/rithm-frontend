@@ -5,11 +5,12 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, Question } from 'src/models';
+import { DocumentNameField, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for document drawer.
@@ -82,6 +83,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
+  /** The assigned user of document information. */
+  documentAssignedUser: StationRosterMember[] = [];
+
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
@@ -92,7 +96,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private documentService: DocumentService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private popupService: PopupService
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -147,7 +152,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (documentName) => {
-          this.documentName = documentName;
+          this.documentName = `${documentName.baseName} ${documentName.appendedName}`;
         }, error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -361,14 +366,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Delete a specified document.
+   * Get the user assigned to the document.
    *
-   * @param documentRithmId The Specific id of document.
+   * @param documentRithmId The id of the document.
    */
-  private deleteDocument(documentRithmId: string): void {
-    this.documentService.deleteDocument(documentRithmId)
+  private getAssignedUserToDocument(documentRithmId: string): void {
+    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
+        next: (assignedUser) => {
+          if (assignedUser) {
+            this.documentAssignedUser = assignedUser;
+          }
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
@@ -376,5 +386,33 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Delete a specified document.
+   */
+  async deleteDocument(): Promise<void> {
+    const deleteDoc = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'The document will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true
+    });
+    if (deleteDoc) {
+      this.documentService.deleteDocument(this.documentRithmId)
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            this.popupService.notify('The document has been deleted.');
+          },
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              error
+            );
+          }
+        });
+    }
   }
 }
