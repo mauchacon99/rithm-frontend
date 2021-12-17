@@ -1145,7 +1145,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       priority: 1
     };
     const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: stationDataInfo,
+      stationRithmId: stationDataInfo.rithmId,
       stationName: station.stationName,
       editMode: this.mapMode === MapMode.Build,
       stationStatus: station.status,
