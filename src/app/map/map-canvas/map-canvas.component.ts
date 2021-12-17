@@ -64,6 +64,27 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
+  /** To track minimum boundary coordinates. */
+  private minBoundaryCoords: Point = DEFAULT_MOUSE_POINT;
+
+  /** To track maximum boundary coordinates. */
+  private maxBoundaryCoords: Point = DEFAULT_MOUSE_POINT;
+
+  /** The longest dimension of the user screen. */
+  private screenDimension = 0;
+
+  /** Used for the boundary left edge of the map. */
+  private leftBoundaryEdge = 0;
+
+  /** Used for the boundary top edge of the map. */
+  private topBoundaryEdge = 0;
+
+  /** Used for the boundary right edge of the map. */
+  private rightBoundaryEdge = 0;
+
+  /** Used for the boundary bottom edge of the map. */
+  private bottomBoundaryEdge = 0;
+
   /** Used to track map movement on a touchscreen. */
   private lastTouchCoords: Point[] = [DEFAULT_MOUSE_POINT];
 
@@ -708,6 +729,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
+  }
+
+  /**
+   * Calculates a boundary edges of a user's map.
+   *
+   */
+  private getBoundaryEdge(): void {
+
+    window.innerWidth > window.innerHeight ? this.screenDimension = window.innerWidth : this.screenDimension = window.innerHeight;
+
+    // To find out corner's of map using the min and max canvas points.
+    this.minBoundaryCoords = this.mapService.getMinCanvasPoint();
+    this.maxBoundaryCoords = this.mapService.getMaxCanvasPoint();
+
+    this.leftBoundaryEdge = this.minBoundaryCoords.x - this.screenDimension;
+    this.topBoundaryEdge = this.minBoundaryCoords.y - this.screenDimension;
+    this.rightBoundaryEdge = this.maxBoundaryCoords.x + this.screenDimension;
+    this.bottomBoundaryEdge = this.maxBoundaryCoords.y + this.screenDimension;
+
   }
 
   /**
