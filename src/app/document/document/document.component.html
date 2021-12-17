@@ -36,7 +36,8 @@
                   <button mat-stroked-button color="accent" class="mx-2" data-testid="document-save"
                     id="document-save">Save</button>
                 </div>
-                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow">Flow</button>
+                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow"
+                  [disabled]="!documentForm.valid">Flow</button>
               </div>
               <div class="relative hidden lg:block">
                 <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
