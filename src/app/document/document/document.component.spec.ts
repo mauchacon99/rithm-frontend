@@ -19,7 +19,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
