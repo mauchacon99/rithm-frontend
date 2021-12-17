@@ -92,7 +92,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
-  /** Loading in held time in station. */
+  /** Loading indicator for time held in station. */
   timeInStationLoading = false;
 
   constructor(
@@ -343,7 +343,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get held time in station for document.
+   * Get the held time of a document in the station.
    */
   private getDocumentTimeInStation(): void {
     this.timeInStationLoading = true;
