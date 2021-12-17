@@ -27,4 +27,4 @@ jobs:
       run: npm run build-test
 
     - name: Deploying app
-      run: Copy-Item ./dist/rithm/* D:/inetpub/testapp.rithm.tech -Recurse -Force
+      run: Copy-Item ./dist/rithm/* C:/inetpub/testapp.rithm.tech -Recurse -Force
