@@ -56,6 +56,9 @@ describe('MapOverlayComponent', () => {
   });
 
   it('should display confirmation prompt when cancel', () => {
+    spyOnProperty(TestBed.inject(MapService), 'mapHasChanges').and.returnValue(true);
+    component.mapHasChanges;
+
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
     component.cancel();
     expect(dialogSpy).toHaveBeenCalledWith({
