@@ -113,6 +113,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
 
+  /** Boolean to check drag on connection line. */
+  private connectionLineDrag = false;
+
 
 
   /**
@@ -945,6 +948,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.eventStartCoords = DEFAULT_MOUSE_POINT;
     this.lastTouchCoords = [DEFAULT_MOUSE_POINT];
     this.mapCanvas.nativeElement.style.cursor = 'default';
+    this.connectionLineDrag = false;
   }
 
   /**
@@ -998,10 +1002,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     } else if (this.dragItem === MapDragItem.Connection) {
-      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-      for (const station of this.stations) {
-        if (station.dragging) {
-          this.mapService.currentMousePoint$.next(moveInput);
+      //If it is a drag and not a click.
+      const moveFromStartX = this.eventStartCoords.x - moveInput.x;
+      const moveFromStartY = this.eventStartCoords.y - moveInput.y;
+      if (Math.abs(moveFromStartX) > 5 || Math.abs(moveFromStartY) > 5) {
+        this.connectionLineDrag = true;
+      }
+      if (this.connectionLineDrag) {
+        this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+        for (const station of this.stations) {
+          if (station.dragging) {
+            this.mapService.currentMousePoint$.next(moveInput);
+          }
         }
       }
     } else {
