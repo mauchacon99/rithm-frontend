@@ -329,5 +329,11 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedData);
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
