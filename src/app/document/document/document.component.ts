@@ -271,13 +271,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
       questionUpdated: false,
     }];
 
-    /** Parameter temporary for auto flow the document. */
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
+      // Parameter temporary testMode.
       testMode: true
     };
-    console.log(this.documentInformation.documentRithmId, documentAnswer);
 
     this.documentLoading = true;
     const petitionsSaveDocument = [
@@ -286,7 +285,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
       this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, documentAnswer),
 
       // Flow a document.
-      // Parameter temporary.
       this.documentService.autoFlowDocument(documentAutoFlow),
     ];
 

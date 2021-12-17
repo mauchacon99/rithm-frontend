@@ -339,49 +339,6 @@ describe('DocumentComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
-  it('should test method to save document answer', () => {
-    const expectedAnswers: DocumentAnswer[] = [{
-      questionRithmId: 'Dev 1',
-      documentRithmId: '123-654-789',
-      stationRithmId: '741-951-753',
-      value: 'Answer Dev',
-      file: 'dev.txt',
-      filename: 'dev',
-      type: QuestionFieldType.Email,
-      rithmId: '789-321-456',
-      questionUpdated: true,
-    },
-    {
-      questionRithmId: 'Dev 2',
-      documentRithmId: '123-654-789-856',
-      stationRithmId: '741-951-753-741',
-      value: 'Answer Dev2',
-      file: 'dev2.txt',
-      filename: 'dev2',
-      type: QuestionFieldType.City,
-      rithmId: '789-321-456-789',
-      questionUpdated: false,
-    }];
-
-    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
-    component.saveDocumentAnswer(expectedAnswers);
-    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
-  });
-
-  it('should flow a document by calling the service', () => {
-    const expectedData: DocumentAutoFlow = {
-      stationRithmId: component.documentInformation.stationRithmId,
-      documentRithmId: component.documentInformation.documentRithmId,
-      testMode: true
-    };
-
-    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
-
-    component.autoFlowDocument(expectedData);
-
-    expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
-  });
-
   it('should validate the form controls initial value', () => {
     const form = component.documentForm.controls;
     const expectFormFirst = ['documentTemplateForm'];
@@ -404,5 +361,56 @@ describe('DocumentComponent', () => {
     fixture.detectChanges();
     const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
     expect(btnFlow.disabled).toBeFalsy();
+  });
+
+  it('should called service to save answers and auto flow to document', () => {
+    const expectedAnswer: DocumentAnswer[] = [{
+      questionRithmId: 'Dev 1',
+      documentRithmId: '123-654-789',
+      stationRithmId: '741-951-753',
+      value: 'Answer Dev',
+      file: 'dev.txt',
+      filename: 'dev',
+      type: QuestionFieldType.Email,
+      rithmId: '789-321-456',
+      questionUpdated: true,
+    },
+    {
+      questionRithmId: 'Dev 2',
+      documentRithmId: '123-654-789-856',
+      stationRithmId: '741-951-753-741',
+      value: 'Answer Dev2',
+      file: 'dev2.txt',
+      filename: 'dev2',
+      type: QuestionFieldType.City,
+      rithmId: '789-321-456-789',
+      questionUpdated: false,
+    }];
+
+    const expectAutoFlow: DocumentAutoFlow = {
+      stationRithmId: component.documentInformation.stationRithmId,
+      documentRithmId: component.documentInformation.documentRithmId,
+      testMode: true
+    };
+
+    const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    const spySaveAutoFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
+
+    component.saveDocumentAnswersAndAutoFlow();
+
+    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
+    expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
+  });
+
+  it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const spyMethod = spyOn(component, 'saveDocumentAnswersAndAutoFlow').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#document-flow');
+
+    button.click();
+
+    expect(spyMethod).toHaveBeenCalled();
   });
 });
