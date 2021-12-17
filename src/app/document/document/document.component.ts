@@ -246,31 +246,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /**
    * Save document answers and auto flow.
    */
-  saveDocumentAnswersAndAutoFlow(): void {
-    /** Parameter temporary save answers to document. */
-    const documentAnswer: DocumentAnswer[] = [{
-      questionRithmId: 'Dev 1',
-      documentRithmId: '123-654-789',
-      stationRithmId: '741-951-753',
-      value: 'Answer Dev',
-      file: 'dev.txt',
-      filename: 'dev',
-      type: QuestionFieldType.Email,
-      rithmId: '789-321-456',
-      questionUpdated: true,
-    },
-    {
-      questionRithmId: 'Dev 2',
-      documentRithmId: '123-654-789-856',
-      stationRithmId: '741-951-753-741',
-      value: 'Answer Dev2',
-      file: 'dev2.txt',
-      filename: 'dev2',
-      type: QuestionFieldType.City,
-      rithmId: '789-321-456-789',
-      questionUpdated: false,
-    }];
-
+  flowDocument(): void {
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
@@ -279,16 +255,16 @@ export class DocumentComponent implements OnInit, OnDestroy {
     };
 
     this.documentLoading = true;
-    const petitionsSaveDocument = [
+    const requestArray = [
       // Save the document answers.
       // Second parameter temporary.
-      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, documentAnswer),
+      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer),
 
       // Flow a document.
       this.documentService.autoFlowDocument(documentAutoFlow),
     ];
 
-    forkJoin(petitionsSaveDocument)
+    forkJoin(requestArray)
       .pipe(first())
       .subscribe({
         next: () => {

@@ -363,29 +363,8 @@ describe('DocumentComponent', () => {
     expect(btnFlow.disabled).toBeFalsy();
   });
 
-  it('should called service to save answers and auto flow to document', () => {
-    const expectedAnswer: DocumentAnswer[] = [{
-      questionRithmId: 'Dev 1',
-      documentRithmId: '123-654-789',
-      stationRithmId: '741-951-753',
-      value: 'Answer Dev',
-      file: 'dev.txt',
-      filename: 'dev',
-      type: QuestionFieldType.Email,
-      rithmId: '789-321-456',
-      questionUpdated: true,
-    },
-    {
-      questionRithmId: 'Dev 2',
-      documentRithmId: '123-654-789-856',
-      stationRithmId: '741-951-753-741',
-      value: 'Answer Dev2',
-      file: 'dev2.txt',
-      filename: 'dev2',
-      type: QuestionFieldType.City,
-      rithmId: '789-321-456-789',
-      questionUpdated: false,
-    }];
+  it('should called service to save answers and auto flow the document', () => {
+    const expectedAnswer = component.documentAnswer;
 
     const expectAutoFlow: DocumentAutoFlow = {
       stationRithmId: component.documentInformation.stationRithmId,
@@ -396,7 +375,7 @@ describe('DocumentComponent', () => {
     const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     const spySaveAutoFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
 
-    component.saveDocumentAnswersAndAutoFlow();
+    component.flowDocument();
 
     expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
     expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
@@ -406,7 +385,7 @@ describe('DocumentComponent', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
     fixture.detectChanges();
-    const spyMethod = spyOn(component, 'saveDocumentAnswersAndAutoFlow').and.callThrough();
+    const spyMethod = spyOn(component, 'flowDocument').and.callThrough();
     const button = fixture.debugElement.nativeElement.querySelector('#document-flow');
 
     button.click();
