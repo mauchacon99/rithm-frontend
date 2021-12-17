@@ -248,7 +248,7 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`, documentAutoFlow);
     }
   }
 }
