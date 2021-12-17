@@ -288,6 +288,16 @@ describe('DocumentService', () => {
       .subscribe((responsePreviousQuestion) => {
         expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseAppUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentRithmId')).toBe(documentId);
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    expect(req.request.params.get('getPrivate')).toBe(`${getPrivate}`);
+
+    req.flush(expectPreviousQuestions);
+    httpTestingController.verify();
   });
 
   it('should delete a document', () => {
