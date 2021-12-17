@@ -15,7 +15,7 @@ import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawe
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
@@ -380,5 +380,29 @@ describe('DocumentComponent', () => {
     component.autoFlowDocument(expectedData);
 
     expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
+  });
+
+  it('should validate the form controls initial value', () => {
+    const form = component.documentForm.controls;
+    const expectFormFirst = ['documentTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['documentTemplateForm'].value).toBe('');
+  });
+
+  it('should disable the button if form is not valid', () => {
+    component.documentLoading = false;
+    component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeTruthy();
+  });
+
+  it('should show button as enabled if form is valid', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeFalsy();
   });
 });
