@@ -294,7 +294,7 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
-    expect(req.request.params.get('getPrivate')).toBe(`${getPrivate}`);
+    expect(Boolean(req.request.params.get('getPrivate'))).toBeTrue();
 
     req.flush(expectPreviousQuestions);
     httpTestingController.verify();
