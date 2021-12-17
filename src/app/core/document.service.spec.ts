@@ -327,13 +327,13 @@ describe('DocumentService', () => {
 
     service.autoFlowDocument(expectedData)
       .subscribe((response) => {
-        expect(response).toEqual(expectedData);
+        expect(response).toBeFalsy();
       });
 
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedData);
-    req.flush(expectedData);
+    req.flush(null);
     httpTestingController.verify();
   });
 });
