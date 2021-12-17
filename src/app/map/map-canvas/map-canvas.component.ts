@@ -82,6 +82,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for connection line path between stations. */
   connections: ConnectionMapElement[] = [];
 
+  /** Initial Data Load. */
+  private initLoad = true;
+
   /** Scale to calculate canvas points. */
   private scale = DEFAULT_SCALE;
 
@@ -132,15 +135,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
-    this.mapService.mapDataReceived$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
-        this.flows = this.mapService.flowElements;
-        this.connections = this.mapService.connectionElements;
-        this.drawElements();
-      });
-
     this.mapService.stationElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
@@ -174,6 +168,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.context = this.mapCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
     this.setCanvasSize();
+    this.mapService.mapDataReceived$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((dataReceived) => {
+      this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
+      this.flows = this.mapService.flowElements;
+      this.connections = this.mapService.connectionElements;
+      if (dataReceived && this.initLoad) {
+        this.mapService.center(dataReceived);
+        this.initLoad = false;
+      }
+      this.drawElements();
+    });
     this.drawElements();
   }
 
@@ -261,7 +267,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
-      //remove event from cache.
+      // remove event from cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1);
@@ -510,7 +516,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (event.key === '+' || event.key === '=' || event.key === '-') {
       this.mapService.matMenuStatus$.next(true);
       this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
-      this.mapService.handleZoom(undefined, false);
+      this.mapService.handleZoom(false);
     }
   }
 
@@ -540,7 +546,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.zoomCount$.next(0);
       }
       this.mapService.zoomCount$.next(this.zoomCount + Math.floor(10*-eventAmount));
-      this.mapService.handleZoom(mousePoint, false);
+      this.mapService.handleZoom(false, mousePoint);
     } else {
       // Do nothing if already at min zoom.
       if (this.scale <= MIN_SCALE
@@ -554,7 +560,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.zoomCount$.next(0);
       }
       this.mapService.zoomCount$.next(this.zoomCount - Math.floor(10*eventAmount));
-      this.mapService.handleZoom(mousePoint, false);
+      this.mapService.handleZoom(false, mousePoint);
     }
     // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
@@ -1029,12 +1035,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Zoom in
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
-      this.mapService.handleZoom(middlePoint, true);
+      this.mapService.handleZoom(true, middlePoint);
     } else if (averageEnd < averageStart) {
       // Zoom out
       this.lastTouchCoords = position;
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
-      this.mapService.handleZoom(middlePoint, true);
+      this.mapService.handleZoom(true, middlePoint);
     }
   }
 

@@ -1,17 +1,17 @@
 <app-sub-header class="fixed z-10 w-full" [itemInfo]="documentInformation"></app-sub-header>
-<mat-drawer-container [hasBackdrop]="drawerHasBackdrop">
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="h-full">
   <mat-drawer #detailDrawer mode="over" position="end">
     <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
     <app-info-drawer *ngIf="drawerContext === 'stationInfo' || drawerContext === 'documentInfo'"></app-info-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="textured-bg grid grid-cols-12 mt-12">
+    <div class="textured-bg grid grid-cols-12 mt-12 min-h-full">
       <!-- Left column -->
       <app-connected-station-pane [location]='"left"' [stations]="previousStations"
         class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
-      <div class="col-span-12 lg:col-span-8 bg-white px-5 pb-12 relative">
+      <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 pb-12 relative">
         <div class="loading" *ngIf="documentLoading">
           <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
         </div>
@@ -36,7 +36,8 @@
                   <button mat-stroked-button color="accent" class="mx-2" data-testid="document-save"
                     id="document-save">Save</button>
                 </div>
-                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow">Flow</button>
+                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow"
+                  [disabled]="!documentForm.valid">Flow</button>
               </div>
               <div class="relative hidden lg:block">
                 <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
