@@ -635,7 +635,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If panning is due to center button being pressed.
-    if (!this.panActive && !this.initLoad && this.mapService.centerPan$.value) {
+    if (!this.panActive && this.mapService.centerPan$.value) {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);

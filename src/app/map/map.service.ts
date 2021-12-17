@@ -530,7 +530,7 @@ export class MapService {
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
+      this.center(onInit);
       //Zoom out.
     } else if ((zoomOutBox > minPoint.y
       || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
@@ -539,41 +539,46 @@ export class MapService {
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
+      this.center(onInit);
+    }
+  }
+
+  /**
+   * Pans the map when center method is called to the map center.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  private centerPan(onInit = false): void {
+    let adjustedCenter = this.getMapCenterPoint();
+    const canvasCenter = this.getCanvasCenterPoint();
+    //Immediately move to center.
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    };
+    if (onInit) {
+      this.currentCanvasPoint$.next(adjustedCenter);
+    } else {
+      //
     }
   }
 
   /**
    * Smoothly sets the scale and pans the map to center.
-   *
-   * @param onInit Determines if this is called during mapCanvas init.
-   */
-  setCenterPanAndScale(onInit: boolean): void {
-    if (onInit) {
-      this.centerScale(onInit);
-      //TODO: set canvaspoint to map center.
-    } else {
-      setTimeout(() => {
-        this.centerScale(onInit);
-        //TODO: incrementally pan map to center.
-      }, 4);
-    }
-  }
-
-  /**
-   * Centers the map by changing this.currentCanvasPoint to the map center point.
+   * On init, immediately change the scale and position.
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
-    let adjustedCenter = this.getMapCenterPoint();
-    const canvasCenter = this.getCanvasCenterPoint();
-    adjustedCenter = {
-      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
-    };
-    this.currentCanvasPoint$.next(adjustedCenter);
-    this.setCenterPanAndScale(onInit);
+    if (onInit) {
+      this.centerScale(onInit);
+      this.centerPan(onInit);
+    } else {
+      setTimeout(() => {
+        this.centerScale(onInit);
+        this.centerPan(onInit);
+      }, 4);
+    }
   }
 
   /**
