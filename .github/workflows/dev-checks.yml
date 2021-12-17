@@ -10,7 +10,7 @@ jobs:
   # Checks that the Angular app conforms to standards
   lint-app:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 4
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 4
 
     steps:
     - uses: actions/checkout@v2
