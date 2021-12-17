@@ -19,7 +19,7 @@
         </div>
       </mat-chip-list>
     </div>
-    <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
+    <button *ngIf="isStation" data-testid="document-info-drawer" id="info-drawer-button-document" mat-icon-button matSuffix class="icon icon-top"
       (click)="toggleDrawer('documentInfo')" [disabled]="isDrawerOpen">
       <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500' "></i>
     </button>
@@ -31,7 +31,7 @@
         <mat-label>Document Name: </mat-label>
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name" (keyup)="updateDocumentNameBS()">
         <button data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
-      (click)="toggleDrawer('documentInfo')" [disabled]="isDrawerOpen">
+      (click)="toggleDrawer('documentInfo')" id="info-drawer-button-document" [disabled]="isDrawerOpen">
         <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500' "></i>
       </button>
     </mat-form-field>

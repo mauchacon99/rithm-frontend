@@ -1,6 +1,6 @@
 <app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation"></app-sub-header>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="h-full">
-  <mat-drawer #drawer mode="over" position="end">
+  <mat-drawer #drawer mode="over" position="end" disableClose="">
     <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
     <app-info-drawer *ngIf="drawerContext === 'stationInfo' || drawerContext === 'documentInfo'"></app-info-drawer>
   </mat-drawer>

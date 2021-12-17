@@ -16,6 +16,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
+  let sideNavService: SidenavDrawerService;
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;
 
@@ -34,6 +35,7 @@ describe('DocumentInfoHeaderComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: FormBuilder, useValue: formBuilder }
       ]
     })
@@ -43,6 +45,7 @@ describe('DocumentInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoHeaderComponent);
     component = fixture.componentInstance;
+    sideNavService = TestBed.inject(SidenavDrawerService);
     component.documentInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
@@ -167,5 +170,23 @@ describe('DocumentInfoHeaderComponent', () => {
       appendedName: component.appendedDocumentName
     };
     expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(documentName);
+  });
+
+  it('should disable info-drawer-button once the info-drawer is opened', () => {
+    component.isDocumentNameEditable = true;
+    sideNavService.isDrawerOpen$.next(true);
+    fixture.detectChanges();
+    expect(Boolean(component.isDrawerOpen)).toBeTrue();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeTruthy();
+  });
+
+  it('should enable info-drawer-button once the info-drawer is closed', () => {
+    component.isDocumentNameEditable = true;
+    sideNavService.isDrawerOpen$.next(false);
+    fixture.detectChanges();
+    expect(Boolean(component.isDrawerOpen)).toBeFalse();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeFalsy();
   });
 });
