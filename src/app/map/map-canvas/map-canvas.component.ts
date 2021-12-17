@@ -959,6 +959,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapService.currentMousePoint$.next(moveInput);
         }
       }
+    } else if (this.mapMode === MapMode.StationAdd && this.mapService.stationElements.some(e => e.isAddingConnected === true)) {
+        this.mapService.currentMousePoint$.next(moveInput);
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
