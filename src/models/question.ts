@@ -1,4 +1,4 @@
-import { QuestionFieldType } from '.';
+import { QuestionFieldType, QuestionAnswer } from '.';
 import { PossibleAnswer } from './possible-answer';
 
 /**
@@ -41,4 +41,6 @@ export interface Question {
   /** Whether the added item is a possibleAnswer (FrontEndOnly). */
   isPossibleAnswer?: boolean;
 
+  /** The answers to each question.*/
+  answer?: QuestionAnswer;
 }

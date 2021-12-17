@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point, User } from 'src/models';
+import { MapMode, Point, User, MapItemStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -112,9 +112,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @returns Whether to show the backdrop.
    */
-     get drawerHasBackdrop(): boolean {
-      return this.sidenavDrawerService.drawerHasBackdrop;
-    }
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
@@ -174,7 +174,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.mapService.matMenuStatus$.next(false);
         }
       });
-      this.sidenavDrawerService.drawerContext$
+    this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (data === 'connectionInfo' || data === 'stationInfo') {
@@ -258,21 +258,28 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Zooms the map in to center.
+   * Center the map on its center point.
+   */
+  center(): void {
+    this.mapService.center();
+  }
+
+  /**
+   * Zooms the map in to center of screen.
    */
   zoomIn(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount + 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**
-   * Zooms the map out from center.
+   * Zooms the map out from center of screen.
    */
   zoomOut(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount - 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**
@@ -331,12 +338,32 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Creates a new station with connection line from the current/selected station.
+   */
+  createConnectedStation(): void {
+    const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
+    if (index >= 0) {
+        this.mapService.stationElements[index].isAddingConnected = true;
+        this.mapService.mapMode$.next(MapMode.StationAdd);
+    }
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+   get mapHasChanges(): boolean {
+    return this.mapService.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }

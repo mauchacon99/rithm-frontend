@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService, MockUserService, MockDocumentService } from 'src/mocks';
+import { MockErrorService, MockStationService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -14,11 +14,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DialogOptions } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
 
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
   let fixture: ComponentFixture<DocumentInfoDrawerComponent>;
+  let sideNavService: SidenavDrawerService;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
   const formBuilder = new FormBuilder();
@@ -34,7 +38,9 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: FormGroup, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: PopupService, useClass: MockPopupService }
       ],
       imports: [
         MatCheckboxModule,
@@ -53,6 +59,8 @@ describe('DocumentInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoDrawerComponent);
     component = fixture.componentInstance;
+    sideNavService = TestBed.inject(SidenavDrawerService);
+    component.documentRithmId = documentId;
     fixture.detectChanges();
   });
 
@@ -81,7 +89,10 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should get document last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(documentId);
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
   });
@@ -94,4 +105,59 @@ describe('DocumentInfoDrawerComponent', () => {
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
+
+  it('should return the user assigned to the document', () => {
+    const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
+    component.stationRithmId = stationId;
+    component['getAssignedUserToDocument'](documentId);
+
+    expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
+  });
+
+  it('should show loading-last-update while get data last updated', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId
+    });
+    fixture.detectChanges();
+    expect(component.lastUpdatedLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-last-update');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should delete a document', async () => {
+    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+
+    await component.deleteDocument();
+
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
+  });
+
+
+  it('should open a confirm dialog to delete the document', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message: 'The document will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+
+    await component.deleteDocument();
+
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+
+  it('should call the confirm dialog when clicking the delete button of document', fakeAsync(() => {
+    component.isUserAdminOrOwner = true;
+    fixture.detectChanges();
+    const deleteDocumentSpy = spyOn(component, 'deleteDocument');
+    const buttonDelete = fixture.debugElement.nativeElement.querySelector('button.priority');
+    expect(buttonDelete).toBeTruthy();
+    buttonDelete.click();
+    tick();
+    expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
+  }));
+
 });
