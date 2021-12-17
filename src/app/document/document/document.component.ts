@@ -5,10 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, DocumentAutoFlow } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, DocumentAutoFlow, QuestionFieldType } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 
 /**
  * Main component for viewing a document.
@@ -244,40 +244,60 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Save the document answers.
-   *
-   * @param answerDocument The answers so document.
+   * Save document answers and auto flow.
    */
-  saveDocumentAnswer(answerDocument: DocumentAnswer[]): void {
-    this.documentLoading = true;
-    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, answerDocument)
-      .pipe(first())
-      .subscribe({
-        next: (docAnswers) => {
-          if (docAnswers) {
-            this.documentAnswer = docAnswers;
-          }
-          this.documentLoading = false;
-        }, error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
+  saveDocumentAnswersAndAutoFlow(): void {
+    /** Parameter temporary save answers to document. */
+    const documentAnswer: DocumentAnswer[] = [{
+      questionRithmId: 'Dev 1',
+      documentRithmId: '123-654-789',
+      stationRithmId: '741-951-753',
+      value: 'Answer Dev',
+      file: 'dev.txt',
+      filename: 'dev',
+      type: QuestionFieldType.Email,
+      rithmId: '789-321-456',
+      questionUpdated: true,
+    },
+    {
+      questionRithmId: 'Dev 2',
+      documentRithmId: '123-654-789-856',
+      stationRithmId: '741-951-753-741',
+      value: 'Answer Dev2',
+      file: 'dev2.txt',
+      filename: 'dev2',
+      type: QuestionFieldType.City,
+      rithmId: '789-321-456-789',
+      questionUpdated: false,
+    }];
 
-  /**
-   * Flow a document.
-   *
-   * @param documentAutoFlow Params for add flow to Document.
-   */
-   autoFlowDocument(documentAutoFlow: DocumentAutoFlow): void {
-    this.documentService.autoFlowDocument(documentAutoFlow)
+    /** Parameter temporary for auto flow the document. */
+    const documentAutoFlow: DocumentAutoFlow = {
+      stationRithmId: this.documentInformation.stationRithmId,
+      documentRithmId: this.documentInformation.documentRithmId,
+      testMode: true
+    };
+    console.log(this.documentInformation.documentRithmId, documentAnswer);
+
+    this.documentLoading = true;
+    const petitionsSaveDocument = [
+      // Save the document answers.
+      // Second parameter temporary.
+      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, documentAnswer),
+
+      // Flow a document.
+      // Parameter temporary.
+      this.documentService.autoFlowDocument(documentAutoFlow),
+    ];
+
+    forkJoin(petitionsSaveDocument)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.documentLoading = false;
+        },
         error: (error: unknown) => {
+          this.documentLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
