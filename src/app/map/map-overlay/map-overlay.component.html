@@ -2,18 +2,18 @@
 <div class="absolute right-0 left-0 bottom-0 md:left-auto md:bottom-auto z-40">
   <mat-drawer-container [hasBackdrop]="drawerHasBackdrop"
     [ngClass]="{'deleteDrawer left-0 right-0 bottom-0': deleteDrawer.opened}">
-    <mat-drawer #deleteDrawer mode="over" position="end">
+    <mat-drawer #deleteDrawer mode="over" position="end" class="mapStationInfo" >
       <app-connection-info-drawer *ngIf="drawerMode === 'connectionInfo'"></app-connection-info-drawer>
       <app-info-drawer *ngIf="drawerMode === 'stationInfo'"></app-info-drawer>
     </mat-drawer>
     <mat-drawer-content>
-      <div *ngIf="mapScale > zoomBuild && isAdmin"
+      <div *ngIf="mapScale > zoomBuild && isAdmin" [ngClass]="{'absolute left-0 right-0 bottom-0': deleteDrawer.opened}"
         class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2">
-        <button mat-raised-button color="accent" *ngIf="!isBuilding" (click)="build()" data-testid="build"
+        <button mat-raised-button color="accent" *ngIf="!isBuilding" [disabled]="mapDataLoading" (click)="build()" data-testid="build"
           class="h-9 md:w-auto w-full">Build</button>
-        <button mat-raised-button color="basic" *ngIf="isBuilding" (click)="cancel()" data-testid="cancel"
+        <button mat-raised-button color="basic" *ngIf="isBuilding" [disabled]="mapDataLoading" (click)="cancel()" data-testid="cancel"
           class="h-9 w-1/2 md:w-auto">Cancel</button>
-        <button mat-raised-button [disabled]="!mapHasChanges" color="accent" *ngIf="isBuilding" (click)="publish()" data-testid="publish"
+        <button mat-raised-button color="accent" *ngIf="isBuilding" [disabled]="mapDataLoading || !mapHasChanges" (click)="publish()" data-testid="publish"
           class="h-9 w-1/2 md:w-auto">Publish</button>
       </div>
     </mat-drawer-content>
