@@ -257,7 +257,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.documentLoading = true;
     const requestArray = [
       // Save the document answers.
-      // Second parameter temporary.
       this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer),
 
       // Flow a document.
