@@ -77,6 +77,7 @@ describe('MapOverlayComponent', () => {
       stationElementsArray.push(newStation);
     }
     component.stations = stationElementsArray;
+    component.mapHasChanges;
 
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
     component.cancel();

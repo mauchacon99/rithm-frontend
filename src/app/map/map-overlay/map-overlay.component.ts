@@ -247,8 +247,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     this.mapService.matMenuStatus$.next(true);
-    const changesPresent = this.stations.filter((station) => station.status !== MapItemStatus.Normal);
-    if ( changesPresent.length > 0 ) {
+    if ( this.mapHasChanges ) {
       const confirm = await this.popupService.confirm({
         title: 'Confirmation',
         message: `Are you sure you want to cancel these changes? All map changes will be lost`,
