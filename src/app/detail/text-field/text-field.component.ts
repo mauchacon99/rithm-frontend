@@ -53,6 +53,9 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** The label tag for each field. */
   @Input() labelTag!: string;
 
+  /**Whether the instance comes from station or document */
+  @Input() isStation = true;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService
@@ -155,8 +158,10 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @param field The field to emit.
    */
    updateFieldPrompt(field: Question): void{
-    field.prompt = this.textFieldForm.controls[this.field.questionType].value;
-    this.stationService.updateStationQuestionInTemplate(field);
+     if (this.isStation){
+      field.prompt = this.textFieldForm.controls[this.field.questionType].value;
+      this.stationService.updateStationQuestionInTemplate(field);
+    }
   }
 
   /**
