@@ -59,24 +59,7 @@ describe('MapOverlayComponent', () => {
   });
 
   it('should display confirmation prompt when cancel', () => {
-    const stationElementsArray: StationMapElement[] = [];
-    for (let i = 0; i < 4; i++) {
-      const newStation = new StationMapElement({
-        rithmId: uuidv4(),
-        stationName: 'Untitled Station',
-        mapPoint: {
-          x: 12,
-          y: 15
-        },
-        noOfDocuments: 0,
-        previousStations: [],
-        nextStations: [],
-        status: MapItemStatus.Created,
-        notes: ''
-      });
-      stationElementsArray.push(newStation);
-    }
-    component.stations = stationElementsArray;
+    spyOnProperty(TestBed.inject(MapService), 'mapHasChanges').and.returnValue(true);
     component.mapHasChanges;
 
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');

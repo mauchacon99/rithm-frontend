@@ -19,6 +19,9 @@ export class MockMapService {
   /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
+  /** The station elements displayed on the map. */
+  stationElements: StationMapElement[] = [];
+
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.Build);
 
@@ -276,5 +279,14 @@ export class MockMapService {
       x: this.getMapX(canvasPoint.x),
       y: this.getMapY(canvasPoint.y)
     };
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 }
