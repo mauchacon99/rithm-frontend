@@ -27,6 +27,9 @@ export class MapService {
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 

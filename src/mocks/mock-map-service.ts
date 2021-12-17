@@ -43,6 +43,9 @@ export class MockMapService {
   /** The number of zoom levels to increment or decrement. */
   zoomCount$ = new BehaviorSubject(0);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
    *
