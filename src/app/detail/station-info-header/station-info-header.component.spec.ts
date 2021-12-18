@@ -13,7 +13,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
   let fixture: ComponentFixture<StationInfoHeaderComponent>;
-  let sideNavService: SidenavDrawerService;
   const stationInformation: StationInformation = {
     rithmId: 'E204F369-386F-4E41',
     name: 'Dry Goods & Liquids',
@@ -112,7 +111,6 @@ describe('StationInfoHeaderComponent', () => {
     component.stationInformation = stationInformation;
     component.stationEditMode = true;
     formGroup = component.stationNameForm;
-    sideNavService = TestBed.inject(SidenavDrawerService);
     fixture.detectChanges();
   });
 
@@ -154,7 +152,9 @@ describe('StationInfoHeaderComponent', () => {
   });
 
   it('should disable info-drawer-button once the info-drawer is opened', () => {
-    sideNavService.isDrawerOpen$.next(true);
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
+    component.stationEditMode = true;
+    component.isDrawerOpen;
     fixture.detectChanges();
     expect(Boolean(component.isDrawerOpen)).toBeTrue();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-station');
@@ -162,7 +162,9 @@ describe('StationInfoHeaderComponent', () => {
   });
 
   it('should enable info-drawer-button once the info-drawer is closed', () => {
-    sideNavService.isDrawerOpen$.next(false);
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
+    component.stationEditMode = true;
+    component.isDrawerOpen;
     fixture.detectChanges();
     expect(Boolean(component.isDrawerOpen)).toBeFalse();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-station');

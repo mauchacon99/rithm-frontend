@@ -16,7 +16,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
-  let sideNavService: SidenavDrawerService;
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;
 
@@ -45,7 +44,6 @@ describe('DocumentInfoHeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentInfoHeaderComponent);
     component = fixture.componentInstance;
-    sideNavService = TestBed.inject(SidenavDrawerService);
     component.documentInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
@@ -173,8 +171,9 @@ describe('DocumentInfoHeaderComponent', () => {
   });
 
   it('should disable info-drawer-button once the info-drawer is opened', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
     component.isDocumentNameEditable = true;
-    sideNavService.isDrawerOpen$.next(true);
+    component.isDrawerOpen;
     fixture.detectChanges();
     expect(Boolean(component.isDrawerOpen)).toBeTrue();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
@@ -182,8 +181,9 @@ describe('DocumentInfoHeaderComponent', () => {
   });
 
   it('should enable info-drawer-button once the info-drawer is closed', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
     component.isDocumentNameEditable = true;
-    sideNavService.isDrawerOpen$.next(false);
+    component.isDrawerOpen;
     fixture.detectChanges();
     expect(Boolean(component.isDrawerOpen)).toBeFalse();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');

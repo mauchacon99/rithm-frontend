@@ -5,7 +5,6 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 /**
  * Reusable component for the station information header.
@@ -35,9 +34,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   /** Field to change station name. */
   nameField!: Question;
 
-  /** Whether the info-drawer has been opened/closed. */
-  isDrawerOpen = false;
-
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -50,11 +46,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       name: ['']
     });
 
-    this.sidenavDrawerService.isDrawerOpen$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((isOpened) => {
-      this.isDrawerOpen = isOpened;
-    });
   }
 
   /** Set this.info. */
@@ -80,6 +71,15 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    */
    get drawerHasBackdrop(): boolean {
     return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Whether the info-drawer is opened.
+   *
+   * @returns Return true if info-drawer is opened, false otherwise.
+   */
+  get isDrawerOpen(): boolean{
+    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
