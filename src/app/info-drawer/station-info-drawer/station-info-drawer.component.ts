@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
+import { MapService } from 'src/app/map/map.service';
 
 /**
  * Component for info station.
@@ -44,11 +45,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Is component viewed in station edit mode. */
   editMode = false;
 
-  /** Station information object passed from parent. */
+  /** Station information object. */
   stationInformation!: StationInformation;
+
+  /** Station Id passed from parent. */
+  stationRithmId = '';
 
   /** Edit Mode. */
   stationName = '';
+
+  /** Notes for the station. */
+  stationNotes?: string;
 
   /** If component is being viewed on the map, what mode is the map in? */
   mapMode?: MapMode;
@@ -74,6 +81,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Allowing access to all MapMode enums in HTML.*/
   mapModeEnum = MapMode;
 
+  /** The priority for current station once the info is loaded.*/
+  stationPriority: number | '--' = '--';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -83,20 +93,28 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private route: ActivatedRoute,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((data: any) => {
         const dataDrawer = data as StationInfoDrawerData;
         if (dataDrawer) {
           this.editMode = dataDrawer.editMode;
-          this.stationInformation = dataDrawer.stationInformation as StationInformation;
+          this.stationRithmId = dataDrawer.stationRithmId;
           this.stationName = dataDrawer.stationName;
           this.mapMode = dataDrawer.mapMode;
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
+          this.stationNotes = dataDrawer.notes;
+          this.editMode = dataDrawer.editMode;
+          if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
+            this.getStationDocumentGenerationStatus();
+          }
         }
+        this.getStationInfo();
       });
 
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
@@ -110,8 +128,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.getLastUpdated(this.stationInformation.rithmId);
-      this.getStationDocumentGenerationStatus(this.stationInformation.rithmId);
+      this.getLastUpdated();
+      this.getStationDocumentGenerationStatus();
 
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
@@ -139,12 +157,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get station document generation status.
-   *
-   * @param stationId The id of the station return status document.
    */
-  getStationDocumentGenerationStatus(stationId: string): void {
+  getStationDocumentGenerationStatus(): void {
     this.docGenLoading = true;
-    this.stationService.getStationDocumentGenerationStatus(stationId)
+    this.stationService.getStationDocumentGenerationStatus(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (status: DocumentGenerationStatus) => {
@@ -191,13 +207,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get the last updated date for a specific station.
-   *
-   * @param stationId The id of the station that the document is in.
    */
-  getLastUpdated(stationId: string): void {
+  getLastUpdated(): void {
     this.stationLoading = true;
     this.lastUpdatedLoading = true;
-    this.stationService.getLastUpdated(stationId)
+    this.stationService.getLastUpdated(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (updatedDate) => {
@@ -231,22 +245,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigates the user back to dashboard and displays a message about the invalid params.
-   */
-  private handleInvalidParams(): void {
-    this.errorService.displayError(
-      'Unable to retrieve the last updated time.',
-      new Error('Invalid params for document')
-    );
-  }
-
-  /**
    * This will delete the current station.
-   *
-   * @param stationId Target station to be deleted.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async deleteStation(stationId: string): Promise<void> {
+  async deleteStation(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
       message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
@@ -255,7 +257,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       important: true,
     });
     if (response) {
-      this.stationService.deleteStation(stationId)
+      this.stationService.deleteStation(this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: () => {
@@ -277,7 +279,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param statusNew New status the station update.
    */
   updateStatusStation(statusNew: MatRadioChange): void {
-    this.updateStationDocumentGenerationStatus(this.stationInformation.rithmId, statusNew.value);
+    this.updateStationDocumentGenerationStatus(this.stationRithmId, statusNew.value);
   }
 
   /**
@@ -287,13 +289,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getStationInfo(): void {
     this.stationLoading = true;
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.stationService.getStationInfo(this.stationInformation.rithmId)
+      this.stationService.getStationInfo(this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: (stationInfo) => {
             this.stationLoading = false;
             if (stationInfo) {
               this.stationInformation = stationInfo;
+              this.stationPriority = stationInfo.priority;
             }
           },
           error: (error: unknown) => {
@@ -344,8 +347,25 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       confirmNavigation = confirm;
     }
     if (confirmNavigation || !this.editMode) {
-      this.router.navigate([`/station/${this.stationInformation.rithmId}`]);
+      this.router.navigate([`/station/${this.stationRithmId}`]);
     }
+  }
+
+  /**
+   * Reporting if the name or notes on a station changed.
+   */
+  reportNewStationMapChange(): void {
+    if (this.stationNotes === undefined) {
+      throw new Error('Station notes not found');
+    }
+    const openStation = this.mapService.stationElements.find((station) => this.stationInformation.rithmId === station.rithmId);
+    if (openStation === undefined) {
+      throw new Error('Station was not found.');
+    }
+    openStation.stationName = this.stationName;
+    openStation.notes = this.stationNotes;
+    openStation.markAsUpdated();
+    this.mapService.stationElementsChanged$.next(true);
   }
 
   /**

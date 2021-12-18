@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 // eslint-disable-next-line max-len
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -252,6 +252,44 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
+  it('should return previous questions', () => {
+    const expectPreviousQuestions: Question[] = [
+      {
+        rithmId: '',
+        questionType: QuestionFieldType.City,
+        prompt: 'string',
+        isPrivate: true,
+        isEncrypted: true,
+        isReadOnly: true,
+        isRequired: true,
+        possibleAnswers: [
+          {
+            text: 'string',
+            default: true
+          }
+        ],
+        answer: {
+          questionRithmId: 'string',
+          referAttribute: 'string',
+          asArray: [],
+          asInt: 0,
+          asDecimal: 0,
+          asString: 'string',
+          asDate: '2021-12-14T14:10:31.030Z',
+          value: 'string'
+        },
+        children: []
+      }
+    ];
+
+    const getPrivate = true;
+
+    service.getDocumentPreviousQuestions(documentId, stationId, getPrivate)
+      .subscribe((responsePreviousQuestion) => {
+        expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
+      });
+  });
+
   it('should delete a document', () => {
     service.deleteDocument(documentId)
       .subscribe((response) => {
@@ -265,7 +303,6 @@ describe('DocumentService', () => {
   });
 
   it('should return the user assigned to the document', () => {
-
     const expectedResponse: StationRosterMember[] = [{
       rithmId: '789-321-456-789',
       firstName: 'John',
@@ -278,5 +315,33 @@ describe('DocumentService', () => {
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse);
       });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user?documentId=${documentId}&stationId=${stationId}&getOnlyCurrentStation=true`);
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('documentId')).toBe(documentId);
+    expect(req.request.params.get('stationId')).toBe(stationId);
+    expect(Boolean(req.request.params.get('getOnlyCurrentStation'))).toBeTrue();
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should flow a document', () => {
+    const expectedData: DocumentAutoFlow = {
+      stationRithmId: stationId,
+      documentRithmId: documentId,
+      testMode: true
+    };
+
+    service.autoFlowDocument(expectedData)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedData);
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
