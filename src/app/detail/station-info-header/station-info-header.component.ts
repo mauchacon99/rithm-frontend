@@ -63,16 +63,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
-
-  /**
-   * Whether to show the backdrop for the drawer.
-   *
-   * @returns Whether to show the backdrop.
-   */
-   get drawerHasBackdrop(): boolean {
-    return this.sidenavDrawerService.drawerHasBackdrop;
-  }
-
   /**
    * Whether the info-drawer is opened.
    *

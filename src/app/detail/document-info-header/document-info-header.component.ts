@@ -89,15 +89,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Whether to show the backdrop for the drawer.
-   *
-   * @returns Whether to show the backdrop.
-   */
-   get drawerHasBackdrop(): boolean {
-    return this.sidenavDrawerService.drawerHasBackdrop;
-  }
-
-  /**
    * Whether the info-drawer is opened.
    *
    * @returns Return true if info-drawer is opened, false otherwise.
