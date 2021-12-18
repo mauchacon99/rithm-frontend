@@ -56,6 +56,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** Get Document Name from BehaviorSubject. */
   private documentName = '';
 
+  /** Show Hidden accordion all field. */
+  accordionFieldAllExpanded = false;
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -273,7 +276,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
    *
    * @param documentAutoFlow Params for add flow to Document.
    */
-   autoFlowDocument(documentAutoFlow: DocumentAutoFlow): void {
+  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): void {
     this.documentService.autoFlowDocument(documentAutoFlow)
       .pipe(first())
       .subscribe({
