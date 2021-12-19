@@ -43,6 +43,12 @@ export class MockMapService {
   /** Informs the map when station elements have changed. */
   stationElementsChanged$ = new BehaviorSubject(false);
 
+  /** Checks if there should be panning towards the center of the map. */
+  centerPan$ = new BehaviorSubject(false);
+
+  /** Passes pan info to the map-canvas. */
+  centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
+
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
    *

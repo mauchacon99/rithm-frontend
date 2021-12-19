@@ -431,11 +431,12 @@ export class MapService {
   }
 
   /**
-   * Set a bounding box around the edge of the map.
+   * Set a bounding box around the edge of the map to calculate centering the map.
+   * Used to put some space between minMapPoints/maxMapPoints and the screen edges.
    *
    * @returns A number representing how for out from the edge of the screen a box should be.
    */
-  boundingBox(): number {
+  centerBoundingBox(): number {
     //Dynamically set the size of the bounding box based on screen size.
     if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
       //Set the size of the box based on screen size.
@@ -476,7 +477,7 @@ export class MapService {
   }
 
   /**
-   * Gets the bottom-left mapPoint.
+   * Gets the bottom-right mapPoint.
    *
    * @returns A point.
    */
@@ -518,8 +519,8 @@ export class MapService {
     const maxPoint = this.getMaxCanvasPoint();
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
-    const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
-    const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
+    const zoomInBox = this.centerBoundingBox() + CENTER_ZOOM_BUFFER;
+    const zoomOutBox = this.centerBoundingBox() - CENTER_ZOOM_BUFFER;
 
     //Zoom in.
     if ((zoomInBox < minPoint.y
@@ -549,17 +550,42 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   private centerPan(onInit = false): void {
+    console.log('pan');
     let adjustedCenter = this.getMapCenterPoint();
     const canvasCenter = this.getCanvasCenterPoint();
-    //Immediately move to center.
+    //The point on the canvas needed to center of the map.
     adjustedCenter = {
       x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
     };
     if (onInit) {
+      //On Init, immediately set the currentCanvasPoint to the center of the map.
       this.currentCanvasPoint$.next(adjustedCenter);
     } else {
-      //
+      const totalPanNeeded = {
+        x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+        y: this.currentCanvasPoint$.value.y - adjustedCenter.y
+      };
+
+      //initialize variable needed to set panVelocity.
+      const panAmount: Point = { x: 0, y: 0 };
+
+      //Set x axis of panAmount.
+      panAmount.x = totalPanNeeded.x * .1;
+
+      //Set y axis of panAmount.
+      panAmount.y = totalPanNeeded.y * .1;
+
+      if ( Math.abs(panAmount.x) >= 1 || Math.abs(panAmount.y) >= 1 ) {
+        //nextPanVelocity on map canvas will be set to this.
+        this.centerPanVelocity$.next(panAmount);
+        this.centerPan$.next(true);
+        this.center(onInit);
+      } else {
+        this.currentCanvasPoint$.next(adjustedCenter);
+        this.centerPanVelocity$.next({ x: 0, y: 0 });
+        this.centerPan$.next(false);
+      }
     }
   }
 
@@ -571,11 +597,41 @@ export class MapService {
    */
   center(onInit = false): void {
     if (onInit) {
-      this.centerScale(onInit);
+      // this.centerScale(onInit);
       this.centerPan(onInit);
     } else {
+      let panInc = 0;
+
+      let adjustedCenter = this.getMapCenterPoint();
+      const canvasCenter = this.getCanvasCenterPoint();
+      //The point on the canvas needed to center of the map.
+      adjustedCenter = {
+        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+      };
+
+      const totalPanNeeded = {
+        x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+        y: this.currentCanvasPoint$.value.y - adjustedCenter.y
+      };
+
+      console.log(totalPanNeeded);
+
+      for ( let panAmount = { x: totalPanNeeded.x, y: totalPanNeeded.y};
+        Math.abs(panAmount.x) <= 1 || Math.abs(panAmount.y) <= 1;
+        panInc++ ) {
+        console.log('hello');
+        //Set x axis of panAmount.
+        panAmount.x = totalPanNeeded.x * .1;
+
+        //Set y axis of panAmount.
+        panAmount.y = totalPanNeeded.y * .1;
+      }
+
+      console.log(panInc);
+
       setTimeout(() => {
-        this.centerScale(onInit);
+        // this.centerScale(onInit);
         this.centerPan(onInit);
       }, 4);
     }
