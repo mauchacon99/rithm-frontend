@@ -550,23 +550,78 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   private centerPan(onInit = false): void {
-    console.log('pan');
     let adjustedCenter = this.getMapCenterPoint();
     const canvasCenter = this.getCanvasCenterPoint();
+
     //The point on the canvas needed to center of the map.
     adjustedCenter = {
       x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
     };
-    if (onInit) {
-      //On Init, immediately set the currentCanvasPoint to the center of the map.
-      this.currentCanvasPoint$.next(adjustedCenter);
-    } else {
-      const totalPanNeeded = {
-        x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-        y: this.currentCanvasPoint$.value.y - adjustedCenter.y
-      };
 
+    //On Init, immediately set the currentCanvasPoint to the center of the map.
+    if (onInit) {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      return;
+    }
+
+    const totalPanNeeded = {
+      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.currentCanvasPoint$.value.y - adjustedCenter.y
+    };
+
+    //initialize variable needed to set panVelocity.
+    const panAmount: Point = { x: 0, y: 0 };
+
+    //Set x axis of panAmount.
+    panAmount.x = totalPanNeeded.x * .1;
+
+    //Set y axis of panAmount.
+    panAmount.y = totalPanNeeded.y * .1;
+
+    if ( Math.abs(panAmount.x) >= 1 || Math.abs(panAmount.y) >= 1 ) {
+      //nextPanVelocity on map canvas will be set to this.
+      this.centerPanVelocity$.next(panAmount);
+      this.centerPan$.next(true);
+    } else {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      this.centerPanVelocity$.next({ x: 0, y: 0 });
+      this.centerPan$.next(false);
+    }
+  }
+
+  /**
+   * Calls the center() method a number of times equal to the local variable: centerCount.
+   *
+   * @param onInit Remove delay if center is called when map-canvas initializes.
+   */
+  handleCenter(onInit = false): void {
+    //On init, simply call center.
+    if (onInit) {
+      this.center(onInit);
+      return;
+    }
+
+    //get centerCount.
+    let centerCount = 0;
+
+    let adjustedCenter = this.getMapCenterPoint();
+    let canvasCenter = this.getCanvasCenterPoint();
+
+    //The point on the canvas needed to center the map.
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    };
+
+    const mockCanvasPoint = this.deepCopy(this.currentCanvasPoint$.value);
+
+    let totalPanNeeded = {
+      x: mockCanvasPoint.x - adjustedCenter.x,
+      y: mockCanvasPoint.y - adjustedCenter.y
+    };
+
+    for ( totalPanNeeded; Math.abs(totalPanNeeded.x) >= 1 || Math.abs(totalPanNeeded.y) >= 1; centerCount++ ) {
       //initialize variable needed to set panVelocity.
       const panAmount: Point = { x: 0, y: 0 };
 
@@ -576,16 +631,42 @@ export class MapService {
       //Set y axis of panAmount.
       panAmount.y = totalPanNeeded.y * .1;
 
-      if ( Math.abs(panAmount.x) >= 1 || Math.abs(panAmount.y) >= 1 ) {
-        //nextPanVelocity on map canvas will be set to this.
-        this.centerPanVelocity$.next(panAmount);
-        this.centerPan$.next(true);
+      mockCanvasPoint.x -= panAmount.x;
+      mockCanvasPoint.y -= panAmount.y;
+
+      adjustedCenter = this.getMapCenterPoint();
+      canvasCenter = this.getCanvasCenterPoint();
+
+      //The point on the canvas needed to center the map.
+      adjustedCenter = {
+        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+      };
+
+      totalPanNeeded = {
+        x: mockCanvasPoint.x - adjustedCenter.x,
+        y: mockCanvasPoint.y - adjustedCenter.y
+      };
+    }
+
+    console.log(centerCount);
+
+    const centerLogic = () => {
+      if (centerCount > 0) {
         this.center(onInit);
-      } else {
-        this.currentCanvasPoint$.next(adjustedCenter);
-        this.centerPanVelocity$.next({ x: 0, y: 0 });
-        this.centerPan$.next(false);
+        --centerCount;
+        if (centerCount > 0) {
+          this.handleCenter(onInit);
+        }
       }
+    };
+
+    if (!onInit) {
+      setTimeout(() => {
+        centerLogic();
+      }, 4);
+    } else {
+      centerLogic();
     }
   }
 
@@ -595,46 +676,9 @@ export class MapService {
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
-  center(onInit = false): void {
-    if (onInit) {
-      // this.centerScale(onInit);
-      this.centerPan(onInit);
-    } else {
-      let panInc = 0;
-
-      let adjustedCenter = this.getMapCenterPoint();
-      const canvasCenter = this.getCanvasCenterPoint();
-      //The point on the canvas needed to center of the map.
-      adjustedCenter = {
-        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
-      };
-
-      const totalPanNeeded = {
-        x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-        y: this.currentCanvasPoint$.value.y - adjustedCenter.y
-      };
-
-      console.log(totalPanNeeded);
-
-      for ( let panAmount = { x: totalPanNeeded.x, y: totalPanNeeded.y};
-        Math.abs(panAmount.x) <= 1 || Math.abs(panAmount.y) <= 1;
-        panInc++ ) {
-        console.log('hello');
-        //Set x axis of panAmount.
-        panAmount.x = totalPanNeeded.x * .1;
-
-        //Set y axis of panAmount.
-        panAmount.y = totalPanNeeded.y * .1;
-      }
-
-      console.log(panInc);
-
-      setTimeout(() => {
-        // this.centerScale(onInit);
-        this.centerPan(onInit);
-      }, 4);
-    }
+  center(onInit: boolean): void {
+    // this.centerScale(onInit);
+    this.centerPan(onInit);
   }
 
   /**

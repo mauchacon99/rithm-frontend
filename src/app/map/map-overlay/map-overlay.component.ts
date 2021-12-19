@@ -261,7 +261,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Center the map on its center point.
    */
   center(): void {
-    this.mapService.center();
+    this.mapService.handleCenter();
   }
 
   /**
