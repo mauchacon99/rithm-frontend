@@ -345,6 +345,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Creates a new station with connection line from the current/selected station.
    */
   createConnectedStation(): void {
+    this.mapService.disableConnectedStationMode();
     const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
     if (index >= 0) {
         this.mapService.stationElements[index].isAddingConnected = true;
