@@ -87,6 +87,15 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether the info-drawer is opened.
+   *
+   * @returns Return true if info-drawer is opened, false otherwise.
+   */
+   get isDrawerOpen(): boolean{
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
