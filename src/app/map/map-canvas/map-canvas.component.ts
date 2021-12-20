@@ -1006,7 +1006,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const moveFromStartX = this.eventStartCoords.x - moveInput.x;
       const moveFromStartY = this.eventStartCoords.y - moveInput.y;
       if (Math.abs(moveFromStartX) > 5 || Math.abs(moveFromStartY) > 5) {
-        this.connectionLineDrag = true;
+        this.onConnectionDrag(moveContext);
       }
       if (this.connectionLineDrag) {
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
@@ -1168,8 +1168,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   onConnectionDrag(contextPoint: Point): void {
      for (const connectionLine of this.connections) {
        connectionLine.checkElementHover(contextPoint, this.context);
-       if (connectionLine.hoverActive) {
+       if (connectionLine.hoverActive && !this.connectionLineDrag) {
+         // Created for future tasks.
+         // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
+         // const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
+         // if ( !startStation || !endStation ){
+         //   throw new Error('This start or end station was not found.');
+         // }
+         // const storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
          this.mapService.removeConnectionLine(connectionLine.startStationRithmId, connectionLine.endStationRithmId);
+         this.connectionLineDrag = true;
          break;
        }
      }
