@@ -165,14 +165,11 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const assignedUser: StationRosterMember[] = [{
-        rithmId: '789-321-456-789',
-        firstName: 'John',
-        lastName: 'Christopher',
-        email: 'johnny.depp@gmail.com',
-        isAssigned: true
-      }];
-      return of(assignedUser).pipe(delay(1000));
+      const params = new HttpParams()
+        .set('documentId', documentId)
+        .set('stationId', stationId)
+        .set('getOnlyCurrentStation', getOnlyCurrentStation);
+      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user`, { params });
     }
   }
 
