@@ -420,6 +420,6 @@ describe('DocumentComponent', () => {
 
     const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     component.saveDocumentAnswer();
-    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
+    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
   });
 });
