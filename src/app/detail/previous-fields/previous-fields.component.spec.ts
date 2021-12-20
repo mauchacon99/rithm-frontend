@@ -110,6 +110,10 @@ describe('PreviousFieldsComponent', () => {
   });
 
   it('should show loading indicators while get previous questions the document', () => {
+    component.isStation = false;
+    component.isPrivate = false;
+    component.documentId = documentId;
+    component.stationId = stationId;
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.isLoading).toBeTrue();
