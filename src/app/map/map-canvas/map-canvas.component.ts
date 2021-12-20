@@ -1,39 +1,20 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {StationMapElement} from 'src/helpers';
-import {
-  ConnectionMapElement,
-  FlowMapElement,
-  MapDragItem,
-  MapItemStatus,
-  MapMode,
-  Point,
-  StationElementHoverType,
-  StationInfoDrawerData,
-  StationInformation
-} from 'src/models';
-import {ConnectionElementService} from '../connection-element.service';
-import {
-  DEFAULT_MOUSE_POINT,
-  DEFAULT_SCALE,
-  MAX_PAN_VELOCITY,
-  MAX_SCALE,
-  MIN_SCALE,
-  PAN_DECAY_RATE,
-  PAN_TRIGGER_LIMIT,
-  SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT,
-  STATION_WIDTH,
-  ZOOM_VELOCITY
-} from '../map-constants';
-import {MapService} from '../map.service';
-import {StationElementService} from '../station-element.service';
-import {FlowElementService} from '../flow-element.service';
-import {StationDocumentsModalComponent} from 'src/app/shared/station-documents-modal/station-documents-modal.component';
-import {MatDialog} from '@angular/material/dialog';
-import {SidenavDrawerService} from 'src/app/core/sidenav-drawer.service';
-import {StationService} from 'src/app/core/station.service';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StationMapElement } from 'src/helpers';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
+  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { ConnectionElementService } from '../connection-element.service';
+import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
+  PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY } from '../map-constants';
+import { MapService } from '../map.service';
+import { StationElementService } from '../station-element.service';
+import { FlowElementService } from '../flow-element.service';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { StationService } from 'src/app/core/station.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -154,6 +135,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
         this.currentCanvasPoint = point;
+        this.drawElements();
+      });
+
+    this.mapService.stationElementsChanged$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stations = this.mapService.stationElements;
         this.drawElements();
       });
 
@@ -283,7 +271,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
-      //remove event from cache.
+      // remove event from cache.
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1);
@@ -1001,6 +989,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapService.currentMousePoint$.next(moveInput);
         }
       }
+      // Check for Add New Connected Station mode is enabled or not also draw a temporary line from station's node.
+    } else if (this.mapMode === MapMode.StationAdd && this.mapService.stationElements.some(e => e.isAddingConnected)) {
+        this.mapService.currentMousePoint$.next(moveInput);
     } else if (this.dragItem === MapDragItem.Connection) {
       //If it is a drag and not a click.
       const moveFromStartX = this.eventStartCoords.x - moveInput.x;
@@ -1218,7 +1209,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       priority: 1
     };
     const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: stationDataInfo,
+      stationRithmId: stationDataInfo.rithmId,
       stationName: station.stationName,
       editMode: this.mapMode === MapMode.Build,
       stationStatus: station.status,

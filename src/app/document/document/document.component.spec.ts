@@ -15,11 +15,11 @@ import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawe
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAnswer, QuestionFieldType } from 'src/models';
+import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -366,5 +366,43 @@ describe('DocumentComponent', () => {
     const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     component.saveDocumentAnswer(expectedAnswers);
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
+  });
+
+  it('should flow a document by calling the service', () => {
+    const expectedData: DocumentAutoFlow = {
+      stationRithmId: component.documentInformation.stationRithmId,
+      documentRithmId: component.documentInformation.documentRithmId,
+      testMode: true
+    };
+
+    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
+
+    component.autoFlowDocument(expectedData);
+
+    expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
+  });
+
+  it('should validate the form controls initial value', () => {
+    const form = component.documentForm.controls;
+    const expectFormFirst = ['documentTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['documentTemplateForm'].value).toBe('');
+  });
+
+  it('should disable the button if form is not valid', () => {
+    component.documentLoading = false;
+    component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeTruthy();
+  });
+
+  it('should show button as enabled if form is valid', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeFalsy();
   });
 });

@@ -1,6 +1,6 @@
 <div [formGroup]="textFieldForm">
   <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType === fieldTypeEnum.LongText,'information-field': field.questionType === fieldTypeEnum.Instructions}">
-    <mat-label>{{field?.prompt}}</mat-label>
+    <mat-label>{{labelTag}}</mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
       <i *ngIf="field.questionType === fieldTypeEnum.ShortText" class="fas fa-font"></i>
@@ -31,8 +31,8 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <input *ngIf="field.questionType !== fieldTypeEnum.LongText && field.questionType !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="field.questionType" autocomplete="off">
-    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="field.questionType">
+    <input *ngIf="field.questionType !== fieldTypeEnum.LongText && field.questionType !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="field.questionType" autocomplete="off" (blur)="updateFieldPrompt(field)">
+    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="field.questionType" (blur)="updateFieldPrompt(field)">
     </textarea>
   </mat-form-field>
 </div>

@@ -13,6 +13,14 @@ import {
   BUTTON_Y_MARGIN,
   CONNECTION_DEFAULT_COLOR,
   DEFAULT_SCALE,
+  ICON_FOLD,
+  ICON_FULL_HEIGHT,
+  ICON_FULL_WIDTH,
+  ICON_MID_HEIGHT,
+  ICON_MID_WIDTH,
+  ICON_RADIUS,
+  ICON_X_MARGIN,
+  ICON_Y_MARGIN,
   NODE_DEFAULT_COLOR,
   NODE_HOVER_COLOR,
   NODE_RADIUS,
@@ -66,6 +74,9 @@ export class StationElementService {
       if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
+        if (station.notes) {
+          this.drawStationNoteIcon(station);
+        }
       }
     }
   }
@@ -302,20 +313,77 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
-      && station.dragging
+    ctx.fillStyle = ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
+      && station.dragging) || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node
           && dragItem !== MapDragItem.Node
             ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && station.dragging && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)) {
+    if (cursor.x !== -1 && ((station.dragging && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)) || station.isAddingConnected)) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
-      && station.dragging
+    ctx.strokeStyle = ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
+      && station.dragging)  || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
+  }
+
+  /**
+   * Draws a note icon in build mode if notes are on the station.
+   *
+   * @param station The station for which to draw the note.
+   */
+  private drawStationNoteIcon(station: StationMapElement): void{
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the connection node when canvas context is not set');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledIconRadius = ICON_RADIUS * this.mapScale;
+    const scaledIconFold = ICON_FOLD * this.mapScale;
+    const scaledIconXMargin = ICON_X_MARGIN * this.mapScale;
+    const scaledIconYMargin = ICON_Y_MARGIN * this.mapScale;
+    const scaledIconMidWidth = ICON_MID_WIDTH * this.mapScale;
+    const scaledIconFullWidth = ICON_FULL_WIDTH * this.mapScale;
+    const scaledIconMidHeight = ICON_MID_HEIGHT * this.mapScale;
+    const scaledIconFullHeight = ICON_FULL_HEIGHT * this.mapScale;
+
+    const iconColor = BUTTON_DEFAULT_COLOR;
+
+    ctx.beginPath(); //square with missing corner
+    ctx.moveTo(startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
+    ctx.lineTo(startingX + scaledIconFullWidth - scaledIconRadius, startingY + scaledIconYMargin); //across the top
+    ctx.quadraticCurveTo(startingX + scaledIconFullWidth, startingY + scaledIconYMargin,
+      startingX + scaledIconFullWidth, startingY + scaledIconYMargin + scaledIconRadius); //top right curve
+    ctx.lineTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight); //down the side to triangle no curve
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconMidHeight); //in to center
+    ctx.quadraticCurveTo(startingX + scaledIconMidWidth, startingY + scaledIconMidHeight,
+      startingX + scaledIconMidWidth, startingY + scaledIconMidHeight + scaledIconRadius); //curve in center
+    ctx.lineTo(startingX + scaledIconMidWidth, startingY + scaledIconFullHeight); //from center down to bottom no curve
+    ctx.lineTo(startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconFullHeight); //bottom line
+    ctx.quadraticCurveTo(startingX + scaledIconXMargin, startingY + scaledIconFullHeight,
+      startingX + scaledIconXMargin, startingY + scaledIconFullHeight - scaledIconRadius); //bottom left curve
+    ctx.lineTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin + scaledIconRadius); //left line
+    ctx.quadraticCurveTo(startingX + scaledIconXMargin, startingY + scaledIconYMargin,
+      startingX + scaledIconXMargin + scaledIconRadius, startingY + scaledIconYMargin);
+    ctx.fillStyle = iconColor;
+    ctx.fill();
+
+    ctx.beginPath(); //triangle
+    ctx.moveTo(startingX + scaledIconFullWidth, startingY + scaledIconMidHeight + scaledIconRadius);
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconFullHeight); // slanted line
+    ctx.lineTo(startingX + scaledIconMidWidth + scaledIconRadius,
+      startingY + scaledIconMidHeight + scaledIconRadius + scaledIconFold); // line up to middle
+    ctx.quadraticCurveTo(startingX + scaledIconMidWidth + scaledIconRadius, startingY + scaledIconMidHeight + scaledIconRadius,
+      startingX + scaledIconMidWidth + scaledIconRadius + scaledIconFold,
+      startingY + scaledIconMidHeight + scaledIconRadius);
+    ctx.closePath();
+    ctx.fillStyle = iconColor;
+    ctx.fill();
   }
 }

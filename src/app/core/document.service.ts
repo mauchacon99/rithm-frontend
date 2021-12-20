@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 // eslint-disable-next-line max-len
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, QuestionFieldType } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -165,14 +165,11 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      const assignedUser: StationRosterMember[] = [{
-        rithmId: '789-321-456-789',
-        firstName: 'John',
-        lastName: 'Christopher',
-        email: 'johnny.depp@gmail.com',
-        isAssigned: true
-      }];
-      return of(assignedUser).pipe(delay(1000));
+      const params = new HttpParams()
+        .set('documentId', documentId)
+        .set('stationId', stationId)
+        .set('getOnlyCurrentStation', getOnlyCurrentStation);
+      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user`, { params });
     }
   }
 
@@ -185,43 +182,12 @@ export class DocumentService {
    * @returns The array with previous questions.
    */
   getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): Observable<Question[]> {
-    if (!documentId || !stationId || getPrivate === null) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Invalid station or document id.'
-        }
-      })).pipe(delay(1000));
-    } else {
-      const previousQuestions: Question[] = [
-        {
-          rithmId: '',
-          questionType: QuestionFieldType.City,
-          prompt: 'string',
-          isPrivate: getPrivate,
-          isEncrypted: true,
-          isReadOnly: true,
-          isRequired: true,
-          possibleAnswers: [
-            {
-              text: 'string',
-              default: true
-            }
-          ],
-          answer: {
-            questionRithmId: 'string',
-            referAttribute: 'string',
-            asArray: [],
-            asInt: 0,
-            asDecimal: 0,
-            asString: 'string',
-            asDate: '2021-12-14T14:10:31.030Z',
-            value: 'string'
-          },
-          children: []
-        }
-      ];
-      return of(previousQuestions).pipe(delay(1000));
-    }
+    const params = new HttpParams()
+      .set('documentRithmId', documentId)
+      .set('stationRithmId', stationId)
+      .set('getPrivate', getPrivate);
+
+    return this.http.get<Question[]>(`${environment.baseAppUrl}${MICROSERVICE_PATH}/questions`, { params });
   }
 
   /**
@@ -232,5 +198,23 @@ export class DocumentService {
    */
   deleteDocument(documentRithmId: string): Observable<unknown> {
     return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
+  }
+
+  /**
+   * Flow a document.
+   *
+   * @param documentAutoFlow Params for add flow to Document.
+   * @returns Returns an empty observable.
+   */
+  autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
+    if (!documentAutoFlow) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Unable to flow the document, invalid parameters.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`, documentAutoFlow);
+    }
   }
 }
