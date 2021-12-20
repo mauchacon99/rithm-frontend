@@ -1,20 +1,19 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
-import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
-  PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY } from '../map-constants';
-import { MapService } from '../map.service';
-import { StationElementService } from '../station-element.service';
-import { FlowElementService } from '../flow-element.service';
-import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
-import { MatDialog } from '@angular/material/dialog';
-import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationService } from 'src/app/core/station.service';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {StationMapElement} from 'src/helpers';
+import {ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
+  StationInfoDrawerData, StationInformation} from 'src/models';
+import {ConnectionElementService} from '../connection-element.service';
+import {DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT,
+  SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY} from '../map-constants';
+import {MapService} from '../map.service';
+import {StationElementService} from '../station-element.service';
+import {FlowElementService} from '../flow-element.service';
+import {StationDocumentsModalComponent} from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {SidenavDrawerService} from 'src/app/core/sidenav-drawer.service';
+import {StationService} from 'src/app/core/station.service';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -874,7 +873,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If dragging a connection node.
-    if (this.dragItem === MapDragItem.Node) {
+    if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Connection) {
       let newNextStation: StationMapElement | undefined;
       let newPreviousStation: StationMapElement | undefined;
       for (const station of this.stations) {
@@ -892,7 +891,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
           station.checkElementHover(position, this.mapMode, this.scale);
-          if (station.hoverActive === StationElementHoverType.Station) {
+          if (station.hoverActive !== StationElementHoverType.None) {
             //ensure we cant get duplicate ids.
             if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
               if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
@@ -997,11 +996,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const moveFromStartX = this.eventStartCoords.x - moveInput.x;
       const moveFromStartY = this.eventStartCoords.y - moveInput.y;
       if (Math.abs(moveFromStartX) > 5 || Math.abs(moveFromStartY) > 5) {
-        this.onConnectionDrag(moveContext);
+        this.onConnectionDrag();
       }
       if (this.connectionLineDrag) {
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
         for (const station of this.stations) {
+          station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
           if (station.dragging) {
             this.mapService.currentMousePoint$.next(moveInput);
           }
@@ -1153,12 +1153,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Handles when a user drags an existing connection line.
-   *
-   * @param contextPoint Calculated position of click.
    */
-  onConnectionDrag(contextPoint: Point): void {
+  onConnectionDrag(): void {
      for (const connectionLine of this.connections) {
-       connectionLine.checkElementHover(contextPoint, this.context);
        if (connectionLine.hoverActive && !this.connectionLineDrag) {
          // Created for future tasks.
          // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
