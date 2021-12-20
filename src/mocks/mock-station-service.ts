@@ -22,6 +22,9 @@ export class MockStationService {
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
 
+  /** The question to be updated when it changes in station page. */
+  stationQuestion$ = new Subject<Question>();
+
   /**
    * Gets a station information.
    *
@@ -549,6 +552,15 @@ export class MockStationService {
    */
   updatedStationNameText(stationName: string): void {
     this.stationName$.next(stationName);
+  }
+
+  /**
+   * Update the station question values in the template area.
+   *
+   * @param question The question to be updated.
+   */
+   updateStationQuestionInTemplate(question: Question): void {
+    this.stationQuestion$.next(question);
   }
 
  /**
