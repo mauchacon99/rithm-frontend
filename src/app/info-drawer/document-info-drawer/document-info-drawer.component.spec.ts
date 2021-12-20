@@ -113,7 +113,7 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should return the user assigned to the document', () => {
     const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
     component.stationRithmId = stationId;
-    component['getAssignedUserToDocument'](documentId);
+    component['getAssignedUserToDocument']();
 
     expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
   });
