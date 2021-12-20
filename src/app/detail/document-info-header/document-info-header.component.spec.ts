@@ -173,9 +173,8 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should disable info-drawer-button once the info-drawer is opened', () => {
     spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
     component.isDocumentNameEditable = true;
-    component.isDrawerOpen;
     fixture.detectChanges();
-    expect(Boolean(component.isDrawerOpen)).toBeTrue();
+    expect(component.isDrawerOpen).toBeTrue();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
     expect(infoButton.disabled).toBeTruthy();
   });
@@ -183,9 +182,8 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should enable info-drawer-button once the info-drawer is closed', () => {
     spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
     component.isDocumentNameEditable = true;
-    component.isDrawerOpen;
     fixture.detectChanges();
-    expect(Boolean(component.isDrawerOpen)).toBeFalse();
+    expect(component.isDrawerOpen).toBeFalse();
     const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
     expect(infoButton.disabled).toBeFalsy();
   });
