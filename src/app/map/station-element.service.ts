@@ -2,34 +2,11 @@ import {Injectable} from '@angular/core';
 import {StationMapElement} from 'src/helpers';
 import {MapDragItem, MapMode, Point, StationElementHoverType} from 'src/models';
 import {
-  BADGE_DEFAULT_COLOR,
-  BADGE_HOVER_COLOR,
-  BADGE_MARGIN,
-  BADGE_RADIUS,
-  BUTTON_DEFAULT_COLOR,
-  BUTTON_HOVER_COLOR,
-  BUTTON_RADIUS,
-  BUTTON_X_MARGIN,
-  BUTTON_Y_MARGIN,
-  CONNECTION_DEFAULT_COLOR,
-  DEFAULT_SCALE,
-  ICON_FOLD,
-  ICON_FULL_HEIGHT,
-  ICON_FULL_WIDTH,
-  ICON_MID_HEIGHT,
-  ICON_MID_WIDTH,
-  ICON_RADIUS,
-  ICON_X_MARGIN,
-  ICON_Y_MARGIN,
-  NODE_DEFAULT_COLOR,
-  NODE_HOVER_COLOR,
-  NODE_RADIUS,
-  NODE_Y_MARGIN,
-  SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT,
-  STATION_PADDING,
-  STATION_RADIUS,
-  STATION_WIDTH,
+  BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR, BADGE_MARGIN, BADGE_RADIUS, BUTTON_DEFAULT_COLOR,
+  BUTTON_HOVER_COLOR, BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, DEFAULT_SCALE,
+  ICON_FOLD, ICON_FULL_HEIGHT, ICON_FULL_WIDTH, ICON_MID_HEIGHT, ICON_MID_WIDTH, ICON_RADIUS, ICON_X_MARGIN,
+  ICON_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, SCALE_RENDER_STATION_ELEMENTS,
+  STATION_HEIGHT, STATION_PADDING, STATION_RADIUS, STATION_WIDTH,
 } from './map-constants';
 import {MapService} from './map.service';
 
@@ -319,7 +296,8 @@ export class StationElementService {
           && dragItem !== MapDragItem.Node
             ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && ((station.dragging && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)) || station.isAddingConnected)) {
+    if (cursor.x !== -1 && ((station.dragging
+      && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)) || station.isAddingConnected)) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
