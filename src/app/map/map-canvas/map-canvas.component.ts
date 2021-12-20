@@ -181,6 +181,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.connections = this.mapService.connectionElements;
       if (dataReceived && this.initLoad) {
         this.mapService.centerActive$.next(true);
+        this.mapService.centerCount$.next(1);
         this.mapService.center(dataReceived);
         this.initLoad = false;
       }
@@ -534,6 +535,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('wheel', ['$event'])
   wheel(event: WheelEvent): void {
     event.preventDefault();
+    //Clear center zoom animations.
+    this.mapService.centerActive$.next(false);
+    this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
+    this.mapService.centerCount$.next(0);
+
     const mousePoint = this.getEventCanvasPoint(event);
     const eventAmount = event.deltaY >= 100
     ? Math.floor(event.deltaY/100)
@@ -800,6 +806,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.fastDrag = false;
       this.mapService.centerActive$.next(false);
       this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
+      this.mapService.centerCount$.next(0);
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 

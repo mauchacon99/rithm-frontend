@@ -262,7 +262,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   center(): void {
     this.mapService.centerActive$.next(true);
-    this.mapService.setCenterInterval();
+    this.mapService.centerCount$.next(1);
     this.mapService.center();
   }
 

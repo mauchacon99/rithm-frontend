@@ -79,7 +79,7 @@ export class MapService {
   centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
 
   /** The number of times this.center() should be called. */
-  private centerCount = 0;
+  centerCount$ = new BehaviorSubject(0);
 
 
   constructor(private http: HttpClient) { }
@@ -522,8 +522,9 @@ export class MapService {
     const maxPoint = this.getMaxCanvasPoint();
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
-    const zoomInBox = this.centerBoundingBox() + CENTER_ZOOM_BUFFER;
-    const zoomOutBox = this.centerBoundingBox() - CENTER_ZOOM_BUFFER;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const zoomInBox = (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
+    const zoomOutBox = (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
 
     //Zoom in.
     if ((zoomInBox < minPoint.y
@@ -533,14 +534,16 @@ export class MapService {
       && this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-      //Zoom out.
+    //Zoom out.
     } else if ((zoomOutBox > minPoint.y
       || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
       || canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH
       || zoomOutBox > minPoint.y) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
     }
   }
@@ -563,7 +566,6 @@ export class MapService {
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
       this.currentCanvasPoint$.next(adjustedCenter);
-      this.centerActive$.next(false);
       return;
     }
 
@@ -581,69 +583,14 @@ export class MapService {
     //Set y axis of panAmount.
     panAmount.y = totalPanNeeded.y * .1;
 
-    if ( Math.abs(panAmount.x) >= .25 || Math.abs(panAmount.y) >= .25 ) {
+    if ( Math.abs(panAmount.x) >= .12 || Math.abs(panAmount.y) >= .12 ) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);
-      this.center(onInit);
+      this.centerCount$.next(this.centerCount$.value + 1);
     } else {
       this.currentCanvasPoint$.next(adjustedCenter);
       this.centerPanVelocity$.next({ x: 0, y: 0 });
-      this.centerActive$.next(false);
     }
-  }
-
-  /**
-   * Sets the number of times that this.center() should be called.
-   */
-  setCenterInterval(): void {
-    //get centerCount.
-    let centerCount = 0;
-
-    let adjustedCenter = this.getMapCenterPoint();
-    let canvasCenter = this.getCanvasCenterPoint();
-
-    //The point on the canvas needed to center the map.
-    adjustedCenter = {
-      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
-    };
-
-    const mockCanvasPoint = this.deepCopy(this.currentCanvasPoint$.value);
-
-    let totalPanNeeded = {
-      x: mockCanvasPoint.x - adjustedCenter.x,
-      y: mockCanvasPoint.y - adjustedCenter.y
-    };
-
-    for ( totalPanNeeded; Math.abs(totalPanNeeded.x) >= 1 || Math.abs(totalPanNeeded.y) >= 1; centerCount++ ) {
-      //initialize variable needed to set panVelocity.
-      const panAmount: Point = { x: 0, y: 0 };
-
-      //Set x axis of panAmount.
-      panAmount.x = totalPanNeeded.x * .1;
-
-      //Set y axis of panAmount.
-      panAmount.y = totalPanNeeded.y * .1;
-
-      mockCanvasPoint.x -= panAmount.x;
-      mockCanvasPoint.y -= panAmount.y;
-
-      adjustedCenter = this.getMapCenterPoint();
-      canvasCenter = this.getCanvasCenterPoint();
-
-      //The point on the canvas needed to center the map.
-      adjustedCenter = {
-        x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-        y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
-      };
-
-      totalPanNeeded = {
-        x: mockCanvasPoint.x - adjustedCenter.x,
-        y: mockCanvasPoint.y - adjustedCenter.y
-      };
-    }
-
-    this.centerCount = centerCount;
   }
 
   /**
@@ -653,17 +600,30 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
-    --this.centerCount;
-
-    if (!onInit && this.centerActive$.value) {
-      setTimeout(() => {
-        // this.centerScale(onInit);
+    const centerLogic = () => {
+      if (this.centerCount$.value > 0) {
+        this.centerScale(onInit);
         this.centerPan(onInit);
+        this.centerCount$.next(this.centerCount$.value - 1);
+        this.center(onInit);
+      } else {
+        this.centerActive$.next(false);
+        this.centerCount$.next(0);
+      }
+    };
+
+    if (!this.centerActive$.value) {
+      return;
+    }
+
+    if (!onInit) {
+      setTimeout(() => {
+        centerLogic();
       }, 4);
     } else {
-      // this.centerScale(onInit);
-      this.centerPan(onInit);
+      centerLogic();
     }
+
   }
 
   /**
