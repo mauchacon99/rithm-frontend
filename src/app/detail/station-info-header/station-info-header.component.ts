@@ -78,13 +78,22 @@ export class StationInfoHeaderComponent implements OnInit {
   }
 
   /**
+   * The id of the station or document.
+   *
+   * @returns The id of the station or document.
+   */
+   get stationRithmId(): string {
+    return 'rithmId' in this.stationInformation ? this.stationInformation.rithmId : this.stationInformation.stationRithmId;
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationInfo'): void {
     const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: this.stationInformation as StationInformation,
+      stationRithmId: this.stationRithmId,
       stationName: this.stationName,
       editMode: this.stationEditMode,
       openedFromMap: false
