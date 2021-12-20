@@ -8,7 +8,7 @@
     field.questionType === fieldTypes.LongTextLabel ||
     field.questionType === fieldTypes.State ||
     field.questionType === fieldTypes.City ||
-    field.questionType === fieldTypes.Email" [field]="field" formControlName="textFieldForm"></app-text-field>
+    field.questionType === fieldTypes.Email" [field]="field" formControlName="textFieldForm" [labelTag]="field.prompt" [isStation]="false"></app-text-field>
   <app-number-field *ngIf="
     field.questionType === fieldTypes.Number ||
     field.questionType === fieldTypes.Phone ||
