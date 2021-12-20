@@ -164,4 +164,16 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
   }));
 
+  it('should show assigned-user-loading while get assigned user of document', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.assignedUserLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
 });

@@ -52,7 +52,7 @@
       </div>
       <div class="col-span-12" *ngIf="assignedUserLoading else assignedUser">
         <div class="w-24 items-center py-2">
-          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+          <app-loading-indicator id="assigned-user-loading" [inlineText]="'Loading...'"></app-loading-indicator>
         </div>
       </div>
       <ng-template #assignedUser>
