@@ -27,6 +27,9 @@ export class MapService {
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -135,7 +138,8 @@ export class MapService {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
 
         if (!outgoingStation) {
-          throw new Error('no outgoing station found.');
+          throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
+            nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
         const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
@@ -727,6 +731,15 @@ export class MapService {
         console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
       }
     }
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }
