@@ -33,6 +33,15 @@ export class SidenavDrawerService {
     return this._drawerHasBackdrop;
   }
 
+  /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+   get isDrawerOpen(): boolean {
+    return !!(this.drawerComponent?.opened);
+  }
+
   constructor() {
     this.determineBackdropDisplay();
 
