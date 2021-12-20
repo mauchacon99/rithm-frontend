@@ -269,13 +269,13 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /**
    * Save document answers and auto flow.
    */
-  flowDocument(): void {
+  autoFlowDocument(): void {
     this.documentLoading = true;
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
       // Parameter temporary testMode.
-      testMode: true
+      testMode: false
     };
 
     const requestArray = [

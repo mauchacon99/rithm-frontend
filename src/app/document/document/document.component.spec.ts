@@ -369,13 +369,13 @@ describe('DocumentComponent', () => {
     const expectAutoFlow: DocumentAutoFlow = {
       stationRithmId: component.documentInformation.stationRithmId,
       documentRithmId: component.documentInformation.documentRithmId,
-      testMode: true
+      testMode: false
     };
 
     const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     const spySaveAutoFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
 
-    component.flowDocument();
+    component.autoFlowDocument();
 
     expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
     expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
@@ -385,7 +385,7 @@ describe('DocumentComponent', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
     fixture.detectChanges();
-    const spyMethod = spyOn(component, 'flowDocument').and.callThrough();
+    const spyMethod = spyOn(component, 'autoFlowDocument').and.callThrough();
     const button = fixture.debugElement.nativeElement.querySelector('#document-flow');
 
     button.click();
