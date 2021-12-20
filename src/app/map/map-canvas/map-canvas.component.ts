@@ -182,7 +182,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.flows = this.mapService.flowElements;
       this.connections = this.mapService.connectionElements;
       if (dataReceived && this.initLoad) {
-        this.mapService.handleCenter(dataReceived);
+        this.mapService.center(dataReceived);
         this.initLoad = false;
       }
       this.drawElements();
@@ -798,6 +798,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       cancelAnimationFrame(this.myReq as number);
       this.panActive = false;
       this.fastDrag = false;
+      this.mapService.centerPan$.next(false);
+      this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 

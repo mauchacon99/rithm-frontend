@@ -78,6 +78,9 @@ export class MapService {
   /** Passes pan info to the map-canvas. */
   centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
 
+  /** The number of times this.center() should be called. */
+  private centerCount = 0;
+
 
   constructor(private http: HttpClient) { }
 
@@ -531,7 +534,6 @@ export class MapService {
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
       this.handleZoom(onInit);
-      this.center(onInit);
       //Zoom out.
     } else if ((zoomOutBox > minPoint.y
       || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
@@ -540,7 +542,6 @@ export class MapService {
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
       this.handleZoom(onInit);
-      this.center(onInit);
     }
   }
 
@@ -579,10 +580,11 @@ export class MapService {
     //Set y axis of panAmount.
     panAmount.y = totalPanNeeded.y * .1;
 
-    if ( Math.abs(panAmount.x) >= 1 || Math.abs(panAmount.y) >= 1 ) {
+    if ( Math.abs(panAmount.x) >= .25 || Math.abs(panAmount.y) >= .25 ) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);
       this.centerPan$.next(true);
+      this.center(onInit);
     } else {
       this.currentCanvasPoint$.next(adjustedCenter);
       this.centerPanVelocity$.next({ x: 0, y: 0 });
@@ -591,17 +593,9 @@ export class MapService {
   }
 
   /**
-   * Calls the center() method a number of times equal to the local variable: centerCount.
-   *
-   * @param onInit Remove delay if center is called when map-canvas initializes.
+   * Sets the number of times that this.center() should be called.
    */
-  handleCenter(onInit = false): void {
-    //On init, simply call center.
-    if (onInit) {
-      this.center(onInit);
-      return;
-    }
-
+  setCenterInterval(): void {
     //get centerCount.
     let centerCount = 0;
 
@@ -649,25 +643,7 @@ export class MapService {
       };
     }
 
-    console.log(centerCount);
-
-    const centerLogic = () => {
-      if (centerCount > 0) {
-        this.center(onInit);
-        --centerCount;
-        if (centerCount > 0) {
-          this.handleCenter(onInit);
-        }
-      }
-    };
-
-    if (!onInit) {
-      setTimeout(() => {
-        centerLogic();
-      }, 4);
-    } else {
-      centerLogic();
-    }
+    this.centerCount = centerCount;
   }
 
   /**
@@ -676,9 +652,18 @@ export class MapService {
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
-  center(onInit: boolean): void {
-    // this.centerScale(onInit);
-    this.centerPan(onInit);
+  center(onInit = false): void {
+    --this.centerCount;
+
+    if (!onInit) {
+      setTimeout(() => {
+        // this.centerScale(onInit);
+        this.centerPan(onInit);
+      }, 4);
+    } else {
+      // this.centerScale(onInit);
+      this.centerPan(onInit);
+    }
   }
 
   /**
