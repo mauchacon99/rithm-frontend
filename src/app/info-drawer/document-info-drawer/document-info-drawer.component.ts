@@ -182,7 +182,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
               .filter(question => question.prompt && question.rithmId)
-              .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
+              .map(field => ({ prompt: field.prompt, questionRithmId: field.rithmId }));
             this.filterFieldsAndQuestions();
           }
         }, error: (error: unknown) => {
@@ -271,7 +271,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
   addStationDocumentFieldName(fieldPrompt: string): void {
-
     const fieldToAppend = this.fieldsToAppend.find(newField => newField.prompt === fieldPrompt);
     if (!fieldToAppend) {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
