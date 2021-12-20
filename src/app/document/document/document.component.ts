@@ -244,9 +244,33 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Save the document answers.
+   */
+  saveDocumentAnswer(): void {
+    this.documentLoading = true;
+    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer)
+      .pipe(first())
+      .subscribe({
+        next: (docAnswers) => {
+          if (docAnswers) {
+            this.documentAnswer = docAnswers;
+          }
+          this.documentLoading = false;
+        }, error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Save document answers and auto flow.
    */
   flowDocument(): void {
+    this.documentLoading = true;
     const documentAutoFlow: DocumentAutoFlow = {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
@@ -254,7 +278,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
       testMode: true
     };
 
-    this.documentLoading = true;
     const requestArray = [
       // Save the document answers.
       this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer),

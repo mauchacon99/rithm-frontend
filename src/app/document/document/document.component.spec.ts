@@ -19,7 +19,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -391,5 +391,35 @@ describe('DocumentComponent', () => {
     button.click();
 
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should test method to save document answer', () => {
+    const expectedAnswers: DocumentAnswer[] = [{
+      questionRithmId: 'Dev 1',
+      documentRithmId: '123-654-789',
+      stationRithmId: '741-951-753',
+      value: 'Answer Dev',
+      file: 'dev.txt',
+      filename: 'dev',
+      type: QuestionFieldType.Email,
+      rithmId: '789-321-456',
+      questionUpdated: true,
+    },
+    {
+      questionRithmId: 'Dev 2',
+      documentRithmId: '123-654-789-856',
+      stationRithmId: '741-951-753-741',
+      value: 'Answer Dev2',
+      file: 'dev2.txt',
+      filename: 'dev2',
+      type: QuestionFieldType.City,
+      rithmId: '789-321-456-789',
+      questionUpdated: false,
+    }];
+    component.documentAnswer = expectedAnswers;
+
+    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    component.saveDocumentAnswer();
+    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
   });
 });
