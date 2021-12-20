@@ -4,6 +4,7 @@ import {
   NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator, ValidatorFn, Validators
 } from '@angular/forms';
+import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -49,8 +50,15 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
+  /** The label tag for each field. */
+  @Input() labelTag!: string;
+
+  /**Whether the instance comes from station or document */
+  @Input() isStation = true;
+
   constructor(
     private fb: FormBuilder,
+    private stationService: StationService
   ) { }
 
   /**
@@ -142,6 +150,18 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
         message: 'Text field form is invalid'
       }
     };
+  }
+
+  /**
+   * Emits an event to parent component to update field from form.
+   *
+   * @param field The field to emit.
+   */
+   updateFieldPrompt(field: Question): void{
+     if (this.isStation){
+      field.prompt = this.textFieldForm.controls[this.field.questionType].value;
+      this.stationService.updateStationQuestionInTemplate(field);
+    }
   }
 
   /**

@@ -100,6 +100,18 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       .subscribe(() => {
         this.stationForm.get('stationTemplateForm')?.markAsTouched();
       });
+
+    this.stationService.stationQuestion$
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((question) => {
+      const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
+      if (prevQuestion){
+        const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
+        if (!question.isPossibleAnswer){
+          this.stationInformation.questions[questionIndex].prompt = question.prompt;
+        }
+      }
+    });
   }
 
   /**
@@ -114,6 +126,17 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /** Comment. */
   ngAfterContentChecked(): void {
     this.ref.detectChanges();
+  }
+
+  /**
+   * Generate a random rithmId to added fields.
+   *
+   * @returns Random RithmId.
+   */
+   private get randRithmId(): string{
+    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
+    return rithmId;
   }
 
   /**
@@ -205,7 +228,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   addQuestion(fieldType: QuestionFieldType): void {
     this.stationInformation.questions.push({
-      rithmId: '',
+      rithmId: this.randRithmId,
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
