@@ -56,9 +56,10 @@ export class InfoDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: '' | 'stationInfo' | 'documentInfo'): void {
+  async toggleDrawer(drawerItem: '' | 'stationInfo' | 'documentInfo'): Promise<void> {
     if (drawerItem === 'documentInfo' || drawerItem === 'stationInfo') {
-      this.sidenavDrawerService.toggleDrawer(drawerItem);
+      await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
+    this.drawerMode = '';
   }
 }
