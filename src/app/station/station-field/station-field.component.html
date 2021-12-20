@@ -16,10 +16,10 @@
     <!-- added conditions from sohw/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
       <ng-container *ngIf="stationRithmId === field.originalStationRithmId; else previousFieldText">
-        <div *ngIf="field.questionType === 'Instructions'">
+        <div *ngIf="field.questionType === 'instructions'">
           <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true" [labelTag]="'Instructions'"></app-text-field>
         </div>
-        <div *ngIf="field.questionType !== 'Instructions'">
+        <div *ngIf="field.questionType !== 'instructions'">
           <app-text-field [field]="labelField" [formControlName]="field.questionType" [toolBar]="true" [labelTag]="'Name your field'"></app-text-field>
         </div>
         <!-- Options/Items -->
@@ -49,7 +49,7 @@
         </div>
       </ng-template>
       <!-- Required Checkbox -->
-      <div class="flex space-x-4" [ngClass]= "{'space-x-reverse': stationRithmId !== field.originalStationRithmId}" *ngIf="field.questionType !== 'Instructions'">
+      <div class="flex space-x-4" [ngClass]= "{'space-x-reverse': stationRithmId !== field.originalStationRithmId}" *ngIf="field.questionType !== 'instructions'">
         <div [ngClass]="{'order-last': stationRithmId !== field.originalStationRithmId}">
           <mat-checkbox [name]="field.rithmId" [disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId" [checked]="field.isRequired" (change)="setRequired($event)">
             Required Field

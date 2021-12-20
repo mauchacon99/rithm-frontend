@@ -52,7 +52,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Instruction field to display. */
   instructionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Instructions',
     questionType: QuestionFieldType.Instructions,
     isReadOnly: false,
@@ -115,6 +115,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * On component initialization.
    */
   ngOnInit(): void {
+    this.instructionField.rithmId = this.field.rithmId;
+    this.instructionField.value = this.field.prompt;
     this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
