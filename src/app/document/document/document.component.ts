@@ -56,7 +56,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** Get Document Name from BehaviorSubject. */
   private documentName = '';
 
-  /** Show Hidden accordion all field. */
+  /** Show or hidden accordion for all field. */
   accordionFieldAllExpanded = false;
 
   constructor(
