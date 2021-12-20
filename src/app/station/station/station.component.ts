@@ -103,7 +103,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
 
     this.stationService.stationQuestion$
     .pipe(takeUntil(this.destroyed$))
-    .subscribe( (question) => {
+    .subscribe((question) => {
       const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
       if (prevQuestion){
         const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
