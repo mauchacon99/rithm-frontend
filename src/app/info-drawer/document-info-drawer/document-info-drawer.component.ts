@@ -96,6 +96,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /* Loading in document the assigned user */
   assignedUserLoading = false;
 
+  /** Loading indicator for time held in station. */
+  timeInStationLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -345,13 +348,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get held time in station for document.
+   * Get the held time of a document in the station.
    */
   private getDocumentTimeInStation(): void {
+    this.timeInStationLoading = true;
     this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {
+          this.timeInStationLoading = false;
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
@@ -368,6 +373,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
           this.documentTimeInStation = 'Unable to retrieve time';
           this.colorMessageDocumentTime = 'text-error-500';
+          this.timeInStationLoading = false;
         }
       });
   }
