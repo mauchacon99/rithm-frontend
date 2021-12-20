@@ -966,6 +966,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapService.currentMousePoint$.next(moveInput);
         }
       }
+      // Check for Add New Connected Station mode is enabled or not also draw a temporary line from station's node.
+    } else if (this.mapMode === MapMode.StationAdd && this.mapService.stationElements.some(e => e.isAddingConnected)) {
+        this.mapService.currentMousePoint$.next(moveInput);
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
