@@ -27,6 +27,9 @@ export class MapService {
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -135,7 +138,8 @@ export class MapService {
         const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
 
         if (!outgoingStation) {
-          throw new Error('no outgoing station found.');
+          throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
+            nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
         const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
@@ -181,6 +185,31 @@ export class MapService {
       status: MapItemStatus.Created,
       notes: '',
     });
+
+    // Connected station create changes
+    const connectedStations = this.stationElements.filter(station => station.isAddingConnected);
+    if (connectedStations.length === 1) {
+      const stationIndex = this.stationElements.findIndex(station => station.rithmId === connectedStations[0].rithmId);
+      const flowIndex = this.flowElements.findIndex(flow => flow.stations.includes(connectedStations[0].rithmId));
+      if (stationIndex >= 0) {
+        this.stationElements[stationIndex].isAddingConnected = false;
+        this.stationElements[stationIndex].nextStations.push(newStation.rithmId);
+        newStation.previousStations.push(this.stationElements[stationIndex].rithmId);
+
+        const lineInfo = new ConnectionMapElement(this.stationElements[stationIndex], newStation, this.mapScale$.value);
+        if (!this.connectionElements.includes(lineInfo)) {
+          this.connectionElements.push(lineInfo);
+        }
+        this.mapMode$.next(MapMode.Build);
+        this.stationElements[stationIndex].markAsUpdated();
+
+        if (flowIndex >= 0 && (!this.flowElements[flowIndex].stations.includes(newStation.rithmId))) {
+          this.flowElements[flowIndex].stations.push(newStation.rithmId);
+          this.flowElements[flowIndex].markAsUpdated();
+        }
+        this.disableConnectedStationMode();
+      }
+    }
 
     //update the stationElements array.
     this.stationElements.push(newStation);
@@ -662,6 +691,16 @@ export class MapService {
   }
 
   /**
+   * Set's isAddingConnected property of station to false if it's true.
+   */
+  disableConnectedStationMode(): void {
+    this.stationElements.filter(station => station.isAddingConnected)
+    .map(connectedStation => {
+      connectedStation.isAddingConnected = false;
+    });
+  }
+
+  /**
    * Validates that data returned from the API doesn't contain any logical problems.
    */
   private validateMapData(): void {
@@ -727,6 +766,15 @@ export class MapService {
         console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
       }
     }
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 
 }

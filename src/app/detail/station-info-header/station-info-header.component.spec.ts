@@ -2,14 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { MockStationService, MockUserService, MockErrorService } from 'src/mocks';
+import { MockStationService, MockUserService } from 'src/mocks';
 import { DocumentStationInformation, StationInfoDrawerData, StationInformation } from 'src/models';
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorService } from 'src/app/core/error.service';
 
 describe('StationInfoHeaderComponent', () => {
   let component: StationInfoHeaderComponent;
@@ -100,7 +99,7 @@ describe('StationInfoHeaderComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
         { provide: UserService, useClass: MockUserService },
         { provide: StationService, useClass: MockStationService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ]
     })
       .compileComponents();
@@ -132,7 +131,7 @@ describe('StationInfoHeaderComponent', () => {
     const drawerItem = 'stationInfo';
     formGroup.controls['name'].setValue('Station Name');
     const stationInfoDrawer: StationInfoDrawerData = {
-      stationInformation: component.stationInformation as StationInformation,
+      stationRithmId: component.stationRithmId,
       stationName: component.stationName,
       editMode: component.stationEditMode,
       openedFromMap: false
@@ -152,6 +151,24 @@ describe('StationInfoHeaderComponent', () => {
     expect(updateStationNameSpy).toHaveBeenCalledOnceWith(formGroup.controls['name'].value);
   });
 
+  it('should disable info-drawer-button once the info-drawer is opened', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
+    component.stationEditMode = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeTrue();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-station');
+    expect(infoButton.disabled).toBeTruthy();
+  });
+
+  it('should enable info-drawer-button once the info-drawer is closed', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
+    component.stationEditMode = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeFalse();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-station');
+    expect(infoButton.disabled).toBeFalsy();
+  });
+
   describe('StationInfoHeaderComponent with DocumentStationInformation model', () => {
 
     beforeEach(() => {
@@ -162,6 +179,5 @@ describe('StationInfoHeaderComponent', () => {
     it('should return the station name from a DocumentStationInformation Object', () => {
       expect(component.stationName).toEqual(documentStationInformation.stationName);
     });
-
   });
 });

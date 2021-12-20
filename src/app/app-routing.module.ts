@@ -27,6 +27,11 @@ import { AuthGuard } from './core/auth.guard';
     },
     {
       path: 'station',
+      pathMatch: 'full',
+      redirectTo: '/dashboard'
+    },
+    {
+      path: 'station',
       loadChildren: () => import('./station/station.module').then(m => m.StationModule),
       canActivate: [AuthGuard]
     },
