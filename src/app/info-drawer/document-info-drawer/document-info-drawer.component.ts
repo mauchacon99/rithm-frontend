@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
+import { Router } from '@angular/router';
 
 /**
  * Component for document drawer.
@@ -103,7 +104,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private documentService: DocumentService,
     private utcTimeConversion: UtcTimeConversion,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -412,6 +414,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.popupService.notify('The document has been deleted.');
+            this.router.navigateByUrl('dashboard');
           },
           error: (error: unknown) => {
             this.errorService.displayError(
