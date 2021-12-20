@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
+import { Router } from '@angular/router';
 
 /**
  * Component for document drawer.
@@ -92,6 +93,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
+  /** Loading indicator for time held in station. */
+  timeInStationLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -100,7 +104,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private documentService: DocumentService,
     private utcTimeConversion: UtcTimeConversion,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -131,6 +136,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
         if (!this.isStation) {
           this.getLastUpdated();
+          this.getAssignedUserToDocument();
           this.getDocumentTimeInStation();
         }
       });
@@ -339,13 +345,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get held time in station for document.
+   * Get the held time of a document in the station.
    */
   private getDocumentTimeInStation(): void {
+    this.timeInStationLoading = true;
     this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {
+          this.timeInStationLoading = false;
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
@@ -362,6 +370,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
           this.documentTimeInStation = 'Unable to retrieve time';
           this.colorMessageDocumentTime = 'text-error-500';
+          this.timeInStationLoading = false;
         }
       });
   }
@@ -369,10 +378,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the user assigned to the document.
    *
-   * @param documentRithmId The id of the document.
    */
-  private getAssignedUserToDocument(documentRithmId: string): void {
-    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
+  private getAssignedUserToDocument(): void {
+    this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
@@ -406,6 +414,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.popupService.notify('The document has been deleted.');
+            this.router.navigateByUrl('dashboard');
           },
           error: (error: unknown) => {
             this.errorService.displayError(

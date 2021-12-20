@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point, User, MapItemStatus } from 'src/models';
+import { MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -247,12 +247,16 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     this.mapService.matMenuStatus$.next(true);
-    const confirm = await this.popupService.confirm({
-      title: 'Confirmation',
-      message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-      okButtonText: 'Confirm',
-    });
-    if (confirm) {
+    if ( this.mapHasChanges ) {
+      const confirm = await this.popupService.confirm({
+        title: 'Confirmation',
+        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+        okButtonText: 'Confirm',
+      });
+      if (confirm) {
+        this.mapService.cancelMapChanges();
+      }
+    } else {
       this.mapService.cancelMapChanges();
     }
   }
@@ -343,6 +347,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Creates a new station with connection line from the current/selected station.
    */
   createConnectedStation(): void {
+    this.mapService.disableConnectedStationMode();
     const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
     if (index >= 0) {
         this.mapService.stationElements[index].isAddingConnected = true;
@@ -365,7 +370,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
    get mapHasChanges(): boolean {
-    return this.mapService.stationElements.some((station) => station.status !== MapItemStatus.Normal);
+    return this.mapService.mapHasChanges;
   }
 
 }
