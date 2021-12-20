@@ -161,10 +161,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.centerPanVelocity$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((velocity) => {
-        if (this.mapService.centerPan$.value) {
-          this.nextPanVelocity = velocity;
-          this.checkAutoPan();
-        }
+        this.nextPanVelocity = velocity;
+        this.checkAutoPan();
       });
   }
 
@@ -182,6 +180,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.flows = this.mapService.flowElements;
       this.connections = this.mapService.connectionElements;
       if (dataReceived && this.initLoad) {
+        this.mapService.centerActive$.next(true);
         this.mapService.center(dataReceived);
         this.initLoad = false;
       }
@@ -635,11 +634,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If panning is due to center button being pressed.
-    if (!this.panActive && this.mapService.centerPan$.value) {
+    if (!this.panActive && this.mapService.centerActive$.value) {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
-        if (this.mapService.centerPan$.value) {
+        if (this.mapService.centerActive$.value) {
           this.myReq = requestAnimationFrame(step);
         } else {
           cancelAnimationFrame(this.myReq as number);
@@ -794,11 +793,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param position The position of the mouse or touch event.
    */
   private eventStartLogic(position: Point) {
+    //Cancel any currently active panning animations.
     if (this.panActive) {
       cancelAnimationFrame(this.myReq as number);
       this.panActive = false;
       this.fastDrag = false;
-      this.mapService.centerPan$.next(false);
+      this.mapService.centerActive$.next(false);
       this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
       this.nextPanVelocity = { x: 0, y: 0 };
     }

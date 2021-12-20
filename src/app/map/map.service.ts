@@ -73,7 +73,7 @@ export class MapService {
   matMenuStatus$ = new BehaviorSubject(false);
 
   /** Checks if there should be panning towards the center of the map. */
-  centerPan$ = new BehaviorSubject(false);
+  centerActive$ = new BehaviorSubject(false);
 
   /** Passes pan info to the map-canvas. */
   centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
@@ -563,6 +563,7 @@ export class MapService {
     //On Init, immediately set the currentCanvasPoint to the center of the map.
     if (onInit) {
       this.currentCanvasPoint$.next(adjustedCenter);
+      this.centerActive$.next(false);
       return;
     }
 
@@ -583,12 +584,11 @@ export class MapService {
     if ( Math.abs(panAmount.x) >= .25 || Math.abs(panAmount.y) >= .25 ) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);
-      this.centerPan$.next(true);
       this.center(onInit);
     } else {
       this.currentCanvasPoint$.next(adjustedCenter);
       this.centerPanVelocity$.next({ x: 0, y: 0 });
-      this.centerPan$.next(false);
+      this.centerActive$.next(false);
     }
   }
 
@@ -655,7 +655,7 @@ export class MapService {
   center(onInit = false): void {
     --this.centerCount;
 
-    if (!onInit) {
+    if (!onInit && this.centerActive$.value) {
       setTimeout(() => {
         // this.centerScale(onInit);
         this.centerPan(onInit);
