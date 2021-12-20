@@ -290,18 +290,18 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = dragItem === MapDragItem.Node
-      && station.dragging
+    ctx.fillStyle = (dragItem === MapDragItem.Node
+      && station.dragging) || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node
           && dragItem !== MapDragItem.Node
             ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && station.dragging && dragItem === MapDragItem.Node) {
+    if (cursor.x !== -1 && ((station.dragging && dragItem === MapDragItem.Node) || station.isAddingConnected)) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = dragItem === MapDragItem.Node
-      && station.dragging
+    ctx.strokeStyle = (dragItem === MapDragItem.Node
+      && station.dragging)  || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
