@@ -132,7 +132,7 @@ describe('StationInfoHeaderComponent', () => {
     const drawerItem = 'stationInfo';
     formGroup.controls['name'].setValue('Station Name');
     const stationInfoDrawer: StationInfoDrawerData = {
-      stationInformation: component.stationInformation as StationInformation,
+      stationRithmId: component.stationRithmId,
       stationName: component.stationName,
       editMode: component.stationEditMode,
       openedFromMap: false
