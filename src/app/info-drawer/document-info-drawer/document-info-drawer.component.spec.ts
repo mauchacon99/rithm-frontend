@@ -99,9 +99,12 @@ describe('DocumentInfoDrawerComponent', () => {
 
   it('should get held time in station for document', () => {
     const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
-    component.stationRithmId = stationId;
 
-    component.getDocumentTimeInStation(documentId);
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
 
     expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
   });
@@ -109,7 +112,7 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should return the user assigned to the document', () => {
     const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
     component.stationRithmId = stationId;
-    component['getAssignedUserToDocument'](documentId);
+    component['getAssignedUserToDocument']();
 
     expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
   });

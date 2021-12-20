@@ -83,6 +83,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** The held time in station for document. */
   documentTimeInStation = '';
 
+  /** The color of documentTimeInStation text.*/
+  colorMessageDocumentTime = '';
+
   /** The assigned user of document information. */
   documentAssignedUser: StationRosterMember[] = [];
 
@@ -128,6 +131,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         }
         if (!this.isStation) {
           this.getLastUpdated();
+          this.getAssignedUserToDocument();
+          this.getDocumentTimeInStation();
         }
       });
 
@@ -336,23 +341,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Get held time in station for document.
-   *
-   * @param documentRithmId The id of the document.
    */
-  getDocumentTimeInStation(documentRithmId: string): void {
-    this.documentService.getDocumentTimeInStation(documentRithmId, this.stationRithmId)
+  private getDocumentTimeInStation(): void {
+    this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
-            if (this.documentTimeInStation === '1 day') {
-              this.documentTimeInStation = ' Yesterday';
-            } else {
-              this.documentTimeInStation += ' ago';
-            }
+            this.colorMessageDocumentTime = 'text-accent-500';
           } else {
+            this.colorMessageDocumentTime = 'text-error-500';
             this.documentTimeInStation = 'Unable to retrieve time';
           }
         },
@@ -361,6 +361,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
+          this.documentTimeInStation = 'Unable to retrieve time';
+          this.colorMessageDocumentTime = 'text-error-500';
         }
       });
   }
@@ -368,10 +370,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the user assigned to the document.
    *
-   * @param documentRithmId The id of the document.
    */
-  private getAssignedUserToDocument(documentRithmId: string): void {
-    this.documentService.getAssignedUserToDocument(documentRithmId, this.stationRithmId, true)
+  private getAssignedUserToDocument(): void {
+    this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
