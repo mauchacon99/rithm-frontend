@@ -726,6 +726,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private getBoundaryEdge(): void {
 
     window.innerWidth > window.innerHeight ? this.screenDimension = window.innerWidth : this.screenDimension = window.innerHeight;
+    this.screenDimension = window.innerWidth > window.innerHeight ? window.innerWidth : window.innerHeight;
 
     // To find out corner's of map using the min and max canvas points.
     const minMapPoint = this.mapService.getMinCanvasPoint();
