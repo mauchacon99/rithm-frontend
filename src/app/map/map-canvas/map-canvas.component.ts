@@ -895,36 +895,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.storedConnectionLine === null){
           throw new Error('The connection line was not stored!');
         }
-        const originatingStation = this.mapService.stationElements.find(station =>
+        const startStation = this.mapService.stationElements.find(station =>
           station.rithmId === this.storedConnectionLine?.startStationRithmId);
-        if (!originatingStation) {
-          throw new Error(`Station ${this.storedConnectionLine.startStationRithmId} was not found when trying to restore a station`);
+        if (!startStation) {
+          throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was not found when trying to restore a station`);
         }
-        originatingStation.nextStations.push(this.storedConnectionLine.startStationRithmId);
-        originatingStation.previousStations.push(this.storedConnectionLine.endStationRithmId);
+        const endStation = this.mapService.stationElements.find(station =>
+          station.rithmId === this.storedConnectionLine?.endStationRithmId);
+        if (!endStation) {
+          throw new Error(`End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`);
+        }
+        startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
+        endStation.previousStations.push(this.storedConnectionLine.startStationRithmId);
         this.connections.push(this.storedConnectionLine);
       }
       this.storedConnectionLine = null;
-
-      // for (const station of this.stations) {
-      //   // Check if clicked on an interactive station element.
-      //   station.checkElementHover(position, this.mapMode, this.scale);
-      //   if (station.hoverActive !== StationElementHoverType.None) {
-      //     newNextStation = station;
-      //   } else if (this.dragItem === MapDragItem.Connection && StationElementHoverType.None) {
-      //     if (!this.storedConnectionLine){
-      //       throw new Error('The connection line was not stored!');
-      //     }
-      //     station.previousStations.push(this.storedConnectionLine.startStationRithmId);
-      //     station.nextStations.push(this.storedConnectionLine.endStationRithmId);
-      //     this.connections.push(this.storedConnectionLine);
-      //   }
-      //   // this.storedConnectionLine = null;
-      //   if (station.dragging) {
-      //     newPreviousStation = station;
-      //   }
-      //   break;
-      // }
 
       if (newNextStation && newPreviousStation) {
         for (const station of this.stations) {
