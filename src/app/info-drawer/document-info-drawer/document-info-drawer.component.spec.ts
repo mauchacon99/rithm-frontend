@@ -17,7 +17,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DialogOptions } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
-
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -50,7 +50,8 @@ describe('DocumentInfoDrawerComponent', () => {
         MatInputModule,
         NoopAnimationsModule,
         MatSelectModule,
-        FormsModule
+        FormsModule,
+        RouterTestingModule
       ],
     })
       .compileComponents();
@@ -162,5 +163,17 @@ describe('DocumentInfoDrawerComponent', () => {
     tick();
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
   }));
+
+  it('should show loading-indicators while get held time in station', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.timeInStationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-time-in-station');
+    expect(loadingComponent).toBeTruthy();
+  });
 
 });
