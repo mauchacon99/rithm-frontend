@@ -432,7 +432,7 @@ describe('DocumentComponent', () => {
     component.autoFlowDocument();
   });
 
-  it('should not redirect to dashboard if some petition is wrong', () => {
+  it('should not redirect if some petition is wrong', () => {
     const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
     forkJoin([of(Error()), of()]).subscribe(() => {
       expect(routerSpy).not.toHaveBeenCalled();
