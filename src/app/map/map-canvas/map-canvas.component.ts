@@ -5,6 +5,7 @@ import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
   StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
+import { MapBoundaryService } from '../map-boundary.service';
 import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY } from '../map-constants';
@@ -64,12 +65,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The coordinate where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
-  /** To track minimum boundary coordinates. */
-  private minBoundaryCoords: Point = DEFAULT_MOUSE_POINT;
-
-  /** To track maximum boundary coordinates. */
-  private maxBoundaryCoords: Point = DEFAULT_MOUSE_POINT;
-
   /** The longest dimension of the user screen. */
   private screenDimension = 0;
 
@@ -121,7 +116,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService
+    private stationService: StationService,
+    private mapBoundaryService: MapBoundaryService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -725,7 +721,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private getBoundaryEdge(): void {
 
-    window.innerWidth > window.innerHeight ? this.screenDimension = window.innerWidth : this.screenDimension = window.innerHeight;
     this.screenDimension = window.innerWidth > window.innerHeight ? window.innerWidth : window.innerHeight;
 
     // To find out corner's of map using the min and max canvas points.
@@ -737,8 +732,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const rightBoundaryEdge = maxMapPoint.x + this.screenDimension;
     const bottomBoundaryEdge = maxMapPoint.y + this.screenDimension;
 
-    this.minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
-    this.maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
+    const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
+    const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
+
+    this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
 
   }
 
