@@ -15,7 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DialogOptions } from 'src/models';
+import { DialogOptions, StationRosterMember } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -187,5 +187,22 @@ describe('DocumentInfoDrawerComponent', () => {
     const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-loading');
     expect(loadingComponent).toBeTruthy();
   });
+
+  it('should call the service to unassign a user to document', async () => {
+    component.stationRithmId='ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    component.documentRithmId='E204F369-386F-4E41';
+    const assignedUser: StationRosterMember = {
+      rithmId: '789-321-456-789',
+      firstName: 'John',
+      lastName: 'Christopher',
+      email: 'johnny.depp@gmail.com'
+    };
+    const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
+
+    await component.unassignUserToDocument(assignedUser);
+
+    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId,component.stationRithmId,assignedUser);
+  });
+
 
 });
