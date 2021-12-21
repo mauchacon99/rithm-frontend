@@ -807,18 +807,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      for (const connection of this.connections) {
-        // Check if connection line was clicked. ContextPoint is used for connection lines.
-        connection.checkElementHover(contextPoint, this.context);
-        if (connection.hoverActive) {
-          for (const station of this.stations) {
-            if (station.rithmId === connection.startStationRithmId){
-              station.dragging = true;
-              break;
+      if (this.dragItem !== MapDragItem.Node && this.dragItem !== MapDragItem.Station) {
+        for (const connection of this.connections) {
+          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          connection.checkElementHover(contextPoint, this.context);
+          if (connection.hoverActive) {
+            for (const station of this.stations) {
+              if (station.rithmId === connection.startStationRithmId) {
+                station.dragging = true;
+                break;
+              }
             }
+            this.dragItem = MapDragItem.Connection;
+            break;
           }
-         this.dragItem = MapDragItem.Connection;
-         break;
         }
       }
 
