@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
+import { Router } from '@angular/router';
 
 /**
  * Component for document drawer.
@@ -92,6 +93,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
+  /** Loading indicator for time held in station. */
+  timeInStationLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -100,7 +104,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private documentService: DocumentService,
     private utcTimeConversion: UtcTimeConversion,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private router: Router
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -180,7 +185,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
               .filter(question => question.prompt && question.rithmId)
-              .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
+              .map(field => ({ prompt: field.prompt, questionRithmId: field.rithmId }));
             this.filterFieldsAndQuestions();
           }
         }, error: (error: unknown) => {
@@ -256,9 +261,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param separator The field prompt selected in autocomplete.
    */
   updateSeparatorFieldValue(separator: string): void {
-    // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
-      if (this.appendedFields[i].questionRithmId === '') {
+      if (!this.appendedFields[i].questionRithmId) {
         this.appendedFields[i].prompt = separator;
       }
     }
@@ -270,13 +274,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
   addStationDocumentFieldName(fieldPrompt: string): void {
-
     const fieldToAppend = this.fieldsToAppend.find(newField => newField.prompt === fieldPrompt);
     if (!fieldToAppend) {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
     }
     this.appendedFields.length > 0
-      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: '' }, fieldToAppend)
+      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: null }, fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -340,13 +343,15 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get held time in station for document.
+   * Get the held time of a document in the station.
    */
   private getDocumentTimeInStation(): void {
+    this.timeInStationLoading = true;
     this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {
+          this.timeInStationLoading = false;
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
             this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
               this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
@@ -363,6 +368,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
           this.documentTimeInStation = 'Unable to retrieve time';
           this.colorMessageDocumentTime = 'text-error-500';
+          this.timeInStationLoading = false;
         }
       });
   }
@@ -406,6 +412,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.popupService.notify('The document has been deleted.');
+            this.router.navigateByUrl('dashboard');
           },
           error: (error: unknown) => {
             this.errorService.displayError(
