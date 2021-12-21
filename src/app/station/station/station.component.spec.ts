@@ -208,7 +208,7 @@ describe('StationComponent', () => {
   });
 
   it('should return to dashboard after confirming to cancel changes', async () => {
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     await component.cancelStation();
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
@@ -229,7 +229,7 @@ describe('StationComponent', () => {
   });
 
   it('should redirect to dashboard if param stationId is empty in the init life cycle', () => {
-    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    const spyGetParams = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     component.ngOnInit();
 

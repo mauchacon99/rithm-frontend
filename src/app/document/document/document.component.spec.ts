@@ -425,7 +425,7 @@ describe('DocumentComponent', () => {
   });
 
   it('should redirect to dashboard if petitions is successfully', () => {
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     forkJoin([of(), of()]).subscribe(() => {
       expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
     });
@@ -433,7 +433,7 @@ describe('DocumentComponent', () => {
   });
 
   it('should not redirect if some petition is wrong', () => {
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     forkJoin([of(Error()), of()]).subscribe(() => {
       expect(routerSpy).not.toHaveBeenCalled();
     });
