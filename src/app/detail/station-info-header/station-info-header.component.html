@@ -2,13 +2,13 @@
   <div class="col-span-12">
     <h6 class="text-center">Station Information</h6>
   </div>
-  <div  class="col-span-12" [ngClass]="{'md:col-span-12': stationEditMode, 'md:ml-2 md:col-span-4 xl:col-span-5': !stationEditMode}">
-    <span *ngIf="!stationEditMode">
-      <button *ngIf="type === 'admin'" mat-icon-button color="accent">
-        <i class="fas fa-pen"></i>
-      </button>
+  <div  class="col-span-12">
+    <div *ngIf="!stationEditMode" class="flex justify-between items-center w-full">
       <span>{{stationName}}</span>
-    </span>
+      <button data-testid="station-info-drawer" mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('stationInfo')">
+        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+      </button>
+    </div>
     <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>

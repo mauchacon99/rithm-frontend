@@ -341,6 +341,60 @@ describe('DocumentComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
+  it('should validate the form controls initial value', () => {
+    const form = component.documentForm.controls;
+    const expectFormFirst = ['documentTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['documentTemplateForm'].value).toBe('');
+  });
+
+  it('should disable the button if form is not valid', () => {
+    component.documentLoading = false;
+    component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeTruthy();
+  });
+
+  it('should show button as enabled if form is valid', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeFalsy();
+  });
+
+  it('should called service to save answers and auto flow the document', () => {
+    const expectedAnswer = component.documentAnswer;
+
+    const expectAutoFlow: DocumentAutoFlow = {
+      stationRithmId: component.documentInformation.stationRithmId,
+      documentRithmId: component.documentInformation.documentRithmId,
+      testMode: false
+    };
+
+    const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    const spySaveAutoFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
+
+    component.autoFlowDocument();
+
+    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
+    expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
+  });
+
+  it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const spyMethod = spyOn(component, 'autoFlowDocument').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#document-flow');
+
+    button.click();
+
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
   it('should test method to save document answer', () => {
     const expectedAnswers: DocumentAnswer[] = [{
       questionRithmId: 'Dev 1',
@@ -364,47 +418,10 @@ describe('DocumentComponent', () => {
       rithmId: '789-321-456-789',
       questionUpdated: false,
     }];
+    component.documentAnswer = expectedAnswers;
 
     const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
-    component.saveDocumentAnswer(expectedAnswers);
-    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, expectedAnswers);
-  });
-
-  it('should flow a document by calling the service', () => {
-    const expectedData: DocumentAutoFlow = {
-      stationRithmId: component.documentInformation.stationRithmId,
-      documentRithmId: component.documentInformation.documentRithmId,
-      testMode: true
-    };
-
-    const spySaveFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
-
-    component.autoFlowDocument(expectedData);
-
-    expect(spySaveFlowDocument).toHaveBeenCalledWith(expectedData);
-  });
-
-  it('should validate the form controls initial value', () => {
-    const form = component.documentForm.controls;
-    const expectFormFirst = ['documentTemplateForm'];
-
-    expect(Object.keys(form)).toEqual(expectFormFirst);
-    expect(form['documentTemplateForm'].value).toBe('');
-  });
-
-  it('should disable the button if form is not valid', () => {
-    component.documentLoading = false;
-    component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
-    fixture.detectChanges();
-    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
-    expect(btnFlow.disabled).toBeTruthy();
-  });
-
-  it('should show button as enabled if form is valid', () => {
-    component.documentLoading = false;
-    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
-    fixture.detectChanges();
-    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
-    expect(btnFlow.disabled).toBeFalsy();
+    component.saveDocumentAnswer();
+    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
   });
 });
