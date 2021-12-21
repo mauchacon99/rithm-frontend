@@ -109,7 +109,7 @@ describe('PreviousFieldsComponent', () => {
     expect(getStationPreviousQuestionsSpy).toHaveBeenCalledOnceWith(stationId, isPrivate);
   });
 
-  it('should show loading indicators while get previous questions the document', () => {
+  it('should show loading indicators while getting previous questions on the document', () => {
     component.isStation = false;
     component.isPrivate = false;
     component.documentId = documentId;
