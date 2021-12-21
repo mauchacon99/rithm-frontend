@@ -424,7 +424,7 @@ describe('DocumentComponent', () => {
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
   });
 
-  it('should redirect to dashboard if petitions is successfully', () => {
+  it('should redirect to dashboard if petitions are successfully', () => {
     const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     forkJoin([of(), of()]).subscribe(() => {
       expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
