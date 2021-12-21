@@ -196,8 +196,8 @@ describe('DocumentInfoDrawerComponent', () => {
     });
     fixture.detectChanges();
     expect(component.assignedUserError).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
-    expect(loadingComponent).toBeTruthy();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
+    expect(errorComponent).toBeTruthy();
   });
 
 });
