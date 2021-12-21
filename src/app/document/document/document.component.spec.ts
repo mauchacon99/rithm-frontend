@@ -20,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { forkJoin, of } from 'rxjs';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -421,5 +422,21 @@ describe('DocumentComponent', () => {
     const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
     component.saveDocumentAnswer();
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
+  });
+
+  it('should redirect to dashboard if petitions is successfully', () => {
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    forkJoin([of(), of()]).subscribe(() => {
+      expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
+    });
+    component.autoFlowDocument();
+  });
+
+  it('should not redirect to dashboard if some petition is wrong', () => {
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl').and.callThrough();
+    forkJoin([of(Error()), of()]).subscribe(() => {
+      expect(routerSpy).not.toHaveBeenCalled();
+    });
+    component.autoFlowDocument();
   });
 });
