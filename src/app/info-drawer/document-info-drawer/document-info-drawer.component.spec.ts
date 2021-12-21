@@ -188,4 +188,16 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
+  it('should show error message when request for assigned user fails', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: '',
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.assignedUserError).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
+    expect(loadingComponent).toBeTruthy();
+  });
+
 });

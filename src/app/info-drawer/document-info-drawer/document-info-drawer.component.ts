@@ -99,6 +99,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading indicator for time held in station. */
   timeInStationLoading = false;
 
+  /** Enable error message if assigned user to document request fails. */
+  assignedUserError = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -392,6 +395,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: unknown) => {
+          this.assignedUserError = true;
           this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
