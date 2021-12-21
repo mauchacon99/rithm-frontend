@@ -2,11 +2,15 @@ import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from 
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {StationMapElement} from 'src/helpers';
-import {ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
-  StationInfoDrawerData, StationInformation} from 'src/models';
+import {
+  ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
+  StationInfoDrawerData, StationInformation
+} from 'src/models';
 import {ConnectionElementService} from '../connection-element.service';
-import {DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT,
-  SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY} from '../map-constants';
+import {
+  DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, PAN_DECAY_RATE, PAN_TRIGGER_LIMIT,
+  SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY
+} from '../map-constants';
 import {MapService} from '../map.service';
 import {StationElementService} from '../station-element.service';
 import {FlowElementService} from '../flow-element.service';
@@ -95,6 +99,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** Boolean to check drag on connection line. */
   private connectionLineDrag = false;
+
+  /** Storing broken connection line. */
+  private storedConnectionLine: ConnectionMapElement | null = null;
 
 
 
@@ -877,15 +884,47 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       let newNextStation: StationMapElement | undefined;
       let newPreviousStation: StationMapElement | undefined;
       for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
         station.checkElementHover(position, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           newNextStation = station;
-        }
-        if (station.dragging) {
-          newPreviousStation = station;
+          newPreviousStation = this.stations.find((foundStation)=> foundStation.dragging);
+          break;
         }
       }
+      if (!newNextStation && MapDragItem.Connection) {
+        if (this.storedConnectionLine === null){
+          throw new Error('The connection line was not stored!');
+        }
+        const originatingStation = this.mapService.stationElements.find(station =>
+          station.rithmId === this.storedConnectionLine?.startStationRithmId);
+        if (!originatingStation) {
+          throw new Error(`Station ${this.storedConnectionLine.startStationRithmId} was not found when trying to restore a station`);
+        }
+        originatingStation.nextStations.push(this.storedConnectionLine.startStationRithmId);
+        originatingStation.previousStations.push(this.storedConnectionLine.endStationRithmId);
+        this.connections.push(this.storedConnectionLine);
+      }
+      this.storedConnectionLine = null;
+
+      // for (const station of this.stations) {
+      //   // Check if clicked on an interactive station element.
+      //   station.checkElementHover(position, this.mapMode, this.scale);
+      //   if (station.hoverActive !== StationElementHoverType.None) {
+      //     newNextStation = station;
+      //   } else if (this.dragItem === MapDragItem.Connection && StationElementHoverType.None) {
+      //     if (!this.storedConnectionLine){
+      //       throw new Error('The connection line was not stored!');
+      //     }
+      //     station.previousStations.push(this.storedConnectionLine.startStationRithmId);
+      //     station.nextStations.push(this.storedConnectionLine.endStationRithmId);
+      //     this.connections.push(this.storedConnectionLine);
+      //   }
+      //   // this.storedConnectionLine = null;
+      //   if (station.dragging) {
+      //     newPreviousStation = station;
+      //   }
+      //   break;
+      // }
 
       if (newNextStation && newPreviousStation) {
         for (const station of this.stations) {
@@ -1159,12 +1198,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
      for (const connectionLine of this.connections) {
        if (connectionLine.hoverActive && !this.connectionLineDrag) {
          // Created for future tasks.
-         // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
-         // const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
-         // if ( !startStation || !endStation ){
-         //   throw new Error('This start or end station was not found.');
-         // }
-         // const storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
+         const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
+         const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
+         if ( !startStation || !endStation ){
+           throw new Error('This start or end station was not found.');
+         }
+         this.storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
          this.mapService.removeConnectionLine(connectionLine.startStationRithmId, connectionLine.endStationRithmId);
          this.connectionLineDrag = true;
          break;
