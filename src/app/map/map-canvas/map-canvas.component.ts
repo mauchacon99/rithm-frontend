@@ -94,6 +94,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**Set up interval for zoom. */
   private zoomInterval?: NodeJS.Timeout;
 
+  /** Boolean to check drag on connection line. */
+  private connectionLineDrag = false;
+
 
 
   /**
@@ -233,7 +236,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.eventStartCoords = this.getEventCanvasPoint(pointer);
 
           const pos = this.getEventCanvasPoint(pointer);
-          this.eventStartLogic(pos);
+          const con = this.getEventContextPoint(pointer);
+          this.eventStartLogic(pos, con);
         }
 
         if (this.pointerCache.length === 2) {
@@ -353,7 +357,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.eventStartCoords = this.getEventCanvasPoint(event);
 
       const pos = this.getEventCanvasPoint(event);
-      this.eventStartLogic(pos);
+      const con = this.getEventContextPoint(event);
+      this.eventStartLogic(pos, con);
     }
   }
 
@@ -408,11 +413,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
         const pos = this.getEventCanvasPoint(touchPoint);
+        const con = this.getEventContextPoint(touchPoint);
 
         this.lastTouchCoords[0] = pos;
         this.eventStartCoords = pos;
 
-        this.eventStartLogic(pos);
+        this.eventStartLogic(pos, con);
       }
 
       if (event.touches.length === 2) {
@@ -768,8 +774,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles mouseDown and touchStart logic.
    *
    * @param position The position of the mouse or touch event.
+   * @param contextPoint The more specific position of the mouse or touch event used for connection lines.
    */
-  private eventStartLogic(position: Point) {
+  private eventStartLogic(position: Point, contextPoint: Point) {
     if (this.panActive) {
       cancelAnimationFrame(this.myReq as number);
       this.panActive = false;
@@ -800,6 +807,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      for (const connection of this.connections) {
+        // Check if connection line was clicked. ContextPoint is used for connection lines.
+        connection.checkElementHover(contextPoint, this.context);
+        if (connection.hoverActive) {
+          for (const station of this.stations) {
+            if (station.rithmId === connection.startStationRithmId){
+              station.dragging = true;
+              break;
+            }
+          }
+         this.dragItem = MapDragItem.Connection;
+         break;
+        }
+      }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       if (this.stations.find( obj => obj.dragging === true)) {
         const draggingStation = this.stations.filter( obj => obj.dragging === true);
@@ -808,7 +830,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.dragItem !== MapDragItem.Station && this.dragItem !== MapDragItem.Node) {
+    if (this.dragItem <= 1) {
       // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
@@ -914,6 +936,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.eventStartCoords = DEFAULT_MOUSE_POINT;
     this.lastTouchCoords = [DEFAULT_MOUSE_POINT];
     this.mapCanvas.nativeElement.style.cursor = 'default';
+    this.connectionLineDrag = false;
   }
 
   /**
@@ -969,6 +992,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Check for Add New Connected Station mode is enabled or not also draw a temporary line from station's node.
     } else if (this.mapMode === MapMode.StationAdd && this.mapService.stationElements.some(e => e.isAddingConnected)) {
         this.mapService.currentMousePoint$.next(moveInput);
+    } else if (this.dragItem === MapDragItem.Connection) {
+      //If it is a drag and not a click.
+      const moveFromStartX = this.eventStartCoords.x - moveInput.x;
+      const moveFromStartY = this.eventStartCoords.y - moveInput.y;
+      if (Math.abs(moveFromStartX) > 5 || Math.abs(moveFromStartY) > 5) {
+        this.onConnectionDrag(moveContext);
+      }
+      if (this.connectionLineDrag) {
+        this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+        for (const station of this.stations) {
+          if (station.dragging) {
+            this.mapService.currentMousePoint$.next(moveInput);
+          }
+        }
+      }
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
@@ -1111,6 +1149,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         break;
       }
     }
+  }
+
+  /**
+   * Handles when a user drags an existing connection line.
+   *
+   * @param contextPoint Calculated position of click.
+   */
+  onConnectionDrag(contextPoint: Point): void {
+     for (const connectionLine of this.connections) {
+       connectionLine.checkElementHover(contextPoint, this.context);
+       if (connectionLine.hoverActive && !this.connectionLineDrag) {
+         // Created for future tasks.
+         // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
+         // const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
+         // if ( !startStation || !endStation ){
+         //   throw new Error('This start or end station was not found.');
+         // }
+         // const storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
+         this.mapService.removeConnectionLine(connectionLine.startStationRithmId, connectionLine.endStationRithmId);
+         this.connectionLineDrag = true;
+         break;
+       }
+     }
   }
 
   /**
