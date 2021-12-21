@@ -424,19 +424,28 @@ describe('DocumentComponent', () => {
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
   });
 
-  it('should redirect to dashboard if petitions are successfully', () => {
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
-    forkJoin([of(), of()]).subscribe(() => {
-      expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
+  describe('navigateRouterTesting', () => {
+    let router: Router;
+    let routerNavigateSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      router = TestBed.inject(Router);
+      routerNavigateSpy = spyOn(router, 'navigateByUrl');
     });
-    component.autoFlowDocument();
+
+    it('should redirect to dashboard if petitions are successfully', () => {
+      forkJoin([of(), of()]).subscribe(() => {
+        expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
+      });
+      component.autoFlowDocument();
+    });
+
+    it('should not redirect if some petition is wrong', () => {
+      forkJoin([of(Error()), of()]).subscribe(() => {
+        expect(routerNavigateSpy).not.toHaveBeenCalled();
+      });
+      component.autoFlowDocument();
+    });
   });
 
-  it('should not redirect if some petition is wrong', () => {
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
-    forkJoin([of(Error()), of()]).subscribe(() => {
-      expect(routerSpy).not.toHaveBeenCalled();
-    });
-    component.autoFlowDocument();
-  });
 });
