@@ -93,6 +93,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
+  /* Loading in document the assigned user */
+  assignedUserLoading = false;
+
   /** Loading indicator for time held in station. */
   timeInStationLoading = false;
 
@@ -378,15 +381,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   private getAssignedUserToDocument(): void {
+    this.assignedUserLoading = true;
     this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
+          this.assignedUserLoading = false;
           if (assignedUser) {
             this.documentAssignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {
+          this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
