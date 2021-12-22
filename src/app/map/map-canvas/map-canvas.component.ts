@@ -1001,10 +1001,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
       if (this.connectionLineDrag) {
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-        for (const station of this.stations) {
-          if (station.dragging) {
-            this.mapService.currentMousePoint$.next(moveInput);
-          }
+        if (this.stations.some((station) => station.dragging)) {
+          this.mapService.currentMousePoint$.next(moveInput);
         }
       }
     } else {
