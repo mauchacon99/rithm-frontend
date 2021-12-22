@@ -36,7 +36,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The current mode of the map. */
-  private currentMode = MapMode.View;
+  currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
   mapDataLoading = true;
@@ -69,6 +69,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Option menu button cursor handler. */
   optionMenuNone = false;
 
+  /** Map mode variable form comparison in html. */
+  mapMode = MapMode;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -79,12 +82,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Station the map is in stationAdd mode.
+   * Station the map is in stationAdd or FlowAdd mode.
    *
-   * @returns True if the map is in stationAdd mode, false otherwise.
+   * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
    */
-  get isStationAdd(): boolean {
-    return this.currentMode === MapMode.StationAdd;
+  get isStationOrFlowAdd(): boolean {
+    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
   }
 
   /**
