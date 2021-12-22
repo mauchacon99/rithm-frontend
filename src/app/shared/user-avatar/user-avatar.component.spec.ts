@@ -19,8 +19,8 @@ describe('UserAvatarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserAvatarComponent);
     component = fixture.componentInstance;
-    component.firstName = 'Tyler';
-    component.lastName = 'Hendrickson';
+    component.firstName = 'tyler';
+    component.lastName = 'hendrickson';
     fixture.detectChanges();
   });
 
