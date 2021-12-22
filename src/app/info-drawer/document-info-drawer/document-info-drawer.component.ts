@@ -435,8 +435,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
  *
  * @param user The User who will be unassigned.
  */
-  unassignUserToDocument(user: StationRosterMember): void{
-    this.documentService.unassignUserToDocument(this.documentRithmId,this.stationRithmId,user)
+  private unassignUserToDocument(user: StationRosterMember): void{
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId, user)
     .pipe(first())
     .subscribe({
       next: (result) => {

@@ -189,8 +189,11 @@ describe('DocumentInfoDrawerComponent', () => {
   });
 
   it('should call the service to unassign a user to document', async () => {
-    component.stationRithmId='ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    component.documentRithmId='E204F369-386F-4E41';
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
     const assignedUser: StationRosterMember = {
       rithmId: '789-321-456-789',
       firstName: 'John',
@@ -198,8 +201,7 @@ describe('DocumentInfoDrawerComponent', () => {
       email: 'johnny.depp@gmail.com'
     };
     const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
-
-    await component.unassignUserToDocument(assignedUser);
+    expect(unassignSpy).toHaveBeenCalledOnceWith(documentId,stationId,assignedUser);
 
     expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId,component.stationRithmId,assignedUser);
   });
