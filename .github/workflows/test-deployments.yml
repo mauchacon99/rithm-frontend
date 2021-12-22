@@ -26,5 +26,11 @@ jobs:
     - name: Compiling app
       run: npm run build-test
 
+    - name: Placing app offline file
+      run: Copy-Item ./src/app_offline.htm C:/inetpub/testapp.rithm.tech
+
     - name: Deploying app
       run: Copy-Item ./dist/rithm/* C:/inetpub/testapp.rithm.tech -Recurse -Force
+
+    - name: Removing app offline file
+      run: Remove-Item C:/inetpub/testapp.rithm.tech/app_offline.htm
