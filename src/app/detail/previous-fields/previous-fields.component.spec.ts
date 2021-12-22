@@ -108,4 +108,16 @@ describe('PreviousFieldsComponent', () => {
     component.ngOnInit();
     expect(getStationPreviousQuestionsSpy).toHaveBeenCalledOnceWith(stationId, isPrivate);
   });
+
+  it('should show loading indicators while getting previous questions on the document', () => {
+    component.isStation = false;
+    component.isPrivate = false;
+    component.documentId = documentId;
+    component.stationId = stationId;
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loading = fixture.debugElement.nativeElement.querySelector('#loading-previous-field-component');
+    expect(loading).toBeTruthy();
+  });
 });

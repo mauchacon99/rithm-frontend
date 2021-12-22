@@ -37,8 +37,8 @@ export class UserAvatarComponent {
    * @returns The initials.
    */
   get initials(): string {
-    const firstInitial = this.firstName ? this.firstName.charAt(0) : '';
-    const lastInitial = this.lastName ? this.lastName.charAt(0) : '';
+    const firstInitial = this.firstName ? this.firstName.charAt(0).toUpperCase() : '';
+    const lastInitial = this.lastName ? this.lastName.charAt(0).toUpperCase() : '';
 
     return firstInitial + lastInitial;
   }
