@@ -23,17 +23,18 @@ jobs:
     - name: Installing dependencies
       run: npm ci --no-audit
 
-    # - name: Stopping IIS pool
-    #   run: c:\batch\elevate Stop-WebAppPool -Name devapp
-
     - name: Compiling app
       run: npm run build
+
+    - name: Placing app offline file
+      run: Copy-Item ./src/app_offline.htm C:/inetpub/devapp.rithm.tech
 
     - name: Deploying app
       run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
 
-    # - name: Starting IIS pool
-    #   run: c:\batch\elevate Start-WebAppPool -Name devapp
+    - name: Removing app offline file
+      run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
+
 
   # Deploys the Karma test coverage site
   test-coverage:

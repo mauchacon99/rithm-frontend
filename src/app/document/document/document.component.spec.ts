@@ -21,6 +21,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
 import { forkJoin, of } from 'rxjs';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -46,7 +47,8 @@ describe('DocumentComponent', () => {
         ),
         MatSidenavModule,
         ReactiveFormsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatExpansionModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
