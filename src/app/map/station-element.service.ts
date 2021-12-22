@@ -8,7 +8,7 @@ import {
   ICON_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_PADDING, STATION_RADIUS, STATION_WIDTH,
 } from './map-constants';
-import {MapService} from './map.service';
+import { MapService } from './map.service';
 
 /**
  * Service for rendering and other behavior for a station on the map.
