@@ -201,9 +201,7 @@ describe('DocumentInfoDrawerComponent', () => {
       email: 'johnny.depp@gmail.com'
     };
     const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
-    expect(unassignSpy).toHaveBeenCalledOnceWith(documentId,stationId,assignedUser);
-
-    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId,component.stationRithmId,assignedUser);
+    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId, assignedUser);
   });
 
 
