@@ -1,9 +1,9 @@
 name: Dev Deployments
 
 on:
-  pull_request:
-    # paths:
-    #   - "src/**"
+  push:
+    paths:
+      - "src/**"
     branches:
       - "dev"
 
@@ -37,64 +37,64 @@ jobs:
 
 
   # Deploys the Karma test coverage site
-  # test-coverage:
-  #   runs-on: [self-hosted, devvm]
-  #   needs: web-app
-  #   timeout-minutes: 10
+  test-coverage:
+    runs-on: [self-hosted, devvm]
+    needs: web-app
+    timeout-minutes: 10
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '16'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Generating test coverage
-  #     run: npm run test-ci
+    - name: Generating test coverage
+      run: npm run test-ci
 
-  #   - name: Deploying documentation site
-  #     run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
+    - name: Deploying documentation site
+      run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
 
   # Deploys the Compodoc documentation site
-  # compodoc:
-  #   runs-on: [self-hosted, devvm]
-  #   needs: web-app
-  #   timeout-minutes: 10
+  compodoc:
+    runs-on: [self-hosted, devvm]
+    needs: web-app
+    timeout-minutes: 10
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '16'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Compiling documentation
-  #     run: npm run compile-docs
+    - name: Compiling documentation
+      run: npm run compile-docs
 
-  #   - name: Deploying documentation site
-  #     run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
+    - name: Deploying documentation site
+      run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
 
   # Deploys the SassDoc documentation site
-  # sassdoc:
-  #   runs-on: [self-hosted, devvm]
-  #   needs: web-app
-  #   timeout-minutes: 10
+  sassdoc:
+    runs-on: [self-hosted, devvm]
+    needs: web-app
+    timeout-minutes: 10
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '16'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-  #   - name: Installing dependencies
-  #     run: npm ci --no-audit
+    - name: Installing dependencies
+      run: npm ci --no-audit
 
-  #   - name: Compiling documentation
-  #     run: npm run compile-style-docs
+    - name: Compiling documentation
+      run: npm run compile-style-docs
 
-  #   - name: Deploying documentation site
-  #     run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
+    - name: Deploying documentation site
+      run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
