@@ -84,6 +84,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The priority for current station once the info is loaded.*/
   stationPriority: number | '--' = '--';
 
+  /** Is the signed in user an Admin or station owner. */
+  userAdminOrOwner = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -296,6 +299,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
+              this.userAdminOrOwner = this.isUserAdminOrOwner;
             }
           },
           error: (error: unknown) => {
@@ -376,4 +380,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+ /**
+  * Is the current user an owner or an admin for this station.
+  *
+  * @returns Validate if user is owner or admin of current station.
+  */
+  get isUserAdminOrOwner(): boolean {
+    this.stationInformation.stationOwners = [];
+    return this.stationInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId)
+    !== undefined  ? true : (this.type === 'admin') ? true : false;
+  }
 }
