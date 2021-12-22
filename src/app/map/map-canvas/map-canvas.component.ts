@@ -798,14 +798,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if connection line was clicked. ContextPoint is used for connection lines.
         connection.checkElementHover(eventContextPoint, this.context);
         if (connection.hoverActive) {
-          for (const station of this.stations) {
-            if (station.rithmId === connection.startStationRithmId){
-              station.dragging = true;
-              break;
-            }
+          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+          if (!startStation) {
+            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
           }
-         this.dragItem = MapDragItem.Connection;
-         break;
+          startStation.dragging = true;
+          this.dragItem = MapDragItem.Connection;
+          break;
         }
       }
 
