@@ -189,7 +189,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should call the service to unassign a user to document', async () => {
+  it('should call the service to unassign a user to document', () => {
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
