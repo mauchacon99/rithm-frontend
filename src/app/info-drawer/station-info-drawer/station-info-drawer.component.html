@@ -1,4 +1,4 @@
-<div class="h-full w-full flex justify-center items-center absolute" *ngIf="stationLoading">
+<div class="h-full w-full flex justify-center items-center" *ngIf="stationLoading">
   <app-loading-indicator id="loading-drawer-component"></app-loading-indicator>
 </div>
 <div class="grid grid-cols-1" *ngIf="!stationLoading">
@@ -6,39 +6,51 @@
     <div class="col-span-12">
       <h6 class="text-center">Station Information</h6>
     </div>
-    <div class="col-span-12 pt-2">
-      <p class="overline">Station Name</p>
+    <div class="col-span-12 pt-2" *ngIf="!openedFromMap || !editMode">
+      <p class="overline-font">Station Name</p>
       <p>{{stationName}}</p>
+    </div>
+    <div class="col-span-12 pt-2" *ngIf="openedFromMap && editMode">
+      <form [formGroup]="stationNameForm">
+        <mat-form-field appearance="outline" class="col-span-12 sm:col-span-8 p-0">
+          <mat-label>Station name</mat-label>
+          <input matInput type="text" id="station" formControlName="name" autocomplete="name" data-testid="station-name-field"
+                 (ngModelChange)="reportNewStationMapChange()"/>
+        </mat-form-field>
+      </form>
     </div>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station owners</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.stationOwners"
-      [rosterSize]="stationInformation.stationOwners.length" [stationId]="stationInformation.rithmId"
-      [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
-    </app-roster>
+    <p class="overline-font">station owners</p>
+    <div class="overline-font py-2 text-secondary-500" *ngIf="locallyCreated else showOwnerRoster">Publish map to add roster members</div>
+    <ng-template #showOwnerRoster>
+      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="false" [editMode]="editMode">
+      </app-roster>
+    </ng-template>
   </div>
   <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline">worker roster</p>
-    <app-roster (modalClosed)="refreshInfoDrawer($event)" [rosterMembers]="stationInformation.workers"
-      [rosterSize]="stationInformation.workers.length" [stationId]="stationInformation.rithmId"
-      [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
-    </app-roster>
+    <p class="overline-font">worker roster</p>
+    <div class="overline-font py-2 text-secondary-500" *ngIf="locallyCreated else showWorkerRoster">Publish map to add roster members</div>
+    <ng-template #showWorkerRoster>
+      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="true" [editMode]="editMode">
+      </app-roster>
+    </ng-template>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station priority</p>
-    <button mat-mini-fab color="warn" class="priority">
-      1
+    <p class="overline-font">station priority</p>
+    <button [ngClass]="!locallyCreated ? 'mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn' : 'pt-1 cursor-text outline-none'">
+      {{stationPriority}}
     </button>
   </div>
   <div class="w-full py-2">
-    <p class="overline">document generation</p>
-    <div class="w-24 items-center py-2" *ngIf="docGenLoading">
+    <p class="overline-font">document generation</p>
+    <div class="py-1 text-sm" *ngIf="locallyCreated">None</div>
+    <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
       <app-loading-indicator id="loading-indicator-status" [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
-    <div class="py-1" *ngIf="!docGenLoading">
+    <div class="py-1" *ngIf="!docGenLoading && !locallyCreated">
       <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)"
-        *ngIf="!showDocumentGenerationError">
+                       *ngIf="!showDocumentGenerationError">
         <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'">
           None
         </mat-radio-button>
@@ -50,8 +62,8 @@
       </div>
     </div>
   </div>
-  <div class="w-full py-2">
-    <p class="overline">last updated</p>
+  <div class="w-full py-2" *ngIf="!openedFromMap">
+    <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
       <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
     </div>
@@ -59,8 +71,19 @@
       <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
   </div>
-  <div class="w-full py-2">
-    <button mat-stroked-button color="warn" *ngIf="editMode" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete
-      Station</button>
+  <div class="w-full" *ngIf="mapMode === mapModeEnum.Build">
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea matInput [(ngModel)]="stationNotes" (ngModelChange)="reportNewStationMapChange()"></textarea>
+    </mat-form-field>
+  </div>
+  <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
+    <button mat-stroked-button color="accent" (click)="goToStation()">
+      View Station
+    </button>
+  </div>
+  <div class="w-full py-2" *ngIf="editMode">
+    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation()">Delete Station
+    </button>
   </div>
 </div>

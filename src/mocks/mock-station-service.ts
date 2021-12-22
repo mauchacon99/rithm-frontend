@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 // eslint-disable-next-line max-len
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
@@ -13,8 +13,17 @@ export class MockStationService {
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
+  /** Set the Question of the station-template which will be moved to previous fields expansion panel. */
+  questionToMove$ = new Subject<Question>();
+
   /** The Name of the Station Document as BehaviorSubject. */
   documentStationNameFields$ = new BehaviorSubject<DocumentNameField[]>([]);
+
+  /** Set touch to station template form. */
+  stationFormTouched$ = new Subject<void>();
+
+  /** The question to be updated when it changes in station page. */
+  stationQuestion$ = new Subject<Question>();
 
   /**
    * Gets a station information.
@@ -231,10 +240,11 @@ export class MockStationService {
   /**
    * Update the station questions.
    *
+   * @param stationId The Specific id of station.
    * @param questions The Specific questions of station.
    * @returns Station save the questions array.
    */
-  updateStationQuestions(questions: Question[]): Observable<Question[]> {
+  updateStationQuestions(stationId: string, questions: Question[]): Observable<Question[]> {
     questions = [
       {
         prompt: 'Example question#1',
@@ -545,6 +555,24 @@ export class MockStationService {
   }
 
   /**
+   * Update the station question values in the template area.
+   *
+   * @param question The question to be updated.
+   */
+   updateStationQuestionInTemplate(question: Question): void {
+    this.stationQuestion$.next(question);
+  }
+
+ /**
+  * Reports a new question to be moved.
+  *
+  * @param question The question of the station-template to be moved.
+  */
+  moveQuestion(question: Question): void {
+    this.questionToMove$.next(question);
+  }
+
+  /**
    * Update the Station General Instruction.
    *
    * @param rithmId The Specific id of station.
@@ -568,36 +596,28 @@ export class MockStationService {
 
   /**
    * Updates a station name.
-   * Get previous and following stations.
+   * Get previous and next stations.
    *
    * @param stationRithmId The rithm id actually station.
-   * @returns Previous and following stations.
+   * @returns Previous and next stations.
    */
-  getPreviousAndFollowingStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
+  getPreviousAndNextStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
     const mockDataFollowAndPrevStations: ForwardPreviousStationsDocument = {
       rithmId: stationRithmId,
       previousStations: [
         {
-          rithmId: '789-654-321',
-          name: 'Previous station 1',
-          totalDocuments: 5
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+          name: 'Step 1'
         },
         {
-          rithmId: '789-654-753',
-          name: 'Previous station 2',
-          totalDocuments: 2
+          rithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
+          name: 'Step 2'
         }
       ],
-      followingStations: [
+      nextStations: [
         {
-          rithmId: '852-963-741',
-          name: 'Follow station 1',
-          totalDocuments: 2
-        },
-        {
-          rithmId: '852-963-418',
-          name: 'Follow station 2',
-          totalDocuments: 1
+          rithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+          name: 'Step 4'
         }
       ]
     };
@@ -633,15 +653,15 @@ export class MockStationService {
     const documentFieldName: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: null
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
     return of(documentFieldName).pipe(delay(1000));
@@ -665,18 +685,23 @@ export class MockStationService {
       const documentFieldName: DocumentNameField[] = [
         {
           prompt: 'Address',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
         },
         {
           prompt: '/',
-          rithmId: ''
+          questionRithmId: null
         },
         {
           prompt: 'Which is best?',
-          rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+          questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
         },
       ];
       return of(documentFieldName).pipe(delay(1000));
     }
+  }
+
+  /** Set touch to station template form. */
+  touchStationForm(): void {
+    this.stationFormTouched$.next();
   }
 }

@@ -19,6 +19,9 @@ export class MockMapService {
   /** This behavior subject will track the array of stations. */
   mapElements$ = new BehaviorSubject<StationMapData[]>([]);
 
+  /** The station elements displayed on the map. */
+  stationElements: StationMapElement[] = [];
+
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.Build);
 
@@ -40,6 +43,9 @@ export class MockMapService {
   /** The number of zoom levels to increment or decrement. */
   zoomCount$ = new BehaviorSubject(0);
 
+  /** Informs the map when station elements have changed. */
+  stationElementsChanged$ = new BehaviorSubject(false);
+
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
    *
@@ -54,7 +60,7 @@ export class MockMapService {
    *
    * @returns Retrieves all map elements for a given organization.
    */
-  getMapElements(): Observable<MapData> {
+  getMapData(): Observable<MapData> {
     const data: MapData = {
       stations: [
         {
@@ -67,7 +73,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -79,7 +86,8 @@ export class MockMapService {
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
@@ -91,7 +99,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         },
         {
           rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
@@ -103,7 +112,8 @@ export class MockMapService {
           },
           previousStations: [],
           nextStations: [],
-          status: MapItemStatus.Normal
+          status: MapItemStatus.Normal,
+          notes: ''
         }
       ],
       flows: [
@@ -272,5 +282,14 @@ export class MockMapService {
       x: this.getMapX(canvasPoint.x),
       y: this.getMapY(canvasPoint.y)
     };
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 }

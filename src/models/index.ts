@@ -37,3 +37,6 @@ export * from './connection-map-element';
 export * from './document-name-field';
 export * from './standard-string-json';
 export * from './document-answer';
+export * from './document-name';
+export * from './question-answer';
+export * from './document-auto-flow';

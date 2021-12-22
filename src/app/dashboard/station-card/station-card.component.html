@@ -2,17 +2,14 @@
   <div class="grid grid-cols-2 gap-1">
     <h6 class="col-span-2 text-accent-500 font-medium">{{station?.stationName}}</h6>
     <div>
-      <p class="overline">worker roster</p>
+      <p class="overline-font">worker roster</p>
       <app-roster
-        [rosterMembers]="station.worker"
-        [rosterSize]="station.numberOfWorkers"
         [stationId]="station.rithmId!"
-        [stationName]="station.stationName"
         [isWorker]="true">
       </app-roster>
     </div>
     <div>
-      <p class="overline">documents</p>
+      <p class="overline-font">documents</p>
       <div class="cursor-pointer circle-30-secondary my-1" (click)="openDocsModal()">{{station?.numberOfDocuments}}</div>
     </div>
   </div>

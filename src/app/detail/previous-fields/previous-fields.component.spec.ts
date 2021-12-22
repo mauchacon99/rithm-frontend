@@ -1,21 +1,24 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
+import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationService } from 'src/app/core/station.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockErrorService, MockPopupService, MockStationService } from 'src/mocks';
+import { MockDocumentService, MockErrorService, MockPopupService, MockStationService } from 'src/mocks';
 import { DialogOptions, QuestionFieldType } from 'src/models';
 import { PreviousFieldsComponent } from './previous-fields.component';
 
 describe('PreviousFieldsComponent', () => {
   let component: PreviousFieldsComponent;
   let fixture: ComponentFixture<PreviousFieldsComponent>;
+  const stationId = 'E204F369-386F-4E41';
+  const documentId = 'E204F369-386F-4E41';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PreviousFieldsComponent,
+      declarations: [PreviousFieldsComponent,
         MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
@@ -24,10 +27,11 @@ describe('PreviousFieldsComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
+        { provide: DocumentService, useClass: MockDocumentService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -60,20 +64,20 @@ describe('PreviousFieldsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should execute to service popup service',() => {
-    const expectData: DialogOptions = {
-       title: 'Move field?',
-       message: 'Are you sure you want to move this field into the template area?',
-       okButtonText: 'Confirm',
-       cancelButtonText: 'Close'
-     };
-     const popupSpy = spyOn(TestBed.inject(PopupService),'confirm').and.callThrough();
-     component.moveFieldToTemplate();
-     expect(popupSpy).toHaveBeenCalledOnceWith(expectData);
-   });
+  it('should open a confirm dialog to move the previous field to template area', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Move field?',
+      message: 'Are you sure you want to move this field into the template area?',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close'
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.moveFieldToTemplate(component.questions[0]);
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
 
 
-  it('should clicked the card previous fields and call moveFieldToTemplate', fakeAsync(() => {
+  it('should move the previous field to the template area once confirm the popup', fakeAsync(() => {
     component.isLoading = false;
     fixture.detectChanges();
     const moveFieldToTemplateSpy = spyOn(component, 'moveFieldToTemplate');
@@ -81,7 +85,39 @@ describe('PreviousFieldsComponent', () => {
     expect(previousQuestionCard).toBeTruthy();
     previousQuestionCard.click();
     tick();
-    expect(moveFieldToTemplateSpy).toHaveBeenCalled();
+    expect(moveFieldToTemplateSpy).toHaveBeenCalledOnceWith(component.questions[0]);
   }));
 
+  it('should return document previous Questions', () => {
+    const getPrivate = false;
+    component.isStation = false;
+    component.documentId = documentId;
+    component.stationId = stationId;
+    component.isPrivate = getPrivate;
+    const getDocumentPreviousQuestionsSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentPreviousQuestions').and.callThrough();
+    component.ngOnInit();
+    expect(getDocumentPreviousQuestionsSpy).toHaveBeenCalledOnceWith(documentId, stationId, getPrivate);
+  });
+
+  it('should return station previous Questions', () => {
+    const isPrivate = false;
+    component.isStation = true;
+    component.stationId = stationId;
+    component.isPrivate = isPrivate;
+    const getStationPreviousQuestionsSpy = spyOn(TestBed.inject(StationService), 'getStationPreviousQuestions').and.callThrough();
+    component.ngOnInit();
+    expect(getStationPreviousQuestionsSpy).toHaveBeenCalledOnceWith(stationId, isPrivate);
+  });
+
+  it('should show loading indicators while getting previous questions on the document', () => {
+    component.isStation = false;
+    component.isPrivate = false;
+    component.documentId = documentId;
+    component.stationId = stationId;
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loading = fixture.debugElement.nativeElement.querySelector('#loading-previous-field-component');
+    expect(loading).toBeTruthy();
+  });
 });

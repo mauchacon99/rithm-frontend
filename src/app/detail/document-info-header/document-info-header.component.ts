@@ -1,13 +1,14 @@
+
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, StandardStringJSON } from 'src/models';
-import { UtcTimeConversion } from 'src/helpers';
+import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, DocumentName } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
@@ -16,7 +17,7 @@ import { UserService } from 'src/app/core/user.service';
   selector: 'app-document-info-header[documentInformation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: []
 })
 export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
@@ -38,17 +39,26 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /** Document name form. */
   documentNameForm: FormGroup;
 
-  /** Whether the request is underway. */
-  documentLoadingIndicator = false;
+  /** Whether the Station allows edit document name or not. */
+  isDocumentNameEditable!: boolean;
+
+  /**Current document name */
+  documentName = '';
+
+  /** Id the document actually. */
+  documentRithmId = '';
+
+  /** Fields appended to the document name. */
+  appendedDocumentName = '';
 
   constructor(
     private fb: FormBuilder,
     private sidenavDrawerService: SidenavDrawerService,
-    private utcTimeConversion: UtcTimeConversion,
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute
   ) {
     this.documentNameForm = this.fb.group({
       name: ['']
@@ -66,22 +76,43 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Disable document input element in station edit mode.
    */
   ngOnInit(): void {
+    this.getParams();
     this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
-    this.documentNameForm.controls['name'].setValue(this.documentName);
-    this.getAppendedFieldsOnDocumentName(this.rithmId);
+    if (!this.isStation) {
+      this.getDocumentName();
+    } else {
+      this.getAppendedFieldsOnDocumentName(this.stationRithmId);
+    }
+    this.getStatusDocumentEditable();
   }
 
   /**
-   * Uses the helper: UtcTimeConversion.
-   * Tells how long a document has been in a station for.
+   * Whether the info-drawer is opened.
    *
-   * @param timeEntered Reflects the date we're calculating against.
-   * @returns A string reading something like "4 days" or "32 minutes".
+   * @returns Return true if info-drawer is opened, false otherwise.
    */
-  getElapsedTime(timeEntered: string): string {
-    return this.utcTimeConversion.getElapsedTimeText(
-      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
-    );
+   get isDrawerOpen(): boolean{
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
+   * Attempts to retrieve the document info from the query params in the URL and make the requests.
+   */
+  private getParams(): void {
+    this.route.params
+      .pipe(first())
+      .subscribe({
+        next: (params) => {
+          if (params.docName) {
+            this.documentRithmId = params.docName;
+          }
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 
   /**
@@ -94,48 +125,22 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Document Priority of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Priority.
-   */
-  get documentPriority(): number {
-    return 'documentPriority' in this.documentInformation ? this.documentInformation.documentPriority : 0;
-  }
-
-  /**
-   * Get flowed time UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Flowed time UTC.
-   */
-  get flowedTimeUTC(): string {
-    return 'flowedTimeUTC' in this.documentInformation ? this.documentInformation.flowedTimeUTC : '';
-  }
-
-  /**
-   * Get last updated UTC of document from DocumentStationInformation based on type.
-   *
-   * @returns The Last Updated UTC.
-   */
-  get lastUpdatedUTC(): string {
-    return 'lastUpdatedUTC' in this.documentInformation ? this.documentInformation.lastUpdatedUTC : '';
-  }
-
-  /**
-   * Get name of document from DocumentStationInformation based on type.
-   *
-   * @returns The Document Name.
-   */
-  get documentName(): string {
-    return 'documentName' in this.documentInformation ? this.documentInformation.documentName : '';
-  }
-
-  /**
    * The id of the station or document.
    *
    * @returns The id of the station or document.
    */
-  get rithmId(): string {
+  get stationRithmId(): string {
     return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
+  get isUserAdminOrOwner(): boolean {
+    return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
+      ? true : false;
   }
 
   /**
@@ -146,15 +151,37 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'documentInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem,
       {
-        rithmId: this.rithmId,
+        stationRithmId: this.stationRithmId,
         isStation: this.isStation,
-        isUserAdminOrOwner: this.isUserAdminOrOwner
+        isUserAdminOrOwner: this.isUserAdminOrOwner,
+        documentRithmId: this.documentRithmId
       }
     );
   }
 
   /**
-   * Get appended fields to document.
+   * Get document name.
+   */
+  private getDocumentName(): void {
+    this.documentService.getDocumentName(this.documentRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentName) => {
+          this.documentNameForm.controls.name.setValue(documentName.baseName);
+          this.documentName = documentName.baseName;
+          this.appendedDocumentName = documentName.appendedName;
+          this.documentService.updateDocumentNameBS(documentName);
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Get appended fields to document name template.
    *
    * @param stationId  The id of station.
    */
@@ -177,6 +204,25 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get the station document name editable status.
+   *
+   */
+  private getStatusDocumentEditable(): void {
+    this.stationService.getStatusDocumentEditable(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (editableStatus) => {
+          this.isDocumentNameEditable = editableStatus;
+        }, error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
    * Remove an appended field from document field names.
    *
    * @param index The current index to remove from appendedFields.
@@ -188,22 +234,14 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get document name.
-   *
+   * Update the Document Name Behavior Subject.
    */
-  private getDocumentName(): void {
-    this.documentService.getDocumentName(this.rithmId)
-      .pipe(first())
-      .subscribe({
-        next: (documentName) => {
-          this.documentNameForm.controls.name.setValue(documentName.data);
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+  updateDocumentNameBS(): void {
+    const documentName: DocumentName = {
+      baseName: this.documentNameForm.controls.name.value,
+      appendedName: this.appendedDocumentName
+    };
+    this.documentService.updateDocumentNameBS(documentName);
   }
 
   /**
@@ -212,40 +250,5 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  /**
-   * Update the document name.
-   *
-   */
-  private updateDocumentName(): void {
-    this.documentLoadingIndicator = true;
-    const newDocumentName: StandardStringJSON = {
-      data: this.documentNameForm.controls.name.value
-    };
-    this.documentService.updateDocumentName(this.rithmId, newDocumentName)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.documentLoadingIndicator = false;
-        },
-        error: (error: unknown) => {
-          this.documentLoadingIndicator = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
-   * Get User type owner to actually station.
-   *
-   * @returns Validate if user actually is owner to actually station.
-   */
-  get isUserAdminOrOwner(): boolean {
-    return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
-      ? true : false;
   }
 }

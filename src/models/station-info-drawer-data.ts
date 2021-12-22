@@ -1,12 +1,12 @@
-import { StationInformation } from './station-info';
+import { MapItemStatus, MapMode } from '.';
 
 /**
  * Represents the matDrawer model in component info drawer.
  */
 export interface StationInfoDrawerData {
 
-  /** StationInformation the type StationInformation model. */
-  stationInformation: StationInformation;
+  /** The id of the specific station. */
+  stationRithmId: string;
 
   /** Name Station. */
   stationName: string;
@@ -14,6 +14,15 @@ export interface StationInfoDrawerData {
   /** Mode Edit. */
   editMode: boolean;
 
-  /** Whether the station has been created locally and doesn't yet exist (used for the map). */
-  locallyCreated: boolean;
+  /** Map Mode. */
+  mapMode?: MapMode;
+
+  /** The status of the station (used for the map). */
+  stationStatus?: MapItemStatus;
+
+  /** Whether the station drawer is opened from map or not (used for the map). */
+  openedFromMap: boolean;
+
+  /** Optional notes to station. */
+  notes?: string;
 }

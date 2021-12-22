@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { ErrorService } from 'src/app/core/error.service';
+import { Subject } from 'rxjs';
 
 /**
  * Reusable component for the station information header.
@@ -14,7 +14,11 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss']
 })
-export class StationInfoHeaderComponent implements OnInit {
+export class StationInfoHeaderComponent implements OnInit, OnDestroy {
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Is component viewed in station edit mode? */
   @Input() stationEditMode!: boolean;
 
@@ -35,13 +39,13 @@ export class StationInfoHeaderComponent implements OnInit {
     private userService: UserService,
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
-    private errorService: ErrorService,
   ) {
     this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
 
     this.stationNameForm = this.fb.group({
       name: ['']
     });
+
   }
 
   /** Set this.info. */
@@ -57,6 +61,15 @@ export class StationInfoHeaderComponent implements OnInit {
       children: [],
     };
     this.stationNameForm.controls['name'].setValue(this.stationName);
+  }
+
+  /**
+   * Whether the info-drawer is opened.
+   *
+   * @returns Return true if info-drawer is opened, false otherwise.
+   */
+  get isDrawerOpen(): boolean{
+    return this.sidenavDrawerService.isDrawerOpen;
   }
 
   /**
@@ -78,16 +91,25 @@ export class StationInfoHeaderComponent implements OnInit {
   }
 
   /**
+   * The id of the station or document.
+   *
+   * @returns The id of the station or document.
+   */
+   get stationRithmId(): string {
+    return 'rithmId' in this.stationInformation ? this.stationInformation.rithmId : this.stationInformation.stationRithmId;
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'stationInfo'): void {
     const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: this.stationInformation as StationInformation,
+      stationRithmId: this.stationRithmId,
       stationName: this.stationName,
       editMode: this.stationEditMode,
-      locallyCreated: false
+      openedFromMap: false
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updateStationInfoDrawerName();
@@ -98,6 +120,14 @@ export class StationInfoHeaderComponent implements OnInit {
    */
   updateStationInfoDrawerName(): void {
     this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
 }

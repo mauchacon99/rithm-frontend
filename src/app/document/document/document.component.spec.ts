@@ -15,11 +15,12 @@ import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawe
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { QuestionFieldType } from 'src/models';
+import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -45,7 +46,8 @@ describe('DocumentComponent', () => {
         ),
         MatSidenavModule,
         ReactiveFormsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatExpansionModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -339,4 +341,87 @@ describe('DocumentComponent', () => {
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
+  it('should validate the form controls initial value', () => {
+    const form = component.documentForm.controls;
+    const expectFormFirst = ['documentTemplateForm'];
+
+    expect(Object.keys(form)).toEqual(expectFormFirst);
+    expect(form['documentTemplateForm'].value).toBe('');
+  });
+
+  it('should disable the button if form is not valid', () => {
+    component.documentLoading = false;
+    component.documentForm.get('documentTemplateForm')?.addValidators(Validators.required);
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeTruthy();
+  });
+
+  it('should show button as enabled if form is valid', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const btnFlow = fixture.debugElement.nativeElement.querySelector('#document-flow');
+    expect(btnFlow.disabled).toBeFalsy();
+  });
+
+  it('should called service to save answers and auto flow the document', () => {
+    const expectedAnswer = component.documentAnswer;
+
+    const expectAutoFlow: DocumentAutoFlow = {
+      stationRithmId: component.documentInformation.stationRithmId,
+      documentRithmId: component.documentInformation.documentRithmId,
+      testMode: false
+    };
+
+    const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    const spySaveAutoFlowDocument = spyOn(TestBed.inject(DocumentService), 'autoFlowDocument').and.callThrough();
+
+    component.autoFlowDocument();
+
+    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
+    expect(spySaveAutoFlowDocument).toHaveBeenCalledOnceWith(expectAutoFlow);
+  });
+
+  it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
+    component.documentLoading = false;
+    component.documentForm.controls['documentTemplateForm'].setValue('Dev');
+    fixture.detectChanges();
+    const spyMethod = spyOn(component, 'autoFlowDocument').and.callThrough();
+    const button = fixture.debugElement.nativeElement.querySelector('#document-flow');
+
+    button.click();
+
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should test method to save document answer', () => {
+    const expectedAnswers: DocumentAnswer[] = [{
+      questionRithmId: 'Dev 1',
+      documentRithmId: '123-654-789',
+      stationRithmId: '741-951-753',
+      value: 'Answer Dev',
+      file: 'dev.txt',
+      filename: 'dev',
+      type: QuestionFieldType.Email,
+      rithmId: '789-321-456',
+      questionUpdated: true,
+    },
+    {
+      questionRithmId: 'Dev 2',
+      documentRithmId: '123-654-789-856',
+      stationRithmId: '741-951-753-741',
+      value: 'Answer Dev2',
+      file: 'dev2.txt',
+      filename: 'dev2',
+      type: QuestionFieldType.City,
+      rithmId: '789-321-456-789',
+      questionUpdated: false,
+    }];
+    component.documentAnswer = expectedAnswers;
+
+    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    component.saveDocumentAnswer();
+    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
+  });
 });

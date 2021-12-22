@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockPopupService, MockStationService, MockUserService } from 'src/mocks';
+import {MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService} from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -15,6 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
+import { MapService } from 'src/app/map/map.service';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -43,6 +44,7 @@ describe('StationInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: MapService, useClass: MockMapService}
       ]
     })
       .compileComponents();
@@ -66,6 +68,7 @@ describe('StationInfoDrawerComponent', () => {
       questions: [],
       priority: 2
     };
+    component.stationRithmId = stationId;
     fixture.detectChanges();
   });
 
@@ -76,17 +79,16 @@ describe('StationInfoDrawerComponent', () => {
   it('should get station last updated date', () => {
     const getLastUpdatedSpy = spyOn(TestBed.inject(StationService), 'getLastUpdated').and.callThrough();
 
-    component.getLastUpdated(stationId);
+    component.getLastUpdated();
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
   it('should delete a station', async () => {
     const deleteStationSpy = spyOn(TestBed.inject(StationService), 'deleteStation').and.callThrough();
+    await component.deleteStation();
 
-    await component.deleteStation(stationId);
-
-    expect(deleteStationSpy).toHaveBeenCalledOnceWith(stationId);
+    expect(deleteStationSpy).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
   it('should update station document generation status', () => {
@@ -102,7 +104,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should update the component data', () => {
     const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
     component.getStationInfo();
-    expect(refreshDataComponent).toHaveBeenCalledOnceWith(stationId);
+    expect(refreshDataComponent).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
   it('should show loading-indicators while get data component', () => {
@@ -114,7 +116,7 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should show loading-indicators while get lasted data update', () => {
-    component.getLastUpdated(stationId);
+    component.getLastUpdated();
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
@@ -122,15 +124,19 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should show loading-indicators while get data the status station document', () => {
-    component.getStationDocumentGenerationStatus(stationId);
+    component.stationLoading = false;
+    component.getStationDocumentGenerationStatus();
+    fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
     expect(loadingComponent).toBeTruthy();
   });
 
   it('should show loading-indicators while update data the status station document', () => {
+    component.stationLoading = false;
     const newStatus = DocumentGenerationStatus.Manual;
-    component.updateStationDocumentGenerationStatus(stationId, newStatus);
+    component.updateStationDocumentGenerationStatus(component.stationRithmId, newStatus);
+    fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
     expect(loadingComponent).toBeTruthy();

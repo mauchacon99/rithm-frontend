@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentInfoHeaderComponent } from './document-info-header.component';
@@ -9,12 +9,15 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService, MockDocumentService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { DocumentNameField } from 'src/models';
+import { DocumentName, DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
+  const formBuilder = new FormBuilder();
+  let formGroup: FormGroup;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,13 +26,16 @@ describe('DocumentInfoHeaderComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatInputModule,
-        MatChipsModule
+        MatChipsModule,
+        RouterTestingModule
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: UserService, useClass: MockUserService }
+        { provide: UserService, useClass: MockUserService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+        { provide: FormBuilder, useValue: formBuilder }
       ]
     })
       .compileComponents();
@@ -61,6 +67,7 @@ describe('DocumentInfoHeaderComponent', () => {
       questions: [],
       instructions: 'General instructions'
     };
+    formGroup = component.documentNameForm;
     fixture.detectChanges();
   });
 
@@ -71,11 +78,14 @@ describe('DocumentInfoHeaderComponent', () => {
   it('should display/hide the document info drawer in station', () => {
     const drawerItem = 'documentInfo';
     const isStation = false;
-    const rithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211';
+    component.documentRithmId = documentRithmId;
     const expectedData = {
-      rithmId: rithmId,
+      stationRithmId: stationRithmId,
       isStation: isStation,
-      isUserAdminOrOwner: true
+      isUserAdminOrOwner: true,
+      documentRithmId: documentRithmId
     };
     const toggleDrawerSpy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
     component.toggleDrawer(drawerItem);
@@ -96,15 +106,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -118,15 +128,15 @@ describe('DocumentInfoHeaderComponent', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
       {
         prompt: '/',
-        rithmId: ''
+        questionRithmId: ''
       },
       {
         prompt: 'Which is best?',
-        rithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
       },
     ];
 
@@ -135,8 +145,46 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(documentNameTemplateSpy).toHaveBeenCalledWith(appendedFields.splice(currentIndex - 1, 2));
   };
 
+  it('should return the station document name editable status', () => {
+    const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const editableName = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
+    component.ngOnInit();
+    expect(editableName).toHaveBeenCalledOnceWith(stationId);
+  });
+
   it('should test method get userLoginIsOwner and return boolean', () => {
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBe(true);
+  });
+
+  it('should update the name in document info drawer', () => {
+    formGroup.controls['name'].setValue('Document Name');
+    component.appendedDocumentName = 'Appended Name';
+
+    const updateDocumentNameSpy = spyOn(TestBed.inject(DocumentService), 'updateDocumentNameBS');
+    component.updateDocumentNameBS();
+    const documentName: DocumentName = {
+      baseName: formGroup.controls['name'].value,
+      appendedName: component.appendedDocumentName
+    };
+    expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(documentName);
+  });
+
+  it('should disable info-drawer-button once the info-drawer is opened', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
+    component.isDocumentNameEditable = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeTrue();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeTruthy();
+  });
+
+  it('should enable info-drawer-button once the info-drawer is closed', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
+    component.isDocumentNameEditable = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeFalse();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeFalsy();
   });
 });

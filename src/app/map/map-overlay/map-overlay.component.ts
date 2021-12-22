@@ -36,7 +36,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The current mode of the map. */
-  private currentMode = MapMode.View;
+  currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
   mapDataLoading = true;
@@ -69,6 +69,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Option menu button cursor handler. */
   optionMenuNone = false;
 
+  /** Map mode variable form comparison in html. */
+  mapMode = MapMode;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -79,12 +82,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Station the map is in stationAdd mode.
+   * Station the map is in stationAdd or FlowAdd mode.
    *
-   * @returns True if the map is in stationAdd mode, false otherwise.
+   * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
    */
-  get isStationAdd(): boolean {
-    return this.currentMode === MapMode.StationAdd;
+  get isStationOrFlowAdd(): boolean {
+    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
   }
 
   /**
@@ -112,9 +115,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @returns Whether to show the backdrop.
    */
-     get drawerHasBackdrop(): boolean {
-      return this.sidenavDrawerService.drawerHasBackdrop;
-    }
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
@@ -174,7 +177,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           this.mapService.matMenuStatus$.next(false);
         }
       });
-      this.sidenavDrawerService.drawerContext$
+    this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (data === 'connectionInfo' || data === 'stationInfo') {
@@ -247,32 +250,43 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     this.mapService.matMenuStatus$.next(true);
-    const confirm = await this.popupService.confirm({
-      title: 'Confirmation',
-      message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-      okButtonText: 'Confirm',
-    });
-    if (confirm) {
+    if ( this.mapHasChanges ) {
+      const confirm = await this.popupService.confirm({
+        title: 'Confirmation',
+        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+        okButtonText: 'Confirm',
+      });
+      if (confirm) {
+        this.mapService.cancelMapChanges();
+      }
+    } else {
       this.mapService.cancelMapChanges();
     }
   }
 
   /**
-   * Zooms the map in to center.
+   * Center the map on its center point.
+   */
+  center(): void {
+    this.mapService.center();
+  }
+
+  /**
+   * Zooms the map in to center of screen.
    */
   zoomIn(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount + 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**
-   * Zooms the map out from center.
+   * Zooms the map out from center of screen.
    */
   zoomOut(): void {
     this.mapService.matMenuStatus$.next(true);
     this.mapService.zoomCount$.next(this.zoomCount - 50);
-    this.mapService.handleZoom(undefined, false);
+    this.mapService.handleZoom(false);
   }
 
   /**
@@ -331,12 +345,33 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Creates a new station with connection line from the current/selected station.
+   */
+  createConnectedStation(): void {
+    this.mapService.disableConnectedStationMode();
+    const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
+    if (index >= 0) {
+        this.mapService.stationElements[index].isAddingConnected = true;
+        this.mapService.mapMode$.next(MapMode.StationAdd);
+    }
+  }
+
+  /**
    * Toggles the open state of the drawer for station info.
    *
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+   get mapHasChanges(): boolean {
+    return this.mapService.mapHasChanges;
   }
 
 }
