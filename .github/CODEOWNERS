@@ -36,11 +36,11 @@ src/app/map/ @HendricksonTyler @Gobsmack90 @adarsh3593 @manojk82
 # src/app/map/**/*.html @HendricksonTyler @Gobsmack90
 
 # Team Lion rules
-src/app/admin/ @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/dashboard/ @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/document/ @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/settings/ @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/station/ @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/admin/ @strut-software/team-lion
+src/app/dashboard/ @strut-software/team-lion
+src/app/document/ @strut-software/team-lion
+src/app/settings/ @strut-software/team-lion
+src/app/station/ @strut-software/team-lion
 
 # src/app/admin/**/*.html @strut-software/team-lion-style-reviewers
 # src/app/dashboard/**/*.html @strut-software/team-lion-style-reviewers
