@@ -142,14 +142,6 @@ describe('TextFieldComponent', () => {
       expect(url.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();
     });
-
-    it('should require a valid url', () => {
-      const url = component.textFieldForm.controls['url'];
-      url.setValue('test.com');
-      expect(url.valid).toBeFalse();
-      expect(url.hasError('urlIncorrect')).toBeTrue();
-      expect(component.textFieldForm.valid).toBeFalse();
-    });
   });
 
   describe('email field', () => {
@@ -163,14 +155,6 @@ describe('TextFieldComponent', () => {
       const email = component.textFieldForm.controls['email'];
       expect(email.valid).toBeFalse();
       expect(email.hasError('required')).toBeTrue();
-      expect(component.textFieldForm.valid).toBeFalse();
-    });
-
-    it('should require a valid email', () => {
-      const email = component.textFieldForm.controls['email'];
-      email.setValue('test.com');
-      expect(email.valid).toBeFalse();
-      expect(email.hasError('email')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
   });
