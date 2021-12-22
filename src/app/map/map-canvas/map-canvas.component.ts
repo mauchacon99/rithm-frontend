@@ -1136,7 +1136,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   onConnectionDrag(): void {
      for (const connectionLine of this.connections) {
-       // connectionLine.checkElementHover(contextPoint, this.context);
        if (connectionLine.hoverActive && !this.connectionLineDrag) {
          // Created for future tasks.
          // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
