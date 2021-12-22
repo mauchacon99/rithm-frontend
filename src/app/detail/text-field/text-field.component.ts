@@ -77,18 +77,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
       validators.push(Validators.required);
     }
 
-    //Need to set email and url.
-    switch (this.field.questionType) {
-      case QuestionFieldType.Email:
-        validators.push(Validators.email);
-        break;
-      case QuestionFieldType.URL:
-        validators.push(this.fieldValidation.urlValidation());
-        break;
-    }
-
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
-
   }
 
   /**
