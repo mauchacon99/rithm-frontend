@@ -803,8 +803,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
           }
           startStation.dragging = true;
-          this.dragItem = MapDragItem.Connection;
-          break;
+         this.dragItem = MapDragItem.Connection;
+         break;
         }
       }
 
