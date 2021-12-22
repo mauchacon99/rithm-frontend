@@ -93,6 +93,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
+  /* Loading in document the assigned user */
+  assignedUserLoading = false;
+
   /** Loading indicator for time held in station. */
   timeInStationLoading = false;
 
@@ -185,7 +188,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
               .filter(question => question.prompt && question.rithmId)
-              .map(field => ({ prompt: field.prompt, rithmId: field.rithmId }));
+              .map(field => ({ prompt: field.prompt, questionRithmId: field.rithmId }));
             this.filterFieldsAndQuestions();
           }
         }, error: (error: unknown) => {
@@ -261,9 +264,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param separator The field prompt selected in autocomplete.
    */
   updateSeparatorFieldValue(separator: string): void {
-    // search separatorField and replace in all items with ritmId==''
     for (let i = 0; i < this.appendedFields.length; i++) {
-      if (this.appendedFields[i].questionRithmId === '') {
+      if (!this.appendedFields[i].questionRithmId) {
         this.appendedFields[i].prompt = separator;
       }
     }
@@ -275,13 +277,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
   addStationDocumentFieldName(fieldPrompt: string): void {
-
     const fieldToAppend = this.fieldsToAppend.find(newField => newField.prompt === fieldPrompt);
     if (!fieldToAppend) {
       throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
     }
     this.appendedFields.length > 0
-      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: '' }, fieldToAppend)
+      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: null }, fieldToAppend)
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -380,15 +381,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   private getAssignedUserToDocument(): void {
+    this.assignedUserLoading = true;
     this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
+          this.assignedUserLoading = false;
           if (assignedUser) {
             this.documentAssignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {
+          this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
