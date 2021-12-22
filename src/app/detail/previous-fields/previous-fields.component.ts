@@ -129,12 +129,15 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    *
    */
   private getDocumentPreviousQuestions(): void {
+    this.isLoading = true;
     this.documentService.getDocumentPreviousQuestions(this.documentId, this.stationId, this.isPrivate)
       .pipe(first())
       .subscribe({
         next: (previousQuestions) => {
+          this.isLoading = false;
           this.documentPreviousQuestions = previousQuestions;
         }, error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

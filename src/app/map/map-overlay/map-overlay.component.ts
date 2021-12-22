@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapItemStatus, MapMode, Point, User } from 'src/models';
+import { MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -36,7 +36,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** The current mode of the map. */
-  private currentMode = MapMode.View;
+  currentMode = MapMode.View;
 
   /** Map data request loading indicator. */
   mapDataLoading = true;
@@ -69,6 +69,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Option menu button cursor handler. */
   optionMenuNone = false;
 
+  /** Map mode variable form comparison in html. */
+  mapMode = MapMode;
+
   /**
    * Whether the map is in any building mode.
    *
@@ -79,12 +82,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Station the map is in stationAdd mode.
+   * Station the map is in stationAdd or FlowAdd mode.
    *
-   * @returns True if the map is in stationAdd mode, false otherwise.
+   * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
    */
-  get isStationAdd(): boolean {
-    return this.currentMode === MapMode.StationAdd;
+  get isStationOrFlowAdd(): boolean {
+    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
   }
 
   /**
@@ -368,30 +371,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
    get mapHasChanges(): boolean {
-    if (!this.mapService.stationElements.some(st => st.status === MapItemStatus.Created || st.status === MapItemStatus.Deleted)) {
-      const updatedStations = this.mapService.stationElements.filter((station) => station.status !== MapItemStatus.Normal);
-      for (const station of updatedStations) {
-        const storedStation = this.mapService.storedStationElements.find((st) => st.rithmId === station.rithmId);
-        if (this.compareStations(station, storedStation)) {
-            station.status = MapItemStatus.Normal;
-        }
-      }
-    }
     return this.mapService.mapHasChanges;
-  }
-
-  /**
-   * Compares the modified station with stored station data.
-   *
-   * @param station The modified station data.
-   * @param storedStation The stored station data.
-   * @returns Returns TRUE is data is same else FALSE.
-   */
-  private compareStations(station: StationMapElement, storedStation: StationMapElement | undefined): boolean {
-    return JSON.stringify(station.previousStations) === JSON.stringify(storedStation?.previousStations) &&
-      JSON.stringify(station.nextStations) === JSON.stringify(storedStation?.nextStations) &&
-      JSON.stringify(station.canvasPoint) === JSON.stringify(storedStation?.canvasPoint) &&
-      station.stationName === storedStation?.stationName && station.notes === storedStation.notes ? true : false;
   }
 
 }
