@@ -17,7 +17,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { DialogOptions } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { throwError } from 'rxjs';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -50,7 +51,8 @@ describe('DocumentInfoDrawerComponent', () => {
         MatInputModule,
         NoopAnimationsModule,
         MatSelectModule,
-        FormsModule
+        FormsModule,
+        RouterTestingModule
       ],
     })
       .compileComponents();
@@ -112,7 +114,7 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should return the user assigned to the document', () => {
     const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
     component.stationRithmId = stationId;
-    component['getAssignedUserToDocument'](documentId);
+    component['getAssignedUserToDocument']();
 
     expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
   });
@@ -163,4 +165,42 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith();
   }));
 
+  it('should show loading-indicators while get held time in station', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.timeInStationLoading).toBeTrue();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-time-in-station');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show assigned-user-loading while get assigned user of document', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.assignedUserLoading).toBeTrue();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-loading');
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show error message when request for assigned user fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: '',
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component.userErrorAssigned).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
+    expect(errorComponent).toBeTruthy();
+  });
 });

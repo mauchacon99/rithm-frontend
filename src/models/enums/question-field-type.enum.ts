@@ -61,6 +61,6 @@ export enum QuestionFieldType {
   LongTextLabel = 'LongTextLabel',
 
   /** Instruction input type. */
-  Instructions = 'Instructions',
+  Instructions = 'instructions',
 
 }

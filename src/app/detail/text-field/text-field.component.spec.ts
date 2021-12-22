@@ -6,6 +6,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 
 import { TextFieldComponent } from './text-field.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 const FIELDS: Question[] = [
   {
@@ -62,6 +64,7 @@ describe('TextFieldComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
       ]
     })
     .compileComponents();
@@ -77,6 +80,21 @@ describe('TextFieldComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update the stationQuestion Bsubject ', () => {
+    const updatedQuestion: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Fake question 4',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
+    const stationSpy = spyOn(TestBed.inject(StationService), 'updateStationQuestionInTemplate');
+    component.updateFieldPrompt(updatedQuestion);
+    expect(stationSpy).toHaveBeenCalledOnceWith(updatedQuestion);
   });
 
   describe('shortText field', () => {
