@@ -817,7 +817,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.dragItem <= 1) {
+    if (this.dragItem === MapDragItem.Default) {
       // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
