@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {StationMapElement} from 'src/helpers';
-import {MapDragItem, MapMode, Point, StationElementHoverType} from 'src/models';
+import { Injectable } from '@angular/core';
+import { StationMapElement } from 'src/helpers';
+import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
   BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR, BADGE_MARGIN, BADGE_RADIUS, BUTTON_DEFAULT_COLOR,
   BUTTON_HOVER_COLOR, BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, DEFAULT_SCALE,
