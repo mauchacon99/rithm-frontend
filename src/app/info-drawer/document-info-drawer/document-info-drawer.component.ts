@@ -434,4 +434,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  /**
+   * Unassign a user to document.
+   *
+   * @param user User who will be unassigned.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async unassignUser(user: StationRosterMember): Promise<void> {
+    // This variable will be use.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const deleteDoc = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Close',
+      important: true
+    });
+  }
 }
