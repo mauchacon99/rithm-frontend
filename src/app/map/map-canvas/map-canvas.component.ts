@@ -7,7 +7,8 @@ import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElem
 import { ConnectionElementService } from '../connection-element.service';
 import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY } from '../map-constants';
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
+} from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
@@ -234,10 +235,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           const pointer = this.pointerCache[0];
           this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
           this.eventStartCoords = this.getEventCanvasPoint(pointer);
-
-          const pos = this.getEventCanvasPoint(pointer);
-          const con = this.getEventContextPoint(pointer);
-          this.eventStartLogic(pos, con);
+          this.eventStartLogic(event);
         }
 
         if (this.pointerCache.length === 2) {
@@ -280,15 +278,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       if (this.pointerCache.length === 0) {
-        const pos = this.getEventCanvasPoint(event);
-        const con = this.getEventContextPoint(event);
-
         if (this.dragItem !== MapDragItem.Default) {
           const map = document.getElementById('map');
           map?.releasePointerCapture(event.pointerId);
         }
 
-        this.eventEndLogic(pos, con);
+        this.eventEndLogic(event);
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -355,10 +350,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.eventStartCoords = this.getEventCanvasPoint(event);
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
       this.eventStartCoords = this.getEventCanvasPoint(event);
-
-      const pos = this.getEventCanvasPoint(event);
-      const con = this.getEventContextPoint(event);
-      this.eventStartLogic(pos, con);
+      this.eventStartLogic(event);
     }
   }
 
@@ -371,11 +363,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   mouseUp(event: MouseEvent): void {
     if (!window.PointerEvent) {
-      const pos = this.getEventCanvasPoint(event);
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
-      const con = this.getEventContextPoint(event);
-
-      this.eventEndLogic(pos, con);
+      this.eventEndLogic(event);
     }
   }
 
@@ -412,13 +401,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (!window.PointerEvent || (is_android && is_firefox)) {
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
-        const pos = this.getEventCanvasPoint(touchPoint);
-        const con = this.getEventContextPoint(touchPoint);
+        const eventCanvasPoint = this.getEventCanvasPoint(touchPoint);
 
-        this.lastTouchCoords[0] = pos;
-        this.eventStartCoords = pos;
+        this.lastTouchCoords[0] = eventCanvasPoint;
+        this.eventStartCoords = eventCanvasPoint;
 
-        this.eventStartLogic(pos, con);
+        this.eventStartLogic(touchPoint);
       }
 
       if (event.touches.length === 2) {
@@ -449,10 +437,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
-      const pos = this.getEventCanvasPoint(touchPoint);
-      const con = this.getEventContextPoint(touchPoint);
-
-      this.eventEndLogic(pos, con);
+      this.eventEndLogic(touchPoint);
     }
   }
 
@@ -773,10 +758,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Handles mouseDown and touchStart logic.
    *
-   * @param position The position of the mouse or touch event.
-   * @param contextPoint The more specific position of the mouse or touch event used for connection lines.
+   * @param event Is an input event.
    */
-  private eventStartLogic(position: Point, contextPoint: Point) {
+  private eventStartLogic(event: MouseEvent | Touch) {
+    const eventCanvasPoint = this.getEventCanvasPoint(event);
+    const eventContextPoint = this.getEventContextPoint(event);
     if (this.panActive) {
       cancelAnimationFrame(this.myReq as number);
       this.panActive = false;
@@ -791,7 +777,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.mapMode === MapMode.Build) {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.mapMode, this.scale);
+        station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         // clicked on a connection node.
         if (station.hoverActive === StationElementHoverType.Node) {
           station.dragging = true;
@@ -807,20 +793,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.dragItem !== MapDragItem.Node && this.dragItem !== MapDragItem.Station) {
-        for (const connection of this.connections) {
-          // Check if connection line was clicked. ContextPoint is used for connection lines.
-          connection.checkElementHover(contextPoint, this.context);
-          if (connection.hoverActive) {
-            for (const station of this.stations) {
-              if (station.rithmId === connection.startStationRithmId) {
-                station.dragging = true;
-                break;
-              }
-            }
-            this.dragItem = MapDragItem.Connection;
-            break;
+      for (const connection of this.connections) {
+        // Check if connection line was clicked. ContextPoint is used for connection lines.
+        connection.checkElementHover(eventContextPoint, this.context);
+        if (connection.hoverActive) {
+          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+          if (!startStation) {
+            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
           }
+          startStation.dragging = true;
+         this.dragItem = MapDragItem.Connection;
+         break;
         }
       }
 
@@ -832,7 +815,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.dragItem <= 1) {
+    if (this.dragItem === MapDragItem.Default) {
       // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
@@ -841,10 +824,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Handles mouseUp and touchEnd logic.
    *
-   * @param position The position of the mouse or touch event.
-   * @param contextPoint Calculated position of click.
+   * @param event Is a mouse or touch event.
    */
-  private eventEndLogic(position: Point, contextPoint: Point) {
+  private eventEndLogic(event: MouseEvent | Touch) {
+    const eventCanvasPoint = this.getEventCanvasPoint(event);
+    const eventContextPoint = this.getEventContextPoint(event);
     this.holdDrag = false;
 
     // Overlay option menu close state.
@@ -853,13 +837,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If it is a click and not a drag.
-    if (Math.abs(position.x - this.eventStartCoords.x) < 5 && Math.abs(position.y - this.eventStartCoords.y) < 5) {
+    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < 5 && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < 5) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
       });
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-        this.clickEventHandler(position, contextPoint);
+        this.clickEventHandler(eventCanvasPoint, eventContextPoint);
       }
       return;
     }
@@ -881,7 +865,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       let newPreviousStation: StationMapElement | undefined;
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
-        station.checkElementHover(position, this.mapMode, this.scale);
+        station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           newNextStation = station;
         }
@@ -893,7 +877,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (newNextStation && newPreviousStation) {
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
-          station.checkElementHover(position, this.mapMode, this.scale);
+          station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
           if (station.hoverActive === StationElementHoverType.Station) {
             //ensure we cant get duplicate ids.
             if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
@@ -998,15 +982,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //If it is a drag and not a click.
       const moveFromStartX = this.eventStartCoords.x - moveInput.x;
       const moveFromStartY = this.eventStartCoords.y - moveInput.y;
-      if (Math.abs(moveFromStartX) > 5 || Math.abs(moveFromStartY) > 5) {
+      if (Math.abs(moveFromStartX) > MOUSE_MOVEMENT_OVER_CONNECTION || Math.abs(moveFromStartY) > MOUSE_MOVEMENT_OVER_CONNECTION) {
         this.onConnectionDrag(moveContext);
       }
       if (this.connectionLineDrag) {
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-        for (const station of this.stations) {
-          if (station.dragging) {
-            this.mapService.currentMousePoint$.next(moveInput);
-          }
+        if (this.stations.some((station) => station.dragging)) {
+          this.mapService.currentMousePoint$.next(moveInput);
         }
       }
     } else {

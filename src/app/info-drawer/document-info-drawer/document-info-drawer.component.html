@@ -48,8 +48,38 @@
     </div>
     <ng-container *ngIf="!isStation">
       <div class="col-span-12 pt-4">
-        <p class="overline-font mb-2">Assigned to</p>
+        <p class="overline-font">Assigned to</p>
       </div>
+      <div class="col-span-12" *ngIf="assignedUserLoading else assignedUser">
+        <div class="w-24 items-center py-2">
+          <app-loading-indicator id="assigned-user-loading" [inlineText]="'Loading...'"></app-loading-indicator>
+        </div>
+      </div>
+      <ng-template #assignedUser>
+        <div class="col-span-full text-error-500" id="assigned-user-error" *ngIf="userErrorAssigned">
+          Unable to retrieve assigned user
+        </div>
+        <ng-container *ngIf="!userErrorAssigned">
+          <div class="col-12 flex py-1 justify-start" *ngIf="documentAssignedUser.length > 0 else noAssignedUser">
+            <div class="my-1">
+              <app-user-avatar [firstName]="documentAssignedUser[0].firstName" [lastName]="documentAssignedUser[0].lastName"
+                [hideToolTip]="true">
+              </app-user-avatar>
+            </div>
+            <div class="flex flex-col justify-center overflow-hidden">
+              <p class="leading-none pl-2 mb-1 truncate">
+                {{documentAssignedUser[0].firstName}} {{documentAssignedUser[0].lastName}}
+              </p>
+              <p class="leading-none overline-font pl-2 text-accent-500 truncate">{{documentAssignedUser[0].email}}</p>
+            </div>
+          </div>
+          <ng-template #noAssignedUser>
+            <div class="col-span-full">
+              No assigned user
+            </div>
+          </ng-template>
+        </ng-container>
+      </ng-template>
       <div class="col-span-12 pt-4">
         <p class="overline-font mb-2">Document Priority</p>
       </div>

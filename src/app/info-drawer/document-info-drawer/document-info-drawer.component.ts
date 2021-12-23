@@ -93,8 +93,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
 
+  /* Loading in document the assigned user */
+  assignedUserLoading = false;
+
   /** Loading indicator for time held in station. */
   timeInStationLoading = false;
+
+  /** Enable error message if assigned user the document request fails. */
+  userErrorAssigned = false;
 
   constructor(
     private fb: FormBuilder,
@@ -378,15 +384,20 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   private getAssignedUserToDocument(): void {
+    this.userErrorAssigned = false;
+    this.assignedUserLoading = true;
     this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
+          this.assignedUserLoading = false;
           if (assignedUser) {
             this.documentAssignedUser = assignedUser;
           }
         },
         error: (error: unknown) => {
+          this.userErrorAssigned = true;
+          this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -422,5 +433,27 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  /**
+   * Unassign a user to document.
+   *
+   * @param user The User who will be unassigned.
+   */
+  private unassignUserToDocument(user: StationRosterMember): void {
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId, user)
+      .pipe(first())
+      .subscribe({
+        next: (result) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const res = result; /* This will replaced by loading indicator */
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }

@@ -51,6 +51,7 @@ export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
 export const CONNECTION_NODE_OFFSET = 80;
 export const CONNECTION_HEIGHT_REDUCER = 5;
+export const MOUSE_MOVEMENT_OVER_CONNECTION = 5;
 
 // Connection node
 export const NODE_X_MARGIN = 0;
