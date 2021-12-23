@@ -1,9 +1,5 @@
 import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, ValidatorFn, Validators
-} from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';

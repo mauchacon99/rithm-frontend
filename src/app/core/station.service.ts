@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-// eslint-disable-next-line max-len
 import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
