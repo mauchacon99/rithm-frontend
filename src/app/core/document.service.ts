@@ -187,7 +187,7 @@ export class DocumentService {
       .set('stationRithmId', stationId)
       .set('getPrivate', getPrivate);
 
-    return this.http.get<Question[]>(`${environment.baseAppUrl}${MICROSERVICE_PATH}/questions`, { params });
+    return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, { params });
   }
 
   /**
