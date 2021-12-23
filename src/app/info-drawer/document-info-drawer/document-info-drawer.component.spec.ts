@@ -221,13 +221,22 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(errorComponent).toBeTruthy();
   });
 
-  it('should show popup dialog to unassigned user', () => {
-    const assignedUser: StationRosterMember = {
+  it('should show popup dialog to unassigned user', async () => {
+    const unAssignedUser: StationRosterMember = {
       rithmId: '789-321-456-789',
       firstName: 'John',
       lastName: 'Christopher',
       email: 'johnny.depp@gmail.com'
     };
-    expect(component.unassignUser(assignedUser)).toBeTruthy();
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Close',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.unassignUser(unAssignedUser);
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 });

@@ -1,5 +1,3 @@
-@import 'rithm-light-palettes';
-
 .fa-times {
-  color: map-get($secondary-gray-palette, 300) !important;
+  @apply text-secondary-500;
 }
