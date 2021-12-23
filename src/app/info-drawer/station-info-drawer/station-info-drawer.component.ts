@@ -5,7 +5,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { UtcTimeConversion } from 'src/helpers';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
@@ -91,7 +91,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private utcTimeConversion: UtcTimeConversion,
     private errorService: ErrorService,
-    private route: ActivatedRoute,
     private popupService: PopupService,
     private router: Router,
     private mapService: MapService
@@ -377,4 +376,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+ /**
+  * Is the current user an owner or an admin for this station.
+  *
+  * @returns Validate if user is owner or admin of current station.
+  */
+  get isUserAdminOrOwner(): boolean {
+    return this.stationInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId)
+    !== undefined  ? true : (this.type === 'admin') ? true : false;
+  }
 }

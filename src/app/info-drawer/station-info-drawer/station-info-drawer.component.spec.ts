@@ -149,4 +149,29 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyRefresh).toHaveBeenCalledOnceWith();
   });
 
+  it('should show the delete-station-button on the station information', () => {
+    component.stationLoading = false;
+    component.editMode = true;
+    fixture.detectChanges();
+    expect(component.editMode).toBeTrue();
+    const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
+    expect(deleteButton).toBeTruthy();
+  });
+
+  it('should not show the delete-station-button on the station information', () => {
+    component.stationLoading = false;
+    component.editMode = false;
+    component.type = 'worker';
+    expect(component.editMode).toBeFalse();
+    expect(component.type).toEqual('worker');
+    const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
+    expect(deleteButton).toBeFalsy();
+  });
+
+  it('should test method get userLoginIsOwner and return boolean', () => {
+    component.type = 'admin';
+    expect(component.type).toEqual('admin');
+    const valueExpected = component.isUserAdminOrOwner;
+    expect(valueExpected).toBeTrue();
+  });
 });
