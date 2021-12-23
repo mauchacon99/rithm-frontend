@@ -11,8 +11,7 @@ import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SC
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
-import { StationDocumentsModalComponent
-} from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
