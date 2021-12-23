@@ -121,7 +121,7 @@ describe('TextFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should not require an input in long text field', () => {
+    it('should require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
       expect(longText.valid).toBeFalse();
       expect(longText.hasError('required')).toBeTrue();
