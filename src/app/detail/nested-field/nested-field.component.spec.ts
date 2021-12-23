@@ -104,4 +104,10 @@ describe('NestedFieldComponent', () => {
   it('should have children', () => {
     expect(component.childrenFields.length).toEqual(5);
   });
+
+  it('should check the field question type state when there are possibleAnswers options', () => {
+    const stateField = component.childrenFields.find(element => element.questionType === 'state');
+    expect(stateField).toBeTruthy();
+    expect(stateField?.possibleAnswers).toHaveSize(STATES.length);
+  });
 });
