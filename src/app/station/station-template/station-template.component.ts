@@ -1,5 +1,4 @@
 import { Component, forwardRef, Input } from '@angular/core';
-// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
