@@ -1,9 +1,5 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator
-} from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { Question } from 'src/models';
 
 /**
