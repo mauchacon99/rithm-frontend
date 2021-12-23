@@ -2,17 +2,21 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import {
+  ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
+  StationInfoDrawerData, StationInformation
+} from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
-  PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
+import {
+  DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, MOUSE_MOVEMENT_OVER_CONNECTION,
+  PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
-import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
+import {
+  StationDocumentsModalComponent
+} from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
@@ -793,17 +797,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      for (const connection of this.connections) {
-        // Check if connection line was clicked. ContextPoint is used for connection lines.
-        connection.checkElementHover(eventContextPoint, this.context);
-        if (connection.hoverActive) {
-          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
-          if (!startStation) {
-            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+      if (this.dragItem !== MapDragItem.Node) {
+        for (const connection of this.connections) {
+          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          connection.checkElementHover(eventContextPoint, this.context);
+          if (connection.hoverActive) {
+            const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+            if (!startStation) {
+              throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+            }
+            startStation.dragging = true;
+            this.dragItem = MapDragItem.Connection;
+            break;
           }
-          startStation.dragging = true;
-         this.dragItem = MapDragItem.Connection;
-         break;
         }
       }
 
