@@ -1,4 +1,5 @@
 import { Component, forwardRef, Input } from '@angular/core';
+// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 

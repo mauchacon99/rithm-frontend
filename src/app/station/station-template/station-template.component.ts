@@ -1,4 +1,5 @@
 import { Component, forwardRef, Input } from '@angular/core';
+// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
@@ -84,7 +85,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   remove(field: Question): void {
     const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
-    if (this.stationRithmId !== field.originalStationRithmId){
+    if (this.stationRithmId !== field.originalStationRithmId) {
       this.movingQuestion(field);
     }
     this.stationService.touchStationForm();

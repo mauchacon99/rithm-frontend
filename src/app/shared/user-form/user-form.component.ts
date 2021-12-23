@@ -1,4 +1,5 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
+// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
@@ -23,7 +24,7 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
     }
   ]
 })
-export class UserFormComponent implements OnInit,ControlValueAccessor, Validator {
+export class UserFormComponent implements OnInit, ControlValueAccessor, Validator {
   /** Whether this form is to be used for account create (defaults to `false`). */
   @Input() accountCreate = false;
 
@@ -51,7 +52,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
   constructor(
     private fb: FormBuilder,
     private userService: UserService
-  ) {}
+  ) { }
 
   /**
    * Set up FormBuilder group.

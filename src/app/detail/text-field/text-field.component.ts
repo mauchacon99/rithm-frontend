@@ -1,4 +1,5 @@
 import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
+// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
@@ -100,7 +101,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val='';
+    val = '';
     val && this.textFieldForm.setValue(val, { emitEvent: false });
   }
 
@@ -153,8 +154,8 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    *
    * @param field The field to emit.
    */
-   updateFieldPrompt(field: Question): void{
-     if (this.isStation){
+  updateFieldPrompt(field: Question): void {
+    if (this.isStation) {
       field.prompt = this.textFieldForm.controls[this.field.questionType].value;
       this.stationService.updateStationQuestionInTemplate(field);
     }

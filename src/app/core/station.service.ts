@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+// eslint-disable-next-line max-len
 import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -244,7 +245,7 @@ export class StationService {
    *
    * @param question The question to be updated.
    */
-   updateStationQuestionInTemplate(question: Question): void {
+  updateStationQuestionInTemplate(question: Question): void {
     this.stationQuestion$.next(question);
   }
 
@@ -299,11 +300,11 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
- /**
-  * Reports a new question to be moved.
-  *
-  * @param question The question of the station-template to be moved.
-  */
+  /**
+   * Reports a new question to be moved.
+   *
+   * @param question The question of the station-template to be moved.
+   */
   moveQuestion(question: Question): void {
     this.questionToMove$.next(question);
   }

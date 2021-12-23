@@ -1,4 +1,5 @@
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
+// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
@@ -131,7 +132,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     });
     this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-       this.stationService.touchStationForm();
+        this.stationService.touchStationForm();
       });
   }
 
@@ -140,10 +141,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    *
    * @returns The Label tag for each additional field.
    */
-   get labelTag(): string{
+  get labelTag(): string {
     const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
-    : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
-    : 'Name your field';
+      : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
+        : 'Name your field';
     return label;
   }
 
@@ -212,7 +213,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = checkboxEvent.checked;
     if (!this.field.isReadOnly) {
-       this.field.isRequired = false;
+      this.field.isRequired = false;
     }
     this.stationService.touchStationForm();
   }

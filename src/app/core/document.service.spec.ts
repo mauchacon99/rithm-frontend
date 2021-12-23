@@ -1,6 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
+// eslint-disable-next-line max-len
 import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -363,7 +364,7 @@ describe('DocumentService', () => {
       lastName: 'Christopher',
       email: 'johnny.depp@gmail.com'
     };
-    service.unassignUserToDocument(documentRithmId,stationRithmId,assignedUser)
+    service.unassignUserToDocument(documentRithmId, stationRithmId, assignedUser)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
