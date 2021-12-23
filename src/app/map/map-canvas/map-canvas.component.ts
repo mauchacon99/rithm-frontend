@@ -2,20 +2,16 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import {
-  ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
-  StationInfoDrawerData, StationInformation
-} from 'src/models';
+import { ConnectionMapElement, FlowMapElement, MapDragItem, MapItemStatus, MapMode, Point, StationElementHoverType,
+  StationInfoDrawerData, StationInformation } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import {
-  DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, MOUSE_MOVEMENT_OVER_CONNECTION,
+import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_PAN_VELOCITY, MAX_SCALE, MIN_SCALE, MOUSE_MOVEMENT_OVER_CONNECTION,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
 import { FlowElementService } from '../flow-element.service';
-import {
-  StationDocumentsModalComponent
+import { StationDocumentsModalComponent
 } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
