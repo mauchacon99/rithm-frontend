@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
 import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
+import { MapBoundaryService } from '../map-boundary.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
@@ -116,7 +117,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService
+    private stationService: StationService,
+    private mapBoundaryService: MapBoundaryService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -698,6 +700,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
+  }
+
+  /**
+   * Draws the boundary edges of a user's map.
+   *
+   */
+  private drawBoundaryBox(): void {
+
+    const screenDimension = window.innerWidth > window.innerHeight ? window.innerWidth : window.innerHeight;
+
+    // To find out corner's of map using the min and max canvas points.
+    const minMapPoint = this.mapService.getMinCanvasPoint();
+    const maxMapPoint = this.mapService.getMaxCanvasPoint();
+
+    const leftBoundaryEdge = minMapPoint.x - screenDimension;
+    const topBoundaryEdge = minMapPoint.y - screenDimension;
+    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
+    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+
+    const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
+    const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
+
+    this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
+
   }
 
   /**
