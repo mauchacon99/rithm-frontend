@@ -53,6 +53,7 @@ describe('AdminAuthGuard', () => {
   });
 
   it('should allow navigation to admin pages if the user is admin', () => {
+    user.role = 'admin';
     localStorage.setItem('user', JSON.stringify(user));
     guard.canActivate().then((result) => {
       expect(result).toBeTrue();
