@@ -974,6 +974,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else if (this.mapMode === MapMode.StationAdd && this.mapService.stationElements.some(e => e.isAddingConnected)) {
         this.mapService.currentMousePoint$.next(eventCanvasPoint);
     } else if (this.dragItem === MapDragItem.Connection) {
+      for (const station of this.stations) {
+        station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
+        // if (station.dragging)
+      }
       //If it is a drag and not a click.
       const moveFromStartX = this.eventStartCoords.x - eventCanvasPoint.x;
       const moveFromStartY = this.eventStartCoords.y - eventCanvasPoint.y;
