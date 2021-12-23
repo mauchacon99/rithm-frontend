@@ -220,4 +220,14 @@ describe('DocumentInfoDrawerComponent', () => {
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
     expect(errorComponent).toBeTruthy();
   });
+
+  it('should show popup dialog to unassigned user', () => {
+    const assignedUser: StationRosterMember = {
+      rithmId: '789-321-456-789',
+      firstName: 'John',
+      lastName: 'Christopher',
+      email: 'johnny.depp@gmail.com'
+    };
+    expect(component.unassignUser(assignedUser)).toBeTruthy();
+  });
 });

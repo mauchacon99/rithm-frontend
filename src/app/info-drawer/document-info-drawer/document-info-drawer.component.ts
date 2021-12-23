@@ -454,7 +454,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Unassing user to document.
+   * Unassign user to document.
    *
    * @param user The User who will be unassigned.
    */
