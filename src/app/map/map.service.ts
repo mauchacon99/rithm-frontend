@@ -774,13 +774,13 @@ export class MapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
-    if (!this.stationElements.some(st => st.status === MapItemStatus.Created || st.status === MapItemStatus.Deleted)) {
-      const updatedStations = this.stationElements.filter((station) => station.status !== MapItemStatus.Normal);
-      for (const station of updatedStations) {
-        const storedStation = this.storedStationElements.find((st) => st.rithmId === station.rithmId);
-        if (station.isIdenticalTo(storedStation)) {
-            station.status = MapItemStatus.Normal;
-        }
+    const updatedStations = this.stationElements.filter((station) => station.status !== MapItemStatus.Normal);
+    for (const station of updatedStations) {
+      const storedStation = this.storedStationElements.find((st) => st.rithmId === station.rithmId);
+      if (storedStation && station.isIdenticalTo(storedStation) && (station.status !== MapItemStatus.Deleted)) {
+          station.status = MapItemStatus.Normal;
+      } else {
+        return true;
       }
     }
     return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);

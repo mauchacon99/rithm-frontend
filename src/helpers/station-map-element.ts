@@ -175,10 +175,10 @@ export class StationMapElement {
    * @param storedStation The stored station data.
    * @returns Returns TRUE is data is same else FALSE.
    */
-  isIdenticalTo(storedStation: StationMapElement | undefined): boolean {
-    return JSON.stringify(this.previousStations) === JSON.stringify(storedStation?.previousStations) &&
-      JSON.stringify(this.nextStations) === JSON.stringify(storedStation?.nextStations) &&
-      JSON.stringify(this.canvasPoint) === JSON.stringify(storedStation?.canvasPoint) &&
-      this.stationName === storedStation?.stationName && this.notes === storedStation.notes ? true : false;
+  isIdenticalTo(storedStation: StationMapElement): boolean {
+    return JSON.stringify(this.previousStations) === JSON.stringify(storedStation.previousStations) &&
+      JSON.stringify(this.nextStations) === JSON.stringify(storedStation.nextStations) &&
+      JSON.stringify(this.canvasPoint) === JSON.stringify(storedStation.canvasPoint) &&
+      this.stationName === storedStation.stationName && this.notes === storedStation.notes;
   }
 }

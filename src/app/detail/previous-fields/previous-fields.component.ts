@@ -11,7 +11,7 @@ import { DocumentService } from 'src/app/core/document.service';
  * Component for station private/all fields in extension panel.
  */
 @Component({
-  selector: 'app-previous-fields[stationId][isPrivate]',
+  selector: 'app-previous-fields[stationId][isPrivate][isStation]',
   templateUrl: './previous-fields.component.html',
   styleUrls: ['./previous-fields.component.scss']
 })
