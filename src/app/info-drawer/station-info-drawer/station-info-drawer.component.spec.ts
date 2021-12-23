@@ -162,7 +162,6 @@ describe('StationInfoDrawerComponent', () => {
     component.stationLoading = false;
     component.editMode = false;
     component.type = 'worker';
-    fixture.detectChanges();
     expect(component.editMode).toBeFalse();
     expect(component.type).toEqual('worker');
     const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
@@ -172,7 +171,6 @@ describe('StationInfoDrawerComponent', () => {
   it('should test method get userLoginIsOwner and return boolean', () => {
     component.type = 'admin';
     expect(component.type).toEqual('admin');
-    fixture.detectChanges();
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
   });
