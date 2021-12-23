@@ -719,8 +719,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const rightBoundaryEdge = maxMapPoint.x + screenDimension;
     const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
 
-    const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
-    const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
+    const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
+    const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
 
     this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
 
@@ -818,17 +818,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      for (const connection of this.connections) {
-        // Check if connection line was clicked. ContextPoint is used for connection lines.
-        connection.checkElementHover(eventContextPoint, this.context);
-        if (connection.hoverActive) {
-          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
-          if (!startStation) {
-            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+      if (this.dragItem !== MapDragItem.Node) {
+        for (const connection of this.connections) {
+          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          connection.checkElementHover(eventContextPoint, this.context);
+          if (connection.hoverActive) {
+            const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+            if (!startStation) {
+              throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+            }
+            startStation.dragging = true;
+            this.dragItem = MapDragItem.Connection;
+            break;
           }
-          startStation.dragging = true;
-          this.dragItem = MapDragItem.Connection;
-          break;
         }
       }
 
