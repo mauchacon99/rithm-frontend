@@ -212,7 +212,7 @@ describe('DocumentInfoDrawerComponent', () => {
     }));
     sideNavService.drawerData$.next({
       isStation: false,
-      documentRithmId: '',
+      documentRithmId: documentId,
       stationRithmId: stationId
     });
     fixture.detectChanges();
