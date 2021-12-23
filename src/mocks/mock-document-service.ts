@@ -604,4 +604,24 @@ export class MockDocumentService {
       return of().pipe(delay(1000));
     }
   }
+
+  /**
+   * Unassign a user to document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @param stationId The station Id.
+   * @param userAssigned The User who will be unassigned.
+   * @returns Returns an empty observable.
+   */
+  unassignUserToDocument(documentRithmId: string, stationId: string, userAssigned: StationRosterMember): Observable<unknown> {
+    if (!documentRithmId || !userAssigned || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'The user cannot be unassigned.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
 }

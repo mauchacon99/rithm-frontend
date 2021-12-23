@@ -4,6 +4,7 @@ import { delay } from 'rxjs/operators';
 import { ZOOM_VELOCITY } from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
 import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/models';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Mocks methods of the `MapService`.
@@ -21,6 +22,21 @@ export class MockMapService {
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
+
+  /** The station element displayed on the map. */
+  station = new StationMapElement({
+    rithmId: uuidv4(),
+    stationName: 'Untitled Station',
+    mapPoint: {
+      x: 12,
+      y: 15
+    },
+    noOfDocuments: 0,
+    previousStations: [],
+    nextStations: [],
+    status: MapItemStatus.Created,
+    notes: ''
+  });
 
   /** The current mode of interaction on the map. */
   mapMode$ = new BehaviorSubject(MapMode.Build);
@@ -45,6 +61,15 @@ export class MockMapService {
 
   /** Informs the map when station elements have changed. */
   stationElementsChanged$ = new BehaviorSubject(false);
+
+  /**
+   * Creates a new `MockMapService`.
+   *
+   */
+  constructor() {
+    this.station.isAddingConnected = true;
+    this.stationElements.push(this.station);
+  }
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -292,4 +317,15 @@ export class MockMapService {
   get mapHasChanges(): boolean {
     return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
+
+  /**
+   * Set's isAddingConnected property of station to false if it's true.
+   */
+  disableConnectedStationMode(): void {
+    this.stationElements.filter(station => station.isAddingConnected)
+    .map(connectedStation => {
+      connectedStation.isAddingConnected = false;
+    });
+  }
+
 }
