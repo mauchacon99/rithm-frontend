@@ -434,4 +434,26 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  /**
+   * Unassign a user to document.
+   *
+   * @param user The User who will be unassigned.
+   */
+  private unassignUserToDocument(user: StationRosterMember): void {
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId, user)
+      .pipe(first())
+      .subscribe({
+        next: (result) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const res = result; /* This will replaced by loading indicator */
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }
