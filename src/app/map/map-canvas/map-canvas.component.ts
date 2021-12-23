@@ -259,7 +259,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mouseup event that was triggered.
    */
   @HostListener('pointerup', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pointerUp(event: PointerEvent): void {
     /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
     We disable pointer event listening and use touch events instead in this case. */

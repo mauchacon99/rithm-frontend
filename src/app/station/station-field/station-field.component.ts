@@ -141,7 +141,6 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @returns The Label tag for each additional field.
    */
    get labelTag(): string{
-    // eslint-disable-next-line max-len
     const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
     : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
     : 'Name your field';
