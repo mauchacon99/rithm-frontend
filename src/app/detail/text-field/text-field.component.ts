@@ -12,7 +12,7 @@ import { QuestionFieldType, Question } from 'src/models';
  * Reusable component for all fields involving text.
  */
 @Component({
-  selector: 'app-text-field',
+  selector: 'app-text-field[isStation]',
   templateUrl: './text-field.component.html',
   styleUrls: ['./text-field.component.scss'],
   providers: [
@@ -53,7 +53,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** The label tag for each field. */
   @Input() labelTag!: string;
 
-  /**Whether the instance comes from station or document */
+  /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
   constructor(
@@ -73,8 +73,23 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     const validators: ValidatorFn[] = [];
 
     //The field is required. Validators.required must be included.
-    if (this.field.isRequired) {
+    if (this.field.isRequired ||
+      this.field.questionType === QuestionFieldType.ShortText ||
+      this.field.questionType === QuestionFieldType.LongText) {
+      this.field.isRequired = true;
       validators.push(Validators.required);
+    }
+
+    if (!this.isStation) {
+      //Need to set email and url.
+      switch (this.field.questionType) {
+        case QuestionFieldType.Email:
+          validators.push(Validators.email);
+          break;
+        case QuestionFieldType.URL:
+          validators.push(this.fieldValidation.urlValidation());
+          break;
+      }
     }
 
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
@@ -93,7 +108,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val='';
+    val = '';
     val && this.textFieldForm.setValue(val, { emitEvent: false });
   }
 
@@ -146,8 +161,8 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    *
    * @param field The field to emit.
    */
-   updateFieldPrompt(field: Question): void{
-     if (this.isStation){
+  updateFieldPrompt(field: Question): void {
+    if (this.isStation) {
       field.prompt = this.textFieldForm.controls[this.field.questionType].value;
       this.stationService.updateStationQuestionInTemplate(field);
     }

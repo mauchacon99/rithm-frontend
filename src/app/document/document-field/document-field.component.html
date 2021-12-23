@@ -24,6 +24,6 @@
   </app-select-field>
   <app-check-field *ngIf="field.questionType === fieldTypes.CheckList" [field]="field" formControlName="checkFieldForm">
   </app-check-field>
-  <app-nested-field *ngIf="field.children.length > 0" [field]="field" formControlName="nestedFieldForm">
+  <app-nested-field *ngIf="field.children.length > 0" [field]="field" formControlName="nestedFieldForm" [isStation]="false">
   </app-nested-field>
 </ng-container>

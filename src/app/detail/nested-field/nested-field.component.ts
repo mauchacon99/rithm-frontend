@@ -23,7 +23,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class NestedFieldComponent implements OnInit{
+export class NestedFieldComponent implements OnInit {
   /** The form to add this field in the template. */
   nestedFieldForm!: FormGroup;
 
@@ -38,6 +38,9 @@ export class NestedFieldComponent implements OnInit{
 
   /** They array of children fields. */
   childrenFields!: Question[];
+
+  /** Whether the instance comes from station or document. */
+  @Input() isStation = true;
 
   constructor(
     private fb: FormBuilder,

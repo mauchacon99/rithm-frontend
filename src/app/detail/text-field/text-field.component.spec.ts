@@ -55,7 +55,7 @@ describe('TextFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextFieldComponent ],
+      declarations: [TextFieldComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -67,7 +67,7 @@ describe('TextFieldComponent', () => {
         { provide: StationService, useClass: MockStationService },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -123,15 +123,16 @@ describe('TextFieldComponent', () => {
 
     it('should not require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
-      expect(longText.valid).toBeTrue();
-      expect(longText.hasError('required')).toBeFalse();
-      expect(component.textFieldForm.valid).toBeTrue();
+      expect(longText.valid).toBeFalse();
+      expect(longText.hasError('required')).toBeTrue();
+      expect(component.textFieldForm.valid).toBeFalse();
     });
   });
 
   describe('url field', () => {
     beforeEach(() => {
       component.field = FIELDS[2];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -142,11 +143,20 @@ describe('TextFieldComponent', () => {
       expect(url.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();
     });
+
+    it('should require a valid url', () => {
+      const url = component.textFieldForm.controls['url'];
+      url.setValue('test.com');
+      expect(url.valid).toBeFalse();
+      expect(url.hasError('urlIncorrect')).toBeTrue();
+      expect(component.textFieldForm.valid).toBeFalse();
+    });
   });
 
   describe('email field', () => {
     beforeEach(() => {
       component.field = FIELDS[3];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -157,6 +167,13 @@ describe('TextFieldComponent', () => {
       expect(email.hasError('required')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
-  });
 
+    it('should require a valid email', () => {
+      const email = component.textFieldForm.controls['email'];
+      email.setValue('test.com');
+      expect(email.valid).toBeFalse();
+      expect(email.hasError('email')).toBeTrue();
+      expect(component.textFieldForm.valid).toBeFalse();
+    });
+  });
 });
