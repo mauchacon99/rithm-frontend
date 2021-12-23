@@ -73,10 +73,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     const validators: ValidatorFn[] = [];
 
     //The field is required. Validators.required must be included.
-    if (this.field.isRequired ||
-      this.field.questionType === QuestionFieldType.ShortText ||
-      this.field.questionType === QuestionFieldType.LongText) {
-      this.field.isRequired = true;
+    if (this.field.isRequired) {
       validators.push(Validators.required);
     }
 
