@@ -357,13 +357,7 @@ describe('DocumentService', () => {
   it('should unassign a user to document', () => {
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'E204F369-386F-4E41';
-    const assignedUser: StationRosterMember = {
-      rithmId: '789-321-456-789',
-      firstName: 'John',
-      lastName: 'Christopher',
-      email: 'johnny.depp@gmail.com'
-    };
-    service.unassignUserToDocument(documentRithmId,stationRithmId,assignedUser)
+    service.unassignUserToDocument(documentRithmId,stationRithmId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });

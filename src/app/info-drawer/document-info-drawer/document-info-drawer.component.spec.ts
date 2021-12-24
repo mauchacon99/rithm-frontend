@@ -15,7 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DialogOptions, StationRosterMember } from 'src/models';
+import { DialogOptions } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -195,15 +195,9 @@ describe('DocumentInfoDrawerComponent', () => {
       documentRithmId: documentId,
       stationRithmId: stationId
     });
-    const assignedUser: StationRosterMember = {
-      rithmId: '789-321-456-789',
-      firstName: 'John',
-      lastName: 'Christopher',
-      email: 'johnny.depp@gmail.com'
-    };
     const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
-    component['unassignUserToDocument'](assignedUser);
-    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId, assignedUser);
+    component['unassignUserToDocument']();
+    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId);
   });
 
   it('should show error message when request for assigned user fails', () => {
@@ -219,5 +213,18 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(component.userErrorAssigned).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
     expect(errorComponent).toBeTruthy();
+  });
+
+  it('should Connect to API to unassign user', () => {
+    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    fixture.detectChanges();
+    expect(component['unassignUserToDocument']).toBeTruthy();
   });
 });
