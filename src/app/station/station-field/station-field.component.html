@@ -49,12 +49,9 @@
         </div>
       </ng-template>
       <!-- Required Checkbox -->
-      <div class="flex space-x-4" [ngClass]="{'space-x-reverse': stationRithmId !== field.originalStationRithmId}"
-        *ngIf="field.questionType !== 'instructions'">
+      <div class="flex space-x-4" [ngClass]="{'space-x-reverse': stationRithmId !== field.originalStationRithmId}" *ngIf="field.questionType !== 'instructions'">
         <div [ngClass]="{'order-last': stationRithmId !== field.originalStationRithmId}">
-          <mat-checkbox [name]="field.rithmId"
-            [disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId"
-            [checked]="field.isRequired" (change)="setRequired($event)">
+          <mat-checkbox [name]="field.rithmId" [disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId" [checked]="field.isRequired" (change)="setRequired($event)">
             Required Field
           </mat-checkbox>
         </div>
