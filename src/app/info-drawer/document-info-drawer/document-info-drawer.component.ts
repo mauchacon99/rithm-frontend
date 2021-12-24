@@ -448,12 +448,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const res = result; /* This will replaced by loading indicator */
         },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+        error: () => {
+          this.unassignmentPopup();
         }
       });
+  }
+
+/**
+ * Show a deallocation error.
+ */
+  async unassignmentPopup(): Promise<void> {
+    await this.popupService.confirm({
+      title: 'The unassignment cannot be complete',
+      message: 'An unexpected error has occurred.',
+      okButtonText: 'OK',
+      cancelButtonText: 'Close',
+      important: true
+    });
   }
 }

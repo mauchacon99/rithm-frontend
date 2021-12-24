@@ -220,4 +220,17 @@ describe('DocumentInfoDrawerComponent', () => {
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
     expect(errorComponent).toBeTruthy();
   });
+
+  it('should show popup dialog to unassigned user was failed', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'The unassignment cannot be complete',
+      message: 'An unexpected error has occurred.',
+      okButtonText: 'OK',
+      cancelButtonText: 'Close',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.unassignmentPopup();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
 });
