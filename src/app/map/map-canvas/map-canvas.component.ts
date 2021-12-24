@@ -2,8 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {
@@ -262,7 +261,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mouseup event that was triggered.
    */
   @HostListener('pointerup', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pointerUp(event: PointerEvent): void {
     /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
     We disable pointer event listening and use touch events instead in this case. */
@@ -820,17 +818,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      for (const connection of this.connections) {
-        // Check if connection line was clicked. ContextPoint is used for connection lines.
-        connection.checkElementHover(eventContextPoint, this.context);
-        if (connection.hoverActive) {
-          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
-          if (!startStation) {
-            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+      if (this.dragItem !== MapDragItem.Node) {
+        for (const connection of this.connections) {
+          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          connection.checkElementHover(eventContextPoint, this.context);
+          if (connection.hoverActive) {
+            const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+            if (!startStation) {
+              throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+            }
+            startStation.dragging = true;
+            this.dragItem = MapDragItem.Connection;
+            break;
           }
-          startStation.dragging = true;
-         this.dragItem = MapDragItem.Connection;
-         break;
         }
       }
 
