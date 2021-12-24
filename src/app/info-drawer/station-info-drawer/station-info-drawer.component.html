@@ -71,10 +71,10 @@
       <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
     </div>
   </div>
-  <div class="w-full" *ngIf="mapMode === mapModeEnum.Build">
-    <mat-form-field appearance="outline">
+  <div *ngIf="mapMode === mapModeEnum.Build">
+    <mat-form-field appearance="outline" class="w-full">
       <mat-label>Notes</mat-label>
-      <textarea matInput [(ngModel)]="stationNotes" (ngModelChange)="reportNewStationMapChange()"></textarea>
+      <textarea class="h-28" matInput [(ngModel)]="stationNotes" (ngModelChange)="reportNewStationMapChange()"></textarea>
     </mat-form-field>
   </div>
   <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
@@ -82,8 +82,8 @@
       View Station
     </button>
   </div>
-  <div class="w-full py-2" *ngIf="editMode">
-    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation()">Delete Station
+  <div class="w-full py-2" *ngIf="editMode || isUserAdminOrOwner">
+    <button mat-stroked-button id="delete-station-button" color="warn" class="priority" (click)="deleteStation()">Delete Station
     </button>
   </div>
 </div>
