@@ -20,6 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { forkJoin, of } from 'rxjs';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -45,7 +47,8 @@ describe('DocumentComponent', () => {
         ),
         MatSidenavModule,
         ReactiveFormsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatExpansionModule
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
@@ -422,4 +425,30 @@ describe('DocumentComponent', () => {
     component.saveDocumentAnswer();
     expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
   });
+
+  describe('navigateRouterTesting', () => {
+    let router: Router;
+    let routerNavigateSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      router = TestBed.inject(Router);
+      routerNavigateSpy = spyOn(router, 'navigateByUrl');
+    });
+
+    // TODO: spec has no expectations being called
+    xit('should redirect to dashboard if petitions are successfully', () => {
+      forkJoin([of(), of()]).subscribe(() => {
+        expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
+      });
+      component.autoFlowDocument();
+    });
+    // TODO: spec has no expectations being called
+    xit('should not redirect if some petition is wrong', () => {
+      forkJoin([of(Error()), of()]).subscribe(() => {
+        expect(routerNavigateSpy).not.toHaveBeenCalled();
+      });
+      component.autoFlowDocument();
+    });
+  });
+
 });

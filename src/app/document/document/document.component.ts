@@ -56,6 +56,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /** Get Document Name from BehaviorSubject. */
   private documentName = '';
 
+  /** Show or hidden accordion for all field. */
+  accordionFieldAllExpanded = false;
+
   constructor(
     private documentService: DocumentService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -291,6 +294,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.documentLoading = false;
+          this.router.navigateByUrl('dashboard');
         },
         error: (error: unknown) => {
           this.documentLoading = false;
