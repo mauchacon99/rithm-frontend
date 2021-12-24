@@ -8,7 +8,7 @@ import { QuestionFieldType, Question } from 'src/models';
  * Reusable component for all fields involving text.
  */
 @Component({
-  selector: 'app-text-field[isStation]',
+  selector: 'app-text-field',
   templateUrl: './text-field.component.html',
   styleUrls: ['./text-field.component.scss'],
   providers: [

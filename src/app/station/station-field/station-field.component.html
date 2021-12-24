@@ -19,18 +19,17 @@
       <ng-container *ngIf="stationRithmId === field.originalStationRithmId; else previousFieldText">
         <div *ngIf="field.questionType === 'instructions'">
           <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true"
-            [labelTag]="'Instructions'" [isStation]="true"></app-text-field>
+            [labelTag]="'Instructions'"></app-text-field>
         </div>
         <div *ngIf="field.questionType !== 'instructions'">
           <app-text-field [field]="labelField" [formControlName]="field.questionType" [toolBar]="true"
-            [labelTag]="'Name your field'" [isStation]="true"></app-text-field>
+            [labelTag]="'Name your field'"></app-text-field>
         </div>
         <!-- Options/Items -->
         <ng-container
           *ngIf="field.questionType === fieldType.Select || field.questionType === fieldType.MultiSelect || field.questionType === fieldType.CheckList">
           <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField"
-            [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)" [labelTag]="labelTag"
-            [isStation]="true"></app-text-field>
+            [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)" [labelTag]="labelTag"></app-text-field>
           <div class="mb-3">
             <button mat-stroked-button color="accent" (click)="addOption(field.questionType)">
               <span *ngIf="field.questionType === fieldType.Select || field.questionType === fieldType.MultiSelect">

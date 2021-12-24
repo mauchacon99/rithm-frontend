@@ -7,7 +7,7 @@ import { Question, QuestionFieldType } from 'src/models';
  * Reusable component used to construct nested questions such as Address and Payment fields.
  */
 @Component({
-  selector: 'app-nested-field[isStation]',
+  selector: 'app-nested-field',
   templateUrl: './nested-field.component.html',
   styleUrls: ['./nested-field.component.scss'],
   providers: [
@@ -23,7 +23,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class NestedFieldComponent implements OnInit {
+export class NestedFieldComponent implements OnInit{
   /** The form to add this field in the template. */
   nestedFieldForm!: FormGroup;
 
@@ -38,9 +38,6 @@ export class NestedFieldComponent implements OnInit {
 
   /** They array of children fields. */
   childrenFields!: Question[];
-
-  /** Whether the instance comes from station or document. */
-  @Input() isStation = true;
 
   constructor(
     private fb: FormBuilder,
