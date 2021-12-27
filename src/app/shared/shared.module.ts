@@ -23,7 +23,6 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
-import { RuleModalComponent } from './rule-modal/rule-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +36,7 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-    RosterManagementModalComponent,
-    RuleModalComponent
+    RosterManagementModalComponent
   ],
   imports: [
     CommonModule,
