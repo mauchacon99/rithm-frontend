@@ -346,7 +346,7 @@ export class MapService {
     this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
     this.stationElements[startStationIndex].status = MapItemStatus.Updated;
-    endStation.status = MapItemStatus.Updated;
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
