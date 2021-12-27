@@ -1,5 +1,5 @@
 /**
- * Represents the structure to move to documents.
+ * Represents the structure move to documents.
  */
 
 export interface MoveDocument {
