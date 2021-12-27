@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer,
+  DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -218,7 +219,7 @@ export class DocumentService {
   }
 
   /**
-   * Unassign a user to document.
+   * Unassign a user to document via API.
    *
    * @param documentRithmId The Specific id of document.
    * @param stationId The station Id.

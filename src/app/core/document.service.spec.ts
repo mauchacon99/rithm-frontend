@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON,
+  DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -354,12 +355,12 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should unassign a user to document', () => {
+  it('should unassign a user to document via API', () => {
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'E204F369-386F-4E41';
     service.unassignUserToDocument(documentRithmId,stationRithmId)
       .subscribe((response) => {
-        expect(response).toBeFalsy();
+        expect(response).toBeInstanceOf(String);
       });
   });
 });
