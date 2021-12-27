@@ -215,7 +215,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(errorComponent).toBeTruthy();
   });
 
-  it('should Connect to API to unassign user', () => {
+  it('should catch error to document service', () => {
     spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
       throw new Error();
     }));
