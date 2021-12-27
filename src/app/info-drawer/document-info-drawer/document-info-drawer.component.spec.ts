@@ -219,12 +219,13 @@ describe('DocumentInfoDrawerComponent', () => {
     spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
       throw new Error();
     }));
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
       stationRithmId: stationId
     });
-    fixture.detectChanges();
-    expect(component['unassignUserToDocument']).toBeTruthy();
+    component['unassignUserToDocument']();
+    expect(spyError).toHaveBeenCalled();
   });
 });
