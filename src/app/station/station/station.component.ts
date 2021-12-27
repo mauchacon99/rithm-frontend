@@ -375,7 +375,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       {prompt: 'Address Line 2', type: QuestionFieldType.LongText, required: false },
       {prompt: 'City', type: QuestionFieldType.City, required: true },
       {prompt: 'State', type: QuestionFieldType.State, required: true },
-      {prompt: 'Postal Code (ZIP)', type: QuestionFieldType.Zip, required: true },
+      {prompt: 'Zip', type: QuestionFieldType.Zip, required: true },
     ];
     children.forEach( (element) => {
       const child: Question = {
