@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import { MapDragItem, MapMode, Point, StationElementHoverType } from 'src/models';
 import {
-  STATION_HEIGHT, STATION_WIDTH, STATION_RADIUS, DEFAULT_SCALE, STATION_PADDING, BADGE_RADIUS, BADGE_MARGIN,
-  BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR,
-  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, BUTTON_DEFAULT_COLOR, BUTTON_HOVER_COLOR,
-  SCALE_RENDER_STATION_ELEMENTS, CONNECTION_DEFAULT_COLOR, ICON_X_MARGIN, ICON_Y_MARGIN, ICON_FULL_HEIGHT,
-  ICON_MID_HEIGHT, ICON_MID_WIDTH, ICON_FULL_WIDTH, ICON_RADIUS, ICON_FOLD,
+  BADGE_DEFAULT_COLOR, BADGE_HOVER_COLOR, BADGE_MARGIN, BADGE_RADIUS, BUTTON_DEFAULT_COLOR, BUTTON_HOVER_COLOR,
+  BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, DEFAULT_SCALE, ICON_FOLD, ICON_FULL_HEIGHT,
+  ICON_FULL_WIDTH, ICON_MID_HEIGHT, ICON_MID_WIDTH, ICON_RADIUS, ICON_X_MARGIN, ICON_Y_MARGIN, NODE_DEFAULT_COLOR,
+  NODE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, SCALE_RENDER_STATION_ELEMENTS, STATION_HEIGHT, STATION_PADDING,
+  STATION_RADIUS, STATION_WIDTH,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -109,7 +109,7 @@ export class StationElementService {
     // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle = station.hoverActive !== StationElementHoverType.None
-      && dragItem === MapDragItem.Node
+      && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
       && !station.dragging
         ? '#ebebeb' : '#fff';
     ctx.strokeStyle = station.hoverActive !== StationElementHoverType.None
@@ -290,17 +290,18 @@ export class StationElementService {
 
     ctx.beginPath();
     ctx.arc(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin, scaledNodeRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = (dragItem === MapDragItem.Node
+    ctx.fillStyle = ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
       && station.dragging) || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : station.hoverActive === StationElementHoverType.Node
           && dragItem !== MapDragItem.Node
             ? NODE_HOVER_COLOR : NODE_DEFAULT_COLOR;
     ctx.fill();
-    if (cursor.x !== -1 && ((station.dragging && dragItem === MapDragItem.Node) || station.isAddingConnected)) {
+    if (cursor.x !== -1 && ((station.dragging
+      && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)) || station.isAddingConnected)) {
       ctx.moveTo(startingX + scaledStationWidth, startingY + scaledStationHeight - scaledNodeYMargin);
       ctx.lineTo(cursor.x, cursor.y);
     }
-    ctx.strokeStyle = (dragItem === MapDragItem.Node
+    ctx.strokeStyle = ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
       && station.dragging)  || station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR : NODE_HOVER_COLOR;
     ctx.stroke();

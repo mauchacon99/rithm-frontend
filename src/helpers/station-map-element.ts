@@ -168,4 +168,17 @@ export class StationMapElement {
         'You should instead remove it from the array of stations.');
     }
   }
+
+  /**
+   * Compares the modified station with stored station data.
+   *
+   * @param station The station to compare this station against.
+   * @returns Returns TRUE is data is same else FALSE.
+   */
+  isIdenticalTo(station: StationMapElement): boolean {
+    return JSON.stringify(this.previousStations) === JSON.stringify(station.previousStations) &&
+      JSON.stringify(this.nextStations) === JSON.stringify(station.nextStations) &&
+      JSON.stringify(this.canvasPoint) === JSON.stringify(station.canvasPoint) &&
+      this.stationName === station.stationName && this.notes === station.notes;
+  }
 }

@@ -14,4 +14,7 @@
 
   /** A connection node is being dragged. */
   Node,
+
+  /** A connection line is being dragged. */
+  Connection,
 }
