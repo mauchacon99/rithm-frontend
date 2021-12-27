@@ -638,6 +638,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.connectionElementService.drawConnection(connection);
       });
 
+      // Draw the Boundary box
+      this.drawBoundaryBox();
+
       // Draw the stations
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(station, this.mapMode, this.mapService.currentMousePoint$.value, this.dragItem);
@@ -714,10 +717,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension;
-    const topBoundaryEdge = minMapPoint.y - screenDimension;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+    const leftBoundaryEdge = minMapPoint.x - screenDimension / Math.floor(MAX_PAN_VELOCITY / this.scale);
+    const topBoundaryEdge = minMapPoint.y - screenDimension / Math.floor(MAX_PAN_VELOCITY / this.scale);
+    const rightBoundaryEdge = maxMapPoint.x + screenDimension / Math.floor(MAX_PAN_VELOCITY / this.scale);
+    const bottomBoundaryEdge = maxMapPoint.y + screenDimension / Math.floor(MAX_PAN_VELOCITY / this.scale);
 
     const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
     const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
