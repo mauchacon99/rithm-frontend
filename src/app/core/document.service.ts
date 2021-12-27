@@ -229,7 +229,7 @@ export class DocumentService {
       documentRithmId: documentRithmId,
       stationRithmId: stationId
     };
-    return this.http.delete<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,{body:requestObject})
+    return this.http.delete<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,{ body: requestObject })
     .pipe(map(response=> response.data));
   }
 }
