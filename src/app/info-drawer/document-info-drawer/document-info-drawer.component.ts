@@ -439,7 +439,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Unassign user to document.
    */
   private unassignUserToDocument(): void {
-    this.assignedUserLoading=true;
+    this.assignedUserLoading = true;
     this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
