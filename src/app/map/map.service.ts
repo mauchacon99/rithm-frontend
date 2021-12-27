@@ -333,17 +333,20 @@ export class MapService {
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
     const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
-    const endStationIndex = this.stationElements.findIndex(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    if (!endStation){
+      throw new Error(`A station was not found for ${endStationId}`);
+    }
 
     // Find the index from each stations between nextStations and previousStations
     const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
-    const prevStationIndex = this.stationElements[endStationIndex].previousStations.findIndex(e => e === startStationId);
+    const prevStationIndex = endStation.previousStations.findIndex(e => e === startStationId);
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
-    this.stationElements[endStationIndex].previousStations.splice(prevStationIndex, 1);
+    endStation.previousStations.splice(prevStationIndex, 1);
     this.stationElements[startStationIndex].status = MapItemStatus.Updated;
-    this.stationElements[endStationIndex].status = MapItemStatus.Updated;
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
