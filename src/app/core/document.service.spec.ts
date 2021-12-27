@@ -1,7 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-// eslint-disable-next-line max-len
 import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -353,5 +352,20 @@ describe('DocumentService', () => {
     expect(req.request.body).toEqual(expectedData);
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should unassign a user to document', () => {
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'E204F369-386F-4E41';
+    const assignedUser: StationRosterMember = {
+      rithmId: '789-321-456-789',
+      firstName: 'John',
+      lastName: 'Christopher',
+      email: 'johnny.depp@gmail.com'
+    };
+    service.unassignUserToDocument(documentRithmId,stationRithmId,assignedUser)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
   });
 });
