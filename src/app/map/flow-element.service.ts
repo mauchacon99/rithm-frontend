@@ -118,9 +118,6 @@ export class FlowElementService {
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR
     const fontSize = Math.ceil(16*this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    this.canvasContext.clearRect(flow.boundaryPoints[0].x - GROUP_NAME_PADDING,
-      flow.boundaryPoints[flow.boundaryPoints.length - 1].y - GROUP_NAME_PADDING, flow.title.length, fontSize)
-    // console.log(`${flow.boundaryPoints} the boundry points array`)
     this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
       flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
   }
