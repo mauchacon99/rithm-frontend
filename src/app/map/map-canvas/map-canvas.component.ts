@@ -2,10 +2,11 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType,
-  StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
-import { DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
+import { MapBoundaryService } from '../map-boundary.service';
+import {
+  DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
   STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
 } from '../map-constants';
@@ -116,7 +117,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private flowElementService: FlowElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
-    private stationService: StationService
+    private stationService: StationService,
+    private mapBoundaryService: MapBoundaryService
   ) {
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
@@ -259,7 +261,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The mouseup event that was triggered.
    */
   @HostListener('pointerup', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pointerUp(event: PointerEvent): void {
     /* Firefox for android doesn't get along with pointer events well, as of 11/11/21.
     We disable pointer event listening and use touch events instead in this case. */
@@ -695,6 +696,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Draws the boundary edges of a user's map.
+   *
+   */
+  private drawBoundaryBox(): void {
+
+    const screenDimension = window.innerWidth > window.innerHeight ? window.innerWidth : window.innerHeight;
+
+    // To find out corner's of map using the min and max canvas points.
+    const minMapPoint = this.mapService.getMinCanvasPoint();
+    const maxMapPoint = this.mapService.getMaxCanvasPoint();
+
+    const leftBoundaryEdge = minMapPoint.x - screenDimension;
+    const topBoundaryEdge = minMapPoint.y - screenDimension;
+    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
+    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+
+    const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
+    const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
+
+    this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
+
+  }
+
+  /**
    * Pans the map a given direction based on panVelocity.
    * Used when outside the bounding box and dragging.
    * //TODO: Allow use when middle wheel is active.
@@ -786,17 +811,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      for (const connection of this.connections) {
-        // Check if connection line was clicked. ContextPoint is used for connection lines.
-        connection.checkElementHover(eventContextPoint, this.context);
-        if (connection.hoverActive) {
-          const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
-          if (!startStation) {
-            throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+      if (this.dragItem !== MapDragItem.Node) {
+        for (const connection of this.connections) {
+          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          connection.checkElementHover(eventContextPoint, this.context);
+          if (connection.hoverActive) {
+            const startStation = this.stations.find((station) => station.rithmId === connection.startStationRithmId);
+            if (!startStation) {
+              throw new Error(`Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`);
+            }
+            startStation.dragging = true;
+            this.dragItem = MapDragItem.Connection;
+            break;
           }
-          startStation.dragging = true;
-         this.dragItem = MapDragItem.Connection;
-         break;
         }
       }
 
