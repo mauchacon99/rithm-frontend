@@ -6,7 +6,7 @@ import {
   BUTTON_HOVER_COLOR, BUTTON_RADIUS, BUTTON_X_MARGIN, BUTTON_Y_MARGIN, CONNECTION_DEFAULT_COLOR, DEFAULT_SCALE,
   ICON_FOLD, ICON_FULL_HEIGHT, ICON_FULL_WIDTH, ICON_MID_HEIGHT, ICON_MID_WIDTH, ICON_RADIUS, ICON_X_MARGIN,
   ICON_Y_MARGIN, NODE_DEFAULT_COLOR, NODE_HOVER_COLOR, NODE_RADIUS, NODE_Y_MARGIN, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_PADDING, STATION_RADIUS, STATION_WIDTH,
+  STATION_HEIGHT, STATION_PADDING, STATION_RADIUS, STATION_WIDTH, FONT_SIZE_MODIFIER,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -136,7 +136,7 @@ export class StationElementService {
 
     ctx.textAlign = 'left';
     ctx.fillStyle = 'black';
-    const fontSize = Math.ceil(16*this.mapScale);
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER*this.mapScale);
     ctx.font = `normal ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FlowMapElement, Point } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
-  DEFAULT_SCALE, GROUP_NAME_PADDING,
+  DEFAULT_SCALE, GROUP_NAME_PADDING, FONT_SIZE_MODIFIER,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -115,7 +115,7 @@ export class FlowElementService {
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR
-    const fontSize = Math.ceil(16*this.mapScale);
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER*this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
       flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
