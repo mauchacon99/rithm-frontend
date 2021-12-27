@@ -5,7 +5,6 @@ import {
   DEFAULT_SCALE, GROUP_NAME_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
-import { group } from "@angular/animations";
 
 /**
  * Service for rendering and other behavior for a flow on the map.
