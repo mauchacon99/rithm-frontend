@@ -224,7 +224,7 @@ export class DocumentService {
    * @param stationId The station Id.
    * @returns Returns an empty observable.
    */
-   unassignUserToDocument(documentRithmId: string, stationId: string): Observable<string> {
+  unassignUserToDocument(documentRithmId: string, stationId: string): Observable<string> {
     const requestObject = {
       documentRithmId: documentRithmId,
       stationRithmId: stationId
