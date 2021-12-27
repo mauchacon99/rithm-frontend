@@ -109,7 +109,7 @@ export class StationElementService {
     // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle = station.hoverActive !== StationElementHoverType.None
-      && dragItem === MapDragItem.Node
+      && (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection)
       && !station.dragging
         ? '#ebebeb' : '#fff';
     ctx.strokeStyle = station.hoverActive !== StationElementHoverType.None
