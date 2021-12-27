@@ -386,7 +386,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   * @returns Validate if user is owner or admin of current station.
   */
   get isUserAdminOrOwner(): boolean {
-    return this.stationInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId)
-    !== undefined  ? true : (this.type === 'admin') ? true : false;
+    return this.stationInformation.stationOwners.find((owner) => this.userService.user.rithmId === owner.rithmId)
+    !== undefined ? true : this.type === 'admin'
   }
 }
