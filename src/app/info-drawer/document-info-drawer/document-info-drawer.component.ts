@@ -447,7 +447,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.assignedUserLoading=false;
         },
         error: (error: unknown) => {
-          this.assignedUserLoading=false;
+          this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
