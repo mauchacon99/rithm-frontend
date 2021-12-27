@@ -225,12 +225,12 @@ export class DocumentService {
    * @param stationId The station Id.
    * @returns Returns an empty observable.
    */
-   unassignUserToDocument(documentRithmId: string, stationId: string): Observable<string> {
+  unassignUserToDocument(documentRithmId: string, stationId: string): Observable<string> {
     const requestObject = {
       documentRithmId: documentRithmId,
       stationRithmId: stationId
     };
-    return this.http.delete<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,{body:requestObject})
+    return this.http.delete<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,{ body: requestObject })
     .pipe(map(response=> response.data));
   }
 }
