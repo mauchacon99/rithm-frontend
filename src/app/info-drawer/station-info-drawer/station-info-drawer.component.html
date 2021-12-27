@@ -82,7 +82,7 @@
       View Station
     </button>
   </div>
-  <div class="w-full py-2" *ngIf="editMode || isUserAdminOrOwner">
+  <div class="w-full py-2" *ngIf="(openedFromMap && editMode && isUserAdminOrOwner) || (!openedFromMap && editMode || !openedFromMap && isUserAdminOrOwner)">
     <button mat-stroked-button id="delete-station-button" color="warn" class="priority" (click)="deleteStation()">Delete Station
     </button>
   </div>

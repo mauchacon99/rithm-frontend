@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
-import { UtcTimeConversion } from 'src/helpers';
+import { UtcTimeConversion, StationMapElement } from 'src/helpers';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
@@ -108,7 +108,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
           this.stationNotes = dataDrawer.notes;
-          this.editMode = dataDrawer.editMode;
           if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
             this.getStationDocumentGenerationStatus();
           }
@@ -248,27 +247,32 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deleteStation(): Promise<void> {
-    const response = await this.popupService.confirm({
-      title: 'Are you sure?',
-      message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
-      okButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
-      important: true,
-    });
-    if (response) {
-      this.stationService.deleteStation(this.stationRithmId)
-        .pipe(first())
-        .subscribe({
-          next: () => {
-            this.popupService.notify('The station has been deleted.');
-            this.router.navigateByUrl('dashboard');
-          }, error: (error: unknown) => {
-            this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-              error
-            );
-          }
-        });
+      const response = await this.popupService.confirm({
+        title: 'Are you sure?',
+        message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+        okButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        important: true,
+      });
+      if (response) {
+        if (this.openedFromMap) {
+          this.mapService.removeAllStationConnections(this.stationRithmId)
+          this.mapService.deleteStation(this.stationRithmId)
+        } else {
+        this.stationService.deleteStation(this.stationRithmId)
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.popupService.notify('The station has been deleted.');
+              this.router.navigateByUrl('dashboard');
+            }, error: (error: unknown) => {
+              this.errorService.displayError(
+                'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+                error
+              );
+            }
+          });
+      }
     }
   }
 
