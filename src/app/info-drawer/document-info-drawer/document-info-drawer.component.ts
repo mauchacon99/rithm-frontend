@@ -444,7 +444,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.assignedUserLoading=false;
+          this.assignedUserLoading = false;
         },
         error: (error: unknown) => {
           this.assignedUserLoading = false;
