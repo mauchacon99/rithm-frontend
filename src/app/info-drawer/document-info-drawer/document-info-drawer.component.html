@@ -102,6 +102,11 @@
         </div>
       </div>
       <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
+        <button mat-stroked-button color="accent" class="priority">
+          Move Document
+        </button>
+      </div>
+      <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
         <button mat-stroked-button color="warn" class="priority" (click)="deleteDocument()">
           Delete Document
         </button>
