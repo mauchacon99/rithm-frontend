@@ -13,6 +13,7 @@ import { MapToolbarComponent } from './map-toolbar.component';
 describe('MapToolbarComponent', () => {
   let component: MapToolbarComponent;
   let fixture: ComponentFixture<MapToolbarComponent>;
+  let service: MapService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,6 +28,7 @@ describe('MapToolbarComponent', () => {
         { provide: MapService, useClass: MockMapService }
       ]
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -39,13 +41,18 @@ describe('MapToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should toggle mapMode add station', () => {
+  it('should toggle mapMode add station', () => {
+    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'disableConnectedStationMode');
     component.addStation();
     expect(component.stationAddActive).toBeTrue();
     expect(component.mapMode).toEqual(MapMode.StationAdd);
     component.addStation();
     expect(component.stationAddActive).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);
+    const connectedStationMode = service.stationElements.some(st => st.isAddingConnected);
+    expect(connectedStationMode).toBeTrue();
+    expect(mapServiceSpy).toHaveBeenCalled();
+    service.mapDataReceived$.subscribe(res => expect(res).toBe(true));
   });
 
   it('should toggle mapMode add flow', () => {

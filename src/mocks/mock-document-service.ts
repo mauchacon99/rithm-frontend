@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-// eslint-disable-next-line max-len
 import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -68,7 +67,6 @@ export class MockDocumentService {
       ],
       totalDocuments: 40, userType: UserType.Worker
     };
-    // return this.http.get<DashboardStationResponse[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/api/Dashboard/Stations`);
     if (pageNum === 1) {
       pageNum = 0;
       ELEMENT_DATA.documents = ELEMENT_DATA.documents.slice(pageNum, 10);
@@ -600,6 +598,26 @@ export class MockDocumentService {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Unable to flow the document, invalid parameters.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Unassign a user to document.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @param stationId The station Id.
+   * @param userAssigned The User who will be unassigned.
+   * @returns Returns an empty observable.
+   */
+  unassignUserToDocument(documentRithmId: string, stationId: string, userAssigned: StationRosterMember): Observable<unknown> {
+    if (!documentRithmId || !userAssigned || !stationId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'The user cannot be unassigned.'
         }
       })).pipe(delay(1000));
     } else {
