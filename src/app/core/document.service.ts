@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
-// eslint-disable-next-line max-len
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -215,6 +214,29 @@ export class DocumentService {
       })).pipe(delay(1000));
     } else {
       return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`, documentAutoFlow);
+    }
+  }
+
+  /**
+   * Unassign a user to document via API.
+   *
+   * @param documentRithmId The Specific id of document.
+   * @param stationRithmId The station Id.
+   * @returns Returns an empty observable.
+   */
+  unassignUserToDocument(documentRithmId: string, stationRithmId: string): Observable<unknown> {
+    if (!documentRithmId || !stationRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'The user cannot be unassigned.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      const requestObject = {
+        documentRithmId: documentRithmId,
+        stationRithmId: stationRithmId
+      };
+      return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`, { body: requestObject });
     }
   }
 }

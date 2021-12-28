@@ -434,4 +434,41 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  /**
+   * Open popup service to unassign a user to document.
+   */
+  async unassignUser(): Promise<void> {
+    const userUnassigned = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
+      important: true
+    });
+    if (userUnassigned) {
+      this.unassignUserToDocument();
+    }
+  }
+
+  /**
+   * Unassign user to document.
+   */
+  private unassignUserToDocument(): void {
+    this.assignedUserLoading = true;
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.assignedUserLoading = false;
+        },
+        error: (error: unknown) => {
+          this.assignedUserLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
 }

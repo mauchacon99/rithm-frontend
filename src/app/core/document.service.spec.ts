@@ -1,7 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-// eslint-disable-next-line max-len
 import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -351,6 +350,24 @@ describe('DocumentService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedData);
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should unassign a user to document via API', () => {
+    const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
+    const documentRithmId = 'E204F369-386F-4E41';
+    const requestObject = {
+      documentRithmId: documentRithmId,
+      stationRithmId: stationRithmId
+    };
+    service.unassignUserToDocument(documentRithmId, stationRithmId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(requestObject);
     req.flush(null);
     httpTestingController.verify();
   });

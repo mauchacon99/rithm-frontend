@@ -1,9 +1,5 @@
 import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, ValidatorFn, Validators
-} from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -53,7 +49,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** The label tag for each field. */
   @Input() labelTag!: string;
 
-  /**Whether the instance comes from station or document */
+  /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
   constructor(
@@ -77,18 +73,19 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
       validators.push(Validators.required);
     }
 
-    //Need to set email and url.
-    switch (this.field.questionType) {
-      case QuestionFieldType.Email:
-        validators.push(Validators.email);
-        break;
-      case QuestionFieldType.URL:
-        validators.push(this.fieldValidation.urlValidation());
-        break;
+    if (!this.isStation) {
+      //Need to set email and url.
+      switch (this.field.questionType) {
+        case QuestionFieldType.Email:
+          validators.push(Validators.email);
+          break;
+        case QuestionFieldType.URL:
+          validators.push(this.fieldValidation.urlValidation());
+          break;
+      }
     }
 
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
-
   }
 
   /**
@@ -104,7 +101,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val='';
+    val = '';
     val && this.textFieldForm.setValue(val, { emitEvent: false });
   }
 
@@ -157,8 +154,8 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    *
    * @param field The field to emit.
    */
-   updateFieldPrompt(field: Question): void{
-     if (this.isStation){
+  updateFieldPrompt(field: Question): void {
+    if (this.isStation) {
       field.prompt = this.textFieldForm.controls[this.field.questionType].value;
       this.stationService.updateStationQuestionInTemplate(field);
     }

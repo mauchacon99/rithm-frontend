@@ -294,6 +294,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.documentLoading = false;
+          this.router.navigateByUrl('dashboard');
         },
         error: (error: unknown) => {
           this.documentLoading = false;

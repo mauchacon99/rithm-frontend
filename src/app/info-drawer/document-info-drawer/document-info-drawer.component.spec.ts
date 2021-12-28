@@ -189,18 +189,56 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
+  it('should call the service to unassign a user to document', () => {
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
+    component['unassignUserToDocument']();
+    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId);
+  });
+
   it('should show error message when request for assigned user fails', () => {
     spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.returnValue(throwError(() => {
       throw new Error();
     }));
     sideNavService.drawerData$.next({
       isStation: false,
-      documentRithmId: '',
+      documentRithmId: documentId,
       stationRithmId: stationId
     });
     fixture.detectChanges();
     expect(component.userErrorAssigned).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
     expect(errorComponent).toBeTruthy();
+  });
+
+  it('should show popup dialog to unassigned user', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.unassignUser();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+
+  it('should catch error to document service', () => {
+    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    component['unassignUserToDocument']();
+    expect(spyError).toHaveBeenCalled();
   });
 });

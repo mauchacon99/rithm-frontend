@@ -333,17 +333,20 @@ export class MapService {
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
     const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
-    const endStationIndex = this.stationElements.findIndex(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    if (!endStation){
+      throw new Error(`A station was not found for ${endStationId}`);
+    }
 
     // Find the index from each stations between nextStations and previousStations
     const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
-    const prevStationIndex = this.stationElements[endStationIndex].previousStations.findIndex(e => e === startStationId);
+    const prevStationIndex = endStation.previousStations.findIndex(e => e === startStationId);
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
-    this.stationElements[endStationIndex].previousStations.splice(prevStationIndex, 1);
+    endStation.previousStations.splice(prevStationIndex, 1);
     this.stationElements[startStationIndex].status = MapItemStatus.Updated;
-    this.stationElements[endStationIndex].status = MapItemStatus.Updated;
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
@@ -774,6 +777,17 @@ export class MapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
+    const updatedStations = this.stationElements.filter((station) => station.status === MapItemStatus.Updated);
+    for (const updatedStation of updatedStations) {
+      const storedStation = this.storedStationElements.find((station) => station.rithmId === updatedStation.rithmId);
+      if (!storedStation) {
+        throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
+          but does not exist in stored stations.`);
+      }
+      if (storedStation.isIdenticalTo(updatedStation)) {
+        updatedStation.status = MapItemStatus.Normal;
+      }
+    }
     return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
   }
 

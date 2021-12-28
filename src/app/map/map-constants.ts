@@ -3,6 +3,7 @@ import { Point } from 'src/models';
 // TODO: refine this file; this is polluting the global namespace a little
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
+export const FONT_SIZE_MODIFIER = 16;
 
 // Scale
 export const DEFAULT_SCALE = 1;
@@ -31,6 +32,7 @@ export const CENTER_ZOOM_BUFFER = 10;
 // Flow
 export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;
+export const GROUP_NAME_PADDING = 6;
 
 // Station
 export const STATION_PADDING = 10;
@@ -51,6 +53,7 @@ export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
 export const CONNECTION_NODE_OFFSET = 80;
 export const CONNECTION_HEIGHT_REDUCER = 5;
+export const MOUSE_MOVEMENT_OVER_CONNECTION = 5;
 
 // Connection node
 export const NODE_X_MARGIN = 0;
