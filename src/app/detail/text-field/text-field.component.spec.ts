@@ -55,7 +55,7 @@ describe('TextFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextFieldComponent ],
+      declarations: [TextFieldComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -67,7 +67,7 @@ describe('TextFieldComponent', () => {
         { provide: StationService, useClass: MockStationService },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -132,6 +132,7 @@ describe('TextFieldComponent', () => {
   describe('url field', () => {
     beforeEach(() => {
       component.field = FIELDS[2];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -155,6 +156,7 @@ describe('TextFieldComponent', () => {
   describe('email field', () => {
     beforeEach(() => {
       component.field = FIELDS[3];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -174,5 +176,4 @@ describe('TextFieldComponent', () => {
       expect(component.textFieldForm.valid).toBeFalse();
     });
   });
-
 });

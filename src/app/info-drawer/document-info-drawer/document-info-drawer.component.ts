@@ -102,6 +102,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Enable error message if assigned user the document request fails. */
   userErrorAssigned = false;
 
+  /** Enable error message if unassigned user the document request fails. */
+  userErrorUnassigned = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -436,34 +439,41 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Unassign a user to document.
-   *
-   * @param user The User who will be unassigned.
+   * Open popup service to unassign a user to document.
    */
-  private unassignUserToDocument(user: StationRosterMember): void {
-    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId, user)
-      .pipe(first())
-      .subscribe({
-        next: (result) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const res = result; /* This will replaced by loading indicator */
-        },
-        error: () => {
-          this.unassignmentPopup();
-        }
-      });
-  }
-
-/**
- * Show a deallocation error.
- */
-  async unassignmentPopup(): Promise<void> {
-    await this.popupService.confirm({
-      title: 'The unassignment cannot be complete',
-      message: 'An unexpected error has occurred.',
-      okButtonText: 'OK',
-      cancelButtonText: 'Close',
+  async unassignUser(): Promise<void> {
+    const userUnassigned = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
       important: true
     });
+    if (userUnassigned) {
+      this.unassignUserToDocument();
+    }
+  }
+
+  /**
+   * Unassign user to document.
+   */
+  private unassignUserToDocument(): void {
+    this.userErrorUnassigned = false;
+    this.assignedUserLoading = true;
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.assignedUserLoading = false;
+        },
+        error: (error: unknown) => {
+          this.assignedUserLoading = false;
+          this.userErrorUnassigned = true;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
   }
 }
