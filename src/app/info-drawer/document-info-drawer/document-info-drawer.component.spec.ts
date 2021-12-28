@@ -215,6 +215,19 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(errorComponent).toBeTruthy();
   });
 
+  it('should show popup dialog to unassigned user', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.unassignUser();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+
   it('should catch error to document service', () => {
     spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
       throw new Error();

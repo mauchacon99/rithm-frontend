@@ -436,6 +436,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Open popup service to unassign a user to document.
+   */
+  async unassignUser(): Promise<void> {
+    const userUnassigned = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
+      important: true
+    });
+    if (userUnassigned) {
+      this.unassignUserToDocument();
+    }
+  }
+
+  /**
    * Unassign user to document.
    */
   private unassignUserToDocument(): void {
