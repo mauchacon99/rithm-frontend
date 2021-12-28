@@ -219,19 +219,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const is_android = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
     if (window.PointerEvent && !(is_android && is_firefox)) {
-        event.preventDefault();
-        //If event exists in pointerCache, update event in cache.
-        for (let i = 0; i < this.pointerCache.length; i++) {
-          if (this.pointerCache[i].pointerId === event.pointerId) {
-            this.pointerCache.splice(i, 1, event);
-            break;
-          }
+      event.preventDefault();
+      //If event exists in pointerCache, update event in cache.
+      for (let i = 0; i < this.pointerCache.length; i++) {
+        if (this.pointerCache[i].pointerId === event.pointerId) {
+          this.pointerCache.splice(i, 1, event);
+          break;
         }
+      }
 
-        //If event doesn't exist in pointerCache, add it.
-        if (!this.pointerCache.includes(event)) {
-          this.pointerCache.push(event);
-        }
+      //If event doesn't exist in pointerCache, add it.
+      if (!this.pointerCache.includes(event)) {
+        this.pointerCache.push(event);
+      }
 
         if (this.pointerCache.length === 1) {
           const pointer = this.pointerCache[0];
@@ -240,20 +240,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.eventStartLogic(event);
         }
 
-        if (this.pointerCache.length === 2) {
-          const pointer1 = this.pointerCache[0];
-          const pointer2 = this.pointerCache[1];
+      if (this.pointerCache.length === 2) {
+        const pointer1 = this.pointerCache[0];
+        const pointer2 = this.pointerCache[1];
 
-          this.lastTouchCoords = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
-          this.eventStartCoords = this.getEventCanvasPoint(pointer1);
-        }
+        this.lastTouchCoords = [this.getEventCanvasPoint(pointer1), this.getEventCanvasPoint(pointer2)];
+        this.eventStartCoords = this.getEventCanvasPoint(pointer1);
+      }
 
-        if (this.dragItem !== MapDragItem.Default) {
-          const map = document.getElementById('map');
-          map?.setPointerCapture(event.pointerId);
-        }
+      if (this.dragItem !== MapDragItem.Default) {
+        const map = document.getElementById('map');
+        map?.setPointerCapture(event.pointerId);
       }
     }
+  }
 
   /**
    * Handles user input when releasing and a pointer event is fired.
@@ -515,10 +515,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     event.preventDefault();
     const mousePoint = this.getEventCanvasPoint(event);
     const eventAmount = event.deltaY >= 100
-    ? Math.floor(event.deltaY/100)
-    : event.deltaY <= -100
-      ? Math.ceil(event.deltaY/100)
-      : event.deltaY/3;
+      ? Math.floor(event.deltaY / 100)
+      : event.deltaY <= -100
+        ? Math.ceil(event.deltaY / 100)
+        : event.deltaY / 3;
 
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
@@ -536,10 +536,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       // Do nothing if already at min zoom.
       if (this.scale <= MIN_SCALE
         || this.mapService.mapMode$.value !== MapMode.View
-        && this.scale <= SCALE_RENDER_STATION_ELEMENTS/ZOOM_VELOCITY) {
-          this.mapService.zoomCount$.next(0);
-          return;
-        }
+        && this.scale <= SCALE_RENDER_STATION_ELEMENTS / ZOOM_VELOCITY) {
+        this.mapService.zoomCount$.next(0);
+        return;
+      }
       // Zoom out
       if (this.zoomCount > 0) {
         this.mapService.zoomCount$.next(0);
@@ -559,7 +559,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param fps The framerate to animate at.
    */
   private scaleChangeDraw(fps = 60): void {
-    if (this.zoomCount !== 0){
+    if (this.zoomCount !== 0) {
       if (!this.zoomInterval) {
         this.zoomInterval = setInterval(() => {
           if (this.zoomCount === 0 && this.zoomInterval) {
@@ -567,7 +567,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.zoomInterval = undefined;
           }
           this.drawElements();
-        }, 1000/ fps);
+        }, 1000 / fps);
       }
     }
   }
@@ -596,8 +596,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
-        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1 ) {
-          this.nextPanVelocity = {x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE};
+        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1) {
+          this.nextPanVelocity = { x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE };
           this.myReq = requestAnimationFrame(step);
         } else {
           cancelAnimationFrame(this.myReq as number);
@@ -671,7 +671,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     };
 
-    const panVelocity: Point = {x: 0, y: 0};
+    const panVelocity: Point = { x: 0, y: 0 };
     const mobileAdjust = window.innerWidth < 768 ? 36 : 0;
 
     //Set direction and speed to pan x.
@@ -765,7 +765,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas context.
    */
-   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
+  private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
       x: canvasPoint.x * window.devicePixelRatio,
@@ -801,7 +801,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
-        // Check for drag start on station
+          // Check for drag start on station
         } else if (station.hoverActive !== StationElementHoverType.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
@@ -828,9 +828,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       //This ensures that when dragging a station or node connection, it will always display above other stations.
-      if (this.stations.find( obj => obj.dragging === true)) {
-        const draggingStation = this.stations.filter( obj => obj.dragging === true);
-        this.stations = this.stations.filter( obj => obj.dragging !== true);
+      if (this.stations.find(obj => obj.dragging === true)) {
+        const draggingStation = this.stations.filter(obj => obj.dragging === true);
+        this.stations = this.stations.filter(obj => obj.dragging !== true);
         this.stations.push(draggingStation[0]);
       }
     }
@@ -871,8 +871,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //If dragging the map.
     if (this.dragItem === MapDragItem.Map) {
       //Check if nextPanVelocity is great enough to trigger autoPan.
-      if ( this.fastDrag ) {
-        this.nextPanVelocity = {x: this.nextPanVelocity.x/this.scale, y: this.nextPanVelocity.y/this.scale};
+      if (this.fastDrag) {
+        this.nextPanVelocity = { x: this.nextPanVelocity.x / this.scale, y: this.nextPanVelocity.y / this.scale };
         this.checkAutoPan();
       } else {
         this.nextPanVelocity = { x: 0, y: 0 };
@@ -1118,25 +1118,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     //Check if click was in a station. If so any code under this for loop will not run.
     for (const station of this.stations) {
-       //Connection node.
+      //Connection node.
       if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
         //TODO: Add functionality to allow clicking a node.
         //You would then click on a station to create a new connection instead of dragging.
         return;
-      //Option Button.
+        //Option Button.
       } else if (station.isPointInOptionButton(point, this.mapMode, this.scale)
       ) {
         this.mapService.currentMousePoint$.next(point);
         this.mapService.stationButtonClick$.next({ click: true, data: station });
         return;
-      //Document badge.
+        //Document badge.
       } else if (station.isPointInDocumentBadge(point, this.mapMode, this.scale)) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',
           data: { stationName: station.stationName, stationId: station.rithmId }
         });
         return;
-      //station itself.
+        //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
         this.checkStationClick(station);
         return;
@@ -1151,7 +1151,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    *
    * @param contextPoint Calculated position of click.
    */
-   checkConnectionClick(contextPoint: Point): void {
+  checkConnectionClick(contextPoint: Point): void {
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hoverActive) {
