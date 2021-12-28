@@ -436,19 +436,18 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Unassign a user to document.
-   *
-   * @param user The User who will be unassigned.
+   * Unassign user to document.
    */
-  private unassignUserToDocument(user: StationRosterMember): void {
-    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId, user)
+  private unassignUserToDocument(): void {
+    this.assignedUserLoading = true;
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (result) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const res = result; /* This will replaced by loading indicator */
+        next: () => {
+          this.assignedUserLoading = false;
         },
         error: (error: unknown) => {
+          this.assignedUserLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error

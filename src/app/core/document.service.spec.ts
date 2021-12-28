@@ -354,18 +354,21 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should unassign a user to document', () => {
+  it('should unassign a user to document via API', () => {
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'E204F369-386F-4E41';
-    const assignedUser: StationRosterMember = {
-      rithmId: '789-321-456-789',
-      firstName: 'John',
-      lastName: 'Christopher',
-      email: 'johnny.depp@gmail.com'
+    const requestObject = {
+      documentRithmId: documentRithmId,
+      stationRithmId: stationRithmId
     };
-    service.unassignUserToDocument(documentRithmId, stationRithmId, assignedUser)
+    service.unassignUserToDocument(documentRithmId, stationRithmId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`);
+    expect(req.request.method).toEqual('DELETE');
+    expect(req.request.body).toEqual(requestObject);
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
