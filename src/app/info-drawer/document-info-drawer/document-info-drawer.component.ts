@@ -488,6 +488,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             error
           );
         }
-      })
+      });
   }
 }
