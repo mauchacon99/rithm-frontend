@@ -248,7 +248,7 @@ describe('DocumentInfoDrawerComponent', () => {
       documentRithmId: documentId
     };
 
-    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(throwError(() => {
       throw new Error();
     }));
 
