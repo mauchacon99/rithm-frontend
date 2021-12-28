@@ -252,8 +252,8 @@ describe('DocumentInfoDrawerComponent', () => {
       throw new Error();
     }));
 
-    const spyMoveDocument = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
     component.moveDocument(dataExpect);
-    expect(spyMoveDocument).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
   });
 });
