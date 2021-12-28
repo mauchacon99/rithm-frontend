@@ -2,7 +2,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-// eslint-disable-next-line max-len
 import { Question, QuestionFieldType, Station, StationInformation, DocumentGenerationStatus, StationRosterMember, StationPotentialRostersUsers, DocumentNameField, ForwardPreviousStationsDocument, StandardStringJSON } from 'src/models';
 
 /**
@@ -21,6 +20,9 @@ export class MockStationService {
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
+
+  /** The question to be updated when it changes in station page. */
+  stationQuestion$ = new Subject<Question>();
 
   /**
    * Gets a station information.
@@ -551,6 +553,15 @@ export class MockStationService {
     this.stationName$.next(stationName);
   }
 
+  /**
+   * Update the station question values in the template area.
+   *
+   * @param question The question to be updated.
+   */
+   updateStationQuestionInTemplate(question: Question): void {
+    this.stationQuestion$.next(question);
+  }
+
  /**
   * Reports a new question to be moved.
   *
@@ -645,7 +656,7 @@ export class MockStationService {
       },
       {
         prompt: '/',
-        questionRithmId: ''
+        questionRithmId: null
       },
       {
         prompt: 'Which is best?',
@@ -677,7 +688,7 @@ export class MockStationService {
         },
         {
           prompt: '/',
-          questionRithmId: ''
+          questionRithmId: null
         },
         {
           prompt: 'Which is best?',

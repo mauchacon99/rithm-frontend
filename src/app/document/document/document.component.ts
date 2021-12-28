@@ -5,10 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo } from 'src/models';
+import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, DocumentAutoFlow } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 
 /**
  * Main component for viewing a document.
@@ -55,6 +55,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   /** Get Document Name from BehaviorSubject. */
   private documentName = '';
+
+  /** Show or hidden accordion for all field. */
+  accordionFieldAllExpanded = false;
 
   constructor(
     private documentService: DocumentService,
@@ -245,12 +248,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   /**
    * Save the document answers.
-   *
-   * @param answerDocument The answers so document.
    */
-  saveDocumentAnswer(answerDocument: DocumentAnswer[]): void {
+  saveDocumentAnswer(): void {
     this.documentLoading = true;
-    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, answerDocument)
+    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer)
       .pipe(first())
       .subscribe({
         next: (docAnswers) => {
@@ -259,6 +260,43 @@ export class DocumentComponent implements OnInit, OnDestroy {
           }
           this.documentLoading = false;
         }, error: (error: unknown) => {
+          this.documentLoading = false;
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+      });
+  }
+
+  /**
+   * Save document answers and auto flow.
+   */
+  autoFlowDocument(): void {
+    this.documentLoading = true;
+    const documentAutoFlow: DocumentAutoFlow = {
+      stationRithmId: this.documentInformation.stationRithmId,
+      documentRithmId: this.documentInformation.documentRithmId,
+      // Parameter temporary testMode.
+      testMode: false
+    };
+
+    const requestArray = [
+      // Save the document answers.
+      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer),
+
+      // Flow a document.
+      this.documentService.autoFlowDocument(documentAutoFlow),
+    ];
+
+    forkJoin(requestArray)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.documentLoading = false;
+          this.router.navigateByUrl('dashboard');
+        },
+        error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

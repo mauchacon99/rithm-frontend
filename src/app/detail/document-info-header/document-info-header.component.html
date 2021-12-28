@@ -19,9 +19,9 @@
         </div>
       </mat-chip-list>
     </div>
-    <button *ngIf="isStation" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
-      (click)="toggleDrawer('documentInfo')">
-      <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+    <button *ngIf="isStation" data-testid="document-info-drawer" id="info-drawer-button-document" mat-icon-button matSuffix class="icon icon-top"
+      (click)="toggleDrawer('documentInfo')" [disabled]="isDrawerOpen">
+      <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500' "></i>
     </button>
   </div>
 
@@ -31,14 +31,20 @@
         <mat-label>Document Name: </mat-label>
         <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name" (keyup)="updateDocumentNameBS()">
         <button data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
-      (click)="toggleDrawer('documentInfo')">
-        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+      (click)="toggleDrawer('documentInfo')" id="info-drawer-button-document" [disabled]="isDrawerOpen">
+        <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500' "></i>
       </button>
     </mat-form-field>
-    <p class="pb-2 pl-4 overline-font">Appended Name: {{appendedDocumentName}} </p>
+    <p *ngIf="appendedDocumentName !== ''" class="pb-2 pl-4 overline-font">Appended Name: {{appendedDocumentName}} </p>
     </div>
     <ng-template #nonEditableDocName>
-      <p>Document Name: {{documentName}} {{appendedDocumentName}}</p>
+      <div class="flex items-center justify-between w-full">
+        <p>Document Name: {{documentName}} {{appendedDocumentName}}</p>
+        <button data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
+        (click)="toggleDrawer('documentInfo')">
+          <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+        </button>
+      </div>
     </ng-template>
   </form>
 
@@ -51,9 +57,5 @@
         <!-- <i class="fas fa-lock"></i> -->
       </button>
     </div>
-  </div>
-  <div *ngIf="!isStation" class="col-span-8 md:col-span-4 text-center text-xs">
-    <span>Time in station</span><br>
-    <span class="text-accent-300">{{ getElapsedTime(flowedTimeUTC) }}</span>
   </div>
 </section>

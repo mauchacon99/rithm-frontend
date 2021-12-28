@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-// eslint-disable-next-line max-len
 import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -27,6 +26,9 @@ export class StationService {
 
   /** Set touch to station template form. */
   stationFormTouched$ = new Subject<void>();
+
+  /** The question to be updated when it changes in station page. */
+  stationQuestion$ = new Subject<Question>();
 
   constructor(
     private http: HttpClient
@@ -235,6 +237,15 @@ export class StationService {
    */
   updateDocumentStationNameFields(documentName: DocumentNameField[]): void {
     this.documentStationNameFields$.next(documentName);
+  }
+
+  /**
+   * Update the station question values in the template area.
+   *
+   * @param question The question to be updated.
+   */
+   updateStationQuestionInTemplate(question: Question): void {
+    this.stationQuestion$.next(question);
   }
 
   /**

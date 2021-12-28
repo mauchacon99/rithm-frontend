@@ -34,6 +34,7 @@ describe('DocumentInfoHeaderComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: FormBuilder, useValue: formBuilder }
       ]
     })
@@ -167,5 +168,23 @@ describe('DocumentInfoHeaderComponent', () => {
       appendedName: component.appendedDocumentName
     };
     expect(updateDocumentNameSpy).toHaveBeenCalledOnceWith(documentName);
+  });
+
+  it('should disable info-drawer-button once the info-drawer is opened', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(true);
+    component.isDocumentNameEditable = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeTrue();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeTruthy();
+  });
+
+  it('should enable info-drawer-button once the info-drawer is closed', () => {
+    spyOnProperty(TestBed.inject(SidenavDrawerService), 'isDrawerOpen').and.returnValue(false);
+    component.isDocumentNameEditable = true;
+    fixture.detectChanges();
+    expect(component.isDrawerOpen).toBeFalse();
+    const infoButton = fixture.debugElement.nativeElement.querySelector('#info-drawer-button-document');
+    expect(infoButton.disabled).toBeFalsy();
   });
 });

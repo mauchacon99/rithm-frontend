@@ -22,6 +22,26 @@
           <app-document-template class="flex flex-col pb-7" [stationInstructions]="documentInformation.instructions"
             [documentFields]="documentInformation.questions" formControlName="documentTemplateForm">
           </app-document-template>
+          <div class="pb-5 px-px">
+            <mat-accordion>
+              <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
+                <mat-expansion-panel-header class="text-base">
+                  <mat-panel-title data-testid="all-fields">
+                    All
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <div class="hidden sm:flex justify-start w-full">
+                      View all items on this document
+                    </div>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                  <app-previous-fields [stationId]="documentInformation.stationRithmId" [documentId]="documentInformation.documentRithmId" [isPrivate]="false" [isStation]="false">
+                  </app-previous-fields>
+                </ng-template>
+              </mat-expansion-panel>
+          </mat-accordion>
+        </div>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer">
@@ -36,7 +56,8 @@
                   <button mat-stroked-button color="accent" class="mx-2" data-testid="document-save"
                     id="document-save">Save</button>
                 </div>
-                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow">Flow</button>
+                <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow"
+                  [disabled]="!documentForm.valid" (click)="autoFlowDocument()">Flow</button>
               </div>
               <div class="relative hidden lg:block">
                 <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">

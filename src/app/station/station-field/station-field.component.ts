@@ -1,5 +1,4 @@
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
-// eslint-disable-next-line max-len
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
@@ -52,7 +51,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Instruction field to display. */
   instructionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Instructions',
     questionType: QuestionFieldType.Instructions,
     isReadOnly: false,
@@ -63,7 +62,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Label field to display. */
   labelField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Name your field',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
@@ -75,24 +74,26 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** The field for adding an option to a select field. */
   selectOptionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Add Option',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
+    isPossibleAnswer: true,
   };
 
   /** The field for adding an item to a checklist field. */
   checklistOptionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Add Item',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
+    isPossibleAnswer: true,
   };
 
   /** Array of options for a select/multi-select/checklist field. */
@@ -113,6 +114,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * On component initialization.
    */
   ngOnInit(): void {
+    this.instructionField.rithmId = this.field.rithmId;
+    this.instructionField.value = this.field.prompt;
+    this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
     if (this.field.questionType === this.fieldType.Select
@@ -129,6 +133,18 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
       .subscribe(() => {
        this.stationService.touchStationForm();
       });
+  }
+
+  /**
+   * Returns the appropiate label tag.
+   *
+   * @returns The Label tag for each additional field.
+   */
+   get labelTag(): string{
+    const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
+    : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
+    : 'Name your field';
+    return label;
   }
 
   /**
@@ -154,6 +170,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
+    this.selectOptionField.rithmId = this.field.rithmId;
+    this.checklistOptionField.rithmId = this.field.rithmId;
     this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
   }
 

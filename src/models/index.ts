@@ -40,3 +40,4 @@ export * from './document-answer';
 export * from './document-name';
 export * from './question-answer';
 export * from './document-auto-flow';
+export * from './move-document';
