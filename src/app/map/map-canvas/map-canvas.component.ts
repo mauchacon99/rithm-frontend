@@ -596,7 +596,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
-        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1) {
+        if (Math.floor(this.nextPanVelocity.x) >= 1 || Math.floor(this.nextPanVelocity.y) >= 1) {
+        // if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1) {
           this.nextPanVelocity = { x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE };
           this.myReq = requestAnimationFrame(step);
         } else {
