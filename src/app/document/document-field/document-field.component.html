@@ -1,10 +1,13 @@
 <ng-container [formGroup]="documentFieldForm">
   <p *ngIf="field.questionType === fieldTypes.AddressLine" class="pb-1 italic">{{field.prompt}}</p>
+  <div *ngIf="field?.questionType === fieldTypes?.Instructions && field?.prompt" class="flex items-center py-1">
+    <i class="fas text-secondary-200 fa-sticky-note"></i>
+    <p class="pl-2">{{field?.prompt || 'no text'}}</p>
+  </div>
   <app-text-field *ngIf="
     field.questionType === fieldTypes.ShortText ||
     field.questionType === fieldTypes.LongText ||
     field.questionType === fieldTypes.URL ||
-    field.questionType === fieldTypes.Instructions ||
     field.questionType === fieldTypes.LongTextLabel ||
     field.questionType === fieldTypes.State ||
     field.questionType === fieldTypes.City ||
