@@ -443,7 +443,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       title: 'Are you sure?',
       message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
       okButtonText: 'Unassign',
-      cancelButtonText: 'Close',
+      cancelButtonText: 'Cancel',
       important: true
     });
     if (userUnassigned) {
