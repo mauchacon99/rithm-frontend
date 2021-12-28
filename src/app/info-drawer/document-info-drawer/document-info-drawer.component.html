@@ -74,7 +74,7 @@
                 <p class="leading-none overline-font pl-2 text-accent-500 truncate">{{documentAssignedUser[0].email}}</p>
               </div>
             </div>
-            <button mat-icon-button (click)="unassignUser(documentAssignedUser[0])">
+            <button *ngIf="isUserAdminOrOwner" mat-icon-button (click)="unassignUser(documentAssignedUser[0])">
               <i class="fas fa-times"></i>
             </button>
           </div>
