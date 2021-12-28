@@ -609,12 +609,11 @@ export class MockDocumentService {
    * Unassign a user to document.
    *
    * @param documentRithmId The Specific id of document.
-   * @param stationId The station Id.
-   * @param userAssigned The User who will be unassigned.
+   * @param stationRithmId The station Id.
    * @returns Returns an empty observable.
    */
-  unassignUserToDocument(documentRithmId: string, stationId: string, userAssigned: StationRosterMember): Observable<unknown> {
-    if (!documentRithmId || !userAssigned || !stationId) {
+  unassignUserToDocument(documentRithmId: string, stationRithmId: string): Observable<unknown> {
+    if (!documentRithmId || !stationRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'The user cannot be unassigned.'
