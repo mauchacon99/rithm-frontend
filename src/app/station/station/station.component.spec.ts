@@ -246,8 +246,7 @@ describe('StationComponent', () => {
 
   it('should populate the question children if it is an addressLine question type', () => {
     const fieldType: QuestionFieldType = QuestionFieldType.AddressLine;
-    component.stationInformation.questions = [];
     component.addQuestion(fieldType);
-    expect(component.stationInformation.questions[0].children.length).toBeGreaterThan(0);
+    expect(component.stationInformation.questions[0].children).toHaveSize(5);
   });
 });

@@ -371,13 +371,13 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   private addAddressChildren(): Question[]{
     const addressChildren: Question[] = [];
     const children = [
-      {prompt: 'Address Line 1', type: QuestionFieldType.LongText, required: true },
-      {prompt: 'Address Line 2', type: QuestionFieldType.LongText, required: false },
-      {prompt: 'City', type: QuestionFieldType.City, required: true },
-      {prompt: 'State', type: QuestionFieldType.State, required: true },
-      {prompt: 'Zip', type: QuestionFieldType.Zip, required: true },
+      { prompt: 'Address Line 1', type: QuestionFieldType.LongText, required: true },
+      { prompt: 'Address Line 2', type: QuestionFieldType.LongText, required: false },
+      { prompt: 'City', type: QuestionFieldType.City, required: true },
+      { prompt: 'State', type: QuestionFieldType.State, required: true },
+      { prompt: 'Zip', type: QuestionFieldType.Zip, required: true },
     ];
-    children.forEach( (element) => {
+    children.forEach((element) => {
       const child: Question = {
         rithmId: this.randRithmId,
         prompt: element.prompt,
