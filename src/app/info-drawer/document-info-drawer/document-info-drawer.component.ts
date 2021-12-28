@@ -461,19 +461,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
     this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.assignedUserLoading = false;
-        },
-        error: (error: unknown) => {
-          this.assignedUserLoading = false;
-          this.userErrorUnassigned = true;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        this.assignedUserLoading = false;
+      },
+      error: (error: unknown) => {
+        this.assignedUserLoading = false;
+        this.userErrorUnassigned = true;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 }
