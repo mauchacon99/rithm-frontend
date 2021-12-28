@@ -19,6 +19,7 @@ import { StationTemplateComponent } from './station-template/station-template.co
 import { MatExpansionModule } from '@angular/material/expansion';
 import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
 import { MatInputModule } from '@angular/material/input';
+import { RuleModalComponent } from './rule-modal/rule-modal.component';
 @NgModule({
   declarations: [
     StationComponent,
@@ -26,7 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     PowersComponent,
     ToolbarComponent,
     StationFieldComponent,
-    StationTemplateComponent
+    StationTemplateComponent,
+    RuleModalComponent
   ],
   imports: [
     CommonModule,
