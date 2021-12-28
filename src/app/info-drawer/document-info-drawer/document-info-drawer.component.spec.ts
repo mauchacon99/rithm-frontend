@@ -15,7 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DialogOptions } from 'src/models';
+import { DialogOptions, MoveDocument } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -256,5 +256,33 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(component.userErrorUnassigned).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#unassigned-user-error');
     expect(errorComponent).toBeTruthy();
+
+    it('should call the service to move the document to another station', () => {
+      const dataExpect: MoveDocument = {
+        fromStationRithmId: stationId,
+        toStationRithmIds: ['123-654-789'],
+        documentRithmId: documentId
+      };
+
+      const spyMoveDocument = spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
+      component.moveDocument(dataExpect);
+      expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    });
+
+    it('should catch an error when moving the document if an error occurs', () => {
+      const dataExpect: MoveDocument = {
+        fromStationRithmId: stationId,
+        toStationRithmIds: ['123-654-789'],
+        documentRithmId: documentId
+      };
+
+      spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(throwError(() => {
+        throw new Error();
+      }));
+
+      const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+      component.moveDocument(dataExpect);
+      expect(spyError).toHaveBeenCalled();
+    });
   });
 });
