@@ -6,7 +6,7 @@ import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo, Station, StationInformation } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
