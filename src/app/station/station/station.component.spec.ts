@@ -249,4 +249,26 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
   });
+
+
+  it('should test method get invalidQuestionStationForm and return boolean', () => {
+    const fieldType: QuestionFieldType = QuestionFieldType.Instructions;
+    component.addQuestion(fieldType);
+    const valueExpected = component.invalidQuestionStationForm;
+    expect(valueExpected).toBeTrue();
+  });
+
+  it('should enable the station-save button on the station', () => {
+    const saveButton = fixture.debugElement.nativeElement.querySelector('#station-save');
+    expect(saveButton.disabled).toBeFalsy();
+  });
+
+  it('should not enable the station-save button on the station', () => {
+    const fieldType: QuestionFieldType = QuestionFieldType.Instructions;
+    component.addQuestion(fieldType);
+    fixture.detectChanges();
+    const saveButton = fixture.debugElement.nativeElement.querySelector('#station-save');
+    expect(saveButton.disabled).toBeTruthy();
+  });
+
 });
