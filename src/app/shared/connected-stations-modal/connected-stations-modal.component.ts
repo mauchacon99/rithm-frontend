@@ -18,7 +18,7 @@ export class ConnectedStationsModalComponent {
   /** The Label Select of modal. */
   label = "Select Station"
 
-  /** The Station list of document. */
+  /** The station list by document. */
   stationsDocument: ConnectedStationInfo[] = [];
 
   /** The Document rithmId. */
