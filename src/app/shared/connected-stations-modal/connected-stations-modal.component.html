@@ -1,0 +1,23 @@
+<!-- Title -->
+<h4 id="title" class="m-2 font-semibold"> {{title}} </h4>
+
+<!-- Select station. -->
+<div class="grid grid-cols-1">
+  <!-- Select -->
+  <mat-form-field class="w-4/5" appearance="outline">
+    <mat-label> {{label}} </mat-label>
+    <mat-select>
+      <mat-option *ngFor="let station of stationsDocument" [value]="station.rithmId">
+        {{station.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions class="flex justify-end">
+    <!-- Close -->
+    <button mat-button color="accent" [mat-dialog-close]="false">Close</button>
+
+  <!-- Move -->
+  <button mat-raised-button color="accent" [mat-dialog-close]="true">Move</button>
+</div>
