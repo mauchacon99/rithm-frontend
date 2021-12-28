@@ -115,7 +115,7 @@ export class FlowElementService {
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
-    const fontSize = Math.ceil(FONT_SIZE_MODIFIER*this.mapScale);
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
       flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
