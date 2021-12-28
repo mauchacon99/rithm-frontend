@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -617,6 +617,24 @@ export class MockDocumentService {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'The user cannot be unassigned.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Move to Document to station.
+   *
+   * @param moveDocument Model for move to document.
+   * @returns Returns an empty observable.
+   */
+  moveDocument(moveDocument: MoveDocument): Observable<unknown> {
+    if (!moveDocument) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, document could not be moved.'
         }
       })).pipe(delay(1000));
     } else {
