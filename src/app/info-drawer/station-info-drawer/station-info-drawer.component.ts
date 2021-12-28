@@ -39,9 +39,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
-  /** Type of user looking at a document. */
-  type: 'admin' | 'super' | 'worker';
-
   /** Is component viewed in station edit mode. */
   editMode = false;
 
@@ -115,7 +112,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         this.getStationInfo();
       });
 
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
       name: [this.stationName]
     });
@@ -245,7 +241,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * This will delete the current station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deleteStation(): Promise<void> {
       const response = await this.popupService.confirm({
         title: 'Are you sure?',
@@ -386,7 +381,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   * @returns Validate if user is owner or admin of current station.
   */
   get isUserAdminOrOwner(): boolean {
-    return this.stationInformation.stationOwners.find((owner) => this.userService.user.rithmId === owner.rithmId)
-    !== undefined ? true : this.type === 'admin'
+    return this.userService.isStationOwner(this.stationInformation) || this.userService.isAdmin
+  }
+
+  /**
+   * Is the current user a worker on the station.
+   *
+   * @returns A boolean if user is worker on current station.
+   */
+  get isWorker(): boolean {
+    return this.userService.isWorker(this.stationInformation)
   }
 }

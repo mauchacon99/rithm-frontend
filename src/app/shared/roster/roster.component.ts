@@ -6,6 +6,7 @@ import { RosterManagementModalComponent } from '../roster-management-modal/roste
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
+import { UserService } from "src/app/core/user.service";
 
 /**
  * Reusable component for all user/roster selection and display.
@@ -39,10 +40,15 @@ export class RosterComponent implements OnInit {
   /** Emit the close modal. */
   @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  // get isUserAdminOrOwner(): boolean {
+    // return this.userService.isStationOwner(this.stationInformation) || this.userService.isAdmin
+  // }
+
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private userService: UserService
     ) { }
 
   /**
