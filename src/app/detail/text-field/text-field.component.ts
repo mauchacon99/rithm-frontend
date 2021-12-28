@@ -49,7 +49,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** The label tag for each field. */
   @Input() labelTag!: string;
 
-  /**Whether the instance comes from station or document */
+  /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
   constructor(
@@ -73,18 +73,19 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
       validators.push(Validators.required);
     }
 
-    //Need to set email and url.
-    switch (this.field.questionType) {
-      case QuestionFieldType.Email:
-        validators.push(Validators.email);
-        break;
-      case QuestionFieldType.URL:
-        validators.push(this.fieldValidation.urlValidation());
-        break;
+    if (!this.isStation) {
+      //Need to set email and url.
+      switch (this.field.questionType) {
+        case QuestionFieldType.Email:
+          validators.push(Validators.email);
+          break;
+        case QuestionFieldType.URL:
+          validators.push(this.fieldValidation.urlValidation());
+          break;
+      }
     }
 
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
-
   }
 
   /**
