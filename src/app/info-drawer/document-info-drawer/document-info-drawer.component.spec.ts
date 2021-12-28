@@ -239,8 +239,21 @@ describe('DocumentInfoDrawerComponent', () => {
       stationRithmId: stationId
     });
     component['unassignUserToDocument']();
-    fixture.detectChanges();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should show error message when request for unassigned user fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    component['unassignUserToDocument']();
+    fixture.detectChanges();
+    expect(component.userErrorUnassigned).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#unassigned-user-error');
     expect(errorComponent).toBeTruthy();
   });
