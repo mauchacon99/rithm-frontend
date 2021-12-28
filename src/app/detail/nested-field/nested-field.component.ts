@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { Question, QuestionFieldType } from 'src/models';
 
@@ -54,6 +55,10 @@ export class NestedFieldComponent implements OnInit{
    */
   ngOnInit(): void {
     this.childrenFields = this.field.children;
+
+    if (this.childrenFields[3].questionType === 'state'){
+      this.childrenFields[3].possibleAnswers = STATES;
+    }
   }
 
   /**
@@ -116,87 +121,3 @@ export class NestedFieldComponent implements OnInit{
     };
   }
 }
-
-//TODO: figure out how to correctly format the nested field upon creation.
-
-/* Nested field should be formatted like this: */
-/* {
-      prompt: '',
-      instructions: 'Enter the shipping address',
-      questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.Nested,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [
-        {
-          prompt: 'Address Line 1',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'Address Line 2',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: false,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'City',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.City,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'State',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.State,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          possibleAnswers: STATES,
-          children: [],
-        },
-        {
-          prompt: 'Zip',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Zip,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ],
-    } */
