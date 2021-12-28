@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { Question, QuestionFieldType } from 'src/models';
 
@@ -54,6 +55,10 @@ export class NestedFieldComponent implements OnInit{
    */
   ngOnInit(): void {
     this.childrenFields = this.field.children;
+
+    if (this.childrenFields[3].questionType === 'state'){
+      this.childrenFields[3].possibleAnswers = STATES;
+    }
   }
 
   /**
