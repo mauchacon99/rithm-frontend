@@ -240,5 +240,7 @@ describe('DocumentInfoDrawerComponent', () => {
     });
     component['unassignUserToDocument']();
     expect(spyError).toHaveBeenCalled();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector('#unassigned-user-error');
+    expect(errorComponent).toBeTruthy();
   });
 });

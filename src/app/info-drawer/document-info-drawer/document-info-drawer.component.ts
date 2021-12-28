@@ -102,7 +102,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Enable error message if assigned user the document request fails. */
   userErrorAssigned = false;
 
-  /** Enable error message if unassigned user the document request fails. */
+  /** Enable error message if unassigned user request fails. */
   userErrorUnassigned = false;
 
   constructor(
