@@ -241,9 +241,9 @@ export class DocumentService {
   }
 
   /**
-   * Move to Document to station.
+   * Move the document from a station to another.
    *
-   * @param moveDocument Model for move to document.
+   * @param moveDocument Model to move the document.
    * @returns Returns an empty observable.
    */
   moveDocument(moveDocument: MoveDocument): Observable<unknown> {

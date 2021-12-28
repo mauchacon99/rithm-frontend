@@ -457,9 +457,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Move to Document to station.
+   * Move the document from a station to another.
    *
-   * @param moveDocument Model for move to document.
+   * @param moveDocument Model to move the document.
    */
   moveDocument(moveDocument: MoveDocument): void {
     this.documentService.moveDocument(moveDocument)

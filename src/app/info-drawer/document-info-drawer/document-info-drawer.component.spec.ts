@@ -229,7 +229,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should move to document and executed service', () => {
+  it('should call the service to move the document to another station', () => {
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
       toStationRithmIds: ['123-654-789'],
@@ -241,7 +241,7 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
   });
 
-  it('should catch error for move document service', () => {
+  it('should catch an error when moving the document if an error occurs', () => {
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
       toStationRithmIds: ['123-654-789'],

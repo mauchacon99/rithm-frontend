@@ -372,7 +372,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should move to document to stations', () => {
+  it('should move the document from a station to another', () => {
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
       toStationRithmIds: ['123-654-789'],
