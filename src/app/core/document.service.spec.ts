@@ -383,5 +383,11 @@ describe('DocumentService', () => {
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(dataExpect);
+    req.flush(null);
+    httpTestingController.verify();
   });
 });
