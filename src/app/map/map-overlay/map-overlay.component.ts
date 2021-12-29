@@ -328,7 +328,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
     if (confirm) {
       if (!this.openedMenuStation) {
-        throw new Error(`Attempting to delete a station and remove all connections for a station that has not been defined.`)
+        throw new Error(`Attempting to delete a station and remove all connections for a station that has not been defined.`);
       }
       this.mapService.removeAllStationConnections(this.openedMenuStation.rithmId);
       this.mapService.deleteStation(this.openedMenuStation.rithmId);
@@ -349,7 +349,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
     if (confirm) {
       if (!this.openedMenuStation) {
-        throw new Error('Attempting to remove connections for a station that has not been defined')
+        throw new Error('Attempting to remove connections for a station that has not been defined');
       }
       this.mapService.removeAllStationConnections(this.openedMenuStation.rithmId);
     }
@@ -368,7 +368,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         this.mapService.stationElements[index].isAddingConnected = true;
         this.mapService.mapMode$.next(MapMode.StationAdd);
     } else {
-      throw new Error(`No index found to create connected station ${this.openedMenuStation.rithmId}`)
+      throw new Error(`No index found to create connected station ${this.openedMenuStation.rithmId}`);
     }
   }
 
