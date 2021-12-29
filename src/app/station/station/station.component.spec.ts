@@ -26,9 +26,10 @@ import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks/mock-popup-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { of } from 'rxjs';
 
 describe('StationComponent', () => {
   let component: StationComponent;
@@ -67,7 +68,7 @@ describe('StationComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
         { provide: DocumentInfoHeaderComponent, useClass: DocumentInfoHeaderComponent },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
       ]
     })
       .compileComponents();
@@ -179,11 +180,12 @@ describe('StationComponent', () => {
 
   it('should validate the form controls initial value', () => {
     const form = component.stationForm.controls;
-    const expectFormFirst = ['stationTemplateForm', 'generalInstructions'];
+    const expectFormFirst = ['stationTemplateForm', 'generalInstructions','questions'];
 
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
     expect(form['generalInstructions'].value).toBe('');
+    expect(form['questions'].value).toEqual([])
   });
 
   it('should open confirmation popup when canceling', async () => {
