@@ -6,9 +6,25 @@ on:
     branches: [dev]
 
 jobs:
+
+# Checks that the app has been formatted with Prettier
+  check-prettier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Check Prettier
+        run: npx prettier --check .
+
   # Checks that the Angular app conforms to standards
   lint-app:
     runs-on: ubuntu-latest
+    needs: [check-prettier]
     timeout-minutes: 4
 
     steps:
@@ -26,6 +42,7 @@ jobs:
   # Checks that all stylesheets conform to standards
   lint-stylesheets:
     runs-on: ubuntu-latest
+    needs: [check-prettier]
     timeout-minutes: 4
 
     steps:
