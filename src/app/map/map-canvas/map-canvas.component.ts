@@ -17,6 +17,7 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
+import { MapSelectItem } from 'src/models/enums/map-select-item.enum';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -1156,12 +1157,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
-        this.checkStationClick(station);
-        return;
+        if (this.mapMode === MapMode.FlowAdd) {
+          if (station.isSelected === MapSelectItem.Available) {
+            station.isSelected = MapSelectItem.Selected;
+          } else if (station.isSelected === MapSelectItem.Selected) {
+            station.isSelected = MapSelectItem.Available;
+          }
+          return;
+        } else {
+          this.checkStationClick(station);
+          return;
+        }
       }
     }
     //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
     this.checkConnectionClick(contextPoint);
+
+    //Check if click was on a flow boundary.
+    if (this.mapMode === MapMode.FlowAdd) {
+      this.checkFlowClick(contextPoint);
+    }
   }
 
   /**
@@ -1174,6 +1189,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hoverActive) {
         this.sidenavDrawerService.toggleDrawer('connectionInfo', connectionLine);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Handles user input on a clicked flow.
+   *
+   * @param contextPoint Calculated position of click.
+   */
+  checkFlowClick(contextPoint: Point): void {
+    for (const flow of this.flows) {
+      flow.checkElementHover(contextPoint, this.context);
+      if (flow.hoverActive === FlowElementHoverType.Boundary) {
+        if (flow.isSelected === MapSelectItem.Available) {
+          flow.isSelected = MapSelectItem.Selected;
+        } else if (flow.isSelected === MapSelectItem.Selected) {
+          flow.isSelected = MapSelectItem.Available;
+        }
         break;
       }
     }

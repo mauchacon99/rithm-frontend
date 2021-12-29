@@ -1,6 +1,7 @@
 import { BADGE_MARGIN, BADGE_RADIUS, BUTTON_RADIUS, BUTTON_Y_MARGIN, DEFAULT_CANVAS_POINT,
          NODE_RADIUS, NODE_Y_MARGIN, STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
 import { StationMapData, Point, StationElementHoverType, MapMode, MapItemStatus } from 'src/models';
+import { MapSelectItem } from 'src/models/enums/map-select-item.enum';
 
 export interface StationMapElement extends StationMapData {
   /** The coordinates for the location of the station as rendered in the viewport. */
@@ -14,6 +15,9 @@ export interface StationMapElement extends StationMapData {
 
   /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
+
+  /** Whether the station in available for selection to add into a new group or not. */
+  isSelected: MapSelectItem;
 }
 
 /**
@@ -31,6 +35,7 @@ export class StationMapElement {
     this.dragging = false;
     this.hoverActive = StationElementHoverType.None;
     this.isAddingConnected = false;
+    this.isSelected = MapSelectItem.Available;
     Object.assign(this, stationMapData);
   }
 
