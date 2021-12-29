@@ -46,7 +46,7 @@ export class UserService {
    * @returns The true or false if user is admin or not.
    */
   get isAdmin(): boolean {
-    return this.user.role === 'admin'
+    return this.user.role === 'admin';
   }
 
   /**
@@ -276,7 +276,7 @@ export class UserService {
    * @returns A boolean determining if the current user is an owner of the station.
    */
   isStationOwner(stationInformation: StationInformation): boolean {
-    return !!stationInformation.stationOwners.find((owner)=> owner.rithmId === this.user.rithmId)
+    return !!stationInformation.stationOwners.find((owner)=> owner.rithmId === this.user.rithmId);
   }
 
   /**
@@ -286,7 +286,7 @@ export class UserService {
    * @returns A boolean determining if the current user is a worker on the station.
    */
   isWorker(stationInformation: StationInformation):boolean {
-    return !!stationInformation.workers.find((worker)=> worker.rithmId === this.user.rithmId)
+    return !!stationInformation.workers.find((worker)=> worker.rithmId === this.user.rithmId);
   }
 
   // TODO: Re-enable when addressing notification settings

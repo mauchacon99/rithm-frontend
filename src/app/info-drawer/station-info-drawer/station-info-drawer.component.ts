@@ -27,7 +27,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /** Whether the request to get the station info is currently underway. */
-  stationLoading = false;
+  stationLoading = true;
 
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
@@ -42,7 +42,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   editMode = false;
 
   /** Station information object. */
-  stationInformation!: StationInformation;
+  stationInformation?: StationInformation;
 
   /** Station Id passed from parent. */
   stationRithmId = '';
@@ -223,12 +223,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.colorMessage = 'text-error-500';
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
-          this.stationLoading = false;
           this.lastUpdatedLoading = false;
         }, error: (error: unknown) => {
           this.colorMessage = 'text-error-500';
           this.lastUpdatedLoading = false;
-          this.stationLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
@@ -252,8 +250,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       });
       if (response) {
         if (this.openedFromMap) {
-          this.mapService.removeAllStationConnections(this.stationRithmId)
-          this.mapService.deleteStation(this.stationRithmId)
+          this.mapService.removeAllStationConnections(this.stationRithmId);
+          this.mapService.deleteStation(this.stationRithmId);
         } else {
         this.stationService.deleteStation(this.stationRithmId)
           .pipe(first())
@@ -292,11 +290,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe({
           next: (stationInfo) => {
-            this.stationLoading = false;
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
             }
+            this.stationLoading = false;
           },
           error: (error: unknown) => {
             this.stationLoading = false;
@@ -382,7 +380,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   * @returns Validate if user is owner or admin of current station.
   */
   get isUserAdminOrOwner(): boolean {
-    return this.userService.isStationOwner(this.stationInformation) || this.userService.isAdmin
+    if (!this.stationInformation) {
+      throw new Error(`The stationInformation is undefined when checking if user is admin or owner.`);
+    }
+    return this.userService.isStationOwner(this.stationInformation) || this.userService.isAdmin;
   }
 
   /**
@@ -391,6 +392,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @returns A boolean if user is worker on current station.
    */
   get isWorker(): boolean {
-    return this.userService.isWorker(this.stationInformation)
+    if (!this.stationInformation) {
+      throw new Error(`The stationInformation is undefined when checking if user is a worker.`);
+    }
+    return this.userService.isWorker(this.stationInformation);
   }
 }
