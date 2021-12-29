@@ -184,7 +184,7 @@ describe('StationComponent', () => {
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
     expect(form['generalInstructions'].value).toBe('');
-    expect(form['questions'].value).toEqual([])
+    expect(form['questions'].value).toEqual([]);
   });
 
   it('should open confirmation popup when canceling', async () => {
