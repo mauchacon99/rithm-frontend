@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -609,15 +609,32 @@ export class MockDocumentService {
    * Unassign a user to document.
    *
    * @param documentRithmId The Specific id of document.
-   * @param stationId The station Id.
-   * @param userAssigned The User who will be unassigned.
+   * @param stationRithmId The station Id.
    * @returns Returns an empty observable.
    */
-  unassignUserToDocument(documentRithmId: string, stationId: string, userAssigned: StationRosterMember): Observable<unknown> {
-    if (!documentRithmId || !userAssigned || !stationId) {
+  unassignUserToDocument(documentRithmId: string, stationRithmId: string): Observable<unknown> {
+    if (!documentRithmId || !stationRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'The user cannot be unassigned.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Move the document from a station to another.
+   *
+   * @param moveDocument Model to move the document.
+   * @returns Returns an empty observable.
+   */
+  moveDocument(moveDocument: MoveDocument): Observable<unknown> {
+    if (!moveDocument) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, document could not be moved.'
         }
       })).pipe(delay(1000));
     } else {
