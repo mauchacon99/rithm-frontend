@@ -102,6 +102,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   /** Enable error message if assigned user the document request fails. */
   userErrorAssigned = false;
 
+  /** Enable error message if unassigned user request fails. */
+  userErrorUnassigned = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
@@ -455,21 +458,23 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Unassign user to document.
    */
   private unassignUserToDocument(): void {
+    this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
     this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.assignedUserLoading = false;
-        },
-        error: (error: unknown) => {
-          this.assignedUserLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        this.assignedUserLoading = false;
+      },
+      error: (error: unknown) => {
+        this.assignedUserLoading = false;
+        this.userErrorUnassigned = true;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 
   /**
