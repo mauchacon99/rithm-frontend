@@ -59,6 +59,9 @@
         <div class="col-span-full text-error-500" id="assigned-user-error" *ngIf="userErrorAssigned">
           Unable to retrieve assigned user
         </div>
+        <div class="col-span-full text-error-500" id="unassigned-user-error" *ngIf="userErrorUnassigned">
+          Unable to unassign user
+        </div>
         <ng-container *ngIf="!userErrorAssigned">
           <div class="col-12 flex py-1 justify-between items-center" *ngIf="documentAssignedUser.length > 0 else noAssignedUser">
             <div class="col-12 flex justify-start">
