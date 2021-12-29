@@ -392,15 +392,4 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     });
     return addressChildren;
   }
-
- /**
-  * Is valid if the questions in the station form have the fields correctly.
-  *
-  * @returns Invalid when fields are empty in the prompt property.
-  */
-  get invalidQuestionStationForm(): boolean {
-    return this.stationInformation.questions.some((question) =>
-      question.isRequired && question.prompt === '');
-  }
-
 }
