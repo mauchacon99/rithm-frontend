@@ -1,5 +1,5 @@
 <div [formGroup]="textFieldForm">
-  <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType === fieldTypeEnum.LongText}">
+  <mat-form-field class="w-full" appearance="outline" [ngClass]="{'long-text': field.questionType === fieldTypeEnum.LongText,'information-field': field.questionType === fieldTypeEnum.Instructions}">
     <mat-label>{{labelTag}}</mat-label>
     <div matPrefix class="icon">
       <!-- Text Icons -->
@@ -23,14 +23,16 @@
       <i *ngIf="field.questionType === fieldTypeEnum.Nested || field.questionType === fieldTypeEnum.AddressLine" class="far fa-address-card"></i>
       <!-- City icon -->
       <i *ngIf="field.questionType === fieldTypeEnum.City" class="fas fa-city"></i>
+      <!-- Instructions icon -->
+      <i *ngIf="field.questionType === fieldTypeEnum.Instructions" class="fas fa-sticky-note"></i>
     </div>
     <div *ngIf="removableField" matSuffix class="icon">
       <button mat-icon-button (click)="removeField(field)">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <input *ngIf="field.questionType !== fieldTypeEnum.LongText" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="field.questionType" autocomplete="off" (blur)="updateFieldPrompt(field)">
-    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="field.questionType" (blur)="updateFieldPrompt(field)">
+    <input *ngIf="field.questionType !== fieldTypeEnum.LongText && field.questionType !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="field.questionType" autocomplete="off" (blur)="updateFieldPrompt(field)">
+    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="field.questionType" (blur)="updateFieldPrompt(field)">
     </textarea>
   </mat-form-field>
 </div>
