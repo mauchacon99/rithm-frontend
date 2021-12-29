@@ -17,20 +17,20 @@ const FIELD: Question = {
   possibleAnswers: [
     {
       text: 'Option 1',
-      default: false
+      default: false,
     },
     {
       text: 'Option 2',
-      default: true
+      default: true,
     },
     {
       text: 'Option 3',
-      default: false
+      default: false,
     },
     {
       text: 'Option 4',
-      default: false
-    }
+      default: false,
+    },
   ],
   children: [],
 };
@@ -42,18 +42,15 @@ describe('SelectFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectFieldComponent ],
+      declarations: [SelectFieldComponent],
       imports: [
         MatFormFieldModule,
         MatSelectModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
-      providers: [
-        { provide: FormGroup, useValue: formBuilder },
-      ]
-    })
-    .compileComponents();
+      providers: [{ provide: FormGroup, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -76,5 +73,4 @@ describe('SelectFieldComponent', () => {
     // expect(select.hasError('required')).toBeTrue();
     // expect(component.selectFieldForm.valid).toBeFalse();
   });
-
 });

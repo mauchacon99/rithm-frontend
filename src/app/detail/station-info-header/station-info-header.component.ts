@@ -2,7 +2,13 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentStationInformation, Question, QuestionFieldType, StationInformation, StationInfoDrawerData } from 'src/models';
+import {
+  DocumentStationInformation,
+  Question,
+  QuestionFieldType,
+  StationInformation,
+  StationInfoDrawerData,
+} from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 import { Subject } from 'rxjs';
 
@@ -12,10 +18,9 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-station-info-header[stationInformation][stationEditMode]',
   templateUrl: './station-info-header.component.html',
-  styleUrls: ['./station-info-header.component.scss']
+  styleUrls: ['./station-info-header.component.scss'],
 })
 export class StationInfoHeaderComponent implements OnInit, OnDestroy {
-
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -38,19 +43,20 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+    this.type =
+      this.userService.user.role === 'admin'
+        ? this.userService.user.role
+        : 'worker';
 
     this.stationNameForm = this.fb.group({
-      name: ['']
+      name: [''],
     });
-
   }
 
   /** Set this.info. */
   ngOnInit(): void {
-
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
@@ -68,7 +74,7 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns Return true if info-drawer is opened, false otherwise.
    */
-  get isDrawerOpen(): boolean{
+  get isDrawerOpen(): boolean {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
@@ -78,7 +84,9 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns The Station Name.
    */
   get stationName(): string {
-    return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
+    return 'stationName' in this.stationInformation
+      ? this.stationInformation.stationName
+      : this.stationInformation.name;
   }
 
   /**
@@ -87,7 +95,9 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns The Priority of station.
    */
   get priority(): number | null {
-    return 'priority' in this.stationInformation ? this.stationInformation.priority : null;
+    return 'priority' in this.stationInformation
+      ? this.stationInformation.priority
+      : null;
   }
 
   /**
@@ -95,8 +105,10 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns The id of the station or document.
    */
-   get stationRithmId(): string {
-    return 'rithmId' in this.stationInformation ? this.stationInformation.rithmId : this.stationInformation.stationRithmId;
+  get stationRithmId(): string {
+    return 'rithmId' in this.stationInformation
+      ? this.stationInformation.rithmId
+      : this.stationInformation.stationRithmId;
   }
 
   /**
@@ -109,7 +121,7 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       stationRithmId: this.stationRithmId,
       stationName: this.stationName,
       editMode: this.stationEditMode,
-      openedFromMap: false
+      openedFromMap: false,
     };
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
     this.updateStationInfoDrawerName();
@@ -119,15 +131,16 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
    * Update InfoDrawer Station Name.
    */
   updateStationInfoDrawerName(): void {
-    this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
+    this.stationService.updatedStationNameText(
+      this.stationNameForm.controls.name.value
+    );
   }
 
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
 }

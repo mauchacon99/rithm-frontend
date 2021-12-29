@@ -5,7 +5,6 @@ import { EmailLinkType } from 'src/models';
  * All behavior for and information present on a URL link to the sign in page from the user's email.
  */
 export class EmailLinkParams {
-
   /** The context of the action to be performed on the sign in page. */
   type: EmailLinkType | null;
 

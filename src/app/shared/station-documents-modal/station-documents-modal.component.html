@@ -7,7 +7,12 @@
       </div>
     </span>
     <span *ngIf="!isLoading && totalNumDocs > 0">
-      <p class="text-error-700 text-center" *ngIf="userType === userTypeEnum.None">You are not a part of this station.</p>
+      <p
+        class="text-error-700 text-center"
+        *ngIf="userType === userTypeEnum.None"
+      >
+        You are not a part of this station.
+      </p>
       <div class="grid grid-cols-12 xl:grid-cols-10 pb-2">
         <div class="pl-9 col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4">
           <strong class="font-semibold">Document</strong>
@@ -25,19 +30,28 @@
       <div
         *ngFor="let document of documents"
         (click)="checkDocPermission(document.documentRithmId)"
-        [ngClass]="{'cursor-pointer' : userType !== userTypeEnum.None}"
-        class="grid grid-cols-12 xl:grid-cols-10 mb-4
-        rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
+        [ngClass]="{ 'cursor-pointer': userType !== userTypeEnum.None }"
+        class="grid grid-cols-12 xl:grid-cols-10 mb-4 rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
       >
-        <div matTooltip="This document has been escalated." matTooltipPosition="above"
-          [matTooltipDisabled]="!document.isEscalated" class="flex col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4">
+        <div
+          matTooltip="This document has been escalated."
+          matTooltipPosition="above"
+          [matTooltipDisabled]="!document.isEscalated"
+          class="flex col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-4"
+        >
           <!-- Priority -->
           <div class="circle-30-accent mr-3">
             {{ document.priority }}
           </div>
-          <p [ngClass]="{'warn-text' : document.isEscalated }" class="leading-7 truncate whitespace-nowrap">
+          <p
+            [ngClass]="{ 'warn-text': document.isEscalated }"
+            class="leading-7 truncate whitespace-nowrap"
+          >
             <!-- Escalated icon -->
-            <i *ngIf="document.isEscalated" class="fas fa-exclamation-circle"></i>
+            <i
+              *ngIf="document.isEscalated"
+              class="fas fa-exclamation-circle"
+            ></i>
             <!-- Document name -->
             {{ document.documentName }}
           </p>
@@ -46,7 +60,11 @@
         <div class="md:col-span-4 col-span-6 lg:col-span-3 xl:col-span-2">
           <span *ngIf="document?.userAssigned" class="flex">
             <div class="mr-3">
-              <app-user-avatar [firstName]="getNamePortion(document.userAssigned, 0)" [lastName]="getNamePortion(document.userAssigned, 1)" [hideToolTip]="true"></app-user-avatar>
+              <app-user-avatar
+                [firstName]="getNamePortion(document.userAssigned, 0)"
+                [lastName]="getNamePortion(document.userAssigned, 1)"
+                [hideToolTip]="true"
+              ></app-user-avatar>
             </div>
             <div class="hidden leading-7 truncate whitespace-nowrap md:block">
               {{ document.userAssigned }}
@@ -54,25 +72,46 @@
           </span>
         </div>
         <!-- Time in station -->
-        <div class="hidden leading-7 whitespace-nowrap md:block md:col-span-4 lg:col-span-3 xl:col-span-2">
+        <div
+          class="hidden leading-7 whitespace-nowrap md:block md:col-span-4 lg:col-span-3 xl:col-span-2"
+        >
           {{ getElapsedTime(document.flowedTimeUTC) }}
         </div>
         <!-- Last updated -->
-        <div class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2">
-          {{ ((getElapsedTime(document.updatedTimeUTC) === '1 day') || (getElapsedTime(document.updatedTimeUTC) === 'Unknown')) ? (getElapsedTime(document.updatedTimeUTC) === '1 day' ? 'Yesterday' : getElapsedTime(document.updatedTimeUTC)) : getElapsedTime(document.updatedTimeUTC)  + ' ago'}}
+        <div
+          class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2"
+        >
+          {{
+            getElapsedTime(document.updatedTimeUTC) === "1 day" ||
+            getElapsedTime(document.updatedTimeUTC) === "Unknown"
+              ? getElapsedTime(document.updatedTimeUTC) === "1 day"
+                ? "Yesterday"
+                : getElapsedTime(document.updatedTimeUTC)
+              : getElapsedTime(document.updatedTimeUTC) + " ago"
+          }}
         </div>
       </div>
     </span>
-    <app-loading-indicator class="h-full flex justify-center items-center" *ngIf="isLoading"></app-loading-indicator>
+    <app-loading-indicator
+      class="h-full flex justify-center items-center"
+      *ngIf="isLoading"
+    ></app-loading-indicator>
   </div>
 </div>
 <div *ngIf="!isLoading && totalNumDocs > 0" class="flex justify-center">
-  <app-pagination (currentPageNum)="getDocuments($event)" [numItems]="totalNumDocs" [numPerPage]="10" [activeNum]="activeNum">
+  <app-pagination
+    (currentPageNum)="getDocuments($event)"
+    [numItems]="totalNumDocs"
+    [numPerPage]="10"
+    [activeNum]="activeNum"
+  >
   </app-pagination>
 </div>
 
 <!-- Buttons -->
 <div mat-dialog-actions class="flex justify-end">
   <!-- <button id="cancel" mat-button [mat-dialog-close]="false" cdkFocusInitial>{{cancelButtonText}}</button> -->
-  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">Close</button>
+  <button id="confirm" mat-button color="accent" [mat-dialog-close]="true">
+    Close
+  </button>
 </div>

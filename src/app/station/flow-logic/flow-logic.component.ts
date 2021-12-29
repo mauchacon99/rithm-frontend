@@ -6,8 +6,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-flow-logic',
   templateUrl: './flow-logic.component.html',
-  styleUrls: ['./flow-logic.component.scss']
+  styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent {
-
-}
+export class FlowLogicComponent {}

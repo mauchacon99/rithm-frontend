@@ -1,7 +1,21 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, StationRosterMember, Question, QuestionFieldType, Station, StationInformation, StationPotentialRostersUsers, ForwardPreviousStationsDocument, StandardStringJSON, DocumentNameField } from 'src/models';
+import {
+  DocumentGenerationStatus,
+  StationRosterMember,
+  Question,
+  QuestionFieldType,
+  Station,
+  StationInformation,
+  StationPotentialRostersUsers,
+  ForwardPreviousStationsDocument,
+  StandardStringJSON,
+  DocumentNameField,
+} from 'src/models';
 import { StationService } from './station.service';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -12,9 +26,7 @@ describe('StationService', () => {
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(StationService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -30,45 +42,54 @@ describe('StationService', () => {
       name: 'Dry Goods & Liquids',
       instructions: 'General instructions',
       dueDate: '2021-08-22T17:26:47.3506612Z',
-      nextStations: [{
-        stationName: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        stationName: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isOwner: false,
-        isWorker: true
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isOwner: false,
-        isWorker: true
-      }],
+      nextStations: [
+        {
+          stationName: 'Development',
+          totalDocuments: 5,
+          isGenerator: true,
+        },
+      ],
+      previousStations: [
+        {
+          stationName: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isOwner: false,
+          isWorker: true,
+        },
+      ],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
-      questions: []
+      questions: [],
     };
 
-    service.getStationInfo(stationId)
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.getStationInfo(stationId).subscribe((response) => {
+      expect(response).toBeDefined();
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -79,16 +100,17 @@ describe('StationService', () => {
     const expectedResponse: Station = {
       name: 'Example Station',
       rithmId: '3j4k-3h2j-hj4j',
-      instructions: 'Do as I instruct'
+      instructions: 'Do as I instruct',
     };
 
-    service.getAllStations()
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.getAllStations().subscribe((response) => {
+      expect(response).toBeDefined();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -100,30 +122,38 @@ describe('StationService', () => {
       rithmId: 'E204F369-386F-4E41',
       name: 'Station Name',
       instructions: 'General instructions',
-      nextStations: [{
-        name: 'Development',
-        rithmId: '123-321-654'
-      }],
-      previousStations: [{
-        name: 'Station-1',
-        rithmId: '159-357-761'
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
+      nextStations: [
+        {
+          name: 'Development',
+          rithmId: '123-321-654',
+        },
+      ],
+      previousStations: [
+        {
+          name: 'Station-1',
+          rithmId: '159-357-761',
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
@@ -136,44 +166,53 @@ describe('StationService', () => {
       rithmId: station.rithmId,
       name: station.name,
       instructions: 'General instructions',
-      nextStations: [{
-        name: 'Development',
-        rithmId: '123-869-742'
-      }],
-      previousStations: [{
-        name: 'Station-1',
-        rithmId: '258-635-412'
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
+      nextStations: [
+        {
+          name: 'Development',
+          rithmId: '123-869-742',
+        },
+      ],
+      previousStations: [
+        {
+          name: 'Station-1',
+          rithmId: '258-635-412',
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      priority: 1
+      priority: 1,
     };
 
-    service.updateStation(station)
-      .subscribe((response) => {
-        expect(response).toBe(expectedResponse);
-      });
+    service.updateStation(station).subscribe((response) => {
+      expect(response).toBe(expectedResponse);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`
+    );
     expect(req.request.method).toEqual('PUT');
 
     req.flush(expectedResponse);
@@ -183,12 +222,13 @@ describe('StationService', () => {
   it('should return updated date from a specific station', () => {
     const expectedResponse = '2021-07-18T17:26:47.3506612Z';
 
-    service.getLastUpdated(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getLastUpdated(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?rithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -198,12 +238,15 @@ describe('StationService', () => {
   it('should return the status of the specific document', () => {
     const expectedResponse = DocumentGenerationStatus.None;
 
-    service.getStationDocumentGenerationStatus(stationId)
+    service
+      .getStationDocumentGenerationStatus(stationId)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?rithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush({ data: expectedResponse });
@@ -212,12 +255,15 @@ describe('StationService', () => {
 
   it('should return the status of the specific document once the status is updated', () => {
     const status = DocumentGenerationStatus.Manual;
-    service.updateStationDocumentGenerationStatus(stationId, status)
+    service
+      .updateStationDocumentGenerationStatus(stationId, status)
       .subscribe((response) => {
         expect(response).toEqual(status);
       });
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual({ data: status });
 
@@ -248,13 +294,16 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationPreviousQuestions(stationId, isPrivate)
+    service
+      .getStationPreviousQuestions(stationId, isPrivate)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?stationRithmId=${stationId}&getPrivate=${isPrivate}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -282,11 +331,14 @@ describe('StationService', () => {
         children: [],
       },
     ];
-    service.updateStationQuestions(stationId, expectedResponse)
+    service
+      .updateStationQuestions(stationId, expectedResponse)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedResponse);
     req.flush(expectedResponse);
@@ -296,31 +348,37 @@ describe('StationService', () => {
   it('should add a new member to the worker roster', () => {
     const usersIds: string[] = [
       '495FC055-4472-45FE-A68E-B7A0D060E1C8',
-      '49B1A2B4-7B2A-466E-93F9-78F14A672052'
+      '49B1A2B4-7B2A-466E-93F9-78F14A672052',
     ];
-    const expectedResponse: StationRosterMember[] = [{
-      rithmId: '',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }, {
-      rithmId: '',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com',
-      isOwner: false,
-      isWorker: true
-    }];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+      {
+        rithmId: '',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: false,
+        isWorker: true,
+      },
+    ];
 
-    service.addUsersToWorkerRoster(stationId, usersIds)
+    service
+      .addUsersToWorkerRoster(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(usersIds);
 
@@ -332,7 +390,61 @@ describe('StationService', () => {
     const pageNum = 1;
     const pageSize = 20;
     const expectedResponse: StationPotentialRostersUsers = {
-      users: [{
+      users: [
+        {
+          rithmId: '12dasd1-asd12asdasd-asdas',
+          firstName: 'Cesar',
+          lastName: 'Quijada',
+          email: 'strut@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-ffff1',
+          firstName: 'Maria',
+          lastName: 'Quintero',
+          email: 'Maquin@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+        {
+          rithmId: '12dasd1-asd12asdasd-a231',
+          firstName: 'Pedro',
+          lastName: 'Perez',
+          email: 'pperez@gmail.com',
+          isOwner: true,
+          isWorker: true,
+        },
+      ],
+      totalUsers: 3,
+    };
+
+    service
+      .getPotentialStationRosterMembers(stationId, pageNum)
+      .subscribe((users) => {
+        expect(users).toEqual(expectedResponse);
+      });
+
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should delete a station', () => {
+    service.deleteStation(stationId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
+  });
+
+  it('should remove a member from worker roster', () => {
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
         rithmId: '12dasd1-asd12asdasd-asdas',
         firstName: 'Cesar',
         lastName: 'Quijada',
@@ -355,66 +467,19 @@ describe('StationService', () => {
         email: 'pperez@gmail.com',
         isOwner: true,
         isWorker: true,
-      }],
-      totalUsers: 3
-    };
-
-    service.getPotentialStationRosterMembers(stationId, pageNum)
-      .subscribe((users) => {
-        expect(users).toEqual(expectedResponse);
-      });
-
-    // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`);
-    expect(req.request.method).toEqual('GET');
-
-    req.flush(expectedResponse);
-    httpTestingController.verify();
-  });
-
-  it('should delete a station', () => {
-    service.deleteStation(stationId)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
-  });
-
-  it('should remove a member from worker roster', () => {
-    const userIdList: Array<string> = [
-      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+      },
     ];
-    const expectedResponse: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    }];
 
-    service.removeUsersFromWorkerRoster(stationId, userIdList)
+    service
+      .removeUsersFromWorkerRoster(stationId, userIdList)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('DELETE');
     expect(req.request.body).toEqual(userIdList);
 
@@ -442,10 +507,9 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationWorkerRoster(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getStationWorkerRoster(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 
   it('should returns the owner roster for a given station', () => {
@@ -468,39 +532,42 @@ describe('StationService', () => {
       },
     ];
 
-    service.getStationOwnerRoster(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getStationOwnerRoster(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
   });
 
   it('should add a new member to the owner roster', () => {
-    const userIdList: Array<string> = [
-      '495FC055-4472-45FE-A68E-B7A0D060E1C8',
+    const userIdList: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
+        firstName: 'Marry',
+        lastName: 'Poppins',
+        email: 'marrypoppins@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
+        firstName: 'Worker',
+        lastName: 'User',
+        email: 'workeruser@inpivota.com',
+        isOwner: true,
+        isWorker: false,
+      },
     ];
-    const expectedResponse: StationRosterMember[] = [{
-      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F991',
-      firstName: 'Marry',
-      lastName: 'Poppins',
-      email: 'marrypoppins@inpivota.com',
-      isOwner: true,
-      isWorker: false
-    }, {
-      rithmId: 'C5C1480C-461E-4267-BBB1-BB79E489F992',
-      firstName: 'Worker',
-      lastName: 'User',
-      email: 'workeruser@inpivota.com',
-      isOwner: true,
-      isWorker: false
-    }];
 
-    service.addUsersToOwnersRoster(stationId, userIdList)
+    service
+      .addUsersToOwnersRoster(stationId, userIdList)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(userIdList);
 
@@ -510,38 +577,43 @@ describe('StationService', () => {
 
   it('should remove a member the owner from the roster', () => {
     const usersIds: Array<string> = ['495FC055-4472-45FE-A68E-B7A0D060E1C8'];
-    const expectedResponse: StationRosterMember[] = [{
-      rithmId: '12dasd1-asd12asdasd-asdas',
-      firstName: 'Cesar',
-      lastName: 'Quijada',
-      email: 'strut@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-ffff1',
-      firstName: 'Maria',
-      lastName: 'Quintero',
-      email: 'Maquin@gmail.com',
-      isOwner: true,
-      isWorker: true,
-    },
-    {
-      rithmId: '12dasd1-asd12asdasd-a231',
-      firstName: 'Pedro',
-      lastName: 'Perez',
-      email: 'pperez@gmail.com',
-      isOwner: true,
-      isWorker: false,
-    }];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '12dasd1-asd12asdasd-asdas',
+        firstName: 'Cesar',
+        lastName: 'Quijada',
+        email: 'strut@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-ffff1',
+        firstName: 'Maria',
+        lastName: 'Quintero',
+        email: 'Maquin@gmail.com',
+        isOwner: true,
+        isWorker: true,
+      },
+      {
+        rithmId: '12dasd1-asd12asdasd-a231',
+        firstName: 'Pedro',
+        lastName: 'Perez',
+        email: 'pperez@gmail.com',
+        isOwner: true,
+        isWorker: false,
+      },
+    ];
 
-    service.removeUsersFromOwnerRoster(stationId, usersIds)
+    service
+      .removeUsersFromOwnerRoster(stationId, usersIds)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('DELETE');
     expect(req.request.body).toEqual(usersIds);
 
@@ -552,13 +624,16 @@ describe('StationService', () => {
   it('should update the editable status of the document in the station', () => {
     const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const newStatus = true;
-    service.updateStatusDocumentEditable(stationRithmId, newStatus)
+    service
+      .updateStatusDocumentEditable(stationRithmId, newStatus)
       .subscribe((response) => {
         expect(response).toEqual(newStatus);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`
+    );
     expect(req.request.method).toEqual('PUT');
 
     req.flush(newStatus);
@@ -569,13 +644,14 @@ describe('StationService', () => {
     const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
     const expectedResponse = true;
 
-    service.getStatusDocumentEditable(stationRithmId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getStatusDocumentEditable(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -590,14 +666,15 @@ describe('StationService', () => {
         lastName: 'User',
         email: 'rithmuser@inpivota.com',
         isWorker: false,
-        isOwner: true
-      }
+        isOwner: true,
+      },
     ];
-    service.getStationOwnerRoster(stationId)
-      .subscribe((orgInfo) => {
-        expect(orgInfo).toEqual(expectedResponse);
-      });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`);
+    service.getStationOwnerRoster(stationId).subscribe((orgInfo) => {
+      expect(orgInfo).toEqual(expectedResponse);
+    });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(expectedResponse);
     httpTestingController.verify();
@@ -611,35 +688,39 @@ describe('StationService', () => {
         {
           rithmId: '789-654-321',
           name: 'Previous station 1',
-          totalDocuments: 5
+          totalDocuments: 5,
         },
         {
           rithmId: '789-654-753',
           name: 'Previous station 2',
-          totalDocuments: 2
-        }
+          totalDocuments: 2,
+        },
       ],
       nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
-          totalDocuments: 2
+          totalDocuments: 2,
         },
         {
           rithmId: '852-963-418',
           name: 'Follow station 2',
-          totalDocuments: 1
-        }
-      ]
+          totalDocuments: 1,
+        },
+      ],
     };
-    service.getPreviousAndNextStations(stationRithmId)
+    service
+      .getPreviousAndNextStations(stationRithmId)
       .subscribe((prevAndNextStations) => {
         expect(prevAndNextStations).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationRithmId}`);
-    expect(req.request.params.get('stationRithmId')).toBe('4eca65f1-89ef-4970-8aa5-8a26a5e45628');
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations?stationRithmId=${stationRithmId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toBe(
+      '4eca65f1-89ef-4970-8aa5-8a26a5e45628'
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -652,68 +733,80 @@ describe('StationService', () => {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'New Station Name',
       instructions: '',
-      nextStations: [{
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
-        name: 'Development',
-        totalDocuments: 5,
-        isGenerator: true
-      }],
-      previousStations: [{
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
-        name: 'Station-1',
-        totalDocuments: 2,
-        isGenerator: true
-      }, {
-        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
-        name: 'Station-2',
-        totalDocuments: 0,
-        isGenerator: false
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: false,
-        isOwner: true
-      }, {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isWorker: false,
-        isOwner: true
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: false,
-        isOwner: false
-      }, {
-        rithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
+      nextStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1X',
+          name: 'Development',
+          totalDocuments: 5,
+          isGenerator: true,
+        },
+      ],
+      previousStations: [
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Y',
+          name: 'Station-1',
+          totalDocuments: 2,
+          isGenerator: true,
+        },
+        {
+          rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1Z',
+          name: 'Station-2',
+          totalDocuments: 0,
+          isGenerator: false,
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: false,
+          isOwner: true,
+        },
+        {
+          rithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isWorker: false,
+          isOwner: true,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: false,
+          isOwner: false,
+        },
+        {
+          rithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      priority: 2
+      priority: 2,
     };
 
     service.updateStationName(newName, station.rithmId);
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
-    service.updateStationName(newName, stationRithmId)
-      .subscribe((response) => {
-        expect(response).toBe(newName);
-      });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`);
+    service.updateStationName(newName, stationRithmId).subscribe((response) => {
+      expect(response).toBe(newName);
+    });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual({ data: newName });
     req.flush({ data: newName });
@@ -724,80 +817,81 @@ describe('StationService', () => {
     const expectData: DocumentNameField[] = [
       {
         prompt: 'Address',
-        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
       },
       {
         prompt: '/',
-        questionRithmId: ''
+        questionRithmId: '',
       },
       {
         prompt: 'Which is best?',
-        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
       },
     ];
 
-    service.getDocumentNameTemplate(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectData);
-      });
+    service.getDocumentNameTemplate(stationId).subscribe((response) => {
+      expect(response).toEqual(expectData);
+    });
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toEqual(null);
 
     req.flush(expectData);
     httpTestingController.verify();
-
   });
 
   it('should test connection to service to update station document name template', () => {
     const appendedFields: DocumentNameField[] = [
       {
         prompt: 'Address',
-        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
       },
       {
         prompt: '/',
-        questionRithmId: ''
+        questionRithmId: '',
       },
       {
         prompt: 'Which is best?',
-        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a'
+        questionRithmId: 'ff1cc928-0f16-464d-b125-7daa260ccc3a',
       },
     ];
 
-    service.updateDocumentNameTemplate(stationId, appendedFields)
+    service
+      .updateDocumentNameTemplate(stationId, appendedFields)
       .subscribe((response) => {
         expect(response).toEqual(appendedFields);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(appendedFields);
     req.flush(appendedFields);
     httpTestingController.verify();
   });
 
-
-
   it('should return the station with updated general instructions', () => {
     const instructions = 'New Instructions for current Station';
     const expectedResponse: StandardStringJSON = {
-      data: 'New Instructions for current Station'
+      data: 'New Instructions for current Station',
     };
-    service.updateStationGeneralInstructions(stationId, instructions)
+    service
+      .updateStationGeneralInstructions(stationId, instructions)
       .subscribe((stationInfo) => {
         expect(stationInfo).toEqual(expectedResponse);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual({ data: instructions });
     req.flush({ data: instructions });
     httpTestingController.verify();
   });
-
 });
-
-

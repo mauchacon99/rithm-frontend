@@ -19,14 +19,13 @@ describe('MapComponent', () => {
         MapComponent,
         MockComponent(MapToolbarComponent),
         MockComponent(MapOverlayComponent),
-        MockComponent(MapCanvasComponent)
+        MockComponent(MapCanvasComponent),
       ],
       providers: [
         { provide: MapService, useClass: MockMapService },
-        { provide: ErrorService, useClass: MockErrorService }
-      ]
-    })
-    .compileComponents();
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

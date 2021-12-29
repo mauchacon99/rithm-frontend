@@ -1,21 +1,44 @@
-<ng-container *ngIf="!loadingRoster else loadingIndicator">
-  <div *ngFor="let member of rosterMembers | slice:0:slices"
-    (click)="openRosterModal()" class="float-left my-1 mx-px first:ml-0">
-      <app-user-avatar [firstName]="member.firstName" [lastName]="member.lastName"></app-user-avatar>
+<ng-container *ngIf="!loadingRoster; else loadingIndicator">
+  <div
+    *ngFor="let member of rosterMembers | slice: 0:slices"
+    (click)="openRosterModal()"
+    class="float-left my-1 mx-px first:ml-0"
+  >
+    <app-user-avatar
+      [firstName]="member.firstName"
+      [lastName]="member.lastName"
+    ></app-user-avatar>
   </div>
-    <p *ngIf="!editMode && rosterMembers.length === 0" class="overline-font py-2 text-secondary-300">No station {{isWorker ? 'workers' : 'owners'}}</p>
-  <div *ngIf="!editMode && rosterMembers.length > 3" class="float-left my-1 mx-px first:ml-0 circle-30-secondary" (click)="openRosterModal()">
-    +{{rosterMembers.length - 2}}</div>
+  <p
+    *ngIf="!editMode && rosterMembers.length === 0"
+    class="overline-font py-2 text-secondary-300"
+  >
+    No station {{ isWorker ? "workers" : "owners" }}
+  </p>
+  <div
+    *ngIf="!editMode && rosterMembers.length > 3"
+    class="float-left my-1 mx-px first:ml-0 circle-30-secondary"
+    (click)="openRosterModal()"
+  >
+    +{{ rosterMembers.length - 2 }}
+  </div>
   <!-- The custom add/remove user icon. -->
-  <div *ngIf="editMode" class="float-left my-1 mx-px first:ml-0 circle-30-secondary icon cursor-pointer" (click)="openManagementRosterModal()">
+  <div
+    *ngIf="editMode"
+    class="float-left my-1 mx-px first:ml-0 circle-30-secondary icon cursor-pointer"
+    (click)="openManagementRosterModal()"
+  >
     <i class="fas fa-plus plus"></i>
     <i class="fas fa-slash fa-flip-horizontal slash"></i>
     <i class="fas fa-minus minus"></i>
     <div *ngIf="rosterMembers.length > 3" class="badge-accent mat-elevation-z4">
-      +{{rosterMembers.length - 2}}
+      +{{ rosterMembers.length - 2 }}
     </div>
   </div>
 </ng-container>
-<ng-template #loadingIndicator class="loading" >
-  <app-loading-indicator id="loading-roster-indicator" inlineText="Loading..."></app-loading-indicator>
+<ng-template #loadingIndicator class="loading">
+  <app-loading-indicator
+    id="loading-roster-indicator"
+    inlineText="Loading..."
+  ></app-loading-indicator>
 </ng-template>

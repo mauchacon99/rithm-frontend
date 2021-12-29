@@ -1,7 +1,6 @@
 import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '.';
 
 export interface FlowMapElement extends FlowMapData {
-
   /** The points used for the boundary shape of the flow (the points used for the convex hull). */
   boundaryPoints: Point[];
 
@@ -16,7 +15,6 @@ export interface FlowMapElement extends FlowMapData {
  * Represents all info and behavior for a flow as drawn on the map.
  */
 export class FlowMapElement {
-
   /**
    * Creates a new `FlowMapElement`.
    *
@@ -41,8 +39,11 @@ export class FlowMapElement {
   /**
    * Marks the status of the flow element as updated.
    */
-   markAsUpdated(): void {
-    if (this.status !== MapItemStatus.Created && this.status !== MapItemStatus.Deleted) {
+  markAsUpdated(): void {
+    if (
+      this.status !== MapItemStatus.Created &&
+      this.status !== MapItemStatus.Deleted
+    ) {
       this.status = MapItemStatus.Updated;
     }
   }
@@ -54,9 +55,10 @@ export class FlowMapElement {
     if (this.status !== MapItemStatus.Created) {
       this.status = MapItemStatus.Deleted;
     } else {
-      throw new Error('You seem to be trying mark a locally created flow group as deleted. ' +
-        'You should instead remove it from the array of flows.');
+      throw new Error(
+        'You seem to be trying mark a locally created flow group as deleted. ' +
+          'You should instead remove it from the array of flows.'
+      );
     }
   }
-
 }

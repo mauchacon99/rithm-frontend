@@ -1,10 +1,10 @@
 /// Set global styles across the application
 /* stylelint-disable */
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-@import '../helpers/functions';
+@import "../helpers/functions";
 
-$custom-font-family: 'Montserrat, Open Sans, Helvetica';
+$custom-font-family: "Montserrat, Open Sans, Helvetica";
 
 /// Rithm Typography Level: Display 4
 $rithm-display-4: mat.define-typography-level(
@@ -12,7 +12,7 @@ $rithm-display-4: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(112),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 3
@@ -21,7 +21,7 @@ $rithm-display-3: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(56),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 2
@@ -30,7 +30,7 @@ $rithm-display-2: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(45),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Display 1
@@ -39,7 +39,7 @@ $rithm-display-1: mat.define-typography-level(
   $font-weight: 400,
   $font-size: font-calc(34),
   $line-height: 1,
-  $letter-spacing: normal
+  $letter-spacing: normal,
 );
 
 /// Rithm Typography Level: Headline
@@ -130,21 +130,21 @@ $custom-typography: mat.define-typography-config(
   $display-3: $rithm-display-3,
   $display-2: $rithm-display-2,
   $display-1: $rithm-display-1,
-  $headline:  $rithm-headline,
-  $title:  $rithm-title,
-  $subheading-2:  $rithm-subheading-2,
-  $subheading-1:  $rithm-subheading-1,
-  $body-1:  $rithm-body-1,
-  $body-2:  $rithm-body-2,
-  $caption:  $rithm-caption,
-  $button:  $rithm-button,
-  $input:  $rithm-input,
+  $headline: $rithm-headline,
+  $title: $rithm-title,
+  $subheading-2: $rithm-subheading-2,
+  $subheading-1: $rithm-subheading-1,
+  $body-1: $rithm-body-1,
+  $body-2: $rithm-body-2,
+  $caption: $rithm-caption,
+  $button: $rithm-button,
+  $input: $rithm-input,
 );
 
 /// Montserrat Thin 100
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Thin.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Thin.ttf");
   font-weight: 100;
   font-style: normal;
 }
@@ -152,7 +152,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Thin 100 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ThinItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-ThinItalic.ttf");
   font-weight: 100;
   font-style: italic;
 }
@@ -160,7 +160,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Extra Light 200
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraLight.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-ExtraLight.ttf");
   font-weight: 200;
   font-style: normal;
 }
@@ -168,7 +168,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Extra Light 200 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf");
   font-weight: 200;
   font-style: italic;
 }
@@ -176,7 +176,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Light 300
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Light.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Light.ttf");
   font-weight: 300;
   font-style: normal;
 }
@@ -184,7 +184,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Light 300 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-LightItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-LightItalic.ttf");
   font-weight: 300;
   font-style: italic;
 }
@@ -192,7 +192,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Regular 400
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Regular.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Regular.ttf");
   font-weight: 400;
   font-style: normal;
 }
@@ -200,7 +200,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Regular 400 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Italic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Italic.ttf");
   font-weight: 400;
   font-style: italic;
 }
@@ -208,7 +208,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Semi-Bold 600
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-SemiBold.ttf");
   font-weight: 600;
   font-style: normal;
 }
@@ -216,7 +216,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Semi-Bold 600 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf");
   font-weight: 600;
   font-style: italic;
 }
@@ -224,7 +224,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Bold 700
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Bold.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Bold.ttf");
   font-weight: 700;
   font-style: normal;
 }
@@ -232,7 +232,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Bold 700 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-BoldItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-BoldItalic.ttf");
   font-weight: 700;
   font-style: italic;
 }
@@ -240,7 +240,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Extra Bold 800
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-ExtraBold.ttf");
   font-weight: 800;
   font-style: normal;
 }
@@ -248,7 +248,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Extra Bold 800 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf");
   font-weight: 800;
   font-style: italic;
 }
@@ -256,7 +256,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Black 900
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-Black.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-Black.ttf");
   font-weight: 900;
   font-style: normal;
 }
@@ -264,7 +264,7 @@ $custom-typography: mat.define-typography-config(
 /// Montserrat Black 900 Italic
 @font-face {
   font-family: Montserrat;
-  src: url('../../assets/fonts/Montserrat/Montserrat-BlackItalic.ttf');
+  src: url("../../assets/fonts/Montserrat/Montserrat-BlackItalic.ttf");
   font-weight: 900;
   font-style: italic;
 }

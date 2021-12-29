@@ -7,7 +7,6 @@ import { StationRosterMember } from './station-roster-member';
  *
  */
 export interface StationInformation {
-
   /** The global Rithm ID. */
   rithmId: string;
 

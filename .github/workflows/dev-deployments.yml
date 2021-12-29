@@ -8,33 +8,31 @@ on:
       - "dev"
 
 jobs:
-
   # Deploys the web app
   web-app:
     runs-on: [self-hosted, devvm]
     timeout-minutes: 15
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
 
-    - name: Installing dependencies
-      run: npm ci --no-audit
+      - name: Installing dependencies
+        run: npm ci --no-audit
 
-    - name: Compiling app
-      run: npm run build
+      - name: Compiling app
+        run: npm run build
 
-    - name: Placing app offline file
-      run: Copy-Item ./src/app_offline.htm C:/inetpub/devapp.rithm.tech
+      - name: Placing app offline file
+        run: Copy-Item ./src/app_offline.htm C:/inetpub/devapp.rithm.tech
 
-    - name: Deploying app
-      run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
+      - name: Deploying app
+        run: Copy-Item ./dist/rithm/* C:/inetpub/devapp.rithm.tech -Recurse -Force
 
-    - name: Removing app offline file
-      run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
-
+      - name: Removing app offline file
+        run: Remove-Item C:/inetpub/devapp.rithm.tech/app_offline.htm
 
   # Deploys the Karma test coverage site
   test-coverage:
@@ -43,19 +41,19 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
 
-    - name: Installing dependencies
-      run: npm ci --no-audit
+      - name: Installing dependencies
+        run: npm ci --no-audit
 
-    - name: Generating test coverage
-      run: npm run test-ci
+      - name: Generating test coverage
+        run: npm run test-ci
 
-    - name: Deploying documentation site
-      run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
+      - name: Deploying documentation site
+        run: Copy-Item ./coverage/rithm/* C:/inetpub/devapi.rithm.tech/karmacoverage -Recurse -Force
 
   # Deploys the Compodoc documentation site
   compodoc:
@@ -64,19 +62,19 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
 
-    - name: Installing dependencies
-      run: npm ci --no-audit
+      - name: Installing dependencies
+        run: npm ci --no-audit
 
-    - name: Compiling documentation
-      run: npm run compile-docs
+      - name: Compiling documentation
+        run: npm run compile-docs
 
-    - name: Deploying documentation site
-      run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
+      - name: Deploying documentation site
+        run: Copy-Item ./documentation/* C:/inetpub/devapi.rithm.tech/compodoc -Recurse -Force
 
   # Deploys the SassDoc documentation site
   sassdoc:
@@ -85,16 +83,16 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
 
-    - name: Installing dependencies
-      run: npm ci --no-audit
+      - name: Installing dependencies
+        run: npm ci --no-audit
 
-    - name: Compiling documentation
-      run: npm run compile-style-docs
+      - name: Compiling documentation
+        run: npm run compile-style-docs
 
-    - name: Deploying documentation site
-      run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force
+      - name: Deploying documentation site
+        run: Copy-Item ./sassdoc/* C:/inetpub/devapi.rithm.tech/sassdoc -Recurse -Force

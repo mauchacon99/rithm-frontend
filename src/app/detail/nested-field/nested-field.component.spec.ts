@@ -79,14 +79,9 @@ describe('NestedFieldComponent', () => {
         MockComponent(NumberFieldComponent),
         MockComponent(SelectFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -107,7 +102,9 @@ describe('NestedFieldComponent', () => {
 
   it('should check the field question type state when there are possibleAnswers options', () => {
     component.ngOnInit();
-    const stateField = component.childrenFields.find(element => element.questionType === 'state');
+    const stateField = component.childrenFields.find(
+      (element) => element.questionType === 'state'
+    );
     expect(stateField).toBeTruthy();
     expect(stateField?.possibleAnswers).toEqual(STATES);
   });

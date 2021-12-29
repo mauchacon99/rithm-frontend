@@ -16,7 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
   declarations: [
     DocumentComponent,
     DocumentFieldComponent,
-    DocumentTemplateComponent
+    DocumentTemplateComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     SharedModule,
     ReactiveFormsModule,
     InfoDrawerModule,
-    MatExpansionModule
-  ]
+    MatExpansionModule,
+  ],
 })
-export class DocumentModule { }
+export class DocumentModule {}

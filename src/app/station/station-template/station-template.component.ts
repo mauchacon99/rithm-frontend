@@ -1,5 +1,13 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  NG_VALIDATORS,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { Question } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
 
@@ -14,17 +22,18 @@ import { StationService } from 'src/app/core/station.service';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => StationTemplateComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => StationTemplateComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class StationTemplateComponent implements ControlValueAccessor, Validator {
-
+export class StationTemplateComponent
+  implements ControlValueAccessor, Validator
+{
   /** The station fields in the template area. */
   @Input() fields!: Question[];
 
@@ -34,12 +43,9 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   /** The RithmId of the Station. */
   @Input() stationRithmId = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private stationService: StationService,
-  ) {
+  constructor(private fb: FormBuilder, private stationService: StationService) {
     this.stationTemplateForm = this.fb.group({
-      stationFieldForm: this.fb.control('')
+      stationFieldForm: this.fb.control(''),
     });
   }
 
@@ -50,7 +56,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns True if the field can be moved up.
    */
   canFieldMoveUp(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? false : this.fields.length - 1 === fieldIndex ? true : true;
+    return fieldIndex === 0
+      ? false
+      : this.fields.length - 1 === fieldIndex
+      ? true
+      : true;
   }
 
   /**
@@ -60,7 +70,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns True if the field can be moved down.
    */
   canFieldMoveDown(fieldIndex: number): boolean {
-    return fieldIndex === 0 ? true : this.fields.length - 1 === fieldIndex ? false : true;
+    return fieldIndex === 0
+      ? true
+      : this.fields.length - 1 === fieldIndex
+      ? false
+      : true;
   }
 
   /**
@@ -84,7 +98,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   remove(field: Question): void {
     const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
-    if (this.stationRithmId !== field.originalStationRithmId){
+    if (this.stationRithmId !== field.originalStationRithmId) {
       this.movingQuestion(field);
     }
     this.stationService.touchStationForm();
@@ -99,12 +113,11 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
     this.stationService.moveQuestion(field);
   }
 
-
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -143,7 +156,9 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.stationTemplateForm.disable() : this.stationTemplateForm.enable();
+    isDisabled
+      ? this.stationTemplateForm.disable()
+      : this.stationTemplateForm.enable();
   }
 
   /**
@@ -152,12 +167,13 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.stationTemplateForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Station template form is invalid'
-      }
-    };
+    return this.stationTemplateForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Station template form is invalid',
+          },
+        };
   }
-
 }

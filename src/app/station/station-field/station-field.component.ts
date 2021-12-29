@@ -1,5 +1,21 @@
-import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,17 +33,18 @@ import { Question, QuestionFieldType } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
-
+export class StationFieldComponent
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy
+{
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -69,7 +86,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     isRequired: true,
     isPrivate: false,
     children: [],
-    value: ''
+    value: '',
   };
 
   /** The field for adding an option to a select field. */
@@ -107,8 +124,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   constructor(
     private fb: FormBuilder,
-    private stationService: StationService,
-  ) { }
+    private stationService: StationService
+  ) {}
 
   /**
    * On component initialization.
@@ -119,19 +136,22 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
-    if (this.field.questionType === this.fieldType.Select
-      || this.field.questionType === this.fieldType.MultiSelect
-      || this.field.questionType === this.fieldType.CheckList) {
+    if (
+      this.field.questionType === this.fieldType.Select ||
+      this.field.questionType === this.fieldType.MultiSelect ||
+      this.field.questionType === this.fieldType.CheckList
+    ) {
       this.addOption(this.field.questionType);
     }
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
-      optionField: ['']
+      optionField: [''],
     });
-    this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
+    this.stationFieldForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-       this.stationService.touchStationForm();
+        this.stationService.touchStationForm();
       });
   }
 
@@ -140,10 +160,14 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    *
    * @returns The Label tag for each additional field.
    */
-   get labelTag(): string{
-    const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
-    : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
-    : 'Name your field';
+  get labelTag(): string {
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
+        : 'Name your field';
     return label;
   }
 
@@ -172,7 +196,11 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   addOption(fieldType: QuestionFieldType): void {
     this.selectOptionField.rithmId = this.field.rithmId;
     this.checklistOptionField.rithmId = this.field.rithmId;
-    this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
+    this.options.push(
+      fieldType === QuestionFieldType.Select
+        ? this.selectOptionField
+        : this.checklistOptionField
+    );
   }
 
   /**
@@ -212,7 +240,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = checkboxEvent.checked;
     if (!this.field.isReadOnly) {
-       this.field.isRequired = false;
+      this.field.isRequired = false;
     }
     this.stationService.touchStationForm();
   }
@@ -221,7 +249,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -260,7 +288,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.stationFieldForm.disable() : this.stationFieldForm.enable();
+    isDisabled
+      ? this.stationFieldForm.disable()
+      : this.stationFieldForm.enable();
   }
 
   /**
@@ -269,12 +299,14 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.stationFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Station field is invalid'
-      }
-    };
+    return this.stationFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Station field is invalid',
+          },
+        };
   }
 
   /**

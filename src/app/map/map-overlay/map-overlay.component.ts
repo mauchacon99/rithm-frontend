@@ -6,7 +6,13 @@ import { MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
-import { DEFAULT_SCALE, MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS, ZOOM_VELOCITY } from '../map-constants';
+import {
+  DEFAULT_SCALE,
+  MAX_SCALE,
+  MIN_SCALE,
+  SCALE_RENDER_STATION_ELEMENTS,
+  ZOOM_VELOCITY,
+} from '../map-constants';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDrawer } from '@angular/material/sidenav';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -18,10 +24,9 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-map-overlay',
   templateUrl: './map-overlay.component.html',
-  styleUrls: ['./map-overlay.component.scss']
+  styleUrls: ['./map-overlay.component.scss'],
 })
 export class MapOverlayComponent implements OnInit, OnDestroy {
-
   /** The current signed in user. */
   currentUser!: User;
 
@@ -78,7 +83,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
   get isBuilding(): boolean {
-    return this.currentMode === MapMode.Build || this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
+    return (
+      this.currentMode === MapMode.Build ||
+      this.currentMode === MapMode.StationAdd ||
+      this.currentMode === MapMode.FlowAdd
+    );
   }
 
   /**
@@ -87,7 +96,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
    */
   get isStationOrFlowAdd(): boolean {
-    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
+    return (
+      this.currentMode === MapMode.StationAdd ||
+      this.currentMode === MapMode.FlowAdd
+    );
   }
 
   /**
@@ -102,7 +114,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     }
     if (zoom === 0) {
       //disable zooming out past a certain point when in build mode.
-      if (this.mapScale <= this.zoomBuild / ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
+      if (
+        this.mapScale <= this.zoomBuild / ZOOM_VELOCITY &&
+        this.currentMode !== MapMode.View
+      ) {
         return true;
       }
       return this.mapScale <= MIN_SCALE;
@@ -129,15 +144,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService
   ) {
-    this.mapService.mapMode$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (mapMode) => {
-          this.currentMode = mapMode;
-        }, error: (error: unknown) => {
-          throw new Error(`Map overlay subscription error: ${error}`);
-        }
-      });
+    this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (mapMode) => {
+        this.currentMode = mapMode;
+      },
+      error: (error: unknown) => {
+        throw new Error(`Map overlay subscription error: ${error}`);
+      },
+    });
 
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
@@ -157,7 +171,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((clickRes) => {
-        if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
+        if (
+          clickRes.click &&
+          this.mapService.mapMode$.value === MapMode.Build
+        ) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
           this.station = clickRes.data as StationMapElement;
           this.mapService.stationButtonClick$.next({ click: false, data: {} });
@@ -183,8 +200,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         if (data === 'connectionInfo' || data === 'stationInfo') {
           this.drawerMode = data;
         }
-      }
-      );
+      });
   }
 
   /**
@@ -225,21 +241,23 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
-      this.mapService.publishMap()
+      this.mapService
+        .publishMap()
         .pipe(first())
         .subscribe({
           next: () => {
             this.mapDataLoading = false;
             this.mapService.mapMode$.next(MapMode.View);
             this.popupService.notify('Map data published successfully.');
-          }, error: (error: unknown) => {
+          },
+          error: (error: unknown) => {
             this.mapDataLoading = false;
             this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error,
               true
             );
-          }
+          },
         });
     }
   }
@@ -250,7 +268,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     this.mapService.matMenuStatus$.next(true);
-    if ( this.mapHasChanges ) {
+    if (this.mapHasChanges) {
       const confirm = await this.popupService.confirm({
         title: 'Confirmation',
         message: `Are you sure you want to cancel these changes? All map changes will be lost`,
@@ -321,11 +339,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       title: 'Are you sure?',
       message: `The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.`,
       okButtonText: 'Confirm',
-      important: true
+      important: true,
     });
     if (confirm) {
-      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
-      this.mapService.deleteStation(<StationMapElement>(this.station));
+      this.mapService.removeAllStationConnections(
+        <StationMapElement>this.station
+      );
+      this.mapService.deleteStation(<StationMapElement>this.station);
       //TODO: Update to check that the drawer being closed is the drawer that is deleted.
       this.sidenavDrawerService.closeDrawer();
     }
@@ -339,10 +359,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       title: 'Are you sure?',
       message: `This will remove all connections to and from this station and any associated flow logic. This action cannot be undone.`,
       okButtonText: 'Confirm',
-      important: true
+      important: true,
     });
     if (confirm) {
-      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
+      this.mapService.removeAllStationConnections(
+        <StationMapElement>this.station
+      );
     }
   }
 
@@ -351,10 +373,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   createConnectedStation(): void {
     this.mapService.disableConnectedStationMode();
-    const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
+    const index = this.mapService.stationElements.findIndex(
+      (station) => station.rithmId === this.station?.rithmId
+    );
     if (index >= 0) {
-        this.mapService.stationElements[index].isAddingConnected = true;
-        this.mapService.mapMode$.next(MapMode.StationAdd);
+      this.mapService.stationElements[index].isAddingConnected = true;
+      this.mapService.mapMode$.next(MapMode.StationAdd);
     }
   }
 
@@ -372,8 +396,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
-   get mapHasChanges(): boolean {
+  get mapHasChanges(): boolean {
     return this.mapService.mapHasChanges;
   }
-
 }

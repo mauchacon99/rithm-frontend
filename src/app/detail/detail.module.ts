@@ -79,6 +79,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CheckFieldComponent,
     NestedFieldComponent,
     PreviousFieldsComponent,
-  ]
+  ],
 })
-export class DetailModule { }
+export class DetailModule {}

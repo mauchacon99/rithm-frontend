@@ -5,7 +5,6 @@ on:
     types: [opened, reopened]
 
 jobs:
-
   # Automatically adds the PR creator as the assignee on the PR
   auto-assign:
     runs-on: ubuntu-latest

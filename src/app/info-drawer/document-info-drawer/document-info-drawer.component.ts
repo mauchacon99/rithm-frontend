@@ -5,7 +5,12 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, MoveDocument, Question, StationRosterMember } from 'src/models';
+import {
+  DocumentNameField,
+  MoveDocument,
+  Question,
+  StationRosterMember,
+} from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
@@ -20,10 +25,9 @@ import { Router } from '@angular/router';
   selector: 'app-document-info-drawer',
   templateUrl: './document-info-drawer.component.html',
   styleUrls: ['./document-info-drawer.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion],
 })
 export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
-
   /** Organization name form. */
   appendFieldForm: FormGroup;
 
@@ -118,7 +122,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
-      separatorField: '/'
+      separatorField: '/',
     });
 
     this.sidenavDrawerService.drawerData$
@@ -141,7 +145,11 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationRithmId = dataDrawer.stationRithmId;
           this.documentRithmId = dataDrawer.documentRithmId;
           this.isStation = dataDrawer.isStation;
-          this.isUserAdminOrOwner = (this.userService.user.role === 'admin' || dataDrawer.isUserAdminOrOwner) ? true : false;
+          this.isUserAdminOrOwner =
+            this.userService.user.role === 'admin' ||
+            dataDrawer.isUserAdminOrOwner
+              ? true
+              : false;
         }
         if (!this.isStation) {
           this.getLastUpdated();
@@ -153,8 +161,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(appendedFields => {
-        this.options = appendedFields.filter(field => field.questionRithmId);
+      .subscribe((appendedFields) => {
+        this.options = appendedFields.filter((field) => field.questionRithmId);
         if (this.questions.length > 0) {
           this.filterFieldsAndQuestions();
         }
@@ -172,12 +180,13 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (documentName) => {
           this.documentName = `${documentName.baseName} ${documentName.appendedName}`;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -186,23 +195,28 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    *
    */
   getAllPreviousQuestions(): void {
-    this.stationService.getStationPreviousQuestions(this.stationRithmId, false)
+    this.stationService
+      .getStationPreviousQuestions(this.stationRithmId, false)
       .pipe(first())
       .subscribe({
         next: (questions: Question[]) => {
           if (questions) {
             /** Turn Questions objects into DocumentFields Object. */
             this.questions = questions
-              .filter(question => question.prompt && question.rithmId)
-              .map(field => ({ prompt: field.prompt, questionRithmId: field.rithmId }));
+              .filter((question) => question.prompt && question.rithmId)
+              .map((field) => ({
+                prompt: field.prompt,
+                questionRithmId: field.rithmId,
+              }));
             this.filterFieldsAndQuestions();
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -214,7 +228,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   private _filter(value: string): DocumentNameField[] {
     const filterValue = value.toLowerCase();
-    return this.fieldsToAppend.filter(option => option.prompt.toLowerCase().includes(filterValue));
+    return this.fieldsToAppend.filter((option) =>
+      option.prompt.toLowerCase().includes(filterValue)
+    );
   }
 
   /**
@@ -223,7 +239,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   getStatusDocumentEditable(): void {
     this.documentNameLoading = true;
-    this.stationService.getStatusDocumentEditable(this.stationRithmId)
+    this.stationService
+      .getStatusDocumentEditable(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
@@ -231,13 +248,14 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           if (documentEditableStatus) {
             this.documentNameEditable = documentEditableStatus;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.documentNameLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -248,19 +266,21 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   updateStatusDocumentEditable(newStatus: boolean): void {
     this.documentNameLoading = true;
-    this.stationService.updateStatusDocumentEditable(this.stationRithmId, newStatus)
+    this.stationService
+      .updateStatusDocumentEditable(this.stationRithmId, newStatus)
       .pipe(first())
       .subscribe({
         next: (documentEditableStatus) => {
           this.documentNameEditable = documentEditableStatus;
           this.documentNameLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.documentNameLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -283,12 +303,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param fieldPrompt The field prompt selected in autocomplete.
    */
   addStationDocumentFieldName(fieldPrompt: string): void {
-    const fieldToAppend = this.fieldsToAppend.find(newField => newField.prompt === fieldPrompt);
+    const fieldToAppend = this.fieldsToAppend.find(
+      (newField) => newField.prompt === fieldPrompt
+    );
     if (!fieldToAppend) {
-      throw new Error(`Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`);
+      throw new Error(
+        `Requested field with prompt of ${fieldPrompt} could not be found in fieldsToAppend`
+      );
     }
     this.appendedFields.length > 0
-      ? this.appendedFields.push({ prompt: this.appendFieldForm.controls.separatorField.value, questionRithmId: null }, fieldToAppend)
+      ? this.appendedFields.push(
+          {
+            prompt: this.appendFieldForm.controls.separatorField.value,
+            questionRithmId: null,
+          },
+          fieldToAppend
+        )
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -299,12 +329,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   filterFieldsAndQuestions(): void {
     /**Difference between QuestionArray and OptionsArray */
-    this.fieldsToAppend = this.questions.filter(field => !this.options.some(field2 => field.questionRithmId === field2.questionRithmId));
+    this.fieldsToAppend = this.questions.filter(
+      (field) =>
+        !this.options.some(
+          (field2) => field.questionRithmId === field2.questionRithmId
+        )
+    );
 
     /** Set the filter List for auto searching. */
-    this.filteredOptions$ = this.appendFieldForm.controls['appendField'].valueChanges.pipe(
+    this.filteredOptions$ = this.appendFieldForm.controls[
+      'appendField'
+    ].valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value)),
+      map((value) => this._filter(value))
     );
   }
 
@@ -321,14 +358,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   private getLastUpdated(): void {
     this.lastUpdatedLoading = true;
-    this.documentService.getLastUpdated(this.documentRithmId)
+    this.documentService
+      .getLastUpdated(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (lastUpdated) => {
           this.lastUpdatedLoading = false;
           if (lastUpdated && lastUpdated !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(lastUpdated));
+              this.utcTimeConversion.getMillisecondsElapsed(lastUpdated)
+            );
             this.colorMessage = 'text-accent-500';
             if (this.lastUpdatedDate === '1 day') {
               this.lastUpdatedDate = ' Yesterday';
@@ -339,15 +378,16 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
             this.colorMessage = 'text-error-500';
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.lastUpdatedDate = 'Unable to retrieve time';
           this.colorMessage = 'text-error-500';
           this.lastUpdatedLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -356,14 +396,19 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    */
   private getDocumentTimeInStation(): void {
     this.timeInStationLoading = true;
-    this.documentService.getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
+    this.documentService
+      .getDocumentTimeInStation(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentTimeInStation) => {
           this.timeInStationLoading = false;
           if (documentTimeInStation && documentTimeInStation !== 'Unknown') {
-            this.documentTimeInStation = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(documentTimeInStation));
+            this.documentTimeInStation =
+              this.utcTimeConversion.getElapsedTimeText(
+                this.utcTimeConversion.getMillisecondsElapsed(
+                  documentTimeInStation
+                )
+              );
             this.colorMessageDocumentTime = 'text-accent-500';
           } else {
             this.colorMessageDocumentTime = 'text-error-500';
@@ -372,13 +417,13 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
           this.documentTimeInStation = 'Unable to retrieve time';
           this.colorMessageDocumentTime = 'text-error-500';
           this.timeInStationLoading = false;
-        }
+        },
       });
   }
 
@@ -389,7 +434,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   private getAssignedUserToDocument(): void {
     this.userErrorAssigned = false;
     this.assignedUserLoading = true;
-    this.documentService.getAssignedUserToDocument(this.documentRithmId, this.stationRithmId, true)
+    this.documentService
+      .getAssignedUserToDocument(
+        this.documentRithmId,
+        this.stationRithmId,
+        true
+      )
       .pipe(first())
       .subscribe({
         next: (assignedUser) => {
@@ -402,10 +452,10 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.userErrorAssigned = true;
           this.assignedUserLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -418,10 +468,11 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
       message: 'The document will be deleted.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
-      important: true
+      important: true,
     });
     if (deleteDoc) {
-      this.documentService.deleteDocument(this.documentRithmId)
+      this.documentService
+        .deleteDocument(this.documentRithmId)
         .pipe(first())
         .subscribe({
           next: () => {
@@ -430,10 +481,10 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           },
           error: (error: unknown) => {
             this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
             );
-          }
+          },
         });
     }
   }
@@ -444,10 +495,11 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   async unassignUser(): Promise<void> {
     const userUnassigned = await this.popupService.confirm({
       title: 'Are you sure?',
-      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      message:
+        'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
       okButtonText: 'Unassign',
       cancelButtonText: 'Cancel',
-      important: true
+      important: true,
     });
     if (userUnassigned) {
       this.unassignUserToDocument();
@@ -460,21 +512,22 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   private unassignUserToDocument(): void {
     this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
-    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
-    .pipe(first())
-    .subscribe({
-      next: () => {
-        this.assignedUserLoading = false;
-      },
-      error: (error: unknown) => {
-        this.assignedUserLoading = false;
-        this.userErrorUnassigned = true;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
-    });
+    this.documentService
+      .unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.assignedUserLoading = false;
+        },
+        error: (error: unknown) => {
+          this.assignedUserLoading = false;
+          this.userErrorUnassigned = true;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 
   /**
@@ -483,16 +536,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * @param moveDocument Model to move the document.
    */
   moveDocument(moveDocument: MoveDocument): void {
-    this.documentService.moveDocument(moveDocument)
+    this.documentService
+      .moveDocument(moveDocument)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {
           this.assignedUserLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 }
