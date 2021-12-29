@@ -6,8 +6,7 @@ on:
     branches: [dev]
 
 jobs:
-
-# Checks that the app has been formatted with Prettier
+  # Checks that the app has been formatted with Prettier
   check-prettier:
     runs-on: ubuntu-latest
     timeout-minutes: 4
