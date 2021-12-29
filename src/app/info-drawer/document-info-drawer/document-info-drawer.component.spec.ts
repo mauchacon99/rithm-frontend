@@ -15,7 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DialogOptions, StationRosterMember } from 'src/models';
+import { DialogOptions, MoveDocument } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -195,15 +195,9 @@ describe('DocumentInfoDrawerComponent', () => {
       documentRithmId: documentId,
       stationRithmId: stationId
     });
-    const assignedUser: StationRosterMember = {
-      rithmId: '789-321-456-789',
-      firstName: 'John',
-      lastName: 'Christopher',
-      email: 'johnny.depp@gmail.com'
-    };
     const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
-    component['unassignUserToDocument'](assignedUser);
-    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId, assignedUser);
+    component['unassignUserToDocument']();
+    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId);
   });
 
   it('should show error message when request for assigned user fails', () => {
@@ -219,5 +213,60 @@ describe('DocumentInfoDrawerComponent', () => {
     expect(component.userErrorAssigned).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
     expect(errorComponent).toBeTruthy();
+  });
+
+  it('should show popup dialog to unassigned user', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      okButtonText: 'Unassign',
+      cancelButtonText: 'Cancel',
+      important: true
+    };
+    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    await component.unassignUser();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+
+  it('should catch error to document service', () => {
+    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    sideNavService.drawerData$.next({
+      isStation: false,
+      documentRithmId: documentId,
+      stationRithmId: stationId
+    });
+    component['unassignUserToDocument']();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the service to move the document to another station', () => {
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId
+    };
+
+    const spyMoveDocument = spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
+    component.moveDocument(dataExpect);
+    expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+  });
+
+  it('should catch an error when moving the document if an error occurs', () => {
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId
+    };
+
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    component.moveDocument(dataExpect);
+    expect(spyError).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FlowMapElement, Point } from 'src/models';
-import { CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH } from './map-constants';
+import {
+  CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
+  DEFAULT_SCALE, GROUP_NAME_PADDING, FONT_SIZE_MODIFIER,
+} from './map-constants';
 import { MapService } from './map.service';
 
 /**
@@ -14,9 +17,14 @@ export class FlowElementService {
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
+  /** The default scale value for the station card. */
+  private mapScale = DEFAULT_SCALE;
+
   constructor(
     private mapService: MapService
-  ) { }
+  ) {
+    this.mapService.mapScale$.subscribe((scale)=> this.mapScale = scale)
+  }
 
   /**
    * Draws all the flow boundaries on the map. Starts from the deepest flows and works back to the root.
@@ -106,7 +114,11 @@ export class FlowElementService {
       throw new Error('Cannot draw flow name if context is not defined');
     }
     // TODO: Update this to be more dynamic
-    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
+    this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER*this.mapScale);
+    this.canvasContext.font = `bold ${fontSize}px Montserrat`;
+    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
+      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
   }
 
   /**
