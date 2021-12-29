@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, FlowElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {
@@ -1039,7 +1039,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         const stationHoverCount = this.stations.filter((station) => station.hoverActive !== StationElementHoverType.None).length;
-        if (stationHoverCount === 0) {
+        const flowHoverCount = this.flows.filter((flow) => flow.hoverActive !== FlowElementHoverType.None).length;
+        if (stationHoverCount === 0 && flowHoverCount === 0) {
           for (const connection of this.connections) {
             this.connections.map(con => {
               con.hoverActive = false;
@@ -1053,8 +1054,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             }
           }
         }
+        //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
+        const connectionHoverCount = this.connections.filter((con) => con.hoverActive !== false).length;
+        if (stationHoverCount === 0 && connectionHoverCount === 0 && this.mapMode === MapMode.FlowAdd) {
+          for (const flow of this.flows) {
+            this.flows.map(fl => {
+              fl.hoverActive = FlowElementHoverType.None;
+            });
+            flow.checkElementHover(eventContextPoint, this.context);
+            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+              break;
+            } else {
+              this.mapCanvas.nativeElement.style.cursor = 'default';
+            }
+          }
+        }
         if (stationHoverCount > 0) {
           this.connections.map((con) => con.hoverActive = false);
+          this.flows.map((flow) => flow.hoverActive = FlowElementHoverType.None);
         }
       }
     }
