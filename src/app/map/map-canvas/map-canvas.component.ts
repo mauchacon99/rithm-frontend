@@ -99,6 +99,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Boolean to check drag on connection line. */
   private connectionLineDrag = false;
 
+  /**Boundary box inner padding for top-left. */
+  readonly topLeftPadding = 75;
+
+  /**Boundary box inner padding for bottom-right. */
+  readonly bottomRightPadding = 175;
+
 
 
   /**
@@ -710,10 +716,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension * this.scale / 2;
-    const topBoundaryEdge = minMapPoint.y - screenDimension * this.scale / 2;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension * this.scale / 2;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension * this.scale / 2;
+    const leftBoundaryEdge = minMapPoint.x - screenDimension * this.scale / 2 + this.topLeftPadding;
+    const topBoundaryEdge = minMapPoint.y - screenDimension * this.scale / 2 + this.topLeftPadding;
+    const rightBoundaryEdge = maxMapPoint.x + screenDimension * this.scale / 2 - this.bottomRightPadding;
+    const bottomBoundaryEdge = maxMapPoint.y + screenDimension * this.scale / 2 - this.bottomRightPadding;
 
     const minBoundaryCoords = {x: leftBoundaryEdge, y: topBoundaryEdge};
     const maxBoundaryCoords = {x: rightBoundaryEdge, y: bottomBoundaryEdge};
