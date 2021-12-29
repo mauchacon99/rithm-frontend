@@ -60,18 +60,23 @@
           Unable to retrieve assigned user
         </div>
         <ng-container *ngIf="!userErrorAssigned">
-          <div class="col-12 flex py-1 justify-start" *ngIf="documentAssignedUser.length > 0 else noAssignedUser">
-            <div class="my-1">
-              <app-user-avatar [firstName]="documentAssignedUser[0].firstName" [lastName]="documentAssignedUser[0].lastName"
-                [hideToolTip]="true">
-              </app-user-avatar>
+          <div class="col-12 flex py-1 justify-between items-center" *ngIf="documentAssignedUser.length > 0 else noAssignedUser">
+            <div class="col-12 flex justify-start">
+              <div class="my-1">
+                  <app-user-avatar [firstName]="documentAssignedUser[0].firstName"
+                    [lastName]="documentAssignedUser[0].lastName" [hideToolTip]="true">
+                  </app-user-avatar>
+              </div>
+              <div class="flex flex-col justify-center overflow-hidden">
+                <p class="leading-none pl-2 mb-1 truncate">
+                  {{documentAssignedUser[0].firstName}} {{documentAssignedUser[0].lastName}}
+                </p>
+                <p class="leading-none overline-font pl-2 text-accent-500 truncate">{{documentAssignedUser[0].email}}</p>
+              </div>
             </div>
-            <div class="flex flex-col justify-center overflow-hidden">
-              <p class="leading-none pl-2 mb-1 truncate">
-                {{documentAssignedUser[0].firstName}} {{documentAssignedUser[0].lastName}}
-              </p>
-              <p class="leading-none overline-font pl-2 text-accent-500 truncate">{{documentAssignedUser[0].email}}</p>
-            </div>
+            <button *ngIf="isUserAdminOrOwner" mat-icon-button (click)="unassignUser()">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
           <ng-template #noAssignedUser>
             <div class="col-span-full">
