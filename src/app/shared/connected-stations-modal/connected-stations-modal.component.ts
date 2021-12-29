@@ -1,6 +1,6 @@
 import { Component, Inject, } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConnectedStationInfo } from 'src/models';
+import { ConnectedModalData, ConnectedStationInfo } from 'src/models';
 
 /**
  * Component for connected stations.
@@ -16,7 +16,7 @@ export class ConnectedStationsModalComponent {
   title = "Where would you like to move this document?";
 
   /** The Label Select of modal. */
-  label = "Select Station"
+  label = "Select Station";
 
   /** The station list by document. */
   stationsDocument: ConnectedStationInfo[] = [];
@@ -29,7 +29,7 @@ export class ConnectedStationsModalComponent {
 
   constructor(
     // eslint-disable-next-line max-len
-    @Inject(MAT_DIALOG_DATA) private data: { /** The Document rithmId. */ documentRithmId: string, /** The station id. */ stationRithmId: string }
+    @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
