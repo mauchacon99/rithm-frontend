@@ -170,8 +170,12 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
+    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    const answerId = `ans-${genRanHex(6)}`;
     this.selectOptionField.rithmId = this.field.rithmId;
     this.checklistOptionField.rithmId = this.field.rithmId;
+    this.selectOptionField.originalStationRithmId = answerId;
+    this.checklistOptionField.originalStationRithmId = answerId;
     this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
   }
 
@@ -182,6 +186,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
+    if (this.field.possibleAnswers){
+      this.field.possibleAnswers.splice(index,1);
+    }
   }
 
   /**

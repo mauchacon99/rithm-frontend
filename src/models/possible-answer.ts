@@ -12,4 +12,7 @@ export interface PossibleAnswer {
   /** Whether this answer is the default choice if left empty. */
   default: boolean;
 
+  /** ID to determine the answer to update. */
+  answerId?: string | null;
+
 }
