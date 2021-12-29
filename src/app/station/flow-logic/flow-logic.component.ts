@@ -5,7 +5,7 @@ import { ConnectedStationInfo } from 'src/models';
  * Component for the flow logic tab on a station.
  */
 @Component({
-  selector: 'app-flow-logic',
+  selector: 'app-flow-logic[nextStations]',
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss']
 })
