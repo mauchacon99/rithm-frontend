@@ -24,7 +24,7 @@
     <p class="overline-font">station owners</p>
     <div class="overline-font py-2 text-secondary-500" *ngIf="locallyCreated else showOwnerRoster">Publish map to add roster members</div>
     <ng-template #showOwnerRoster>
-      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="false" [editMode]="editMode">
+      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="false" [editMode]="editMode || isUserAdminOrOwner">
       </app-roster>
     </ng-template>
   </div>
@@ -32,7 +32,7 @@
     <p class="overline-font">worker roster</p>
     <div class="overline-font py-2 text-secondary-500" *ngIf="locallyCreated else showWorkerRoster">Publish map to add roster members</div>
     <ng-template #showWorkerRoster>
-      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="true" [editMode]="editMode">
+      <app-roster (modalClosed)="refreshInfoDrawer($event)" [stationId]="stationRithmId" [isWorker]="true" [editMode]="editMode || isUserAdminOrOwner">
       </app-roster>
     </ng-template>
   </div>
