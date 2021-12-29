@@ -232,7 +232,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
-      isRequired: (fieldType === QuestionFieldType.Instructions ? true : false),
+      isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
       isPrivate: false,
       children: fieldType === QuestionFieldType.AddressLine ? this.addAddressChildren() : [],
       originalStationRithmId: this.stationRithmId
@@ -394,13 +394,13 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   }
 
  /**
-  * Is valid if the questions in the station form have the instruction type fields correctly.
+  * Is valid if the questions in the station form have the fields correctly.
   *
-  * @returns Invalid when instruction type fields are empty prompt property.
+  * @returns Invalid when fields are empty in the prompt property.
   */
   get invalidQuestionStationForm(): boolean {
     return this.stationInformation.questions.some((question) =>
-    question.questionType === QuestionFieldType.Instructions  && question.prompt === '');
+      question.isRequired && question.prompt === '');
   }
 
 }
