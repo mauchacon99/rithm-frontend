@@ -1,15 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef, QueryList } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
-import { FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
-import { query } from '@angular/animations';
 
 /**
  * Main component for viewing a station.
@@ -113,9 +112,9 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           this.stationInformation.questions[questionIndex].prompt = question.prompt;
         }
 
-        let formQuestionsArray = <FormArray>this.stationForm.controls["questions"];
-        const fieldUpdate = formQuestionsArray.controls.find(field => (Object.keys(field.value))[0] === question.rithmId)
-        fieldUpdate?.patchValue({[question.rithmId]:question.prompt})
+        const formQuestionsArray = <FormArray> this.stationForm.controls["questions"];
+        const fieldUpdate = formQuestionsArray.controls.find(field => (Object.keys(field.value))[0] === question.rithmId);
+        fieldUpdate?.patchValue({[question.rithmId]:question.prompt});
       }
     });
   }
@@ -214,10 +213,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
             this.stationName = stationInfo.name;
             this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
 
-            let questions =  this.stationForm.get("questions") as FormArray
+            const questions =  this.stationForm.get("questions") as FormArray;
             stationInfo.questions.forEach(x => {
-                questions.push(this.fb.group(x.isRequired ? {[x.rithmId]: [x.prompt,[Validators.required]]} : {[x.rithmId]: [x.prompt,[]]}))
-            })
+                questions.push(this.fb.group(x.isRequired ? {[x.rithmId]: [x.prompt,[Validators.required]]} : {[x.rithmId]: [x.prompt,[]]}));
+            });
           }
           this.stationLoading = false;
         },
