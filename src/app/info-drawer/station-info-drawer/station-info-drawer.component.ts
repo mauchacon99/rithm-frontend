@@ -112,7 +112,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.getStationDocumentGenerationStatus();
           }
         } else {
-          throw new Error('There was no station info drawer data')
+          throw new Error('There was no station info drawer data');
         }
         this.getStationInfo();
       });
