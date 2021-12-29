@@ -5,7 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentNameField, Question, StationRosterMember } from 'src/models';
+import { DocumentNameField, MoveDocument, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
@@ -101,6 +101,9 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Enable error message if assigned user the document request fails. */
   userErrorAssigned = false;
+
+  /** Enable error message if unassigned user request fails. */
+  userErrorUnassigned = false;
 
   constructor(
     private fb: FormBuilder,
@@ -455,13 +458,34 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
    * Unassign user to document.
    */
   private unassignUserToDocument(): void {
+    this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
     this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        this.assignedUserLoading = false;
+      },
+      error: (error: unknown) => {
+        this.assignedUserLoading = false;
+        this.userErrorUnassigned = true;
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
+  }
+
+  /**
+   * Move the document from a station to another.
+   *
+   * @param moveDocument Model to move the document.
+   */
+  moveDocument(moveDocument: MoveDocument): void {
+    this.documentService.moveDocument(moveDocument)
       .pipe(first())
       .subscribe({
-        next: () => {
-          this.assignedUserLoading = false;
-        },
         error: (error: unknown) => {
           this.assignedUserLoading = false;
           this.errorService.displayError(
