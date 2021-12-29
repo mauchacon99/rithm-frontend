@@ -11,7 +11,7 @@ import { DocumentFieldComponent } from './document-field/document-field.componen
 import { DocumentTemplateComponent } from './document-template/document-template.component';
 import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ConnectedStationsModalComponent } from '../shared/connected-stations-modal/connected-stations-modal.component';
+import { ConnectedStationsModalComponent } from './connected-stations-modal/connected-stations-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 
