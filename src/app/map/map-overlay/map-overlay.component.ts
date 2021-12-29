@@ -327,7 +327,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
       this.mapService.deleteStation(<StationMapElement>(this.station));
       //TODO: Update to check that the drawer being closed is the drawer that is deleted.
-      this.sidenavDrawerService.closeDrawer()
+      this.sidenavDrawerService.closeDrawer();
     }
   }
 
