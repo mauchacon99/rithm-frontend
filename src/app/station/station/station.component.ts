@@ -215,7 +215,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
 
             const questions =  this.stationForm.get("questions") as FormArray;
             stationInfo.questions.forEach(x => {
-                questions.push(this.fb.group(x.isRequired ? {[x.rithmId]: [x.prompt,[Validators.required]]} : {[x.rithmId]: [x.prompt,[]]}));
+                questions.push(this.fb.group(x.isRequired ? {[x.rithmId]:[x.prompt,[Validators.required]]} : {[x.rithmId]:[x.prompt,[]]}));
             });
           }
           this.stationLoading = false;
