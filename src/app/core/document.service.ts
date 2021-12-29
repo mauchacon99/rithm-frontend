@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -254,7 +254,7 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`, moveDocument);
     }
   }
 }
