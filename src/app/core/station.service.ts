@@ -383,12 +383,14 @@ export class StationService {
   touchStationForm(): void {
     this.stationFormTouched$.next();
   }
+
   /**
  * Set config for field change.
- *
- * @param question Value the change.
- */
+  *
+  * @param question Value the change.
+  */
   fieldConfigChange(question: Question): void {
     this.fieldConfig$.next(question);
   }
+  
 }
