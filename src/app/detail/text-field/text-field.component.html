@@ -32,7 +32,7 @@
       </button>
     </div>
     <input *ngIf="field.questionType !== fieldTypeEnum.LongText && field.questionType !== fieldTypeEnum.Instructions" matInput type="{{ toolBar ? 'text' : field.questionType }}" [required]="field.isRequired" [formControlName]="field.questionType" autocomplete="off" (blur)="updateFieldPrompt(field)">
-    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired" [formControlName]="field.questionType" (blur)="updateFieldPrompt(field)">
+    <textarea *ngIf="field.questionType === fieldTypeEnum.LongText || field.questionType === fieldTypeEnum.Instructions" matInput placeholder="{{field?.prompt}}" rows="3" spellcheck="true" [required]="field.isRequired || field.questionType === fieldTypeEnum.Instructions" [formControlName]="field.questionType" (blur)="updateFieldPrompt(field)">
     </textarea>
   </mat-form-field>
 </div>
