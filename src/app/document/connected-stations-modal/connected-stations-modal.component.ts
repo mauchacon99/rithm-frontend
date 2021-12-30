@@ -13,10 +13,10 @@ import { ConnectedModalData, ConnectedStationInfo } from 'src/models';
 export class ConnectedStationsModalComponent {
 
   /** The title Modal. */
-  title = "Where would you like to move this document?";
+  title = 'Where would you like to move this document?';
 
   /** The Label Select of modal. */
-  label = "Select Station";
+  label = 'Select Station';
 
   /** The station list by document. */
   stationsDocument: ConnectedStationInfo[] = [];
@@ -28,7 +28,6 @@ export class ConnectedStationsModalComponent {
   stationRithmId = '';
 
   constructor(
-    // eslint-disable-next-line max-len
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData
   ) {
     this.documentRithmId = data.documentRithmId;
