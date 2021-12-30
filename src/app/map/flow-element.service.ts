@@ -23,7 +23,7 @@ export class FlowElementService {
   constructor(
     private mapService: MapService
   ) {
-    this.mapService.mapScale$.subscribe((scale)=> this.mapScale = scale)
+    this.mapService.mapScale$.subscribe((scale)=> this.mapScale = scale);
   }
 
   /**
@@ -107,8 +107,8 @@ export class FlowElementService {
       throw new Error('Cannot draw flow name if context is not defined');
     }
     // TODO: Update this to be more dynamic
-    this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR
-    const fontSize = Math.ceil(FONT_SIZE_MODIFIER*this.mapScale);
+    this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
       flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);

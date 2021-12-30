@@ -498,10 +498,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:keypress', ['$event'])
   keyPress(event: KeyboardEvent): void {
-    if (event.key === '+' || event.key === '=' || event.key === '-') {
-      this.mapService.matMenuStatus$.next(true);
-      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
-      this.mapService.handleZoom(false);
+    if (!this.sidenavDrawerService.isDrawerOpen) {
+      if (event.key === '+' || event.key === '=' || event.key === '-') {
+        this.mapService.matMenuStatus$.next(true);
+        this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
+        this.mapService.handleZoom(false);
+      }
     }
   }
 
@@ -596,7 +598,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.panActive = true;
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
-        if (Math.abs(this.nextPanVelocity.x) >= 1 || Math.abs(this.nextPanVelocity.y) >= 1) {
+        if (Math.floor(this.nextPanVelocity.x) >= 1 || Math.floor(this.nextPanVelocity.y) >= 1) {
           this.nextPanVelocity = { x: this.nextPanVelocity.x * PAN_DECAY_RATE, y: this.nextPanVelocity.y * PAN_DECAY_RATE };
           this.myReq = requestAnimationFrame(step);
         } else {
@@ -753,8 +755,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
-      x: event.clientX - canvasRect.left,
-      y: event.clientY - canvasRect.top
+      x: Math.floor(event.clientX - canvasRect.left),
+      y: Math.floor(event.clientY - canvasRect.top)
     };
   }
 
@@ -768,8 +770,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private getEventContextPoint(event: MouseEvent | PointerEvent | Touch): Point {
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
-      x: canvasPoint.x * window.devicePixelRatio,
-      y: canvasPoint.y * window.devicePixelRatio
+      x: Math.floor(canvasPoint.x * window.devicePixelRatio),
+      y: Math.floor(canvasPoint.y * window.devicePixelRatio)
     };
   }
 
@@ -1038,9 +1040,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
-        const stationHoverCount = this.stations.filter((station) => station.hoverActive !== StationElementHoverType.None).length;
-        const flowHoverCount = this.flows.filter((flow) => flow.hoverActive !== FlowElementHoverType.None).length;
-        if (stationHoverCount === 0 && flowHoverCount === 0) {
+        const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
+        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== FlowElementHoverType.None);
+        if (hoveringOverStation && hoveringOverFlow) {
           for (const connection of this.connections) {
             this.connections.map(con => {
               con.hoverActive = false;
@@ -1055,8 +1057,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
-        const connectionHoverCount = this.connections.filter((con) => con.hoverActive !== false).length;
-        if (stationHoverCount === 0 && connectionHoverCount === 0 && this.mapMode === MapMode.FlowAdd) {
+        const hoveringOverConnection = this.connections.some((con) => con.hoverActive);
+        if (hoveringOverStation && hoveringOverConnection && this.mapMode === MapMode.FlowAdd) {
           for (const flow of this.flows) {
             this.flows.map(fl => {
               fl.hoverActive = FlowElementHoverType.None;
@@ -1070,7 +1072,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             }
           }
         }
-        if (stationHoverCount > 0) {
+        if (hoveringOverStation) {
           this.connections.map((con) => con.hoverActive = false);
           this.flows.map((flow) => flow.hoverActive = FlowElementHoverType.None);
         }
@@ -1123,8 +1125,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Add station.
     if (this.mapMode === MapMode.StationAdd) {
       const coords: Point = { x: 0, y: 0 };
-      coords.x = point.x - STATION_WIDTH / 2 * this.scale;
-      coords.y = point.y - STATION_HEIGHT / 2 * this.scale;
+      coords.x = Math.floor(point.x - STATION_WIDTH / 2 * this.scale);
+      coords.y = Math.floor(point.y - STATION_HEIGHT / 2 * this.scale);
 
       //create a new station at click.
       this.mapService.createNewStation(coords);
