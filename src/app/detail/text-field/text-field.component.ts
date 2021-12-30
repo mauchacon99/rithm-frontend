@@ -86,7 +86,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /**
    * Applied logic for validation field.
    */
-  private validationField(): void {
+  validationField(): void {
     //Logic to determine if a field should be required, and the validators to give it.
     const validators: ValidatorFn[] = [];
 
