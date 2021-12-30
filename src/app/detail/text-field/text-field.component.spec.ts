@@ -195,7 +195,7 @@ describe('TextFieldComponent', () => {
         isRequired: true,
         isPrivate: false,
         children: [],
-      }
+      };
       stationServiceSubject.fieldConfig$.next(question);
       expect(spyValidate).toHaveBeenCalled();
     });
