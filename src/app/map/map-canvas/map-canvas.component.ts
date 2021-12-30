@@ -501,10 +501,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:keypress', ['$event'])
   keyPress(event: KeyboardEvent): void {
-    if (event.key === '+' || event.key === '=' || event.key === '-') {
-      this.mapService.matMenuStatus$.next(true);
-      this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
-      this.mapService.handleZoom(false);
+    if (!this.sidenavDrawerService.isDrawerOpen) {
+      if (event.key === '+' || event.key === '=' || event.key === '-') {
+        this.mapService.matMenuStatus$.next(true);
+        this.mapService.zoomCount$.next(this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50));
+        this.mapService.handleZoom(false);
+      }
     }
   }
 
