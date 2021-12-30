@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, NgZone, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { first } from 'rxjs';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -34,6 +35,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
 
   constructor(
     private fb: FormBuilder,
+    private ngZone: NgZone
   ) { }
 
   /**
@@ -81,6 +83,12 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.selectFieldForm.valueChanges.subscribe(fn);
+    this.ngZone.onStable
+      .pipe(first())
+      .subscribe(() => {
+        this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
+        this.selectFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+      });
   }
 
   /**
