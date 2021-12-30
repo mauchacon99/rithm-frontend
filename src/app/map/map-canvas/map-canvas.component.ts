@@ -8,7 +8,7 @@ import { MapBoundaryService } from '../map-boundary.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION, TOUCH_EVENT_MARGIN
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
