@@ -22,7 +22,6 @@ import { MapService } from 'src/app/map/map.service';
   styleUrls: ['./station-info-drawer.component.scss'],
   providers: [UtcTimeConversion]
 })
-
 export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -112,6 +111,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
             this.getStationDocumentGenerationStatus();
           }
+        } else {
+          throw new Error('There was no station info drawer data');
         }
         this.getStationInfo();
       });
@@ -357,7 +358,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationNotes === undefined) {
       throw new Error('Station notes not found');
     }
-    const openStation = this.mapService.stationElements.find((station) => this.stationInformation.rithmId === station.rithmId);
+    const openStation = this.mapService.stationElements.find((station) => this.stationRithmId === station.rithmId);
     if (openStation === undefined) {
       throw new Error('Station was not found.');
     }
