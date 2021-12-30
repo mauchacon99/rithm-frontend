@@ -249,4 +249,5 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
   });
+
 });
