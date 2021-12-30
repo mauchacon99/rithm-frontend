@@ -53,6 +53,7 @@ describe('TextFieldComponent', () => {
   let fixture: ComponentFixture<TextFieldComponent>;
   const formBuilder = new FormBuilder();
 
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TextFieldComponent],
@@ -174,6 +175,29 @@ describe('TextFieldComponent', () => {
       expect(email.valid).toBeFalse();
       expect(email.hasError('email')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
+    });
+  });
+
+  describe('email field', () => {
+    let stationServiceSubject: StationService;
+    beforeEach(() => {
+      stationServiceSubject = TestBed.inject(StationService);
+    });
+
+    it('should ', () => {
+      const spyValidate = spyOn<any>(component,'validationField').and.callThrough();
+
+      const question: Question = {
+        rithmId: 'string',
+        prompt: 'string',
+        questionType: QuestionFieldType.City,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      }
+      stationServiceSubject.fieldConfig$.next(question);
+      expect(spyValidate).toHaveBeenCalled();
     });
   });
 });
