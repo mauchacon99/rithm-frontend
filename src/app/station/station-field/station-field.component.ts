@@ -119,6 +119,15 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
+    this.labelField.isRequired = this.field.isRequired;
+    this.labelField.isPrivate = this.field.isPrivate;
+    this.labelField.isReadOnly = this.field.isReadOnly;
+    this.checklistOptionField.isRequired = this.field.isRequired;
+    this.checklistOptionField.isPrivate = this.field.isPrivate;
+    this.checklistOptionField.isReadOnly = this.field.isReadOnly;
+    this.selectOptionField.isRequired = this.field.isRequired;
+    this.selectOptionField.isPrivate = this.field.isPrivate;
+    this.selectOptionField.isReadOnly = this.field.isReadOnly;
     if (this.field.questionType === this.fieldType.Select
       || this.field.questionType === this.fieldType.MultiSelect
       || this.field.questionType === this.fieldType.CheckList) {
@@ -131,7 +140,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     });
     this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-       this.stationService.touchStationForm();
+        this.stationService.touchStationForm();
       });
   }
 
@@ -140,10 +149,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    *
    * @returns The Label tag for each additional field.
    */
-   get labelTag(): string{
+  get labelTag(): string {
     const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
-    : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
-    : 'Name your field';
+      : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
+        : 'Name your field';
     return label;
   }
 
@@ -191,6 +200,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setRequired(checkboxEvent: MatCheckboxChange): void {
     this.field.isRequired = checkboxEvent.checked;
+    this.stationService.fieldConfigChange(this.field);
     this.stationService.touchStationForm();
   }
 
@@ -201,6 +211,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
+    this.stationService.fieldConfigChange(this.field);
     this.stationService.touchStationForm();
   }
 
@@ -212,8 +223,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   setEditable(checkboxEvent: MatCheckboxChange): void {
     this.field.isReadOnly = checkboxEvent.checked;
     if (!this.field.isReadOnly) {
-       this.field.isRequired = false;
+      this.field.isRequired = false;
     }
+    this.stationService.fieldConfigChange(this.field);
     this.stationService.touchStationForm();
   }
 
