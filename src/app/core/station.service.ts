@@ -30,6 +30,9 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
+  /** Set config for field change. */
+  fieldConfig$ = new Subject<Question>();
+
   constructor(
     private http: HttpClient
   ) { }
@@ -244,7 +247,7 @@ export class StationService {
    *
    * @param question The question to be updated.
    */
-   updateStationQuestionInTemplate(question: Question): void {
+  updateStationQuestionInTemplate(question: Question): void {
     this.stationQuestion$.next(question);
   }
 
@@ -299,11 +302,11 @@ export class StationService {
     return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
   }
 
- /**
-  * Reports a new question to be moved.
-  *
-  * @param question The question of the station-template to be moved.
-  */
+  /**
+   * Reports a new question to be moved.
+   *
+   * @param question The question of the station-template to be moved.
+   */
   moveQuestion(question: Question): void {
     this.questionToMove$.next(question);
   }
@@ -379,5 +382,13 @@ export class StationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
+  }
+  /**
+ * Set config for field change.
+ *
+ * @param question Value the change.
+ */
+  fieldConfigChange(question: Question): void {
+    this.fieldConfig$.next(question);
   }
 }
