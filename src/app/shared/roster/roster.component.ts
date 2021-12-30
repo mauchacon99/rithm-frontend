@@ -39,14 +39,10 @@ export class RosterComponent implements OnInit {
   /** Emit the close modal. */
   @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  // get isUserAdminOrOwner(): boolean {
-    // return this.userService.isStationOwner(this.stationInformation) || this.userService.isAdmin
-  // }
-
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
-    private errorService: ErrorService,
+    private errorService: ErrorService
     ) { }
 
   /**
