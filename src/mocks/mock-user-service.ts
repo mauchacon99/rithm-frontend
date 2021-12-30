@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo, StationInformation } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -228,6 +228,35 @@ export class MockUserService {
       })).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
+  }
+
+  /**
+   * Checks to see if signed in user is an owner of the station.
+   *
+   * @param stationInformation The station used to check if user is an admin.
+   * @returns A boolean determining if the current user is an owner of the station.
+   */
+  isStationOwner(stationInformation: StationInformation): boolean {
+    return !!stationInformation.stationOwners.find((owner)=> owner.rithmId === this.user.rithmId);
+  }
+
+  /**
+   * Checked to see if signed in user is a worker.
+   *
+   * @param stationInformation The station used to check if user is a worker.
+   * @returns A boolean determining if the current user is a worker on the station.
+   */
+  isWorker(stationInformation: StationInformation):boolean {
+    return !!stationInformation.workers.find((worker)=> worker.rithmId === this.user.rithmId);
+  }
+
+  /**
+   * Checking if the current user is an admin.
+   *
+   * @returns The true or false if user is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.user.role === 'admin';
   }
 
 }
