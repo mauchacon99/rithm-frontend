@@ -6,7 +6,7 @@ import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import { SignInResponse, TokenResponse, User, UserAccountInfo, StationInformation } from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -38,6 +38,15 @@ export class UserService {
   get user(): User {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
+  }
+
+  /**
+   * Checking if the current user is an admin.
+   *
+   * @returns The true or false if user is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.user.role === 'admin';
   }
 
   /**
@@ -258,6 +267,26 @@ export class UserService {
    setUserData(): void {
     const user = localStorage.getItem('user');
     this.userData$.next(JSON.parse(<string>user));
+  }
+
+  /**
+   * Checks to see if signed in user is an owner of the station.
+   *
+   * @param stationInformation The station used to check if user is an admin.
+   * @returns A boolean determining if the current user is an owner of the station.
+   */
+  isStationOwner(stationInformation: StationInformation): boolean {
+    return !!stationInformation.stationOwners.find((owner)=> owner.rithmId === this.user.rithmId);
+  }
+
+  /**
+   * Checked to see if signed in user is a worker.
+   *
+   * @param stationInformation The station used to check if user is a worker.
+   * @returns A boolean determining if the current user is a worker on the station.
+   */
+  isWorker(stationInformation: StationInformation):boolean {
+    return !!stationInformation.workers.find((worker)=> worker.rithmId === this.user.rithmId);
   }
 
   // TODO: Re-enable when addressing notification settings
