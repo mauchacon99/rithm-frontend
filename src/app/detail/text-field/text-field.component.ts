@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -52,10 +53,25 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
-    private stationService: StationService
-  ) { }
+    private stationService: StationService,
+    private ngZone: NgZone
+  ) {
+    this.stationService.fieldConfig$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((field) => {
+        if (field.rithmId === this.field.rithmId) {
+          this.field.isRequired = field.isRequired;
+          this.field.isPrivate = field.isPrivate;
+          this.field.isReadOnly = field.isReadOnly;
+          this.validationField();
+        }
+      });
+  }
 
   /**
    * Set up FormBuilder group.
@@ -64,7 +80,13 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     this.textFieldForm = this.fb.group({
       [this.field.questionType]: [this.field.value ? this.field.value : '', []]
     });
+    this.validationField();
+  }
 
+  /**
+  * Applied logic for validation field.
+  */
+  private validationField(): void {
     //Logic to determine if a field should be required, and the validators to give it.
     const validators: ValidatorFn[] = [];
 
@@ -84,7 +106,6 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
           break;
       }
     }
-
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
   }
 
@@ -115,6 +136,12 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.textFieldForm.valueChanges.subscribe(fn);
+    this.ngZone.onStable
+      .pipe(first())
+      .subscribe(() => {
+        this.textFieldForm.get(this.field.questionType)?.markAsTouched();
+        this.textFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+      });
   }
 
   /**
