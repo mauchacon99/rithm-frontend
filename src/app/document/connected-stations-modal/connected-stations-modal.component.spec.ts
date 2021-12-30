@@ -9,7 +9,7 @@ import { ConnectedStationsModalComponent } from './connected-stations-modal.comp
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
   stationRithmId: 'E204F369-386F-4E41'
-}
+};
 
 describe('ConnectedStationsModalComponent', () => {
   let component: ConnectedStationsModalComponent;
