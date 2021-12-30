@@ -178,13 +178,13 @@ describe('TextFieldComponent', () => {
     });
   });
 
-  describe('email field', () => {
+  describe('spy subjects station service', () => {
     let stationServiceSubject: StationService;
     beforeEach(() => {
       stationServiceSubject = TestBed.inject(StationService);
     });
 
-    it('should ', () => {
+    it('should apply add validation field', () => {
       const spyValidate = spyOn(component, 'validationField').and.callThrough();
 
       const question: Question = {
