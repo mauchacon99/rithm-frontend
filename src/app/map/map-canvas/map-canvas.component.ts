@@ -99,6 +99,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Boolean to check drag on connection line. */
   private connectionLineDrag = false;
 
+  /** Storing broken connection line. */
+  private storedConnectionLine: ConnectionMapElement | null = null;
+
 
 
   /**
@@ -890,11 +893,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         if (station.hoverActive !== StationElementHoverType.None) {
           newNextStation = station;
-        }
-        if (station.dragging) {
-          newPreviousStation = station;
+          newPreviousStation = this.stations.find((foundStation)=> foundStation.dragging);
+          break;
         }
       }
+      if (!newNextStation && MapDragItem.Connection) {
+        if (this.storedConnectionLine === null){
+          throw new Error('The connection line was not stored!');
+        }
+        const startStation = this.mapService.stationElements.find(station =>
+          station.rithmId === this.storedConnectionLine?.startStationRithmId);
+        if (!startStation) {
+          throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was not found when trying to restore a station`);
+        }
+        const endStation = this.mapService.stationElements.find(station =>
+          station.rithmId === this.storedConnectionLine?.endStationRithmId);
+        if (!endStation) {
+          throw new Error(`End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`);
+        }
+        startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
+        endStation.previousStations.push(this.storedConnectionLine.startStationRithmId);
+        this.connections.push(this.storedConnectionLine);
+      }
+      this.storedConnectionLine = null;
 
       if (newNextStation && newPreviousStation) {
         for (const station of this.stations) {
@@ -1171,12 +1192,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
      for (const connectionLine of this.connections) {
        if (connectionLine.hoverActive && !this.connectionLineDrag) {
          // Created for future tasks.
-         // const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
-         // const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
-         // if ( !startStation || !endStation ){
-         //   throw new Error('This start or end station was not found.');
-         // }
-         // const storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
+         const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
+         const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
+         if ( !startStation || !endStation ){
+           throw new Error('This start or end station was not found.');
+         }
+         this.storedConnectionLine = new ConnectionMapElement(startStation, endStation, this.scale);
          this.mapService.removeConnectionLine(connectionLine.startStationRithmId, connectionLine.endStationRithmId);
          this.connectionLineDrag = true;
          break;
