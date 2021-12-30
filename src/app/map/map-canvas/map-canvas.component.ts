@@ -8,7 +8,7 @@ import { MapBoundaryService } from '../map-boundary.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION, TOUCH_EVENT_MARGIN
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -859,7 +859,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If it is a click and not a drag.
-    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < 5 && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < 5) {
+    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) === 0
+      && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) === 0) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
@@ -1005,7 +1006,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else if (this.dragItem === MapDragItem.Connection) {
       for (const station of this.stations) {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
-        // if (station.dragging)
       }
       //If it is a drag and not a click.
       const moveFromStartX = this.eventStartCoords.x - eventCanvasPoint.x;
@@ -1227,9 +1227,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       openedFromMap: true,
       notes: station.notes,
     };
-    // if (!this.panActive) {
       this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
       this.stationService.updatedStationNameText(station.stationName);
-    // }
   }
 }

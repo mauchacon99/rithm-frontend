@@ -4,6 +4,7 @@ import { Point } from 'src/models';
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
 export const FONT_SIZE_MODIFIER = 16;
+export const TOUCH_EVENT_MARGIN = 3;
 
 // Scale
 export const DEFAULT_SCALE = 1;
