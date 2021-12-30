@@ -859,7 +859,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If it is a click and not a drag.
-    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) === 0 && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) === 0) {
+    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < 5 && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < 5) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
@@ -1227,7 +1227,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       openedFromMap: true,
       notes: station.notes,
     };
-    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-    this.stationService.updatedStationNameText(station.stationName);
+    // if (!this.panActive) {
+      this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+      this.stationService.updatedStationNameText(station.stationName);
+    // }
   }
 }
