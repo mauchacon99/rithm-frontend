@@ -185,7 +185,7 @@ describe('TextFieldComponent', () => {
     });
 
     it('should ', () => {
-      const spyValidate = spyOn<any>(component,'validationField').and.callThrough();
+      const spyValidate = spyOn(component, 'validationField').and.callThrough();
 
       const question: Question = {
         rithmId: 'string',
