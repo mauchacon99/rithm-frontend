@@ -96,22 +96,22 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
 
     this.stationService.stationFormTouched$
-    .pipe(first())
+      .pipe(first())
       .subscribe(() => {
         this.stationForm.get('stationTemplateForm')?.markAsTouched();
       });
 
     this.stationService.stationQuestion$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((question) => {
-      const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
-      if (prevQuestion){
-        const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
-        if (!question.isPossibleAnswer){
-          this.stationInformation.questions[questionIndex].prompt = question.prompt;
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((question) => {
+        const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
+        if (prevQuestion) {
+          const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
+          if (!question.isPossibleAnswer) {
+            this.stationInformation.questions[questionIndex].prompt = question.prompt;
+          }
         }
-      }
-    });
+      });
   }
 
   /**
@@ -133,7 +133,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    *
    * @returns Random RithmId.
    */
-   private get randRithmId(): string{
+  private get randRithmId(): string {
     const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
     const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
     return rithmId;
@@ -339,11 +339,11 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
   }
 
- /**
-  * Move previous field from private/all expansion panel to the template area.
-  *
-  * @param question The question that was moved from private/all.
-  */
+  /**
+   * Move previous field from private/all expansion panel to the template area.
+   *
+   * @param question The question that was moved from private/all.
+   */
   movePreviousFieldToTemplate(question: Question): void {
     this.stationInformation.questions.push(question);
     this.stationService.touchStationForm();
@@ -368,7 +368,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    *
    * @returns Address children questions.
    */
-  private addAddressChildren(): Question[]{
+  private addAddressChildren(): Question[] {
     const addressChildren: Question[] = [];
     const children = [
       { prompt: 'Address Line 1', type: QuestionFieldType.LongText, required: true },

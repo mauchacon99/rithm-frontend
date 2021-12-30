@@ -67,7 +67,7 @@ describe('StationComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
         { provide: DocumentInfoHeaderComponent, useClass: DocumentInfoHeaderComponent },
-        { provide: PopupService, useClass: MockPopupService },
+        { provide: PopupService, useClass: MockPopupService }
       ]
     })
       .compileComponents();

@@ -188,14 +188,15 @@ describe('TextFieldComponent', () => {
       const spyValidate = spyOn(component, 'validationField').and.callThrough();
 
       const question: Question = {
-        rithmId: 'string',
-        prompt: 'string',
-        questionType: QuestionFieldType.City,
+        rithmId: '3j4k-3h2j-hj4j',
+        prompt: 'dev',
+        questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: true,
         isPrivate: false,
         children: [],
       };
+
       stationServiceSubject.fieldConfig$.next(question);
       expect(spyValidate).toHaveBeenCalled();
     });
