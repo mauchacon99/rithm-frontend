@@ -219,10 +219,10 @@ export class MapService {
   /**
    * Updates station status to delete.
    *
-   * @param station The station for which status has to be set to delete.
+   * @param stationId The station for which status has to be set to delete.
    */
-   deleteStation(station: StationMapElement): void {
-    const index = this.stationElements.findIndex(e => e.rithmId === station.rithmId);
+   deleteStation(stationId: string): void {
+    const index = this.stationElements.findIndex(e => e.rithmId === stationId);
     if (index >= 0 ) {
       if (this.stationElements[index].status === MapItemStatus.Created) {
         this.stationElements.splice(index, 1);
@@ -231,8 +231,8 @@ export class MapService {
       }
     }
     this.flowElements.map((flow) => {
-      if (flow.stations.includes(station.rithmId)) {
-        flow.stations = flow.stations.filter(stn => stn !== station.rithmId);
+      if (flow.stations.includes(stationId)) {
+        flow.stations = flow.stations.filter(stn => stn !== stationId);
         flow.markAsUpdated();
       }
     });
@@ -242,32 +242,32 @@ export class MapService {
   /**
    * Removes the connections from a station, and removes that station from the connections of previous and next stations.
    *
-   * @param station The station for which connections has to be removed.
+   * @param stationId The station ID for which connections have to be removed.
    */
-   removeAllStationConnections(station: StationMapElement): void {
+   removeAllStationConnections(stationId: string): void {
     this.stationElements.map((e) => {
       //Remove the previous and next stations from the station.
-      if (e.rithmId === station.rithmId) {
+      if (e.rithmId === stationId) {
         e.previousStations = [];
         e.nextStations = [];
         e.markAsUpdated();
       }
 
       //Remove the station from the previousStation arrays of all connecting stations.
-      if (e.previousStations.includes(station.rithmId)) {
-        e.previousStations.splice(e.previousStations.indexOf(station.rithmId), 1);
+      if (e.previousStations.includes(stationId)) {
+        e.previousStations.splice(e.previousStations.indexOf(stationId), 1);
         e.markAsUpdated();
       }
 
       //Remove the station from the nextStation arrays of all connecting stations.
-      if (e.nextStations.includes(station.rithmId)) {
-        e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
+      if (e.nextStations.includes(stationId)) {
+        e.nextStations.splice(e.nextStations.indexOf(stationId), 1);
         e.markAsUpdated();
       }
     });
     //Remove the connections from this.connectionElements.
     const filteredConnections = this.connectionElements.filter(
-      (e) => e.startStationRithmId !== station.rithmId && e.endStationRithmId !== station.rithmId);
+      (e) => e.startStationRithmId !== stationId && e.endStationRithmId !== stationId);
     this.connectionElements = filteredConnections;
     this.mapDataReceived$.next(true);
   }
@@ -332,21 +332,24 @@ export class MapService {
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
-    const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
+    const startStation = this.stationElements.find(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
     const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    if (!startStation){
+      throw new Error(`A start station was not found for ${endStationId}`);
+    }
     if (!endStation){
-      throw new Error(`A station was not found for ${endStationId}`);
+      throw new Error(`An end station was not found for ${endStationId}`);
     }
 
     // Find the index from each stations between nextStations and previousStations
-    const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
+    const nextStationIndex = startStation.nextStations.findIndex(e => e === endStationId);
     const prevStationIndex = endStation.previousStations.findIndex(e => e === startStationId);
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
-    this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
+    startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    this.stationElements[startStationIndex].status = MapItemStatus.Updated;
-    endStation.markAsUpdated();
+    startStation.status = MapItemStatus.Updated;
+    endStation.status = MapItemStatus.Updated;
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
