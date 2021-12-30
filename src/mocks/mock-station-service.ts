@@ -708,10 +708,10 @@ export class MockStationService {
   }
 
  /**
- * Set config for field change.
- *
- * @param question Value the change.
- */
+  * Set config for field change.
+  *
+  * @param question Value the change.
+  */
   fieldConfigChange(question: Question): void {
     this.fieldConfig$.next(question);
   }
