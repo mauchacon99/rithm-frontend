@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
@@ -75,7 +75,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
       generalInstructions: this.fb.control(''),
-      questions:this.fb.array([])
     });
 
     this.sidenavDrawerService.drawerContext$
@@ -111,10 +110,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         if (!question.isPossibleAnswer){
           this.stationInformation.questions[questionIndex].prompt = question.prompt;
         }
-
-        const formQuestionsArray = <FormArray> this.stationForm.controls["questions"];
-        const fieldUpdate = formQuestionsArray.controls.find(field => (Object.keys(field.value))[0] === question.rithmId);
-        fieldUpdate?.patchValue({[question.rithmId]:question.prompt});
       }
     });
   }
@@ -212,11 +207,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
             this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
-
-            const questions =  this.stationForm.get("questions") as FormArray;
-            stationInfo.questions.forEach(x => {
-                questions.push(this.fb.group(x.isRequired ? {[x.rithmId]:[x.prompt,[Validators.required]]} : {[x.rithmId]:[x.prompt,[]]}));
-            });
           }
           this.stationLoading = false;
         },
