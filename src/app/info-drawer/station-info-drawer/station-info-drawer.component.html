@@ -28,7 +28,7 @@
       </app-roster>
     </ng-template>
   </div>
-  <div class="w-full py-2" *ngIf="type !== 'worker'">
+  <div class="w-full py-2" *ngIf="!isWorker">
     <p class="overline-font">worker roster</p>
     <div class="overline-font py-2 text-secondary-500" *ngIf="locallyCreated else showWorkerRoster">Publish map to add roster members</div>
     <ng-template #showWorkerRoster>
@@ -82,7 +82,7 @@
       View Station
     </button>
   </div>
-  <div class="w-full py-2" *ngIf="editMode || isUserAdminOrOwner">
+  <div class="w-full py-2" *ngIf="(openedFromMap && editMode && isUserAdminOrOwner) || (!openedFromMap && editMode || !openedFromMap && isUserAdminOrOwner)">
     <button mat-stroked-button id="delete-station-button" color="warn" class="priority" (click)="deleteStation()">Delete Station
     </button>
   </div>
