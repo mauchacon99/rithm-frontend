@@ -22,7 +22,7 @@ import { UserService } from 'src/app/core/user.service';
 })
 export class MapOverlayComponent implements OnInit, OnDestroy {
 
-  /** The current signed in user. */
+  /** The current signed-in user. */
   currentUser!: User;
 
   /** Is the user an admin? */
@@ -41,11 +41,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Map data request loading indicator. */
   mapDataLoading = true;
 
-  /** Data for station card used in the map. */
-  stations: StationMapElement[] = [];
-
-  /** Data of station used in the map. */
-  station?: StationMapElement;
+  /** Station user has selected and opened the dropdown menu. */
+  private openedMenuStation?: StationMapElement;
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
@@ -72,6 +69,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Map mode variable form comparison in html. */
   mapMode = MapMode;
 
+  /** Whether the called info-drawer is documentInfo type or stationInfo. */
+  drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
+
   /**
    * Whether the map is in any building mode.
    *
@@ -91,26 +91,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Zoom in/out button state Enable and disable when limits has been reached.
-   *
-   * @param zoom Zoom in/out buttons.
-   * @returns Disable zoom button state if limits are reached.
-   */
-  enableZoom(zoom: number): boolean {
-    if (zoom === 1) {
-      return this.mapScale >= MAX_SCALE;
-    }
-    if (zoom === 0) {
-      //disable zooming out past a certain point when in build mode.
-      if (this.mapScale <= this.zoomBuild / ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
-        return true;
-      }
-      return this.mapScale <= MIN_SCALE;
-    }
-    return false;
-  }
-
-  /**
    * Whether to show the backdrop for the comment and history drawers.
    *
    * @returns Whether to show the backdrop.
@@ -119,8 +99,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
-  /** Whether the called info-drawer is documentInfo type or stationInfo. */
-  drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
+  /**
+   * Disable publish button until some changes in map/station.
+   *
+   * @returns Returns true if no stations are updated and false if any station is updated.
+   */
+  get mapHasChanges(): boolean {
+    return this.mapService.mapHasChanges;
+  }
 
   constructor(
     private mapService: MapService,
@@ -145,7 +131,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
         if (received === true) {
           this.mapDataLoading = false;
         }
-        this.stations = this.mapService.stationElements;
       });
 
     this.mapService.mapScale$
@@ -159,7 +144,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       .subscribe((clickRes) => {
         if (clickRes.click && this.mapService.mapMode$.value === MapMode.Build) {
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
-          this.station = clickRes.data as StationMapElement;
+          this.openedMenuStation = clickRes.data as StationMapElement;
           this.mapService.stationButtonClick$.next({ click: false, data: {} });
         }
       });
@@ -173,7 +158,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((click) => {
         if (click) {
-          this.optionMenuClose();
+          this.closeOptionMenu();
           this.mapService.matMenuStatus$.next(false);
         }
       });
@@ -203,6 +188,27 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
+  }
+
+  /**
+   * Zoom in/out button state Enable and disable when limits has been reached.
+   *
+   * @param zoom Zoom in/out buttons.
+   * @returns Disable zoom button state if limits are reached.
+   */
+  isZoomEnabled(zoom: number): boolean {
+    //TODO: Simplify this. What is zoom?
+    if (zoom === 1) {
+      return this.mapScale >= MAX_SCALE;
+    }
+    if (zoom === 0) {
+      //disable zooming out past a certain point when in build mode.
+      if (this.mapScale <= this.zoomBuild / ZOOM_VELOCITY && this.currentMode !== MapMode.View) {
+        return true;
+      }
+      return this.mapScale <= MIN_SCALE;
+    }
+    return false;
   }
 
   /**
@@ -250,16 +256,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   async cancel(): Promise<void> {
     this.mapService.matMenuStatus$.next(true);
-    if ( this.mapHasChanges ) {
-      const confirm = await this.popupService.confirm({
-        title: 'Confirmation',
-        message: `Are you sure you want to cancel these changes? All map changes will be lost`,
-        okButtonText: 'Confirm',
-      });
-      if (confirm) {
-        this.mapService.cancelMapChanges();
-      }
-    } else {
+    const confirm = !this.mapHasChanges ? true : await this.popupService.confirm({
+      title: 'Confirmation',
+      message: `Are you sure you want to cancel these changes? All map changes will be lost`,
+      okButtonText: 'Confirm',
+    });
+    if (confirm) {
       this.mapService.cancelMapChanges();
     }
   }
@@ -278,7 +280,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   zoomIn(): void {
     this.mapService.matMenuStatus$.next(true);
-    this.mapService.zoomCount$.next(this.zoomCount + 50);
+    this.mapService.zoomCount$.next(this.zoomCount + 50); //TODO: Magic number. Also in zoomOut.
     this.mapService.handleZoom(false);
   }
 
@@ -294,12 +296,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /**
    * Display menu option for station on option button is clicked.
    *
-   * @param points The points coordinates values.
+   * @param point The points coordinates values.
    */
-  optionMenuTrigger(points: Point): void {
+  optionMenuTrigger(point: Point): void { //TODO: Add more specific name.
     this.optionMenuNone = false;
-    this.menuX = points.x - 15;
-    this.menuY = points.y + 63;
+    this.menuX = point.x - 15;
+    this.menuY = point.y + 63;
     this.menu.closeMenu();
     this.menu.openMenu();
   }
@@ -308,11 +310,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Close display menu option to default state.
    *
    */
-  optionMenuClose(): void {
+  closeOptionMenu(): void {
     this.optionMenuNone = true;
     this.menuX = -1;
     this.menuY = -1;
     this.menu.closeMenu();
+    this.openedMenuStation = undefined;
   }
 
   /**
@@ -326,8 +329,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       important: true
     });
     if (confirm) {
-      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
-      this.mapService.deleteStation(<StationMapElement>(this.station));
+      if (!this.openedMenuStation) {
+        throw new Error(`Attempting to delete a station and remove all connections for a station that has not been defined.`);
+      }
+      this.mapService.removeAllStationConnections(this.openedMenuStation.rithmId);
+      this.mapService.deleteStation(this.openedMenuStation.rithmId);
+      //TODO: Update to check that the drawer being closed is the drawer that is deleted.
+      this.sidenavDrawerService.closeDrawer();
     }
   }
 
@@ -342,7 +350,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       important: true
     });
     if (confirm) {
-      this.mapService.removeAllStationConnections(<StationMapElement>(this.station));
+      if (!this.openedMenuStation) {
+        throw new Error('Attempting to remove connections for a station that has not been defined');
+      }
+      this.mapService.removeAllStationConnections(this.openedMenuStation.rithmId);
     }
   }
 
@@ -351,10 +362,15 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   createConnectedStation(): void {
     this.mapService.disableConnectedStationMode();
-    const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.station?.rithmId);
+    if (!this.openedMenuStation) {
+      throw new Error(`Attempting to create a new connected station for a station that has not been defined`);
+    }
+    const index = this.mapService.stationElements.findIndex(station => station.rithmId === this.openedMenuStation?.rithmId);
     if (index >= 0) {
         this.mapService.stationElements[index].isAddingConnected = true;
         this.mapService.mapMode$.next(MapMode.StationAdd);
+    } else {
+      throw new Error(`No index found to create connected station ${this.openedMenuStation.rithmId}`);
     }
   }
 
@@ -366,14 +382,4 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   toggleDrawer(drawerItem: 'connectionInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
-
-  /**
-   * Disable publish button until some changes in map/station.
-   *
-   * @returns Returns true if no stations are updated and false if any station is updated.
-   */
-   get mapHasChanges(): boolean {
-    return this.mapService.mapHasChanges;
-  }
-
 }

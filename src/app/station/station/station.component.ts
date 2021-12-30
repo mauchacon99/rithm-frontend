@@ -232,9 +232,9 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
-      isRequired: false,
+      isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
       isPrivate: false,
-      children: [],
+      children: fieldType === QuestionFieldType.AddressLine ? this.addAddressChildren() : [],
       originalStationRithmId: this.stationRithmId
     });
     this.stationService.touchStationForm();
@@ -363,5 +363,34 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     }
   }
 
+  /**
+   * Comment.
+   *
+   * @returns Address children questions.
+   */
+  private addAddressChildren(): Question[]{
+    const addressChildren: Question[] = [];
+    const children = [
+      { prompt: 'Address Line 1', type: QuestionFieldType.LongText, required: true },
+      { prompt: 'Address Line 2', type: QuestionFieldType.LongText, required: false },
+      { prompt: 'City', type: QuestionFieldType.City, required: true },
+      { prompt: 'State', type: QuestionFieldType.State, required: true },
+      { prompt: 'Zip', type: QuestionFieldType.Zip, required: true },
+    ];
+    children.forEach((element) => {
+      const child: Question = {
+        rithmId: this.randRithmId,
+        prompt: element.prompt,
+        questionType: element.type,
+        isReadOnly: false,
+        isRequired: element.required,
+        isPrivate: false,
+        children: [],
+        originalStationRithmId: this.stationRithmId
+      };
+      addressChildren.push(child);
+    });
+    return addressChildren;
+  }
 
 }
