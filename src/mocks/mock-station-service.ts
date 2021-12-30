@@ -707,7 +707,7 @@ export class MockStationService {
     this.stationFormTouched$.next();
   }
 
-  /**
+ /**
  * Set config for field change.
  *
  * @param question Value the change.
