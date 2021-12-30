@@ -179,12 +179,11 @@ describe('StationComponent', () => {
 
   it('should validate the form controls initial value', () => {
     const form = component.stationForm.controls;
-    const expectFormFirst = ['stationTemplateForm', 'generalInstructions','questions'];
+    const expectFormFirst = ['stationTemplateForm', 'generalInstructions'];
 
     expect(Object.keys(form)).toEqual(expectFormFirst);
     expect(form['stationTemplateForm'].value).toBe('');
     expect(form['generalInstructions'].value).toBe('');
-    expect(form['questions'].value).toEqual([]);
   });
 
   it('should open confirmation popup when canceling', async () => {
