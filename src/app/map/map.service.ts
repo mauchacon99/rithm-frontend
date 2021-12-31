@@ -840,11 +840,7 @@ export class MapService {
     const updatedStations = this.stationElements.filter((station) => station.status === MapItemStatus.Updated);
     for (const updatedStation of updatedStations) {
       const storedStation = this.storedStationElements.find((station) => station.rithmId === updatedStation.rithmId);
-      if (!storedStation) {
-        throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
-          but does not exist in stored stations.`);
-      }
-      if (storedStation.isIdenticalTo(updatedStation)) {
+      if (storedStation && storedStation.isIdenticalTo(updatedStation)) {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
