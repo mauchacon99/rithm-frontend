@@ -935,21 +935,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.storedConnectionLine === null){
           throw new Error('The connection line was not stored!');
         }
-        const startStation = this.mapService.stationElements.find(station =>
-          station.rithmId === this.storedConnectionLine?.startStationRithmId);
-        if (!startStation) {
-          throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was not found when trying to restore a station`);
-        }
-        const endStation = this.mapService.stationElements.find(station =>
-          station.rithmId === this.storedConnectionLine?.endStationRithmId);
-        if (!endStation) {
-          throw new Error(`End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`);
-        }
-        startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
-        endStation.previousStations.push(this.storedConnectionLine.startStationRithmId);
+        this.restoreConnection();
         this.connections.push(this.storedConnectionLine);
+        this.storedConnectionLine = null;
       }
-      this.storedConnectionLine = null;
 
       if (newNextStation && newPreviousStation) {
         for (const station of this.stations) {
@@ -979,6 +968,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (!this.mapService.connectionElements.map(e => JSON.stringify(e)).includes(JSON.stringify(lineInfo))
           && (newPreviousStation.rithmId !== newNextStation.rithmId)) {
           this.mapService.connectionElements.push(lineInfo);
+        }
+        if (this.storedConnectionLine) {
+          this.restoreConnection();
+          this.mapService.connectionElements.push(this.storedConnectionLine);
+          this.storedConnectionLine = null;
         }
       }
     }
@@ -1201,6 +1195,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
     //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
     this.checkConnectionClick(contextPoint);
+  }
+
+  /**
+   * Restores the connection line to previous state if something fails while moving current connection line.
+   *
+   */
+  restoreConnection(): void {
+    if (this.storedConnectionLine === null){
+      throw new Error('The connection line was not stored!');
+    }
+    const startStation = this.mapService.stationElements.find(station =>
+      station.rithmId === this.storedConnectionLine?.startStationRithmId);
+    if (!startStation) {
+      throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was
+      not found when trying to restore a station`);
+    }
+    const endStation = this.mapService.stationElements.find(station =>
+      station.rithmId === this.storedConnectionLine?.endStationRithmId);
+    if (!endStation) {
+      throw new Error(`End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`);
+    }
+
+    startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
+    endStation.previousStations.push(this.storedConnectionLine.startStationRithmId);
   }
 
   /**
