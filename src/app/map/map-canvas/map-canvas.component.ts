@@ -8,7 +8,7 @@ import { MapBoundaryService } from '../map-boundary.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION, TOUCH_EVENT_MARGIN
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -164,6 +164,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
           this.outsideBox = !(velocity.x === 0 && velocity.y === 0);
+          //create if statement to check if outside box is true. then create logic based on that.
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
@@ -728,6 +729,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
+    //When we stop tracking the current mouse point, we reset panVelocity to 0, 0.
     return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
   }
 
@@ -896,8 +898,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If it is a click and not a drag.
-    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) === 0
-      && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) === 0) {
+    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < TOUCH_EVENT_MARGIN
+      && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < TOUCH_EVENT_MARGIN) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
@@ -905,6 +907,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
         this.clickEventHandler(eventCanvasPoint, eventContextPoint);
       }
+      //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
+      this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
       return;
     }
 
