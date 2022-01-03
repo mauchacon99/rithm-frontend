@@ -43,10 +43,22 @@ describe('FlowLogicComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be open modal', function () {
-    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
-    component.openModal(component.nextStations[0]);
-    expect(dialogSpy).toHaveBeenCalled();
-    expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  describe('Should tested mat modal in component', () => {
+    const dialogRefSpyObj = jasmine.createSpyObj({
+      // eslint-disable-next-line rxjs/finnish
+      afterClosed: of({}),
+      close: null
+    });
+
+    dialogRefSpyObj.componentInstance = {
+      body: ''
+    };
+
+    it('should be open modal', () => {
+      const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+      component.openModal(component.nextStations[0]);
+      expect(dialogSpy).toHaveBeenCalled();
+      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+    });
   });
 });
