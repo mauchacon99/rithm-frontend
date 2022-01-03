@@ -931,7 +931,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (!newNextStation && MapDragItem.Connection) {
+      if (!newNextStation && this.dragItem === MapDragItem.Connection) {
         if (this.storedConnectionLine === null) {
           throw new Error('The connection line was not stored!');
         }
