@@ -164,7 +164,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.dragItem === MapDragItem.Node || this.dragItem === MapDragItem.Station) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(this.currentMousePoint);
           this.outsideBox = !(velocity.x === 0 && velocity.y === 0);
-          //create if statement to check if outside box is true. then create logic based on that.
           this.nextPanVelocity = velocity;
           this.checkAutoPan();
         }
