@@ -11,13 +11,13 @@
   </ng-container>
   <ng-container *ngIf="questions.length > 0 && !isStation">
     <div id="previous-field" class="cursor-pointer" *ngFor="let previousField of questions">
-        <mat-card class="padding-card">
+        <mat-card class="padding-card" (click)="openModalPreviousQuestions(previousField)">
           <div class="flex h-full items-center justify-between previous-question-container">
             <div class="h-full w-4/5">
               <p class="truncate font-semibold">{{previousField.prompt}}</p>
               <p class="truncate">{{previousField.answer?.value}}</p>
             </div>
-            <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+            <i class="fas fa-info-circle text-2xl text-primary-500" ></i>
           </div>
         </mat-card>
     </div>
