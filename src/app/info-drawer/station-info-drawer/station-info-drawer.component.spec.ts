@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import {MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService} from 'src/mocks';
+import { MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -16,6 +16,9 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from '../../core/document.service';
+import { MockDocumentService } from '../../../mocks/mock-document-service';
+import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -44,7 +47,8 @@ describe('StationInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService}
+        { provide: MapService, useClass: MockMapService },
+        { provide: DocumentService, useClass: MockDocumentService }
       ]
     })
       .compileComponents();
@@ -161,7 +165,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should not show the delete-station-button on the station information if the user is a worker', () => {
     component.stationLoading = false;
     component.editMode = false;
-    spyOnProperty(component,'isWorker').and.returnValue(true);
+    spyOnProperty(component, 'isWorker').and.returnValue(true);
     expect(component.editMode).toBeFalse();
     const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
     expect(deleteButton).toBeFalsy();
@@ -171,5 +175,24 @@ describe('StationInfoDrawerComponent', () => {
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
+  });
+
+  it('should a user assigned in new document', () => {
+    const newUserExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    const spyPetition = spyOn(TestBed.inject(DocumentService), 'assignUserToNewDocument').and.callThrough();
+    component.assignUserToNewDocument(newUserExpect, newDocumentExpect);
+    expect(spyPetition).toHaveBeenCalledOnceWith(newUserExpect, component.stationRithmId, newDocumentExpect);
+  });
+
+  it('should catch error and executed error service', () => {
+    const newUserExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    spyOn(TestBed.inject(DocumentService), 'assignUserToNewDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    component.assignUserToNewDocument(newUserExpect, newDocumentExpect);
+    expect(spyError).toHaveBeenCalled();
   });
 });
