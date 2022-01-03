@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlowLogicComponent } from './flow-logic.component';
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import {ConnectedStationInfo} from "../../../models";
+import { ConnectedStationInfo } from "src/models";
 import {of} from "rxjs";
 
 describe('FlowLogicComponent', () => {
