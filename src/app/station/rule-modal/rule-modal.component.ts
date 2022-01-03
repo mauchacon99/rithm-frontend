@@ -12,10 +12,7 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 export class RuleModalComponent {
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public modalData: {
-      /** The station object. */
-      station: object;
-    }
+    @Inject(MAT_DIALOG_DATA) public modalData: ConnectedStationInfo
   ) { }
 
 }
