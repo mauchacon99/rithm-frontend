@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
-import {ConnectedStationInfo} from 'src/models';
-import {first} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
-import {RuleModalComponent} from "../rule-modal/rule-modal.component";
+import { Component, Input } from '@angular/core';
+import { ConnectedStationInfo } from 'src/models';
+import { first } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { RuleModalComponent } from "src/app/station/rule-modal/rule-modal.component";
 
 /**
  * Component for the flow logic tab on a station.
@@ -29,7 +29,7 @@ export class FlowLogicComponent {
     const dialog = this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: {station}
+      data: { station }
     });
     dialog.afterClosed().pipe(first()).subscribe();
   }
