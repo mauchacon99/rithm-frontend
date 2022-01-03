@@ -35,7 +35,10 @@ src/app/map/ @HendricksonTyler @strut-software/team-falcon
 
 # Team Lion rules
 src/app/admin/ @strut-software/team-lion
-src/app/dashboard/ @strut-software/team-lion
 src/app/document/ @strut-software/team-lion
 src/app/settings/ @strut-software/team-lion
 src/app/station/ @strut-software/team-lion
+
+# Team Eagle rules
+src/app/dashboard/ @strut-software/team-eagle
+src/app/widgets/ @strut-software/team-eagle
