@@ -955,7 +955,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-          if (station.hoverActive === StationElementHoverType.Station) {
+          if (station.hoverActive !== StationElementHoverType.None) {
             //ensure we cant get duplicate ids.
             if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
               if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
@@ -1225,7 +1225,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   onConnectionDrag(): void {
     for (const connectionLine of this.connections) {
       if (connectionLine.hoverActive && !this.connectionLineDrag) {
-        // Created for future tasks.
         const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
         const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
         if (!startStation || !endStation) {
