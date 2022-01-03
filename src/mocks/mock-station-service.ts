@@ -25,7 +25,7 @@ export class MockStationService {
   stationQuestion$ = new Subject<Question>();
 
   /** Set config for field change. */
-  fieldConfig$ = new Subject<Question>();
+  changedField$ = new Subject<Question>();
 
   /**
    * Gets a station information.
@@ -707,13 +707,13 @@ export class MockStationService {
     this.stationFormTouched$.next();
   }
 
- /**
-  * Set config for field change.
-  *
-  * @param question Value the change.
-  */
-  fieldConfigChange(question: Question): void {
-    this.fieldConfig$.next(question);
+  /**
+   * Set if field changed.
+   *
+   * @param question Value the change.
+   */
+   fieldChange(question: Question): void {
+    this.changedField$.next(question);
   }
 
 }

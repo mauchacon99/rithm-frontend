@@ -200,7 +200,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setRequired(checkboxEvent: MatCheckboxChange): void {
     this.field.isRequired = checkboxEvent.checked;
-    this.stationService.fieldConfigChange(this.field);
+    this.stationService.fieldChange(this.field);
     this.stationService.touchStationForm();
   }
 
@@ -211,7 +211,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
-    this.stationService.fieldConfigChange(this.field);
+    this.stationService.fieldChange(this.field);
     this.stationService.touchStationForm();
   }
 
@@ -225,7 +225,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     if (!this.field.isReadOnly) {
       this.field.isRequired = false;
     }
-    this.stationService.fieldConfigChange(this.field);
+    this.stationService.fieldChange(this.field);
     this.stationService.touchStationForm();
   }
 

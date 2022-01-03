@@ -385,11 +385,11 @@ export class StationService {
   }
 
   /**
-   * Set config for field change.
+   * Set if field changed.
    *
    * @param question Value the change.
    */
-  fieldConfigChange(question: Question): void {
+   fieldChange(question: Question): void {
     this.changedField$.next(question);
   }
 

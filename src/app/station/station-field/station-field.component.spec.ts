@@ -147,21 +147,21 @@ describe('StationFieldComponent', () => {
 
 
   it('should call service config change execute function setRequire', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldConfigChange').and.callThrough();
+    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
     const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
     component.setRequired(setValue);
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should call service config change execute function setPrivate', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldConfigChange').and.callThrough();
+    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
     const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
     component.setPrivate(setValue);
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should call service config change execute function setEditable', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldConfigChange').and.callThrough();
+    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
     const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
     component.setEditable(setValue);
     expect(spyService).toHaveBeenCalled();

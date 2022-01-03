@@ -74,7 +74,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
-      generalInstructions: this.fb.control(''),
+      generalInstructions: this.fb.control('')
     });
 
     this.sidenavDrawerService.drawerContext$

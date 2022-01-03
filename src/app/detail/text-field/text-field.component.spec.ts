@@ -198,7 +198,7 @@ describe('TextFieldComponent', () => {
         children: [],
       };
 
-      stationServiceSubject.fieldConfig$.next(question);
+      stationServiceSubject.changedField$.next(question);
       expect(spyValidate).toHaveBeenCalled();
     });
   });
