@@ -31,7 +31,7 @@ export class StationService {
   stationQuestion$ = new Subject<Question>();
 
   /** Set config for field change. */
-  fieldConfig$ = new Subject<Question>();
+  changedField$ = new Subject<Question>();
 
   constructor(
     private http: HttpClient
@@ -390,7 +390,7 @@ export class StationService {
    * @param question Value the change.
    */
   fieldConfigChange(question: Question): void {
-    this.fieldConfig$.next(question);
+    this.changedField$.next(question);
   }
 
 }

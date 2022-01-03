@@ -61,7 +61,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
     private stationService: StationService,
     private ngZone: NgZone
   ) {
-    this.stationService.fieldConfig$
+    this.stationService.changedField$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((field) => {
         if (field.rithmId === this.field.rithmId) {
