@@ -16,7 +16,7 @@ describe('RuleModalComponent', () => {
       imports: [
         MatDialogModule
       ],
-      declarations: [RuleModalComponent],
+      declarations: [ RuleModalComponent ],
       providers: [
         {provide: MatDialogRef, useValue: {}},
         {provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA}
