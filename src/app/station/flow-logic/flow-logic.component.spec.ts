@@ -12,14 +12,6 @@ describe('FlowLogicComponent', () => {
     rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
     name: 'Untitled Station'
   }];
-  const dialogRefSpyObj = jasmine.createSpyObj({
-    // eslint-disable-next-line rxjs/finnish
-    afterClosed: of({}),
-    close: null
-  });
-  dialogRefSpyObj.componentInstance = {
-    body: ''
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
