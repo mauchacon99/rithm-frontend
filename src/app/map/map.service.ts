@@ -72,6 +72,16 @@ export class MapService {
   /** Check if mouse clicked outside of the option menu in canvas area. */
   matMenuStatus$ = new BehaviorSubject(false);
 
+  /** Checks if there should be panning towards the center of the map. */
+  centerActive$ = new BehaviorSubject(false);
+
+  /** Passes pan info to the map-canvas. */
+  centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
+
+  /** The number of times this.center() should be called. */
+  centerCount$ = new BehaviorSubject(0);
+
+
   constructor(private http: HttpClient) { }
 
   /**
@@ -332,21 +342,24 @@ export class MapService {
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
-    const startStationIndex = this.stationElements.findIndex(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
+    const startStation = this.stationElements.find(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
     const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
+    if (!startStation){
+      throw new Error(`A start station was not found for ${endStationId}`);
+    }
     if (!endStation){
-      throw new Error(`A station was not found for ${endStationId}`);
+      throw new Error(`An end station was not found for ${endStationId}`);
     }
 
     // Find the index from each stations between nextStations and previousStations
-    const nextStationIndex = this.stationElements[startStationIndex].nextStations.findIndex(e => e === endStationId);
+    const nextStationIndex = startStation.nextStations.findIndex(e => e === endStationId);
     const prevStationIndex = endStation.previousStations.findIndex(e => e === startStationId);
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
-    this.stationElements[startStationIndex].nextStations.splice(nextStationIndex, 1);
+    startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    this.stationElements[startStationIndex].status = MapItemStatus.Updated;
-    endStation.markAsUpdated();
+    startStation.status = MapItemStatus.Updated;
+    endStation.status = MapItemStatus.Updated;
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
@@ -452,11 +465,12 @@ export class MapService {
   }
 
   /**
-   * Set a bounding box around the edge of the map.
+   * Set a bounding box around the edge of the map to calculate centering the map.
+   * Used to put some space between minMapPoints/maxMapPoints and the screen edges.
    *
    * @returns A number representing how for out from the edge of the screen a box should be.
    */
-  boundingBox(): number {
+  centerBoundingBox(): number {
     //Dynamically set the size of the bounding box based on screen size.
     if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
       //Set the size of the box based on screen size.
@@ -497,7 +511,7 @@ export class MapService {
   }
 
   /**
-   * Gets the bottom-left mapPoint.
+   * Gets the bottom-right mapPoint.
    *
    * @returns A point.
    */
@@ -539,8 +553,9 @@ export class MapService {
     const maxPoint = this.getMaxCanvasPoint();
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
-    const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
-    const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const zoomInBox = (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
+    const zoomOutBox = (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
 
     //Zoom in.
     if ((zoomInBox < minPoint.y
@@ -550,51 +565,96 @@ export class MapService {
       && this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
-      //Zoom out.
+    //Zoom out.
     } else if ((zoomOutBox > minPoint.y
       || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
       || canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH
       || zoomOutBox > minPoint.y) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
+    }
+  }
+
+  /**
+   * Pans the map when center method is called to the map center.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  private centerPan(onInit = false): void {
+    let adjustedCenter = this.getMapCenterPoint();
+    const canvasCenter = this.getCanvasCenterPoint();
+
+    //The point on the canvas needed to center of the map.
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    };
+
+    //On Init, immediately set the currentCanvasPoint to the center of the map.
+    if (onInit) {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      return;
+    }
+
+    const totalPanNeeded = {
+      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.currentCanvasPoint$.value.y - adjustedCenter.y
+    };
+
+    //initialize variable needed to set panVelocity.
+    const panAmount: Point = { x: 0, y: 0 };
+
+    //Set x axis of panAmount.
+    panAmount.x = totalPanNeeded.x * .1;
+
+    //Set y axis of panAmount.
+    panAmount.y = totalPanNeeded.y * .1;
+
+    if ( Math.abs(panAmount.x) >= .12 || Math.abs(panAmount.y) >= .12 ) {
+      //nextPanVelocity on map canvas will be set to this.
+      this.centerPanVelocity$.next(panAmount);
+      this.centerCount$.next(this.centerCount$.value + 1);
+    } else {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
   }
 
   /**
    * Smoothly sets the scale and pans the map to center.
-   *
-   * @param onInit Determines if this is called during mapCanvas init.
-   */
-  setCenterPanAndScale(onInit: boolean): void {
-    if (onInit) {
-      this.centerScale(onInit);
-      //TODO: set canvaspoint to map center.
-    } else {
-      setTimeout(() => {
-        this.centerScale(onInit);
-        //TODO: incrementally pan map to center.
-      }, 4);
-    }
-  }
-
-  /**
-   * Centers the map by changing this.currentCanvasPoint to the map center point.
+   * On init, immediately change the scale and position.
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
-    let adjustedCenter = this.getMapCenterPoint();
-    const canvasCenter = this.getCanvasCenterPoint();
-    adjustedCenter = {
-      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+    const centerLogic = () => {
+      if (this.centerCount$.value > 0) {
+        this.centerScale(onInit);
+        this.centerPan(onInit);
+        this.centerCount$.next(this.centerCount$.value - 1);
+        this.center(onInit);
+      } else {
+        this.centerActive$.next(false);
+        this.centerCount$.next(0);
+      }
     };
-    this.currentCanvasPoint$.next(adjustedCenter);
-    this.setCenterPanAndScale(onInit);
+
+    if (!this.centerActive$.value) {
+      return;
+    }
+
+    if (!onInit) {
+      setTimeout(() => {
+        centerLogic();
+      }, 4);
+    } else {
+      centerLogic();
+    }
+
   }
 
   /**
