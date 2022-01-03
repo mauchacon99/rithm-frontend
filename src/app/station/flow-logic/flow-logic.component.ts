@@ -29,7 +29,6 @@ export class FlowLogicComponent {
     const dialog = this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      disableClose: true,
       data: {station}
     });
     dialog.afterClosed().pipe(first()).subscribe();
