@@ -19,15 +19,17 @@ export class FlowLogicComponent {
 
    constructor(private dialog: MatDialog) { }
 
-  /**
-   * Open a modal rule-modal.
-   */
-   openModal(): void {
+   /**
+    * Open a modal rule-modal.
+    *
+    * @param station The object of model ConnectedStationInfo.
+    */
+   openModal(station: ConnectedStationInfo): void {
     const dialog = this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       disableClose: true,
-      data: { data: this.nextStations }
+      data: { station }
     });
     dialog.afterClosed().pipe(first()).subscribe();
    }

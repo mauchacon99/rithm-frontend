@@ -13,8 +13,9 @@ export class RuleModalComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public modalData: {
-      /** The station rithmId. */
-      data: object;
+      /** The station object. */
+      station: object;
     }
   ) { }
+
 }
