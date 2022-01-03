@@ -1,5 +1,8 @@
 import { Component,Input } from '@angular/core';
 import { ConnectedStationInfo } from 'src/models';
+import {first} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {RuleModalComponent} from "../rule-modal/rule-modal.component";
 
 /**
  * Component for the flow logic tab on a station.
@@ -13,5 +16,20 @@ export class FlowLogicComponent {
 
    /** The list of stations to display in the pane. */
    @Input() nextStations: ConnectedStationInfo[] = [];
+
+   constructor(private dialog: MatDialog) { }
+
+  /**
+   * Open a modal rule-modal.
+   */
+   openModal(): void {
+    const dialog = this.dialog.open(RuleModalComponent, {
+      panelClass: ['w-5/6', 'sm:w-4/5'],
+      maxWidth: '1024px',
+      disableClose: true,
+      data: { data: this.nextStations }
+    });
+    dialog.afterClosed().pipe(first()).subscribe();
+   }
 
 }

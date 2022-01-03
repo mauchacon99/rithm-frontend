@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlowLogicComponent } from './flow-logic.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -8,6 +9,9 @@ describe('FlowLogicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        MatDialogModule
+      ],
       declarations: [ FlowLogicComponent ]
     })
     .compileComponents();

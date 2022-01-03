@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -10,4 +11,10 @@ import { Component } from '@angular/core';
 })
 export class RuleModalComponent {
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public modalData: {
+      /** The station rithmId. */
+      data: object;
+    }
+  ) { }
 }
