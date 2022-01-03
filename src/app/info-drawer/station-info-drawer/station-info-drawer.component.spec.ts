@@ -16,8 +16,8 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
-import { DocumentService } from '../../core/document.service';
-import { MockDocumentService } from '../../../mocks/mock-document-service';
+import { DocumentService } from 'src/app/core/document.service';
+import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
