@@ -110,7 +110,7 @@
         </div>
       </div>
       <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
-        <button mat-stroked-button color="accent" (click)="openModalMoveDocument()">
+        <button mat-stroked-button color="accent" (click)="openModalMoveDocument()" data-testid="move-document-modal" id="move-document-modal">
           Move Document
         </button>
       </div>
