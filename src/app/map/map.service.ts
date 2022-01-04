@@ -358,8 +358,8 @@ export class MapService {
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    startStation.status = MapItemStatus.Updated;
-    endStation.status = MapItemStatus.Updated;
+    startStation.markAsUpdated();
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
