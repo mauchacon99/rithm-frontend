@@ -252,6 +252,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         if (this.openedFromMap) {
           this.mapService.removeAllStationConnections(this.stationRithmId);
           this.mapService.deleteStation(this.stationRithmId);
+          this.sidenavDrawerService.closeDrawer();
         } else {
         this.stationService.deleteStation(this.stationRithmId)
           .pipe(first())
