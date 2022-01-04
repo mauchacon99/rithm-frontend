@@ -13,7 +13,7 @@
       </button>
     </div>
     <!-- Field -->
-    <!-- added conditions from sohw/hide instructions element -->
+    <!-- added conditions from show/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
       <ng-container *ngIf="stationRithmId === field.originalStationRithmId; else previousFieldText">
         <div *ngIf="field.questionType === 'instructions'">
@@ -51,18 +51,18 @@
       <!-- Required Checkbox -->
       <div class="flex space-x-4" [ngClass]="{'space-x-reverse': stationRithmId !== field.originalStationRithmId}" *ngIf="field.questionType !== 'instructions'">
         <div [ngClass]="{'order-last': stationRithmId !== field.originalStationRithmId}">
-          <mat-checkbox [name]="field.rithmId" [disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId" [checked]="field.isRequired" (change)="setRequired($event)">
+          <mat-checkbox [name]="field.rithmId" formControlName="isRequired" [attr.disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId" [checked]="field.isRequired" (change)="setRequired($event)">
             Required Field
           </mat-checkbox>
         </div>
         <div *ngIf="stationRithmId === field.originalStationRithmId else previousFieldCheck">
-          <mat-checkbox [name]="field.rithmId" [checked]="field.isPrivate" (change)="setPrivate($event)">
+          <mat-checkbox [name]="field.rithmId" formControlName="isPrivate" [checked]="field.isPrivate" (change)="setPrivate($event)">
             Private Field
           </mat-checkbox>
         </div>
         <ng-template #previousFieldCheck>
           <div>
-            <mat-checkbox [name]="field.rithmId" [checked]="field.isReadOnly" (change)="setEditable($event)">
+            <mat-checkbox [name]="field.rithmId" formControlName="isReadOnly" [checked]="field.isReadOnly" (change)="setEditable($event)">
               Editable Field
             </mat-checkbox>
           </div>

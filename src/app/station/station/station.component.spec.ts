@@ -168,6 +168,7 @@ describe('StationComponent', () => {
     const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
     const button = fixture.debugElement.nativeElement.querySelector('#station-save');
 
+    button.disabled = false;
     button.click();
 
     expect(spyFunctionSave).toHaveBeenCalled();

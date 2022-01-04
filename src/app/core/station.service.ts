@@ -30,9 +30,6 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** Set config for field change. */
-  changedField$ = new Subject<Question>();
-
   constructor(
     private http: HttpClient
   ) { }
@@ -382,15 +379,6 @@ export class StationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
-  }
-
-  /**
-   * Set if field changed.
-   *
-   * @param question Value the change.
-   */
-   fieldChange(question: Question): void {
-    this.changedField$.next(question);
   }
 
 }

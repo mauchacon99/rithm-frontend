@@ -178,28 +178,4 @@ describe('TextFieldComponent', () => {
       expect(component.textFieldForm.valid).toBeFalse();
     });
   });
-
-  describe('spy subjects station service', () => {
-    let stationServiceSubject: StationService;
-    beforeEach(() => {
-      stationServiceSubject = TestBed.inject(StationService);
-    });
-
-    it('should apply add validation field', () => {
-      const spyValidate = spyOn(component, 'validationField').and.callThrough();
-
-      const question: Question = {
-        rithmId: '3j4k-3h2j-hj4j',
-        prompt: 'dev',
-        questionType: QuestionFieldType.LongText,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      };
-
-      stationServiceSubject.changedField$.next(question);
-      expect(spyValidate).toHaveBeenCalled();
-    });
-  });
 });

@@ -2,7 +2,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckbox, MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
@@ -143,28 +143,6 @@ describe('StationFieldComponent', () => {
     it('should automatically add an option to the array', () => {
       expect(component.options.length).toBeGreaterThan(0);
     });
-  });
-
-
-  it('should call service config change execute function setRequire', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
-    const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
-    component.setRequired(setValue);
-    expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should call service config change execute function setPrivate', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
-    const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
-    component.setPrivate(setValue);
-    expect(spyService).toHaveBeenCalled();
-  });
-
-  it('should call service config change execute function setEditable', () => {
-    const spyService = spyOn(TestBed.inject(StationService), 'fieldChange').and.callThrough();
-    const setValue: MatCheckboxChange = {source: {} as MatCheckbox, checked: true };
-    component.setEditable(setValue);
-    expect(spyService).toHaveBeenCalled();
   });
 
 });

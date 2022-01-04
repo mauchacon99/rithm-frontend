@@ -24,9 +24,6 @@ export class MockStationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  /** Set config for field change. */
-  changedField$ = new Subject<Question>();
-
   /**
    * Gets a station information.
    *
@@ -706,14 +703,4 @@ export class MockStationService {
   touchStationForm(): void {
     this.stationFormTouched$.next();
   }
-
-  /**
-   * Set if field changed.
-   *
-   * @param question Value the change.
-   */
-   fieldChange(question: Question): void {
-    this.changedField$.next(question);
-  }
-
 }
