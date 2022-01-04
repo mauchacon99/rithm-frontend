@@ -25,13 +25,17 @@ export class FlowLogicComponent {
    *
    * @param station The object of model ConnectedStationInfo.
    */
-  openModal(station: ConnectedStationInfo): void {
-    const dialog = this.dialog.open(RuleModalComponent, {
+  async openModal(station: ConnectedStationInfo): Promise<void> {
+    const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       data: { station }
     });
-    dialog.afterClosed().pipe(first()).subscribe();
+    if (dialog) {
+      // handle returned rule
+    } else {
+      // handle error
+    }
   }
 
 }
