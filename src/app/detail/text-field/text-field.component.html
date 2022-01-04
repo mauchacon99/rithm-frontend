@@ -107,7 +107,9 @@
       placeholder="{{ field?.prompt }}"
       rows="3"
       spellcheck="true"
-      [required]="field.isRequired"
+      [required]="
+        field.isRequired || field.questionType === fieldTypeEnum.Instructions
+      "
       [formControlName]="field.questionType"
       (blur)="updateFieldPrompt(field)"
     >

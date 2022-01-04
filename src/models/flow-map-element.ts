@@ -9,6 +9,9 @@ export interface FlowMapElement extends FlowMapData {
 
   /** Whether the flow is currently hovering? */
   hoverActive: FlowElementHoverType;
+
+  /** The path of the flow boundary. */
+  path: Path2D;
 }
 
 /**
@@ -25,6 +28,21 @@ export class FlowMapElement {
     this.dragging = false;
     this.hoverActive = FlowElementHoverType.None;
     Object.assign(this, flowMapData);
+  }
+
+  /**
+   * Checks whether an element in the station is being hovered over.
+   *
+   * @param point The cursor location.
+   * @param ctx The rendering context for the canvas.
+   */
+   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+    ctx.save();
+    ctx.lineWidth = 30;
+    if (this.path) {
+      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y) ? FlowElementHoverType.Boundary : FlowElementHoverType.None;
+    }
+    ctx.restore();
   }
 
   /**

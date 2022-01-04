@@ -17,7 +17,7 @@ import {
   MockPopupService,
   MockStationService,
 } from 'src/mocks';
-import { DialogOptions, QuestionFieldType } from 'src/models';
+import { DialogOptions, Question, QuestionFieldType } from 'src/models';
 import { PreviousFieldsComponent } from './previous-fields.component';
 
 describe('PreviousFieldsComponent', () => {
@@ -148,5 +148,37 @@ describe('PreviousFieldsComponent', () => {
       '#loading-previous-field-component'
     );
     expect(loading).toBeTruthy();
+  });
+
+  it('should open the previous question modal', () => {
+    const previousQuestion: Question = {
+      answer: {
+        questionRithmId: '',
+        referAttribute: '',
+        value: 'value',
+      },
+      children: [],
+      isEncrypted: false,
+      isPrivate: false,
+      isReadOnly: false,
+      isRequired: false,
+      possibleAnswers: [],
+      prompt: 'Campo Uno',
+      questionType: QuestionFieldType.ShortText,
+      rithmId: '703ef763-cbfb-4e7',
+    };
+    const dialogConfirm: DialogOptions = {
+      title: `${previousQuestion.prompt}`,
+      message: `${previousQuestion.answer?.value}`,
+      okButtonText: 'Ok',
+      cancelButtonText: 'Cancel',
+    };
+
+    const popUpSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    component.openModalPreviousQuestions(previousQuestion);
+    expect(popUpSpy).toHaveBeenCalledOnceWith(dialogConfirm);
   });
 });

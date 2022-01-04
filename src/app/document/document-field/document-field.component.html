@@ -2,12 +2,14 @@
   <p *ngIf="field.questionType === fieldTypes.AddressLine" class="pb-1 italic">
     {{ field.prompt }}
   </p>
+  <p *ngIf="field.questionType === fieldTypes.Instructions && field.prompt">
+    {{ field.prompt }}
+  </p>
   <app-text-field
     *ngIf="
       field.questionType === fieldTypes.ShortText ||
       field.questionType === fieldTypes.LongText ||
       field.questionType === fieldTypes.URL ||
-      field.questionType === fieldTypes.Instructions ||
       field.questionType === fieldTypes.LongTextLabel ||
       field.questionType === fieldTypes.State ||
       field.questionType === fieldTypes.City ||

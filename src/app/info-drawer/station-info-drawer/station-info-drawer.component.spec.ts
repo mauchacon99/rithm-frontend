@@ -193,21 +193,19 @@ describe('StationInfoDrawerComponent', () => {
     expect(deleteButton).toBeTruthy();
   });
 
-  it('should not show the delete-station-button on the station information', () => {
+  it('should not show the delete-station-button on the station information if the user is a worker', () => {
     component.stationLoading = false;
     component.editMode = false;
-    component.type = 'worker';
+    spyOnProperty(component, 'isWorker').and.returnValue(true);
     expect(component.editMode).toBeFalse();
-    expect(component.type).toEqual('worker');
     const deleteButton = fixture.debugElement.nativeElement.querySelector(
       '#delete-station-button'
     );
     expect(deleteButton).toBeFalsy();
   });
 
-  it('should test method get userLoginIsOwner and return boolean', () => {
-    component.type = 'admin';
-    expect(component.type).toEqual('admin');
+  it('should determine if the user is an admin or station owner', () => {
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
   });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FlowMapElement, Point } from 'src/models';
+import { FlowElementHoverType, FlowMapElement, Point } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   FLOW_PADDING,
@@ -10,6 +10,7 @@ import {
   DEFAULT_SCALE,
   GROUP_NAME_PADDING,
   FONT_SIZE_MODIFIER,
+  NODE_HOVER_COLOR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -79,6 +80,7 @@ export class FlowElementService {
 
     // TODO: Render an empty flow
     if (flow.boundaryPoints.length > 0) {
+      this.setFlowBoundaryPath(flow);
       this.drawFlowBoundaryLine(flow);
       this.drawFlowName(flow);
     }
@@ -97,22 +99,15 @@ export class FlowElementService {
       );
     }
     const ctx = this.canvasContext;
-    const strokeColor = CONNECTION_DEFAULT_COLOR;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
-    ctx.strokeStyle = strokeColor;
-
-    ctx.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
-    flow.boundaryPoints = flow.boundaryPoints.concat(
-      flow.boundaryPoints.splice(0, 1)
-    ); // Shift the first point to the back
-
-    for (const boundaryPoint of flow.boundaryPoints) {
-      ctx.lineTo(boundaryPoint.x, boundaryPoint.y);
-    }
+    ctx.strokeStyle =
+      flow.hoverActive === FlowElementHoverType.Boundary
+        ? NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
-    ctx.stroke();
+    ctx.stroke(flow.path);
     ctx.setLineDash([]);
   }
 
@@ -135,6 +130,25 @@ export class FlowElementService {
       flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
       flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING
     );
+  }
+
+  /**
+   * Set's the flow boundary path on the map for a flow.
+   *
+   * @param flow The flow for which path needs to be set.
+   */
+  private setFlowBoundaryPath(flow: FlowMapElement): void {
+    const path = new Path2D();
+
+    path.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
+    flow.boundaryPoints = flow.boundaryPoints.concat(
+      flow.boundaryPoints.splice(0, 1)
+    ); // Shift the first point to the back
+
+    for (const boundaryPoint of flow.boundaryPoints) {
+      path.lineTo(boundaryPoint.x, boundaryPoint.y);
+    }
+    flow.path = path;
   }
 
   /**

@@ -460,6 +460,15 @@ describe('DocumentComponent', () => {
     );
   });
 
+  it('should call the save method when the save button is clicked', () => {
+    component.documentLoading = false;
+    const spyMethod = spyOn(component,'saveDocumentAnswer').and.callThrough();
+    fixture.detectChanges();
+    const buttonSave = fixture.debugElement.nativeElement.querySelector('#document-save');
+    buttonSave.click();
+    expect(spyMethod).toHaveBeenCalled();
+  });
+
   describe('navigateRouterTesting', () => {
     let router: Router;
     let routerNavigateSpy: jasmine.Spy;

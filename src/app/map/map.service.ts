@@ -96,6 +96,15 @@ export class MapService {
   /** Check if mouse clicked outside of the option menu in canvas area. */
   matMenuStatus$ = new BehaviorSubject(false);
 
+  /** Checks if there should be panning towards the center of the map. */
+  centerActive$ = new BehaviorSubject(false);
+
+  /** Passes pan info to the map-canvas. */
+  centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
+
+  /** The number of times this.center() should be called. */
+  centerCount$ = new BehaviorSubject(0);
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -278,11 +287,11 @@ export class MapService {
   /**
    * Updates station status to delete.
    *
-   * @param station The station for which status has to be set to delete.
+   * @param stationId The station for which status has to be set to delete.
    */
-  deleteStation(station: StationMapElement): void {
+  deleteStation(stationId: string): void {
     const index = this.stationElements.findIndex(
-      (e) => e.rithmId === station.rithmId
+      (e) => e.rithmId === stationId
     );
     if (index >= 0) {
       if (this.stationElements[index].status === MapItemStatus.Created) {
@@ -292,8 +301,8 @@ export class MapService {
       }
     }
     this.flowElements.map((flow) => {
-      if (flow.stations.includes(station.rithmId)) {
-        flow.stations = flow.stations.filter((stn) => stn !== station.rithmId);
+      if (flow.stations.includes(stationId)) {
+        flow.stations = flow.stations.filter((stn) => stn !== stationId);
         flow.markAsUpdated();
       }
     });
@@ -303,37 +312,33 @@ export class MapService {
   /**
    * Removes the connections from a station, and removes that station from the connections of previous and next stations.
    *
-   * @param station The station for which connections has to be removed.
+   * @param stationId The station ID for which connections have to be removed.
    */
-  removeAllStationConnections(station: StationMapElement): void {
+  removeAllStationConnections(stationId: string): void {
     this.stationElements.map((e) => {
       //Remove the previous and next stations from the station.
-      if (e.rithmId === station.rithmId) {
+      if (e.rithmId === stationId) {
         e.previousStations = [];
         e.nextStations = [];
         e.markAsUpdated();
       }
 
       //Remove the station from the previousStation arrays of all connecting stations.
-      if (e.previousStations.includes(station.rithmId)) {
-        e.previousStations.splice(
-          e.previousStations.indexOf(station.rithmId),
-          1
-        );
+      if (e.previousStations.includes(stationId)) {
+        e.previousStations.splice(e.previousStations.indexOf(stationId), 1);
         e.markAsUpdated();
       }
 
       //Remove the station from the nextStation arrays of all connecting stations.
-      if (e.nextStations.includes(station.rithmId)) {
-        e.nextStations.splice(e.nextStations.indexOf(station.rithmId), 1);
+      if (e.nextStations.includes(stationId)) {
+        e.nextStations.splice(e.nextStations.indexOf(stationId), 1);
         e.markAsUpdated();
       }
     });
     //Remove the connections from this.connectionElements.
     const filteredConnections = this.connectionElements.filter(
       (e) =>
-        e.startStationRithmId !== station.rithmId &&
-        e.endStationRithmId !== station.rithmId
+        e.startStationRithmId !== stationId && e.endStationRithmId !== stationId
     );
     this.connectionElements = filteredConnections;
     this.mapDataReceived$.next(true);
@@ -403,7 +408,7 @@ export class MapService {
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
-    const startStationIndex = this.stationElements.findIndex(
+    const startStation = this.stationElements.find(
       (e) =>
         e.nextStations.includes(endStationId) && e.rithmId === startStationId
     );
@@ -412,25 +417,25 @@ export class MapService {
         e.previousStations.includes(startStationId) &&
         e.rithmId === endStationId
     );
+    if (!startStation) {
+      throw new Error(`A start station was not found for ${startStationId}`);
+    }
     if (!endStation) {
-      throw new Error(`A station was not found for ${endStationId}`);
+      throw new Error(`An end station was not found for ${endStationId}`);
     }
 
     // Find the index from each stations between nextStations and previousStations
-    const nextStationIndex = this.stationElements[
-      startStationIndex
-    ].nextStations.findIndex((e) => e === endStationId);
+    const nextStationIndex = startStation.nextStations.findIndex(
+      (e) => e === endStationId
+    );
     const prevStationIndex = endStation.previousStations.findIndex(
       (e) => e === startStationId
     );
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
-    this.stationElements[startStationIndex].nextStations.splice(
-      nextStationIndex,
-      1
-    );
+    startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    this.stationElements[startStationIndex].status = MapItemStatus.Updated;
+    startStation.markAsUpdated();
     endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
@@ -565,11 +570,12 @@ export class MapService {
   }
 
   /**
-   * Set a bounding box around the edge of the map.
+   * Set a bounding box around the edge of the map to calculate centering the map.
+   * Used to put some space between minMapPoints/maxMapPoints and the screen edges.
    *
    * @returns A number representing how for out from the edge of the screen a box should be.
    */
-  boundingBox(): number {
+  centerBoundingBox(): number {
     //Dynamically set the size of the bounding box based on screen size.
     if (((window.innerHeight + window.innerWidth) / 2) * 0.01 < 30) {
       //Set the size of the box based on screen size.
@@ -621,7 +627,7 @@ export class MapService {
   }
 
   /**
-   * Gets the bottom-left mapPoint.
+   * Gets the bottom-right mapPoint.
    *
    * @returns A point.
    */
@@ -666,8 +672,11 @@ export class MapService {
     const maxPoint = this.getMaxCanvasPoint();
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
-    const zoomInBox = this.boundingBox() + CENTER_ZOOM_BUFFER;
-    const zoomOutBox = this.boundingBox() - CENTER_ZOOM_BUFFER;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const zoomInBox =
+      (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
+    const zoomOutBox =
+      (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
 
     //Zoom in.
     if (
@@ -679,8 +688,8 @@ export class MapService {
       this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
       //Zoom out.
     } else if (
       (zoomOutBox > minPoint.y ||
@@ -690,42 +699,86 @@ export class MapService {
       this.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
+      this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-      this.setCenterPanAndScale(onInit);
+    }
+  }
+
+  /**
+   * Pans the map when center method is called to the map center.
+   *
+   * @param onInit Determines if this is called during mapCanvas init.
+   */
+  private centerPan(onInit = false): void {
+    let adjustedCenter = this.getMapCenterPoint();
+    const canvasCenter = this.getCanvasCenterPoint();
+
+    //The point on the canvas needed to center of the map.
+    adjustedCenter = {
+      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
+    };
+
+    //On Init, immediately set the currentCanvasPoint to the center of the map.
+    if (onInit) {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      return;
+    }
+
+    const totalPanNeeded = {
+      x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
+      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
+    };
+
+    //initialize variable needed to set panVelocity.
+    const panAmount: Point = { x: 0, y: 0 };
+
+    //Set x axis of panAmount.
+    panAmount.x = totalPanNeeded.x * 0.1;
+
+    //Set y axis of panAmount.
+    panAmount.y = totalPanNeeded.y * 0.1;
+
+    if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
+      //nextPanVelocity on map canvas will be set to this.
+      this.centerPanVelocity$.next(panAmount);
+      this.centerCount$.next(this.centerCount$.value + 1);
+    } else {
+      this.currentCanvasPoint$.next(adjustedCenter);
+      this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
   }
 
   /**
    * Smoothly sets the scale and pans the map to center.
-   *
-   * @param onInit Determines if this is called during mapCanvas init.
-   */
-  setCenterPanAndScale(onInit: boolean): void {
-    if (onInit) {
-      this.centerScale(onInit);
-      //TODO: set canvaspoint to map center.
-    } else {
-      setTimeout(() => {
-        this.centerScale(onInit);
-        //TODO: incrementally pan map to center.
-      }, 4);
-    }
-  }
-
-  /**
-   * Centers the map by changing this.currentCanvasPoint to the map center point.
+   * On init, immediately change the scale and position.
    *
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
-    let adjustedCenter = this.getMapCenterPoint();
-    const canvasCenter = this.getCanvasCenterPoint();
-    adjustedCenter = {
-      x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
+    const centerLogic = () => {
+      if (this.centerCount$.value > 0) {
+        this.centerScale(onInit);
+        this.centerPan(onInit);
+        this.centerCount$.next(this.centerCount$.value - 1);
+        this.center(onInit);
+      } else {
+        this.centerActive$.next(false);
+        this.centerCount$.next(0);
+      }
     };
-    this.currentCanvasPoint$.next(adjustedCenter);
-    this.setCenterPanAndScale(onInit);
+
+    if (!this.centerActive$.value) {
+      return;
+    }
+
+    if (!onInit) {
+      setTimeout(() => {
+        centerLogic();
+      }, 4);
+    } else {
+      centerLogic();
+    }
   }
 
   /**

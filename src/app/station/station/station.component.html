@@ -134,7 +134,11 @@
               <ng-template mat-tab-label>
                 <span data-testid="flow-logic-tab">Flow Logic</span>
               </ng-template>
-              <ng-template matTabContent> Flow Logic tab </ng-template>
+              <ng-template matTabContent>
+                <app-flow-logic
+                  [nextStations]="forwardStations"
+                ></app-flow-logic>
+              </ng-template>
             </mat-tab>
           </mat-tab-group>
           <div class="w-full fixed z-10 bottom-0 left-0">

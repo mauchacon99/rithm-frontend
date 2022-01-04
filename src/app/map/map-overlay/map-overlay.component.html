@@ -97,9 +97,9 @@
   </div>
   <div class="bg-white shadow-md rounded border border-solid flex flex-col">
     <button
-      [disabled]="enableZoom(1)"
+      [disabled]="isZoomEnabled(1)"
       [ngClass]="
-        enableZoom(1)
+        isZoomEnabled(1)
           ? 'opacity-50 cursor-not-allowed'
           : 'hover:text-secondary-300'
       "
@@ -110,9 +110,9 @@
       <i class="fas fa-search-plus"></i>
     </button>
     <button
-      [disabled]="enableZoom(0)"
+      [disabled]="isZoomEnabled(0)"
       [ngClass]="
-        enableZoom(0)
+        isZoomEnabled(0)
           ? 'opacity-50 cursor-not-allowed'
           : 'hover:text-secondary-300'
       "
@@ -149,6 +149,7 @@
     </button>
   </div>
 </mat-menu>
+<!--TODO: What does optionMenuNone do? -->
 <div
   class="opacity-0 cursor-pointer w-9 h-2"
   [class.pointer-events-none]="optionMenuNone"

@@ -254,7 +254,7 @@ export class StationComponent
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
-      isRequired: false,
+      isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
       isPrivate: false,
       children:
         fieldType === QuestionFieldType.AddressLine
