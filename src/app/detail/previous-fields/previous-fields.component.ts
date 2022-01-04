@@ -44,9 +44,6 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** The Previous Questions.*/
-  documentPreviousQuestions: Question[] = [];
-
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
@@ -135,7 +132,7 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (previousQuestions) => {
           this.isLoading = false;
-          this.documentPreviousQuestions = previousQuestions;
+          this.questions = previousQuestions;
         }, error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
@@ -144,5 +141,19 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  /**
+   * Open The Modal display of previous questions.
+   *
+   * @param previousQuestion The Question of the document.
+   */
+  openModalPreviousQuestions(previousQuestion: Question): void {
+    this.popupService.confirm({
+      title: `${previousQuestion.prompt}`,
+      message: `${previousQuestion.answer?.value}`,
+      okButtonText: 'Ok',
+      cancelButtonText: 'Cancel'
+    });
   }
 }
