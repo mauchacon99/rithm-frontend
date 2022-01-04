@@ -1,4 +1,4 @@
-import { FlowMapData, StationMapData } from '.';
+import { StationGroupMapData, StationMapData } from '.';
 
 /**
  * Contains all the data displayed on the map.
@@ -9,5 +9,5 @@ export interface MapData {
   stations: StationMapData[];
 
   /** List of all flows in the map. */
-  flows: FlowMapData[];
+  flows: StationGroupMapData[];
 }

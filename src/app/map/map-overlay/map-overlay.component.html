@@ -21,7 +21,7 @@
 </div>
 <div *ngIf="isStationOrFlowAdd" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
   <div class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-sm bg-opacity-90">
-    {{ currentMode === mapMode.StationAdd ? 'Select a location for this new station' : currentMode === mapMode.FlowAdd ? 'Select flows and stations to add to new flow' : '' }}
+    {{ currentMode === mapMode.StationAdd ? 'Select a location for this new station' : currentMode === mapMode.StationGroupAdd ? 'Select flows and stations to add to new flow' : '' }}
   </div>
 </div>
 <div *ngIf="mapScale <= zoomBuild && isAdmin" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">

@@ -3,7 +3,7 @@ import { MapItemStatus } from '.';
 /**
  * Represents all info about a flow as returned from and to be sent to the API.
  */
-export interface FlowMapData {
+export interface StationGroupMapData {
   /** The global Rithm id for the flow. */
   readonly rithmId: string;
 

@@ -58,7 +58,7 @@ describe('MapToolbarComponent', () => {
   it('should toggle mapMode add flow', () => {
     component.addFlow();
     expect(component.flowAddActive).toBeTrue();
-    expect(component.mapMode).toEqual(MapMode.FlowAdd);
+    expect(component.mapMode).toEqual(MapMode.StationGroupAdd);
     component.addFlow();
     expect(component.flowAddActive).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);

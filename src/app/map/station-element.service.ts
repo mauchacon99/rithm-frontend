@@ -48,7 +48,7 @@ export class StationElementService {
       this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
-      if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.FlowAdd) {
+      if (mapMode === MapMode.Build || mapMode === MapMode.StationAdd || mapMode === MapMode.StationGroupAdd) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
         if (station.notes) {

@@ -78,7 +78,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
   get isBuilding(): boolean {
-    return this.currentMode === MapMode.Build || this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
+    return this.currentMode === MapMode.Build || this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.StationGroupAdd;
   }
 
   /**
@@ -87,7 +87,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
    */
   get isStationOrFlowAdd(): boolean {
-    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.FlowAdd;
+    return this.currentMode === MapMode.StationAdd || this.currentMode === MapMode.StationGroupAdd;
   }
 
   /**

@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, FlowElementHoverType } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, StationGroupMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, StationGroupElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {
@@ -79,7 +79,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   stations: StationMapElement[] = [];
 
   /** Data for flow used in the map. */
-  flows: FlowMapElement[] = [];
+  flows: StationGroupMapElement[] = [];
 
   /** Data for connection line path between stations. */
   connections: ConnectionMapElement[] = [];
@@ -188,7 +188,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((dataReceived) => {
         this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
-        this.flows = this.mapService.flowElements;
+        this.flows = this.mapService.stationGroupElements;
         this.connections = this.mapService.connectionElements;
         if (dataReceived && this.initLoad) {
           this.mapService.centerActive$.next(true);
@@ -1099,7 +1099,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
-        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== FlowElementHoverType.None);
+        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== StationGroupElementHoverType.None);
         if (!hoveringOverStation && !hoveringOverFlow) {
           this.connections.map(con => {
             con.hoverActive = false;
@@ -1116,13 +1116,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
         const hoveringOverConnection = this.connections.some((con) => con.hoverActive);
-        if (!hoveringOverStation && !hoveringOverConnection && this.mapMode === MapMode.FlowAdd) {
+        if (!hoveringOverStation && !hoveringOverConnection && this.mapMode === MapMode.StationGroupAdd) {
           this.flows.map(fl => {
-            fl.hoverActive = FlowElementHoverType.None;
+            fl.hoverActive = StationGroupElementHoverType.None;
           });
           for (const flow of this.flows) {
             flow.checkElementHover(eventContextPoint, this.context);
-            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+            if (flow.hoverActive === StationGroupElementHoverType.Boundary) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
@@ -1132,7 +1132,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         if (hoveringOverStation) {
           this.connections.map((con) => con.hoverActive = false);
-          this.flows.map((flow) => flow.hoverActive = FlowElementHoverType.None);
+          this.flows.map((flow) => flow.hoverActive = StationGroupElementHoverType.None);
         }
       }
     }

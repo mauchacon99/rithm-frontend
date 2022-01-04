@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { FlowElementHoverType, FlowMapElement, Point } from 'src/models';
+import { StationGroupElementHoverType, StationGroupMapElement, Point } from 'src/models';
 import {
-  CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
-  DEFAULT_SCALE, GROUP_NAME_PADDING, FONT_SIZE_MODIFIER, NODE_HOVER_COLOR,
+CONNECTION_DEFAULT_COLOR, STATION_GROUP_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
+  DEFAULT_SCALE, STATION_GROUP_NAME_PADDING, FONT_SIZE_MODIFIER, NODE_HOVER_COLOR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -30,10 +30,10 @@ export class FlowElementService {
    * Draws all the flow boundaries on the map. Starts from the deepest flows and works back to the root.
    */
   drawFlows(): void {
-    if (!this.mapService.flowElements.length) {
+    if (!this.mapService.stationGroupElements.length) {
       return;
     }
-    const rootFlow = this.mapService.flowElements.find((flow) => flow.isReadOnlyRootFlow);
+    const rootFlow = this.mapService.stationGroupElements.find((flow) => flow.isReadOnlyRootFlow);
     if (!rootFlow) {
       throw new Error('Root flow could not be found');
     }
@@ -45,11 +45,11 @@ export class FlowElementService {
    *
    * @param flow The flow to be drawn on the map.
    */
-  private drawFlow(flow: FlowMapElement): void {
+  private drawFlow(flow: StationGroupMapElement): void {
 
     // If flow has a sub-flow, draw that first
     flow.subFlows.forEach((subFlowId) => {
-      const subFlow = this.mapService.flowElements.find((flowElement) => flowElement.rithmId === subFlowId);
+      const subFlow = this.mapService.stationGroupElements.find((flowElement) => flowElement.rithmId === subFlowId);
       if (!subFlow) {
         throw new Error(`Couldn't find a sub-flow for which an id exists: ${subFlowId}`);
       }
@@ -81,7 +81,7 @@ export class FlowElementService {
    *
    * @param flow The flow for which to draw the flow boundary line.
    */
-  private drawFlowBoundaryLine(flow: FlowMapElement): void {
+  private drawFlowBoundaryLine(flow: StationGroupMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw flow boundary line if context is not defined');
@@ -90,7 +90,7 @@ export class FlowElementService {
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
-    ctx.strokeStyle = flow.hoverActive === FlowElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
+    ctx.strokeStyle = flow.hoverActive === StationGroupElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
     ctx.stroke(flow.path);
     ctx.setLineDash([]);
@@ -101,7 +101,7 @@ export class FlowElementService {
    *
    * @param flow The flow for which to draw the name.
    */
-  private drawFlowName(flow: FlowMapElement): void {
+  private drawFlowName(flow: StationGroupMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw flow name if context is not defined');
@@ -110,8 +110,8 @@ export class FlowElementService {
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
-      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
+    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
+      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + STATION_GROUP_NAME_PADDING);
   }
 
   /**
@@ -119,7 +119,7 @@ export class FlowElementService {
    *
    * @param flow The flow for which path needs to be set.
    */
-   private setFlowBoundaryPath(flow: FlowMapElement): void {
+   private setFlowBoundaryPath(flow: StationGroupMapElement): void {
     const path = new Path2D();
 
     path.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
@@ -137,7 +137,7 @@ export class FlowElementService {
    * @param flow The flow for which to get the points.
    * @returns A list of contained points representing the stations.
    */
-  private getStationPointsForFlow(flow: FlowMapElement): Point[] {
+  private getStationPointsForFlow(flow: StationGroupMapElement): Point[] {
     if (!flow.stations.length) {
       return []; // Nothing to do here
     }
@@ -148,7 +148,7 @@ export class FlowElementService {
     // Get all the station points within this flow
     const stationPointsWithinFlow: Point[] = [];
     for (const station of flowStations) {
-      const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
+      const scaledPadding = STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
       const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
 
@@ -166,12 +166,12 @@ export class FlowElementService {
    * @param flow The flow for which to get the points.
    * @returns A list of contained points representing the flow boundary of the sub-flows.
    */
-  private getSubFlowPointsForFlow(flow: FlowMapElement): Point[] {
+  private getSubFlowPointsForFlow(flow: StationGroupMapElement): Point[] {
     if (!flow.subFlows.length) {
       return [];
     }
     // Get the sub-flows within the flow
-    const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
+    const subFlows = this.mapService.stationGroupElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
 
     // Get all the points for sub-flows
     const subFlowPointsWithinFlow: Point[] = [];
@@ -202,15 +202,15 @@ export class FlowElementService {
     for (const point of updatedBoundaryPoints) {
 
       if (point.x === maxX) {
-        point.x += FLOW_PADDING * this.mapService.mapScale$.value;
+        point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       } else if (point.x === minX) {
-        point.x -= FLOW_PADDING * this.mapService.mapScale$.value;
+        point.x -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       }
 
       if (point.y === maxY) {
-        point.y += FLOW_PADDING * this.mapService.mapScale$.value;
+        point.y += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       } else if (point.y === minY) {
-        point.y -= FLOW_PADDING * this.mapService.mapScale$.value;
+        point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       }
 
     }

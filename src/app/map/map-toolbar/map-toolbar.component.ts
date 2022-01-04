@@ -38,7 +38,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
   get isBuilding(): boolean {
-    return this.mapMode === MapMode.Build || this.mapMode === MapMode.StationAdd || this.mapMode === MapMode.FlowAdd;
+    return this.mapMode === MapMode.Build || this.mapMode === MapMode.StationAdd || this.mapMode === MapMode.StationGroupAdd;
   }
 
   /**
@@ -56,7 +56,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   get flowAddActive(): boolean {
-    return this.mapMode === MapMode.FlowAdd;
+    return this.mapMode === MapMode.StationGroupAdd;
   }
 
   constructor(
@@ -84,7 +84,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    */
   addFlow(): void {
     if (!this.flowAddActive) {
-      this.mapService.mapMode$.next(MapMode.FlowAdd);
+      this.mapService.mapMode$.next(MapMode.StationGroupAdd);
       this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);

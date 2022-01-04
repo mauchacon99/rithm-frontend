@@ -1,7 +1,7 @@
 /**
  * Represents all the types of hover interactions on a flow in the map.
  */
-export enum FlowElementHoverType {
+export enum StationGroupElementHoverType {
 
   /** The map cursor is hovering over the flow boundary. */
   Boundary = 'boundary',

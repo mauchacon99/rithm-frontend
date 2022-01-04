@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, StationGroupMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
   ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT, SCALE_REDUCED_RENDER, CENTER_ZOOM_BUFFER } from './map-constants';
@@ -21,7 +21,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root'
 })
 export class MapService {
-  /** This behavior subject will track the array of stations and flows. */
+  /** This behavior subject will track the array of stations and station groups. */
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
@@ -36,11 +36,11 @@ export class MapService {
   /** An array that stores a backup of stationElements when buildMap is called. */
   storedStationElements: StationMapElement[] = [];
 
-  /** The flow elements displayed on the map. */
-  flowElements: FlowMapElement[] = [];
+  /** The station group elements displayed on the map. */
+  stationGroupElements: StationGroupMapElement[] = [];
 
-  /** An array that stores a backup of flowElements when buildMap is called. */
-  storedFlowElements: FlowMapElement[] = [];
+  /** An array that stores a backup of stationGroupElements when buildMap is called. */
+  storedStationGroupElements: StationGroupMapElement[] = [];
 
   /** Data for connection line path between stations. */
   connectionElements: ConnectionMapElement[] = [];
@@ -122,7 +122,7 @@ export class MapService {
    */
   private useStationData(): void {
     this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
-    this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
+    this.stationGroupElements = this.mapData.flows.map((e) => new StationGroupMapElement(e));
     this.setConnections();
     this.updateStationCanvasPoints();
   }
@@ -200,7 +200,8 @@ export class MapService {
     const connectedStations = this.stationElements.filter(station => station.isAddingConnected);
     if (connectedStations.length === 1) {
       const stationIndex = this.stationElements.findIndex(station => station.rithmId === connectedStations[0].rithmId);
-      const flowIndex = this.flowElements.findIndex(flow => flow.stations.includes(connectedStations[0].rithmId));
+      const stationGroupIndex =
+        this.stationGroupElements.findIndex(stationGroup => stationGroup.stations.includes(connectedStations[0].rithmId));
       if (stationIndex >= 0) {
         this.stationElements[stationIndex].isAddingConnected = false;
         this.stationElements[stationIndex].nextStations.push(newStation.rithmId);
@@ -213,9 +214,9 @@ export class MapService {
         this.mapMode$.next(MapMode.Build);
         this.stationElements[stationIndex].markAsUpdated();
 
-        if (flowIndex >= 0 && (!this.flowElements[flowIndex].stations.includes(newStation.rithmId))) {
-          this.flowElements[flowIndex].stations.push(newStation.rithmId);
-          this.flowElements[flowIndex].markAsUpdated();
+        if (stationGroupIndex >= 0 && (!this.stationGroupElements[stationGroupIndex].stations.includes(newStation.rithmId))) {
+          this.stationGroupElements[stationGroupIndex].stations.push(newStation.rithmId);
+          this.stationGroupElements[stationGroupIndex].markAsUpdated();
         }
         this.disableConnectedStationMode();
       }
@@ -240,10 +241,10 @@ export class MapService {
         this.stationElements[index].markAsDeleted();
       }
     }
-    this.flowElements.map((flow) => {
-      if (flow.stations.includes(stationId)) {
-        flow.stations = flow.stations.filter(stn => stn !== stationId);
-        flow.markAsUpdated();
+    this.stationGroupElements.map((stationGroup) => {
+      if (stationGroup.stations.includes(stationId)) {
+        stationGroup.stations = stationGroup.stations.filter(stn => stn !== stationId);
+        stationGroup.markAsUpdated();
       }
     });
     this.mapDataReceived$.next(true);
@@ -309,7 +310,7 @@ export class MapService {
    */
   buildMap(): void {
     this.storedStationElements = this.deepCopy(this.stationElements);
-    this.storedFlowElements = this.deepCopy(this.flowElements);
+    this.storedStationGroupElements = this.deepCopy(this.stationGroupElements);
     this.storedConnectionElements = this.deepCopy(this.connectionElements);
     this.mapMode$.next(MapMode.Build);
   }
@@ -322,9 +323,9 @@ export class MapService {
       this.stationElements = this.deepCopy(this.storedStationElements);
       this.storedStationElements = [];
     }
-    if (this.storedFlowElements.length > 0) {
-      this.flowElements = this.deepCopy(this.storedFlowElements);
-      this.storedFlowElements = [];
+    if (this.storedStationGroupElements.length > 0) {
+      this.stationGroupElements = this.deepCopy(this.storedStationGroupElements);
+      this.storedStationGroupElements = [];
     }
     if (this.storedConnectionElements.length > 0) {
       this.connectionElements = this.deepCopy(this.storedConnectionElements);
@@ -378,7 +379,7 @@ export class MapService {
   publishMap(): Observable<unknown> {
     const filteredData: MapData = {
       stations: this.stationElements.filter((e) => e.status !== MapItemStatus.Normal),
-      flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal)
+      flows: this.stationGroupElements.filter((e) => e.status !== MapItemStatus.Normal)
     };
 
     return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
@@ -768,8 +769,8 @@ export class MapService {
    */
   private validateMapData(): void {
     this.validateConnections();
-    this.validateStationsBelongToExactlyOneFlow();
-    this.validateFlowsBelongToExactlyOneFlow();
+    this.validateStationsBelongToExactlyOneStationGroup();
+    this.validateStationGroupsBelongToExactlyOneStationGroup();
   }
 
   /**
@@ -796,37 +797,43 @@ export class MapService {
   }
 
   /**
-   * Validates that stations belong to exactly one immediate parent flow.
+   * Validates that stations belong to exactly one immediate parent station group.
    */
-  private validateStationsBelongToExactlyOneFlow(): void {
-    // Each station should belong to exactly one flow.
+  private validateStationsBelongToExactlyOneStationGroup(): void {
+    // Each station should belong to exactly one station group.
     for (const station of this.stationElements) {
-      const flowsThatContainThisStation = this.flowElements.filter((flow) => flow.stations.includes(station.rithmId));
-      if (flowsThatContainThisStation.length > 1) {
-        const flowDetails: string = flowsThatContainThisStation.map((flowInfo) => `${flowInfo.rithmId}: ${flowInfo.title}`).toString();
+      const stationGroupsThatContainThisStation =
+        this.stationGroupElements.filter((stationGroup) => stationGroup.stations.includes(station.rithmId));
+      if (stationGroupsThatContainThisStation.length > 1) {
+        const stationGroupDetails: string =
+          stationGroupsThatContainThisStation.map(
+            (stationGroupInfo) => `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`).toString();
         // eslint-disable-next-line no-console
-        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${flowsThatContainThisStation.length} flows:
-          ${flowDetails}`);
-      } else if (!flowsThatContainThisStation.length) {
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${
+          stationGroupsThatContainThisStation.length} station groups:
+          ${stationGroupDetails}`);
+      } else if (!stationGroupsThatContainThisStation.length) {
         // eslint-disable-next-line no-console
-        console.error(`No flows contain the station: ${station.stationName}: ${station.rithmId}`);
+        console.error(`No station groups contain the station: ${station.stationName}: ${station.rithmId}`);
       }
     }
   }
 
   /**
-   * Validates that flows belong to exactly one immediate parent flow.
+   * Validates that station groups belong to exactly one immediate parent station group.
    */
-  private validateFlowsBelongToExactlyOneFlow(): void {
-    // Each flow should belong to exactly one flow.
-    for (const flow of this.flowElements) {
-      const flowsThatContainThisFlow = this.flowElements.filter((flowElement) => flowElement.subFlows.includes(flow.rithmId));
-      if (flowsThatContainThisFlow.length > 1) {
+  private validateStationGroupsBelongToExactlyOneStationGroup(): void {
+    // Each station group should belong to exactly one station group.
+    for (const stationGroup of this.stationGroupElements) {
+      const stationGroupsThatContainThisStationGroup =
+        this.stationGroupElements.filter((stationGroupElement) => stationGroupElement.subFlows.includes(stationGroup.rithmId));
+      if (stationGroupsThatContainThisStationGroup.length > 1) {
         // eslint-disable-next-line no-console
-        console.error(`The flow ${flow.rithmId}: ${flow.title} is contained in ${flowsThatContainThisFlow.length} flows!`);
-      } else if (!flowsThatContainThisFlow.length && !flow.isReadOnlyRootFlow) {
+        console.error(`The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${
+          stationGroupsThatContainThisStationGroup.length} station groups!`);
+      } else if (!stationGroupsThatContainThisStationGroup.length && !stationGroup.isReadOnlyRootFlow) {
         // eslint-disable-next-line no-console
-        console.error(`No flows contain the flow: ${flow.title} ${flow.rithmId}`);
+        console.error(`No station groups contain the station group: ${stationGroup.title} ${stationGroup.rithmId}`);
       }
     }
   }
