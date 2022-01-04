@@ -128,12 +128,12 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   private populatePossibleAnswers(answer: Question, questionIndex: number, arrayAnswers: PossibleAnswer[] = []): void {
     const newAnswer: PossibleAnswer = {
-      answerId: answer.originalStationRithmId,
+      rithmId: answer.originalStationRithmId ? answer.originalStationRithmId : '',
       text: answer.prompt,
       default: false,
     };
     if (this.stationInformation.questions[questionIndex].possibleAnswers !== undefined){
-      const possibleAnswer = arrayAnswers.find( a => a.answerId === newAnswer.answerId);
+      const possibleAnswer = arrayAnswers.find( a => a.rithmId === newAnswer.rithmId);
       if (possibleAnswer) {
         const answerIndex = arrayAnswers.indexOf(possibleAnswer);
         arrayAnswers[answerIndex] = newAnswer;
