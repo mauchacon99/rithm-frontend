@@ -1,8 +1,8 @@
 <div [formGroup]="nestedFieldForm">
   <div *ngIf="field.questionType === fieldTypeEnum.AddressLine" class="grid grid-cols-12 gap-x-4 w-full">
-    <app-text-field [field]="childrenFields[0]" class="col-span-12"></app-text-field>
-    <app-text-field [field]="childrenFields[1]" class="col-span-12"></app-text-field>
-    <app-text-field [field]="childrenFields[2]" class="col-span-12"></app-text-field>
+    <app-text-field [field]="childrenFields[0]" [labelTag]="childrenFields[0].prompt" [isStation]="false" class="col-span-12"></app-text-field>
+    <app-text-field [field]="childrenFields[1]" [labelTag]="childrenFields[1].prompt" [isStation]="false" class="col-span-12"></app-text-field>
+    <app-text-field [field]="childrenFields[2]" [labelTag]="childrenFields[2].prompt" [isStation]="false" class="col-span-12"></app-text-field>
     <app-select-field [field]="childrenFields[3]" class="col-span-12 md:col-span-6"></app-select-field>
     <app-number-field [field]="childrenFields[4]" class="col-span-12 md:col-span-6"></app-number-field>
   </div>

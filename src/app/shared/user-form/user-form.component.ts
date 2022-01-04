@@ -23,7 +23,7 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
     }
   ]
 })
-export class UserFormComponent implements OnInit,ControlValueAccessor, Validator {
+export class UserFormComponent implements OnInit, ControlValueAccessor, Validator {
   /** Whether this form is to be used for account create (defaults to `false`). */
   @Input() accountCreate = false;
 
@@ -51,7 +51,7 @@ export class UserFormComponent implements OnInit,ControlValueAccessor, Validator
   constructor(
     private fb: FormBuilder,
     private userService: UserService
-  ) {}
+  ) { }
 
   /**
    * Set up FormBuilder group.
