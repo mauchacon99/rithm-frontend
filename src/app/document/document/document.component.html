@@ -54,7 +54,7 @@
                   <span class="mr-3"><button mat-stroked-button color="accent" (click)="cancelDocument()"
                       data-testid="document-cancel" id="document-cancel">Cancel</button></span>
                   <button mat-stroked-button color="accent" class="mx-2" data-testid="document-save"
-                    id="document-save">Save</button>
+                    id="document-save" (click)="saveDocumentAnswer()">Save</button>
                 </div>
                 <button mat-raised-button color="accent" data-testid="document-flow" id="document-flow"
                   [disabled]="!documentForm.valid" (click)="autoFlowDocument()">Flow</button>

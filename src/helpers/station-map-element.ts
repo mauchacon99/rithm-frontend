@@ -183,7 +183,7 @@ export class StationMapElement {
   isIdenticalTo(station: StationMapElement): boolean {
     return JSON.stringify(this.previousStations) === JSON.stringify(station.previousStations) &&
       JSON.stringify(this.nextStations) === JSON.stringify(station.nextStations) &&
-      JSON.stringify(this.canvasPoint) === JSON.stringify(station.canvasPoint) &&
+      JSON.stringify(this.mapPoint) === JSON.stringify(station.mapPoint) &&
       this.stationName === station.stationName && this.notes === station.notes;
   }
 }
