@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -289,7 +289,7 @@ describe('DocumentService', () => {
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseAppUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`);
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`);
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
@@ -368,6 +368,25 @@ describe('DocumentService', () => {
     const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`);
     expect(req.request.method).toEqual('DELETE');
     expect(req.request.body).toEqual(requestObject);
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
+  it('should move the document from a station to another', () => {
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId
+    };
+
+    service.moveDocument(dataExpect)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(dataExpect);
     req.flush(null);
     httpTestingController.verify();
   });

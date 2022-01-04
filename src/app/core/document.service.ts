@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow } from 'src/models';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -186,7 +186,7 @@ export class DocumentService {
       .set('stationRithmId', stationId)
       .set('getPrivate', getPrivate);
 
-    return this.http.get<Question[]>(`${environment.baseAppUrl}${MICROSERVICE_PATH}/questions`, { params });
+    return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, { params });
   }
 
   /**
@@ -237,6 +237,24 @@ export class DocumentService {
         stationRithmId: stationRithmId
       };
       return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`, { body: requestObject });
+    }
+  }
+
+  /**
+   * Move the document from a station to another.
+   *
+   * @param moveDocument Model to move the document.
+   * @returns Returns an empty observable.
+   */
+  moveDocument(moveDocument: MoveDocument): Observable<unknown> {
+    if (!moveDocument) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, document could not be moved.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`, moveDocument);
     }
   }
 }
