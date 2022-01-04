@@ -42,7 +42,8 @@ export class StationGroupMapElement {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
-      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y) ? StationGroupElementHoverType.Boundary : StationGroupElementHoverType.None;
+      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y) ?
+        StationGroupElementHoverType.Boundary : StationGroupElementHoverType.None;
     }
     ctx.restore();
   }
