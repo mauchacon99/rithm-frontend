@@ -345,7 +345,7 @@ export class MapService {
     const startStation = this.stationElements.find(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
     const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
     if (!startStation){
-      throw new Error(`A start station was not found for ${endStationId}`);
+      throw new Error(`A start station was not found for ${startStationId}`);
     }
     if (!endStation){
       throw new Error(`An end station was not found for ${endStationId}`);
@@ -358,8 +358,8 @@ export class MapService {
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    startStation.status = MapItemStatus.Updated;
-    endStation.status = MapItemStatus.Updated;
+    startStation.markAsUpdated();
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(

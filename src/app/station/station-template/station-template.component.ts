@@ -84,7 +84,7 @@ export class StationTemplateComponent implements ControlValueAccessor, Validator
   remove(field: Question): void {
     const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
-    if (this.stationRithmId !== field.originalStationRithmId){
+    if (this.stationRithmId !== field.originalStationRithmId) {
       this.movingQuestion(field);
     }
     this.stationService.touchStationForm();

@@ -558,15 +558,15 @@ export class MockStationService {
    *
    * @param question The question to be updated.
    */
-   updateStationQuestionInTemplate(question: Question): void {
+  updateStationQuestionInTemplate(question: Question): void {
     this.stationQuestion$.next(question);
   }
 
- /**
-  * Reports a new question to be moved.
-  *
-  * @param question The question of the station-template to be moved.
-  */
+  /**
+   * Reports a new question to be moved.
+   *
+   * @param question The question of the station-template to be moved.
+   */
   moveQuestion(question: Question): void {
     this.questionToMove$.next(question);
   }
@@ -578,7 +578,7 @@ export class MockStationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-   updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON>{
+  updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON> {
     if (!rithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {
@@ -648,7 +648,7 @@ export class MockStationService {
    * @param stationId  The id of station.
    * @returns Array the appended fields in document name.
    */
-   getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
+  getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
     const documentFieldName: DocumentNameField[] = [
       {
         prompt: 'Address',
@@ -673,7 +673,7 @@ export class MockStationService {
    * @param appendedFields  The appended fields.
    * @returns A list of field names for document name template.
    */
-   updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+  updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
     if (!stationId || !appendedFields) {
       return throwError(() => new HttpErrorResponse({
         error: {
