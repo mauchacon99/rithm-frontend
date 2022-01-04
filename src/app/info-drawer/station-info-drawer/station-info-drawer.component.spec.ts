@@ -178,7 +178,7 @@ describe('StationInfoDrawerComponent', () => {
 
   it('should create a document from station-info-drawer', () => {
     const createDocumentSpy = spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.callThrough();
-    component.createNewDocument(component.stationRithmId);
+    component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
@@ -188,7 +188,7 @@ describe('StationInfoDrawerComponent', () => {
     }));
 
     const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
-    component.createNewDocument(component.stationRithmId);
+    component.createNewDocument();
     expect(spyError).toHaveBeenCalled();
   });
 });
