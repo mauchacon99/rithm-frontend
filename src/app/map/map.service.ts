@@ -345,7 +345,7 @@ export class MapService {
     const startStation = this.stationElements.find(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
     const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
     if (!startStation){
-      throw new Error(`A start station was not found for ${endStationId}`);
+      throw new Error(`A start station was not found for ${startStationId}`);
     }
     if (!endStation){
       throw new Error(`An end station was not found for ${endStationId}`);
