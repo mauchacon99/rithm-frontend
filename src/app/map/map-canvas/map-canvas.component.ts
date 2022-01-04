@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, FlowElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {
@@ -1098,12 +1098,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
-        const stationHoverCount = this.stations.filter((station) => station.hoverActive !== StationElementHoverType.None).length;
-        if (stationHoverCount === 0) {
+        const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
+        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== FlowElementHoverType.None);
+        if (!hoveringOverStation && !hoveringOverFlow) {
+          this.connections.map(con => {
+            con.hoverActive = false;
+          });
           for (const connection of this.connections) {
-            this.connections.map(con => {
-              con.hoverActive = false;
-            });
             connection.checkElementHover(eventContextPoint, this.context);
             if (connection.hoverActive) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1113,8 +1114,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             }
           }
         }
-        if (stationHoverCount > 0) {
+        //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
+        const hoveringOverConnection = this.connections.some((con) => con.hoverActive);
+        if (!hoveringOverStation && !hoveringOverConnection && this.mapMode === MapMode.FlowAdd) {
+          this.flows.map(fl => {
+            fl.hoverActive = FlowElementHoverType.None;
+          });
+          for (const flow of this.flows) {
+            flow.checkElementHover(eventContextPoint, this.context);
+            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+              break;
+            } else {
+              this.mapCanvas.nativeElement.style.cursor = 'default';
+            }
+          }
+        }
+        if (hoveringOverStation) {
           this.connections.map((con) => con.hoverActive = false);
+          this.flows.map((flow) => flow.hoverActive = FlowElementHoverType.None);
         }
       }
     }
