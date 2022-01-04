@@ -27,4 +27,56 @@ describe('FlowMapElement', () => {
     expect(flow).toBeTruthy();
   });
 
+  xit('should be marked as deleted', () => {
+    // TODO: add test
+  });
+
+  xit('should throw an error when marking it as deleted when it is newly created', () => {
+    // TODO: add test
+  });
+
+  xit('should be marked as updated', () => {
+    // TODO: add test
+  });
+
+  xit('should not be marked as updated when it has been deleted', () => {
+    // TODO: add test
+  });
+
+  xit('should not be marked as updated when it has been newly created', () => {
+    // TODO: add test
+  });
+
+  xit('should be empty if there are no stations or sub groups within', () => {
+    // TODO: add test
+  });
+
+  xit('should not be empty if there are stations contained', () => {
+    // TODO: add test
+  });
+
+  xit('should not be empty if there are sub groups contained', () => {
+    // TODO: add test
+  });
+
+  xit('should report hover of boundary when the point is over the station group boundary', () => {
+    // TODO: add test
+  });
+
+  xit('should report hover of title when the point is over the station group title', () => {
+    // TODO: add test
+  });
+
+  xit('should report hover of none when the point isn\'t over anything specifically', () => {
+    // TODO: add test
+  });
+
+  xit('should report that a flow is identical to itself', () => {
+    // TODO: add test
+  });
+
+  xit('should report that a flow is non-identical to itself', () => {
+    // TODO: add test
+  });
+
 });
