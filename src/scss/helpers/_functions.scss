@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 /// Calculate the font-size and return rem size
 /// @param {number} $target-size the target size of the font in px
 @function font-calc($target-size) {

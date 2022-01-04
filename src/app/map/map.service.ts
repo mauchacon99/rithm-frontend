@@ -357,10 +357,10 @@ export class MapService {
       ? new Date(source.getTime())
       : source && typeof source === 'object'
       ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           Object.defineProperty(
             o,
             prop,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             Object.getOwnPropertyDescriptor(source, prop)!
           );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

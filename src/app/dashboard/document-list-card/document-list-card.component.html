@@ -25,9 +25,9 @@
         [ngClass]="{ 'lg:flex': isPriority, 'xl:flex': !isPriority }"
       >
         {{
-          getElapsedTime(document.flowedTimeUTC) === "Unknown"
-            ? ""
-            : getElapsedTime(document.flowedTimeUTC) + " in station"
+          getElapsedTime(document.flowedTimeUTC) === 'Unknown'
+            ? ''
+            : getElapsedTime(document.flowedTimeUTC) + ' in station'
         }}
       </div>
       <div

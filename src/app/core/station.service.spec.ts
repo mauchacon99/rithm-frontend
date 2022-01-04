@@ -425,8 +425,8 @@ describe('StationService', () => {
         expect(users).toEqual(expectedResponse);
       });
 
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users?stationRithmId=${stationId}&pageNum=${pageNum}&pageSize=${pageSize}`
     );
     expect(req.request.method).toEqual('GET');

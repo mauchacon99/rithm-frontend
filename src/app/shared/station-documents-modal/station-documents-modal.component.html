@@ -82,12 +82,12 @@
           class="hidden leading-7 whitespace-nowrap lg:block lg:col-span-3 xl:col-span-2"
         >
           {{
-            getElapsedTime(document.updatedTimeUTC) === "1 day" ||
-            getElapsedTime(document.updatedTimeUTC) === "Unknown"
-              ? getElapsedTime(document.updatedTimeUTC) === "1 day"
-                ? "Yesterday"
+            getElapsedTime(document.updatedTimeUTC) === '1 day' ||
+            getElapsedTime(document.updatedTimeUTC) === 'Unknown'
+              ? getElapsedTime(document.updatedTimeUTC) === '1 day'
+                ? 'Yesterday'
                 : getElapsedTime(document.updatedTimeUTC)
-              : getElapsedTime(document.updatedTimeUTC) + " ago"
+              : getElapsedTime(document.updatedTimeUTC) + ' ago'
           }}
         </div>
       </div>

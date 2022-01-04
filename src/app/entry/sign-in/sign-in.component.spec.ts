@@ -97,10 +97,10 @@ describe('SignInComponent', () => {
   });
 
   it('should navigate to dashboard upon successful sign in', fakeAsync(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const routerSpy = spyOn(
       TestBed.inject(Router),
       'navigateByUrl'
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ).and.callFake(async (url) => true);
     component.signInForm.controls['email'].setValue('someone@email.com');
     component.signInForm.controls['password'].setValue('password1234');

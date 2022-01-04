@@ -10,8 +10,8 @@ describe('PopupService', () => {
   let service: PopupService;
   let dialogSpy: jasmine.Spy;
   let snackBarSpy: jasmine.Spy;
-  // eslint-disable-next-line rxjs/finnish
   const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line rxjs/finnish
     afterClosed: of({}),
     close: null,
   });

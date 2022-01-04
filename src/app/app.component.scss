@@ -1,4 +1,4 @@
-@import "variables", "functions", "mixins";
+@import 'variables', 'functions', 'mixins';
 
 .page {
   @include gradient($secondary-gray, $secondary-blue);

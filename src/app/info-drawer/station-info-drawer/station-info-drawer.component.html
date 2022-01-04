@@ -155,7 +155,8 @@
     *ngIf="
       locallyCreated ||
       (openedFromMap && editMode && isUserAdminOrOwner) ||
-      (!openedFromMap && editMode) || (!openedFromMap && isUserAdminOrOwner)
+      (!openedFromMap && editMode) ||
+      (!openedFromMap && isUserAdminOrOwner)
     "
   >
     <button

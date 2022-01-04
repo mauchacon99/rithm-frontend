@@ -242,9 +242,9 @@ export class OrganizationManagementComponent implements OnInit {
     const organizationId: string = this.userService.user?.organization;
     const orgData: OrganizationInfo = {
       name: this.orgNameForm.get('name')?.value,
-      mainContactEmail: <string>this.orgInfo?.mainContactEmail,
-      mainContactPhoneNumber: <string>this.orgInfo?.mainContactPhoneNumber,
-      timeZone: <string>this.orgInfo?.timeZone,
+      mainContactEmail: this.orgInfo?.mainContactEmail as string,
+      mainContactPhoneNumber: this.orgInfo?.mainContactPhoneNumber as string,
+      timeZone: this.orgInfo?.timeZone as string,
     };
     this.organizationService
       .updateOrganizationInfo(orgData, organizationId)

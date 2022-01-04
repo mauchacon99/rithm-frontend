@@ -1,6 +1,6 @@
 <section>
   <h4 class="text-center mb-5">
-    {{ isWorker ? "Worker" : "Supervisor" }} Roster
+    {{ isWorker ? 'Worker' : 'Supervisor' }} Roster
   </h4>
   <div *ngIf="!isLoading" class="h-60 overflow-y-auto overflow-x-hidden">
     <div class="flex mt-2" *ngFor="let member of members">

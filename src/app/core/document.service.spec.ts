@@ -415,8 +415,8 @@ describe('DocumentService', () => {
         expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });
 
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
     );
     expect(req.request.method).toEqual('GET');
@@ -458,8 +458,8 @@ describe('DocumentService', () => {
         expect(documentTimeInStation).toEqual(expectedResponse);
       });
 
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user?documentId=${documentId}&stationId=${stationId}&getOnlyCurrentStation=true`
     );
     expect(req.request.method).toEqual('GET');

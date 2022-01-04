@@ -17,8 +17,8 @@ describe('AccountSettingsComponent', () => {
   let fixture: ComponentFixture<AccountSettingsComponent>;
   const formBuilder = new FormBuilder();
 
-  // eslint-disable-next-line rxjs/finnish
   const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line rxjs/finnish
     afterClosed: of({}),
     close: null,
   });

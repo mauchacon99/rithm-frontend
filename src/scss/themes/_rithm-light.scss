@@ -1,8 +1,8 @@
 // Rithm Light Theme
-@use "@angular/material" as mat;
+@use '@angular/material' as mat;
 
 /// import light theme color palette
-@import "../helpers/rithm-light-palettes";
+@import '../helpers/rithm-light-palettes';
 
 // mat-palette accepts $palette-name, main, lighter and darker variants
 /// Apply primary color palette to theme

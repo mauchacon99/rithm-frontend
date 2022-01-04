@@ -76,8 +76,8 @@ describe('OrganizationService', () => {
         expect(users).toBeDefined();
       });
 
-    // eslint-disable-next-line max-len
     const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/users-organization?rithmid=${organizationId}&pageNum=${pageNum}&usersPerPage=${expectedResponse.userPerPage}`
     );
     expect(req.request.method).toEqual('GET');
