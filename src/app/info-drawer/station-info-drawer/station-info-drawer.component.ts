@@ -12,7 +12,7 @@ import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
-import { DocumentService } from '../../core/document.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for info station.
