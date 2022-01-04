@@ -122,7 +122,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   /**
    * Populate and update possibleAnswers for an specific question.
    *
-   * @param answer The index of the current question in the station.
+   * @param answer The question we are adding possible answers to.
    * @param questionIndex The index of the current question in the station.
    * @param arrayAnswers The array of possible answers in the current question.
    */
