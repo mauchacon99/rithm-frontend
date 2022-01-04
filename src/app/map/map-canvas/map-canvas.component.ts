@@ -1099,7 +1099,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
-        const hoveringOverStationGroup = this.stationGroups.some((stationGroup) => stationGroup.hoverActive !== StationGroupElementHoverType.None);
+        const hoveringOverStationGroup =
+          this.stationGroups.some((stationGroup) => stationGroup.hoverActive !== StationGroupElementHoverType.None);
         if (!hoveringOverStation && !hoveringOverStationGroup) {
           this.connections.map(con => {
             con.hoverActive = false;
