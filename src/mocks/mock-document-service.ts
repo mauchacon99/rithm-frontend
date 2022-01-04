@@ -647,9 +647,9 @@ export class MockDocumentService {
    * Creates a new document.
    *
    * @param document The specific document to save.
-   * @returns Document object that has been saved.
+   * @returns The id of the document object that has been saved.
    */
-  createNewDocument(document: DocumentCreate): Observable<unknown> {
+  createNewDocument(document: DocumentCreate): Observable<string> {
     const documentResponse = {
       rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
       name: document.name,
@@ -665,6 +665,6 @@ export class MockDocumentService {
       children: [],
       parents: []
     };
-    return of(documentResponse).pipe(delay(1000));
+    return of(documentResponse.rithmId).pipe(delay(1000));
   }
 }

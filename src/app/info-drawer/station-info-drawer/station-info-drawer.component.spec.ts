@@ -17,6 +17,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DocumentCreate, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -184,5 +185,21 @@ describe('StationInfoDrawerComponent', () => {
     };
     component.createNewDocument(newDocument);
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(newDocument);
+  });
+
+  it('should catch an error if creating the document fails', () => {
+    const newDocument: DocumentCreate = {
+      name: "Demo Document",
+      priority: 0,
+      stationRithmId: component.stationRithmId
+    };
+
+    spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    component.createNewDocument(newDocument);
+    expect(spyError).toHaveBeenCalled();
   });
 });
