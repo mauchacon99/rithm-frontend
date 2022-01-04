@@ -254,6 +254,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       if (this.openedFromMap) {
         this.mapService.removeAllStationConnections(this.stationRithmId);
         this.mapService.deleteStation(this.stationRithmId);
+        this.sidenavDrawerService.closeDrawer();
       } else {
         this.stationService.deleteStation(this.stationRithmId)
           .pipe(first())
@@ -406,7 +407,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param userRithmId The Specific id of user assign.
    * @param documentRithmId The Specific id of document.
    */
-   private assignUserToDocument(userRithmId: string, documentRithmId: string): void {
+  private assignUserToDocument(userRithmId: string, documentRithmId: string): void {
     this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({

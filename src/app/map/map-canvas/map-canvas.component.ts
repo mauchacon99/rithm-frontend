@@ -2,13 +2,13 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, FlowElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {
   DEFAULT_MOUSE_POINT, DEFAULT_SCALE, MAX_SCALE, MIN_SCALE,
   PAN_DECAY_RATE, PAN_TRIGGER_LIMIT, SCALE_RENDER_STATION_ELEMENTS,
-  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION
+  STATION_HEIGHT, STATION_WIDTH, ZOOM_VELOCITY, MAX_PAN_VELOCITY, MOUSE_MOVEMENT_OVER_CONNECTION, TOUCH_EVENT_MARGIN
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -728,6 +728,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       panVelocity.y = bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale) ? bottomPan : Math.floor(-MAX_PAN_VELOCITY / this.scale);
     }
 
+    //When we stop tracking the current mouse point, we reset panVelocity to 0, 0.
     return this.currentMousePoint !== DEFAULT_MOUSE_POINT ? panVelocity : { x: 0, y: 0 };
   }
 
@@ -896,7 +897,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //If it is a click and not a drag.
-    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < 5 && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < 5) {
+    if (Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) < TOUCH_EVENT_MARGIN
+      && Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) < TOUCH_EVENT_MARGIN) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
@@ -904,6 +906,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
         this.clickEventHandler(eventCanvasPoint, eventContextPoint);
       }
+      //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
+      this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
       return;
     }
 
@@ -931,7 +935,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (!newNextStation && MapDragItem.Connection) {
+      if (!newNextStation && this.dragItem === MapDragItem.Connection) {
         if (this.storedConnectionLine === null) {
           throw new Error('The connection line was not stored!');
         }
@@ -955,7 +959,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-          if (station.hoverActive === StationElementHoverType.Station) {
+          if (station.hoverActive !== StationElementHoverType.None) {
             //ensure we cant get duplicate ids.
             if (!station.previousStations.includes(newPreviousStation.rithmId) && station.rithmId !== newPreviousStation.rithmId) {
               if (newPreviousStation.rithmId.length > 0 && newNextStation.rithmId.length > 0) {
@@ -1060,7 +1064,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else if (this.dragItem === MapDragItem.Connection) {
       for (const station of this.stations) {
         station.checkElementHover(this.mapService.currentMousePoint$.value, this.mapMode, this.scale);
-        // if (station.dragging)
       }
       //If it is a drag and not a click.
       const moveFromStartX = this.eventStartCoords.x - eventCanvasPoint.x;
@@ -1095,12 +1098,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
-        const stationHoverCount = this.stations.filter((station) => station.hoverActive !== StationElementHoverType.None).length;
-        if (stationHoverCount === 0) {
+        const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
+        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== FlowElementHoverType.None);
+        if (!hoveringOverStation && !hoveringOverFlow) {
+          this.connections.map(con => {
+            con.hoverActive = false;
+          });
           for (const connection of this.connections) {
-            this.connections.map(con => {
-              con.hoverActive = false;
-            });
             connection.checkElementHover(eventContextPoint, this.context);
             if (connection.hoverActive) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1110,8 +1114,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             }
           }
         }
-        if (stationHoverCount > 0) {
+        //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
+        const hoveringOverConnection = this.connections.some((con) => con.hoverActive);
+        if (!hoveringOverStation && !hoveringOverConnection && this.mapMode === MapMode.FlowAdd) {
+          this.flows.map(fl => {
+            fl.hoverActive = FlowElementHoverType.None;
+          });
+          for (const flow of this.flows) {
+            flow.checkElementHover(eventContextPoint, this.context);
+            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+              this.mapCanvas.nativeElement.style.cursor = 'pointer';
+              break;
+            } else {
+              this.mapCanvas.nativeElement.style.cursor = 'default';
+            }
+          }
+        }
+        if (hoveringOverStation) {
           this.connections.map((con) => con.hoverActive = false);
+          this.flows.map((flow) => flow.hoverActive = FlowElementHoverType.None);
         }
       }
     }
@@ -1225,7 +1246,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   onConnectionDrag(): void {
     for (const connectionLine of this.connections) {
       if (connectionLine.hoverActive && !this.connectionLineDrag) {
-        // Created for future tasks.
         const startStation = this.stations.find(station => station.rithmId === connectionLine.startStationRithmId);
         const endStation = this.stations.find(station => station.rithmId === connectionLine.endStationRithmId);
         if (!startStation || !endStation) {
@@ -1282,7 +1302,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       openedFromMap: true,
       notes: station.notes,
     };
-    this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
-    this.stationService.updatedStationNameText(station.stationName);
+      this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+      this.stationService.updatedStationNameText(station.stationName);
   }
 }
