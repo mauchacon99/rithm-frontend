@@ -36,11 +36,13 @@ export class FlowMapElement {
    * @param point The cursor location.
    * @param ctx The rendering context for the canvas.
    */
-   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
-      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y) ? FlowElementHoverType.Boundary : FlowElementHoverType.None;
+      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y)
+        ? FlowElementHoverType.Boundary
+        : FlowElementHoverType.None;
     }
     ctx.restore();
   }

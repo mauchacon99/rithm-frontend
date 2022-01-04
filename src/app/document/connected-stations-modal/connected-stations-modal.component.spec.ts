@@ -8,7 +8,7 @@ import { ConnectedStationsModalComponent } from './connected-stations-modal.comp
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
-  stationRithmId: 'E204F369-386F-4E41'
+  stationRithmId: 'E204F369-386F-4E41',
 };
 
 describe('ConnectedStationsModalComponent', () => {
@@ -22,13 +22,10 @@ describe('ConnectedStationsModalComponent', () => {
         NoopAnimationsModule,
         MatDialogModule,
         MatButtonModule,
-        MatSelectModule
+        MatSelectModule,
       ],
-      providers: [
-        { provide: MAT_DIALOG_DATA, useValue: DATA_TEST }
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: DATA_TEST }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
