@@ -18,9 +18,9 @@ describe('FlowLogicComponent', () => {
       imports: [
         MatDialogModule
       ],
-      declarations: [ FlowLogicComponent ]
+      declarations: [FlowLogicComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -49,7 +49,6 @@ describe('FlowLogicComponent', () => {
       const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
       component.openModal(component.nextStations[0]);
       expect(dialogSpy).toHaveBeenCalled();
-      expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
     });
   });
 });

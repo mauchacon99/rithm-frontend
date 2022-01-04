@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { ConnectedStationInfo } from 'src/models';
-import { first } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { RuleModalComponent } from "src/app/station/rule-modal/rule-modal.component";
 
