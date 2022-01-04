@@ -13,7 +13,13 @@ const TEST_STATION_MAP_DATA: StationMapData = {
 };
 
 describe('StationMapElement', () => {
+  let station: StationMapElement;
+
+  beforeEach(() => {
+    station = new StationMapElement(TEST_STATION_MAP_DATA);
+  });
+
   it('should create an instance', () => {
-    expect(new StationMapElement(TEST_STATION_MAP_DATA)).toBeTruthy();
+    expect(station).toBeTruthy();
   });
 });
