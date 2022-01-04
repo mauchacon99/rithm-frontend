@@ -34,7 +34,7 @@ describe('FlowLogicComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Should tested mat modal in component', () => {
+  describe('New rule modal', () => {
     const dialogRefSpyObj = jasmine.createSpyObj({
       // eslint-disable-next-line rxjs/finnish
       afterClosed: of({}),
