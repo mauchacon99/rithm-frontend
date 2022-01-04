@@ -404,11 +404,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Creates a new document.
-   *
-   * @param stationRithmId The station where we will create a new document.
    */
-  createNewDocument(stationRithmId: string): void {
-    this.documentService.createNewDocument(stationRithmId)
+  createNewDocument(): void {
+    this.documentService.createNewDocument(this.stationRithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
