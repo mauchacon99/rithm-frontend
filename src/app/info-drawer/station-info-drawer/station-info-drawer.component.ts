@@ -402,7 +402,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Assign a user to a new document.
+   * Assign an user to a document.
    *
    * @param userRithmId The Specific id of user assign.
    * @param documentRithmId The Specific id of document.
