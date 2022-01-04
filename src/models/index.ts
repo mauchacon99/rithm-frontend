@@ -42,4 +42,3 @@ export * from './question-answer';
 export * from './document-auto-flow';
 export * from './move-document';
 export * from './connected-modal-data';
-export * from './document-create';

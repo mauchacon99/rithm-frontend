@@ -8,7 +8,7 @@ import { UtcTimeConversion } from 'src/helpers';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentCreate, DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
@@ -405,10 +405,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Creates a new document.
    *
-   * @param document The specific document to save.
+   * @param stationRithmId The station where we will create a new document.
    */
-  createNewDocument(document: DocumentCreate): void {
-    this.documentService.createNewDocument(document)
+  createNewDocument(stationRithmId: string): void {
+    this.documentService.createNewDocument(stationRithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument, DocumentCreate } from 'src/models';
+import { ConnectedStationInfo, DocumentStationInformation, ForwardPreviousStationsDocument, QuestionFieldType, StationDocuments, UserType, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -646,19 +646,19 @@ export class MockDocumentService {
   /**
    * Creates a new document.
    *
-   * @param document The specific document to save.
+   * @param stationRithmId The station where we will create a new document.
    * @returns The id of the document object that has been saved.
    */
-  createNewDocument(document: DocumentCreate): Observable<string> {
+  createNewDocument(stationRithmId: string): Observable<string> {
     const documentResponse = {
       rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
-      name: document.name,
+      name: '',
       priority: 0,
       currentStations: [
         {
           name: "So long",
           instructions: "",
-          rithmId: "4a8df4c5-185d-46e0-805e-3f4836ed33fa",
+          rithmId: stationRithmId,
           assignedUser: null
         }
       ],
