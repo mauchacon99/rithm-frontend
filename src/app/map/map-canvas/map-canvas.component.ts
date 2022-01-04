@@ -968,6 +968,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (!this.mapService.connectionElements.map(e => JSON.stringify(e)).includes(JSON.stringify(lineInfo))
           && (newPreviousStation.rithmId !== newNextStation.rithmId)) {
           this.mapService.connectionElements.push(lineInfo);
+          // Set storedConnectionLine to null to avoid restoring it to previous state once it's moved successfully.
+          if (this.storedConnectionLine) {
+            this.storedConnectionLine = null;
+          }
         }
         if (this.storedConnectionLine) {
           this.restoreConnection();
@@ -1201,7 +1205,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Restores the connection line to previous state if something fails while moving current connection line.
    *
    */
-  restoreConnection(): void {
+  private restoreConnection(): void {
     if (this.storedConnectionLine === null){
       throw new Error('The connection line was not stored!');
     }
