@@ -22,13 +22,13 @@ export class FlowLogicComponent {
   /**
    * Open a modal rule-modal.
    *
-   * @param station The object of model ConnectedStationInfo.
+   * @param rithmId String.
    */
-  async openModal(station: ConnectedStationInfo): Promise<void> {
+  async openModal(rithmId: string): Promise<void> {
     const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: { station }
+      data: rithmId
     });
     if (dialog) {
       // handle returned rule

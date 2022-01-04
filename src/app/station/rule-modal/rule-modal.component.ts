@@ -13,7 +13,7 @@ import { ConnectedStationInfo } from "src/models";
 export class RuleModalComponent {
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public modalData: ConnectedStationInfo
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public rithmId: string
+  ) { console.log(rithmId) }
 
 }

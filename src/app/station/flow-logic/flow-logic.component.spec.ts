@@ -41,10 +41,10 @@ describe('FlowLogicComponent', () => {
       const expectDataModal = {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
-        data: { station: nextStations[0] }
+        data: nextStations[0].rithmId
       };
       const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.callThrough();
-      await component.openModal(nextStations[0]);
+      await component.openModal(nextStations[0].rithmId);
       expect(dialogSpy).toHaveBeenCalledOnceWith(RuleModalComponent, expectDataModal);
     });
 
@@ -53,7 +53,7 @@ describe('FlowLogicComponent', () => {
       const btnOpenModal = fixture.nativeElement.querySelector('#new-rule');
       expect(btnOpenModal).toBeTruthy();
       btnOpenModal.click();
-      expect(spyFunc).toHaveBeenCalledOnceWith(nextStations[0]);
+      expect(spyFunc).toHaveBeenCalledOnceWith(nextStations[0].rithmId);
     });
   });
 });
