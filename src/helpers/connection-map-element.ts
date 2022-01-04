@@ -1,7 +1,7 @@
 import { CONNECTION_ARROW_LENGTH, CONNECTION_HEIGHT_REDUCER, CONNECTION_NODE_OFFSET,
   STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
-import { Point } from '.';
+import { Point } from '../models';
 
 /**
  * Represents all information about a connection line between any two stations.

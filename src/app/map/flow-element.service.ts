@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FlowElementHoverType, FlowMapElement, Point } from 'src/models';
+import { FlowMapElement } from 'src/helpers';
+import { FlowElementHoverType, Point } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
   DEFAULT_SCALE, GROUP_NAME_PADDING, FONT_SIZE_MODIFIER, NODE_HOVER_COLOR,

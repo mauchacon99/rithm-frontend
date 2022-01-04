@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StationMapElement } from 'src/helpers';
-import { MapMode, Point, MapDragItem, MapItemStatus, FlowMapElement, StationElementHoverType, StationInfoDrawerData, StationInformation, ConnectionMapElement, FlowElementHoverType } from 'src/models';
+import { ConnectionMapElement, FlowMapElement, StationMapElement } from 'src/helpers';
+import { MapMode, Point, MapDragItem, MapItemStatus, StationElementHoverType, StationInfoDrawerData, StationInformation, FlowElementHoverType } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
 import {

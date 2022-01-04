@@ -1,4 +1,4 @@
-import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '.';
+import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '../models';
 
 export interface FlowMapElement extends FlowMapData {
 

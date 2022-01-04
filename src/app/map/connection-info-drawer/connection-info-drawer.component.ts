@@ -2,8 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationMapElement } from 'src/helpers';
-import { ConnectionMapElement, MapMode } from 'src/models';
+import { ConnectionMapElement, StationMapElement } from 'src/helpers';
+import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { PopupService } from 'src/app/core/popup.service';
 

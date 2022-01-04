@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, FlowMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
+import { MapMode, Point, MapData, MapItemStatus, EnvironmentName } from 'src/models';
 import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
   MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
   ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT, SCALE_REDUCED_RENDER, CENTER_ZOOM_BUFFER } from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { StationMapElement } from 'src/helpers';
+import { ConnectionMapElement, FlowMapElement, StationMapElement } from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
