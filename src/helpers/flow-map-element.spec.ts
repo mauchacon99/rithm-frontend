@@ -71,11 +71,11 @@ describe('FlowMapElement', () => {
     // TODO: add test
   });
 
-  xit('should report that a flow is identical to itself', () => {
+  xit('should report that a station group is identical to itself', () => {
     // TODO: add test
   });
 
-  xit('should report that a flow is non-identical to itself', () => {
+  xit('should report that a station group is different from itself', () => {
     // TODO: add test
   });
 
