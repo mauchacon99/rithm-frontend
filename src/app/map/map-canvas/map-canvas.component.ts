@@ -78,8 +78,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Data for station card used in the map. */
   stations: StationMapElement[] = [];
 
-  /** Data for flow used in the map. */
-  flows: StationGroupMapElement[] = [];
+  /** Data for station groups used in the map. */
+  stationGroups: StationGroupMapElement[] = [];
 
   /** Data for connection line path between stations. */
   connections: ConnectionMapElement[] = [];
@@ -117,7 +117,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
-    private flowElementService: StationGroupElementService,
+    private stationGroupElementService: StationGroupElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
@@ -188,7 +188,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((dataReceived) => {
         this.stations = this.mapService.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
-        this.flows = this.mapService.stationGroupElements;
+        this.stationGroups = this.mapService.stationGroupElements;
         this.connections = this.mapService.connectionElements;
         if (dataReceived && this.initLoad) {
           this.mapService.centerActive$.next(true);
@@ -659,8 +659,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Update station and connection positions.
       this.mapService.updateStationCanvasPoints();
 
-      // Draw the flows
-      this.flowElementService.drawStationGroups();
+      // Draw the station groups
+      this.stationGroupElementService.drawStationGroups();
 
       // Draw the connections
       this.connections.forEach((connection) => {
@@ -1099,8 +1099,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         const hoveringOverStation = this.stations.some((station) => station.hoverActive !== StationElementHoverType.None);
-        const hoveringOverFlow = this.flows.some((flow) => flow.hoverActive !== StationGroupElementHoverType.None);
-        if (!hoveringOverStation && !hoveringOverFlow) {
+        const hoveringOverStationGroup = this.stationGroups.some((stationGroup) => stationGroup.hoverActive !== StationGroupElementHoverType.None);
+        if (!hoveringOverStation && !hoveringOverStationGroup) {
           this.connections.map(con => {
             con.hoverActive = false;
           });
@@ -1114,15 +1114,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             }
           }
         }
-        //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
+        //These next if statement ensure that while a station or connection is being hovered a station group is not also,
+        //map mode should be AddStationGroup.
         const hoveringOverConnection = this.connections.some((con) => con.hoverActive);
         if (!hoveringOverStation && !hoveringOverConnection && this.mapMode === MapMode.StationGroupAdd) {
-          this.flows.map(fl => {
+          this.stationGroups.map(fl => {
             fl.hoverActive = StationGroupElementHoverType.None;
           });
-          for (const flow of this.flows) {
-            flow.checkElementHover(eventContextPoint, this.context);
-            if (flow.hoverActive === StationGroupElementHoverType.Boundary) {
+          for (const stationGroup of this.stationGroups) {
+            stationGroup.checkElementHover(eventContextPoint, this.context);
+            if (stationGroup.hoverActive === StationGroupElementHoverType.Boundary) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
@@ -1132,7 +1133,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         if (hoveringOverStation) {
           this.connections.map((con) => con.hoverActive = false);
-          this.flows.map((flow) => flow.hoverActive = StationGroupElementHoverType.None);
+          this.stationGroups.map((stationGroup) => stationGroup.hoverActive = StationGroupElementHoverType.None);
         }
       }
     }

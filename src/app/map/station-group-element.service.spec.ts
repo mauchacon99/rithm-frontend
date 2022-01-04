@@ -5,7 +5,7 @@ import { MockMapService } from 'src/mocks';
 import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
 
-describe('FlowElementService', () => {
+describe('StationGroupElementService', () => {
   let service: StationGroupElementService;
 
   beforeEach(() => {
