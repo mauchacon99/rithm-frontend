@@ -358,8 +358,8 @@ export class MapService {
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
-    startStation.status = MapItemStatus.Updated;
-    endStation.status = MapItemStatus.Updated;
+    startStation.markAsUpdated();
+    endStation.markAsUpdated();
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
@@ -840,7 +840,11 @@ export class MapService {
     const updatedStations = this.stationElements.filter((station) => station.status === MapItemStatus.Updated);
     for (const updatedStation of updatedStations) {
       const storedStation = this.storedStationElements.find((station) => station.rithmId === updatedStation.rithmId);
-      if (storedStation && storedStation.isIdenticalTo(updatedStation)) {
+      if (!storedStation) {
+        throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
+          but does not exist in stored stations.`);
+      }
+      if (storedStation.isIdenticalTo(updatedStation)) {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
