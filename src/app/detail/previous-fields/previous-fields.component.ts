@@ -142,4 +142,18 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  /**
+   * Open The Modal display of previous questions.
+   *
+   * @param previousQuestion The Question of the document.
+   */
+  openModalPreviousQuestions(previousQuestion: Question): void {
+    this.popupService.confirm({
+      title: `${previousQuestion.prompt}`,
+      message: `${previousQuestion.answer?.value}`,
+      okButtonText: 'Ok',
+      cancelButtonText: 'Cancel'
+    });
+  }
 }
