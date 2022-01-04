@@ -18,7 +18,6 @@ import { DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
-import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -177,22 +176,11 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should assign user to a document', () => {
+  it('should create new document and called services', () => {
     const userExpect = '123-957';
     const newDocumentExpect = '852-789-654-782';
     const spyPetition = spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.callThrough();
-    component['assignUserToDocument'](userExpect, newDocumentExpect);
+    component.createDocument(userExpect, newDocumentExpect);
     expect(spyPetition).toHaveBeenCalledOnceWith(userExpect, component.stationRithmId, newDocumentExpect);
-  });
-
-  it('should catch error and executed error service', () => {
-    const userExpect = '123-957';
-    const newDocumentExpect = '852-789-654-782';
-    spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
-    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
-    component['assignUserToDocument'](userExpect, newDocumentExpect);
-    expect(spyError).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -407,8 +407,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param userRithmId The Specific id of user assign.
    * @param documentRithmId The Specific id of document.
    */
-  private assignUserToDocument(userRithmId: string, documentRithmId: string): void {
-    this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
+  createDocument(userRithmId: string, documentRithmId: string): void {
+    const requestArray = [
+      // Assign an user to a document.
+      this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
+    ];
+
+    forkJoin(requestArray)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {
