@@ -394,7 +394,7 @@ describe('DocumentService', () => {
   it('should assign an user to a document', () => {
     const expectUser = '123-984-657';
 
-    service.assignUserToNewDocument(expectUser, stationId, documentId)
+    service.assignUserToDocument(expectUser, stationId, documentId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
