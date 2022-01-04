@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { Question, QuestionFieldType } from 'src/models';
@@ -24,7 +24,7 @@ import { Question, QuestionFieldType } from 'src/models';
     }
   ]
 })
-export class NestedFieldComponent implements OnInit{
+export class NestedFieldComponent implements ControlValueAccessor, OnInit{
   /** The form to add this field in the template. */
   nestedFieldForm!: FormGroup;
 
