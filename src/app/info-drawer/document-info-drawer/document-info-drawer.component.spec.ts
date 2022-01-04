@@ -19,6 +19,7 @@ import { DialogOptions, MoveDocument } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -52,7 +53,8 @@ describe('DocumentInfoDrawerComponent', () => {
         NoopAnimationsModule,
         MatSelectModule,
         FormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatDialogModule
       ],
     })
       .compileComponents();
