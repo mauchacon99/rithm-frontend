@@ -406,8 +406,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param userRithmId The Specific id of user assign.
    * @param documentRithmId The Specific id of document.
    */
-  assignUserToNewDocument(userRithmId: string, documentRithmId: string): void {
-    this.documentService.assignUserToNewDocument(userRithmId, this.stationRithmId, documentRithmId)
+   private assignUserToDocument(userRithmId: string, documentRithmId: string): void {
+    this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({
         error: (error: unknown) => {

@@ -643,14 +643,14 @@ export class MockDocumentService {
   }
 
   /**
-   * Assign a user to a new document.
+   * Assign an user to a document.
    *
    * @param userRithmId The Specific id of user assign.
    * @param stationRithmId The Specific id of station.
    * @param documentRithmId The Specific id of document.
    * @returns Returns an empty observable.
    */
-  assignUserToNewDocument(userRithmId:string, stationRithmId:string, documentRithmId:string): Observable<unknown> {
+  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
     if (!userRithmId || !stationRithmId || !documentRithmId) {
       return throwError(() => new HttpErrorResponse({
         error: {

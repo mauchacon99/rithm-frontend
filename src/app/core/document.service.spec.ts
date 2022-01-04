@@ -391,7 +391,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  it('should add new user to new document', () => {
+  it('should assign an user to a document', () => {
     const expectUser = '123-984-657';
 
     service.assignUserToNewDocument(expectUser, stationId, documentId)

@@ -177,22 +177,22 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should a user assigned in new document', () => {
+  it('should assign user to a document', () => {
     const userExpect = '123-957';
     const newDocumentExpect = '852-789-654-782';
-    const spyPetition = spyOn(TestBed.inject(DocumentService), 'assignUserToNewDocument').and.callThrough();
-    component.assignUserToNewDocument(userExpect, newDocumentExpect);
+    const spyPetition = spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.callThrough();
+    component['assignUserToDocument'](userExpect, newDocumentExpect);
     expect(spyPetition).toHaveBeenCalledOnceWith(userExpect, component.stationRithmId, newDocumentExpect);
   });
 
   it('should catch error and executed error service', () => {
     const userExpect = '123-957';
     const newDocumentExpect = '852-789-654-782';
-    spyOn(TestBed.inject(DocumentService), 'assignUserToNewDocument').and.returnValue(throwError(() => {
+    spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.returnValue(throwError(() => {
       throw new Error();
     }));
     const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
-    component.assignUserToNewDocument(userExpect, newDocumentExpect);
+    component['assignUserToDocument'](userExpect, newDocumentExpect);
     expect(spyError).toHaveBeenCalled();
   });
 });
