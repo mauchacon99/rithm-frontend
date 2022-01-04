@@ -2,11 +2,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockMapService } from 'src/mocks';
 
-import { FlowElementService } from './flow-element.service';
+import { StationGroupElementService } from './station-group-element.service';
 import { MapService } from './map.service';
 
 describe('FlowElementService', () => {
-  let service: FlowElementService;
+  let service: StationGroupElementService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('FlowElementService', () => {
         { provide: MapService, useClass: MockMapService }
       ]
     });
-    service = TestBed.inject(FlowElementService);
+    service = TestBed.inject(StationGroupElementService);
   });
 
   it('should be created', () => {

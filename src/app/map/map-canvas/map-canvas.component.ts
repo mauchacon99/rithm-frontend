@@ -12,7 +12,7 @@ import {
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
-import { FlowElementService } from '../flow-element.service';
+import { StationGroupElementService } from '../station-group-element.service';
 import { StationDocumentsModalComponent } from 'src/app/shared/station-documents-modal/station-documents-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -117,7 +117,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private stationElementService: StationElementService,
     private connectionElementService: ConnectionElementService,
-    private flowElementService: FlowElementService,
+    private flowElementService: StationGroupElementService,
     private dialog: MatDialog,
     private sidenavDrawerService: SidenavDrawerService,
     private stationService: StationService,
@@ -660,7 +660,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.updateStationCanvasPoints();
 
       // Draw the flows
-      this.flowElementService.drawFlows();
+      this.flowElementService.drawStationGroups();
 
       // Draw the connections
       this.connections.forEach((connection) => {

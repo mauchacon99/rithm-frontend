@@ -21,15 +21,15 @@ export interface StationGroupMapElement extends StationGroupMapData {
 export class StationGroupMapElement {
 
   /**
-   * Creates a new `FlowMapElement`.
+   * Creates a new `StationGroupMapElement`.
    *
-   * @param flowMapData The `FlowMapData` returned from the API.
+   * @param stationGroupMapData The `StationGroupMapData` returned from the API.
    */
-  constructor(flowMapData: StationGroupMapData) {
+  constructor(stationGroupMapData: StationGroupMapData) {
     this.boundaryPoints = [];
     this.dragging = false;
     this.hoverActive = StationGroupElementHoverType.None;
-    Object.assign(this, flowMapData);
+    Object.assign(this, stationGroupMapData);
   }
 
   /**

@@ -7,12 +7,12 @@ CONNECTION_DEFAULT_COLOR, STATION_GROUP_PADDING, STATION_HEIGHT, STATION_WIDTH, 
 import { MapService } from './map.service';
 
 /**
- * Service for rendering and other behavior for a flow on the map.
+ * Service for rendering and other behavior for a station group on the map.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class FlowElementService {
+export class StationGroupElementService {
 
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
@@ -27,167 +27,170 @@ export class FlowElementService {
   }
 
   /**
-   * Draws all the flow boundaries on the map. Starts from the deepest flows and works back to the root.
+   * Draws all the station group boundaries on the map. Starts from the deepest station groups and works back to the root.
    */
-  drawFlows(): void {
+  drawStationGroups(): void {
     if (!this.mapService.stationGroupElements.length) {
       return;
     }
-    const rootFlow = this.mapService.stationGroupElements.find((flow) => flow.isReadOnlyRootFlow);
-    if (!rootFlow) {
-      throw new Error('Root flow could not be found');
+    const rootStationGroup = this.mapService.stationGroupElements.find((stationGroup) => stationGroup.isReadOnlyRootFlow);
+    if (!rootStationGroup) {
+      throw new Error('Root station group could not be found');
     }
-    this.drawFlow(rootFlow);
+    this.drawStationGroup(rootStationGroup);
   }
 
   /**
-   * Draws a specific flow on the map. Draws any nested flows first through recursion.
+   * Draws a specific station group on the map. Draws any nested station groups first through recursion.
    *
-   * @param flow The flow to be drawn on the map.
+   * @param stationGroup The station group to be drawn on the map.
    */
-  private drawFlow(flow: StationGroupMapElement): void {
+  private drawStationGroup(stationGroup: StationGroupMapElement): void {
 
-    // If flow has a sub-flow, draw that first
-    flow.subFlows.forEach((subFlowId) => {
-      const subFlow = this.mapService.stationGroupElements.find((flowElement) => flowElement.rithmId === subFlowId);
-      if (!subFlow) {
-        throw new Error(`Couldn't find a sub-flow for which an id exists: ${subFlowId}`);
+    // If station group has a sub-station-group, draw that first
+    stationGroup.subFlows.forEach((subStationGroupId) => {
+      const subStationGroup =
+        this.mapService.stationGroupElements.find((stationGroupElement) => stationGroupElement.rithmId === subStationGroupId);
+      if (!subStationGroup) {
+        throw new Error(`Couldn't find a sub-station-group for which an id exists: ${subStationGroupId}`);
       }
-      this.drawFlow(subFlow);
+      this.drawStationGroup(subStationGroup);
     });
 
-    if (flow.isReadOnlyRootFlow) {
-      return; // No need to calculate/render the root flow
+    if (stationGroup.isReadOnlyRootFlow) {
+      return; // No need to calculate/render the root station group.
     }
 
-    // Determine the points within the flow
-    const pointsWithinFlow: Point[] = [];
-    pointsWithinFlow.push(...this.getStationPointsForFlow(flow));
-    pointsWithinFlow.push(...this.getSubFlowPointsForFlow(flow));
+    // Determine the points within the station group.
+    const pointsWithinStationGroup: Point[] = [];
+    pointsWithinStationGroup.push(...this.getStationPointsForStationGroup(stationGroup));
+    pointsWithinStationGroup.push(...this.getSubStationGroupPointsForStationGroup(stationGroup));
 
     // Determine the points for the boundary line
-    flow.boundaryPoints = this.getConvexHull(pointsWithinFlow);
+    stationGroup.boundaryPoints = this.getConvexHull(pointsWithinStationGroup);
 
-    // TODO: Render an empty flow
-    if (flow.boundaryPoints.length > 0) {
-      this.setFlowBoundaryPath(flow);
-      this.drawFlowBoundaryLine(flow);
-      this.drawFlowName(flow);
+    // TODO: Render an empty station group.
+    if (stationGroup.boundaryPoints.length > 0) {
+      this.setStationGroupBoundaryPath(stationGroup);
+      this.drawStationGroupBoundaryLine(stationGroup);
+      this.drawStationGroupName(stationGroup);
     }
   }
 
   /**
-   * Draws the boundary line on the map for a flow.
+   * Draws the boundary line on the map for a station group.
    *
-   * @param flow The flow for which to draw the flow boundary line.
+   * @param stationGroup The station group for which to draw the station group boundary line.
    */
-  private drawFlowBoundaryLine(flow: StationGroupMapElement): void {
+  private drawStationGroupBoundaryLine(stationGroup: StationGroupMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw flow boundary line if context is not defined');
+      throw new Error('Cannot draw station group boundary line if context is not defined');
     }
     const ctx = this.canvasContext;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
-    ctx.strokeStyle = flow.hoverActive === StationGroupElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
+    ctx.strokeStyle = stationGroup.hoverActive === StationGroupElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
-    ctx.stroke(flow.path);
+    ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
   }
 
   /**
-   * Draws the flow name on the map.
+   * Draws the station group name on the map.
    *
-   * @param flow The flow for which to draw the name.
+   * @param stationGroup The station group for which to draw the name.
    */
-  private drawFlowName(flow: StationGroupMapElement): void {
+  private drawStationGroupName(stationGroup: StationGroupMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw flow name if context is not defined');
+      throw new Error('Cannot draw station group name if context is not defined');
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
-      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + STATION_GROUP_NAME_PADDING);
+    this.canvasContext.fillText(stationGroup.title, stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y + STATION_GROUP_NAME_PADDING);
   }
 
   /**
-   * Set's the flow boundary path on the map for a flow.
+   * Set's the station group boundary path on the map for a station group.
    *
-   * @param flow The flow for which path needs to be set.
+   * @param stationGroup The station group for which path needs to be set.
    */
-   private setFlowBoundaryPath(flow: StationGroupMapElement): void {
+   private setStationGroupBoundaryPath(stationGroup: StationGroupMapElement): void {
     const path = new Path2D();
 
-    path.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
-    flow.boundaryPoints = flow.boundaryPoints.concat(flow.boundaryPoints.splice(0, 1)); // Shift the first point to the back
+    path.moveTo(stationGroup.boundaryPoints[0].x, stationGroup.boundaryPoints[0].y);
+    stationGroup.boundaryPoints =
+      stationGroup.boundaryPoints.concat(stationGroup.boundaryPoints.splice(0, 1)); // Shift the first point to the back
 
-    for (const boundaryPoint of flow.boundaryPoints) {
+    for (const boundaryPoint of stationGroup.boundaryPoints) {
       path.lineTo(boundaryPoint.x, boundaryPoint.y);
     }
-    flow.path = path;
+    stationGroup.path = path;
   }
 
   /**
-   * Gets a list of all the station points that are contained within a flow.
+   * Gets a list of all the station points that are contained within a station group.
    *
-   * @param flow The flow for which to get the points.
+   * @param stationGroup The station group for which to get the points.
    * @returns A list of contained points representing the stations.
    */
-  private getStationPointsForFlow(flow: StationGroupMapElement): Point[] {
-    if (!flow.stations.length) {
+  private getStationPointsForStationGroup(stationGroup: StationGroupMapElement): Point[] {
+    if (!stationGroup.stations.length) {
       return []; // Nothing to do here
     }
 
-    // Get the stations within the flow
-    const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
+    // Get the stations within the station group.
+    const stationGroupStations = this.mapService.stationElements.filter((station) => stationGroup.stations.includes(station.rithmId));
 
-    // Get all the station points within this flow
-    const stationPointsWithinFlow: Point[] = [];
-    for (const station of flowStations) {
+    // Get all the station points within this station group.
+    const stationPointsWithinStationGroup: Point[] = [];
+    for (const station of stationGroupStations) {
       const scaledPadding = STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
       const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
 
-      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
-      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
-      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
-      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+      stationPointsWithinStationGroup.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
+      stationPointsWithinStationGroup.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
+      stationPointsWithinStationGroup.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
+      stationPointsWithinStationGroup.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
     }
-    return stationPointsWithinFlow;
+    return stationPointsWithinStationGroup;
   }
 
   /**
-   * Gets a list of all the pre-calculated, sub-flow points that are contained within a flow.
+   * Gets a list of all the pre-calculated, sub-station-group points that are contained within a station group.
    *
-   * @param flow The flow for which to get the points.
-   * @returns A list of contained points representing the flow boundary of the sub-flows.
+   * @param stationGroup The station group for which to get the points.
+   * @returns A list of contained points representing the station group boundary of the sub-station-groups.
    */
-  private getSubFlowPointsForFlow(flow: StationGroupMapElement): Point[] {
-    if (!flow.subFlows.length) {
+  private getSubStationGroupPointsForStationGroup(stationGroup: StationGroupMapElement): Point[] {
+    if (!stationGroup.subFlows.length) {
       return [];
     }
-    // Get the sub-flows within the flow
-    const subFlows = this.mapService.stationGroupElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
+    // Get the sub-station-groups within the station group.
+    const subStationGroups =
+      this.mapService.stationGroupElements.filter((subStationGroup) => stationGroup.subFlows.includes(subStationGroup.rithmId));
 
-    // Get all the points for sub-flows
-    const subFlowPointsWithinFlow: Point[] = [];
-    subFlows.forEach((subFlow) => {
-      subFlowPointsWithinFlow.push(...this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints));
+    // Get all the points for sub-station-groups.
+    const subStationGroupPointsWithinStationGroup: Point[] = [];
+    subStationGroups.forEach((subStationGroup) => {
+      subStationGroupPointsWithinStationGroup.push(...this.getPaddedStationGroupBoundaryPoints(subStationGroup.boundaryPoints));
     });
-    return subFlowPointsWithinFlow;
+    return subStationGroupPointsWithinStationGroup;
   }
 
   /**
-   * Adds flow padding to the provided boundary points and returns it.
+   * Adds station group padding to the provided boundary points and returns it.
    *
-   * @param boundaryPoints The existing flow boundary points for which to add padding.
-   * @returns The padded flow boundary points.
+   * @param boundaryPoints The existing station group boundary points for which to add padding.
+   * @returns The padded station group boundary points.
    */
-  private getPaddedFlowBoundaryPoints(boundaryPoints: Point[]): Point[] {
+  private getPaddedStationGroupBoundaryPoints(boundaryPoints: Point[]): Point[] {
     const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
     const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
