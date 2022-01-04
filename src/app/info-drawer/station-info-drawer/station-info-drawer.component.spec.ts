@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import {MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService} from 'src/mocks';
+import { MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService, MockDocumentService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -14,8 +14,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { DocumentGenerationStatus } from 'src/models';
+import { DocumentCreate, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -44,7 +45,8 @@ describe('StationInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService}
+        { provide: MapService, useClass: MockMapService},
+        { provide: DocumentService, useClass: MockDocumentService },
       ]
     })
       .compileComponents();
@@ -171,5 +173,16 @@ describe('StationInfoDrawerComponent', () => {
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
+  });
+
+  it('should create a document from station-info-drawer', () => {
+    const createDocumentSpy = spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.callThrough();
+    const newDocument: DocumentCreate = {
+      name: "Demo Document",
+      priority: 0,
+      stationRithmId: component.stationRithmId
+    };
+    component.createNewDocument(newDocument);
+    expect(createDocumentSpy).toHaveBeenCalledOnceWith(newDocument);
   });
 });

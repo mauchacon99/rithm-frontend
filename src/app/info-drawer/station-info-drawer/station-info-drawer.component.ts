@@ -8,10 +8,11 @@ import { UtcTimeConversion } from 'src/helpers';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
+import { DocumentCreate, DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from '../../core/document.service';
 
 /**
  * Component for info station.
@@ -89,7 +90,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private popupService: PopupService,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private documentService: DocumentService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -397,5 +399,26 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       throw new Error(`The stationInformation is undefined when checking if user is a worker.`);
     }
     return this.userService.isWorker(this.stationInformation);
+  }
+
+
+  /**
+   * Creates a new document.
+   *
+   * @param document The specific document to save.
+   */
+  createNewDocument(document: DocumentCreate): void {
+    this.documentService.createNewDocument(document)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+     });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument, DocumentCreate } from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -256,5 +256,30 @@ export class DocumentService {
     } else {
       return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`, moveDocument);
     }
+  }
+
+  /**
+   * Creates a new document.
+   *
+   * @param document The specific document to save.
+   * @returns Document object that has been saved.
+   */
+  createNewDocument(document: DocumentCreate): Observable<unknown> {
+    const documentResponse = {
+      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      name: document.name,
+      priority: 0,
+      currentStations: [
+        {
+          name: "So long",
+          instructions: "",
+          rithmId: "4a8df4c5-185d-46e0-805e-3f4836ed33fa",
+          assignedUser: null
+        }
+      ],
+      children: [],
+      parents: []
+    };
+    return of(documentResponse).pipe(delay(1000));
   }
 }
