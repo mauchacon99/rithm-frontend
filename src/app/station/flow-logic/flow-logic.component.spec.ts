@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlowLogicComponent } from './flow-logic.component';
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ConnectedStationInfo } from "src/models";
-import { of } from "rxjs";
+import { RuleModalComponent } from "../rule-modal/rule-modal.component";
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -18,7 +18,7 @@ describe('FlowLogicComponent', () => {
       imports: [
         MatDialogModule
       ],
-      declarations: [FlowLogicComponent]
+      declarations: [FlowLogicComponent, RuleModalComponent]
     })
       .compileComponents();
   });
@@ -35,19 +35,20 @@ describe('FlowLogicComponent', () => {
   });
 
   describe('New rule modal', () => {
-    const dialogRefSpyObj = jasmine.createSpyObj({
-      // eslint-disable-next-line rxjs/finnish
-      afterClosed: of({}),
-      close: null
+
+    it('should to call function openModal', () => {
+      const openModal = spyOn(component, 'openModal');
+      const btnOpenModal = fixture.nativeElement.querySelector('#new-rule');
+      expect(btnOpenModal).toBeTruthy();
+      btnOpenModal.click();
+      expect(openModal).toHaveBeenCalled();
     });
 
-    dialogRefSpyObj.componentInstance = {
-      body: ''
-    };
-
-    it('should be open modal', () => {
-      const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
-      component.openModal(component.nextStations[0]);
+    it('should to call dialog service', () => {
+      const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open');
+      const btnOpenModal = fixture.nativeElement.querySelector('#new-rule');
+      expect(btnOpenModal).toBeTruthy();
+      btnOpenModal.click();
       expect(dialogSpy).toHaveBeenCalled();
     });
   });
