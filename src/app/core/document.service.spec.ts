@@ -263,6 +263,7 @@ describe('DocumentService', () => {
         isRequired: true,
         possibleAnswers: [
           {
+            rithmId: 'string',
             text: 'string',
             default: true
           }
@@ -389,5 +390,14 @@ describe('DocumentService', () => {
     expect(req.request.body).toEqual(dataExpect);
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should assign an user to a document', () => {
+    const expectUser = '123-984-657';
+
+    service.assignUserToDocument(expectUser, stationId, documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
   });
 });
