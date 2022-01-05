@@ -10,12 +10,8 @@ describe('CommentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        CommentComponent,
-        MockComponent(UserAvatarComponent)
-      ]
-    })
-    .compileComponents();
+      declarations: [CommentComponent, MockComponent(UserAvatarComponent)],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -29,7 +25,7 @@ describe('CommentComponent', () => {
       archived: true,
       userFirstName: 'Alex',
       userLastName: 'Can',
-      rithmId: 'string'
+      rithmId: 'string',
     };
     fixture.detectChanges();
   });
