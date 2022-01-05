@@ -164,7 +164,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should not show the delete-station-button on the station information if the user is a worker', () => {
     component.stationLoading = false;
     component.editMode = false;
-    spyOnProperty(component,'isWorker').and.returnValue(true);
+    spyOnProperty(component, 'isWorker').and.returnValue(true);
     expect(component.editMode).toBeFalse();
     const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
     expect(deleteButton).toBeFalsy();
@@ -189,6 +189,25 @@ describe('StationInfoDrawerComponent', () => {
 
     const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
     component.createNewDocument();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should create new document and called services', () => {
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    const spyPetition = spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.callThrough();
+    component.assignUserToDocument(userExpect, newDocumentExpect);
+    expect(spyPetition).toHaveBeenCalledOnceWith(userExpect, component.stationRithmId, newDocumentExpect);
+  });
+
+  it('should catch error and executed error service', () => {
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    spyOn(TestBed.inject(DocumentService), 'assignUserToDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    component.assignUserToDocument(userExpect, newDocumentExpect);
     expect(spyError).toHaveBeenCalled();
   });
 });

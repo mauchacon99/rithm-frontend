@@ -282,4 +282,24 @@ export class DocumentService {
     };
     return of(documentResponse.rithmId).pipe(delay(1000));
   }
+
+ /**
+  * Assign an user to a document.
+  *
+  * @param userRithmId The Specific id of user assign.
+  * @param stationRithmId The Specific id of station.
+  * @param documentRithmId The Specific id of document.
+  * @returns Returns an empty observable.
+  */
+  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
+    if (!userRithmId || !stationRithmId || !documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, new user cannot be assigned to the document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
 }
