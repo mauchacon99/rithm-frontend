@@ -7,7 +7,6 @@ import { Question } from './question';
  * @see `QuestionListViewModel` in back end.
  */
 export interface QuestionList {
-
   /** The global Rithm ID for the station that houses the questions. */
   stationRithmId: string;
 

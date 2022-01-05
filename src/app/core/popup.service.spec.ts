@@ -10,15 +10,18 @@ describe('PopupService', () => {
   let service: PopupService;
   let dialogSpy: jasmine.Spy;
   let snackBarSpy: jasmine.Spy;
-  // eslint-disable-next-line rxjs/finnish
-  const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of({}), close: null });
+  const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line rxjs/finnish
+    afterClosed: of({}),
+    close: null,
+  });
   dialogRefSpyObj.componentInstance = { body: '' };
   const dialogWithWidth: DialogData = {
     type: DialogType.Terms,
     title: 'Terms and Conditions',
     message: 'Returns terms and conditions',
     okButtonText: 'Agree',
-    width: '90%'
+    width: '90%',
   };
   const dialogWithoutWidth: DialogData = {
     type: DialogType.Terms,
@@ -29,16 +32,15 @@ describe('PopupService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        MatSnackBarModule
-      ]
+      imports: [MatDialogModule, MatSnackBarModule],
     });
     service = TestBed.inject(PopupService);
   });
 
   beforeEach(() => {
-    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(
+      dialogRefSpyObj
+    );
     snackBarSpy = spyOn(TestBed.inject(MatSnackBar), 'open');
   });
 
@@ -74,7 +76,7 @@ describe('PopupService', () => {
     service.notify('mock notification');
     expect(snackBarSpy).toHaveBeenCalledWith('mock notification', 'OK', {
       duration: 3500,
-      panelClass: 'snackbar'
+      panelClass: 'snackbar',
     });
   });
 
@@ -82,8 +84,7 @@ describe('PopupService', () => {
     service.notify('mock notification', true);
     expect(snackBarSpy).toHaveBeenCalledWith('mock notification', 'OK', {
       duration: 3500,
-      panelClass: 'snackbar-error'
+      panelClass: 'snackbar-error',
     });
   });
-
 });

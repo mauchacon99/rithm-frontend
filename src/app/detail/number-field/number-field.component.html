@@ -1,14 +1,67 @@
 <div [formGroup]="numberFieldForm">
   <mat-form-field class="w-full" appearance="outline">
-    <mat-label>{{field.prompt}}</mat-label>
+    <mat-label>{{ field.prompt }}</mat-label>
     <div matPrefix class="icon">
-      <i *ngIf="field.questionType === fieldTypeEnum.Number || field.questionType === fieldTypeEnum.Zip" class="fas fa-calculator"></i>
-      <i *ngIf="field.questionType === fieldTypeEnum.Currency" class="fas fa-money-bill-wave"></i>
-      <i *ngIf="field.questionType === fieldTypeEnum.Phone" class="fa fa-phone"></i>
+      <i
+        *ngIf="
+          field.questionType === fieldTypeEnum.Number ||
+          field.questionType === fieldTypeEnum.Zip
+        "
+        class="fas fa-calculator"
+      ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Currency"
+        class="fas fa-money-bill-wave"
+      ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Phone"
+        class="fa fa-phone"
+      ></i>
     </div>
-    <input *ngIf="field.questionType === fieldTypeEnum.Number" mask="separator" [allowNegativeNumbers]="true" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType">
-    <input *ngIf="field.questionType === fieldTypeEnum.Zip" mask="00000"  matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType">
-    <input *ngIf="field.questionType === fieldTypeEnum.Currency" prefix="$ " mask="separator.2" thousandSeparator="," matInput placeholder="{{field?.prompt}}" type="text" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType">
-    <input *ngIf="field.questionType === fieldTypeEnum.Phone" mask="(000) 000-0000" [dropSpecialCharacters]="false" matInput placeholder="{{field?.prompt}}" type="tel" [required]="field.isRequired" inputmode="numeric" [formControlName]="this.field.questionType">
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.Number"
+      mask="separator"
+      [allowNegativeNumbers]="true"
+      thousandSeparator=","
+      matInput
+      placeholder="{{ field?.prompt }}"
+      type="text"
+      [required]="field.isRequired"
+      inputmode="numeric"
+      [formControlName]="this.field.questionType"
+    />
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.Zip"
+      mask="00000"
+      matInput
+      placeholder="{{ field?.prompt }}"
+      type="text"
+      [required]="field.isRequired"
+      inputmode="numeric"
+      [formControlName]="this.field.questionType"
+    />
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.Currency"
+      prefix="$ "
+      mask="separator.2"
+      thousandSeparator=","
+      matInput
+      placeholder="{{ field?.prompt }}"
+      type="text"
+      [required]="field.isRequired"
+      inputmode="numeric"
+      [formControlName]="this.field.questionType"
+    />
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.Phone"
+      mask="(000) 000-0000"
+      [dropSpecialCharacters]="false"
+      matInput
+      placeholder="{{ field?.prompt }}"
+      type="tel"
+      [required]="field.isRequired"
+      inputmode="numeric"
+      [formControlName]="this.field.questionType"
+    />
   </mat-form-field>
 </div>

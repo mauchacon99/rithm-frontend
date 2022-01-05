@@ -2,7 +2,6 @@
  * Represents a single option to be selected for a question.
  */
 export interface QuestionOption {
-
   /** Separate text to display (if different than value). */
   displayText?: string;
 
@@ -11,5 +10,4 @@ export interface QuestionOption {
 
   /** Whether the option is selected. */
   isSelected: boolean;
-
 }

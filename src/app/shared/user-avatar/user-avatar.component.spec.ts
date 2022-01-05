@@ -10,10 +10,9 @@ describe('UserAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserAvatarComponent ],
-      imports: [ MatTooltipModule, MatBadgeModule ]
-    })
-    .compileComponents();
+      declarations: [UserAvatarComponent],
+      imports: [MatTooltipModule, MatBadgeModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -64,5 +63,4 @@ describe('UserAvatarComponent', () => {
     const badgeValue = component.getBadge();
     expect(badgeValue).toEqual('\u2212');
   });
-
 });

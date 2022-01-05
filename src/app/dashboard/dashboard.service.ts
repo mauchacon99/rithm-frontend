@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { WorkerDashboardHeader, DashboardStationData, StationRosterMember, Document } from 'src/models';
+import {
+  WorkerDashboardHeader,
+  DashboardStationData,
+  StationRosterMember,
+  Document,
+} from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -10,12 +15,10 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
  * Service for all business logic involving the dashboard.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets info needed for dashboard header.
@@ -23,7 +26,9 @@ export class DashboardService {
    * @returns Dashboard header data.
    */
   getDashboardHeader(): Observable<WorkerDashboardHeader> {
-    return this.http.get<WorkerDashboardHeader>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
+    return this.http.get<WorkerDashboardHeader>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
+    );
   }
 
   /**
@@ -32,7 +37,9 @@ export class DashboardService {
    * @returns Dashboard stations observable.
    */
   getDashboardStations(): Observable<DashboardStationData[]> {
-    return this.http.get<DashboardStationData[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    return this.http.get<DashboardStationData[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
+    );
   }
 
   /**
@@ -43,7 +50,9 @@ export class DashboardService {
    */
   getWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${stationId}`
+    );
   }
 
   /**
@@ -54,7 +63,9 @@ export class DashboardService {
    */
   getSupervisorRoster(stationId: string): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${stationId}`);
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${stationId}`
+    );
   }
 
   /**
@@ -63,7 +74,9 @@ export class DashboardService {
    * @returns A list of top priority queue documents.
    */
   getPriorityQueueDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`);
+    return this.http.get<Document[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`
+    );
   }
 
   /**
@@ -72,7 +85,8 @@ export class DashboardService {
    * @returns A list of previously started documents.
    */
   getPreviouslyStartedDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`);
+    return this.http.get<Document[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`
+    );
   }
-
 }

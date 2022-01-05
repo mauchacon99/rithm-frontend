@@ -6,23 +6,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './token.interceptor';
 import { CookieService } from 'ngx-cookie-service';
 
-
-
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    MatDialogModule,
-    MatSnackBarModule
-  ],
+  imports: [CommonModule, HttpClientModule, MatDialogModule, MatSnackBarModule],
   providers: [
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}

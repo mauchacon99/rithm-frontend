@@ -1,7 +1,23 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-import { ForwardPreviousStationsDocument, StationDocuments, UserType, DocumentStationInformation, StandardStringJSON, DocumentAnswer, QuestionFieldType, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
+import {
+  ForwardPreviousStationsDocument,
+  StationDocuments,
+  UserType,
+  DocumentStationInformation,
+  StandardStringJSON,
+  DocumentAnswer,
+  QuestionFieldType,
+  DocumentName,
+  StationRosterMember,
+  Question,
+  DocumentAutoFlow,
+  MoveDocument,
+} from 'src/models';
 import { DocumentService } from './document.service';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -14,9 +30,7 @@ describe('DocumentService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
+      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(DocumentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -31,24 +45,124 @@ describe('DocumentService', () => {
     const expectedResponse: StationDocuments = {
       documents: [
         /* eslint-disable max-len */
-        { documentName: 'Almond Flour', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: '', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Apple Crisps', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 7, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Apple Sauce', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 3, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Bagel Seasoning', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 7, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Baking Soda', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 9, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Banana Crisps', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 1, userAssigned: 'John Doe', isEscalated: true, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Black Pepper', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 2, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Borax', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 1, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Bowtie Pasta', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '', priority: 2, userAssigned: '', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
-        { documentName: 'Calcium', stationName: 'Dry Goods & Liquids', flowedTimeUTC: '2021-06-16T17:26:47.3506612Z', priority: 3, userAssigned: 'John Doe', isEscalated: false, updatedTimeUTC: '2021-06-16T17:26:47.3506612Z', documentRithmId: '', stationRithmId: '', },
+        {
+          documentName: 'Almond Flour',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 2,
+          userAssigned: '',
+          isEscalated: true,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Apple Crisps',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 7,
+          userAssigned: 'John Doe',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Apple Sauce',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 3,
+          userAssigned: '',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Bagel Seasoning',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 7,
+          userAssigned: '',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Baking Soda',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 9,
+          userAssigned: 'John Doe',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Banana Crisps',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 1,
+          userAssigned: 'John Doe',
+          isEscalated: true,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Black Pepper',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 2,
+          userAssigned: 'John Doe',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Borax',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 1,
+          userAssigned: '',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Bowtie Pasta',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '',
+          priority: 2,
+          userAssigned: '',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
+        {
+          documentName: 'Calcium',
+          stationName: 'Dry Goods & Liquids',
+          flowedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          priority: 3,
+          userAssigned: 'John Doe',
+          isEscalated: false,
+          updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
+          documentRithmId: '',
+          stationRithmId: '',
+        },
         /* eslint-enable max-len */
       ],
-      totalDocuments: 40, userType: UserType.Admin
+      totalDocuments: 40,
+      userType: UserType.Admin,
     };
-    service.getStationDocuments(stationId, pageNum)
-      .subscribe((response) => {
-        expect(response.documents.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getStationDocuments(stationId, pageNum).subscribe((response) => {
+      expect(response.documents.length).toBeGreaterThanOrEqual(0);
+    });
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents?stationId=${stationId}&pageNum=${pageNum}`
@@ -67,29 +181,30 @@ describe('DocumentService', () => {
         {
           rithmId: '789-654-321',
           name: 'Previous station 1',
-          totalDocuments: 5
+          totalDocuments: 5,
         },
         {
           rithmId: '789-654-753',
           name: 'Previous station 2',
-          totalDocuments: 2
-        }
+          totalDocuments: 2,
+        },
       ],
       nextStations: [
         {
           rithmId: '852-963-741',
           name: 'Follow station 1',
-          totalDocuments: 2
+          totalDocuments: 2,
         },
         {
           rithmId: '852-963-418',
           name: 'Follow station 2',
-          totalDocuments: 1
-        }
-      ]
+          totalDocuments: 1,
+        },
+      ],
     };
 
-    service.getConnectedStationInfo(documentId, stationId)
+    service
+      .getConnectedStationInfo(documentId, stationId)
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse);
       });
@@ -119,17 +234,18 @@ describe('DocumentService', () => {
       stationOwners: [],
       workers: [],
       questions: [],
-      instructions: 'General instructions'
+      instructions: 'General instructions',
     };
 
-    service.getDocumentInfo(stationId, documentId)
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.getDocumentInfo(stationId, documentId).subscribe((response) => {
+      expect(response).toBeDefined();
+    });
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info?documentId=${documentId}&stationId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info?documentId=${documentId}&stationId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toEqual(null);
 
@@ -140,15 +256,18 @@ describe('DocumentService', () => {
   it('Should return the update of the new document name', () => {
     const documentName = 'Almond Flour';
     const expectDocumentName: StandardStringJSON = {
-      data: documentName
+      data: documentName,
     };
 
-    service.updateDocumentName(documentId, documentName)
+    service
+      .updateDocumentName(documentId, documentName)
       .subscribe((newDocumentName) => {
         expect(newDocumentName).toEqual(documentName);
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`
+    );
     expect(req.request.method).toEqual('PUT');
 
     expect(req.request.body).toEqual(expectDocumentName);
@@ -159,55 +278,58 @@ describe('DocumentService', () => {
   it('should return document name', () => {
     const documentName: DocumentName = {
       baseName: 'Metroid Dread',
-      appendedName: ''
+      appendedName: '',
     };
 
+    service.getDocumentName(documentId).subscribe((response) => {
+      expect(response).toEqual(documentName);
+    });
 
-    service.getDocumentName(documentId)
-      .subscribe((response) => {
-        expect(response).toEqual(documentName);
-      });
-
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/name?documentRithmId=${documentId}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     req.flush(documentName);
     httpTestingController.verify();
-
   });
 
-
   it('should make request to save document answer', () => {
-    const expectedAnswers: DocumentAnswer[] = [{
-      questionRithmId: 'Dev 1',
-      documentRithmId: '123-654-789',
-      stationRithmId: '741-951-753',
-      value: 'Answer Dev',
-      file: 'dev.txt',
-      filename: 'dev',
-      type: QuestionFieldType.Email,
-      rithmId: '789-321-456',
-      questionUpdated: true,
-    },
-    {
-      questionRithmId: 'Dev 2',
-      documentRithmId: '123-654-789-856',
-      stationRithmId: '741-951-753-741',
-      value: 'Answer Dev2',
-      file: 'dev2.txt',
-      filename: 'dev2',
-      type: QuestionFieldType.City,
-      rithmId: '789-321-456-789',
-      questionUpdated: false,
-    }];
+    const expectedAnswers: DocumentAnswer[] = [
+      {
+        questionRithmId: 'Dev 1',
+        documentRithmId: '123-654-789',
+        stationRithmId: '741-951-753',
+        value: 'Answer Dev',
+        file: 'dev.txt',
+        filename: 'dev',
+        type: QuestionFieldType.Email,
+        rithmId: '789-321-456',
+        questionUpdated: true,
+      },
+      {
+        questionRithmId: 'Dev 2',
+        documentRithmId: '123-654-789-856',
+        stationRithmId: '741-951-753-741',
+        value: 'Answer Dev2',
+        file: 'dev2.txt',
+        filename: 'dev2',
+        type: QuestionFieldType.City,
+        rithmId: '789-321-456-789',
+        questionUpdated: false,
+      },
+    ];
 
-    service.saveDocumentAnswer(documentId, expectedAnswers)
+    service
+      .saveDocumentAnswer(documentId, expectedAnswers)
       .subscribe((response) => {
         expect(response).toEqual(expectedAnswers);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedAnswers);
 
@@ -217,15 +339,16 @@ describe('DocumentService', () => {
 
   it('should return updated date from a specific document', () => {
     const expectedResponse: StandardStringJSON = {
-      data: '2021-12-09T17:26:47.3506612Z'
+      data: '2021-12-09T17:26:47.3506612Z',
     };
 
-    service.getLastUpdated(documentId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse.data);
-      });
+    service.getLastUpdated(documentId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?documentRithmId=${documentId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated?documentRithmId=${documentId}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     req.flush(expectedResponse);
@@ -234,16 +357,19 @@ describe('DocumentService', () => {
 
   it('should return held time in station for document', () => {
     const expectedResponse: StandardStringJSON = {
-      data: '2021-12-09T17:26:47.3506612Z'
+      data: '2021-12-09T17:26:47.3506612Z',
     };
 
-    service.getDocumentTimeInStation(documentId, stationId)
+    service
+      .getDocumentTimeInStation(documentId, stationId)
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse.data);
       });
 
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time?documentRithmId=${documentId}&stationRithmId=${stationId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time?documentRithmId=${documentId}&stationRithmId=${stationId}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
@@ -263,9 +389,10 @@ describe('DocumentService', () => {
         isRequired: true,
         possibleAnswers: [
           {
+            rithmId: 'string',
             text: 'string',
-            default: true
-          }
+            default: true,
+          },
         ],
         answer: {
           questionRithmId: 'string',
@@ -275,21 +402,24 @@ describe('DocumentService', () => {
           asDecimal: 0,
           asString: 'string',
           asDate: '2021-12-14T14:10:31.030Z',
-          value: 'string'
+          value: 'string',
         },
-        children: []
-      }
+        children: [],
+      },
     ];
 
     const getPrivate = true;
 
-    service.getDocumentPreviousQuestions(documentId, stationId, getPrivate)
+    service
+      .getDocumentPreviousQuestions(documentId, stationId, getPrivate)
       .subscribe((responsePreviousQuestion) => {
         expect(responsePreviousQuestion).toEqual(expectPreviousQuestions);
       });
 
-    // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`);
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
@@ -300,33 +430,39 @@ describe('DocumentService', () => {
   });
 
   it('should delete a document', () => {
-    service.deleteDocument(documentId)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.deleteDocument(documentId).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentId}`
+    );
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
   });
 
   it('should return the user assigned to the document', () => {
-    const expectedResponse: StationRosterMember[] = [{
-      rithmId: '789-321-456-789',
-      firstName: 'John',
-      lastName: 'Christopher',
-      email: 'johnny.depp@gmail.com',
-      isAssigned: true
-    }];
+    const expectedResponse: StationRosterMember[] = [
+      {
+        rithmId: '789-321-456-789',
+        firstName: 'John',
+        lastName: 'Christopher',
+        email: 'johnny.depp@gmail.com',
+        isAssigned: true,
+      },
+    ];
 
-    service.getAssignedUserToDocument(documentId, stationId, true)
+    service
+      .getAssignedUserToDocument(documentId, stationId, true)
       .subscribe((documentTimeInStation) => {
         expect(documentTimeInStation).toEqual(expectedResponse);
       });
 
-    // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user?documentId=${documentId}&stationId=${stationId}&getOnlyCurrentStation=true`);
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user?documentId=${documentId}&stationId=${stationId}&getOnlyCurrentStation=true`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentId')).toBe(documentId);
     expect(req.request.params.get('stationId')).toBe(stationId);
@@ -339,15 +475,16 @@ describe('DocumentService', () => {
     const expectedData: DocumentAutoFlow = {
       stationRithmId: stationId,
       documentRithmId: documentId,
-      testMode: true
+      testMode: true,
     };
 
-    service.autoFlowDocument(expectedData)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.autoFlowDocument(expectedData).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedData);
     req.flush(null);
@@ -359,13 +496,16 @@ describe('DocumentService', () => {
     const documentRithmId = 'E204F369-386F-4E41';
     const requestObject = {
       documentRithmId: documentRithmId,
-      stationRithmId: stationRithmId
+      stationRithmId: stationRithmId,
     };
-    service.unassignUserToDocument(documentRithmId, stationRithmId)
+    service
+      .unassignUserToDocument(documentRithmId, stationRithmId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`
+    );
     expect(req.request.method).toEqual('DELETE');
     expect(req.request.body).toEqual(requestObject);
     req.flush(null);
@@ -376,18 +516,37 @@ describe('DocumentService', () => {
     const dataExpect: MoveDocument = {
       fromStationRithmId: stationId,
       toStationRithmIds: ['123-654-789'],
-      documentRithmId: documentId
+      documentRithmId: documentId,
     };
 
-    service.moveDocument(dataExpect)
-      .subscribe((response) => {
-        expect(response).toBeFalsy();
-      });
+    service.moveDocument(dataExpect).subscribe((response) => {
+      expect(response).toBeFalsy();
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(dataExpect);
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should assign an user to a document', () => {
+    const expectUser = '123-984-657';
+
+    service
+      .assignUserToDocument(expectUser, stationId, documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
+
+  it('should create a new document', () => {
+    const expectDocumentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+
+    service.createNewDocument(stationId).subscribe((response) => {
+      expect(response).toEqual(expectDocumentId);
+    });
   });
 });

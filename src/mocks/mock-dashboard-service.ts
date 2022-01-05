@@ -1,5 +1,9 @@
 import { Observable, of } from 'rxjs';
-import { WorkerDashboardHeader, DashboardStationData, StationRosterMember } from 'src/models';
+import {
+  WorkerDashboardHeader,
+  DashboardStationData,
+  StationRosterMember,
+} from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -8,7 +12,6 @@ import { Document } from 'src/models';
  * Mocks methods of the `DashboardService`.
  */
 export class MockDashboardService {
-
   /**
    * Gets info needed for dashboard header.
    *
@@ -18,7 +21,7 @@ export class MockDashboardService {
     const dashboardHeaderData: WorkerDashboardHeader = {
       userRithmId: '1234',
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
     };
 
     return of(dashboardHeaderData).pipe(delay(1000));
@@ -43,7 +46,7 @@ export class MockDashboardService {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -51,9 +54,9 @@ export class MockDashboardService {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
+            isOwner: false,
+          },
+        ],
       },
       {
         rithmId: '2',
@@ -67,7 +70,7 @@ export class MockDashboardService {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -75,10 +78,10 @@ export class MockDashboardService {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
-      }
+            isOwner: false,
+          },
+        ],
+      },
     ];
 
     return of(dashboardStationData).pipe(delay(1000));
@@ -98,7 +101,7 @@ export class MockDashboardService {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -106,8 +109,8 @@ export class MockDashboardService {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
     return of(expectedResponse).pipe(delay(1000));
   }
@@ -126,17 +129,16 @@ export class MockDashboardService {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
-      }
-      ,
+        isOwner: false,
+      },
       {
         rithmId: '',
         firstName: 'Tyler',
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
     return of(expectedResponse).pipe(delay(1000));
   }
@@ -157,8 +159,9 @@ export class MockDashboardService {
         flowedTimeUTC: '0001-01-01T00:00:00',
         userAssigned: '',
         updatedTimeUTC: '2021-06-18T21:17:34.3506612Z',
-        isEscalated: false
-      }];
+        isEscalated: false,
+      },
+    ];
     return of(expectedResponse).pipe(delay(1000));
   }
 
@@ -178,7 +181,7 @@ export class MockDashboardService {
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
         flowedTimeUTC: '',
-        stationRithmId: ''
+        stationRithmId: '',
       },
       {
         documentName: 'New Doc 2',
@@ -189,10 +192,9 @@ export class MockDashboardService {
         updatedTimeUTC: '2021-06-16T17:26:47.3506612Z',
         documentRithmId: '',
         flowedTimeUTC: '',
-        stationRithmId: ''
-      }
+        stationRithmId: '',
+      },
     ];
     return of(filterData).pipe(delay(1000));
   }
-
 }

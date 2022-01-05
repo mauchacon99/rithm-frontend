@@ -11,18 +11,12 @@ import { NotificationToastsContainerComponent } from './navigation/notification-
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        RouterTestingModule,
-        MatSidenavModule
-      ],
+      imports: [NoopAnimationsModule, RouterTestingModule, MatSidenavModule],
       declarations: [
         AppComponent,
-        MockComponent(NotificationToastsContainerComponent)
+        MockComponent(NotificationToastsContainerComponent),
       ],
-      providers: [
-        { provide: UserService, useClass: MockUserService },
-      ]
+      providers: [{ provide: UserService, useClass: MockUserService }],
     }).compileComponents();
   });
 
@@ -31,5 +25,4 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
-
 });

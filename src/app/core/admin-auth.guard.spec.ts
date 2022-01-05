@@ -19,9 +19,8 @@ const user: User = {
   createdDate: '2021-08-23T15:35:42.2234693',
   isEmailVerified: true,
   notificationSettings: null,
-  organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989'
+  organization: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
 };
-
 
 describe('AdminAuthGuard', () => {
   let guard: AdminAuthGuard;
@@ -30,14 +29,14 @@ describe('AdminAuthGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
-        RouterTestingModule.withRoutes(
-          [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
-        )
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: MockComponent(DashboardComponent) },
+        ]),
       ],
       providers: [
         { provide: PopupService, useClass: MockPopupService },
-        { provide: UserService, useClass: MockUserService }
-      ]
+        { provide: UserService, useClass: MockUserService },
+      ],
     });
     guard = TestBed.inject(AdminAuthGuard);
   });
@@ -67,5 +66,4 @@ describe('AdminAuthGuard', () => {
       expect(result).toBeFalse();
     });
   });
-
 });
