@@ -1,8 +1,14 @@
 import { Component, forwardRef, Input, NgZone, OnInit } from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, ValidatorFn, Validators
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { first } from 'rxjs';
 import { QuestionFieldType, Question } from 'src/models';
@@ -18,16 +24,18 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CheckFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => CheckFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class CheckFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class CheckFieldComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   checkFieldForm!: FormGroup;
 
@@ -46,12 +54,14 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-
     // eslint-disable-next-line prefer-const
     let fields: { [key: string]: unknown } = {};
 
     this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem${index}`] = ['', this.field.isRequired ? [Validators.required] : []];
+      fields[`checkItem${index}`] = [
+        '',
+        this.field.isRequired ? [Validators.required] : [],
+      ];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -71,7 +81,7 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -125,12 +135,13 @@ export class CheckFieldComponent implements OnInit, ControlValueAccessor, Valida
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.checkFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Check field form is invalid'
-      }
-    };
+    return this.checkFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Check field form is invalid',
+          },
+        };
   }
-
 }

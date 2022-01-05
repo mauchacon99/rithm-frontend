@@ -9,21 +9,25 @@ import { MapService } from '../map.service';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent {
-  constructor(private mapService: MapService,
-    private errorService: ErrorService) {
-    this.mapService.getMapData()
-    .pipe(first())
-    .subscribe({ error: (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error,
-          true
-        );
-        this.mapService.mapDataReceived$.next(true);
-      }
-    });
+  constructor(
+    private mapService: MapService,
+    private errorService: ErrorService
+  ) {
+    this.mapService
+      .getMapData()
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error,
+            true
+          );
+          this.mapService.mapDataReceived$.next(true);
+        },
+      });
   }
 }

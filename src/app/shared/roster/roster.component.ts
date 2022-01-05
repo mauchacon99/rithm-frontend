@@ -13,7 +13,7 @@ import { StationService } from 'src/app/core/station.service';
 @Component({
   selector: 'app-roster[stationId][isWorker]',
   templateUrl: './roster.component.html',
-  styleUrls: ['./roster.component.scss']
+  styleUrls: ['./roster.component.scss'],
 })
 export class RosterComponent implements OnInit {
   //TODO: Decide if it would be better to create a model specifically for displayed rosters instead of using so many inputs.
@@ -43,7 +43,7 @@ export class RosterComponent implements OnInit {
     private dialog: MatDialog,
     private stationService: StationService,
     private errorService: ErrorService
-    ) { }
+  ) {}
 
   /**
    * Set the number of roster members to show when less than 3.
@@ -58,7 +58,7 @@ export class RosterComponent implements OnInit {
   openRosterModal(): void {
     this.dialog.open(RosterModalComponent, {
       minWidth: '325px',
-      data: { stationId: this.stationId, isWorker: this.isWorker }
+      data: { stationId: this.stationId, isWorker: this.isWorker },
     });
   }
 
@@ -70,38 +70,44 @@ export class RosterComponent implements OnInit {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       disableClose: true,
-      data: { stationId: this.stationId, type: this.isWorker ? 'workers' : 'owners' }
+      data: {
+        stationId: this.stationId,
+        type: this.isWorker ? 'workers' : 'owners',
+      },
     });
-    dialog.afterClosed().pipe(first()).subscribe(result => {
-      this.modalClosed.emit(result);
-    });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe((result) => {
+        this.modalClosed.emit(result);
+      });
   }
 
   /**
    * Get Users Roster for a given Station.
    */
-   private getStationUsersRoster(): void {
-     this.loadingRoster = true;
+  private getStationUsersRoster(): void {
+    this.loadingRoster = true;
     const stationUserRoster$ = this.isWorker
       ? this.stationService.getStationWorkerRoster(this.stationId)
       : this.stationService.getStationOwnerRoster(this.stationId);
 
-    stationUserRoster$
-      .pipe(first())
-      .subscribe({
-        next: (data) => {
-          if (data) {
-            this.rosterMembers = data;
-            this.slices = this.rosterMembers.length > 3 ? 2 : this.rosterMembers.length;
-          }
-          this.loadingRoster = false;
-        }, error: (error: unknown) => {
-          this.loadingRoster = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    stationUserRoster$.pipe(first()).subscribe({
+      next: (data) => {
+        if (data) {
+          this.rosterMembers = data;
+          this.slices =
+            this.rosterMembers.length > 3 ? 2 : this.rosterMembers.length;
         }
-      });
+        this.loadingRoster = false;
+      },
+      error: (error: unknown) => {
+        this.loadingRoster = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 }

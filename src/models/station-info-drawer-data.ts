@@ -4,7 +4,6 @@ import { MapItemStatus, MapMode } from '.';
  * Represents the matDrawer model in component info drawer.
  */
 export interface StationInfoDrawerData {
-
   /** The id of the specific station. */
   stationRithmId: string;
 

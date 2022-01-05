@@ -1,8 +1,7 @@
 /**
  * Represents all information about user account.
  */
- export interface UserAccountInfo {
-
+export interface UserAccountInfo {
   /** The user's first name. */
   firstName?: string;
 

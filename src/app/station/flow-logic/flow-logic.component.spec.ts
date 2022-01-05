@@ -8,9 +8,8 @@ describe('FlowLogicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlowLogicComponent ]
-    })
-    .compileComponents();
+      declarations: [FlowLogicComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

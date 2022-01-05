@@ -1,5 +1,12 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  ControlValueAccessor
+} from '@angular/forms';
 import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { Question, QuestionFieldType } from 'src/models';
@@ -15,14 +22,14 @@ import { Question, QuestionFieldType } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => NestedFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => NestedFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class NestedFieldComponent implements ControlValueAccessor, OnInit{
   /** The form to add this field in the template. */
@@ -40,9 +47,7 @@ export class NestedFieldComponent implements ControlValueAccessor, OnInit{
   /** They array of children fields. */
   childrenFields!: Question[];
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.nestedFieldForm = this.fb.group({
       textFieldForm: this.fb.control(''),
       numberFieldForm: this.fb.control(''),
@@ -56,7 +61,7 @@ export class NestedFieldComponent implements ControlValueAccessor, OnInit{
   ngOnInit(): void {
     this.childrenFields = this.field.children;
 
-    if (this.childrenFields[3].questionType === 'state'){
+    if (this.childrenFields[3].questionType === 'state') {
       this.childrenFields[3].possibleAnswers = STATES;
     }
   }
@@ -65,7 +70,7 @@ export class NestedFieldComponent implements ControlValueAccessor, OnInit{
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -113,11 +118,13 @@ export class NestedFieldComponent implements ControlValueAccessor, OnInit{
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.nestedFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Nested field form is invalid'
-      }
-    };
+    return this.nestedFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Nested field form is invalid',
+          },
+        };
   }
 }

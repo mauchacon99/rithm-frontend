@@ -1,8 +1,7 @@
 /**
  * All the contexts for a dialog pop-up.
  */
- export enum DialogType {
-
+export enum DialogType {
   /** A pop-up that warns a user. */
   Alert,
 

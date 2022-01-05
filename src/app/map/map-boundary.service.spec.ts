@@ -10,9 +10,7 @@ describe('MapBoundaryService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [
-        { provide: MapService, useClass: MockMapService }
-      ]
+      providers: [{ provide: MapService, useClass: MockMapService }],
     });
     service = TestBed.inject(MapBoundaryService);
   });

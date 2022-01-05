@@ -1,5 +1,14 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  Validators,
+} from '@angular/forms';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -14,16 +23,18 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DateFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => DateFieldComponent),
-      multi: true
+      multi: true,
     },
-  ]
+  ],
 })
-export class DateFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class DateFieldComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   dateFieldForm!: FormGroup;
 
@@ -36,16 +47,14 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(
-    private fb: FormBuilder,
-  ) { }
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
     this.dateFieldForm = this.fb.group({
-      date: ['', []]
+      date: ['', []],
     });
 
     if (this.field.isRequired) {
@@ -57,7 +66,7 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -105,11 +114,13 @@ export class DateFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.dateFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Date field form is invalid'
-      }
-    };
+    return this.dateFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Date field form is invalid',
+          },
+        };
   }
 }

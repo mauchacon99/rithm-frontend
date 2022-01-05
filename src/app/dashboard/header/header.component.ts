@@ -12,7 +12,7 @@ import { UserService } from 'src/app/core/user.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   /** The user that is currently signed in. */
@@ -39,7 +39,8 @@ export class HeaderComponent implements OnInit {
    * Get dashboard header display for number previous documents and stations.
    */
   ngOnInit(): void {
-    this.dashboardService.getDashboardHeader()
+    this.dashboardService
+      .getDashboardHeader()
       .pipe(first())
       .subscribe({
         next: (headerData: WorkerDashboardHeader) => {
@@ -48,14 +49,14 @@ export class HeaderComponent implements OnInit {
             this.numStations = headerData.rosterStations;
             this.isLoading = false;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
-
 }
