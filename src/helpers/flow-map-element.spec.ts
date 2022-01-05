@@ -27,36 +27,48 @@ describe('FlowMapElement', () => {
     expect(flow).toBeTruthy();
   });
 
-  xit('should be marked as deleted', () => {
-    // TODO: add test
+  it('should be marked as deleted', () => {
+    flow.markAsDeleted();
+    expect(flow.status).toEqual(MapItemStatus.Deleted);
   });
 
-  xit('should throw an error when marking it as deleted when it is newly created', () => {
-    // TODO: add test
+  it('should throw an error when marking it as deleted when it is newly created', () => {
+    flow.status = MapItemStatus.Created;
+    expect(() => flow.markAsDeleted()).toThrowError();
+    expect(flow.status).toEqual(MapItemStatus.Created);
   });
 
-  xit('should be marked as updated', () => {
-    // TODO: add test
+  it('should be marked as updated', () => {
+    flow.markAsUpdated();
+    expect(flow.status).toEqual(MapItemStatus.Updated);
   });
 
-  xit('should not be marked as updated when it has been deleted', () => {
-    // TODO: add test
+  it('should not be marked as updated when it has been deleted already', () => {
+    flow.status = MapItemStatus.Deleted;
+    flow.markAsUpdated();
+    expect(flow.status).toEqual(MapItemStatus.Deleted);
   });
 
-  xit('should not be marked as updated when it has been newly created', () => {
-    // TODO: add test
+  it('should not be marked as updated when it has been newly created', () => {
+    flow.status = MapItemStatus.Created;
+    flow.markAsUpdated();
+    expect(flow.status).toEqual(MapItemStatus.Created);
   });
 
-  xit('should be empty if there are no stations or sub groups within', () => {
-    // TODO: add test
+  it('should be empty if there are no stations or sub groups within', () => {
+    flow.stations = [];
+    flow.subFlows = [];
+    expect(flow.isEmpty).toBeTrue();
   });
 
-  xit('should not be empty if there are stations contained', () => {
-    // TODO: add test
+  it('should not be empty if there are stations contained', () => {
+    flow.subFlows = [];
+    expect(flow.isEmpty).toBeFalse();
   });
 
-  xit('should not be empty if there are sub groups contained', () => {
-    // TODO: add test
+  it('should not be empty if there are sub groups contained', () => {
+    flow.stations = [];
+    expect(flow.isEmpty).toBeFalse();
   });
 
   xit('should report hover of boundary when the point is over the station group boundary', () => {
