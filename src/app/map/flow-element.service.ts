@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FlowMapElement } from 'src/helpers';
-import { FlowElementHoverType, Point } from 'src/models';
+import { FlowElementHoverItem, Point } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   FLOW_PADDING,
@@ -104,7 +104,7 @@ export class FlowElementService {
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
-      flow.hoverActive === FlowElementHoverType.Boundary
+      flow.hoverItem === FlowElementHoverItem.Boundary
         ? NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
