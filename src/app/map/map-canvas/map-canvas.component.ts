@@ -976,7 +976,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const connection of this.connections) {
           // Check if connection line was clicked. ContextPoint is used for connection lines.
           connection.checkElementHover(eventContextPoint, this.context);
-          if (connection.hoverActive) {
+          if (connection.hovering) {
             const startStation = this.stations.find(
               (station) => station.rithmId === connection.startStationRithmId
             );
@@ -1284,11 +1284,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         );
         if (!hoveringOverStation && !hoveringOverFlow) {
           this.connections.map((con) => {
-            con.hoverActive = false;
+            con.hovering = false;
           });
           for (const connection of this.connections) {
             connection.checkElementHover(eventContextPoint, this.context);
-            if (connection.hoverActive) {
+            if (connection.hovering) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
@@ -1298,7 +1298,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
         const hoveringOverConnection = this.connections.some(
-          (con) => con.hoverActive
+          (con) => con.hovering
         );
         if (
           !hoveringOverStation &&
@@ -1319,7 +1319,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         if (hoveringOverStation) {
-          this.connections.map((con) => (con.hoverActive = false));
+          this.connections.map((con) => (con.hovering = false));
           this.flows.map(
             (flow) => (flow.hoverItem = FlowElementHoverItem.None)
           );
@@ -1469,7 +1469,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   checkConnectionClick(contextPoint: Point): void {
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
-      if (connectionLine.hoverActive) {
+      if (connectionLine.hovering) {
         this.sidenavDrawerService.toggleDrawer(
           'connectionInfo',
           connectionLine
@@ -1485,7 +1485,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   onConnectionDrag(): void {
     for (const connectionLine of this.connections) {
-      if (connectionLine.hoverActive && !this.connectionLineDrag) {
+      if (connectionLine.hovering && !this.connectionLineDrag) {
         const startStation = this.stations.find(
           (station) => station.rithmId === connectionLine.startStationRithmId
         );
