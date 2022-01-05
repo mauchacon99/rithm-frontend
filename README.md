@@ -75,6 +75,12 @@ Serves the test summary page and runs all of the defined tests in the project.
 `npm run test-ci`\
 Runs all of the defined tests in the project without serving up a webpage.
 
+`npm run format`\
+Formats all of the files in the project using Prettier.
+
+`npm run format-check`\
+Checks that all of the files in the project have been formatted using Prettier.
+
 `npm run lint`\
 Checks all of the TypeScript/JavaScript code for lint errors.
 
