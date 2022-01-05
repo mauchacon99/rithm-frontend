@@ -53,7 +53,9 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should activate the move document button', () => {
-    const btnMoveDocument = fixture.nativeElement.querySelector('#connected-modal-move');
+    const btnMoveDocument = fixture.nativeElement.querySelector(
+      '#connected-modal-move'
+    );
     expect(btnMoveDocument.disabled).toBeTruthy();
     component.selectedStation = stationId;
     fixture.detectChanges();

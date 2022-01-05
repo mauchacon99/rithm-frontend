@@ -1,6 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConnectedModalData, ConnectedStationInfo, MoveDocument } from 'src/models';
+import {
+  ConnectedModalData,
+  ConnectedStationInfo,
+  MoveDocument,
+} from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
@@ -78,7 +82,7 @@ export class ConnectedStationsModalComponent implements OnInit {
     const moveDocument: MoveDocument = {
       fromStationRithmId: this.stationRithmId,
       toStationRithmIds: [this.selectedStation],
-      documentRithmId: this.documentRithmId
+      documentRithmId: this.documentRithmId,
     };
     this.documentService
       .moveDocument(moveDocument)

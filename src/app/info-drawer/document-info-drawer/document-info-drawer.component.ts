@@ -5,11 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  DocumentNameField,
-  Question,
-  StationRosterMember,
-} from 'src/models';
+import { DocumentNameField, Question, StationRosterMember } from 'src/models';
 import { FieldNameSeparator } from 'src/models/enums';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
@@ -149,7 +145,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner =
             this.userService.user.role === 'admin' ||
-              dataDrawer.isUserAdminOrOwner
+            dataDrawer.isUserAdminOrOwner
               ? true
               : false;
         }
@@ -315,12 +311,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     }
     this.appendedFields.length > 0
       ? this.appendedFields.push(
-        {
-          prompt: this.appendFieldForm.controls.separatorField.value,
-          questionRithmId: null,
-        },
-        fieldToAppend
-      )
+          {
+            prompt: this.appendFieldForm.controls.separatorField.value,
+            questionRithmId: null,
+          },
+          fieldToAppend
+        )
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
