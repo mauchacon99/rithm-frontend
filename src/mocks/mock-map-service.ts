@@ -244,12 +244,13 @@ export class MockMapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-  // eslint-disable-next-line
   zoom(
+    /* eslint-disable */
     zoomingIn: boolean,
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
   ): void {}
+  /* eslint-enable */
 
   /**
    * Gets the center point of the canvas.
