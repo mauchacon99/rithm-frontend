@@ -47,18 +47,18 @@ export class DashboardComponent implements OnInit {
       this.splitService.initSdk(user.rithmId);
     }
 
-    this.splitService.sdkReady$
-    .pipe(first())
-    .subscribe({
+    this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
-        treatment === 'on' ? this.viewNewDashboard = true : this.viewNewDashboard = false;
+        treatment === 'on'
+          ? (this.viewNewDashboard = true)
+          : (this.viewNewDashboard = false);
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
-      }
+      },
     });
-    }
+  }
 
   /**
    * Whether the signed in user is an admin or not.

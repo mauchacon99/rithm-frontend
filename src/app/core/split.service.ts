@@ -4,10 +4,9 @@ import * as SplitIO from '@splitsoftware/splitio-browserjs/types/splitio';
 import { Subject } from 'rxjs';
 /** Split.io service. */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SplitService {
-
   private splitClient!: SplitIO.IClient;
 
   public sdkReady$: Subject<void> = new Subject<void>();
@@ -21,8 +20,8 @@ export class SplitService {
     const splitSDK: SplitIO.ISDK = SplitFactory({
       core: {
         authorizationKey: 'o2auojf6jvntjdciqc356q300cepl3t26la0',
-        key: userId
-      }
+        key: userId,
+      },
     });
 
     this.splitClient = splitSDK.client();
