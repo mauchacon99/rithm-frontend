@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
  * Service for all behavior involving push and in-app notifications.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class NotificationService {
-
-}
+export class NotificationService {}

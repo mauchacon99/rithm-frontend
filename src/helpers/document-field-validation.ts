@@ -21,7 +21,6 @@ export class DocumentFieldValidation {
   /** Regex to check url input. */
   private url_regex = new RegExp(/^(ftp|http|https):\/\/[^ "]+$|^$/);
 
-
   /**
    * Check if address field is correctly entered.
    *

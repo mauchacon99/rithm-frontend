@@ -2,7 +2,6 @@
  * Represents all information about a notification.
  */
 export interface Notification {
-
   /** The global Rithm ID for this notification. */
   rithmId: string;
 

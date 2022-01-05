@@ -12,5 +12,5 @@ export enum EnvironmentName {
   UAT = 'uat',
 
   /** The environment used for production. */
-  Production = 'production'
+  Production = 'production',
 }

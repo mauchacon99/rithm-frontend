@@ -16,8 +16,7 @@ import { FormsModule } from '@angular/forms';
 
 // TODO: rework these tests
 
-const DIALOG_TEST_DATA: DialogData[] =
-[
+const DIALOG_TEST_DATA: DialogData[] = [
   {
     type: DialogType.Alert,
     title: 'Alert',
@@ -29,7 +28,7 @@ const DIALOG_TEST_DATA: DialogData[] =
     title: 'Confirm',
     message: 'This is an example confirm used for testing.',
     okButtonText: 'Yep',
-    cancelButtonText: 'Nope'
+    cancelButtonText: 'Nope',
   },
   {
     type: DialogType.Prompt,
@@ -38,7 +37,7 @@ const DIALOG_TEST_DATA: DialogData[] =
     promptLabel: 'Grandma name',
     promptValue: 'Gertrude',
     okButtonText: 'Go',
-    cancelButtonText: 'Nope'
+    cancelButtonText: 'Nope',
   },
 ];
 
@@ -56,13 +55,10 @@ describe('DialogComponent Type Prompt', () => {
         NoopAnimationsModule,
         MatDialogModule,
         MatButtonModule,
-        MatInputModule
+        MatInputModule,
       ],
-      providers: [
-        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[2] }
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[2] }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -81,7 +77,8 @@ describe('DialogComponent Type Prompt', () => {
     let titleElement: HTMLElement;
 
     beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
+      titleElement = fixture.debugElement.query(By.css('#title'))
+        .nativeElement as HTMLHeadingElement;
     });
 
     it('should exist', () => {
@@ -90,7 +87,7 @@ describe('DialogComponent Type Prompt', () => {
 
     it('should have custom text', () => {
       const titleText = component.title;
-      expect(titleElement.textContent).toEqual(titleText);
+      expect(titleElement.textContent).toContain(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA[2].title);
     });
   });
@@ -100,7 +97,8 @@ describe('DialogComponent Type Prompt', () => {
     let messageElement: HTMLParagraphElement;
 
     beforeEach(() => {
-      messageElement = fixture.debugElement.query(By.css('#message')).nativeElement as HTMLHeadingElement;
+      messageElement = fixture.debugElement.query(By.css('#message'))
+        .nativeElement as HTMLHeadingElement;
     });
 
     it('should exist', () => {
@@ -141,7 +139,9 @@ describe('DialogComponent Type Prompt', () => {
     let buttonHarness: MatButtonHarness;
 
     beforeEach(async () => {
-      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({ selector: '#confirm' }));
+      buttonHarness = await loader.getHarness<MatButtonHarness>(
+        MatButtonHarness.with({ selector: '#confirm' })
+      );
     });
 
     it('should exist', async () => {
@@ -160,7 +160,9 @@ describe('DialogComponent Type Prompt', () => {
     let buttonHarness: MatButtonHarness;
 
     beforeEach(async () => {
-      buttonHarness = await loader.getHarness<MatButtonHarness>(MatButtonHarness.with({ selector: '#cancel' }));
+      buttonHarness = await loader.getHarness<MatButtonHarness>(
+        MatButtonHarness.with({ selector: '#cancel' })
+      );
     });
 
     it('should exist', async () => {
@@ -170,7 +172,9 @@ describe('DialogComponent Type Prompt', () => {
     it('should have custom text', async () => {
       const cancelButtonText = component.cancelButtonText;
       expect(await buttonHarness.getText()).toEqual(cancelButtonText);
-      expect(cancelButtonText).toEqual(DIALOG_TEST_DATA[2].cancelButtonText as string);
+      expect(cancelButtonText).toEqual(
+        DIALOG_TEST_DATA[2].cancelButtonText as string
+      );
     });
   });
 });
@@ -182,16 +186,10 @@ describe('DialogComponent Type Confirm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogComponent ],
-      imports: [
-        MatDialogModule,
-        MatButtonModule
-      ],
-      providers: [
-        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[1] }
-      ]
-    })
-    .compileComponents();
+      declarations: [DialogComponent],
+      imports: [MatDialogModule, MatButtonModule],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[1] }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -214,15 +212,9 @@ describe('DialogComponent Type Alert', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DialogComponent],
-      imports: [
-        MatDialogModule,
-        MatButtonModule
-      ],
-      providers: [
-        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[0] },
-      ]
-    })
-      .compileComponents();
+      imports: [MatDialogModule, MatButtonModule],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA[0] }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -241,7 +233,8 @@ describe('DialogComponent Type Alert', () => {
     let titleElement: HTMLElement;
 
     beforeEach(() => {
-      titleElement = fixture.debugElement.query(By.css('#title')).nativeElement as HTMLHeadingElement;
+      titleElement = fixture.debugElement.query(By.css('#title'))
+        .nativeElement as HTMLHeadingElement;
     });
 
     xit('should have error color when error', () => {
@@ -263,12 +256,14 @@ describe('DialogComponent Type Alert', () => {
       component.title = 'Error';
       fixture.detectChanges();
       const buttonElement: TestElement = await buttonHarness.host();
-      expect(await (buttonElement.hasClass('mat-error'))).toBeTruthy();
+      expect(await buttonElement.hasClass('mat-error')).toBeTruthy();
     });
 
     xit('should close modal when clicked', async () => {
       // TODO: Test for closing of modal on button click
-      const okButton = await loader.getHarness<MatButtonHarness>(MatButtonHarness);
+      const okButton = await loader.getHarness<MatButtonHarness>(
+        MatButtonHarness
+      );
       await okButton.click();
       fixture.detectChanges();
       // tick();
