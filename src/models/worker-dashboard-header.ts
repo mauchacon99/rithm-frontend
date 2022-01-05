@@ -4,7 +4,6 @@
  * @see `DashboardCount` model in the back end.
  */
 export interface WorkerDashboardHeader {
-
   /** The Rithm ID for the user that requested the dashboard header. */
   userRithmId: string;
 
@@ -13,5 +12,4 @@ export interface WorkerDashboardHeader {
 
   /** The number of stations where the user is on the work roster. */
   rosterStations: number;
-
 }

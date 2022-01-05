@@ -13,10 +13,9 @@ describe('LoadingIndicatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoadingIndicatorComponent ],
-      imports: [ MatProgressSpinnerModule ]
-    })
-    .compileComponents();
+      declarations: [LoadingIndicatorComponent],
+      imports: [MatProgressSpinnerModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

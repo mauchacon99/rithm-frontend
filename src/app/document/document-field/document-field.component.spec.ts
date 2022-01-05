@@ -16,12 +16,12 @@ describe('DocumentFieldComponent', () => {
   let fixture: ComponentFixture<DocumentFieldComponent>;
   const formBuilder = new FormBuilder();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const fn = function() { };
+  const fn = function () {};
   const errorMessage = {
     invalidForm: {
       valid: false,
-      message: 'User form is invalid'
-    }
+      message: 'User form is invalid',
+    },
   };
 
   beforeEach(async () => {
@@ -35,14 +35,9 @@ describe('DocumentFieldComponent', () => {
         MockComponent(CheckFieldComponent),
         MockComponent(NestedFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

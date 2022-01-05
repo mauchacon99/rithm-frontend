@@ -9,10 +9,9 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 @Component({
   selector: 'app-detail-drawer',
   templateUrl: './detail-drawer.component.html',
-  styleUrls: ['./detail-drawer.component.scss']
+  styleUrls: ['./detail-drawer.component.scss'],
 })
 export class DetailDrawerComponent implements OnDestroy {
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -27,9 +26,7 @@ export class DetailDrawerComponent implements OnDestroy {
   /** The id of the document for which this drawer was opened. */
   documentId = '';
 
-  constructor(
-    private sidenavDrawerService: SidenavDrawerService
-  ) {
+  constructor(private sidenavDrawerService: SidenavDrawerService) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((context) => {
@@ -56,5 +53,4 @@ export class DetailDrawerComponent implements OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
 }

@@ -19,21 +19,18 @@ describe('UserFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        UserFormComponent
-      ],
+      declarations: [UserFormComponent],
       imports: [
         NoopAnimationsModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        { provide: UserService, useClass: MockUserService }
-      ]
-    })
-      .compileComponents();
+        { provide: UserService, useClass: MockUserService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -133,8 +130,13 @@ describe('UserFormComponent', () => {
   });
 
   it('should show password requirements based on focus', async () => {
-    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements').and.callThrough();
-    const passwordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#password' }));
+    const passwordRequirementsSpy = spyOn(
+      component,
+      'togglePasswordRequirements'
+    ).and.callThrough();
+    const passwordHarness = await loader.getHarness(
+      MatInputHarness.with({ selector: '#password' })
+    );
 
     await passwordHarness.focus();
     expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('password');
@@ -143,8 +145,13 @@ describe('UserFormComponent', () => {
   });
 
   it('should show confirm password requirements based on focus', async () => {
-    const passwordRequirementsSpy = spyOn(component, 'togglePasswordRequirements');
-    const confirmPasswordHarness = await loader.getHarness(MatInputHarness.with({ selector: '#confirmPassword' }));
+    const passwordRequirementsSpy = spyOn(
+      component,
+      'togglePasswordRequirements'
+    );
+    const confirmPasswordHarness = await loader.getHarness(
+      MatInputHarness.with({ selector: '#confirmPassword' })
+    );
 
     await confirmPasswordHarness.focus();
     expect(passwordRequirementsSpy).toHaveBeenCalledOnceWith('confirmPassword');
@@ -189,6 +196,4 @@ describe('UserFormComponent', () => {
 
     expect(component.userForm.valid).toBeTrue();
   });
-
-
 });

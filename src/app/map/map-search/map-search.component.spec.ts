@@ -8,9 +8,8 @@ describe('MapSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapSearchComponent ]
-    })
-    .compileComponents();
+      declarations: [MapSearchComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

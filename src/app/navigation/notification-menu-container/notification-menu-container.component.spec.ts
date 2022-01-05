@@ -13,13 +13,10 @@ describe('NotificationMenuContainerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         NotificationMenuContainerComponent,
-        MockComponent(NotificationCardComponent)
+        MockComponent(NotificationCardComponent),
       ],
-      imports: [
-        MatCardModule
-      ]
-    })
-    .compileComponents();
+      imports: [MatCardModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

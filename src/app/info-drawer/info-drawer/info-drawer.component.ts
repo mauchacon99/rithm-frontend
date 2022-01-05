@@ -10,9 +10,8 @@ import { StationInfoDrawerData } from 'src/models';
 @Component({
   selector: 'app-info-drawer',
   templateUrl: './info-drawer.component.html',
-  styleUrls: ['./info-drawer.component.scss']
+  styleUrls: ['./info-drawer.component.scss'],
 })
-
 export class InfoDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -22,17 +21,14 @@ export class InfoDrawerComponent implements OnDestroy {
 
   openedFromMap = false;
 
-  constructor(
-    private sidenavDrawerService: SidenavDrawerService
-  ) {
+  constructor(private sidenavDrawerService: SidenavDrawerService) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         if (data === 'documentInfo' || data === 'stationInfo') {
           this.drawerMode = data;
         }
-      }
-      );
+      });
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -56,7 +52,9 @@ export class InfoDrawerComponent implements OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  async toggleDrawer(drawerItem: '' | 'stationInfo' | 'documentInfo'): Promise<void> {
+  async toggleDrawer(
+    drawerItem: '' | 'stationInfo' | 'documentInfo'
+  ): Promise<void> {
     if (drawerItem === 'documentInfo' || drawerItem === 'stationInfo') {
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }

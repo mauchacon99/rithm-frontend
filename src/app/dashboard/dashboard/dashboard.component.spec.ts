@@ -20,14 +20,13 @@ describe('DashboardComponent', () => {
         MockComponent(HeaderComponent),
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
-        MockComponent(MyStationsComponent)
+        MockComponent(MyStationsComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: UserService, useClass: MockUserService }
-      ]
-    })
-      .compileComponents();
+        { provide: UserService, useClass: MockUserService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
