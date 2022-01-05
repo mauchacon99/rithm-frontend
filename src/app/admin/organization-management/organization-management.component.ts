@@ -13,10 +13,9 @@ import { OrganizationService } from 'src/app/core/organization.service';
 @Component({
   selector: 'app-organization-management',
   templateUrl: './organization-management.component.html',
-  styleUrls: ['./organization-management.component.scss']
+  styleUrls: ['./organization-management.component.scss'],
 })
 export class OrganizationManagementComponent implements OnInit {
-
   /** The users of the organization. */
   users: User[] = [];
 
@@ -58,7 +57,7 @@ export class OrganizationManagementComponent implements OnInit {
     private organizationService: OrganizationService
   ) {
     this.orgNameForm = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -80,22 +79,24 @@ export class OrganizationManagementComponent implements OnInit {
     this.activeNum = pageNum;
     this.isLoading = true;
     const organizationId: string = this.userService.user?.organization;
-    this.organizationService.getUsersForOrganization(organizationId, pageNum)
+    this.organizationService
+      .getUsersForOrganization(organizationId, pageNum)
       .pipe(first())
       .subscribe({
-          next: (orgUsers) => {
+        next: (orgUsers) => {
           if (orgUsers) {
             this.users = orgUsers.users;
             this.totalNumUsers = orgUsers.totalOrgUsers;
           }
           this.isLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -115,20 +116,25 @@ export class OrganizationManagementComponent implements OnInit {
       });
       if (confirm) {
         this.isLoading = true;
-        this.organizationService.removeUserFromOrganization(this.userService.user?.organization, user.rithmId)
+        this.organizationService
+          .removeUserFromOrganization(
+            this.userService.user?.organization,
+            user.rithmId
+          )
           .pipe(first())
           .subscribe({
             next: () => {
               this.popupService.notify('User removed from organization.');
               this.getUsers(this.activeNum);
-            }, error: (error: unknown) => {
+            },
+            error: (error: unknown) => {
               this.isLoading = false;
               this.errorService.displayError(
-                'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
                 error,
                 true
               );
-            }
+            },
           });
       }
     }
@@ -140,7 +146,8 @@ export class OrganizationManagementComponent implements OnInit {
   getOrganizationInfo(): void {
     this.orgLoading = true;
     const organizationId: string = this.userService.user?.organization;
-    this.organizationService.getOrganizationInfo(organizationId)
+    this.organizationService
+      .getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe({
         next: (organization) => {
@@ -148,13 +155,14 @@ export class OrganizationManagementComponent implements OnInit {
             this.orgInfo = organization;
           }
           this.orgLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.orgLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -165,9 +173,15 @@ export class OrganizationManagementComponent implements OnInit {
    * @param userId The id of user for which role has to update.
    * @param index The index of the user in page.
    */
-  async updateUserRole(user: User, userId: string, index: number): Promise<void> {
+  async updateUserRole(
+    user: User,
+    userId: string,
+    index: number
+  ): Promise<void> {
     let role: 'admin' | null;
-    let message, title, buttonText = '';
+    let message,
+      title,
+      buttonText = '';
     if (!user.role || user.role.length === 0) {
       role = 'admin';
       // eslint-disable-next-line max-len
@@ -190,22 +204,31 @@ export class OrganizationManagementComponent implements OnInit {
 
     if (confirm) {
       this.roleLoading[index] = true;
-      this.organizationService.updateUserRole(role, organizationId, userId)
+      this.organizationService
+        .updateUserRole(role, organizationId, userId)
         .pipe(first())
         .subscribe({
           next: () => {
             this.roleLoading[index] = false;
-            !user.role || user.role.length === 0 ? user.role = 'admin' : user.role = null;
-            user.role && user.role.length > 0 ? this.popupService.notify('User has been promoted to admin role.') :
-              this.popupService.notify('User has been de-promoted from admin role.');
-          }, error: (error: unknown) => {
+            !user.role || user.role.length === 0
+              ? (user.role = 'admin')
+              : (user.role = null);
+            user.role && user.role.length > 0
+              ? this.popupService.notify(
+                  'User has been promoted to admin role.'
+                )
+              : this.popupService.notify(
+                  'User has been de-promoted from admin role.'
+                );
+          },
+          error: (error: unknown) => {
             this.roleLoading[index] = false;
             this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error,
               true
             );
-          }
+          },
         });
     }
   }
@@ -219,11 +242,12 @@ export class OrganizationManagementComponent implements OnInit {
     const organizationId: string = this.userService.user?.organization;
     const orgData: OrganizationInfo = {
       name: this.orgNameForm.get('name')?.value,
-      mainContactEmail: <string>(this.orgInfo?.mainContactEmail),
-      mainContactPhoneNumber: <string>(this.orgInfo?.mainContactPhoneNumber),
-      timeZone: <string>(this.orgInfo?.timeZone)
+      mainContactEmail: this.orgInfo?.mainContactEmail as string,
+      mainContactPhoneNumber: this.orgInfo?.mainContactPhoneNumber as string,
+      timeZone: this.orgInfo?.timeZone as string,
     };
-    this.organizationService.updateOrganizationInfo(orgData, organizationId)
+    this.organizationService
+      .updateOrganizationInfo(orgData, organizationId)
       .pipe(first())
       .subscribe({
         next: (organization) => {
@@ -232,15 +256,16 @@ export class OrganizationManagementComponent implements OnInit {
           }
           this.orgNameLoading = false;
           this.popupService.notify('Organization name has been updated.');
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.orgNameLoading = false;
           this.editName = !this.editName;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error,
             true
           );
-        }
+        },
       });
   }
 

@@ -1,5 +1,15 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -13,16 +23,18 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SelectFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => SelectFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class SelectFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class SelectFieldComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   selectFieldForm!: FormGroup;
 
@@ -32,16 +44,14 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(
-    private fb: FormBuilder,
-  ) { }
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []]
+      [this.field.questionType]: ['', []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -52,14 +62,16 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
       validators.push(Validators.required);
     }
 
-    this.selectFieldForm.get(this.field.questionType)?.setValidators(validators);
+    this.selectFieldForm
+      .get(this.field.questionType)
+      ?.setValidators(validators);
   }
 
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -107,12 +119,13 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.selectFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Select field form is invalid'
-      }
-    };
+    return this.selectFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Select field form is invalid',
+          },
+        };
   }
-
 }

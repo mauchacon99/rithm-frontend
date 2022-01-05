@@ -16,20 +16,19 @@ describe('ForgotPasswordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ForgotPasswordComponent ],
+      declarations: [ForgotPasswordComponent],
       imports: [
         NoopAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatCardModule,
-        MatInputModule
+        MatInputModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-    .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

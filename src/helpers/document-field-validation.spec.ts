@@ -21,7 +21,7 @@ describe('DocumentFieldValidation', () => {
     control = { value: '!$34a' };
     const result2 = helper.addressValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({addressIncorrect: true});
+    expect(result2).toEqual({ addressIncorrect: true });
   });
 
   it('should validate currency', () => {
@@ -33,7 +33,7 @@ describe('DocumentFieldValidation', () => {
     control = { value: '1.2.3' };
     const result2 = helper.currencyValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({currencyIncorrect: true});
+    expect(result2).toEqual({ currencyIncorrect: true });
   });
 
   it('should validate a zip code', () => {
@@ -45,7 +45,7 @@ describe('DocumentFieldValidation', () => {
     control = { value: '1234' };
     const result2 = helper.zipValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({zipIncorrect: true});
+    expect(result2).toEqual({ zipIncorrect: true });
   });
 
   it('should validate a phone number', () => {
@@ -57,7 +57,7 @@ describe('DocumentFieldValidation', () => {
     control = { value: '123456' };
     const result2 = helper.phoneValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({phoneIncorrect: true});
+    expect(result2).toEqual({ phoneIncorrect: true });
   });
 
   it('should validate a url', () => {
@@ -69,7 +69,7 @@ describe('DocumentFieldValidation', () => {
     control = { value: 'google.com' };
     const result2 = helper.urlValidation()(control as AbstractControl);
 
-    expect(result2).toEqual({urlIncorrect: true});
+    expect(result2).toEqual({ urlIncorrect: true });
   });
 
   it('should pass when control is left blank', () => {

@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MapData, MapItemStatus } from 'src/models';
 import { environment } from 'src/environments/environment';
@@ -15,9 +18,7 @@ describe('MapService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(MapService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -36,12 +37,12 @@ describe('MapService', () => {
           noOfDocuments: 5,
           mapPoint: {
             x: 12,
-            y: 15
+            y: 15,
           },
           previousStations: [],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -49,12 +50,12 @@ describe('MapService', () => {
           noOfDocuments: 5,
           mapPoint: {
             x: 200,
-            y: 80
+            y: 80,
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
@@ -62,12 +63,12 @@ describe('MapService', () => {
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
-            y: 400
+            y: 400,
           },
           previousStations: [],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
@@ -75,13 +76,13 @@ describe('MapService', () => {
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
-            y: 240
+            y: 240,
           },
           previousStations: [],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
-        }
+          notes: '',
+        },
       ],
       flows: [
         {
@@ -94,11 +95,11 @@ describe('MapService', () => {
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
             'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
-            'CCAEBE94-AF01-48AB-A7BB-279CC25B0989'
+            'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
           ],
           subFlows: [],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: false
+          isReadOnlyRootFlow: false,
         },
         {
           rithmId: '',
@@ -106,17 +107,18 @@ describe('MapService', () => {
           stations: [],
           subFlows: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: true
-        }
-      ]
+          isReadOnlyRootFlow: true,
+        },
+      ],
     };
 
-    service.getMapData()
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getMapData().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/all`
+    );
     expect(req.request.method).toEqual('GET');
     expect(req.request.body).toBeFalsy();
 
@@ -134,13 +136,13 @@ describe('MapService', () => {
         stationName: 'Untitled Station',
         mapPoint: {
           x: 12,
-          y: 15
+          y: 15,
         },
         noOfDocuments: 0,
         previousStations: [],
         nextStations: [],
         status: MapItemStatus.Created,
-        notes: ''
+        notes: '',
       });
       stationElementsArray.push(newStation);
     }
@@ -149,9 +151,15 @@ describe('MapService', () => {
     stationElementsArray[1].nextStations.push(stationElementsArray[2].rithmId);
     stationElementsArray[2].nextStations.push(stationElementsArray[3].rithmId);
 
-    stationElementsArray[3].previousStations.push(stationElementsArray[2].rithmId);
-    stationElementsArray[2].previousStations.push(stationElementsArray[1].rithmId);
-    stationElementsArray[1].previousStations.push(stationElementsArray[0].rithmId);
+    stationElementsArray[3].previousStations.push(
+      stationElementsArray[2].rithmId
+    );
+    stationElementsArray[2].previousStations.push(
+      stationElementsArray[1].rithmId
+    );
+    stationElementsArray[1].previousStations.push(
+      stationElementsArray[0].rithmId
+    );
 
     service.stationElements = stationElementsArray;
 
@@ -290,28 +298,35 @@ describe('MapService', () => {
           noOfDocuments: 5,
           mapPoint: {
             x: 12,
-            y: 15
+            y: 15,
           },
-          previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-          nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+          previousStations: [
+            'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+            'AAAEBE98-YU01-97ER-A7BB-285PP25B0989',
+          ],
+          nextStations: [
+            'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+            'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989',
+          ],
           status: MapItemStatus.Normal,
-          notes: ''
-        }
-      ], flows: []
+          notes: '',
+        },
+      ],
+      flows: [],
     };
 
-    service.publishMap()
-      .subscribe((response) => {
-        expect(response).toBeDefined();
-      });
+    service.publishMap().subscribe((response) => {
+      expect(response).toBeDefined();
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`
+    );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(postData);
 
     req.flush(postData);
     httpTestingController.verify();
   });
-
 });
