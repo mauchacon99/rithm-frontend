@@ -259,6 +259,31 @@ export class DocumentService {
   }
 
   /**
+   * Creates a new document.
+   *
+   * @param stationRithmId The station where we want to create a new document.
+   * @returns The id of the document object that has been saved.
+   */
+  createNewDocument(stationRithmId: string): Observable<string> {
+    const documentResponse = {
+      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      name: '',
+      priority: 0,
+      currentStations: [
+        {
+          name: "So long",
+          instructions: "",
+          rithmId: stationRithmId,
+          assignedUser: null
+        }
+      ],
+      children: [],
+      parents: []
+    };
+    return of(documentResponse.rithmId).pipe(delay(1000));
+  }
+
+  /**
    * Assign an user to a document.
    *
    * @param userRithmId The Specific id of user assign.

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService } from 'src/mocks';
+import { MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService, MockDocumentService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -17,7 +17,6 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
@@ -47,8 +46,8 @@ describe('StationInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService },
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: MapService, useClass: MockMapService},
+        { provide: DocumentService, useClass: MockDocumentService },
       ]
     })
       .compileComponents();
@@ -175,6 +174,22 @@ describe('StationInfoDrawerComponent', () => {
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
+  });
+
+  it('should create a document from station-info-drawer', () => {
+    const createDocumentSpy = spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.callThrough();
+    component.createNewDocument();
+    expect(createDocumentSpy).toHaveBeenCalledOnceWith(component.stationRithmId);
+  });
+
+  it('should catch an error if creating the document fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(throwError(() => {
+      throw new Error();
+    }));
+
+    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    component.createNewDocument();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should create new document and called services', () => {

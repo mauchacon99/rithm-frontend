@@ -400,4 +400,13 @@ describe('DocumentService', () => {
         expect(response).toBeFalsy();
       });
   });
+
+  it('should create a new document', () => {
+    const expectDocumentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+
+    service.createNewDocument(stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDocumentId);
+      });
+  });
 });

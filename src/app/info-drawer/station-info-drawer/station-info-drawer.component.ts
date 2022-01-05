@@ -402,6 +402,24 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Creates a new document.
+   */
+  createNewDocument(): void {
+    this.documentService.createNewDocument(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+     });
+  }
+
+  /**
    * Assign an user to a document.
    *
    * @param userRithmId The Specific id of user assign.
