@@ -1516,19 +1516,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param station The clicked station.
    */
   checkStationClick(station: StationMapElement): void {
-    // TODO: Remove this test rename prompt once renaming in the drawer is done
-    // this.popupService.prompt({
-    //   title: 'Rename Station',
-    //   message: 'Please provide a name for this station',
-    //   promptLabel: 'Station name',
-    //   promptValue: station.stationName
-    // }).then((newName) => {
-    //   if (newName && newName !== station.stationName) {
-    //     station.stationName = newName;
-    //     station.markAsUpdated();
-    //     this.drawElements();
-    //   }
-    // });
     const stationDataInfo: StationInformation = {
       rithmId: station.rithmId,
       name: '',
