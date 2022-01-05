@@ -217,28 +217,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update the document name.
-   */
-  private updateDocumentName(): void {
-    this.documentLoading = true;
-    const newDocumentName = 'Provisional Name while BSubject is done';
-    this.documentService.updateDocumentName(this.documentInformation.documentRithmId, newDocumentName)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.documentLoading = false;
-        },
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        }
-      });
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -247,19 +225,26 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Save the document answers.
+   * Save document changes with the save button.
    */
-  saveDocumentAnswer(): void {
+   saveDocumentChanges(): void {
     this.documentLoading = true;
-    this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer)
+
+    const requestArray = [
+      // Update the document name.
+      this.documentService.updateDocumentName(this.documentInformation.documentRithmId, this.documentName),
+
+      // Save the document answers.
+      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer)
+    ];
+
+    forkJoin(requestArray)
       .pipe(first())
       .subscribe({
-        next: (docAnswers) => {
-          if (docAnswers) {
-            this.documentAnswer = docAnswers;
-          }
+        next: () => {
           this.documentLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
             'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',

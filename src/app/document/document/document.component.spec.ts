@@ -19,7 +19,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
-import { DocumentAnswer, DocumentAutoFlow, QuestionFieldType } from 'src/models';
+import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
 import { forkJoin, of } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -382,6 +382,25 @@ describe('DocumentComponent', () => {
     expect(btnFlow.disabled).toBeFalsy();
   });
 
+  it('should called saveAnswers service when saving document changes', () => {
+    const expectedAnswer = component.documentAnswer;
+    const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    component.saveDocumentChanges();
+    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
+  });
+
+  it('should called UpdateDocumentName service when saving document changes', () => {
+    const documentService = TestBed.inject(DocumentService);
+    documentService.documentName$.next({
+      baseName: 'New Document Name',
+      appendedName: ''
+    });
+    const documentName = 'New Document Name';
+    const spyUpdateDocumentName = spyOn(TestBed.inject(DocumentService), 'updateDocumentName').and.callThrough();
+    component.saveDocumentChanges();
+    expect(spyUpdateDocumentName).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, documentName);
+  });
+
   it('should called service to save answers and auto flow the document', () => {
     const expectedAnswer = component.documentAnswer;
 
@@ -409,45 +428,6 @@ describe('DocumentComponent', () => {
 
     button.click();
 
-    expect(spyMethod).toHaveBeenCalled();
-  });
-
-  it('should test method to save document answer', () => {
-    const expectedAnswers: DocumentAnswer[] = [{
-      questionRithmId: 'Dev 1',
-      documentRithmId: '123-654-789',
-      stationRithmId: '741-951-753',
-      value: 'Answer Dev',
-      file: 'dev.txt',
-      filename: 'dev',
-      type: QuestionFieldType.Email,
-      rithmId: '789-321-456',
-      questionUpdated: true,
-    },
-    {
-      questionRithmId: 'Dev 2',
-      documentRithmId: '123-654-789-856',
-      stationRithmId: '741-951-753-741',
-      value: 'Answer Dev2',
-      file: 'dev2.txt',
-      filename: 'dev2',
-      type: QuestionFieldType.City,
-      rithmId: '789-321-456-789',
-      questionUpdated: false,
-    }];
-    component.documentAnswer = expectedAnswers;
-
-    const spyQuestionAnswer = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
-    component.saveDocumentAnswer();
-    expect(spyQuestionAnswer).toHaveBeenCalledWith(component.documentInformation.documentRithmId, component.documentAnswer);
-  });
-
-  it('should call the save method when the save button is clicked', () => {
-    component.documentLoading = false;
-    const spyMethod = spyOn(component,'saveDocumentAnswer').and.callThrough();
-    fixture.detectChanges();
-    const buttonSave = fixture.debugElement.nativeElement.querySelector('#document-save');
-    buttonSave.click();
     expect(spyMethod).toHaveBeenCalled();
   });
 
