@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
 
-  viewNewDashbaord = false;
+  viewNewDashboard = false;
 
   constructor(
     private stationService: StationService,
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
     .subscribe({
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
-        treatment === 'on' ? this.viewNewDashbaord = true : this.viewNewDashbaord = false;
+        treatment === 'on' ? this.viewNewDashboard = true : this.viewNewDashboard = false;
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
