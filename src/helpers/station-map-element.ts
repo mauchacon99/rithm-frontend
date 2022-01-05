@@ -24,7 +24,7 @@ export interface StationMapElement extends StationMapData {
   /** Whether the station itself is currently being dragged. */
   dragging: boolean;
 
-  /** What item the user is currently hovering over on this station, if any. */
+  /** The item the user is currently hovering over on this station, if any. */
   hoverItem: StationElementHoverItem;
 
   /** Whether a connected station is being added from this station or not. */
