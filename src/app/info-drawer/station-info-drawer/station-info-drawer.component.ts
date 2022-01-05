@@ -89,7 +89,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   stationPriority: number | '--' = '--';
 
   /** The default message to prompt user to publish local changes.*/
-  publishStationMessage = 'Publish map changes to add ';
+  publishStationMessage = 'Publish map changes to update ';
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
