@@ -47,30 +47,32 @@ describe('StationComponent', () => {
         MockComponent(DocumentTemplateComponent),
         MockComponent(LoadingIndicatorComponent),
         MockComponent(ToolbarComponent),
-        MockComponent(StationTemplateComponent)
+        MockComponent(StationTemplateComponent),
       ],
       imports: [
         NoopAnimationsModule,
         MatInputModule,
         MatFormFieldModule,
-        RouterTestingModule.withRoutes(
-          [{ path: 'dashboard', component: MockComponent(DashboardComponent) }]
-        ),
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: MockComponent(DashboardComponent) },
+        ]),
         MatSidenavModule,
         ReactiveFormsModule,
         MatTabsModule,
-        MatExpansionModule
+        MatExpansionModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: UserService, useClass: MockUserService },
-        { provide: DocumentInfoHeaderComponent, useClass: DocumentInfoHeaderComponent },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-      .compileComponents();
+        {
+          provide: DocumentInfoHeaderComponent,
+          useClass: DocumentInfoHeaderComponent,
+        },
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -80,53 +82,64 @@ describe('StationComponent', () => {
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
       name: 'Dry Goods & Liquids',
       instructions: '',
-      nextStations: [{
-        name: 'Development',
-        rithmId: '741-258-963'
-      }],
-      previousStations: [{
-        name: 'Station-1',
-        rithmId: '963-258-741'
-      }, {
-        name: 'Station-2',
-        rithmId: '951-753-987'
-      }],
-      stationOwners: [{
-        rithmId: '',
-        firstName: 'Marry',
-        lastName: 'Poppins',
-        email: 'marrypoppins@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }, {
-        rithmId: '',
-        firstName: 'Worker',
-        lastName: 'User',
-        email: 'workeruser@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
-      workers: [{
-        rithmId: '',
-        firstName: 'Harry',
-        lastName: 'Potter',
-        email: 'harrypotter@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }, {
-        rithmId: '',
-        firstName: 'Supervisor',
-        lastName: 'User',
-        email: 'supervisoruser@inpivota.com',
-        isWorker: true,
-        isOwner: false
-      }],
+      nextStations: [
+        {
+          name: 'Development',
+          rithmId: '741-258-963',
+        },
+      ],
+      previousStations: [
+        {
+          name: 'Station-1',
+          rithmId: '963-258-741',
+        },
+        {
+          name: 'Station-2',
+          rithmId: '951-753-987',
+        },
+      ],
+      stationOwners: [
+        {
+          rithmId: '',
+          firstName: 'Marry',
+          lastName: 'Poppins',
+          email: 'marrypoppins@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+        {
+          rithmId: '',
+          firstName: 'Worker',
+          lastName: 'User',
+          email: 'workeruser@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
+      workers: [
+        {
+          rithmId: '',
+          firstName: 'Harry',
+          lastName: 'Potter',
+          email: 'harrypotter@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+        {
+          rithmId: '',
+          firstName: 'Supervisor',
+          lastName: 'User',
+          email: 'supervisoruser@inpivota.com',
+          isWorker: true,
+          isOwner: false,
+        },
+      ],
       createdByRithmId: 'ED6148C9-PBK8-408E-A210-9242B2735B1C',
       createdDate: '2021-07-16T17:26:47.3506612Z',
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      priority: 2
+      priority: 2,
     };
 
     fixture.detectChanges();
@@ -152,7 +165,7 @@ describe('StationComponent', () => {
       isRequired: false,
       isPrivate: false,
       children: [],
-      originalStationRithmId: '3j4k-3h2j-hj4j'
+      originalStationRithmId: '3j4k-3h2j-hj4j',
     };
     component.movePreviousFieldToTemplate(previousField);
     fixture.detectChanges();
@@ -191,19 +204,24 @@ describe('StationComponent', () => {
   it('should open confirmation popup when canceling', async () => {
     const dataToConfirmPopup = {
       title: 'Are you sure?',
-      message: 'Your changes will be lost and you will return to the dashboard.',
+      message:
+        'Your changes will be lost and you will return to the dashboard.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
     };
-    const popUpConfirmSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
     await component.cancelStation();
     expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
   });
 
   it('should show popup confirm when cancel button is clicked', () => {
     const methodCalled = spyOn(component, 'cancelStation');
-    const btnCancel = fixture.debugElement.nativeElement.querySelector('#station-cancel');
+    const btnCancel =
+      fixture.debugElement.nativeElement.querySelector('#station-cancel');
     expect(btnCancel).toBeTruthy();
     btnCancel.click();
     expect(methodCalled).toHaveBeenCalled();
@@ -217,9 +235,14 @@ describe('StationComponent', () => {
 
   it('should get previous and next stations', () => {
     component.stationRithmId = component.stationInformation.rithmId;
-    const prevAndNextStations = spyOn(TestBed.inject(StationService), 'getPreviousAndNextStations').and.callThrough();
+    const prevAndNextStations = spyOn(
+      TestBed.inject(StationService),
+      'getPreviousAndNextStations'
+    ).and.callThrough();
     component.getPreviousAndNextStations();
-    expect(prevAndNextStations).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(prevAndNextStations).toHaveBeenCalledOnceWith(
+      component.stationRithmId
+    );
   });
 
   it('should call sidenav service in the init life cycle', () => {
@@ -239,7 +262,10 @@ describe('StationComponent', () => {
   });
 
   it('should get previous and next stations on page load', () => {
-    const spyMethodPrevAndNextStation = spyOn(component, 'getPreviousAndNextStations');
+    const spyMethodPrevAndNextStation = spyOn(
+      component,
+      'getPreviousAndNextStations'
+    );
 
     component.ngOnInit();
 
@@ -251,5 +277,4 @@ describe('StationComponent', () => {
     component.addQuestion(fieldType);
     expect(component.stationInformation.questions[0].children).toHaveSize(5);
   });
-
 });

@@ -3,34 +3,33 @@ name: Test Deployments
 on:
   push:
     paths:
-      - "src/**"
+      - 'src/**'
     branches:
-      - "test"
+      - 'test'
 
 jobs:
-
   # Deploys the web app
   web-app:
     runs-on: [self-hosted, testvm]
     timeout-minutes: 15
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Installing dependencies
-      run: npm ci --no-audit
+      - name: Installing dependencies
+        run: npm ci --no-audit
 
-    - name: Compiling app
-      run: npm run build-test
+      - name: Compiling app
+        run: npm run build-test
 
-    - name: Placing app offline file
-      run: Copy-Item ./src/app_offline.htm C:/inetpub/testapp.rithm.tech
+      - name: Placing app offline file
+        run: Copy-Item ./src/app_offline.htm C:/inetpub/testapp.rithm.tech
 
-    - name: Deploying app
-      run: Copy-Item ./dist/rithm/* C:/inetpub/testapp.rithm.tech -Recurse -Force
+      - name: Deploying app
+        run: Copy-Item ./dist/rithm/* C:/inetpub/testapp.rithm.tech -Recurse -Force
 
-    - name: Removing app offline file
-      run: Remove-Item C:/inetpub/testapp.rithm.tech/app_offline.htm
+      - name: Removing app offline file
+        run: Remove-Item C:/inetpub/testapp.rithm.tech/app_offline.htm

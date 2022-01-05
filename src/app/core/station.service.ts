@@ -1,9 +1,23 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { DocumentGenerationStatus, Question, Station, StationInformation, StationPotentialRostersUsers, StationRosterMember, DocumentNameField, StandardStringJSON, ForwardPreviousStationsDocument } from 'src/models';
+import {
+  DocumentGenerationStatus,
+  Question,
+  Station,
+  StationInformation,
+  StationPotentialRostersUsers,
+  StationRosterMember,
+  DocumentNameField,
+  StandardStringJSON,
+  ForwardPreviousStationsDocument,
+} from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
 
@@ -11,10 +25,9 @@ const MICROSERVICE_PATH = '/stationservice/api/station';
  * Service for all station behavior and business logic.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StationService {
-
   /** The Name of the Station as BehaviorSubject. */
   stationName$ = new BehaviorSubject<string>('');
 
@@ -30,9 +43,7 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets station information.
@@ -41,9 +52,11 @@ export class StationService {
    * @returns Information related to station.
    */
   getStationInfo(stationId: string): Observable<StationInformation> {
-    const params = new HttpParams()
-      .set('stationRithmId', stationId);
-    return this.http.get<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info`, { params });
+    const params = new HttpParams().set('stationRithmId', stationId);
+    return this.http.get<StationInformation>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-info`,
+      { params }
+    );
   }
 
   /**
@@ -52,7 +65,9 @@ export class StationService {
    * @returns The list of all stations.
    */
   getAllStations(): Observable<Station[]> {
-    return this.http.get<Station[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}`);
+    return this.http.get<Station[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}`
+    );
   }
 
   /**
@@ -62,7 +77,10 @@ export class StationService {
    * @param station The station information that will be update.
    */
   updateStation(station: StationInformation): Observable<StationInformation> {
-    return this.http.put<StationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`, station);
+    return this.http.put<StationInformation>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/${station.rithmId}`,
+      station
+    );
   }
 
   /**
@@ -72,9 +90,11 @@ export class StationService {
    * @returns The last updated date for this station.
    */
   getLastUpdated(stationId: string): Observable<string> {
-    const params = new HttpParams()
-      .set('rithmId', stationId);
-    return this.http.get<string>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params });
+    const params = new HttpParams().set('rithmId', stationId);
+    return this.http.get<string>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`,
+      { params }
+    );
   }
 
   /**
@@ -83,9 +103,15 @@ export class StationService {
    * @param stationId The id of the station return status document.
    * @returns Status the document.
    */
-  getStationDocumentGenerationStatus(stationId: string): Observable<DocumentGenerationStatus> {
+  getStationDocumentGenerationStatus(
+    stationId: string
+  ): Observable<DocumentGenerationStatus> {
     const params = new HttpParams().set('rithmId', stationId);
-    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`, { params })
+    return this.http
+      .get<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status`,
+        { params }
+      )
       .pipe(map((response) => response.data as DocumentGenerationStatus));
   }
 
@@ -96,10 +122,17 @@ export class StationService {
    * @param status The new status set in station document.
    * @returns Status new the document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, status: DocumentGenerationStatus): Observable<DocumentGenerationStatus> {
+  updateStationDocumentGenerationStatus(
+    stationId: string,
+    status: DocumentGenerationStatus
+  ): Observable<DocumentGenerationStatus> {
     const standardBody = { data: status };
-    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
-      standardBody).pipe(map(response => response.data as DocumentGenerationStatus));
+    return this.http
+      .put<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/generator-status?stationRithmId=${stationId}`,
+        standardBody
+      )
+      .pipe(map((response) => response.data as DocumentGenerationStatus));
   }
 
   /**
@@ -109,11 +142,17 @@ export class StationService {
    * @param isPrivate True returns private questions - False returns all questions.
    * @returns Station private/all items Array.
    */
-  getStationPreviousQuestions(stationId: string, isPrivate: boolean): Observable<Question[]> {
+  getStationPreviousQuestions(
+    stationId: string,
+    isPrivate: boolean
+  ): Observable<Question[]> {
     const params = new HttpParams()
       .set('stationRithmId', stationId)
       .set('getPrivate', isPrivate);
-    return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`, { params });
+    return this.http.get<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`,
+      { params }
+    );
   }
 
   /**
@@ -123,8 +162,14 @@ export class StationService {
    * @param questions The question to be updated.
    * @returns Station updated questions array.
    */
-  updateStationQuestions(stationId: string, questions: Question[]): Observable<Question[]> {
-    return this.http.post<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`, questions);
+  updateStationQuestions(
+    stationId: string,
+    questions: Question[]
+  ): Observable<Question[]> {
+    return this.http.post<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationId}`,
+      questions
+    );
   }
 
   /**
@@ -134,9 +179,15 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns Rosters in the station.
    */
-  addUsersToWorkerRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+  addUsersToWorkerRoster(
+    stationId: string,
+    userIds: string[]
+  ): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`, userIds);
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
+      userIds
+    );
   }
 
   /**
@@ -146,12 +197,17 @@ export class StationService {
    * @param usersIds The selected users id array to removed.
    * @returns New station Worker Roster.
    */
-  removeUsersFromWorkerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
+  removeUsersFromWorkerRoster(
+    stationId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster-user?stationRithmId=${stationId}`,
       {
-        body: usersIds
-      });
+        body: usersIds,
+      }
+    );
   }
 
   /**
@@ -162,20 +218,29 @@ export class StationService {
    * @returns Users for the organization bind to station.
    */
   // eslint-disable-next-line max-len
-  getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): Observable<StationPotentialRostersUsers> {
+  getPotentialStationRosterMembers(
+    stationRithmId: string,
+    pageNum: number
+  ): Observable<StationPotentialRostersUsers> {
     if (!pageNum) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Invalid page number.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Invalid page number.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       const params = new HttpParams()
         .set('stationRithmId', stationRithmId)
         .set('pageNum', pageNum)
         .set('pageSize', 20);
       // eslint-disable-next-line max-len
-      return this.http.get<StationPotentialRostersUsers>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`, { params });
+      return this.http.get<StationPotentialRostersUsers>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/potential-roster-users`,
+        { params }
+      );
     }
   }
 
@@ -186,7 +251,9 @@ export class StationService {
    * @returns Returns an empty observable.
    */
   deleteStation(stationId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`);
+    return this.http.delete<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/${stationId}`
+    );
   }
 
   /**
@@ -196,9 +263,11 @@ export class StationService {
    * @returns A rosterMember array.
    */
   getStationWorkerRoster(stationId: string): Observable<StationRosterMember[]> {
-    const params = new HttpParams()
-      .set('rithmId', stationId);
-    return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`, { params });
+    const params = new HttpParams().set('rithmId', stationId);
+    return this.http.get<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-roster`,
+      { params }
+    );
   }
 
   /**
@@ -209,15 +278,20 @@ export class StationService {
    */
   getStationOwnerRoster(stationId: string): Observable<StationRosterMember[]> {
     if (!stationId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Invalid station ID.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Invalid station ID.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
-      const params = new HttpParams()
-        .set('stationRithmId', stationId);
-      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users`, { params });
+      const params = new HttpParams().set('stationRithmId', stationId);
+      return this.http.get<StationRosterMember[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-users`,
+        { params }
+      );
     }
   }
 
@@ -255,9 +329,15 @@ export class StationService {
    * @param userIds The users ids for assign in station.
    * @returns OwnerRoster in the station.
    */
-  addUsersToOwnersRoster(stationId: string, userIds: string[]): Observable<StationRosterMember[]> {
+  addUsersToOwnersRoster(
+    stationId: string,
+    userIds: string[]
+  ): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.put<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`, userIds);
+    return this.http.put<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
+      userIds
+    );
   }
 
   /**
@@ -267,12 +347,17 @@ export class StationService {
    * @param usersIds The selected owners id array to removed.
    * @returns New Station information with owners roster.
    */
-  removeUsersFromOwnerRoster(stationId: string, usersIds: string[]): Observable<StationRosterMember[]> {
+  removeUsersFromOwnerRoster(
+    stationId: string,
+    usersIds: string[]
+  ): Observable<StationRosterMember[]> {
     // eslint-disable-next-line max-len
-    return this.http.delete<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
+    return this.http.delete<StationRosterMember[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/owner-user?stationRithmId=${stationId}`,
       {
-        body: usersIds
-      });
+        body: usersIds,
+      }
+    );
   }
 
   /**
@@ -282,9 +367,15 @@ export class StationService {
    * @param newStatus The new status is editable in the change for document.
    * @returns New status for document editable.
    */
-  updateStatusDocumentEditable(stationRithmId: string, newStatus: boolean): Observable<boolean> {
+  updateStatusDocumentEditable(
+    stationRithmId: string,
+    newStatus: boolean
+  ): Observable<boolean> {
     // eslint-disable-next-line max-len
-    return this.http.put<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`, stationRithmId);
+    return this.http.put<boolean>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document?stationRithmId=${stationRithmId}&canRename=${newStatus}`,
+      stationRithmId
+    );
   }
 
   /**
@@ -294,9 +385,11 @@ export class StationService {
    * @returns Status for document editable.
    */
   getStatusDocumentEditable(stationRithmId: string): Observable<boolean> {
-    const params = new HttpParams()
-      .set('stationRithmId', stationRithmId);
-    return this.http.get<boolean>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`, { params });
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http.get<boolean>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/worker-rename-document`,
+      { params }
+    );
   }
 
   /**
@@ -315,12 +408,18 @@ export class StationService {
    * @param instructions The general instructions to be updated.
    * @returns The updated stationInformation.
    */
-  updateStationGeneralInstructions(rithmId: string, instructions: string): Observable<StandardStringJSON> {
+  updateStationGeneralInstructions(
+    rithmId: string,
+    instructions: string
+  ): Observable<StandardStringJSON> {
     const generalInstructions: StandardStringJSON = {
-      data: instructions
+      data: instructions,
     };
     // eslint-disable-next-line max-len
-    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${rithmId}`, generalInstructions);
+    return this.http.put<StandardStringJSON>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/instructions?rithmId=${rithmId}`,
+      generalInstructions
+    );
   }
 
   /**
@@ -330,10 +429,14 @@ export class StationService {
    * @param stationRithmId The rithm id actually station.
    * @returns Previous and next stations.
    */
-  getPreviousAndNextStations(stationRithmId: string): Observable<ForwardPreviousStationsDocument> {
-    const params = new HttpParams()
-      .set('stationRithmId', stationRithmId);
-    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations`, { params });
+  getPreviousAndNextStations(
+    stationRithmId: string
+  ): Observable<ForwardPreviousStationsDocument> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http.get<ForwardPreviousStationsDocument>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/prev-next-stations`,
+      { params }
+    );
   }
 
   /**
@@ -345,7 +448,11 @@ export class StationService {
    */
   updateStationName(name: string, stationRithmId: string): Observable<string> {
     const standardBody: StandardStringJSON = { data: name };
-    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`, standardBody)
+    return this.http
+      .put<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${stationRithmId}`,
+        standardBody
+      )
       .pipe(map((response) => response.data));
   }
 
@@ -357,11 +464,13 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
-    const params = new HttpParams()
-      .set('stationRithmId', stationId);
-    return this.http.get<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template`, {
-      params
-    });
+    const params = new HttpParams().set('stationRithmId', stationId);
+    return this.http.get<DocumentNameField[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template`,
+      {
+        params,
+      }
+    );
   }
 
   /**
@@ -371,9 +480,15 @@ export class StationService {
    * @param appendedFields  The appended fields.
    * @returns The updated document name template in the station.
    */
-  updateDocumentNameTemplate(stationId: string, appendedFields: DocumentNameField[]): Observable<DocumentNameField[]> {
+  updateDocumentNameTemplate(
+    stationId: string,
+    appendedFields: DocumentNameField[]
+  ): Observable<DocumentNameField[]> {
     // eslint-disable-next-line max-len
-    return this.http.put<DocumentNameField[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`, appendedFields);
+    return this.http.put<DocumentNameField[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-naming-template?stationRithmId=${stationId}`,
+      appendedFields
+    );
   }
 
   /** Set touch to station template form. */

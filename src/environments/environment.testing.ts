@@ -1,7 +1,6 @@
 import { EnvironmentName } from 'src/models';
 
 export const environment = {
-
   /** The version number for the app. */
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   appVersionNumber: `${require('../../package.json').version}-test`,
@@ -16,5 +15,5 @@ export const environment = {
   baseAppUrl: 'https://testapp.rithm.tech',
 
   /** The lifetime for which an access token is valid in milliseconds. */
-  accessTokenLifetime: 900000
+  accessTokenLifetime: 900000,
 };

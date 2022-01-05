@@ -19,14 +19,8 @@ describe('StationFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        StationFieldComponent,
-        MockComponent(TextFieldComponent)
-      ],
-      imports: [
-        MatCheckboxModule,
-        ReactiveFormsModule
-      ],
+      declarations: [StationFieldComponent, MockComponent(TextFieldComponent)],
+      imports: [MatCheckboxModule, ReactiveFormsModule],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
@@ -47,7 +41,7 @@ describe('StationFieldComponent', () => {
       isRequired: false,
       isPrivate: false,
       children: [],
-      originalStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4'
+      originalStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
     };
     component.stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c4';
     fixture.detectChanges();
@@ -76,7 +70,7 @@ describe('StationFieldComponent', () => {
         isRequired: false,
         isPrivate: false,
         children: [],
-      }
+      },
     ];
     expect(component.options.length).toBe(2);
     component.removeOption(1);
@@ -90,9 +84,11 @@ describe('StationFieldComponent', () => {
   });
 
   it('should set isRequired', async () => {
-    const checkbox = await loader.getHarness<MatCheckboxHarness>(MatCheckboxHarness.with({
-      name: component.field.rithmId
-    }));
+    const checkbox = await loader.getHarness<MatCheckboxHarness>(
+      MatCheckboxHarness.with({
+        name: component.field.rithmId,
+      })
+    );
 
     component.field.isRequired = true;
     expect(await checkbox.isChecked()).toBeTruthy();
@@ -106,7 +102,6 @@ describe('StationFieldComponent', () => {
 
     expect(await checkbox.isChecked()).toBeTruthy();
     expect(component.field.isRequired).toBeTrue();
-
   });
 
   describe('label field', () => {
@@ -144,5 +139,4 @@ describe('StationFieldComponent', () => {
       expect(component.options.length).toBeGreaterThan(0);
     });
   });
-
 });

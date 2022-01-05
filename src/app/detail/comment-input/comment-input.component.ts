@@ -1,5 +1,16 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormGroupDirective,
+} from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Comment } from 'src/models';
@@ -11,10 +22,9 @@ import { CommentService } from '../comment.service';
 @Component({
   selector: 'app-comment-input',
   templateUrl: './comment-input.component.html',
-  styleUrls: ['./comment-input.component.scss']
+  styleUrls: ['./comment-input.component.scss'],
 })
 export class CommentInputComponent {
-
   /** The form group directive to reset form state. */
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
@@ -30,7 +40,6 @@ export class CommentInputComponent {
   /** The newly posted comment. */
   @Output() private newComment = new EventEmitter<Comment>();
 
-
   /** The form for adding a new comment. */
   commentForm: FormGroup;
 
@@ -40,7 +49,7 @@ export class CommentInputComponent {
     private errorService: ErrorService
   ) {
     this.commentForm = this.fb.group({
-      comment: ['', [Validators.required]]
+      comment: ['', [Validators.required]],
     });
   }
 
@@ -53,27 +62,29 @@ export class CommentInputComponent {
     const newComment: Comment = {
       displayText: this.commentForm.controls['comment'].value,
       stationRithmId: this.stationId,
-      documentRithmId: this.documentId
+      documentRithmId: this.documentId,
     };
 
-    this.commentService.postDocumentComment(newComment)
+    this.commentService
+      .postDocumentComment(newComment)
       .pipe(first())
       .subscribe({
-          next: (comment) => {
+        next: (comment) => {
           this.commentForm.enable();
           this.newComment.emit(comment);
           this.postingComment.emit(false);
           this.commentForm.get('comment')?.reset('');
           this.formDirective.resetForm();
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.commentForm.enable();
           this.postingComment.emit(false);
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error,
             true
           );
-        }
+        },
       });
   }
 }

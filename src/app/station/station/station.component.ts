@@ -1,10 +1,23 @@
-import { Component, OnDestroy, OnInit, ViewChild, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterContentChecked,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { StationInformation, QuestionFieldType, ConnectedStationInfo, DocumentNameField, Question } from 'src/models';
+import {
+  StationInformation,
+  QuestionFieldType,
+  ConnectedStationInfo,
+  DocumentNameField,
+  Question,
+} from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -19,7 +32,9 @@ import { PossibleAnswer } from '../../../models/possible-answer';
   templateUrl: './station.component.html',
   styleUrls: ['./station.component.scss'],
 })
-export class StationComponent implements OnInit, OnDestroy, AfterContentChecked {
+export class StationComponent
+  implements OnInit, OnDestroy, AfterContentChecked
+{
   /** The component for the drawer that houses comments and history. */
   @ViewChild('drawer', { static: true })
   drawer!: MatDrawer;
@@ -75,7 +90,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),
-      generalInstructions: this.fb.control('')
+      generalInstructions: this.fb.control(''),
     });
 
     this.sidenavDrawerService.drawerContext$
@@ -103,20 +118,28 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       });
 
     this.stationService.stationQuestion$
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe((question) => {
-      const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
-      if (prevQuestion){
-        const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
-        if (!question.isPossibleAnswer){
-          this.stationInformation.questions[questionIndex].prompt = question.prompt;
-        } else {
-          if (prevQuestion.possibleAnswers){
-            this.populatePossibleAnswers(question, questionIndex, prevQuestion.possibleAnswers);
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((question) => {
+        const prevQuestion = this.stationInformation.questions.find(
+          (field) => field.rithmId === question.rithmId
+        );
+        if (prevQuestion) {
+          const questionIndex =
+            this.stationInformation.questions.indexOf(prevQuestion);
+          if (!question.isPossibleAnswer) {
+            this.stationInformation.questions[questionIndex].prompt =
+              question.prompt;
+          } else {
+            if (prevQuestion.possibleAnswers) {
+              this.populatePossibleAnswers(
+                question,
+                questionIndex,
+                prevQuestion.possibleAnswers
+              );
+            }
           }
         }
-      }
-    });
+      });
   }
 
   /**
@@ -126,20 +149,34 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * @param questionIndex The index of the current question in the station.
    * @param arrayAnswers The array of possible answers in the current question.
    */
-  private populatePossibleAnswers(answer: Question, questionIndex: number, arrayAnswers: PossibleAnswer[] = []): void {
+  private populatePossibleAnswers(
+    answer: Question,
+    questionIndex: number,
+    arrayAnswers: PossibleAnswer[] = []
+  ): void {
     const newAnswer: PossibleAnswer = {
-      rithmId: answer.originalStationRithmId ? answer.originalStationRithmId : '',
+      rithmId: answer.originalStationRithmId
+        ? answer.originalStationRithmId
+        : '',
       text: answer.prompt,
       default: false,
     };
-    if (this.stationInformation.questions[questionIndex].possibleAnswers !== undefined){
-      const possibleAnswer = arrayAnswers.find( a => a.rithmId === newAnswer.rithmId);
+    if (
+      this.stationInformation.questions[questionIndex].possibleAnswers !==
+      undefined
+    ) {
+      const possibleAnswer = arrayAnswers.find(
+        (a) => a.rithmId === newAnswer.rithmId
+      );
       if (possibleAnswer) {
         const answerIndex = arrayAnswers.indexOf(possibleAnswer);
         arrayAnswers[answerIndex] = newAnswer;
-        this.stationInformation.questions[questionIndex].possibleAnswers = arrayAnswers;
+        this.stationInformation.questions[questionIndex].possibleAnswers =
+          arrayAnswers;
       } else {
-        this.stationInformation.questions[questionIndex].possibleAnswers?.push(newAnswer);
+        this.stationInformation.questions[questionIndex].possibleAnswers?.push(
+          newAnswer
+        );
       }
     }
   }
@@ -182,23 +219,22 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.params
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (!params.stationId) {
-            this.handleInvalidParams();
-          } else {
-            this.stationRithmId = params.stationId;
-            this.getStationInfo(params.stationId);
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    this.route.params.pipe(first()).subscribe({
+      next: (params) => {
+        if (!params.stationId) {
+          this.handleInvalidParams();
+        } else {
+          this.stationRithmId = params.stationId;
+          this.getStationInfo(params.stationId);
         }
-      });
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
@@ -229,14 +265,17 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    */
   private getStationInfo(stationId: string): void {
     this.stationLoading = true;
-    this.stationService.getStationInfo(stationId)
+    this.stationService
+      .getStationInfo(stationId)
       .pipe(first())
       .subscribe({
         next: (stationInfo) => {
           if (stationInfo) {
             this.stationInformation = stationInfo;
             this.stationName = stationInfo.name;
-            this.stationForm.controls.generalInstructions.setValue(stationInfo.instructions);
+            this.stationForm.controls.generalInstructions.setValue(
+              stationInfo.instructions
+            );
           }
           this.stationLoading = false;
         },
@@ -244,10 +283,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
           this.navigateBack();
           this.stationLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -264,14 +303,19 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
       isReadOnly: false,
       isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
       isPrivate: false,
-      children: fieldType === QuestionFieldType.AddressLine ? this.addAddressChildren() : [],
-      originalStationRithmId: this.stationRithmId
+      children:
+        fieldType === QuestionFieldType.AddressLine
+          ? this.addAddressChildren()
+          : [],
+      originalStationRithmId: this.stationRithmId,
     };
-    if (fieldType === QuestionFieldType.CheckList ||
+    if (
+      fieldType === QuestionFieldType.CheckList ||
       fieldType === QuestionFieldType.Select ||
-      fieldType === QuestionFieldType.MultiSelect){
-        newQuestion.possibleAnswers = [];
-      }
+      fieldType === QuestionFieldType.MultiSelect
+    ) {
+      newQuestion.possibleAnswers = [];
+    }
     this.stationInformation.questions.push(newQuestion);
     this.stationService.touchStationForm();
   }
@@ -292,20 +336,31 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
     this.stationLoading = true;
     const petitionsUpdateStation = [
       // Update station Name.
-      this.stationService.updateStationName(this.stationName, this.stationInformation.rithmId),
+      this.stationService.updateStationName(
+        this.stationName,
+        this.stationInformation.rithmId
+      ),
 
       // Update appended fields to document.
-      this.stationService.updateDocumentNameTemplate(this.stationInformation.rithmId, this.appendedFields),
+      this.stationService.updateDocumentNameTemplate(
+        this.stationInformation.rithmId,
+        this.appendedFields
+      ),
 
       // Update general instructions.
-      this.stationService.updateStationGeneralInstructions(this.stationInformation.rithmId,
-        this.stationForm.controls.generalInstructions.value),
+      this.stationService.updateStationGeneralInstructions(
+        this.stationInformation.rithmId,
+        this.stationForm.controls.generalInstructions.value
+      ),
     ];
 
     if (this.stationForm.get('stationTemplateForm')?.touched) {
       petitionsUpdateStation.push(
         // Update Questions.
-        this.stationService.updateStationQuestions(this.stationInformation.rithmId, this.stationInformation.questions)
+        this.stationService.updateStationQuestions(
+          this.stationInformation.rithmId,
+          this.stationInformation.questions
+        )
       );
     }
 
@@ -319,10 +374,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         error: (error: unknown) => {
           this.stationLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -358,7 +413,8 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
    *
    */
   getPreviousAndNextStations(): void {
-    this.stationService.getPreviousAndNextStations(this.stationRithmId)
+    this.stationService
+      .getPreviousAndNextStations(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (prevAndNextStations) => {
@@ -366,12 +422,13 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
             this.forwardStations = prevAndNextStations.nextStations;
             this.previousStations = prevAndNextStations.previousStations;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -389,7 +446,8 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   async cancelStation(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message: 'Your changes will be lost and you will return to the dashboard.',
+      message:
+        'Your changes will be lost and you will return to the dashboard.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
@@ -407,8 +465,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
   private addAddressChildren(): Question[] {
     const addressChildren: Question[] = [];
     const children = [
-      { prompt: 'Address Line 1', type: QuestionFieldType.LongText, required: true },
-      { prompt: 'Address Line 2', type: QuestionFieldType.LongText, required: false },
+      {
+        prompt: 'Address Line 1',
+        type: QuestionFieldType.LongText,
+        required: true,
+      },
+      {
+        prompt: 'Address Line 2',
+        type: QuestionFieldType.LongText,
+        required: false,
+      },
       { prompt: 'City', type: QuestionFieldType.City, required: true },
       { prompt: 'State', type: QuestionFieldType.State, required: true },
       { prompt: 'Zip', type: QuestionFieldType.Zip, required: true },
@@ -422,11 +488,10 @@ export class StationComponent implements OnInit, OnDestroy, AfterContentChecked 
         isRequired: element.required,
         isPrivate: false,
         children: [],
-        originalStationRithmId: this.stationRithmId
+        originalStationRithmId: this.stationRithmId,
       };
       addressChildren.push(child);
     });
     return addressChildren;
   }
-
 }

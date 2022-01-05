@@ -8,15 +8,14 @@ import { AuthGuard } from './auth.guard';
  * Guard for preventing a user from accessing admin page if not authenticated/Authorized.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminAuthGuard implements CanActivate {
-
   constructor(
     private popupService: PopupService,
     private router: Router,
     private authGuard: AuthGuard
-  ) { }
+  ) {}
 
   /**
    * Determines if the user is signed in and can access admin routing action.
@@ -35,12 +34,11 @@ export class AdminAuthGuard implements CanActivate {
           this.router.navigateByUrl('dashboard');
           this.popupService.alert({
             title: 'Access denied!!',
-            message: 'You do not have permission to view that page.'
+            message: 'You do not have permission to view that page.',
           });
           return false;
         }
       }
     });
   }
-
 }

@@ -18,18 +18,18 @@ const FIELD: Question = {
     {
       rithmId: '3j4k-3h2j-hj41',
       text: 'Option 1',
-      default: false
+      default: false,
     },
   ],
   children: [],
 };
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const fn = function() { };
+const fn = function () {};
 const errorMessage = {
   invalidForm: {
     valid: false,
-    message: 'Check field form is invalid'
-  }
+    message: 'Check field form is invalid',
+  },
 };
 
 describe('CheckFieldComponent', () => {
@@ -44,13 +44,10 @@ describe('CheckFieldComponent', () => {
         MatFormFieldModule,
         MatCheckboxModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
-      providers: [
-        { provide: FormGroup, useValue: formBuilder },
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: FormGroup, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -90,5 +87,4 @@ describe('CheckFieldComponent', () => {
     const error = component.validate();
     expect(error).toEqual(errorMessage);
   });
-
 });

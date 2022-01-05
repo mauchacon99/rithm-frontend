@@ -32,14 +32,14 @@ Once the development server is running, you can open the link listed in the term
 
 You can use any of the following pre-existing credentials for signing in:
 
-|Email|Password | Note|
---- | --- | ---
-|workeruser@inpivota.com|R1thm?24601|
-|rithmuser@inpivota.com|R1thm?24601|
-|supervisoruser@inpivota.com|R1thm?24601|
-|harrypotter@inpivota.com|R1thm?24601|
-|rithmadmin@inpivota.com|R1thm?24601|User has admin privileges
-|marypoppins@inpivota.com|R1thm?24601|User has no stations
+| Email                       | Password    | Note                      |
+| --------------------------- | ----------- | ------------------------- |
+| workeruser@inpivota.com     | R1thm?24601 |
+| rithmuser@inpivota.com      | R1thm?24601 |
+| supervisoruser@inpivota.com | R1thm?24601 |
+| harrypotter@inpivota.com    | R1thm?24601 |
+| rithmadmin@inpivota.com     | R1thm?24601 | User has admin privileges |
+| marypoppins@inpivota.com    | R1thm?24601 | User has no stations      |
 
 ## Documentation
 
@@ -74,6 +74,12 @@ Serves the test summary page and runs all of the defined tests in the project.
 
 `npm run test-ci`\
 Runs all of the defined tests in the project without serving up a webpage.
+
+`npm run format`\
+Formats all of the files in the project using Prettier.
+
+`npm run format-check`\
+Checks that all of the files in the project have been formatted using Prettier.
 
 `npm run lint`\
 Checks all of the TypeScript/JavaScript code for lint errors.
