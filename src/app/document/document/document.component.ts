@@ -241,7 +241,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
     forkJoin(requestArray)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (data) => {
+          this.documentAnswer = data[1] as DocumentAnswer[];
           this.documentLoading = false;
         },
         error: (error: unknown) => {
