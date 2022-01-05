@@ -87,7 +87,7 @@ describe('DialogComponent Type Prompt', () => {
 
     it('should have custom text', () => {
       const titleText = component.title;
-      expect(titleElement.textContent).toEqual(titleText);
+      expect(titleElement.textContent).toContain(titleText);
       expect(titleText).toEqual(DIALOG_TEST_DATA[2].title);
     });
   });
