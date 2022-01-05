@@ -136,10 +136,12 @@ export class StationFieldComponent
     this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
-    if (this.field.questionType === this.fieldType.Select
-      || this.field.questionType === this.fieldType.MultiSelect
-      || this.field.questionType === this.fieldType.CheckList) {
-        this.addOption(this.field.questionType);
+    if (
+      this.field.questionType === this.fieldType.Select ||
+      this.field.questionType === this.fieldType.MultiSelect ||
+      this.field.questionType === this.fieldType.CheckList
+    ) {
+      this.addOption(this.field.questionType);
     }
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
@@ -192,13 +194,20 @@ export class StationFieldComponent
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    const genRanHex = (size: number) =>
+      [...Array(size)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join('');
     const answerRithmId = `ans-${genRanHex(6)}`;
     this.selectOptionField.rithmId = this.field.rithmId;
     this.checklistOptionField.rithmId = this.field.rithmId;
     this.selectOptionField.originalStationRithmId = answerRithmId;
     this.checklistOptionField.originalStationRithmId = answerRithmId;
-    this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
+    this.options.push(
+      fieldType === QuestionFieldType.Select
+        ? this.selectOptionField
+        : this.checklistOptionField
+    );
   }
 
   /**
@@ -208,8 +217,8 @@ export class StationFieldComponent
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
-    if (this.field.possibleAnswers){
-      this.field.possibleAnswers.splice(index,1);
+    if (this.field.possibleAnswers) {
+      this.field.possibleAnswers.splice(index, 1);
     }
   }
 

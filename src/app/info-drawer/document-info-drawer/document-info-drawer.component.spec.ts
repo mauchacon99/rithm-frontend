@@ -51,7 +51,7 @@ describe('DocumentInfoDrawerComponent', () => {
       declarations: [
         DocumentInfoDrawerComponent,
         MockComponent(LoadingIndicatorComponent),
-        ConnectedStationsModalComponent
+        ConnectedStationsModalComponent,
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -72,7 +72,7 @@ describe('DocumentInfoDrawerComponent', () => {
         MatSelectModule,
         FormsModule,
         RouterTestingModule,
-        MatDialogModule
+        MatDialogModule,
       ],
     }).compileComponents();
   });
@@ -386,8 +386,13 @@ describe('DocumentInfoDrawerComponent', () => {
     component.isStation = false;
     component.isUserAdminOrOwner = true;
     fixture.detectChanges();
-    const openModalMoveDocumentSpy = spyOn(component, 'openModalMoveDocument').and.callThrough();
-    const btnMoveDocument = fixture.nativeElement.querySelector('#move-document-modal');
+    const openModalMoveDocumentSpy = spyOn(
+      component,
+      'openModalMoveDocument'
+    ).and.callThrough();
+    const btnMoveDocument = fixture.nativeElement.querySelector(
+      '#move-document-modal'
+    );
     expect(btnMoveDocument).toBeTruthy();
     btnMoveDocument.click();
     expect(openModalMoveDocumentSpy).toHaveBeenCalled();
@@ -399,11 +404,17 @@ describe('DocumentInfoDrawerComponent', () => {
     const expectDataModal = {
       data: {
         documentRithmId: documentId,
-        stationRithmId: stationId
-      }
+        stationRithmId: stationId,
+      },
     };
-    const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.callThrough();
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
     component.openModalMoveDocument();
-    expect(dialogSpy).toHaveBeenCalledOnceWith(ConnectedStationsModalComponent, expectDataModal);
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      ConnectedStationsModalComponent,
+      expectDataModal
+    );
   });
 });

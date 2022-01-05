@@ -266,7 +266,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   async deleteStation(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+      message:
+        'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
       important: true,
@@ -277,7 +278,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         this.mapService.deleteStation(this.stationRithmId);
         this.sidenavDrawerService.closeDrawer();
       } else {
-        this.stationService.deleteStation(this.stationRithmId)
+        this.stationService
+          .deleteStation(this.stationRithmId)
           .pipe(first())
           .subscribe({
             next: () => {
@@ -440,18 +442,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Creates a new document.
    */
   createNewDocument(): void {
-    this.documentService.createNewDocument(this.stationRithmId)
+    this.documentService
+      .createNewDocument(this.stationRithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         next: () => {},
         error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
-     });
+        },
+      });
   }
 
   /**
@@ -461,15 +464,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param documentRithmId The Specific id of document.
    */
   assignUserToDocument(userRithmId: string, documentRithmId: string): void {
-    this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
-    .pipe(first())
-    .subscribe({
-      error: (error: unknown) => {
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
-      }
-    });
+    this.documentService
+      .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

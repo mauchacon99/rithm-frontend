@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConnectedModalData, ConnectedStationInfo } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
@@ -14,7 +14,6 @@ import { ErrorService } from 'src/app/core/error.service';
   styleUrls: ['./connected-stations-modal.component.scss'],
 })
 export class ConnectedStationsModalComponent implements OnInit {
-
   /** The title Modal. */
   title = 'Where would you like to move this document?';
 
@@ -50,14 +49,22 @@ export class ConnectedStationsModalComponent implements OnInit {
    * Retrieves a list of the connected stations for the given document.
    */
   private getConnectedStations(): void {
-    this.documentService.getConnectedStationInfo(this.documentRithmId, this.stationRithmId)
+    this.documentService
+      .getConnectedStationInfo(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.connectedStations = connectedStations.nextStations.concat(connectedStations.previousStations);
-        }, error: (error: unknown) => {
-          this.errorService.displayError('Failed to get connected stations for this document.', error, false);
-        }
+          this.connectedStations = connectedStations.nextStations.concat(
+            connectedStations.previousStations
+          );
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        },
       });
   }
 }

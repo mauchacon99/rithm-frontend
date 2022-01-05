@@ -535,7 +535,8 @@ describe('DocumentService', () => {
   it('should assign an user to a document', () => {
     const expectUser = '123-984-657';
 
-    service.assignUserToDocument(expectUser, stationId, documentId)
+    service
+      .assignUserToDocument(expectUser, stationId, documentId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
@@ -544,9 +545,8 @@ describe('DocumentService', () => {
   it('should create a new document', () => {
     const expectDocumentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
 
-    service.createNewDocument(stationId)
-      .subscribe((response) => {
-        expect(response).toEqual(expectDocumentId);
-      });
+    service.createNewDocument(stationId).subscribe((response) => {
+      expect(response).toEqual(expectDocumentId);
+    });
   });
 });

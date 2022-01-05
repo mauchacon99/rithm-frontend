@@ -32,10 +32,9 @@ describe('ConnectedStationsModalComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService }
-      ]
-    })
-      .compileComponents();
+        { provide: DocumentService, useClass: MockDocumentService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -51,16 +50,30 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should must call the method that returns the previous and next stations.', () => {
-    const spyStations = spyOn(TestBed.inject(DocumentService), 'getConnectedStationInfo').and.callThrough();
+    const spyStations = spyOn(
+      TestBed.inject(DocumentService),
+      'getConnectedStationInfo'
+    ).and.callThrough();
     component.ngOnInit();
-    expect(spyStations).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId);
+    expect(spyStations).toHaveBeenCalledOnceWith(
+      component.documentRithmId,
+      component.stationRithmId
+    );
   });
 
   it('should show error message when request for next and previous stations fails.', () => {
-    spyOn(TestBed.inject(DocumentService), 'getConnectedStationInfo').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
-    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getConnectedStationInfo'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
   });

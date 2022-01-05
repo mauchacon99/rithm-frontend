@@ -1432,23 +1432,31 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    *
    */
   private restoreConnection(): void {
-    if (this.storedConnectionLine === null){
+    if (this.storedConnectionLine === null) {
       throw new Error('The connection line was not stored!');
     }
-    const startStation = this.mapService.stationElements.find(station =>
-      station.rithmId === this.storedConnectionLine?.startStationRithmId);
+    const startStation = this.mapService.stationElements.find(
+      (station) =>
+        station.rithmId === this.storedConnectionLine?.startStationRithmId
+    );
     if (!startStation) {
       throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was
       not found when trying to restore a station`);
     }
-    const endStation = this.mapService.stationElements.find(station =>
-      station.rithmId === this.storedConnectionLine?.endStationRithmId);
+    const endStation = this.mapService.stationElements.find(
+      (station) =>
+        station.rithmId === this.storedConnectionLine?.endStationRithmId
+    );
     if (!endStation) {
-      throw new Error(`End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`);
+      throw new Error(
+        `End station ${this.storedConnectionLine.endStationRithmId} was not found when trying to restore a station`
+      );
     }
 
     startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
-    endStation.previousStations.push(this.storedConnectionLine.startStationRithmId);
+    endStation.previousStations.push(
+      this.storedConnectionLine.startStationRithmId
+    );
   }
 
   /**

@@ -515,7 +515,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   private unassignUserToDocument(): void {
     this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
-    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+    this.documentService
+      .unassignUserToDocument(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -525,10 +526,10 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.assignedUserLoading = false;
           this.userErrorUnassigned = true;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -559,8 +560,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     this.dialog.open(ConnectedStationsModalComponent, {
       data: {
         documentRithmId: this.documentRithmId,
-        stationRithmId: this.stationRithmId
-      }
+        stationRithmId: this.stationRithmId,
+      },
     });
   }
 }

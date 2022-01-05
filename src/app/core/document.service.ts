@@ -1,7 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
+import {
+  StationDocuments,
+  ForwardPreviousStationsDocument,
+  DocumentStationInformation,
+  StandardStringJSON,
+  DocumentAnswer,
+  DocumentName,
+  StationRosterMember,
+  Question,
+  DocumentAutoFlow,
+  MoveDocument,
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -349,19 +364,19 @@ export class DocumentService {
    */
   createNewDocument(stationRithmId: string): Observable<string> {
     const documentResponse = {
-      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F',
       name: '',
       priority: 0,
       currentStations: [
         {
-          name: "So long",
-          instructions: "",
+          name: 'So long',
+          instructions: '',
           rithmId: stationRithmId,
-          assignedUser: null
-        }
+          assignedUser: null,
+        },
       ],
       children: [],
-      parents: []
+      parents: [],
     };
     return of(documentResponse.rithmId).pipe(delay(1000));
   }
@@ -374,13 +389,21 @@ export class DocumentService {
    * @param documentRithmId The Specific id of document.
    * @returns Returns an empty observable.
    */
-  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
+  assignUserToDocument(
+    userRithmId: string,
+    stationRithmId: string,
+    documentRithmId: string
+  ): Observable<unknown> {
     if (!userRithmId || !stationRithmId || !documentRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Data invalid, new user cannot be assigned to the document.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error:
+                'Data invalid, new user cannot be assigned to the document.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       return of().pipe(delay(1000));
     }
