@@ -1,7 +1,12 @@
-
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentStationInformation, UserType, StationInformation, DocumentNameField, DocumentName } from 'src/models';
+import {
+  DocumentStationInformation,
+  UserType,
+  StationInformation,
+  DocumentNameField,
+  DocumentName,
+} from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
@@ -17,10 +22,9 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-document-info-header[documentInformation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
-  providers: []
+  providers: [],
 })
 export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
-
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
@@ -28,7 +32,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   @Input() userType!: UserType;
 
   /** Document information object passed from parent. */
-  @Input() documentInformation!: DocumentStationInformation | StationInformation;
+  @Input() documentInformation!:
+    | DocumentStationInformation
+    | StationInformation;
 
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
@@ -61,13 +67,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
     this.documentNameForm = this.fb.group({
-      name: ['']
+      name: [''],
     });
 
     /** Get Document Appended Fields from Behaviour Subject. */
     this.stationService.documentStationNameFields$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(appendedFields => {
+      .subscribe((appendedFields) => {
         this.documentAppendedFields = appendedFields;
       });
   }
@@ -77,7 +83,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     this.getParams();
-    this.isStation ? this.documentNameForm.disable() : this.documentNameForm.enable();
+    this.isStation
+      ? this.documentNameForm.disable()
+      : this.documentNameForm.enable();
     if (!this.isStation) {
       this.getDocumentName();
     } else {
@@ -91,7 +99,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns Return true if info-drawer is opened, false otherwise.
    */
-   get isDrawerOpen(): boolean{
+  get isDrawerOpen(): boolean {
     return this.sidenavDrawerService.isDrawerOpen;
   }
 
@@ -99,20 +107,19 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.params
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (params.docName) {
-            this.documentRithmId = params.docName;
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    this.route.params.pipe(first()).subscribe({
+      next: (params) => {
+        if (params.docName) {
+          this.documentRithmId = params.docName;
         }
-      });
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
@@ -130,7 +137,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns The id of the station or document.
    */
   get stationRithmId(): string {
-    return 'rithmId' in this.documentInformation ? this.documentInformation.rithmId : this.documentInformation.stationRithmId;
+    return 'rithmId' in this.documentInformation
+      ? this.documentInformation.rithmId
+      : this.documentInformation.stationRithmId;
   }
 
   /**
@@ -139,8 +148,11 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @returns Validate if user is owner or admin of current station.
    */
   get isUserAdminOrOwner(): boolean {
-    return this.documentInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId) !== undefined
-      ? true : false;
+    return this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    ) !== undefined
+      ? true
+      : false;
   }
 
   /**
@@ -149,21 +161,20 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @param drawerItem The drawer item to toggle.
    */
   toggleDrawer(drawerItem: 'documentInfo'): void {
-    this.sidenavDrawerService.toggleDrawer(drawerItem,
-      {
-        stationRithmId: this.stationRithmId,
-        isStation: this.isStation,
-        isUserAdminOrOwner: this.isUserAdminOrOwner,
-        documentRithmId: this.documentRithmId
-      }
-    );
+    this.sidenavDrawerService.toggleDrawer(drawerItem, {
+      stationRithmId: this.stationRithmId,
+      isStation: this.isStation,
+      isUserAdminOrOwner: this.isUserAdminOrOwner,
+      documentRithmId: this.documentRithmId,
+    });
   }
 
   /**
    * Get document name.
    */
   private getDocumentName(): void {
-    this.documentService.getDocumentName(this.documentRithmId)
+    this.documentService
+      .getDocumentName(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (documentName) => {
@@ -171,12 +182,13 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
           this.documentName = documentName.baseName;
           this.appendedDocumentName = documentName.appendedName;
           this.documentService.updateDocumentNameBS(documentName);
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -186,20 +198,24 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * @param stationId  The id of station.
    */
   getAppendedFieldsOnDocumentName(stationId: string): void {
-    this.stationService.getDocumentNameTemplate(stationId)
+    this.stationService
+      .getDocumentNameTemplate(stationId)
       .pipe(first())
       .subscribe({
         next: (appendedFields) => {
           if (appendedFields) {
             this.documentAppendedFields = appendedFields;
-            this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+            this.stationService.updateDocumentStationNameFields(
+              this.documentAppendedFields
+            );
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -208,17 +224,19 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    */
   private getStatusDocumentEditable(): void {
-    this.stationService.getStatusDocumentEditable(this.stationRithmId)
+    this.stationService
+      .getStatusDocumentEditable(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (editableStatus) => {
           this.isDocumentNameEditable = editableStatus;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -230,7 +248,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   removeAppendedFieldFromDocumentName(index: number): void {
     const removeStartIndex = index > 0 ? index - 1 : index;
     this.documentAppendedFields.splice(removeStartIndex, 2);
-    this.stationService.updateDocumentStationNameFields(this.documentAppendedFields);
+    this.stationService.updateDocumentStationNameFields(
+      this.documentAppendedFields
+    );
   }
 
   /**
@@ -239,7 +259,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   updateDocumentNameBS(): void {
     const documentName: DocumentName = {
       baseName: this.documentNameForm.controls.name.value,
-      appendedName: this.appendedDocumentName
+      appendedName: this.appendedDocumentName,
     };
     this.documentService.updateDocumentNameBS(documentName);
   }

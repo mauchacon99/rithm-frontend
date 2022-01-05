@@ -1,9 +1,16 @@
 <form [formGroup]="deleteForm" (ngSubmit)="deleteUser()" class="flex flex-col">
   <!-- Email -->
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
-    </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input
+      id="email"
+      type="email"
+      matInput
+      placeholder="Email"
+      formControlName="email"
+      autocomplete="email"
+    />
+  </mat-form-field>
   <!-- Delete button -->
   <div>
     <button type="submit" mat-raised-button color="accent">DELETE</button>

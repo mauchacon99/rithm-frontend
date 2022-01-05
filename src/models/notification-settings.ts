@@ -2,8 +2,7 @@
  * Represents all information about a notification settings.
  */
 
- export interface NotificationSettings {
-
+export interface NotificationSettings {
   /** The comments settings. */
   comments: boolean;
 

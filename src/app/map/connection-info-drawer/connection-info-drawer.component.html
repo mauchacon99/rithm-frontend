@@ -5,17 +5,27 @@
     </div>
     <div class="col-span-12 mb-3">
       <p class="overline-font">CONNECTION START</p>
-      <div class="col-span-12">{{connectionStartStationName}}</div>
+      <div class="col-span-12">{{ connectionStartStationName }}</div>
     </div>
     <div class="col-span-12">
       <p class="overline-font">CONNECTION END</p>
-      <div class="col-span-12">{{connectionEndStationName}}</div>
+      <div class="col-span-12">{{ connectionEndStationName }}</div>
     </div>
     <div class="w-full py-2">
-      <button *ngIf="mapMode !== mapModeEnum.View" mat-stroked-button color="warn" class="priority" (click)="removeConnectionLine()">Delete Connection</button>
+      <button
+        *ngIf="mapMode !== mapModeEnum.View"
+        mat-stroked-button
+        color="warn"
+        class="priority"
+        (click)="removeConnectionLine()"
+      >
+        Delete Connection
+      </button>
     </div>
   </div>
 </div>
-  <div class="flex justify-center border-t border-solid border-secondary-50">
-    <button mat-button color="accent" (click)="toggleDrawer('connectionInfo')">Close</button>
-  </div>
+<div class="flex justify-center border-t border-solid border-secondary-50">
+  <button mat-button color="accent" (click)="toggleDrawer('connectionInfo')">
+    Close
+  </button>
+</div>

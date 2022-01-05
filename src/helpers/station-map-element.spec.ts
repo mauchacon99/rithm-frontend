@@ -9,7 +9,7 @@ const TEST_STATION_MAP_DATA: StationMapData = {
   previousStations: [],
   noOfDocuments: 5,
   status: MapItemStatus.Normal,
-  notes: ''
+  notes: '',
 };
 
 describe('StationMapElement', () => {

@@ -20,15 +20,12 @@ describe('RosterComponent', () => {
         MockComponent(UserAvatarComponent),
         MockComponent(LoadingIndicatorComponent),
       ],
-      imports: [
-        MatDialogModule
-      ],
+      imports: [MatDialogModule],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
-      ]
-    })
-      .compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -41,7 +38,7 @@ describe('RosterComponent', () => {
         lastName: 'User',
         email: 'workeruser@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -49,8 +46,8 @@ describe('RosterComponent', () => {
         lastName: 'Potter',
         email: 'harrypotter@inpivota.com',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
     component.isWorker = true;
     component.stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
@@ -65,19 +62,27 @@ describe('RosterComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.loadingRoster).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-roster-indicator');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-roster-indicator'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
   it('should return the station owners roster members', () => {
-    const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationOwnerRoster').and.callThrough();
+    const rosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationOwnerRoster'
+    ).and.callThrough();
     component.isWorker = false;
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
   it('should return the station workers roster members', () => {
-    const rosterSpy = spyOn(TestBed.inject(StationService), 'getStationWorkerRoster').and.callThrough();
+    const rosterSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationWorkerRoster'
+    ).and.callThrough();
     component.isWorker = true;
     component.ngOnInit();
     expect(rosterSpy).toHaveBeenCalledOnceWith(stationId);

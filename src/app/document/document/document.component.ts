@@ -5,7 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DocumentAnswer, DocumentStationInformation, ConnectedStationInfo, DocumentAutoFlow } from 'src/models';
+import {
+  DocumentAnswer,
+  DocumentStationInformation,
+  ConnectedStationInfo,
+  DocumentAutoFlow,
+} from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
@@ -16,7 +21,7 @@ import { Subject, forkJoin } from 'rxjs';
 @Component({
   selector: 'app-document',
   templateUrl: './document.component.html',
-  styleUrls: ['./document.component.scss']
+  styleUrls: ['./document.component.scss'],
 })
 export class DocumentComponent implements OnInit, OnDestroy {
   /** Document form. */
@@ -69,7 +74,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     private popupService: PopupService
   ) {
     this.documentForm = this.fb.group({
-      documentTemplateForm: this.fb.control('')
+      documentTemplateForm: this.fb.control(''),
     });
 
     this.sidenavDrawerService.drawerContext$
@@ -106,24 +111,23 @@ export class DocumentComponent implements OnInit, OnDestroy {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.queryParams
-      .pipe(first())
-      .subscribe({
-        next: (params) => {
-          if (!params.stationId || !params.documentId) {
-            this.handleInvalidParams();
-          } else {
-            this.documentId = params.documentId;
-            this.getDocumentStationData(params.documentId, params.stationId);
-            this.getConnectedStations(params.documentId, params.stationId);
-          }
-        }, error: (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
+    this.route.queryParams.pipe(first()).subscribe({
+      next: (params) => {
+        if (!params.stationId || !params.documentId) {
+          this.handleInvalidParams();
+        } else {
+          this.documentId = params.documentId;
+          this.getDocumentStationData(params.documentId, params.stationId);
+          this.getConnectedStations(params.documentId, params.stationId);
         }
-      });
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 
   /**
@@ -156,7 +160,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
    */
   private getDocumentStationData(documentId: string, stationId: string): void {
     this.documentLoading = true;
-    this.documentService.getDocumentInfo(documentId, stationId)
+    this.documentService
+      .getDocumentInfo(documentId, stationId)
       .pipe(first())
       .subscribe({
         next: (document) => {
@@ -164,14 +169,15 @@ export class DocumentComponent implements OnInit, OnDestroy {
             this.documentInformation = document;
           }
           this.documentLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.navigateBack();
           this.documentLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -183,14 +189,16 @@ export class DocumentComponent implements OnInit, OnDestroy {
    */
   private getConnectedStations(documentId: string, stationId: string): void {
     this.connectedStationsLoading = true;
-    this.documentService.getConnectedStationInfo(documentId, stationId)
+    this.documentService
+      .getConnectedStationInfo(documentId, stationId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
           this.forwardStations = connectedStations.nextStations;
           this.previousStations = connectedStations.previousStations;
           this.connectedStationsLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.navigateBack();
           this.connectedStationsLoading = false;
           this.errorService.displayError(
@@ -198,7 +206,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
             error,
             false
           );
-        }
+        },
       });
   }
 
@@ -206,7 +214,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
   async cancelDocument(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message: 'Your changes will be lost and you will return to the dashboard.',
+      message:
+        'Your changes will be lost and you will return to the dashboard.',
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
@@ -248,10 +257,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -264,12 +273,17 @@ export class DocumentComponent implements OnInit, OnDestroy {
       stationRithmId: this.documentInformation.stationRithmId,
       documentRithmId: this.documentInformation.documentRithmId,
       // Parameter temporary testMode.
-      testMode: false
+      testMode: false,
     };
 
     const requestArray = [
       // Save the document answers.
-      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer),
+      this.documentService.saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      ),
+      // Update the document name.
+      this.documentService.updateDocumentName(this.documentInformation.documentRithmId, this.documentName),
 
       // Flow a document.
       this.documentService.autoFlowDocument(documentAutoFlow),
@@ -285,10 +299,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
         error: (error: unknown) => {
           this.documentLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 }

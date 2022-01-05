@@ -12,10 +12,9 @@ describe('NotificationToastsContainerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         NotificationToastsContainerComponent,
-        MockComponent(NotificationCardComponent)
-      ]
-    })
-    .compileComponents();
+        MockComponent(NotificationCardComponent),
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
