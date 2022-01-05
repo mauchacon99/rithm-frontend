@@ -263,6 +263,7 @@ describe('DocumentService', () => {
         isRequired: true,
         possibleAnswers: [
           {
+            rithmId: 'string',
             text: 'string',
             default: true
           }

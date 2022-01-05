@@ -216,18 +216,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: true
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -243,18 +247,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: true
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -270,18 +278,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -332,18 +344,22 @@ export class MockDocumentService {
               isPrivate: false,
               possibleAnswers: [
                 {
+                  rithmId: '3j4k-3h2j-hj41',
                   text: 'Option 1',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj42',
                   text: 'Option 2',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj43',
                   text: 'Option 3',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj44',
                   text: 'Option 4',
                   default: false
                 }
@@ -548,6 +564,7 @@ export class MockDocumentService {
           isRequired: true,
           possibleAnswers: [
             {
+              rithmId: 'string',
               text: 'string',
               default: true
             }
