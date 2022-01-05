@@ -53,7 +53,7 @@ export class FlowMapElement {
    * @returns Whether the flow is empty.
    */
   get isEmpty(): boolean {
-    return !this.stations && !this.subFlows;
+    return !this.stations.length && !this.subFlows.length;
   }
 
   /**
