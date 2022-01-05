@@ -4,8 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
-import { Question, QuestionFieldType } from 'src/models';
-import { PossibleAnswer } from '../../../models/possible-answer';
+import { Question, QuestionFieldType, PossibleAnswer } from 'src/models';
 
 /**
  * Station Field Component.
