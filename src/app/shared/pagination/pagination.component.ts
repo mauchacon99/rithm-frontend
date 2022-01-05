@@ -14,7 +14,7 @@ const SET_ENDING_PAGE_NUM = 2;
 @Component({
   selector: 'app-pagination[numItems][numPerPage][activeNum]',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  styleUrls: ['./pagination.component.scss'],
 })
 export class PaginationComponent implements OnInit {
   /** Total number of items. */
@@ -87,7 +87,10 @@ export class PaginationComponent implements OnInit {
   clickPage(pageNum: number): void {
     this.activeNum = pageNum;
 
-    if (this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.pagesArr.length > RESET_PAGE_NUM_LIMIT) {
+    if (
+      this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM &&
+      this.pagesArr.length > RESET_PAGE_NUM_LIMIT
+    ) {
       this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
       this.endingPageNum = this.pagesArr.length;
     }
@@ -95,7 +98,10 @@ export class PaginationComponent implements OnInit {
       this.startingPageNum = INIT_PAGE_NUM;
       this.endingPageNum = LAST_PAGE_NUM;
     }
-    if (this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+    if (
+      this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM &&
+      this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM
+    ) {
       this.startingPageNum = this.activeNum - ACTIVE_NUM_LIMIT_RESET_PAGE_NUM;
       this.endingPageNum = this.activeNum + SET_ENDING_PAGE_NUM;
     }
@@ -109,7 +115,10 @@ export class PaginationComponent implements OnInit {
    */
   changePage(num: number): void {
     this.activeNum += num;
-    if (this.pagesArr.length > RESET_PAGE_NUM_LIMIT && this.activeNum >= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+    if (
+      this.pagesArr.length > RESET_PAGE_NUM_LIMIT &&
+      this.activeNum >= ACTIVE_NUM_LIMIT_RESET_PAGE_NUM
+    ) {
       if (this.activeNum >= this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM) {
         this.startingPageNum = this.pagesArr.length - RESET_PAGE_NUM_LIMIT;
         this.endingPageNum = this.pagesArr.length;
@@ -118,7 +127,10 @@ export class PaginationComponent implements OnInit {
         this.startingPageNum = INIT_PAGE_NUM;
         this.endingPageNum = LAST_PAGE_NUM;
       }
-      if (this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM && this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM) {
+      if (
+        this.activeNum < this.pagesArr.length - LAST_BUT_ONE_PAGE_NUM &&
+        this.activeNum > ACTIVE_NUM_LIMIT_RESET_PAGE_NUM
+      ) {
         this.startingPageNum += num;
         this.endingPageNum += num;
       }
@@ -134,5 +146,4 @@ export class PaginationComponent implements OnInit {
   private emitPageNum(newPageNum: number): void {
     this.currentPageNum.emit(newPageNum);
   }
-
 }

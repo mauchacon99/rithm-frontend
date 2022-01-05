@@ -10,10 +10,9 @@ import { Station } from 'src/models';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
@@ -22,10 +21,10 @@ export class DashboardComponent {
     private stationService: StationService,
     private userService: UserService
   ) {
-
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
-      this.stationService.getAllStations()
+      this.stationService
+        .getAllStations()
         .pipe(first())
         .subscribe((stations) => {
           this.stations = stations;

@@ -4,7 +4,6 @@ import { ConnectedStationInfo } from './connected-station-info';
  * Represents forward and previous stations for a specific document.
  */
 export interface ForwardPreviousStationsDocument {
-
   /** Station rithm id. */
   rithmId: string;
 

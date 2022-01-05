@@ -1,5 +1,15 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { UserService } from 'src/app/core/user.service';
 import { PasswordRequirements } from 'src/helpers/password-requirements';
 
@@ -14,16 +24,18 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => UserFormComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => UserFormComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class UserFormComponent implements OnInit, ControlValueAccessor, Validator {
+export class UserFormComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** Whether this form is to be used for account create (defaults to `false`). */
   @Input() accountCreate = false;
 
@@ -48,10 +60,7 @@ export class UserFormComponent implements OnInit, ControlValueAccessor, Validato
   /** The label text to be displayed for the confirm password field. */
   confirmPasswordLabel = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService
-  ) { }
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   /**
    * Set up FormBuilder group.
@@ -62,30 +71,21 @@ export class UserFormComponent implements OnInit, ControlValueAccessor, Validato
     this.userForm = this.fb.group({
       firstName: [
         !this.accountCreate ? this.userService.user?.firstName : '',
-        [Validators.required]
+        [Validators.required],
       ],
       lastName: [
         !this.accountCreate ? this.userService.user?.lastName : '',
-        [Validators.required]
+        [Validators.required],
       ],
       email: [
         {
           value: !this.accountCreate ? this.userService.user?.email : '',
-          disabled: !this.accountCreate
+          disabled: !this.accountCreate,
         },
-        [
-          Validators.email,
-          Validators.required
-        ]
+        [Validators.email, Validators.required],
       ],
-      password: [
-        '',
-        []
-      ],
-      confirmPassword: [
-        '',
-        []
-      ],
+      password: ['', []],
+      confirmPassword: ['', []],
     });
 
     const passwordValidators: ValidatorFn[] = [
@@ -93,46 +93,44 @@ export class UserFormComponent implements OnInit, ControlValueAccessor, Validato
       this.passwordRequirements.hasOneLowerCaseChar(),
       this.passwordRequirements.hasOneUpperCaseChar(),
       this.passwordRequirements.hasOneDigitChar(),
-      this.passwordRequirements.hasOneSpecialChar()
+      this.passwordRequirements.hasOneSpecialChar(),
     ];
     const confirmPasswordValidators = [
       ...passwordValidators,
-      this.passwordRequirements.passwordsMatch()
+      this.passwordRequirements.passwordsMatch(),
     ];
 
     //Set the validation for passwords.
     if (this.accountCreate) {
-      this.userForm.get('password')?.setValidators([...passwordValidators, Validators.required]);
-      this.userForm.get('confirmPassword')?.setValidators([...confirmPasswordValidators, Validators.required]);
+      this.userForm
+        .get('password')
+        ?.setValidators([...passwordValidators, Validators.required]);
+      this.userForm
+        .get('confirmPassword')
+        ?.setValidators([...confirmPasswordValidators, Validators.required]);
     } else {
-      this.userForm.get('password')?.setValidators(
-        [
-          ...passwordValidators,
-          (): ValidationErrors | null => {
-            this.userForm.get('confirmPassword')?.setValidators(
-              [...confirmPasswordValidators]
-            );
-            if (this.userForm?.dirty) {
-              this.userForm?.get('confirmPassword')?.updateValueAndValidity();
-            }
-            return null;
+      this.userForm.get('password')?.setValidators([
+        ...passwordValidators,
+        (): ValidationErrors | null => {
+          this.userForm
+            .get('confirmPassword')
+            ?.setValidators([...confirmPasswordValidators]);
+          if (this.userForm?.dirty) {
+            this.userForm?.get('confirmPassword')?.updateValueAndValidity();
           }
-        ]
-      );
-      this.userForm.get('confirmPassword')?.setValidators(
-        [
-          ...confirmPasswordValidators,
-          (): ValidationErrors | null => {
-            this.userForm.get('password')?.setValidators(
-              [...passwordValidators]
-            );
-            if (this.userForm?.dirty) {
-              this.userForm?.get('password')?.updateValueAndValidity();
-            }
-            return null;
+          return null;
+        },
+      ]);
+      this.userForm.get('confirmPassword')?.setValidators([
+        ...confirmPasswordValidators,
+        (): ValidationErrors | null => {
+          this.userForm.get('password')?.setValidators([...passwordValidators]);
+          if (this.userForm?.dirty) {
+            this.userForm?.get('password')?.updateValueAndValidity();
           }
-        ]
-      );
+          return null;
+        },
+      ]);
     }
   }
 
@@ -164,7 +162,7 @@ export class UserFormComponent implements OnInit, ControlValueAccessor, Validato
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -212,12 +210,13 @@ export class UserFormComponent implements OnInit, ControlValueAccessor, Validato
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.userForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'User form is invalid'
-      }
-    };
+    return this.userForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'User form is invalid',
+          },
+        };
   }
-
 }

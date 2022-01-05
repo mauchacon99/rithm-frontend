@@ -1,4 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
@@ -22,18 +27,14 @@ describe('CommentDrawerComponent', () => {
         CommentDrawerComponent,
         MockComponent(CommentComponent),
         MockComponent(LoadingIndicatorComponent),
-        MockComponent(CommentInputComponent)
+        MockComponent(CommentInputComponent),
       ],
-      imports: [
-        NoopAnimationsModule,
-        MatTabsModule
-      ],
+      imports: [NoopAnimationsModule, MatTabsModule],
       providers: [
         { provide: CommentService, useClass: MockCommentService },
-        { provide: ErrorService, useClass: MockErrorService }
+        { provide: ErrorService, useClass: MockErrorService },
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -50,23 +51,26 @@ describe('CommentDrawerComponent', () => {
     component.documentId = '1234';
     component.stationId = '1234';
     component.commentPage = 0;
-    component.comments = [{
-      displayText: 'This is first comment',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      dateCreated: '2021-06-16T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }, {
-      displayText: 'This is second comment',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      dateCreated: '2021-06-15T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-12T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }];
+    component.comments = [
+      {
+        displayText: 'This is first comment',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        dateCreated: '2021-06-16T17:26:47.3506612Z',
+        dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+        archived: false,
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      },
+      {
+        displayText: 'This is second comment',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        dateCreated: '2021-06-15T17:26:47.3506612Z',
+        dateLastEdited: '2021-07-12T17:26:47.3506612Z',
+        archived: false,
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      },
+    ];
 
     component.loadMore();
     tick(1000);
@@ -81,7 +85,7 @@ describe('CommentDrawerComponent', () => {
       dateLastEdited: '2021-07-14T17:26:47.3506612Z',
       archived: false,
       rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
+      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
     };
     component.addNewComment(comment);
     expect(component.comments.unshift(comment));
@@ -98,5 +102,4 @@ describe('CommentDrawerComponent', () => {
     component.setPostingLoading(loadingStatus);
     expect(component.loadingPostedComment).toBe(loadingStatus);
   });
-
 });

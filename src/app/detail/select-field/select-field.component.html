@@ -1,9 +1,16 @@
 <div [formGroup]="selectFieldForm">
   <mat-form-field class="w-full" appearance="outline">
-    <mat-label>{{field?.prompt}}</mat-label>
-    <mat-select [multiple]="field.questionType === fieldTypeEnum.MultiSelect" [required]="field.isRequired" [formControlName]="this.field.questionType">
-      <mat-option *ngFor="let possibleAnswer of field?.possibleAnswers" [value]="possibleAnswer">
-        {{possibleAnswer.text}}
+    <mat-label>{{ field?.prompt }}</mat-label>
+    <mat-select
+      [multiple]="field.questionType === fieldTypeEnum.MultiSelect"
+      [required]="field.isRequired"
+      [formControlName]="this.field.questionType"
+    >
+      <mat-option
+        *ngFor="let possibleAnswer of field?.possibleAnswers"
+        [value]="possibleAnswer"
+      >
+        {{ possibleAnswer.text }}
       </mat-option>
     </mat-select>
   </mat-form-field>
