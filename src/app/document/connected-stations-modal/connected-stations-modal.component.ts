@@ -1,6 +1,9 @@
-import { Component, Inject, } from '@angular/core';
+import { Component, Inject, OnInit, } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConnectedModalData, ConnectedStationInfo } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Component for connected stations.
@@ -10,7 +13,7 @@ import { ConnectedModalData, ConnectedStationInfo } from 'src/models';
   templateUrl: './connected-stations-modal.component.html',
   styleUrls: ['./connected-stations-modal.component.scss']
 })
-export class ConnectedStationsModalComponent {
+export class ConnectedStationsModalComponent implements OnInit {
 
   /** The title Modal. */
   title = 'Where would you like to move this document?';
@@ -28,9 +31,33 @@ export class ConnectedStationsModalComponent {
   stationRithmId = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData
+    @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
+    private documentService: DocumentService,
+    private errorService: ErrorService
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
+  }
+
+  /**
+   * Gets info about the document as well as forward and previous stations for a specific document.
+   */
+  ngOnInit(): void {
+    this.getConnectedStations();
+  }
+
+  /**
+   * Retrieves a list of the connected stations for the given document.
+   */
+  private getConnectedStations(): void {
+    this.documentService.getConnectedStationInfo(this.documentRithmId, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (connectedStations) => {
+          this.stationsDocument = connectedStations.nextStations.concat(connectedStations.previousStations);
+        }, error: (error: unknown) => {
+          this.errorService.displayError('Failed to get connected stations for this document.', error, false);
+        }
+      });
   }
 }
