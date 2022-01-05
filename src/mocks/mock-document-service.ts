@@ -216,18 +216,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: true
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -243,18 +247,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: true
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -270,18 +278,22 @@ export class MockDocumentService {
           isPrivate: false,
           possibleAnswers: [
             {
+              rithmId: '3j4k-3h2j-hj41',
               text: 'Option 1',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj42',
               text: 'Option 2',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj43',
               text: 'Option 3',
               default: false
             },
             {
+              rithmId: '3j4k-3h2j-hj44',
               text: 'Option 4',
               default: false
             }
@@ -332,18 +344,22 @@ export class MockDocumentService {
               isPrivate: false,
               possibleAnswers: [
                 {
+                  rithmId: '3j4k-3h2j-hj41',
                   text: 'Option 1',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj42',
                   text: 'Option 2',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj43',
                   text: 'Option 3',
                   default: false
                 },
                 {
+                  rithmId: '3j4k-3h2j-hj44',
                   text: 'Option 4',
                   default: false
                 }
@@ -548,6 +564,7 @@ export class MockDocumentService {
           isRequired: true,
           possibleAnswers: [
             {
+              rithmId: 'string',
               text: 'string',
               default: true
             }
@@ -635,6 +652,52 @@ export class MockDocumentService {
       return throwError(() => new HttpErrorResponse({
         error: {
           error: 'Data invalid, document could not be moved.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
+    }
+  }
+
+
+  /**
+   * Creates a new document.
+   *
+   * @param stationRithmId The station where we will create a new document.
+   * @returns The id of the document object that has been saved.
+   */
+  createNewDocument(stationRithmId: string): Observable<string> {
+    const documentResponse = {
+      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      name: '',
+      priority: 0,
+      currentStations: [
+        {
+          name: "So long",
+          instructions: "",
+          rithmId: stationRithmId,
+          assignedUser: null
+        }
+      ],
+      children: [],
+      parents: []
+    };
+    return of(documentResponse.rithmId).pipe(delay(1000));
+  }
+
+  /**
+   * Assign an user to a document.
+   *
+   * @param userRithmId The Specific id of user assign.
+   * @param stationRithmId The Specific id of station.
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
+    if (!userRithmId || !stationRithmId || !documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, new user cannot be assigned to the document.'
         }
       })).pipe(delay(1000));
     } else {

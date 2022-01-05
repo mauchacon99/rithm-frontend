@@ -12,6 +12,7 @@ import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for info station.
@@ -89,7 +90,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private popupService: PopupService,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private documentService: DocumentService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -241,18 +243,19 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * This will delete the current station.
    */
   async deleteStation(): Promise<void> {
-      const response = await this.popupService.confirm({
-        title: 'Are you sure?',
-        message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
-        okButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
-        important: true,
-      });
-      if (response) {
-        if (this.openedFromMap) {
-          this.mapService.removeAllStationConnections(this.stationRithmId);
-          this.mapService.deleteStation(this.stationRithmId);
-        } else {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      if (this.openedFromMap) {
+        this.mapService.removeAllStationConnections(this.stationRithmId);
+        this.mapService.deleteStation(this.stationRithmId);
+        this.sidenavDrawerService.closeDrawer();
+      } else {
         this.stationService.deleteStation(this.stationRithmId)
           .pipe(first())
           .subscribe({
@@ -369,16 +372,16 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
 
- /**
-  * Is the current user an owner or an admin for this station.
-  *
-  * @returns Validate if user is owner or admin of current station.
-  */
+  /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
   get isUserAdminOrOwner(): boolean {
     if (!this.stationInformation) {
       throw new Error(`The stationInformation is undefined when checking if user is admin or owner.`);
@@ -396,5 +399,42 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       throw new Error(`The stationInformation is undefined when checking if user is a worker.`);
     }
     return this.userService.isWorker(this.stationInformation);
+  }
+
+  /**
+   * Creates a new document.
+   */
+  createNewDocument(): void {
+    this.documentService.createNewDocument(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            error
+          );
+        }
+     });
+  }
+
+  /**
+   * Assign an user to a document.
+   *
+   * @param userRithmId The Specific id of user assign.
+   * @param documentRithmId The Specific id of document.
+   */
+  assignUserToDocument(userRithmId: string, documentRithmId: string): void {
+    this.documentService.assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
+    .pipe(first())
+    .subscribe({
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          error
+        );
+      }
+    });
   }
 }

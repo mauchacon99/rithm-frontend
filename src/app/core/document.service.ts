@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -255,6 +255,51 @@ export class DocumentService {
       })).pipe(delay(1000));
     } else {
       return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`, moveDocument);
+    }
+  }
+
+  /**
+   * Creates a new document.
+   *
+   * @param stationRithmId The station where we want to create a new document.
+   * @returns The id of the document object that has been saved.
+   */
+  createNewDocument(stationRithmId: string): Observable<string> {
+    const documentResponse = {
+      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      name: '',
+      priority: 0,
+      currentStations: [
+        {
+          name: "So long",
+          instructions: "",
+          rithmId: stationRithmId,
+          assignedUser: null
+        }
+      ],
+      children: [],
+      parents: []
+    };
+    return of(documentResponse.rithmId).pipe(delay(1000));
+  }
+
+  /**
+   * Assign an user to a document.
+   *
+   * @param userRithmId The Specific id of user assign.
+   * @param stationRithmId The Specific id of station.
+   * @param documentRithmId The Specific id of document.
+   * @returns Returns an empty observable.
+   */
+  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
+    if (!userRithmId || !stationRithmId || !documentRithmId) {
+      return throwError(() => new HttpErrorResponse({
+        error: {
+          error: 'Data invalid, new user cannot be assigned to the document.'
+        }
+      })).pipe(delay(1000));
+    } else {
+      return of().pipe(delay(1000));
     }
   }
 }
