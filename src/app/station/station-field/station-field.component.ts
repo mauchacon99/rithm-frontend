@@ -122,7 +122,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     if (this.field.questionType === this.fieldType.Select
       || this.field.questionType === this.fieldType.MultiSelect
       || this.field.questionType === this.fieldType.CheckList) {
-      this.addOption(this.field.questionType);
+        this.addOption(this.field.questionType);
     }
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
@@ -136,7 +136,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   /**
-   * Returns the appropiate label tag.
+   * Returns the correct label tag.
    *
    * @returns The Label tag for each additional field.
    */
@@ -170,8 +170,12 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
+    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    const answerRithmId = `ans-${genRanHex(6)}`;
     this.selectOptionField.rithmId = this.field.rithmId;
     this.checklistOptionField.rithmId = this.field.rithmId;
+    this.selectOptionField.originalStationRithmId = answerRithmId;
+    this.checklistOptionField.originalStationRithmId = answerRithmId;
     this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
   }
 
@@ -182,6 +186,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
+    if (this.field.possibleAnswers){
+      this.field.possibleAnswers.splice(index,1);
+    }
   }
 
   /**
