@@ -7,7 +7,6 @@ import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   DocumentNameField,
-  MoveDocument,
   Question,
   StationRosterMember,
 } from 'src/models';
@@ -150,7 +149,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.isStation = dataDrawer.isStation;
           this.isUserAdminOrOwner =
             this.userService.user.role === 'admin' ||
-            dataDrawer.isUserAdminOrOwner
+              dataDrawer.isUserAdminOrOwner
               ? true
               : false;
         }
@@ -316,12 +315,12 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     }
     this.appendedFields.length > 0
       ? this.appendedFields.push(
-          {
-            prompt: this.appendFieldForm.controls.separatorField.value,
-            questionRithmId: null,
-          },
-          fieldToAppend
-        )
+        {
+          prompt: this.appendFieldForm.controls.separatorField.value,
+          questionRithmId: null,
+        },
+        fieldToAppend
+      )
       : this.appendedFields.push(fieldToAppend);
     this.stationService.updateDocumentStationNameFields(this.appendedFields);
     this.appendFieldForm.controls.appendField.setValue('');
@@ -525,26 +524,6 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
         error: (error: unknown) => {
           this.assignedUserLoading = false;
           this.userErrorUnassigned = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Move the document from a station to another.
-   *
-   * @param moveDocument Model to move the document.
-   */
-  moveDocument(moveDocument: MoveDocument): void {
-    this.documentService
-      .moveDocument(moveDocument)
-      .pipe(first())
-      .subscribe({
-        error: (error: unknown) => {
-          this.assignedUserLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
