@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TokenInterceptor } from './token.interceptor';
@@ -18,16 +21,13 @@ describe('TokenInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
+      imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
         TokenInterceptor,
         UserService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: PopupService, useClass: MockPopupService },
-      ]
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     userService = TestBed.inject(UserService);
@@ -45,16 +45,22 @@ describe('TokenInterceptor', () => {
 
     tick(1000);
 
-    const httpRequest = httpTestingController.expectOne(`${environment.baseApiUrl}${USER_SERVICE_PATH}/update`);
+    const httpRequest = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${USER_SERVICE_PATH}/update`
+    );
     expect(httpRequest.request.headers.has('Authorization')).toEqual(true);
-    expect(httpRequest.request.headers.get('Authorization')).toEqual(`Bearer ${token}`);
+    expect(httpRequest.request.headers.get('Authorization')).toEqual(
+      `Bearer ${token}`
+    );
     httpTestingController.verify();
   }));
 
   it('should pass the request on regular routes', () => {
     userService.getTermsConditions().subscribe();
 
-    const httpRequest = httpTestingController.expectOne(`${environment.baseApiUrl}${USER_SERVICE_PATH}/terms-and-conditions`);
+    const httpRequest = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${USER_SERVICE_PATH}/terms-and-conditions`
+    );
     expect(httpRequest.request.headers.has('Authorization')).toEqual(false);
   });
 
@@ -64,10 +70,10 @@ describe('TokenInterceptor', () => {
 
     userService.updateUserAccount({}).subscribe();
 
-    httpTestingController.expectNone(`${environment.baseApiUrl}${USER_SERVICE_PATH}/update`);
+    httpTestingController.expectNone(
+      `${environment.baseApiUrl}${USER_SERVICE_PATH}/update`
+    );
     httpTestingController.verify();
     expect(signOutSpy).toHaveBeenCalledTimes(1);
   });
-
 });
-

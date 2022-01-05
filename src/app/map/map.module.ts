@@ -13,8 +13,6 @@ import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connecti
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 
-
-
 @NgModule({
   declarations: [
     MapComponent,
@@ -22,7 +20,7 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
     MapToolbarComponent,
     MapCanvasComponent,
     MapOverlayComponent,
-    ConnectionInfoDrawerComponent
+    ConnectionInfoDrawerComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +29,7 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
     MatButtonModule,
     MatMenuModule,
     MatSidenavModule,
-    InfoDrawerModule
-  ]
+    InfoDrawerModule,
+  ],
 })
-export class MapModule { }
+export class MapModule {}

@@ -1,73 +1,162 @@
-<app-loading-indicator *ngIf="mapDataLoading" class="fixed right-0 left-0 top-2/4 text-center"></app-loading-indicator>
+<app-loading-indicator
+  *ngIf="mapDataLoading"
+  class="fixed right-0 left-0 top-2/4 text-center"
+></app-loading-indicator>
 <div class="absolute right-0 left-0 bottom-0 md:left-auto md:bottom-auto z-40">
-  <mat-drawer-container [hasBackdrop]="drawerHasBackdrop"
-    [ngClass]="{'deleteDrawer left-0 right-0 bottom-0': deleteDrawer.opened}">
-    <mat-drawer #deleteDrawer mode="over" position="end" class="mapStationInfo" >
-      <app-connection-info-drawer *ngIf="drawerMode === 'connectionInfo'"></app-connection-info-drawer>
+  <mat-drawer-container
+    [hasBackdrop]="drawerHasBackdrop"
+    [ngClass]="{ 'deleteDrawer left-0 right-0 bottom-0': deleteDrawer.opened }"
+  >
+    <mat-drawer #deleteDrawer mode="over" position="end" class="mapStationInfo">
+      <app-connection-info-drawer
+        *ngIf="drawerMode === 'connectionInfo'"
+      ></app-connection-info-drawer>
       <app-info-drawer *ngIf="drawerMode === 'stationInfo'"></app-info-drawer>
     </mat-drawer>
     <mat-drawer-content>
-      <div *ngIf="mapScale > zoomBuild && isAdmin" [ngClass]="{'absolute left-0 right-0 bottom-0': deleteDrawer.opened}"
-        class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2">
-        <button mat-raised-button color="accent" *ngIf="!isBuilding" [disabled]="mapDataLoading" (click)="build()" data-testid="build"
-          class="h-9 md:w-auto w-full">Build</button>
-        <button mat-raised-button color="basic" *ngIf="isBuilding" [disabled]="mapDataLoading" (click)="cancel()" data-testid="cancel"
-          class="h-9 w-1/2 md:w-auto">Cancel</button>
-        <button mat-raised-button color="accent" *ngIf="isBuilding" [disabled]="mapDataLoading || !mapHasChanges" (click)="publish()" data-testid="publish"
-          class="h-9 w-1/2 md:w-auto">Publish</button>
+      <div
+        *ngIf="mapScale > zoomBuild && isAdmin"
+        [ngClass]="{ 'absolute left-0 right-0 bottom-0': deleteDrawer.opened }"
+        class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2"
+      >
+        <button
+          mat-raised-button
+          color="accent"
+          *ngIf="!isBuilding"
+          [disabled]="mapDataLoading"
+          (click)="build()"
+          data-testid="build"
+          class="h-9 md:w-auto w-full"
+        >
+          Build
+        </button>
+        <button
+          mat-raised-button
+          color="basic"
+          *ngIf="isBuilding"
+          [disabled]="mapDataLoading"
+          (click)="cancel()"
+          data-testid="cancel"
+          class="h-9 w-1/2 md:w-auto"
+        >
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          *ngIf="isBuilding"
+          [disabled]="mapDataLoading || !mapHasChanges"
+          (click)="publish()"
+          data-testid="publish"
+          class="h-9 w-1/2 md:w-auto"
+        >
+          Publish
+        </button>
       </div>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>
-<div *ngIf="isStationOrFlowAdd" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
-  <div class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-sm bg-opacity-90">
-    {{ currentMode === mapMode.StationAdd ? 'Select a location for this new station' : currentMode === mapMode.FlowAdd ? 'Select flows and stations to add to new flow' : '' }}
+<div
+  *ngIf="isStationOrFlowAdd"
+  class="text-center absolute left-0 right-0 m-auto mt-2 w-auto"
+>
+  <div
+    class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-sm bg-opacity-90"
+  >
+    {{
+      currentMode === mapMode.StationAdd
+        ? 'Select a location for this new station'
+        : currentMode === mapMode.FlowAdd
+        ? 'Select flows and stations to add to new flow'
+        : ''
+    }}
   </div>
 </div>
-<div *ngIf="mapScale <= zoomBuild && isAdmin" class="text-center absolute left-0 right-0 m-auto mt-2 w-auto">
-  <div class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-xs bg-opacity-90">
+<div
+  *ngIf="mapScale <= zoomBuild && isAdmin"
+  class="text-center absolute left-0 right-0 m-auto mt-2 w-auto"
+>
+  <div
+    class="bg-white shadow-md p-2 mx-auto mr-auto rounded-lg max-w-xs bg-opacity-90"
+  >
     View only. Zoom in to edit.
   </div>
 </div>
 <div class="absolute flex flex-col right-2 bottom-12 md:bottom-2 mb-1 md:mb-0">
   <div class="bg-white shadow-md rounded border border-solid mb-2">
-    <button class="py-1 text-secondary-500 hover:text-secondary-300" data-testid="center"
-    (click)="center()">
+    <button
+      class="py-1 text-secondary-500 hover:text-secondary-300"
+      data-testid="center"
+      (click)="center()"
+    >
       <span class="fa-stack">
         <i class="fas fa-circle fa-stack-1x"></i>
         <i class="far fa-square fa-stack-2x"></i>
       </span>
     </button>
   </div>
-  <div
-    class="bg-white  shadow-md rounded border border-solid flex flex-col">
-    <button [disabled]="isZoomEnabled(1)"
-      [ngClass]="isZoomEnabled(1) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
-      class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300" data-testid="zoomin"
-      (click)="zoomIn()"> <i class="fas fa-search-plus"></i></button>
-    <button [disabled]="isZoomEnabled(0)"
-      [ngClass]="isZoomEnabled(0) ? 'opacity-50 cursor-not-allowed' : 'hover:text-secondary-300'"
-      class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300" data-testid="zoomout" (click)="zoomOut()"> <i
-        class="fas fa-search-minus"></i></button>
+  <div class="bg-white shadow-md rounded border border-solid flex flex-col">
+    <button
+      [disabled]="isZoomEnabled(1)"
+      [ngClass]="
+        isZoomEnabled(1)
+          ? 'opacity-50 cursor-not-allowed'
+          : 'hover:text-secondary-300'
+      "
+      class="px-2 py-1 text-2xl border-b border-solid text-secondary-500 hover:text-secondary-300"
+      data-testid="zoomin"
+      (click)="zoomIn()"
+    >
+      <i class="fas fa-search-plus"></i>
+    </button>
+    <button
+      [disabled]="isZoomEnabled(0)"
+      [ngClass]="
+        isZoomEnabled(0)
+          ? 'opacity-50 cursor-not-allowed'
+          : 'hover:text-secondary-300'
+      "
+      class="px-2 py-1 text-2xl text-secondary-500 hover:text-secondary-300"
+      data-testid="zoomout"
+      (click)="zoomOut()"
+    >
+      <i class="fas fa-search-minus"></i>
+    </button>
   </div>
 </div>
 <mat-menu #optionMenu>
   <div>
-    <button class="text-left w-full pl-8 p-3 hover:bg-secondary-50" (click)="createConnectedStation()">
+    <button
+      class="text-left w-full pl-8 p-3 hover:bg-secondary-50"
+      (click)="createConnectedStation()"
+    >
       <i class="fas fa-plus"></i>
       <span class="pl-2">New connected station</span>
     </button>
-    <button class="text-left w-full pl-8 p-3 hover:bg-secondary-50" (click)="removeStationConnections()">
+    <button
+      class="text-left w-full pl-8 p-3 hover:bg-secondary-50"
+      (click)="removeStationConnections()"
+    >
       <i class="fas fa-times"></i>
       <span class="pl-2">Remove all connections</span>
     </button>
-    <button class="text-left w-full pl-8 p-3 hover:bg-secondary-50" (click)="deleteStation()">
+    <button
+      class="text-left w-full pl-8 p-3 hover:bg-secondary-50"
+      (click)="deleteStation()"
+    >
       <i class="fas fa-trash-alt"></i>
       <span class="pl-2">Delete station</span>
     </button>
   </div>
 </mat-menu>
 <!--TODO: What does optionMenuNone do? -->
-<div class="opacity-0 cursor-pointer w-9 h-2"  [class.pointer-events-none]="optionMenuNone"
-  [matMenuTriggerFor]="optionMenu" [style.position]="'absolute'" [style.left.px]="menuX" [style.top.px]="menuY">...
+<div
+  class="opacity-0 cursor-pointer w-9 h-2"
+  [class.pointer-events-none]="optionMenuNone"
+  [matMenuTriggerFor]="optionMenu"
+  [style.position]="'absolute'"
+  [style.left.px]="menuX"
+  [style.top.px]="menuY"
+>
+  ...
 </div>

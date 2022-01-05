@@ -9,10 +9,9 @@ import { UtcTimeConversion } from 'src/helpers';
   selector: 'app-document-list-card[documents][isLoading][isPriority]',
   templateUrl: './document-list-card.component.html',
   styleUrls: ['./document-list-card.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion],
 })
 export class DocumentListCardComponent {
-
   /** The list of documents to display in the card. */
   @Input() documents = Array<Document>();
 
@@ -22,7 +21,7 @@ export class DocumentListCardComponent {
   /** Whether the card is for the priority queue. */
   @Input() isPriority = false;
 
-  constructor(private utcTimeConversion: UtcTimeConversion) { }
+  constructor(private utcTimeConversion: UtcTimeConversion) {}
 
   /**
    * Uses the helper: UtcTimeConversion.
