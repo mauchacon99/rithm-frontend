@@ -394,23 +394,14 @@ export class DocumentService {
     stationRithmId: string,
     documentRithmId: string
   ): Observable<unknown> {
-    if (!userRithmId || !stationRithmId || !documentRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error:
-                'Data invalid, new user cannot be assigned to the document.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const requestObject = {
-        userRithmId: userRithmId,
-        documentRithmId: documentRithmId,
-        stationRithmId: stationRithmId
-      };
-      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`, requestObject);
-    }
+    const requestObject = {
+      userRithmId: userRithmId,
+      documentRithmId: documentRithmId,
+      stationRithmId: stationRithmId,
+    };
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,
+      requestObject
+    );
   }
 }

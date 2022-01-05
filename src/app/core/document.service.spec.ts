@@ -534,14 +534,21 @@ describe('DocumentService', () => {
 
   it('should assign an user to a document', () => {
     const userRithmId = '123-984-657';
-    service.assignUserToDocument(userRithmId, stationId, documentId)
+    service
+      .assignUserToDocument(userRithmId, stationId, documentId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
       });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`
+    );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual({ userRithmId, stationRithmId:stationId, documentRithmId:documentId });
+    expect(req.request.body).toEqual({
+      userRithmId,
+      stationRithmId: stationId,
+      documentRithmId: documentId,
+    });
 
     req.flush(null);
     httpTestingController.verify();
