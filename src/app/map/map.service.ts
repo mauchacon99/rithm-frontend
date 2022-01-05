@@ -41,7 +41,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root',
 })
 export class MapService {
-  /** This behavior subject will track the array of stations and flows. */
+  /** This will track the array of stations and flows. */
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
@@ -756,6 +756,11 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
+    //If there are no stations to center around, do nothing.
+    if (this.stationElements.length === 0) {
+      return;
+    }
+
     const centerLogic = () => {
       if (this.centerCount$.value > 0) {
         this.centerScale(onInit);
