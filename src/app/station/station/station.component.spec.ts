@@ -175,12 +175,28 @@ describe('StationComponent', () => {
   it('should call service methods to update data when save button is clicked ', () => {
     component.stationForm.get('stationTemplateForm')?.markAsTouched();
     component.stationForm.get('stationTemplateForm')?.markAsDirty();
-    const spyUpdateStationName = spyOn(TestBed.inject(StationService), 'updateStationName').and.callThrough();
-    const spyUpdateNameTemplate = spyOn(TestBed.inject(StationService), 'updateDocumentNameTemplate').and.callThrough();
-    const spyUpdateGeneralInstructions = spyOn(TestBed.inject(StationService), 'updateStationGeneralInstructions').and.callThrough();
-    const spyUpdateStationQuestions = spyOn(TestBed.inject(StationService), 'updateStationQuestions').and.callThrough();
-    const spyFunctionSave = spyOn(component, 'saveStationInformation').and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector('#station-save');
+    const spyUpdateStationName = spyOn(
+      TestBed.inject(StationService),
+      'updateStationName'
+    ).and.callThrough();
+    const spyUpdateNameTemplate = spyOn(
+      TestBed.inject(StationService),
+      'updateDocumentNameTemplate'
+    ).and.callThrough();
+    const spyUpdateGeneralInstructions = spyOn(
+      TestBed.inject(StationService),
+      'updateStationGeneralInstructions'
+    ).and.callThrough();
+    const spyUpdateStationQuestions = spyOn(
+      TestBed.inject(StationService),
+      'updateStationQuestions'
+    ).and.callThrough();
+    const spyFunctionSave = spyOn(
+      component,
+      'saveStationInformation'
+    ).and.callThrough();
+    const button =
+      fixture.debugElement.nativeElement.querySelector('#station-save');
 
     fixture.detectChanges();
     button.click();

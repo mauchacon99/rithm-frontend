@@ -53,7 +53,6 @@ describe('TextFieldComponent', () => {
   let fixture: ComponentFixture<TextFieldComponent>;
   const formBuilder = new FormBuilder();
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TextFieldComponent],

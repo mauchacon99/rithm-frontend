@@ -111,11 +111,9 @@ export class StationComponent
         this.appendedFields = appFields;
       });
 
-    this.stationService.stationFormTouched$
-      .pipe(first())
-      .subscribe(() => {
-        this.stationForm.get('stationTemplateForm')?.markAsTouched();
-      });
+    this.stationService.stationFormTouched$.pipe(first()).subscribe(() => {
+      this.stationForm.get('stationTemplateForm')?.markAsTouched();
+    });
 
     this.stationService.stationQuestion$
       .pipe(takeUntil(this.destroyed$))
@@ -201,7 +199,10 @@ export class StationComponent
    * @returns Random RithmId.
    */
   private get randRithmId(): string {
-    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    const genRanHex = (size: number) =>
+      [...Array(size)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join('');
     const rithmId = `${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}`;
     return rithmId;
   }

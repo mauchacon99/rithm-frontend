@@ -1,5 +1,23 @@
-import { Component, forwardRef, Input, OnInit, Output, EventEmitter, NgZone } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  NgZone,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { first } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
@@ -121,12 +139,10 @@ export class TextFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.textFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable
-      .pipe(first())
-      .subscribe(() => {
-        this.textFieldForm.get(this.field.questionType)?.markAsTouched();
-        this.textFieldForm.get(this.field.questionType)?.updateValueAndValidity();
-      });
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.textFieldForm.get(this.field.questionType)?.markAsTouched();
+      this.textFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+    });
   }
 
   /**
