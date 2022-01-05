@@ -9,7 +9,7 @@ const TEST_STATION_MAP_DATA: StationMapData = {
   previousStations: [],
   noOfDocuments: 5,
   status: MapItemStatus.Normal,
-  notes: ''
+  notes: '',
 };
 
 describe('StationMapElement', () => {
@@ -50,5 +50,4 @@ describe('StationMapElement', () => {
   xit('should report that a station is different from itself', () => {
     // TODO: add test
   });
-
 });

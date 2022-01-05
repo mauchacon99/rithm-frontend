@@ -9,7 +9,7 @@ const TEST_STATION_DATA: StationMapData = {
   previousStations: [],
   noOfDocuments: 5,
   status: MapItemStatus.Normal,
-  notes: ''
+  notes: '',
 };
 
 const TEST_STATION_1 = new StationMapElement(TEST_STATION_DATA);
@@ -25,5 +25,4 @@ describe('ConnectionMapElement', () => {
   it('should create an instance', () => {
     expect(connection).toBeTruthy();
   });
-
 });

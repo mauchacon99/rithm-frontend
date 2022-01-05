@@ -1,4 +1,7 @@
-<div class="h-full w-full flex justify-center items-center absolute" *ngIf="documentInfoDrawerLoading">
+<div
+  class="h-full w-full flex justify-center items-center absolute"
+  *ngIf="documentInfoDrawerLoading"
+>
   <app-loading-indicator></app-loading-indicator>
 </div>
 <div class="grid grid-cols-1" *ngIf="!documentInfoDrawerLoading">
@@ -8,12 +11,17 @@
     </div>
     <div class="col-span-12 pt-2">
       <p class="overline-font">Document Name</p>
-      <p class="break-words">{{documentName}}</p>
+      <p class="break-words">{{ documentName }}</p>
       <div class="w-24 items-center py-2" *ngIf="documentNameLoading">
-        <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        <app-loading-indicator
+          [inlineText]="'Loading...'"
+        ></app-loading-indicator>
       </div>
       <div class="pt-1" *ngIf="!documentNameLoading && isStation">
-        <mat-checkbox (click)="updateStatusDocumentEditable(!documentNameEditable)" [(ngModel)]="documentNameEditable">
+        <mat-checkbox
+          (click)="updateStatusDocumentEditable(!documentNameEditable)"
+          [(ngModel)]="documentNameEditable"
+        >
           Editable Name
         </mat-checkbox>
       </div>
@@ -23,12 +31,25 @@
       <form [formGroup]="appendFieldForm">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Search</mat-label>
-          <input type="text" placeholder="Pick one" aria-label="Search" matInput formControlName="appendField"
-            [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption classList="test-class"
-            (optionSelected)="addStationDocumentFieldName($event.option.value)">
-            <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option.prompt">
-              <p *ngIf="option.prompt">{{option.prompt}}</p>
+          <input
+            type="text"
+            placeholder="Pick one"
+            aria-label="Search"
+            matInput
+            formControlName="appendField"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            autoActiveFirstOption
+            classList="test-class"
+            (optionSelected)="addStationDocumentFieldName($event.option.value)"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions$ | async"
+              [value]="option.prompt"
+            >
+              <p *ngIf="option.prompt">{{ option.prompt }}</p>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
@@ -37,9 +58,15 @@
           <p class="overline-font pb-2">Separator Value</p>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Select</mat-label>
-            <mat-select formControlName="separatorField" (selectionChange)="updateSeparatorFieldValue($event.value)">
-              <mat-option *ngFor="let option of fieldNameSeparatorOptions | keyvalue" [value]="option.value">
-                {{option.value}}
+            <mat-select
+              formControlName="separatorField"
+              (selectionChange)="updateSeparatorFieldValue($event.value)"
+            >
+              <mat-option
+                *ngFor="let option of fieldNameSeparatorOptions | keyvalue"
+                [value]="option.value"
+              >
+                {{ option.value }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -50,41 +77,65 @@
       <div class="col-span-12 pt-4">
         <p class="overline-font">Assigned to</p>
       </div>
-      <div class="col-span-12" *ngIf="assignedUserLoading else assignedUser">
+      <div class="col-span-12" *ngIf="assignedUserLoading; else assignedUser">
         <div class="w-24 items-center py-2">
-          <app-loading-indicator id="assigned-user-loading" [inlineText]="'Loading...'"></app-loading-indicator>
+          <app-loading-indicator
+            id="assigned-user-loading"
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
         </div>
       </div>
       <ng-template #assignedUser>
-        <div class="col-span-full text-error-500" id="assigned-user-error" *ngIf="userErrorAssigned">
+        <div
+          class="col-span-full text-error-500"
+          id="assigned-user-error"
+          *ngIf="userErrorAssigned"
+        >
           Unable to retrieve assigned user
         </div>
-        <div class="col-span-full text-error-500" id="unassigned-user-error" *ngIf="userErrorUnassigned">
+        <div
+          class="col-span-full text-error-500"
+          id="unassigned-user-error"
+          *ngIf="userErrorUnassigned"
+        >
           Unable to unassign user
         </div>
         <ng-container *ngIf="!userErrorAssigned">
-          <div class="col-12 flex py-1 justify-between items-center" *ngIf="documentAssignedUser.length > 0 else noAssignedUser">
+          <div
+            class="col-12 flex py-1 justify-between items-center"
+            *ngIf="documentAssignedUser.length > 0; else noAssignedUser"
+          >
             <div class="col-12 flex justify-start">
               <div class="my-1">
-                  <app-user-avatar [firstName]="documentAssignedUser[0].firstName"
-                    [lastName]="documentAssignedUser[0].lastName" [hideToolTip]="true">
-                  </app-user-avatar>
+                <app-user-avatar
+                  [firstName]="documentAssignedUser[0].firstName"
+                  [lastName]="documentAssignedUser[0].lastName"
+                  [hideToolTip]="true"
+                >
+                </app-user-avatar>
               </div>
               <div class="flex flex-col justify-center overflow-hidden">
                 <p class="leading-none pl-2 mb-1 truncate">
-                  {{documentAssignedUser[0].firstName}} {{documentAssignedUser[0].lastName}}
+                  {{ documentAssignedUser[0].firstName }}
+                  {{ documentAssignedUser[0].lastName }}
                 </p>
-                <p class="leading-none overline-font pl-2 text-accent-500 truncate">{{documentAssignedUser[0].email}}</p>
+                <p
+                  class="leading-none overline-font pl-2 text-accent-500 truncate"
+                >
+                  {{ documentAssignedUser[0].email }}
+                </p>
               </div>
             </div>
-            <button *ngIf="isUserAdminOrOwner" mat-icon-button (click)="unassignUser()">
+            <button
+              *ngIf="isUserAdminOrOwner"
+              mat-icon-button
+              (click)="unassignUser()"
+            >
               <i class="fas fa-times"></i>
             </button>
           </div>
           <ng-template #noAssignedUser>
-            <div class="col-span-full">
-              No assigned user
-            </div>
+            <div class="col-span-full">No assigned user</div>
           </ng-template>
         </ng-container>
       </ng-template>
@@ -93,24 +144,54 @@
       </div>
       <div class="col-span-12 pt-2">
         <p class="overline-font">Time in station</p>
-        <div class="w-24 items-center py-2" *ngIf="timeInStationLoading" id="loading-time-in-station">
-          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        <div
+          class="w-24 items-center py-2"
+          *ngIf="timeInStationLoading"
+          id="loading-time-in-station"
+        >
+          <app-loading-indicator
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
         </div>
         <div class="text-left text-xs py-2" *ngIf="!timeInStationLoading">
-          <span class="{{colorMessageDocumentTime}}">{{documentTimeInStation}}</span>
+          <span class="{{ colorMessageDocumentTime }}">{{
+            documentTimeInStation
+          }}</span>
         </div>
       </div>
       <div class="w-full py-2">
         <p class="overline-font">last updated</p>
-        <div class="items-center py-2" *ngIf="lastUpdatedLoading" id="loading-last-update">
-          <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+        <div
+          class="items-center py-2"
+          *ngIf="lastUpdatedLoading"
+          id="loading-last-update"
+        >
+          <app-loading-indicator
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
         </div>
         <div class="text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
-          <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
+          <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
         </div>
       </div>
       <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
-        <button mat-stroked-button color="warn" class="priority" (click)="deleteDocument()">
+        <button
+          mat-stroked-button
+          color="accent"
+          (click)="openModalMoveDocument()"
+          data-testid="move-document-modal"
+          id="move-document-modal"
+        >
+          Move Document
+        </button>
+      </div>
+      <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
+        <button
+          mat-stroked-button
+          color="warn"
+          class="priority"
+          (click)="deleteDocument()"
+        >
           Delete Document
         </button>
       </div>

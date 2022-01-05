@@ -2,7 +2,6 @@
  * Represents all options to configure a dialog.
  */
 export interface DialogOptions {
-
   /** The title to be displayed on the dialog. */
   title: string;
 
@@ -26,5 +25,4 @@ export interface DialogOptions {
 
   /** The width of dialog. */
   width?: string;
-
 }

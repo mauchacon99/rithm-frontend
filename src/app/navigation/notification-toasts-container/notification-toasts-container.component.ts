@@ -5,20 +5,22 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-notification-toasts-container',
   templateUrl: './notification-toasts-container.component.html',
-  styleUrls: ['./notification-toasts-container.component.scss']
+  styleUrls: ['./notification-toasts-container.component.scss'],
 })
 export class NotificationToastsContainerComponent {
   /** Array of Notifications. */
-  notifications: {
-    /** Tittle toast. */
-    title: string;
-    /** Photo toast. */
-    photo: string;
-    /** Type toast. */
-    type: string;
-    /** Message toast. */
-    message: string;
-  }[] | [] = [];
+  notifications:
+    | {
+        /** Tittle toast. */
+        title: string;
+        /** Photo toast. */
+        photo: string;
+        /** Type toast. */
+        type: string;
+        /** Message toast. */
+        message: string;
+      }[]
+    | [] = [];
 
   /**
    * Remove a notification from the array.
@@ -29,6 +31,5 @@ export class NotificationToastsContainerComponent {
     setTimeout(() => {
       this.notifications.splice(index, 1);
     }, 1000);
-}
-
+  }
 }

@@ -1,7 +1,11 @@
-import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '../models';
+import {
+  FlowElementHoverType,
+  FlowMapData,
+  MapItemStatus,
+  Point,
+} from '../models';
 
 export interface FlowMapElement extends FlowMapData {
-
   /** The points used for the boundary shape of the flow (the points used for the convex hull). */
   boundaryPoints: Point[];
 
@@ -19,7 +23,6 @@ export interface FlowMapElement extends FlowMapData {
  * Represents all info and behavior for a flow as drawn on the map.
  */
 export class FlowMapElement {
-
   /**
    * Creates a new `FlowMapElement`.
    *
@@ -38,11 +41,13 @@ export class FlowMapElement {
    * @param point The cursor location.
    * @param ctx The rendering context for the canvas.
    */
-   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
-      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y) ? FlowElementHoverType.Boundary : FlowElementHoverType.None;
+      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y)
+        ? FlowElementHoverType.Boundary
+        : FlowElementHoverType.None;
     }
     ctx.restore();
   }
@@ -59,8 +64,11 @@ export class FlowMapElement {
   /**
    * Marks the status of the flow element as updated.
    */
-   markAsUpdated(): void {
-    if (this.status !== MapItemStatus.Created && this.status !== MapItemStatus.Deleted) {
+  markAsUpdated(): void {
+    if (
+      this.status !== MapItemStatus.Created &&
+      this.status !== MapItemStatus.Deleted
+    ) {
       this.status = MapItemStatus.Updated;
     }
   }
@@ -72,9 +80,10 @@ export class FlowMapElement {
     if (this.status !== MapItemStatus.Created) {
       this.status = MapItemStatus.Deleted;
     } else {
-      throw new Error('You seem to be trying mark a locally created flow group as deleted. ' +
-        'You should instead remove it from the array of flows.');
+      throw new Error(
+        'You seem to be trying mark a locally created flow group as deleted. ' +
+          'You should instead remove it from the array of flows.'
+      );
     }
   }
-
 }

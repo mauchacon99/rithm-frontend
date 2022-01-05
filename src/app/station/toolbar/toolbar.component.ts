@@ -7,7 +7,7 @@ import { QuestionFieldType } from 'src/models';
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent {
   /** Send tool.typeString to parent. */
@@ -25,81 +25,81 @@ export class ToolbarComponent {
       name: 'Short Text',
       icon: 'fas fa-font',
       typeString: this.fieldTypeEnum.ShortText,
-      dataTestId: 'add-short-text'
+      dataTestId: 'add-short-text',
     },
     {
       name: 'Long Text',
       icon: 'fas fa-paragraph',
       typeString: this.fieldTypeEnum.LongTextLabel,
-      dataTestId: 'add-long-text'
+      dataTestId: 'add-long-text',
     },
     {
       name: 'URL',
       icon: 'fas fa-link',
       typeString: this.fieldTypeEnum.URL,
-      dataTestId: 'add-url'
+      dataTestId: 'add-url',
     },
     {
       name: 'Email',
       icon: 'fas fa-envelope',
       typeString: this.fieldTypeEnum.Email,
-      dataTestId: 'add-email'
+      dataTestId: 'add-email',
     },
     //TODO: figure out how to correctly format the nested field upon creation.
     {
       name: 'Address',
       icon: 'far fa-address-card',
       typeString: this.fieldTypeEnum.AddressLine,
-      dataTestId: 'add-address'
+      dataTestId: 'add-address',
     },
     {
       name: 'Number',
       icon: 'fas fa-calculator',
       typeString: this.fieldTypeEnum.Number,
-      dataTestId: 'add-number'
+      dataTestId: 'add-number',
     },
     {
       name: 'Phone Number',
       icon: 'fas fa-phone',
       typeString: this.fieldTypeEnum.Phone,
-      dataTestId: 'add-phone-number'
+      dataTestId: 'add-phone-number',
     },
     {
       name: 'Currency',
       icon: 'fas fa-money-bill-wave',
       typeString: this.fieldTypeEnum.Currency,
-      dataTestId: 'add-currency'
+      dataTestId: 'add-currency',
     },
     {
       name: 'Date',
       icon: 'fas fa-calendar-day',
       typeString: this.fieldTypeEnum.Date,
-      dataTestId: 'add-date'
+      dataTestId: 'add-date',
     },
     {
       name: 'Checklist',
       icon: 'fas fa-list',
       typeString: this.fieldTypeEnum.CheckList,
-      dataTestId: 'add-checklist'
+      dataTestId: 'add-checklist',
     },
     {
       name: 'Single Select',
       icon: 'fas fa-chevron-circle-down',
       typeString: this.fieldTypeEnum.Select,
-      dataTestId: 'add-select'
+      dataTestId: 'add-select',
     },
     {
       name: 'Multi Select',
       icon: 'fas fa-chevron-circle-down',
       typeString: this.fieldTypeEnum.MultiSelect,
-      dataTestId: 'add-multi-select'
+      dataTestId: 'add-multi-select',
     },
     {
       name: 'Instructions',
       icon: 'fas fa-sticky-note',
       typeString: this.fieldTypeEnum.Instructions,
-      dataTestId: 'add-instructions'
-    }
+      dataTestId: 'add-instructions',
+    },
   ];
 
   /**
@@ -110,7 +110,6 @@ export class ToolbarComponent {
   selectField(field: QuestionFieldType): void {
     this.fieldSelected.emit(field);
   }
-
 
   /**
    * Toggle the inline toolbar.
@@ -127,5 +126,4 @@ export class ToolbarComponent {
       this.isInlineToolbarOpen = false;
     }
   }
-
 }

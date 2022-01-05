@@ -2,8 +2,16 @@ import { Injectable } from '@angular/core';
 import { FlowMapElement } from 'src/helpers';
 import { FlowElementHoverType, Point } from 'src/models';
 import {
-  CONNECTION_DEFAULT_COLOR, FLOW_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
-  DEFAULT_SCALE, GROUP_NAME_PADDING, FONT_SIZE_MODIFIER, NODE_HOVER_COLOR,
+  CONNECTION_DEFAULT_COLOR,
+  FLOW_PADDING,
+  STATION_HEIGHT,
+  STATION_WIDTH,
+  CONNECTION_LINE_WIDTH,
+  BUTTON_DEFAULT_COLOR,
+  DEFAULT_SCALE,
+  GROUP_NAME_PADDING,
+  FONT_SIZE_MODIFIER,
+  NODE_HOVER_COLOR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -11,20 +19,17 @@ import { MapService } from './map.service';
  * Service for rendering and other behavior for a flow on the map.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FlowElementService {
-
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
-  constructor(
-    private mapService: MapService
-  ) {
-    this.mapService.mapScale$.subscribe((scale)=> this.mapScale = scale);
+  constructor(private mapService: MapService) {
+    this.mapService.mapScale$.subscribe((scale) => (this.mapScale = scale));
   }
 
   /**
@@ -34,7 +39,9 @@ export class FlowElementService {
     if (!this.mapService.flowElements.length) {
       return;
     }
-    const rootFlow = this.mapService.flowElements.find((flow) => flow.isReadOnlyRootFlow);
+    const rootFlow = this.mapService.flowElements.find(
+      (flow) => flow.isReadOnlyRootFlow
+    );
     if (!rootFlow) {
       throw new Error('Root flow could not be found');
     }
@@ -47,12 +54,15 @@ export class FlowElementService {
    * @param flow The flow to be drawn on the map.
    */
   private drawFlow(flow: FlowMapElement): void {
-
     // If flow has a sub-flow, draw that first
     flow.subFlows.forEach((subFlowId) => {
-      const subFlow = this.mapService.flowElements.find((flowElement) => flowElement.rithmId === subFlowId);
+      const subFlow = this.mapService.flowElements.find(
+        (flowElement) => flowElement.rithmId === subFlowId
+      );
       if (!subFlow) {
-        throw new Error(`Couldn't find a sub-flow for which an id exists: ${subFlowId}`);
+        throw new Error(
+          `Couldn't find a sub-flow for which an id exists: ${subFlowId}`
+        );
       }
       this.drawFlow(subFlow);
     });
@@ -85,13 +95,18 @@ export class FlowElementService {
   private drawFlowBoundaryLine(flow: FlowMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw flow boundary line if context is not defined');
+      throw new Error(
+        'Cannot draw flow boundary line if context is not defined'
+      );
     }
     const ctx = this.canvasContext;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
-    ctx.strokeStyle = flow.hoverActive === FlowElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
+    ctx.strokeStyle =
+      flow.hoverActive === FlowElementHoverType.Boundary
+        ? NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
     ctx.stroke(flow.path);
     ctx.setLineDash([]);
@@ -111,8 +126,11 @@ export class FlowElementService {
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    this.canvasContext.fillText(flow.title, flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
-      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING);
+    this.canvasContext.fillText(
+      flow.title,
+      flow.boundaryPoints[0].x + GROUP_NAME_PADDING,
+      flow.boundaryPoints[flow.boundaryPoints.length - 1].y + GROUP_NAME_PADDING
+    );
   }
 
   /**
@@ -120,11 +138,13 @@ export class FlowElementService {
    *
    * @param flow The flow for which path needs to be set.
    */
-   private setFlowBoundaryPath(flow: FlowMapElement): void {
+  private setFlowBoundaryPath(flow: FlowMapElement): void {
     const path = new Path2D();
 
     path.moveTo(flow.boundaryPoints[0].x, flow.boundaryPoints[0].y);
-    flow.boundaryPoints = flow.boundaryPoints.concat(flow.boundaryPoints.splice(0, 1)); // Shift the first point to the back
+    flow.boundaryPoints = flow.boundaryPoints.concat(
+      flow.boundaryPoints.splice(0, 1)
+    ); // Shift the first point to the back
 
     for (const boundaryPoint of flow.boundaryPoints) {
       path.lineTo(boundaryPoint.x, boundaryPoint.y);
@@ -144,19 +164,36 @@ export class FlowElementService {
     }
 
     // Get the stations within the flow
-    const flowStations = this.mapService.stationElements.filter((station) => flow.stations.includes(station.rithmId));
+    const flowStations = this.mapService.stationElements.filter((station) =>
+      flow.stations.includes(station.rithmId)
+    );
 
     // Get all the station points within this flow
     const stationPointsWithinFlow: Point[] = [];
     for (const station of flowStations) {
       const scaledPadding = FLOW_PADDING * this.mapService.mapScale$.value;
-      const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
-      const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
+      const maxX =
+        station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
+      const maxY =
+        station.canvasPoint.y +
+        STATION_HEIGHT * this.mapService.mapScale$.value;
 
-      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
-      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
-      stationPointsWithinFlow.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
-      stationPointsWithinFlow.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+      stationPointsWithinFlow.push({
+        x: station.canvasPoint.x - scaledPadding,
+        y: station.canvasPoint.y - scaledPadding,
+      }); // TL
+      stationPointsWithinFlow.push({
+        x: maxX + scaledPadding,
+        y: station.canvasPoint.y - scaledPadding,
+      }); // TR
+      stationPointsWithinFlow.push({
+        x: station.canvasPoint.x - scaledPadding,
+        y: maxY + scaledPadding,
+      }); // BL
+      stationPointsWithinFlow.push({
+        x: maxX + scaledPadding,
+        y: maxY + scaledPadding,
+      }); // BR
     }
     return stationPointsWithinFlow;
   }
@@ -172,12 +209,16 @@ export class FlowElementService {
       return [];
     }
     // Get the sub-flows within the flow
-    const subFlows = this.mapService.flowElements.filter((subFlow) => flow.subFlows.includes(subFlow.rithmId));
+    const subFlows = this.mapService.flowElements.filter((subFlow) =>
+      flow.subFlows.includes(subFlow.rithmId)
+    );
 
     // Get all the points for sub-flows
     const subFlowPointsWithinFlow: Point[] = [];
     subFlows.forEach((subFlow) => {
-      subFlowPointsWithinFlow.push(...this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints));
+      subFlowPointsWithinFlow.push(
+        ...this.getPaddedFlowBoundaryPoints(subFlow.boundaryPoints)
+      );
     });
     return subFlowPointsWithinFlow;
   }
@@ -201,7 +242,6 @@ export class FlowElementService {
     // };
 
     for (const point of updatedBoundaryPoints) {
-
       if (point.x === maxX) {
         point.x += FLOW_PADDING * this.mapService.mapScale$.value;
       } else if (point.x === minX) {
@@ -213,7 +253,6 @@ export class FlowElementService {
       } else if (point.y === minY) {
         point.y -= FLOW_PADDING * this.mapService.mapScale$.value;
       }
-
     }
 
     return updatedBoundaryPoints;
@@ -281,7 +320,12 @@ export class FlowElementService {
     }
     lowerHull.pop();
 
-    if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) {
+    if (
+      upperHull.length === 1 &&
+      lowerHull.length === 1 &&
+      upperHull[0].x === lowerHull[0].x &&
+      upperHull[0].y === lowerHull[0].y
+    ) {
       return upperHull;
     } else {
       return upperHull.concat(lowerHull);

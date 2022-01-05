@@ -12,16 +12,9 @@ describe('StationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        StationCardComponent,
-        MockComponent(RosterComponent)
-      ],
-      imports: [
-        MatDialogModule,
-        MatCardModule
-      ]
-    })
-      .compileComponents();
+      declarations: [StationCardComponent, MockComponent(RosterComponent)],
+      imports: [MatDialogModule, MatCardModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -39,7 +32,7 @@ describe('StationCardComponent', () => {
           lastName: 'User',
           email: 'supervisoruser@inpivota.com',
           isWorker: true,
-          isOwner: false
+          isOwner: false,
         },
         {
           rithmId: '',
@@ -47,9 +40,9 @@ describe('StationCardComponent', () => {
           lastName: 'Potter',
           email: 'harrypotter@inpivota.com',
           isWorker: true,
-          isOwner: false
-        }
-      ]
+          isOwner: false,
+        },
+      ],
     };
     fixture.detectChanges();
   });

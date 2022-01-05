@@ -9,11 +9,9 @@ const TEST_FLOW_DATA: FlowMapData = {
     '3a97bead-e698-45ea-a1d9-51f4513a909a',
     '6D8976EF-F9A2-40E3-957E-CAAAE2AA2DA8',
   ],
-  subFlows: [
-    '9724A1FB-426D-4826-8FF2-F0752979155E'
-  ],
+  subFlows: ['9724A1FB-426D-4826-8FF2-F0752979155E'],
   status: MapItemStatus.Normal,
-  isReadOnlyRootFlow: false
+  isReadOnlyRootFlow: false,
 };
 
 describe('FlowMapElement', () => {
@@ -79,7 +77,7 @@ describe('FlowMapElement', () => {
     // TODO: add test
   });
 
-  xit('should report hover of none when the point isn\'t over anything specifically', () => {
+  xit("should report hover of none when the point isn't over anything specifically", () => {
     // TODO: add test
   });
 
@@ -90,5 +88,4 @@ describe('FlowMapElement', () => {
   xit('should report that a station group is different from itself', () => {
     // TODO: add test
   });
-
 });

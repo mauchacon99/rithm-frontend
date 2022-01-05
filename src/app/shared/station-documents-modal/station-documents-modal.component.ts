@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DocumentService } from '../../core/document.service';
+import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Document, StationDocumentsModalData, UserType } from 'src/models';
@@ -14,10 +14,9 @@ import { Router } from '@angular/router';
   selector: 'app-station-documents-modal',
   templateUrl: './station-documents-modal.component.html',
   styleUrls: ['./station-documents-modal.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion],
 })
 export class StationDocumentsModalComponent implements OnInit {
-
   /** The documents to show in the modal. */
   documents: Document[] = [];
 
@@ -66,7 +65,8 @@ export class StationDocumentsModalComponent implements OnInit {
   getDocuments(pageNum: number): void {
     this.activeNum = pageNum;
     this.isLoading = true;
-    this.documentService.getStationDocuments(this.stationRithmId, pageNum)
+    this.documentService
+      .getStationDocuments(this.stationRithmId, pageNum)
       .pipe(first())
       .subscribe({
         next: (documentsResponse) => {
@@ -81,10 +81,10 @@ export class StationDocumentsModalComponent implements OnInit {
           this.isLoading = false;
           this.dialogRef.close();
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -96,8 +96,9 @@ export class StationDocumentsModalComponent implements OnInit {
   checkDocPermission(rithmId: string): void {
     if (this.userType !== UserType.None) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
-      this.router.navigate(
-        [`/document/${rithmId}`], { queryParams: { documentId: rithmId, stationId: this.stationRithmId } });
+      this.router.navigate([`/document/${rithmId}`], {
+        queryParams: { documentId: rithmId, stationId: this.stationRithmId },
+      });
       this.dialogRef.close();
     }
   }
@@ -127,5 +128,4 @@ export class StationDocumentsModalComponent implements OnInit {
     const names = fullName.split(' ');
     return names[firstLastIndex];
   }
-
 }
