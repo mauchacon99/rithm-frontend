@@ -1,5 +1,9 @@
 <div class="toasts" *ngIf="notifications.length > 0">
-  <div *ngFor="let notification of notifications, let i = index" class="toast">
-    <app-notification-card (dismissEvent)="removeNotification(i)" [message]="notification.message" [title]="notification.title"></app-notification-card>
+  <div *ngFor="let notification of notifications; let i = index" class="toast">
+    <app-notification-card
+      (dismissEvent)="removeNotification(i)"
+      [message]="notification.message"
+      [title]="notification.title"
+    ></app-notification-card>
   </div>
 </div>

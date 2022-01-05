@@ -2,7 +2,6 @@
  * Represents all the types of hover interactions on a flow in the map.
  */
 export enum FlowElementHoverType {
-
   /** The map cursor is hovering over the flow boundary. */
   Boundary = 'boundary',
 
@@ -10,5 +9,5 @@ export enum FlowElementHoverType {
   Name = 'name',
 
   /** The map cursor is not hovering over anything specific. */
-  None = 'none'
+  None = 'none',
 }

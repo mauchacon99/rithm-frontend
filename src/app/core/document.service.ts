@@ -1,7 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
-import { StationDocuments, ForwardPreviousStationsDocument, DocumentStationInformation, StandardStringJSON, DocumentAnswer, DocumentName, StationRosterMember, Question, DocumentAutoFlow, MoveDocument } from 'src/models';
+import {
+  StationDocuments,
+  ForwardPreviousStationsDocument,
+  DocumentStationInformation,
+  StandardStringJSON,
+  DocumentAnswer,
+  DocumentName,
+  StationRosterMember,
+  Question,
+  DocumentAutoFlow,
+  MoveDocument,
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 
 const MICROSERVICE_PATH = '/documentservice/api/document';
@@ -10,15 +25,16 @@ const MICROSERVICE_PATH = '/documentservice/api/document';
  * Service for all document behavior and business logic.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DocumentService {
-
   /** The Name of the Document as BehaviorSubject. */
-  documentName$ = new BehaviorSubject<DocumentName>({ baseName: '', appendedName: '' });
+  documentName$ = new BehaviorSubject<DocumentName>({
+    baseName: '',
+    appendedName: '',
+  });
 
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets a list of documents for a given station.
@@ -27,11 +43,17 @@ export class DocumentService {
    * @param pageNum The desired page number of results.
    * @returns A list of documents (one page worth).
    */
-  getStationDocuments(stationId: string, pageNum: number): Observable<StationDocuments> {
+  getStationDocuments(
+    stationId: string,
+    pageNum: number
+  ): Observable<StationDocuments> {
     const params = new HttpParams()
       .set('stationId', stationId)
       .set('pageNum', pageNum);
-    return this.http.get<StationDocuments>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents`, { params });
+    return this.http.get<StationDocuments>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-documents`,
+      { params }
+    );
   }
 
   /**
@@ -41,13 +63,19 @@ export class DocumentService {
    * @param stationId The Specific id of station.
    * @returns A list of forward and previous stations for a specific document.
    */
-  getConnectedStationInfo(documentId: string, stationId: string): Observable<ForwardPreviousStationsDocument> {
+  getConnectedStationInfo(
+    documentId: string,
+    stationId: string
+  ): Observable<ForwardPreviousStationsDocument> {
     const params = new HttpParams()
       .set('documentId', documentId)
       .set('stationId', stationId);
-    return this.http.get<ForwardPreviousStationsDocument>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info`, {
-      params
-    });
+    return this.http.get<ForwardPreviousStationsDocument>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/connected-station-info`,
+      {
+        params,
+      }
+    );
   }
 
   /**
@@ -57,8 +85,12 @@ export class DocumentService {
    * @param stationId The Specific id of station.
    * @returns A list of forward and previous stations for a specific document.
    */
-  getDocumentInfo(documentId: string, stationId: string): Observable<DocumentStationInformation> {
-    return this.http.get<DocumentStationInformation>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
+  getDocumentInfo(
+    documentId: string,
+    stationId: string
+  ): Observable<DocumentStationInformation> {
+    return this.http.get<DocumentStationInformation>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/document-info`,
       { params: { documentId, stationId } }
     );
   }
@@ -70,12 +102,19 @@ export class DocumentService {
    * @param documentName The new document name.
    * @returns The new document name.
    */
-  updateDocumentName(documentId: string, documentName: string): Observable<string> {
+  updateDocumentName(
+    documentId: string,
+    documentName: string
+  ): Observable<string> {
     const newDocumentName: StandardStringJSON = {
-      data: documentName
+      data: documentName,
     };
-    return this.http.put<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`, newDocumentName)
-      .pipe(map(response => response.data));
+    return this.http
+      .put<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/name?rithmId=${documentId}`,
+        newDocumentName
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -85,9 +124,11 @@ export class DocumentService {
    * @returns The document name.
    */
   getDocumentName(documentId: string): Observable<DocumentName> {
-    const params = new HttpParams()
-      .set('documentRithmId', documentId);
-    return this.http.get<DocumentName>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/name`, { params });
+    const params = new HttpParams().set('documentRithmId', documentId);
+    return this.http.get<DocumentName>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/name`,
+      { params }
+    );
   }
 
   /**
@@ -97,15 +138,22 @@ export class DocumentService {
    * @param answerDocument The answers so document.
    * @returns The document answers.
    */
-  saveDocumentAnswer(documentRithmId: string, answerDocument: DocumentAnswer[]): Observable<DocumentAnswer[]> {
+  saveDocumentAnswer(
+    documentRithmId: string,
+    answerDocument: DocumentAnswer[]
+  ): Observable<DocumentAnswer[]> {
     if (!documentRithmId || !answerDocument) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get the name of the document or its answers.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get the name of the document or its answers.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
-      return this.http.post<DocumentAnswer[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
+      return this.http.post<DocumentAnswer[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
         answerDocument
       );
     }
@@ -127,10 +175,13 @@ export class DocumentService {
    * @returns Formatted Updated Date.
    */
   getLastUpdated(documentRithmId: string): Observable<string> {
-    const params = new HttpParams()
-      .set('documentRithmId', documentRithmId);
-    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`, { params })
-      .pipe(map(response => response.data));
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http
+      .get<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/last-updated`,
+        { params }
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -140,12 +191,19 @@ export class DocumentService {
    * @param stationId The specific id of station.
    * @returns The document time in station.
    */
-  getDocumentTimeInStation(documentId: string, stationId: string): Observable<string> {
+  getDocumentTimeInStation(
+    documentId: string,
+    stationId: string
+  ): Observable<string> {
     const params = new HttpParams()
       .set('documentRithmId', documentId)
       .set('stationRithmId', stationId);
-    return this.http.get<StandardStringJSON>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time`, { params })
-      .pipe(map(response => response.data));
+    return this.http
+      .get<StandardStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flowed-time`,
+        { params }
+      )
+      .pipe(map((response) => response.data));
   }
 
   /**
@@ -156,19 +214,29 @@ export class DocumentService {
    * @param getOnlyCurrentStation The specific current station only.
    * @returns The assigned user.
    */
-  getAssignedUserToDocument(documentId: string, stationId: string, getOnlyCurrentStation: boolean): Observable<StationRosterMember[]> {
+  getAssignedUserToDocument(
+    documentId: string,
+    stationId: string,
+    getOnlyCurrentStation: boolean
+  ): Observable<StationRosterMember[]> {
     if (!documentId || (!stationId && getOnlyCurrentStation)) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Cannot get the user assigned for document.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get the user assigned for document.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       const params = new HttpParams()
         .set('documentId', documentId)
         .set('stationId', stationId)
         .set('getOnlyCurrentStation', getOnlyCurrentStation);
-      return this.http.get<StationRosterMember[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user`, { params });
+      return this.http.get<StationRosterMember[]>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/assigned-user`,
+        { params }
+      );
     }
   }
 
@@ -180,13 +248,20 @@ export class DocumentService {
    * @param getPrivate Will fetch only private or non private questions.
    * @returns The array with previous questions.
    */
-  getDocumentPreviousQuestions(documentId: string, stationId: string, getPrivate: boolean): Observable<Question[]> {
+  getDocumentPreviousQuestions(
+    documentId: string,
+    stationId: string,
+    getPrivate: boolean
+  ): Observable<Question[]> {
     const params = new HttpParams()
       .set('documentRithmId', documentId)
       .set('stationRithmId', stationId)
       .set('getPrivate', getPrivate);
 
-    return this.http.get<Question[]>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`, { params });
+    return this.http.get<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+      { params }
+    );
   }
 
   /**
@@ -196,7 +271,9 @@ export class DocumentService {
    * @returns Returns an empty observable.
    */
   deleteDocument(documentRithmId: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`);
+    return this.http.delete<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/${documentRithmId}`
+    );
   }
 
   /**
@@ -207,13 +284,19 @@ export class DocumentService {
    */
   autoFlowDocument(documentAutoFlow: DocumentAutoFlow): Observable<unknown> {
     if (!documentAutoFlow) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Unable to flow the document, invalid parameters.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Unable to flow the document, invalid parameters.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
-      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`, documentAutoFlow);
+      return this.http.post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/auto-flow`,
+        documentAutoFlow
+      );
     }
   }
 
@@ -224,19 +307,28 @@ export class DocumentService {
    * @param stationRithmId The station Id.
    * @returns Returns an empty observable.
    */
-  unassignUserToDocument(documentRithmId: string, stationRithmId: string): Observable<unknown> {
+  unassignUserToDocument(
+    documentRithmId: string,
+    stationRithmId: string
+  ): Observable<unknown> {
     if (!documentRithmId || !stationRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'The user cannot be unassigned.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The user cannot be unassigned.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       const requestObject = {
         documentRithmId: documentRithmId,
-        stationRithmId: stationRithmId
+        stationRithmId: stationRithmId,
       };
-      return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`, { body: requestObject });
+      return this.http.delete<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,
+        { body: requestObject }
+      );
     }
   }
 
@@ -248,13 +340,19 @@ export class DocumentService {
    */
   moveDocument(moveDocument: MoveDocument): Observable<unknown> {
     if (!moveDocument) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Data invalid, document could not be moved.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Data invalid, document could not be moved.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
-      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`, moveDocument);
+      return this.http.post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-station-to-station`,
+        moveDocument
+      );
     }
   }
 
@@ -266,19 +364,19 @@ export class DocumentService {
    */
   createNewDocument(stationRithmId: string): Observable<string> {
     const documentResponse = {
-      rithmId: "78DF8E53-549E-44CD-8056-A2CBA055F32F",
+      rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F',
       name: '',
       priority: 0,
       currentStations: [
         {
-          name: "So long",
-          instructions: "",
+          name: 'So long',
+          instructions: '',
           rithmId: stationRithmId,
-          assignedUser: null
-        }
+          assignedUser: null,
+        },
       ],
       children: [],
-      parents: []
+      parents: [],
     };
     return of(documentResponse.rithmId).pipe(delay(1000));
   }
@@ -291,13 +389,21 @@ export class DocumentService {
    * @param documentRithmId The Specific id of document.
    * @returns Returns an empty observable.
    */
-  assignUserToDocument(userRithmId: string, stationRithmId: string, documentRithmId: string): Observable<unknown> {
+  assignUserToDocument(
+    userRithmId: string,
+    stationRithmId: string,
+    documentRithmId: string
+  ): Observable<unknown> {
     if (!userRithmId || !stationRithmId || !documentRithmId) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Data invalid, new user cannot be assigned to the document.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error:
+                'Data invalid, new user cannot be assigned to the document.',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       const requestObject = {
         userRithmId: userRithmId,

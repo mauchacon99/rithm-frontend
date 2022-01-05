@@ -16,9 +16,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AdminModule } from './admin/admin.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -32,9 +30,9 @@ import { AdminModule } from './admin/admin.module';
     DocumentModule,
     StationModule,
     SettingsModule,
-    MatSidenavModule // TODO: refactor; AppModule should only bootstrap other app modules
+    MatSidenavModule, // TODO: refactor; AppModule should only bootstrap other app modules
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

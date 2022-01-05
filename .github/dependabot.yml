@@ -5,13 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: 'npm' # See documentation for possible values
+    directory: '/' # Location of package manifests
     schedule:
-      interval: "daily"
-      time: "09:30"
-      timezone: "US/Mountain"
+      interval: 'daily'
+      time: '09:30'
+      timezone: 'US/Mountain'
     ignore:
       # ignore all Node types major updates to keep in sync with local version
-      - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']

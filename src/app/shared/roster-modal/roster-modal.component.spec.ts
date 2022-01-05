@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import { PopupService } from 'src/app/core/popup.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
@@ -11,7 +15,7 @@ import { RosterModalComponent } from './roster-modal.component';
 const DIALOG_TEST_DATA: RosterModalData = {
   stationName: 'A station',
   stationId: 'kjdf3kj3kj4k',
-  isWorker: true
+  isWorker: true,
 };
 
 describe('RosterModalComponent', () => {
@@ -22,19 +26,16 @@ describe('RosterModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         RosterModalComponent,
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
       ],
-      imports: [
-        MatDialogModule
-      ],
+      imports: [MatDialogModule],
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: DashboardService, useClass: MockDashboardService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-      .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

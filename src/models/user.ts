@@ -2,7 +2,6 @@
  * Represents all information about a Rithm user.
  */
 export interface User {
-
   /** The global Rithm ID for this user. */
   readonly rithmId: string;
 

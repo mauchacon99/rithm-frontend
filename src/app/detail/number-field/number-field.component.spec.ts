@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,7 +49,7 @@ describe('NumberFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NumberFieldComponent ],
+      declarations: [NumberFieldComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -53,11 +57,8 @@ describe('NumberFieldComponent', () => {
         NoopAnimationsModule,
         NgxMaskModule.forRoot(),
       ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder },
-      ]
-    })
-    .compileComponents();
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -88,7 +89,6 @@ describe('NumberFieldComponent', () => {
       expect(numberField.hasError('required')).toBeTrue();
       expect(component.numberFieldForm.valid).toBeFalse();
     });
-
   });
 
   describe('phone field', () => {
@@ -170,5 +170,4 @@ describe('NumberFieldComponent', () => {
       expect(component.numberFieldForm.valid).toBeFalse();
     });
   });
-
 });

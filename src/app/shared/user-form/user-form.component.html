@@ -1,43 +1,88 @@
 <ng-container [formGroup]="userForm">
-  <app-password-requirements class="mat-elevation-z8 w-full"
-    *ngIf="passwordRequirementsVisible && (userForm.controls['password'].value.length > 0 || userForm.controls['confirmPassword'].value.length > 0)"
-    [passReq]="userForm.get(errorsToGet)?.errors" [match]="showMatch"></app-password-requirements>
+  <app-password-requirements
+    class="mat-elevation-z8 w-full"
+    *ngIf="
+      passwordRequirementsVisible &&
+      (userForm.controls['password'].value.length > 0 ||
+        userForm.controls['confirmPassword'].value.length > 0)
+    "
+    [passReq]="userForm.get(errorsToGet)?.errors"
+    [match]="showMatch"
+  ></app-password-requirements>
 
-  <div class="grid gap-x-4" [ngClass]="{'grid-cols-1 md:grid-cols-2' : accountCreate}">
+  <div
+    class="grid gap-x-4"
+    [ngClass]="{ 'grid-cols-1 md:grid-cols-2': accountCreate }"
+  >
     <!-- First name -->
     <mat-form-field class="col-span-2 md:col-span-1" appearance="outline">
       <mat-label>First name</mat-label>
-      <input data-testid="first-name-field" id="firstName" type="text" matInput placeholder="First name"
-        formControlName="firstName" autocomplete="given-name">
+      <input
+        data-testid="first-name-field"
+        id="firstName"
+        type="text"
+        matInput
+        placeholder="First name"
+        formControlName="firstName"
+        autocomplete="given-name"
+      />
     </mat-form-field>
 
     <!-- Last name -->
     <mat-form-field class="col-span-2 md:col-span-1" appearance="outline">
       <mat-label>Last name</mat-label>
-      <input data-testid="last-name-field" id="lastName" type="text" matInput placeholder="Last name"
-        formControlName="lastName" autocomplete="family-name">
+      <input
+        data-testid="last-name-field"
+        id="lastName"
+        type="text"
+        matInput
+        placeholder="Last name"
+        formControlName="lastName"
+        autocomplete="family-name"
+      />
     </mat-form-field>
 
     <!-- Email -->
     <mat-form-field class="col-span-2" appearance="outline">
       <mat-label>Email</mat-label>
-      <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
+      <input
+        id="email"
+        type="email"
+        matInput
+        placeholder="Email"
+        formControlName="email"
+        autocomplete="email"
+      />
     </mat-form-field>
 
     <!-- Password -->
     <mat-form-field class="col-span-2 md:col-span-1" appearance="outline">
       <mat-label>{{ passwordLabel }}</mat-label>
-      <input id="password" type="password" matInput placeholder="Password" formControlName="password"
-        (focus)="togglePasswordRequirements('password')" (focusout)="togglePasswordRequirements('')"
-        autocomplete="new-password">
+      <input
+        id="password"
+        type="password"
+        matInput
+        placeholder="Password"
+        formControlName="password"
+        (focus)="togglePasswordRequirements('password')"
+        (focusout)="togglePasswordRequirements('')"
+        autocomplete="new-password"
+      />
     </mat-form-field>
 
     <!-- Confirm Password -->
     <mat-form-field class="col-span-2 md:col-span-1" appearance="outline">
       <mat-label>{{ confirmPasswordLabel }}</mat-label>
-      <input id="confirmPassword" type="password" matInput placeholder="Confirm password"
-        formControlName="confirmPassword" (focus)="togglePasswordRequirements('confirmPassword')"
-        (focusout)="togglePasswordRequirements('')" autocomplete="new-password">
+      <input
+        id="confirmPassword"
+        type="password"
+        matInput
+        placeholder="Confirm password"
+        formControlName="confirmPassword"
+        (focus)="togglePasswordRequirements('confirmPassword')"
+        (focusout)="togglePasswordRequirements('')"
+        autocomplete="new-password"
+      />
     </mat-form-field>
   </div>
 </ng-container>
