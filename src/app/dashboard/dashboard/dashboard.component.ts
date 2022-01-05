@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
@@ -18,10 +19,13 @@ export class DashboardComponent implements OnInit {
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
 
+  viewNewDashbaord = false;
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
-    private splitService: SplitService
+    private splitService: SplitService,
+    private errorService: ErrorService
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -42,7 +46,19 @@ export class DashboardComponent implements OnInit {
     if (user) {
       this.splitService.initSdk(user.rithmId);
     }
-  }
+
+    this.splitService.sdkReady$
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        const treatment = this.splitService.getDashboardTreatment();
+        treatment === 'on' ? this.viewNewDashbaord = true : this.viewNewDashbaord = false;
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      }
+    });
+    }
 
   /**
    * Whether the signed in user is an admin or not.
