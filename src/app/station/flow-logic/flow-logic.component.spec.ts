@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
   let fixture: ComponentFixture<FlowLogicComponent>;
+  const rithmId = 'C2D2C042-272D-43D9-96C4-BA791612273F';
   const nextStations: ConnectedStationInfo[] = [{
     rithmId: '34904ac2-6bdd-4157-a818-50ffb37fdfbc',
     name: 'Untitled Station'
@@ -28,6 +29,7 @@ describe('FlowLogicComponent', () => {
     fixture = TestBed.createComponent(FlowLogicComponent);
     component = fixture.componentInstance;
     component.nextStations = nextStations;
+    component.rithmId = rithmId;
     fixture.detectChanges();
   });
 
@@ -40,19 +42,27 @@ describe('FlowLogicComponent', () => {
       const expectDataModal = {
         panelClass: ['w-5/6', 'sm:w-4/5'],
         maxWidth: '1024px',
-        data: nextStations[0].rithmId
+        data: rithmId
       };
       const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.callThrough();
-      await component.openModal(nextStations[0].rithmId);
+      await component.openModal();
       expect(dialogSpy).toHaveBeenCalledOnceWith(RuleModalComponent, expectDataModal);
     });
 
-    it('should to call method openModal after clicked in button', () => {
+    it('should to call method openModal after clicked in button with id: all-new-rule', () => {
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
-      const btnOpenModal = fixture.nativeElement.querySelector('#new-rule');
+      const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
       expect(btnOpenModal).toBeTruthy();
       btnOpenModal.click();
-      expect(spyFunc).toHaveBeenCalledOnceWith(nextStations[0].rithmId);
+      expect(spyFunc).toHaveBeenCalled();
+    });
+
+    it('should to call method openModal after clicked in button with id: any-new-rule', () => {
+      const spyFunc = spyOn(component, 'openModal').and.callThrough();
+      const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
+      expect(btnOpenModal).toBeTruthy();
+      btnOpenModal.click();
+      expect(spyFunc).toHaveBeenCalled();
     });
   });
 });

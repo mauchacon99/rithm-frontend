@@ -30,4 +30,8 @@ describe('RuleModalComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
+    expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
+  });
 });

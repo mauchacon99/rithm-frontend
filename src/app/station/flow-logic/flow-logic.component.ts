@@ -16,19 +16,20 @@ export class FlowLogicComponent {
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
+  /** Station Rithm id. */
+  @Input() rithmId = '';
+
   constructor(private dialog: MatDialog) {
   }
 
   /**
    * Open a modal rule-modal.
-   *
-   * @param rithmId String.
    */
-  async openModal(rithmId: string): Promise<void> {
+  async openModal(): Promise<void> {
     const dialog = await this.dialog.open(RuleModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
-      data: rithmId
+      data: this.rithmId
     });
     if (dialog) {
       // handle returned rule
