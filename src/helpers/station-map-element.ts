@@ -29,6 +29,18 @@ export interface StationMapElement extends StationMapData {
 
   /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
+
+  /** The path used for the card used to display the station. */
+  cardPath: Path2D;
+
+  /** The path used for the document badge on the station. */
+  badgePath: Path2D;
+
+  /** The path used for the connection node on the station (in build mode). */
+  nodePath: Path2D;
+
+  /** The path used for the options button on the station (in build mode). */
+  buttonPath: Path2D;
 }
 
 /**
