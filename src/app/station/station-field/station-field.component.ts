@@ -1,5 +1,21 @@
-import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -108,14 +124,16 @@ export class StationFieldComponent
     this.labelField.rithmId = this.field.rithmId;
     this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
-    if (this.field.questionType === this.fieldType.Select
-      || this.field.questionType === this.fieldType.MultiSelect
-      || this.field.questionType === this.fieldType.CheckList) {
-        if (this.field.possibleAnswers && this.field.possibleAnswers.length) {
-          this.populateAnswers(this.field.possibleAnswers);
-        } else {
-          this.addOption(this.field.questionType);
-        }
+    if (
+      this.field.questionType === this.fieldType.Select ||
+      this.field.questionType === this.fieldType.MultiSelect ||
+      this.field.questionType === this.fieldType.CheckList
+    ) {
+      if (this.field.possibleAnswers && this.field.possibleAnswers.length) {
+        this.populateAnswers(this.field.possibleAnswers);
+      } else {
+        this.addOption(this.field.questionType);
+      }
     }
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
@@ -168,22 +186,26 @@ export class StationFieldComponent
    * @param answers THe array of answers to be shown.
    */
   private populateAnswers(answers: PossibleAnswer[]): void {
-    answers.forEach (answer => {
+    answers.forEach((answer) => {
       const possibleAnswer: Question = {
-          rithmId: this.field.rithmId,//Rithm id of the question to track the answer
-          prompt: this.field.questionType === QuestionFieldType.MultiSelect ||
-          this.field.questionType === QuestionFieldType.Select ? 'Add option' :
-          this.field.questionType === QuestionFieldType.CheckList ? 'Add item' : '',
-          questionType: QuestionFieldType.ShortText,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-          isPossibleAnswer: true,
-          value: answer.text,
-          originalStationRithmId: answer.rithmId, //rithm id of the answer to update the answer
-        };
-        this.options.push(possibleAnswer);
+        rithmId: this.field.rithmId, //Rithm id of the question to track the answer
+        prompt:
+          this.field.questionType === QuestionFieldType.MultiSelect ||
+          this.field.questionType === QuestionFieldType.Select
+            ? 'Add option'
+            : this.field.questionType === QuestionFieldType.CheckList
+            ? 'Add item'
+            : '',
+        questionType: QuestionFieldType.ShortText,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+        isPossibleAnswer: true,
+        value: answer.text,
+        originalStationRithmId: answer.rithmId, //rithm id of the answer to update the answer
+      };
+      this.options.push(possibleAnswer);
     });
   }
 
@@ -193,12 +215,20 @@ export class StationFieldComponent
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-    const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}-${genRanHex(12)}`;
+    const genRanHex = (size: number) =>
+      [...Array(size)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join('');
+    const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(
+      4
+    )}-${genRanHex(4)}-${genRanHex(12)}`;
     this.selectableOption.prompt =
-    fieldType === QuestionFieldType.MultiSelect ||
-    fieldType === QuestionFieldType.Select ? 'Add option' :
-    fieldType === QuestionFieldType.CheckList ? 'Add item' : '';
+      fieldType === QuestionFieldType.MultiSelect ||
+      fieldType === QuestionFieldType.Select
+        ? 'Add option'
+        : fieldType === QuestionFieldType.CheckList
+        ? 'Add item'
+        : '';
     this.selectableOption.rithmId = this.field.rithmId;
     this.selectableOption.originalStationRithmId = answerRithmId;
     this.options.push(this.selectableOption);

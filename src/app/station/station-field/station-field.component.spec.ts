@@ -134,7 +134,7 @@ describe('StationFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should automatically add an option to the array if there aren\'t answers', () => {
+    it("should automatically add an option to the array if there aren't answers", () => {
       component.field.possibleAnswers = [];
       const addOptionSpy = spyOn(component, 'addOption').and.callThrough();
       expect(addOptionSpy).toHaveBeenCalled;
@@ -142,11 +142,13 @@ describe('StationFieldComponent', () => {
     });
 
     it('should automatically fill the options if there are possibleAnswers', () => {
-      component.field.possibleAnswers = [{
-        default: false,
-        rithmId:"03BCE692-C347-484D-8EB3-3A2716F80BAF",
-        text:"Light Armor"
-      }];
+      component.field.possibleAnswers = [
+        {
+          default: false,
+          rithmId: '03BCE692-C347-484D-8EB3-3A2716F80BAF',
+          text: 'Light Armor',
+        },
+      ];
       expect(component.options.length).toBeGreaterThan(0);
     });
   });
