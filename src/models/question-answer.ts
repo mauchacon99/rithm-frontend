@@ -2,7 +2,6 @@
  * The answer of the question.
  */
 export interface QuestionAnswer {
-
   /** The Id Specific Question.*/
   questionRithmId: string;
 

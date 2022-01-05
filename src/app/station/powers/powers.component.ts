@@ -6,8 +6,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-powers',
   templateUrl: './powers.component.html',
-  styleUrls: ['./powers.component.scss']
+  styleUrls: ['./powers.component.scss'],
 })
-export class PowersComponent {
-
-}
+export class PowersComponent {}

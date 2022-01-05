@@ -21,7 +21,8 @@ mat-sidenav-container {
   mat-sidenav-content {
     @media screen and (max-width: 991px) {
       &.non-entry {
-        height: calc(100vh - 64px); //this height is set for browser compatibility.
+        //this height is set for browser compatibility.
+        height: calc(100vh - 64px);
         height: calc(var(--appvh, 1vh) * 100 - 64px);
       }
     }

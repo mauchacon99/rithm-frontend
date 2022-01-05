@@ -1,34 +1,43 @@
-<ng-content *ngIf="!fromMenu then toastCard; else menuCard"></ng-content>
+<ng-content *ngIf="!fromMenu; then toastCard; else menuCard"></ng-content>
 
 <!-- Toast card with animation -->
 <ng-template #toastCard>
-  <mat-card *ngIf="isVisible" [@notificationTrigger]="true" class="mat-elevation-z16 notification-card">
-    <ng-content *ngIf="true then notification"></ng-content>
+  <mat-card
+    *ngIf="isVisible"
+    [@notificationTrigger]="true"
+    class="mat-elevation-z16 notification-card"
+  >
+    <ng-content *ngIf="true; then notification"></ng-content>
   </mat-card>
 </ng-template>
 
 <!-- Menu card without animation -->
 <ng-template #menuCard>
   <mat-card *ngIf="isVisible" class="mat-elevation-z0 menu-notification">
-    <ng-content *ngIf="true then notification"></ng-content>
+    <ng-content *ngIf="true; then notification"></ng-content>
   </mat-card>
 </ng-template>
 
 <!-- Shared notification structure -->
 <ng-template #notification id="notification">
   <div class="row no-gutters">
-
     <!-- Profile photo -->
     <div class="col-2">
-      <app-user-avatar firstName="Tyler" lastName="Hendrickson"></app-user-avatar>
+      <app-user-avatar
+        firstName="Tyler"
+        lastName="Hendrickson"
+      ></app-user-avatar>
       <div class="badge-accent mat-elevation-z4">
-        <i *ngIf="notificationType === 'comment'" class="far fa-comment-alt"></i>
+        <i
+          *ngIf="notificationType === 'comment'"
+          class="far fa-comment-alt"
+        ></i>
       </div>
     </div>
 
     <!-- Notification title -->
     <div [ngClass]="fromMenu ? 'col-9' : 'col-8'">
-      <div class="title">{{title}}</div>
+      <div class="title">{{ title }}</div>
     </div>
 
     <!-- Dismiss button (toast) -->
@@ -45,13 +54,12 @@
   <!-- Notification time (from menu) -->
   <div class="row no-gutters">
     <div class="col-10 offset-2 overline-font">
-      {{time}}
+      {{ time }}
     </div>
   </div>
 
   <!-- Text (toast) -->
   <mat-card-content *ngIf="!fromMenu">
-    <p>{{message}}</p>
+    <p>{{ message }}</p>
   </mat-card-content>
-
 </ng-template>

@@ -4,7 +4,6 @@ import { StationRosterMember } from './station-roster-member';
  * Station lists users for possible rosters.
  */
 export interface StationPotentialRostersUsers {
-
   /** The list of possible users of the station. */
   users: StationRosterMember[];
 

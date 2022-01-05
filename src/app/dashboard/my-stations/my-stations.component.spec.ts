@@ -14,15 +14,14 @@ describe('MyStationsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         MyStationsComponent,
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports: [],
       providers: [
         { provide: DashboardService, useClass: MockDashboardService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-      .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -38,5 +37,4 @@ describe('MyStationsComponent', () => {
   it('should have stations', () => {
     expect(component.stations.length).toBeGreaterThanOrEqual(0);
   });
-
 });

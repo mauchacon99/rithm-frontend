@@ -1,5 +1,13 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -13,14 +21,14 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DocumentFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => DocumentFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class DocumentFieldComponent implements ControlValueAccessor, Validator {
   /** The form to add to the template.*/
@@ -32,9 +40,7 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
   /** The field type. */
   fieldTypes = QuestionFieldType;
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.documentFieldForm = this.fb.group({
       textFieldForm: this.fb.control(''),
       numberFieldForm: this.fb.control(''),
@@ -49,7 +55,7 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -88,7 +94,9 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.documentFieldForm.disable() : this.documentFieldForm.enable();
+    isDisabled
+      ? this.documentFieldForm.disable()
+      : this.documentFieldForm.enable();
   }
 
   /**
@@ -97,11 +105,13 @@ export class DocumentFieldComponent implements ControlValueAccessor, Validator {
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.documentFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'User form is invalid'
-      }
-    };
+    return this.documentFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'User form is invalid',
+          },
+        };
   }
 }

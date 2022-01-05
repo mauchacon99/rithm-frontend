@@ -1,10 +1,17 @@
 <div [formGroup]="dateFieldForm">
   <mat-form-field class="w-full" appearance="outline">
-    <mat-label>{{field.prompt}}</mat-label>
-      <input *ngIf="field.questionType === fieldTypeEnum.Date" matInput [matDatepicker]="picker" placeholder="{{field.prompt}}" [required]="field.isRequired" formControlName="date">
-      <mat-datepicker-toggle matPrefix class="icon" [for]="picker">
-        <i matDatepickerToggleIcon class="fas fa-calendar-day"></i>
-      </mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+    <mat-label>{{ field.prompt }}</mat-label>
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.Date"
+      matInput
+      [matDatepicker]="picker"
+      placeholder="{{ field.prompt }}"
+      [required]="field.isRequired"
+      formControlName="date"
+    />
+    <mat-datepicker-toggle matPrefix class="icon" [for]="picker">
+      <i matDatepickerToggleIcon class="fas fa-calendar-day"></i>
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 </div>
