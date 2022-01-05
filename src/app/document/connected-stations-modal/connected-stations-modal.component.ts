@@ -21,8 +21,8 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
-  /** The station list by document. */
-  stationsDocument: ConnectedStationInfo[] = [];
+  /** The list of previous and following stations in the document. */
+  connectedStations: ConnectedStationInfo[] = [];
 
   /** The Document rithmId. */
   documentRithmId = '';
@@ -54,7 +54,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.stationsDocument = connectedStations.nextStations.concat(connectedStations.previousStations);
+          this.connectedStations = connectedStations.nextStations.concat(connectedStations.previousStations);
         }, error: (error: unknown) => {
           this.errorService.displayError('Failed to get connected stations for this document.', error, false);
         }
