@@ -15,7 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './map-toolbar.component.html',
   styleUrls: ['./map-toolbar.component.scss'],
 })
-
 export class MapToolbarComponent implements OnInit, OnDestroy {
   /** The users of the organization. */
   users: User[] = [];
@@ -38,7 +37,11 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
    * @returns True if the map is in any building mode, false otherwise.
    */
   get isBuilding(): boolean {
-    return this.mapMode === MapMode.Build || this.mapMode === MapMode.StationAdd || this.mapMode === MapMode.FlowAdd;
+    return (
+      this.mapMode === MapMode.Build ||
+      this.mapMode === MapMode.StationAdd ||
+      this.mapMode === MapMode.FlowAdd
+    );
   }
 
   /**
@@ -101,7 +104,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
-      if (this.mapService.stationElements.some(e => e.isAddingConnected)) {
+      if (this.mapService.stationElements.some((e) => e.isAddingConnected)) {
         this.mapService.disableConnectedStationMode();
         this.mapService.mapDataReceived$.next(true);
       }
@@ -131,19 +134,18 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: unknown) => {
-          let errorMessage = 'Something went wrong on our end and we\'re looking into it. Please try again in a little while.';
+          let errorMessage =
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.";
           if (error instanceof HttpErrorResponse) {
             switch (error.status) {
               case 401:
-                errorMessage = 'The user does not have rights to access the map.';
+                errorMessage =
+                  'The user does not have rights to access the map.';
             }
           }
           this.isLoading = false;
-          this.errorService.displayError(
-            errorMessage,
-            error
-          );
-        }
+          this.errorService.displayError(errorMessage, error);
+        },
       });
   }
 
@@ -154,5 +156,4 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
 }

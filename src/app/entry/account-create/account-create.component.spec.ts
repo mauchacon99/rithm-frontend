@@ -32,7 +32,7 @@ describe('AccountCreateComponent', () => {
       declarations: [
         AccountCreateComponent,
         MockComponent(UserFormComponent),
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
       ],
       imports: [
         RouterTestingModule,
@@ -41,15 +41,14 @@ describe('AccountCreateComponent', () => {
         MatInputModule,
         MatCardModule,
         MatDialogModule,
-        MatFormFieldModule
+        MatFormFieldModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: ErrorService, useClass: MockErrorService }
-      ]
-    })
-      .compileComponents();
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -107,7 +106,9 @@ describe('AccountCreateComponent', () => {
     });
 
     it('should create an account when clicked', async () => {
-      const createAccountSpy = spyOn(component, 'createAccount').and.callFake(() => null);
+      const createAccountSpy = spyOn(component, 'createAccount').and.callFake(
+        () => null
+      );
       formGroup.controls['agreeToTerms'].setValue(true);
       expect(await buttonHarness.isDisabled()).toBeFalse(); // This needs to be present for some reason...
 
@@ -116,24 +117,33 @@ describe('AccountCreateComponent', () => {
     });
 
     it('should open validate email modal', () => {
-      const alertSpy = spyOn(TestBed.inject(PopupService), 'alert').and.callThrough();
+      const alertSpy = spyOn(
+        TestBed.inject(PopupService),
+        'alert'
+      ).and.callThrough();
       component.openValidateEmailModal();
       expect(alertSpy).toHaveBeenCalledOnceWith({
         title: 'Validate your email address',
-        message: 'Almost there! Please check your email for a link to validate your Rithm account.'
+        message:
+          'Almost there! Please check your email for a link to validate your Rithm account.',
       });
     });
 
     it('should show alert in service in the create account how show error', () => {
       const error = new HttpErrorResponse({
         error: {
-          error: 'This username has already been used.'
+          error: 'This username has already been used.',
         },
       });
 
-      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
-        returnValue(throwError(() => error));
-      const popUpServiceSpy = spyOn(TestBed.inject(PopupService), 'alert').and.callThrough();
+      const createAccountSpy = spyOn(
+        TestBed.inject(UserService),
+        'register'
+      ).and.returnValue(throwError(() => error));
+      const popUpServiceSpy = spyOn(
+        TestBed.inject(PopupService),
+        'alert'
+      ).and.callThrough();
 
       component.createAccount();
 
@@ -144,13 +154,18 @@ describe('AccountCreateComponent', () => {
     it('should show display error the error service if backend not show error', () => {
       const error = new HttpErrorResponse({
         error: {
-          error: ''
+          error: '',
         },
       });
 
-      const createAccountSpy = spyOn(TestBed.inject(UserService), 'register').and.
-        returnValue(throwError(() => error));
-      const errorServiceSpy = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+      const createAccountSpy = spyOn(
+        TestBed.inject(UserService),
+        'register'
+      ).and.returnValue(throwError(() => error));
+      const errorServiceSpy = spyOn(
+        TestBed.inject(ErrorService),
+        'displayError'
+      ).and.callThrough();
 
       component.createAccount();
 
@@ -158,5 +173,4 @@ describe('AccountCreateComponent', () => {
       expect(errorServiceSpy).toHaveBeenCalled();
     });
   });
-
 });

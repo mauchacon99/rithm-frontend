@@ -14,10 +14,9 @@ describe('DetailDrawerComponent', () => {
       declarations: [
         DetailDrawerComponent,
         MockComponent(CommentDrawerComponent),
-        MockComponent(HistoryDrawerComponent)
-      ]
-    })
-    .compileComponents();
+        MockComponent(HistoryDrawerComponent),
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -11,8 +11,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   declarations: [
     TopNavComponent,
@@ -27,13 +25,13 @@ import { SharedModule } from '../shared/shared.module';
     MatMenuModule,
     MatCardModule,
     ClickOutsideModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
     TopNavComponent,
     NotificationMenuContainerComponent,
     NotificationCardComponent,
-    NotificationToastsContainerComponent
-  ]
+    NotificationToastsContainerComponent,
+  ],
 })
-export class NavigationModule { }
+export class NavigationModule {}

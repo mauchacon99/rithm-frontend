@@ -16,12 +16,18 @@ const STATIONS: StationMapData[] = [
     noOfDocuments: 5,
     mapPoint: {
       x: 12,
-      y: 15
+      y: 15,
     },
-    previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C', 'AAAEBE98-YU01-97ER-A7BB-285PP25B0989'],
-    nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989', 'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989'],
+    previousStations: [
+      'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      'AAAEBE98-YU01-97ER-A7BB-285PP25B0989',
+    ],
+    nextStations: [
+      'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+      'CCCAAA00-IO01-97QW-Z7LK-877MM25Z0989',
+    ],
     status: MapItemStatus.Normal,
-    notes: ''
+    notes: '',
   },
   {
     rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
@@ -29,13 +35,13 @@ const STATIONS: StationMapData[] = [
     noOfDocuments: 5,
     mapPoint: {
       x: 200,
-      y: 80
+      y: 80,
     },
     previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
     nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0989'],
     status: MapItemStatus.Normal,
-    notes: ''
-  }
+    notes: '',
+  },
 ];
 
 describe('ConnectionInfoDrawerComponent', () => {
@@ -44,27 +50,24 @@ describe('ConnectionInfoDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        ConnectionInfoDrawerComponent,
-      ],
-      imports:[
-        MatButtonModule,
-      ],
-      providers:[
+      declarations: [ConnectionInfoDrawerComponent],
+      imports: [MatButtonModule],
+      providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService }
-      ]
-    })
-    .compileComponents();
+        { provide: MapService, useClass: MockMapService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectionInfoDrawerComponent);
     component = fixture.componentInstance;
     component.connectedStations = STATIONS.map((e) => new StationMapElement(e));
-    component.connectionStartStationName = component.connectedStations[0].stationName;
-    component.connectionEndStationName = component.connectedStations[1].stationName;
+    component.connectionStartStationName =
+      component.connectedStations[0].stationName;
+    component.connectionEndStationName =
+      component.connectedStations[1].stationName;
     fixture.detectChanges();
   });
 

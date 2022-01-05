@@ -13,14 +13,13 @@ describe('MapCanvasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MapCanvasComponent ],
+      declarations: [MapCanvasComponent],
       imports: [HttpClientTestingModule, MatDialogModule],
       providers: [
         { provide: MapService, useClass: MockMapService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-    .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

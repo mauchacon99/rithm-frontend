@@ -11,13 +11,12 @@ describe('ConnectedStationPaneComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConnectedStationPaneComponent ],
+      declarations: [ConnectedStationPaneComponent],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: PopupService, useClass: MockPopupService }
-      ]
-    })
-    .compileComponents();
+        { provide: PopupService, useClass: MockPopupService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
