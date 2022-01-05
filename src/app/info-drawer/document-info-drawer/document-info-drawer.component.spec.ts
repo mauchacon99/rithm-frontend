@@ -35,6 +35,8 @@ import { DialogOptions, MoveDocument } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 
 describe('DocumentInfoDrawerComponent', () => {
   let component: DocumentInfoDrawerComponent;
@@ -49,6 +51,7 @@ describe('DocumentInfoDrawerComponent', () => {
       declarations: [
         DocumentInfoDrawerComponent,
         MockComponent(LoadingIndicatorComponent),
+        ConnectedStationsModalComponent
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -69,6 +72,7 @@ describe('DocumentInfoDrawerComponent', () => {
         MatSelectModule,
         FormsModule,
         RouterTestingModule,
+        MatDialogModule
       ],
     }).compileComponents();
   });
@@ -376,5 +380,30 @@ describe('DocumentInfoDrawerComponent', () => {
     ).and.callThrough();
     component.moveDocument(dataExpect);
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should to call method openModalMoveDocument after clicked in button', () => {
+    component.isStation = false;
+    component.isUserAdminOrOwner = true;
+    fixture.detectChanges();
+    const openModalMoveDocumentSpy = spyOn(component, 'openModalMoveDocument').and.callThrough();
+    const btnMoveDocument = fixture.nativeElement.querySelector('#move-document-modal');
+    expect(btnMoveDocument).toBeTruthy();
+    btnMoveDocument.click();
+    expect(openModalMoveDocumentSpy).toHaveBeenCalled();
+  });
+
+  it('should to call the modal to move the document', () => {
+    component.documentRithmId = documentId;
+    component.stationRithmId = stationId;
+    const expectDataModal = {
+      data: {
+        documentRithmId: documentId,
+        stationRithmId: stationId
+      }
+    };
+    const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.callThrough();
+    component.openModalMoveDocument();
+    expect(dialogSpy).toHaveBeenCalledOnceWith(ConnectedStationsModalComponent, expectDataModal);
   });
 });

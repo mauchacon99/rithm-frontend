@@ -22,6 +22,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
+import { PossibleAnswer } from '../../../models/possible-answer';
 
 /**
  * Main component for viewing a station.
@@ -115,20 +116,44 @@ export class StationComponent
     });
 
     this.stationService.stationQuestion$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((question) => {
-        const prevQuestion = this.stationInformation.questions.find(
-          (field) => field.rithmId === question.rithmId
-        );
-        if (prevQuestion) {
-          const questionIndex =
-            this.stationInformation.questions.indexOf(prevQuestion);
-          if (!question.isPossibleAnswer) {
-            this.stationInformation.questions[questionIndex].prompt =
-              question.prompt;
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((question) => {
+      const prevQuestion = this.stationInformation.questions.find(field => field.rithmId === question.rithmId);
+      if (prevQuestion){
+        const questionIndex = this.stationInformation.questions.indexOf(prevQuestion);
+        if (!question.isPossibleAnswer){
+          this.stationInformation.questions[questionIndex].prompt = question.prompt;
+        } else {
+          if (prevQuestion.possibleAnswers){
+            this.populatePossibleAnswers(question, questionIndex, prevQuestion.possibleAnswers);
           }
         }
       });
+  }
+
+  /**
+   * Populate and update possibleAnswers for an specific question.
+   *
+   * @param answer The question we are adding possible answers to.
+   * @param questionIndex The index of the current question in the station.
+   * @param arrayAnswers The array of possible answers in the current question.
+   */
+  private populatePossibleAnswers(answer: Question, questionIndex: number, arrayAnswers: PossibleAnswer[] = []): void {
+    const newAnswer: PossibleAnswer = {
+      rithmId: answer.originalStationRithmId ? answer.originalStationRithmId : '',
+      text: answer.prompt,
+      default: false,
+    };
+    if (this.stationInformation.questions[questionIndex].possibleAnswers !== undefined){
+      const possibleAnswer = arrayAnswers.find( a => a.rithmId === newAnswer.rithmId);
+      if (possibleAnswer) {
+        const answerIndex = arrayAnswers.indexOf(possibleAnswer);
+        arrayAnswers[answerIndex] = newAnswer;
+        this.stationInformation.questions[questionIndex].possibleAnswers = arrayAnswers;
+      } else {
+        this.stationInformation.questions[questionIndex].possibleAnswers?.push(newAnswer);
+      }
+    }
   }
 
   /**
@@ -249,19 +274,22 @@ export class StationComponent
    * @param fieldType The field to add.
    */
   addQuestion(fieldType: QuestionFieldType): void {
-    this.stationInformation.questions.push({
+    const newQuestion: Question = {
       rithmId: this.randRithmId,
       prompt: '',
       questionType: fieldType,
       isReadOnly: false,
       isRequired: fieldType === QuestionFieldType.Instructions ? true : false,
       isPrivate: false,
-      children:
-        fieldType === QuestionFieldType.AddressLine
-          ? this.addAddressChildren()
-          : [],
-      originalStationRithmId: this.stationRithmId,
-    });
+      children: fieldType === QuestionFieldType.AddressLine ? this.addAddressChildren() : [],
+      originalStationRithmId: this.stationRithmId
+    };
+    if (fieldType === QuestionFieldType.CheckList ||
+      fieldType === QuestionFieldType.Select ||
+      fieldType === QuestionFieldType.MultiSelect){
+        newQuestion.possibleAnswers = [];
+      }
+    this.stationInformation.questions.push(newQuestion);
     this.stationService.touchStationForm();
   }
 

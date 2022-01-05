@@ -17,6 +17,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { UtcTimeConversion } from 'src/helpers';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConnectedStationsModalComponent } from 'src/app/document/connected-stations-modal/connected-stations-modal.component';
 
 /**
  * Component for document drawer.
@@ -118,7 +120,8 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
     private documentService: DocumentService,
     private utcTimeConversion: UtcTimeConversion,
     private popupService: PopupService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.appendFieldForm = this.fb.group({
       appendField: '',
@@ -512,8 +515,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
   private unassignUserToDocument(): void {
     this.userErrorUnassigned = false;
     this.assignedUserLoading = true;
-    this.documentService
-      .unassignUserToDocument(this.documentRithmId, this.stationRithmId)
+    this.documentService.unassignUserToDocument(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -523,10 +525,10 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           this.assignedUserLoading = false;
           this.userErrorUnassigned = true;
           this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
             error
           );
-        },
+        }
       });
   }
 
@@ -548,5 +550,17 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Open a modal to move document.
+   */
+  openModalMoveDocument(): void {
+    this.dialog.open(ConnectedStationsModalComponent, {
+      data: {
+        documentRithmId: this.documentRithmId,
+        stationRithmId: this.stationRithmId
+      }
+    });
   }
 }

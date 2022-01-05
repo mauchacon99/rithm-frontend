@@ -16,6 +16,7 @@ const FIELD: Question = {
   isPrivate: false,
   possibleAnswers: [
     {
+      rithmId: '3j4k-3h2j-hj41',
       text: 'Option 1',
       default: false,
     },

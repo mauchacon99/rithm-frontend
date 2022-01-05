@@ -8,7 +8,7 @@
     <mat-label> {{ label }} </mat-label>
     <mat-select>
       <mat-option
-        *ngFor="let station of stationsDocument"
+        *ngFor="let station of connectedStations"
         [value]="station.rithmId"
       >
         {{ station.name }}
