@@ -29,6 +29,9 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   /** Output the value of the field. */
   @Output() removeOptionField = new EventEmitter<Question>();
 
+  /** Output the value of a possibleAnswer. */
+  @Output() updPossibleAnswer = new EventEmitter<Question>();
+
   /** The form to add this field in the template. */
   textFieldForm!: FormGroup;
 
