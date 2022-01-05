@@ -67,4 +67,21 @@ describe('MapOverlayComponent', () => {
       okButtonText: 'Confirm',
     });
   });
+
+  it('should disable zoom buttons while the map is loading', () => {
+    component.mapDataLoading = true;
+    fixture.detectChanges();
+    const zoomInButton = fixture.debugElement.nativeElement.querySelector('#zoomIn');
+    expect(zoomInButton.disabled).toBeTruthy();
+    const zoomOutButton = fixture.debugElement.nativeElement.querySelector('#zoomOut');
+    expect(zoomOutButton.disabled).toBeTruthy();
+  });
+
+  it('should disable center button while the map is loading', () => {
+    component.mapDataLoading = true;
+    fixture.detectChanges();
+    const centerButton = fixture.debugElement.nativeElement.querySelector('#centerButton');
+    expect(centerButton.disabled).toBeTruthy();
+  });
+
 });
