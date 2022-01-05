@@ -534,7 +534,6 @@ describe('DocumentService', () => {
 
   it('should assign an user to a document', () => {
     const userRithmId = '123-984-657';
- 
     service.assignUserToDocument(userRithmId, stationId, documentId)
       .subscribe((response) => {
         expect(response).toBeFalsy();
