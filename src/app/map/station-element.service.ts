@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import {
   MapDragItem,
+  MapItemStatus,
   MapMode,
   Point,
   StationElementHoverType,
@@ -294,28 +295,32 @@ export class StationElementService {
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
     ctx.beginPath();
-    ctx.arc(
-      startingX + scaledStationWidth - scaledBadgeMargin,
-      startingY + scaledBadgeMargin,
-      scaledBadgeRadius,
-      0,
-      2 * Math.PI
-    );
-    ctx.fillStyle =
-      station.hoverActive === StationElementHoverType.Badge &&
-      dragItem !== MapDragItem.Node &&
-      !station.dragging
-        ? BADGE_HOVER_COLOR
-        : BADGE_DEFAULT_COLOR;
-    ctx.fill();
+    if (station.status !== MapItemStatus.Created) {
+      ctx.arc(
+        startingX + scaledStationWidth - scaledBadgeMargin,
+        startingY + scaledBadgeMargin,
+        scaledBadgeRadius,
+        0,
+        2 * Math.PI
+      );
+      ctx.fillStyle =
+        station.hoverActive === StationElementHoverType.Badge &&
+        dragItem !== MapDragItem.Node &&
+        !station.dragging
+          ? BADGE_HOVER_COLOR
+          : BADGE_DEFAULT_COLOR;
+      ctx.fill();
+    }
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = station.status === MapItemStatus.Created ? BADGE_DEFAULT_COLOR: '#fff';
     ctx.textAlign = 'center';
     ctx.fillText(
-      station.noOfDocuments.toString(),
-      startingX + scaledStationWidth - scaledBadgeMargin,
-      startingY + scaledBadgeMargin + 6 * this.mapScale
+      station.status === MapItemStatus.Created ? 'New' : station.noOfDocuments.toString(),
+      station.status === MapItemStatus.Created ? startingX + scaledStationWidth - scaledBadgeMargin - 3
+        : startingX + scaledStationWidth - scaledBadgeMargin,
+      station.status === MapItemStatus.Created ?  startingY + scaledBadgeMargin
+        : startingY + scaledBadgeMargin + 6 * this.mapScale
     );
     ctx.closePath();
   }
