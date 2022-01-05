@@ -27,6 +27,9 @@ export class ConnectedStationsModalComponent {
   /** The Station rithmId. */
   stationRithmId = '';
 
+  /** The selected Station for move document. */
+  selectedStation = '';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData
   ) {

@@ -14,6 +14,7 @@ const DATA_TEST = {
 describe('ConnectedStationsModalComponent', () => {
   let component: ConnectedStationsModalComponent;
   let fixture: ComponentFixture<ConnectedStationsModalComponent>;
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,5 +40,13 @@ describe('ConnectedStationsModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should activate the move document button', () => {
+    const btnMoveDocument = fixture.nativeElement.querySelector('#connected-modal-move');
+    expect(btnMoveDocument.disabled).toBeTruthy();
+    component.selectedStation = stationId;
+    fixture.detectChanges();
+    expect(btnMoveDocument.disabled).toBeFalsy();
   });
 });

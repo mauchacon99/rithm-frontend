@@ -6,7 +6,7 @@
   <!-- Select -->
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{label}} </mat-label>
-    <mat-select>
+    <mat-select [(value)]="selectedStation">
       <mat-option *ngFor="let station of stationsDocument" [value]="station.rithmId">
         {{station.name}}
       </mat-option>
@@ -19,5 +19,5 @@
     <button mat-button color="accent" [mat-dialog-close]="false" data-testid="connected-modal-close">Close</button>
 
   <!-- Move -->
-  <button mat-raised-button color="accent" [mat-dialog-close]="true" data-testid="connected-modal-move">Move</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="true" data-testid="connected-modal-move" id="connected-modal-move" [disabled]="selectedStation === '' || selectedStation === null">Move</button>
 </div>
