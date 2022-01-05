@@ -18,7 +18,7 @@ jobs:
           node-version: '16'
 
       - name: Check Prettier
-        run: npx prettier --check .
+        run: npm run format-check
 
   # Checks that the Angular app conforms to standards
   lint-app:
