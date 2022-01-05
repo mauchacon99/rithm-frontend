@@ -391,4 +391,13 @@ describe('DocumentService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('should assign an user to a document', () => {
+    const expectUser = '123-984-657';
+
+    service.assignUserToDocument(expectUser, stationId, documentId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
 });
