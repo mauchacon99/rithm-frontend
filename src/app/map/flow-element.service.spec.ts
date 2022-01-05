@@ -10,12 +10,8 @@ describe('FlowElementService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        { provide: MapService, useClass: MockMapService }
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [{ provide: MapService, useClass: MockMapService }],
     });
     service = TestBed.inject(FlowElementService);
   });

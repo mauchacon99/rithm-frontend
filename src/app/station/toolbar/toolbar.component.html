@@ -1,11 +1,35 @@
 <div class="relative w-full">
-  <button data-testid="add-field-to-doc" mat-button (click)="toggleInlineToolbar()" color="accent" (clickOutside)="clickedOutside()">
+  <button
+    data-testid="add-field-to-doc"
+    mat-button
+    (click)="toggleInlineToolbar()"
+    color="accent"
+    (clickOutside)="clickedOutside()"
+  >
     <i class="fas fa-plus"></i> Add field to document
   </button>
-  <div class="grid grid-cols-3 md:grid-cols-4 gap-2 absolute -top-60 md:-top-38 left-0 p-2 bg-white shadow-lg rounded border border-secondary-50" *ngIf="isInlineToolbarOpen">
-    <button mat-button class="text-center group" *ngFor="let tool of tools" (click)="selectField(tool.typeString)" color="primary" [attr.data-testid]="tool.dataTestId">
-      <i class="{{tool.icon}} text-3xl text-secondary-900 group-hover:text-accent-500"></i>
-      <p class="break-normal text-xs pb-1 text-secondary-900 group-hover:text-accent-500">{{tool.name}}</p>
+  <div
+    class="grid grid-cols-3 md:grid-cols-4 gap-2 absolute -top-60 md:-top-38 left-0 p-2 bg-white shadow-lg rounded border border-secondary-50"
+    *ngIf="isInlineToolbarOpen"
+  >
+    <button
+      mat-button
+      class="text-center group"
+      *ngFor="let tool of tools"
+      (click)="selectField(tool.typeString)"
+      color="primary"
+      [attr.data-testid]="tool.dataTestId"
+    >
+      <i
+        class="{{
+          tool.icon
+        }} text-3xl text-secondary-900 group-hover:text-accent-500"
+      ></i>
+      <p
+        class="break-normal text-xs pb-1 text-secondary-900 group-hover:text-accent-500"
+      >
+        {{ tool.name }}
+      </p>
     </button>
   </div>
 </div>

@@ -12,13 +12,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     SignInComponent,
     ForgotPasswordComponent,
     AccountCreateComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
 })
-export class EntryModule { }
+export class EntryModule {}

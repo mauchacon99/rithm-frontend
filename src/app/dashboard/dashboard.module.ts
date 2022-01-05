@@ -12,8 +12,6 @@ import { PriorityQueueComponent } from './priority-queue/priority-queue.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
-
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -22,14 +20,14 @@ import { MatInputModule } from '@angular/material/input';
     HeaderComponent,
     MyStationsComponent,
     PreviouslyStartedDocumentsComponent,
-    PriorityQueueComponent
+    PriorityQueueComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
     MatInputModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

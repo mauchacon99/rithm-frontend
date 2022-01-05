@@ -1,36 +1,25 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "plugins": [],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ]
+        "project": ["tsconfig.json"]
       },
-      "extends": [
-        "@strut-software/eslint-config/angular"
-      ]
+      "extends": ["@strut-software/eslint-config/angular"],
+      "rules": {
+        "brace-style": "off" // TODO: Stop Prettier from changing this?
+      }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "parser": "@angular-eslint/template-parser",
-      "extends": [
-        "@strut-software/eslint-config/angular-html"
-      ]
+      "extends": ["@strut-software/eslint-config/angular-html"]
     },
     {
-      "files": [
-        "*.js"
-      ],
+      "files": ["*.js"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 2017
@@ -40,9 +29,7 @@
       }
     },
     {
-      "files": [
-        "*.module.ts"
-      ],
+      "files": ["*.module.ts"],
       "rules": {
         "jsdoc/require-jsdoc": "off"
       }

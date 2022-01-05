@@ -6,8 +6,6 @@ import { Injectable } from '@angular/core';
  * Service for all flow behavior and business logic.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class FlowService {
-
-}
+export class FlowService {}

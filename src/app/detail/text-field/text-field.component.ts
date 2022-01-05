@@ -1,5 +1,22 @@
-import { Component, forwardRef, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -15,16 +32,18 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TextFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => TextFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class TextFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class TextFieldComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** Output the value of the field. */
   @Output() removeOptionField = new EventEmitter<Question>();
 
@@ -58,7 +77,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   constructor(
     private fb: FormBuilder,
     private stationService: StationService
-  ) { }
+  ) {}
 
   /**
    * Set up FormBuilder group.
@@ -66,7 +85,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
   ngOnInit(): void {
     // console.log(this.field);
     this.textFieldForm = this.fb.group({
-      [this.field.questionType]: [this.field.value ? this.field.value : '', []]
+      [this.field.questionType]: [this.field.value ? this.field.value : '', []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -96,7 +115,7 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -145,12 +164,14 @@ export class TextFieldComponent implements OnInit, ControlValueAccessor, Validat
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.textFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Text field form is invalid'
-      }
-    };
+    return this.textFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Text field form is invalid',
+          },
+        };
   }
 
   /**

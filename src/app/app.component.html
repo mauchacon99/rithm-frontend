@@ -4,23 +4,32 @@
 <!-- Top nav -->
 <app-top-nav *ngIf="showTopNav"></app-top-nav>
 
-<mat-sidenav-container [ngClass]="{'mt-0 h-screen': !showTopNav, 'mt-16 h-calc': showTopNav}" hasBackdrop="true">
-
+<mat-sidenav-container
+  [ngClass]="{ 'mt-0 h-screen': !showTopNav, 'mt-16 h-calc': showTopNav }"
+  hasBackdrop="true"
+>
   <!-- Side nav -->
   <mat-sidenav #sidenav mode="over" class="pt-4 w-56">
-    <a *ngFor="let link of mobileLinks" routerLink="{{link.link}}" (click)="selectNavItem(link.name)" class="text-base text-accent-500 capitalize">
+    <a
+      *ngFor="let link of mobileLinks"
+      routerLink="{{ link.link }}"
+      (click)="selectNavItem(link.name)"
+      class="text-base text-accent-500 capitalize"
+    >
       <div class="flex py-5 pl-4 w-full">
         <div>
-          <i class="fas {{link.icon}}"></i>
-          {{link.name}}
+          <i class="fas {{ link.icon }}"></i>
+          {{ link.name }}
         </div>
       </div>
     </a>
   </mat-sidenav>
 
   <!-- Main page content -->
-  <mat-sidenav-content class="flex-auto textured-bg" [ngClass]="{'non-entry': showTopNav}">
+  <mat-sidenav-content
+    class="flex-auto textured-bg"
+    [ngClass]="{ 'non-entry': showTopNav }"
+  >
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

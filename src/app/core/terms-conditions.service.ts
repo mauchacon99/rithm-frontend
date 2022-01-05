@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -6,10 +5,9 @@ import { BehaviorSubject } from 'rxjs';
  * Service for all data communication between components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TermsConditionsService {
-
   /** The terms and conditions agreed or not. */
   private agreed$ = new BehaviorSubject<boolean>(false);
 
@@ -24,5 +22,4 @@ export class TermsConditionsService {
   setAgreed(agree: boolean): void {
     this.agreed$.next(agree);
   }
-
 }

@@ -8,4 +8,3 @@ export interface DocumentNameField {
   /** The name/label of the document field name. */
   prompt: string;
 }
-

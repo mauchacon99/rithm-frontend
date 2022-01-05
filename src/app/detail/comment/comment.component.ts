@@ -9,7 +9,7 @@ import { Comment } from 'src/models';
   selector: 'app-comment[comment]',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion],
 })
 export class CommentComponent {
   /** The Data needed to construct the comment. */
@@ -18,9 +18,7 @@ export class CommentComponent {
   /** Has the comment been read before? */
   read = false;
 
-  constructor(
-    private utcTimeConversion: UtcTimeConversion
-  ) {}
+  constructor(private utcTimeConversion: UtcTimeConversion) {}
 
   /**
    * Convert a UTC Timecode into date and time.
@@ -28,10 +26,10 @@ export class CommentComponent {
    * @param timeCommented Reflects time a comment was made.
    * @returns A string with date and time.
    */
-   convertTimecode(timeCommented?: string): string {
-     if (timeCommented) {
-       return this.utcTimeConversion.getDateAndTime(timeCommented);
-     }
-     return 'Unknown';
-   }
+  convertTimecode(timeCommented?: string): string {
+    if (timeCommented) {
+      return this.utcTimeConversion.getDateAndTime(timeCommented);
+    }
+    return 'Unknown';
+  }
 }

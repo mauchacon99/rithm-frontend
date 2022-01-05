@@ -18,17 +18,18 @@ import { PossibleAnswer } from '../../../models/possible-answer';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
-
+export class StationFieldComponent
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy
+{
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -70,7 +71,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     isRequired: true,
     isPrivate: false,
     children: [],
-    value: ''
+    value: '',
   };
 
   /** The field for adding an option to a selectable fieldQuestionType. */
@@ -96,8 +97,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   constructor(
     private fb: FormBuilder,
-    private stationService: StationService,
-  ) { }
+    private stationService: StationService
+  ) {}
 
   /**
    * On component initialization.
@@ -120,9 +121,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
       [this.field.questionType]: [''],
-      optionField: ['']
+      optionField: [''],
     });
-    this.stationFieldForm.valueChanges.pipe(takeUntil(this.destroyed$))
+    this.stationFieldForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
         this.stationService.touchStationForm();
       });
@@ -134,8 +136,12 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @returns The Label tag for each additional field.
    */
   get labelTag(): string {
-    const label = this.field.questionType === this.fieldType.Select ? 'Add Option'
-      : this.field.questionType === this.fieldType.MultiSelect || this.field.questionType === this.fieldType.CheckList ? 'Add Item'
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
         : 'Name your field';
     return label;
   }
@@ -206,8 +212,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
-    if (this.field.possibleAnswers){
-      this.field.possibleAnswers.splice(index,1);
+    if (this.field.possibleAnswers) {
+      this.field.possibleAnswers.splice(index, 1);
     }
     this.stationService.touchStationForm();
   }
@@ -249,7 +255,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -290,7 +296,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.stationFieldForm.disable() : this.stationFieldForm.enable();
+    isDisabled
+      ? this.stationFieldForm.disable()
+      : this.stationFieldForm.enable();
   }
 
   /**
@@ -299,12 +307,14 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.stationFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Station field is invalid'
-      }
-    };
+    return this.stationFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Station field is invalid',
+          },
+        };
   }
 
   /**
