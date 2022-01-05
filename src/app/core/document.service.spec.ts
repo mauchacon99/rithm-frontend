@@ -400,4 +400,11 @@ describe('DocumentService', () => {
         expect(response).toBeFalsy();
       });
   });
+
+  it('should create a new document', () => {
+    service.createNewDocument(stationId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+  });
 });
