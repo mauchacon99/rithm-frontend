@@ -236,15 +236,21 @@ export class DocumentComponent implements OnInit, OnDestroy {
   /**
    * Save document changes with the save button.
    */
-   saveDocumentChanges(): void {
+  saveDocumentChanges(): void {
     this.documentLoading = true;
 
     const requestArray = [
       // Update the document name.
-      this.documentService.updateDocumentName(this.documentInformation.documentRithmId, this.documentName),
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      ),
 
       // Save the document answers.
-      this.documentService.saveDocumentAnswer(this.documentInformation.documentRithmId, this.documentAnswer)
+      this.documentService.saveDocumentAnswer(
+        this.documentInformation.documentRithmId,
+        this.documentAnswer
+      ),
     ];
 
     forkJoin(requestArray)
@@ -283,7 +289,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.documentAnswer
       ),
       // Update the document name.
-      this.documentService.updateDocumentName(this.documentInformation.documentRithmId, this.documentName),
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      ),
 
       // Flow a document.
       this.documentService.autoFlowDocument(documentAutoFlow),

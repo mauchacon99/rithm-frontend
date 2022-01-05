@@ -396,21 +396,33 @@ describe('DocumentComponent', () => {
 
   it('should called saveAnswers service when saving document changes', () => {
     const expectedAnswer = component.documentAnswer;
-    const spySaveAnswerDocument = spyOn(TestBed.inject(DocumentService), 'saveDocumentAnswer').and.callThrough();
+    const spySaveAnswerDocument = spyOn(
+      TestBed.inject(DocumentService),
+      'saveDocumentAnswer'
+    ).and.callThrough();
     component.saveDocumentChanges();
-    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, expectedAnswer);
+    expect(spySaveAnswerDocument).toHaveBeenCalledOnceWith(
+      component.documentInformation.documentRithmId,
+      expectedAnswer
+    );
   });
 
   it('should called UpdateDocumentName service when saving document changes', () => {
     const documentService = TestBed.inject(DocumentService);
     documentService.documentName$.next({
       baseName: 'New Document Name',
-      appendedName: ''
+      appendedName: '',
     });
     const documentName = 'New Document Name';
-    const spyUpdateDocumentName = spyOn(TestBed.inject(DocumentService), 'updateDocumentName').and.callThrough();
+    const spyUpdateDocumentName = spyOn(
+      TestBed.inject(DocumentService),
+      'updateDocumentName'
+    ).and.callThrough();
     component.saveDocumentChanges();
-    expect(spyUpdateDocumentName).toHaveBeenCalledOnceWith(component.documentInformation.documentRithmId, documentName);
+    expect(spyUpdateDocumentName).toHaveBeenCalledOnceWith(
+      component.documentInformation.documentRithmId,
+      documentName
+    );
   });
 
   it('should called service to save answers and auto flow the document', () => {
@@ -425,7 +437,7 @@ describe('DocumentComponent', () => {
     const documentService = TestBed.inject(DocumentService);
     documentService.documentName$.next({
       baseName: 'New Document Name',
-      appendedName: ''
+      appendedName: '',
     });
     const documentName = 'New Document Name';
 
