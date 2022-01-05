@@ -9,34 +9,34 @@ import { StationFieldComponent } from '../station-field/station-field.component'
 import { StationTemplateComponent } from './station-template.component';
 
 const testStationFields = [
-      {
-        rithmId: '3j4k-3h2j-hj4j',
-        prompt: 'Instructions',
-        questionType: QuestionFieldType.LongText,
-        isReadOnly: false,
-        isRequired: false,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        rithmId: '3j4k-3h2j-hj4j',
-        prompt: 'Label',
-        questionType: QuestionFieldType.ShortText,
-        isReadOnly: false,
-        isRequired: false,
-        isPrivate: false,
-        children: [],
-      },
-      {
-        rithmId: '3j4k-3h2j-hj4j',
-        prompt: 'Fake question 7',
-        questionType: QuestionFieldType.Number,
-        isReadOnly: false,
-        isRequired: true,
-        isPrivate: false,
-        children: [],
-      },
-    ];
+  {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Instructions',
+    questionType: QuestionFieldType.LongText,
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    children: [],
+  },
+  {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Label',
+    questionType: QuestionFieldType.ShortText,
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    children: [],
+  },
+  {
+    rithmId: '3j4k-3h2j-hj4j',
+    prompt: 'Fake question 7',
+    questionType: QuestionFieldType.Number,
+    isReadOnly: false,
+    isRequired: true,
+    isPrivate: false,
+    children: [],
+  },
+];
 
 describe('StationTemplateComponent', () => {
   let component: StationTemplateComponent;
@@ -48,17 +48,14 @@ describe('StationTemplateComponent', () => {
       declarations: [
         StationTemplateComponent,
         MockComponent(TextFieldComponent),
-        MockComponent(StationFieldComponent)
+        MockComponent(StationFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
+      imports: [ReactiveFormsModule],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-      ]
-    })
-    .compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -107,11 +104,13 @@ describe('StationTemplateComponent', () => {
       isRequired: true,
       isPrivate: true,
       children: [],
-      originalStationRithmId: '3j5k-3h2j-hj5j'
+      originalStationRithmId: '3j5k-3h2j-hj5j',
     };
-    const movingQuestionSpy = spyOn(TestBed.inject(StationService), 'moveQuestion');
+    const movingQuestionSpy = spyOn(
+      TestBed.inject(StationService),
+      'moveQuestion'
+    );
     component.movingQuestion(testMoved);
     expect(movingQuestionSpy).toHaveBeenCalledOnceWith(testMoved);
   });
-
 });

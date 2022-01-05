@@ -1,5 +1,10 @@
-import { CONNECTION_ARROW_LENGTH, CONNECTION_HEIGHT_REDUCER, CONNECTION_NODE_OFFSET,
-  STATION_HEIGHT, STATION_WIDTH } from 'src/app/map/map-constants';
+import {
+  CONNECTION_ARROW_LENGTH,
+  CONNECTION_HEIGHT_REDUCER,
+  CONNECTION_NODE_OFFSET,
+  STATION_HEIGHT,
+  STATION_WIDTH,
+} from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
 import { Point } from '.';
 
@@ -7,8 +12,7 @@ import { Point } from '.';
  * Represents all information about a connection line between any two stations.
  *
  */
- export interface ConnectionMapElement {
-
+export interface ConnectionMapElement {
   /** The id of the station from which the connection starts. */
   startStationRithmId: string;
 
@@ -38,7 +42,6 @@ import { Point } from '.';
  * Represents all info and behavior for a connection line as drawn on the map.
  */
 export class ConnectionMapElement {
-
   /**
    * Creates a new 'ConnectionElement'.
    *
@@ -46,7 +49,11 @@ export class ConnectionMapElement {
    * @param connectionEndStation Ending station.
    * @param scale The map scale.
    */
-  constructor(connectionStartStation: StationMapElement, connectionEndStation: StationMapElement, scale: number) {
+  constructor(
+    connectionStartStation: StationMapElement,
+    connectionEndStation: StationMapElement,
+    scale: number
+  ) {
     this.startStationName = connectionStartStation.stationName;
     this.startStationRithmId = connectionStartStation.rithmId;
     this.setStartPoint(connectionStartStation.canvasPoint, scale);
@@ -79,7 +86,7 @@ export class ConnectionMapElement {
   setStartPoint(point: Point, scale: number): void {
     this.startPoint = {
       x: point.x + STATION_WIDTH * scale,
-      y: point.y + STATION_HEIGHT * scale / 2
+      y: point.y + (STATION_HEIGHT * scale) / 2,
     };
   }
 
@@ -92,7 +99,7 @@ export class ConnectionMapElement {
   setEndPoint(point: Point, scale: number): void {
     this.endPoint = {
       x: point.x,
-      y: point.y + STATION_HEIGHT * scale / 2
+      y: point.y + (STATION_HEIGHT * scale) / 2,
     };
   }
 
@@ -104,60 +111,137 @@ export class ConnectionMapElement {
    * @param scale The scale at which this should be rendered.
    * @returns Connection line between stations.
    */
-   getConnectionLine(startPoint: Point, endPoint: Point, scale: number): Path2D {
+  getConnectionLine(startPoint: Point, endPoint: Point, scale: number): Path2D {
     const path = new Path2D();
     path.moveTo(startPoint.x, startPoint.y);
 
     // add path
-    if (startPoint.x - STATION_WIDTH*1.5*scale < endPoint.x) {
-      const [controlPoint1, controlPoint2] = this.getConnectionLineControlPoints(startPoint, endPoint, scale);
-      path.bezierCurveTo(controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
+    if (startPoint.x - STATION_WIDTH * 1.5 * scale < endPoint.x) {
+      const [controlPoint1, controlPoint2] =
+        this.getConnectionLineControlPoints(startPoint, endPoint, scale);
+      path.bezierCurveTo(
+        controlPoint1.x,
+        controlPoint1.y,
+        controlPoint2.x,
+        controlPoint2.y,
+        endPoint.x,
+        endPoint.y
+      );
     } else {
       //Using trig to get points.
-      const startArc: Point = startPoint.y >= endPoint.y + STATION_HEIGHT*scale
-      || (startPoint.y <= endPoint.y &&  startPoint.y >= endPoint.y - STATION_HEIGHT*scale) ?
-      {
-        x: Math.floor(startPoint.x + STATION_HEIGHT/3*scale * Math.cos(1.5*Math.PI)),
-        y: Math.floor(startPoint.y - STATION_HEIGHT/3*scale + STATION_HEIGHT/3*scale * Math.sin(1.5*Math.PI))
-      } :
-      {
-        x: Math.floor((startPoint.x + STATION_HEIGHT/3*scale * Math.cos(1.5*Math.PI)) - STATION_WIDTH/1.5*scale),
-        y: Math.floor(startPoint.y + STATION_HEIGHT/3*scale + STATION_HEIGHT/3*scale * Math.sin(.5*Math.PI))
-      };
-      const endArc: Point = startPoint.y <= endPoint.y ?
-      {
-        x: Math.floor(endPoint.x + STATION_HEIGHT/3*scale * Math.cos(1.5*Math.PI)),
-        y: Math.floor(endPoint.y - STATION_HEIGHT/3*scale + STATION_HEIGHT/3*scale * Math.sin(1.5*Math.PI))
-      } :
-      {
-        x: Math.floor(endPoint.x + STATION_HEIGHT/3*scale * Math.cos(.5*Math.PI)),
-        y: Math.floor(endPoint.y + STATION_HEIGHT/3*scale + STATION_HEIGHT/3*scale * Math.sin(.5*Math.PI))
-      };
+      const startArc: Point =
+        startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
+        (startPoint.y <= endPoint.y &&
+          startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
+          ? {
+              x: Math.floor(
+                startPoint.x +
+                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
+              ),
+              y: Math.floor(
+                startPoint.y -
+                  (STATION_HEIGHT / 3) * scale +
+                  (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
+              ),
+            }
+          : {
+              x: Math.floor(
+                startPoint.x +
+                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI) -
+                  (STATION_WIDTH / 1.5) * scale
+              ),
+              y: Math.floor(
+                startPoint.y +
+                  (STATION_HEIGHT / 3) * scale +
+                  (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
+              ),
+            };
+      const endArc: Point =
+        startPoint.y <= endPoint.y
+          ? {
+              x: Math.floor(
+                endPoint.x +
+                  (STATION_HEIGHT / 3) * scale * Math.cos(1.5 * Math.PI)
+              ),
+              y: Math.floor(
+                endPoint.y -
+                  (STATION_HEIGHT / 3) * scale +
+                  (STATION_HEIGHT / 3) * scale * Math.sin(1.5 * Math.PI)
+              ),
+            }
+          : {
+              x: Math.floor(
+                endPoint.x +
+                  (STATION_HEIGHT / 3) * scale * Math.cos(0.5 * Math.PI)
+              ),
+              y: Math.floor(
+                endPoint.y +
+                  (STATION_HEIGHT / 3) * scale +
+                  (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
+              ),
+            };
 
-      startPoint.y >= endPoint.y + STATION_HEIGHT*scale
-      || (startPoint.y <= endPoint.y  &&  startPoint.y >= endPoint.y - STATION_HEIGHT*scale) ?
-        path.arc(
-          startPoint.x, startPoint.y - STATION_HEIGHT/3*scale, STATION_HEIGHT/3*scale, .5 * Math.PI, 1.5 * Math.PI, true) :
-        path.arc(
-          startPoint.x, startPoint.y + STATION_HEIGHT/3*scale, STATION_HEIGHT/3*scale, 1.5 * Math.PI, .5 * Math.PI, false);
-        path.bezierCurveTo(
-        startArc.x - STATION_WIDTH*scale, startArc.y,
-        endArc.x + STATION_WIDTH*scale, endArc.y,
-        endArc.x, endArc.y);
-      startPoint.y <= endPoint.y ?
-        path.arc(
-          endPoint.x, endPoint.y - STATION_HEIGHT/3*scale , STATION_HEIGHT/3*scale, 1.5 * Math.PI, .5 * Math.PI, true) :
-        path.arc(
-          endPoint.x, endPoint.y + STATION_HEIGHT/3*scale , STATION_HEIGHT/3*scale, .5 * Math.PI, 1.5 * Math.PI, false);
+      startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
+      (startPoint.y <= endPoint.y &&
+        startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
+        ? path.arc(
+            startPoint.x,
+            startPoint.y - (STATION_HEIGHT / 3) * scale,
+            (STATION_HEIGHT / 3) * scale,
+            0.5 * Math.PI,
+            1.5 * Math.PI,
+            true
+          )
+        : path.arc(
+            startPoint.x,
+            startPoint.y + (STATION_HEIGHT / 3) * scale,
+            (STATION_HEIGHT / 3) * scale,
+            1.5 * Math.PI,
+            0.5 * Math.PI,
+            false
+          );
+      path.bezierCurveTo(
+        startArc.x - STATION_WIDTH * scale,
+        startArc.y,
+        endArc.x + STATION_WIDTH * scale,
+        endArc.y,
+        endArc.x,
+        endArc.y
+      );
+      startPoint.y <= endPoint.y
+        ? path.arc(
+            endPoint.x,
+            endPoint.y - (STATION_HEIGHT / 3) * scale,
+            (STATION_HEIGHT / 3) * scale,
+            1.5 * Math.PI,
+            0.5 * Math.PI,
+            true
+          )
+        : path.arc(
+            endPoint.x,
+            endPoint.y + (STATION_HEIGHT / 3) * scale,
+            (STATION_HEIGHT / 3) * scale,
+            0.5 * Math.PI,
+            1.5 * Math.PI,
+            false
+          );
     }
 
     // add arrow
-    const controlPoints = this.getConnectionLineControlPoints(startPoint, endPoint, scale);
+    const controlPoints = this.getConnectionLineControlPoints(
+      startPoint,
+      endPoint,
+      scale
+    );
     const ex = endPoint.x;
     const ey = endPoint.y;
-    const norm = startPoint.x - STATION_WIDTH*1.5*scale > endPoint.x ?
-    this.getNormalizedVectorPoint({x: endPoint.x - 10, y: endPoint.y}, endPoint)
-    : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
+    const norm =
+      startPoint.x - STATION_WIDTH * 1.5 * scale > endPoint.x
+        ? this.getNormalizedVectorPoint(
+            { x: endPoint.x - 10, y: endPoint.y },
+            endPoint
+          )
+        : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
     let x, y;
     x = (arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * scale;
@@ -179,13 +263,21 @@ export class ConnectionMapElement {
    * @param scale The scale at which this should be rendered.
    * @returns A list of two control points.
    */
-  private getConnectionLineControlPoints(startPoint: Point, endPoint: Point, scale: number): Point[] {
+  private getConnectionLineControlPoints(
+    startPoint: Point,
+    endPoint: Point,
+    scale: number
+  ): Point[] {
     const controlPoint1 = { x: 0, y: 0 };
     const controlPoint2 = { x: 0, y: 0 };
     const heightDifference = startPoint.y - endPoint.y;
 
-    controlPoint1.y = Math.floor(startPoint.y - heightDifference / CONNECTION_HEIGHT_REDUCER);
-    controlPoint2.y = Math.floor(endPoint.y + heightDifference / CONNECTION_HEIGHT_REDUCER);
+    controlPoint1.y = Math.floor(
+      startPoint.y - heightDifference / CONNECTION_HEIGHT_REDUCER
+    );
+    controlPoint2.y = Math.floor(
+      endPoint.y + heightDifference / CONNECTION_HEIGHT_REDUCER
+    );
 
     controlPoint1.x = startPoint.x + CONNECTION_NODE_OFFSET * scale;
     controlPoint2.x = endPoint.x - CONNECTION_NODE_OFFSET * scale;
@@ -204,10 +296,12 @@ export class ConnectionMapElement {
   private getNormalizedVectorPoint(point1: Point, point2: Point): Point {
     const xDistance = -(point2.y - point1.y);
     const yDistance = point2.x - point1.x;
-    const vectorMagnitude = Math.sqrt(xDistance * xDistance + yDistance * yDistance); // Pythagorean theorem
+    const vectorMagnitude = Math.sqrt(
+      xDistance * xDistance + yDistance * yDistance
+    ); // Pythagorean theorem
     return {
       x: xDistance / vectorMagnitude,
-      y: yDistance / vectorMagnitude
+      y: yDistance / vectorMagnitude,
     };
   }
 }

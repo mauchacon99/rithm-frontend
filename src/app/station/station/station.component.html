@@ -2,13 +2,15 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="h-full">
   <mat-drawer #drawer mode="over" position="end" disableClose>
     <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
-    <app-info-drawer *ngIf="drawerContext === 'stationInfo' || drawerContext === 'documentInfo'"></app-info-drawer>
+    <app-info-drawer *ngIf="
+        drawerContext === 'stationInfo' || drawerContext === 'documentInfo'
+      "></app-info-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
     <div class="textured-bg grid grid-cols-12 min-h-full">
       <!-- Left column -->
-      <app-connected-station-pane [location]='"left"' [stations]="previousStations"
+      <app-connected-station-pane [location]="'left'" [stations]="previousStations"
         class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 py-12">
@@ -25,8 +27,8 @@
                 <span data-testid="document-tab">Document</span>
               </ng-template>
               <ng-template matTabContent>
-
-                <app-document-info-header #documentNameFields [documentInformation]="stationInformation" *ngIf="!stationLoading"></app-document-info-header>
+                <app-document-info-header #documentNameFields [documentInformation]="stationInformation"
+                  *ngIf="!stationLoading"></app-document-info-header>
                 <div class="mt-2">
                   <mat-form-field class="w-full long-text" appearance="outline">
                     <mat-label>General Instructions</mat-label>
@@ -37,7 +39,8 @@
                       spellcheck="true" formControlName="generalInstructions"></textarea>
                   </mat-form-field>
                 </div>
-                <app-station-template [stationRithmId]="stationRithmId" [fields]="stationInformation.questions" formControlName="stationTemplateForm">
+                <app-station-template [stationRithmId]="stationRithmId" [fields]="stationInformation.questions"
+                  formControlName="stationTemplateForm">
                 </app-station-template>
                 <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
                 <div class="py-5 px-px">
@@ -54,7 +57,8 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false" [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"
+                          [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
@@ -70,7 +74,8 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true" [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true"
+                          [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
@@ -91,16 +96,20 @@
             <div class="grid grid-cols-12">
               <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
                 <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
-                    color="accent" (click)="cancelStation()">Cancel</button></span>
+                    color="accent" (click)="cancelStation()">
+                    Cancel
+                  </button></span>
                 <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" id="station-save"
-                  (click)="saveStationInformation()" [disabled]="!stationForm.valid">Save</button>
+                  (click)="saveStationInformation()" [disabled]="!stationForm.valid">
+                  Save
+                </button>
               </div>
             </div>
           </div>
         </form>
       </div>
       <!-- Right column -->
-      <app-connected-station-pane [location]='"right"' [stations]="forwardStations"
+      <app-connected-station-pane [location]="'right'" [stations]="forwardStations"
         class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
     </div>
   </mat-drawer-content>

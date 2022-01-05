@@ -7,4 +7,3 @@ export interface DocumentName {
   /** The appendedName for Document. */
   appendedName: string;
 }
-

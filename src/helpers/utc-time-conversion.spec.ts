@@ -31,7 +31,7 @@ describe('UtcTimeConversion', () => {
 
   it('should return text with minutes elapsed', () => {
     const now = new Date().getTime();
-    const adjustTime = now - (1000 * 60 * 15);
+    const adjustTime = now - 1000 * 60 * 15;
     const elapsed = Date.now() - adjustTime;
 
     expect(conversion.getElapsedTimeText(elapsed)).toMatch(/15 minutes/);
@@ -39,7 +39,7 @@ describe('UtcTimeConversion', () => {
 
   it('should return text with hours elapsed', () => {
     const now = new Date().getTime();
-    const adjustTime = now - (1000 * 60 * 60 * 15);
+    const adjustTime = now - 1000 * 60 * 60 * 15;
     const elapsed = Date.now() - adjustTime;
 
     expect(conversion.getElapsedTimeText(elapsed)).toMatch(/15 hours/);
@@ -47,7 +47,7 @@ describe('UtcTimeConversion', () => {
 
   it('should return text with days elapsed', () => {
     const now = new Date().getTime();
-    const adjustTime = now - (1000 * 60 * 60 * 24 * 5);
+    const adjustTime = now - 1000 * 60 * 60 * 24 * 5;
     const elapsed = Date.now() - adjustTime;
 
     expect(conversion.getElapsedTimeText(elapsed)).toMatch(/5 days/);

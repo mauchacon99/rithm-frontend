@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 @Component({
   selector: 'app-rule-modal',
   templateUrl: './rule-modal.component.html',
-  styleUrls: ['./rule-modal.component.scss']
+  styleUrls: ['./rule-modal.component.scss'],
 })
 export class RuleModalComponent {
 

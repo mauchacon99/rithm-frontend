@@ -9,7 +9,7 @@ import { RuleModalComponent } from "src/app/station/rule-modal/rule-modal.compon
 @Component({
   selector: 'app-flow-logic[nextStations]',
   templateUrl: './flow-logic.component.html',
-  styleUrls: ['./flow-logic.component.scss']
+  styleUrls: ['./flow-logic.component.scss'],
 })
 export class FlowLogicComponent {
 

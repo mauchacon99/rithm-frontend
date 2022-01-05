@@ -13,9 +13,7 @@ describe('ErrorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [
-        { provide: PopupService, useClass: MockPopupService }
-      ]
+      providers: [{ provide: PopupService, useClass: MockPopupService }],
     });
     service = TestBed.inject(ErrorService);
     popupService = TestBed.inject(PopupService);
@@ -39,7 +37,7 @@ describe('ErrorService', () => {
     expect(popupService.alert).toHaveBeenCalledOnceWith({
       title: 'Error',
       message: ERROR_MESSAGE,
-      important: true
+      important: true,
     });
   });
 
@@ -47,5 +45,4 @@ describe('ErrorService', () => {
     service.displayError(ERROR_MESSAGE, new Error('Zoinks'), false);
     expect(popupService.notify).toHaveBeenCalledOnceWith(ERROR_MESSAGE, true);
   });
-
 });

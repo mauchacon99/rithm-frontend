@@ -8,19 +8,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
-  declarations: [
-    AccountSettingsComponent,
-    NotificationSettingsComponent
-  ],
+  declarations: [AccountSettingsComponent, NotificationSettingsComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,
     SharedModule,
     MatCardModule,
     MatButtonModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
 })
-export class SettingsModule { }
+export class SettingsModule {}

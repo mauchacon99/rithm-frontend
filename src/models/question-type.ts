@@ -4,7 +4,6 @@ import { QuestionFieldType } from './enums';
  * Represents all data about a question type.
  */
 export interface QuestionType {
-
   /** The global Rithm ID for the question type. */
   rithmId: string;
 
