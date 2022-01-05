@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { Question, QuestionFieldType } from 'src/models';
+import { PossibleAnswer } from '../../../models/possible-answer';
 
 /**
  * Station Field Component.
@@ -72,22 +73,10 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     value: ''
   };
 
-  /** The field for adding an option to a select field. */
-  selectOptionField: Question = {
+  /** The field for adding an option to a selectable fieldQuestionType. */
+  selectableOption: Question = {
     rithmId: '',
     prompt: 'Add Option',
-    questionType: QuestionFieldType.ShortText,
-    isReadOnly: false,
-    isRequired: true,
-    isPrivate: false,
-    children: [],
-    isPossibleAnswer: true,
-  };
-
-  /** The field for adding an item to a checklist field. */
-  checklistOptionField: Question = {
-    rithmId: '',
-    prompt: 'Add Item',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -122,7 +111,11 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     if (this.field.questionType === this.fieldType.Select
       || this.field.questionType === this.fieldType.MultiSelect
       || this.field.questionType === this.fieldType.CheckList) {
-        this.addOption(this.field.questionType);
+        if (this.field.possibleAnswers && this.field.possibleAnswers.length) {
+          this.populateAnswers(this.field.possibleAnswers);
+        } else {
+          this.addOption(this.field.questionType);
+        }
     }
     this.stationFieldForm = this.fb.group({
       instructionsField: [''],
@@ -165,18 +158,45 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   /**
+   * Display existing possibles Answers.
+   *
+   * @param answers THe array of answers to be shown.
+   */
+  private populateAnswers(answers: PossibleAnswer[]): void {
+    answers.forEach (answer => {
+      const possibleAnswer: Question = {
+          rithmId: this.field.rithmId,//Rithm id of the question to track the answer
+          prompt: this.field.questionType === QuestionFieldType.MultiSelect ||
+          this.field.questionType === QuestionFieldType.Select ? 'Add option' :
+          this.field.questionType === QuestionFieldType.CheckList ? 'Add item' : '',
+          questionType: QuestionFieldType.ShortText,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+          isPossibleAnswer: true,
+          value: answer.text,
+          originalStationRithmId: answer.rithmId, //rithm id of the answer to update the answer
+        };
+        this.options.push(possibleAnswer);
+    });
+  }
+
+  /**
    * Add an option to the options array.
    *
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
     const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-    const answerRithmId = `ans-${genRanHex(6)}`;
-    this.selectOptionField.rithmId = this.field.rithmId;
-    this.checklistOptionField.rithmId = this.field.rithmId;
-    this.selectOptionField.originalStationRithmId = answerRithmId;
-    this.checklistOptionField.originalStationRithmId = answerRithmId;
-    this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
+    const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(4)}-${genRanHex(4)}-${genRanHex(12)}`;
+    this.selectableOption.prompt =
+    fieldType === QuestionFieldType.MultiSelect ||
+    fieldType === QuestionFieldType.Select ? 'Add option' :
+    fieldType === QuestionFieldType.CheckList ? 'Add item' : '';
+    this.selectableOption.rithmId = this.field.rithmId;
+    this.selectableOption.originalStationRithmId = answerRithmId;
+    this.options.push(this.selectableOption);
   }
 
   /**
@@ -189,6 +209,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
     if (this.field.possibleAnswers){
       this.field.possibleAnswers.splice(index,1);
     }
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -237,7 +258,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
+    // console.log('write value');
+    // val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**
@@ -247,6 +269,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   registerOnChange(fn: any): void {
+    // console.log('register on change');
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.stationFieldForm.valueChanges.subscribe(fn);
