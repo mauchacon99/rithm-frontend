@@ -299,7 +299,12 @@ export class DocumentService {
         }
       })).pipe(delay(1000));
     } else {
-      return of().pipe(delay(1000));
+      const requestObject = {
+        userRithmId: userRithmId,
+        documentRithmId: documentRithmId,
+        stationRithmId: stationRithmId
+      };
+      return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`, requestObject);
     }
   }
 }
