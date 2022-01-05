@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 })
 export class RuleModalComponent {
 
+  /** Station Rithm id. */
   stationRithmId = '';
 
   constructor(
