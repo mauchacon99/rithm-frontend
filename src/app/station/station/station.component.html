@@ -1,25 +1,46 @@
-<app-sub-header class="fixed z-10 w-full" [itemInfo]="stationInformation"></app-sub-header>
+<app-sub-header
+  class="fixed z-10 w-full"
+  [itemInfo]="stationInformation"
+></app-sub-header>
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="h-full">
   <mat-drawer #drawer mode="over" position="end" disableClose>
-    <app-detail-drawer *ngIf="drawerContext === 'comments' || drawerContext === 'history'"></app-detail-drawer>
-    <app-info-drawer *ngIf="
+    <app-detail-drawer
+      *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
+    ></app-detail-drawer>
+    <app-info-drawer
+      *ngIf="
         drawerContext === 'stationInfo' || drawerContext === 'documentInfo'
-      "></app-info-drawer>
+      "
+    ></app-info-drawer>
   </mat-drawer>
 
   <mat-drawer-content>
     <div class="textured-bg grid grid-cols-12 min-h-full">
       <!-- Left column -->
-      <app-connected-station-pane [location]="'left'" [stations]="previousStations"
-        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane
+        [location]="'left'"
+        [stations]="previousStations"
+        class="hidden lg:inline-block col-span-2"
+      ></app-connected-station-pane>
       <!-- Center column -->
       <div class="col-span-12 lg:col-span-8 bg-white h-full px-5 py-12">
         <div class="loading" *ngIf="stationLoading">
-          <app-loading-indicator id="component-station-loading" class="flex-grow m-auto"></app-loading-indicator>
+          <app-loading-indicator
+            id="component-station-loading"
+            class="flex-grow m-auto"
+          ></app-loading-indicator>
         </div>
-        <form *ngIf="!stationLoading" [formGroup]="stationForm" autocomplete="off" class="station-base-form">
-          <app-station-info-header [stationInformation]="stationInformation" [stationEditMode]="true"
-            #stationInfoHeader></app-station-info-header>
+        <form
+          *ngIf="!stationLoading"
+          [formGroup]="stationForm"
+          autocomplete="off"
+          class="station-base-form"
+        >
+          <app-station-info-header
+            [stationInformation]="stationInformation"
+            [stationEditMode]="true"
+            #stationInfoHeader
+          ></app-station-info-header>
           <!-- Tabs -->
           <mat-tab-group mat-align-tabs="center" class="mt-2 w-full pb-8">
             <mat-tab>
@@ -27,25 +48,41 @@
                 <span data-testid="document-tab">Document</span>
               </ng-template>
               <ng-template matTabContent>
-                <app-document-info-header #documentNameFields [documentInformation]="stationInformation"
-                  *ngIf="!stationLoading"></app-document-info-header>
+                <app-document-info-header
+                  #documentNameFields
+                  [documentInformation]="stationInformation"
+                  *ngIf="!stationLoading"
+                ></app-document-info-header>
                 <div class="mt-2">
                   <mat-form-field class="w-full long-text" appearance="outline">
                     <mat-label>General Instructions</mat-label>
                     <div matPrefix class="icon">
                       <i class="fas fa-paragraph"></i>
                     </div>
-                    <textarea data-testid="general-instructions" matInput placeholder="General Instructions" rows="3"
-                      spellcheck="true" formControlName="generalInstructions"></textarea>
+                    <textarea
+                      data-testid="general-instructions"
+                      matInput
+                      placeholder="General Instructions"
+                      rows="3"
+                      spellcheck="true"
+                      formControlName="generalInstructions"
+                    ></textarea>
                   </mat-form-field>
                 </div>
-                <app-station-template [stationRithmId]="stationRithmId" [fields]="stationInformation.questions"
-                  formControlName="stationTemplateForm">
+                <app-station-template
+                  [stationRithmId]="stationRithmId"
+                  [fields]="stationInformation.questions"
+                  formControlName="stationTemplateForm"
+                >
                 </app-station-template>
-                <app-toolbar (fieldSelected)="addQuestion($event)"></app-toolbar>
+                <app-toolbar
+                  (fieldSelected)="addQuestion($event)"
+                ></app-toolbar>
                 <div class="py-5 px-px">
                   <mat-accordion>
-                    <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
+                    <mat-expansion-panel
+                      [(expanded)]="accordionFieldAllExpanded"
+                    >
                       <mat-expansion-panel-header class="text-base">
                         <mat-panel-title data-testid="all-fields">
                           All
@@ -57,12 +94,18 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="false"
-                          [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields
+                          [stationId]="stationInformation.rithmId"
+                          [isPrivate]="false"
+                          [isStation]="true"
+                          (movingQuestion)="movePreviousFieldToTemplate($event)"
+                        >
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [(expanded)]="accordionFieldPrivateExpanded">
+                    <mat-expansion-panel
+                      [(expanded)]="accordionFieldPrivateExpanded"
+                    >
                       <mat-expansion-panel-header class="text-base">
                         <mat-panel-title data-testid="private-fields">
                           Private
@@ -74,8 +117,12 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <ng-template matExpansionPanelContent>
-                        <app-previous-fields [stationId]="stationInformation.rithmId" [isPrivate]="true"
-                          [isStation]="true" (movingQuestion)="movePreviousFieldToTemplate($event)">
+                        <app-previous-fields
+                          [stationId]="stationInformation.rithmId"
+                          [isPrivate]="true"
+                          [isStation]="true"
+                          (movingQuestion)="movePreviousFieldToTemplate($event)"
+                        >
                         </app-previous-fields>
                       </ng-template>
                     </mat-expansion-panel>
@@ -88,19 +135,38 @@
                 <span data-testid="flow-logic-tab">Flow Logic</span>
               </ng-template>
               <ng-template matTabContent>
-                <app-flow-logic [rithmId]="stationRithmId" [nextStations]="forwardStations"></app-flow-logic>
+                <app-flow-logic
+                  [rithmId]="stationRithmId"
+                  [nextStations]="forwardStations"
+                ></app-flow-logic>
               </ng-template>
             </mat-tab>
           </mat-tab-group>
           <div class="w-full fixed z-10 bottom-0 left-0">
             <div class="grid grid-cols-12">
-              <div class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between">
-                <span class="mr-3"><button data-testid="station-cancel" id="station-cancel" mat-stroked-button
-                    color="accent" (click)="cancelStation()">
+              <div
+                class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer justify-between"
+              >
+                <span class="mr-3"
+                  ><button
+                    data-testid="station-cancel"
+                    id="station-cancel"
+                    mat-stroked-button
+                    color="accent"
+                    (click)="cancelStation()"
+                  >
                     Cancel
-                  </button></span>
-                <button data-testid="station-save" mat-raised-button color="accent" class="mx-2" id="station-save"
-                  (click)="saveStationInformation()" [disabled]="!stationForm.valid">
+                  </button></span
+                >
+                <button
+                  data-testid="station-save"
+                  mat-raised-button
+                  color="accent"
+                  class="mx-2"
+                  id="station-save"
+                  (click)="saveStationInformation()"
+                  [disabled]="!stationForm.valid"
+                >
                   Save
                 </button>
               </div>
@@ -109,8 +175,11 @@
         </form>
       </div>
       <!-- Right column -->
-      <app-connected-station-pane [location]="'right'" [stations]="forwardStations"
-        class="hidden lg:inline-block col-span-2"></app-connected-station-pane>
+      <app-connected-station-pane
+        [location]="'right'"
+        [stations]="forwardStations"
+        class="hidden lg:inline-block col-span-2"
+      ></app-connected-station-pane>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

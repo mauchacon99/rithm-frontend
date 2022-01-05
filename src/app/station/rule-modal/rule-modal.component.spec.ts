@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { RuleModalComponent } from './rule-modal.component';
 
 describe('RuleModalComponent', () => {
@@ -9,16 +13,13 @@ describe('RuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule
-      ],
+      imports: [MatDialogModule],
       declarations: [RuleModalComponent],
       providers: [
         { provide: MatDialogRef, useValue: {} },
-        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA }
-      ]
-    })
-      .compileComponents();
+        { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
