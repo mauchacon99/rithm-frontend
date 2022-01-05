@@ -5,7 +5,7 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  ControlValueAccessor
+  ControlValueAccessor,
 } from '@angular/forms';
 import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
@@ -31,7 +31,7 @@ import { Question, QuestionFieldType } from 'src/models';
     },
   ],
 })
-export class NestedFieldComponent implements ControlValueAccessor, OnInit{
+export class NestedFieldComponent implements ControlValueAccessor, OnInit {
   /** The form to add this field in the template. */
   nestedFieldForm!: FormGroup;
 

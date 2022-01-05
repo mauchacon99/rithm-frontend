@@ -45,10 +45,7 @@ export class SelectFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(
-    private fb: FormBuilder,
-    private ngZone: NgZone
-  ) { }
+  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
    * Set up FormBuilder group.
@@ -97,12 +94,12 @@ export class SelectFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.selectFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable
-      .pipe(first())
-      .subscribe(() => {
-        this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
-        this.selectFieldForm.get(this.field.questionType)?.updateValueAndValidity();
-      });
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
+      this.selectFieldForm
+        .get(this.field.questionType)
+        ?.updateValueAndValidity();
+    });
   }
 
   /**

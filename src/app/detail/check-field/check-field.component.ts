@@ -45,10 +45,7 @@ export class CheckFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(
-    private fb: FormBuilder,
-    private ngZone: NgZone
-  ) { }
+  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
    * Set up FormBuilder group.
@@ -103,12 +100,12 @@ export class CheckFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.checkFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable
-      .pipe(first())
-      .subscribe(() => {
-        this.checkFieldForm.get(this.field.questionType)?.markAsTouched();
-        this.checkFieldForm.get(this.field.questionType)?.updateValueAndValidity();
-      });
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.checkFieldForm.get(this.field.questionType)?.markAsTouched();
+      this.checkFieldForm
+        .get(this.field.questionType)
+        ?.updateValueAndValidity();
+    });
   }
 
   /**

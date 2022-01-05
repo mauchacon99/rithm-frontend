@@ -118,7 +118,13 @@
                   color="accent"
                   data-testid="document-flow"
                   id="document-flow"
-                  [disabled]="!documentForm.valid"
+                  [disabled]="
+                    !documentForm.valid &&
+                    !(
+                      !documentForm.dirty ||
+                      !documentForm.controls.documentTemplateForm.touched
+                    )
+                  "
                   (click)="autoFlowDocument()"
                 >
                   Flow

@@ -49,10 +49,7 @@ export class NumberFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(
-    private fb: FormBuilder,
-    private ngZone: NgZone
-  ) { }
+  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
    * Set up Formbuilder group.
@@ -114,12 +111,12 @@ export class NumberFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.numberFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable
-      .pipe(first())
-      .subscribe(() => {
-        this.numberFieldForm.get(this.field.questionType)?.markAsTouched();
-        this.numberFieldForm.get(this.field.questionType)?.updateValueAndValidity();
-      });
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.numberFieldForm.get(this.field.questionType)?.markAsTouched();
+      this.numberFieldForm
+        .get(this.field.questionType)
+        ?.updateValueAndValidity();
+    });
   }
 
   /**
