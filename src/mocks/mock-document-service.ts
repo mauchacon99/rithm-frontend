@@ -684,7 +684,7 @@ export class MockDocumentService {
     };
     return of(documentResponse.rithmId).pipe(delay(1000));
   }
-  
+
   /**
    * Assign an user to a document.
    *

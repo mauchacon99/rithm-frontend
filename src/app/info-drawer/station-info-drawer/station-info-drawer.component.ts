@@ -401,7 +401,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     return this.userService.isWorker(this.stationInformation);
   }
 
-
   /**
    * Creates a new document.
    */
@@ -419,7 +418,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         }
      });
   }
-  
+
   /**
    * Assign an user to a document.
    *
