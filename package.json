@@ -7,6 +7,8 @@
     "build-test": "cross-env NODE_ENV=test ng build --configuration test",
     "test": "ng test",
     "test-ci": "npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "format": "npx prettier --write .",
+    "format-check": "npx prettier --check .",
     "lint": "ng lint",
     "lint-style": "npx stylelint \"**/*.scss\"",
     "compile-docs": "compodoc -p tsconfig.json",
