@@ -36,6 +36,8 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The selected Station for move document. */
   selectedStation = '';
 
+  connectedError = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
@@ -56,16 +58,24 @@ export class ConnectedStationsModalComponent implements OnInit {
    * Retrieves a list of the connected stations for the given document.
    */
   private getConnectedStations(): void {
+    this.connectedError = false;
     this.documentService
       .getConnectedStationInfo(this.documentRithmId, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
-          this.connectedStations = connectedStations.nextStations.concat(
-            connectedStations.previousStations
-          );
+          this.connectedError = false;
+          const nextStation = connectedStations.nextStations
+            ? connectedStations.nextStations
+            : [];
+          const previousStation = connectedStations.previousStations
+            ? connectedStations.previousStations
+            : [];
+
+          this.connectedStations = nextStation.concat(previousStation);
         },
         error: (error: unknown) => {
+          this.connectedError = true;
           this.errorService.displayError(
             'Failed to get connected stations for this document.',
             error,
