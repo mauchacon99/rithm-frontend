@@ -1410,8 +1410,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //Document badge.
       } else if (
-        station.isPointInDocumentBadge(point, this.mapMode, this.scale)
-        && station.status !== MapItemStatus.Created
+        station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
+        station.status !== MapItemStatus.Created
       ) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',

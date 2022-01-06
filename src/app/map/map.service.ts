@@ -470,10 +470,18 @@ export class MapService {
       )
       .pipe(
         tap(() => {
-          this.stationElements = this.stationElements.filter((e) => e.status !== MapItemStatus.Deleted);
-          this.flowElements = this.flowElements.filter((e) => e.status !== MapItemStatus.Deleted);
-          this.stationElements.forEach(station => station.status = MapItemStatus.Normal);
-          this.flowElements.forEach(flow => flow.status = MapItemStatus.Normal);
+          this.stationElements = this.stationElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.flowElements = this.flowElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.stationElements.forEach(
+            (station) => (station.status = MapItemStatus.Normal)
+          );
+          this.flowElements.forEach(
+            (flow) => (flow.status = MapItemStatus.Normal)
+          );
         })
       );
   }
