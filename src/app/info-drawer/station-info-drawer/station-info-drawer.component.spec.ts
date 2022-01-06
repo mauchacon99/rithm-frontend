@@ -221,6 +221,8 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
     component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
+      '',
+      0,
       component.stationRithmId
     );
   });

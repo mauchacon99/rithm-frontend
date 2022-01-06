@@ -555,10 +555,27 @@ describe('DocumentService', () => {
   });
 
   it('should create a new document', () => {
-    const expectDocumentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+    const nameDocument = 'The name of Document';
+    const priorityDocument = 0;
+    const expectRequestBody = {
+      name: nameDocument,
+      priority: priorityDocument,
+      stationRithmId: stationId,
+    };
 
-    service.createNewDocument(stationId).subscribe((response) => {
-      expect(response).toEqual(expectDocumentId);
-    });
+    service
+      .createNewDocument(nameDocument, priorityDocument, stationId)
+      .subscribe((response) => {
+        expect(response).toBeFalsy();
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}`
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectRequestBody);
+
+    req.flush(null);
+    httpTestingController.verify();
   });
 });

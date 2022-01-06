@@ -443,7 +443,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   createNewDocument(): void {
     this.documentService
-      .createNewDocument(this.stationRithmId)
+      .createNewDocument('', 0, this.stationRithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
