@@ -243,6 +243,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.stationElements = [];
+    this.mapService.flowElements = [];
+    this.mapService.connectionElements = [];
   }
 
   /**
