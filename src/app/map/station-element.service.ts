@@ -212,7 +212,8 @@ export class StationElementService {
     ctx.fillStyle = 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     //When a station has status set to updated, change the font style to reflect that.
-    const isItalic = station.status === MapItemStatus.Updated ? 'italic' : 'normal';
+    const isItalic =
+      station.status === MapItemStatus.Updated ? 'italic' : 'normal';
     ctx.font = `${isItalic} ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');
