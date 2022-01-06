@@ -114,23 +114,6 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div
-        class="w-full py-2"
-        *ngIf="
-          stationDocumentGenerationStatus === 'Manual' &&
-          (mapMode === 0 || mapMode === undefined)
-        "
-      >
-        <button
-          data-testid="new-document"
-          id="new-document"
-          mat-stroked-button
-          color="accent"
-        >
-          New Document
-        </button>
-      </div>
-
       <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
         <span class="text-error-500"
           >Error: unable to set document generation status</span
@@ -138,6 +121,24 @@
       </div>
     </div>
   </div>
+
+  <div
+    class="w-full py-2"
+    *ngIf="
+      stationDocumentGenerationStatus === 'Manual' &&
+      (mapMode === 0 || mapMode === undefined)
+    "
+  >
+    <button
+      data-testid="new-document"
+      id="new-document"
+      mat-stroked-button
+      color="accent"
+    >
+      New Document
+    </button>
+  </div>
+
   <div class="w-full py-2" *ngIf="!openedFromMap">
     <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">

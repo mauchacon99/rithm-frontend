@@ -165,7 +165,13 @@
                   class="mx-2"
                   id="station-save"
                   (click)="saveStationInformation()"
-                  [disabled]="!stationForm.valid"
+                  [disabled]="
+                    !stationForm.valid &&
+                    !(
+                      !stationForm.dirty ||
+                      !stationForm.controls.stationTemplateForm.touched
+                    )
+                  "
                 >
                   Save
                 </button>
