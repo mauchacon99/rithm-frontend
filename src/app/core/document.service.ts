@@ -4,15 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  delay,
-  ignoreElements,
-  map,
-  Observable,
-  of,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
