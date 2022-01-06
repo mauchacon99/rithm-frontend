@@ -383,6 +383,8 @@ describe('DocumentComponent', () => {
     component.documentForm
       .get('documentTemplateForm')
       ?.addValidators(Validators.required);
+    component.documentForm.markAsDirty();
+    component.documentForm.controls['documentTemplateForm'].markAsTouched();
     fixture.detectChanges();
     const btnFlow =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
