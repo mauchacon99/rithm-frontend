@@ -78,7 +78,9 @@ export class StationElementService {
     this.drawStationCard(station, dragItem);
 
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
-      this.drawDocumentBadge(station, dragItem);
+      station.status === MapItemStatus.Created
+        ? this.drawNewBadge(station)
+        : this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
       if (
@@ -295,37 +297,60 @@ export class StationElementService {
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
 
     ctx.beginPath();
-    if (station.status !== MapItemStatus.Created) {
-      ctx.arc(
-        startingX + scaledStationWidth - scaledBadgeMargin,
-        startingY + scaledBadgeMargin,
-        scaledBadgeRadius,
-        0,
-        2 * Math.PI
-      );
-      ctx.fillStyle =
-        station.hoverActive === StationElementHoverType.Badge &&
-        dragItem !== MapDragItem.Node &&
-        !station.dragging
-          ? BADGE_HOVER_COLOR
-          : BADGE_DEFAULT_COLOR;
-      ctx.fill();
-    }
+    ctx.arc(
+      startingX + scaledStationWidth - scaledBadgeMargin,
+      startingY + scaledBadgeMargin,
+      scaledBadgeRadius,
+      0,
+      2 * Math.PI
+    );
+    ctx.fillStyle =
+      station.hoverActive === StationElementHoverType.Badge &&
+      dragItem !== MapDragItem.Node &&
+      !station.dragging
+        ? BADGE_HOVER_COLOR
+        : BADGE_DEFAULT_COLOR;
+    ctx.fill();
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
-    ctx.fillStyle =
-      station.status === MapItemStatus.Created ? BADGE_DEFAULT_COLOR : '#fff';
+    ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.fillText(
-      station.status === MapItemStatus.Created
-        ? 'New'
-        : station.noOfDocuments.toString(),
-      station.status === MapItemStatus.Created
-        ? startingX + scaledStationWidth - scaledBadgeMargin - 3
-        : startingX + scaledStationWidth - scaledBadgeMargin,
-      station.status === MapItemStatus.Created
-        ? startingY + scaledBadgeMargin
-        : startingY + scaledBadgeMargin + 6 * this.mapScale
+      station.noOfDocuments.toString(),
+      startingX + scaledStationWidth - scaledBadgeMargin,
+      startingY + scaledBadgeMargin + 6 * this.mapScale
+    );
+    ctx.closePath();
+  }
+
+  /**
+   * Draws the "New" badge, indicating the station has been newly created, at the top right of the station card.
+   *
+   * @param station The station for which to draw the badge.
+   */
+  private drawNewBadge(station: StationMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot draw the document badge when canvas context is not set'
+      );
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    ctx.beginPath();
+    const fontSize = Math.ceil(16 * this.mapScale);
+    ctx.font = `600 ${fontSize}px Montserrat`;
+    ctx.fillStyle = BADGE_DEFAULT_COLOR;
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      'New',
+      startingX + scaledStationWidth - scaledBadgeMargin - 3,
+      startingY + scaledBadgeMargin
     );
     ctx.closePath();
   }
