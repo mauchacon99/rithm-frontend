@@ -243,6 +243,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.stationElements = [];
+    this.mapService.flowElements = [];
+    this.mapService.connectionElements = [];
   }
 
   /**
@@ -1388,7 +1391,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //Check if click was in a station. If so any code under this for loop will not run.
+    //Check if click was in a station. If so any code below this for loop will not run.
     for (const station of this.stations) {
       //Connection node.
       if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
@@ -1407,7 +1410,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //Document badge.
       } else if (
-        station.isPointInDocumentBadge(point, this.mapMode, this.scale)
+        station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
+        station.status !== MapItemStatus.Created
       ) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',

@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   EventEmitter,
+  NgZone,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -17,6 +18,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { first } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
@@ -76,7 +78,8 @@ export class TextFieldComponent
 
   constructor(
     private fb: FormBuilder,
-    private stationService: StationService
+    private stationService: StationService,
+    private ngZone: NgZone
   ) {}
 
   /**
@@ -106,7 +109,6 @@ export class TextFieldComponent
           break;
       }
     }
-
     this.textFieldForm.get(this.field.questionType)?.setValidators(validators);
   }
 
@@ -137,6 +139,10 @@ export class TextFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.textFieldForm.valueChanges.subscribe(fn);
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.textFieldForm.get(this.field.questionType)?.markAsTouched();
+      this.textFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+    });
   }
 
   /**
