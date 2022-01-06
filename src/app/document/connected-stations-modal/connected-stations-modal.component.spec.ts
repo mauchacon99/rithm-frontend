@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -11,6 +11,9 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { MockComponent } from 'ng-mocks';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -31,11 +34,15 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: MockComponent(DashboardComponent) },
+        ]),
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: MatDialogRef, useValue: {} }
       ],
     }).compileComponents();
   });
@@ -101,7 +108,6 @@ describe('ConnectedStationsModalComponent', () => {
       toStationRithmIds: ['123-654-789'],
       documentRithmId: documentId,
     };
-
     const spyMoveDocument = spyOn(
       TestBed.inject(DocumentService),
       'moveDocument'

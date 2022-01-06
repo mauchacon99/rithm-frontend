@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ConnectedModalData,
   ConnectedStationInfo,
@@ -8,6 +8,7 @@ import {
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { Router } from '@angular/router';
 
 /**
  * Component for connected stations.
@@ -39,7 +40,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private matDialogRef: MatDialogRef<void>,
+    private router: Router
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
@@ -88,6 +91,10 @@ export class ConnectedStationsModalComponent implements OnInit {
       .moveDocument(moveDocument)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.matDialogRef.close();
+          this.router.navigateByUrl('dashboard');
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
