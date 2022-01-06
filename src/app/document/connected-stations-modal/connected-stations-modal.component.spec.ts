@@ -125,6 +125,25 @@ describe('ConnectedStationsModalComponent', () => {
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
   });
 
+  it('should catch an error when moving the document if an error occurs', () => {
+    component.stationRithmId = stationId;
+    component.documentRithmId = documentId;
+    component.selectedStation = '123-654-789';
+
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.moveDocument();
+    expect(spyError).toHaveBeenCalled();
+  });
+
   it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
