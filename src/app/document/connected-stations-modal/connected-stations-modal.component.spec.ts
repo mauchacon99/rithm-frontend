@@ -38,7 +38,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: PopupService,useClass:MockPopupService}
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
