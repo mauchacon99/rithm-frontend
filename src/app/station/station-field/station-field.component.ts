@@ -293,7 +293,7 @@ export class StationFieldComponent
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-     val && this.stationFieldForm.patchValue(val, { emitEvent: false });
+    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**
