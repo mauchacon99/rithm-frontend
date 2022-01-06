@@ -32,12 +32,12 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
-        SharedModule
+        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService }
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -132,9 +132,10 @@ describe('ConnectedStationsModalComponent', () => {
   });
 
   it('should activate the connected station loading', () => {
-    const connectedStationLoading = fixture.debugElement.nativeElement.querySelector(
-      '#connected-stations-loading'
-    );
+    const connectedStationLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#connected-stations-loading'
+      );
     component.connectedStationLoading = true;
     fixture.detectChanges();
     expect(connectedStationLoading).toBeTruthy();
