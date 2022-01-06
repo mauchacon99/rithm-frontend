@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   MapMode,
@@ -463,10 +463,27 @@ export class MapService {
       flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal),
     };
 
-    return this.http.post<void>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
-      filteredData
-    );
+    return this.http
+      .post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
+        filteredData
+      )
+      .pipe(
+        tap(() => {
+          this.stationElements = this.stationElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.flowElements = this.flowElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.stationElements.forEach(
+            (station) => (station.status = MapItemStatus.Normal)
+          );
+          this.flowElements.forEach(
+            (flow) => (flow.status = MapItemStatus.Normal)
+          );
+        })
+      );
   }
 
   /**
