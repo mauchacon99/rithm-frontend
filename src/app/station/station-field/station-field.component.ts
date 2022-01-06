@@ -303,7 +303,6 @@ export class StationFieldComponent
    */
   // eslint-disable-next-line
   registerOnChange(fn: any): void {
-    // console.log('register on change');
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.stationFieldForm.valueChanges.subscribe(fn);
