@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { WorkerDashboardHeader, Document } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -14,10 +17,7 @@ describe('DashboardService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule],
     });
     service = TestBed.inject(DashboardService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -31,21 +31,21 @@ describe('DashboardService', () => {
     const expectedResponse: WorkerDashboardHeader = {
       userRithmId: '1234',
       startedDocuments: 5,
-      rosterStations: 4
+      rosterStations: 4,
     };
 
-    service.getDashboardHeader()
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.getDashboardHeader().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/header`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
     httpTestingController.verify();
-
   });
 
   it('should successfully fetch data for dashboard stations', () => {
@@ -62,7 +62,7 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'supervisoruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -70,9 +70,9 @@ describe('DashboardService', () => {
             lastName: 'Potter',
             email: 'harrypotter@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
+            isOwner: false,
+          },
+        ],
       },
       {
         rithmId: '2',
@@ -86,7 +86,7 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'workeruser@inpivota.com',
             isWorker: true,
-            isOwner: false
+            isOwner: false,
           },
           {
             rithmId: '',
@@ -94,19 +94,20 @@ describe('DashboardService', () => {
             lastName: 'User',
             email: 'supervisoruser@inpivota.com',
             isWorker: true,
-            isOwner: false
-          }
-        ]
-      }
+            isOwner: false,
+          },
+        ],
+      },
     ];
 
-    service.getDashboardStations()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getDashboardStations().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/stations`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -122,7 +123,7 @@ describe('DashboardService', () => {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -130,17 +131,18 @@ describe('DashboardService', () => {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
 
-    service.getWorkerRoster(rithmId)
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getWorkerRoster(rithmId).subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/station-roster?stationRithmId=${rithmId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -156,7 +158,7 @@ describe('DashboardService', () => {
         lastName: 'Achar',
         email: 'adarsh.achar@inpivota.com',
         isWorker: true,
-        isOwner: false
+        isOwner: false,
       },
       {
         rithmId: '',
@@ -164,18 +166,19 @@ describe('DashboardService', () => {
         lastName: 'Hendrickson',
         email: 'tyler.hendrickson@rithm.software',
         isWorker: true,
-        isOwner: false
-      }
+        isOwner: false,
+      },
     ];
 
-    service.getSupervisorRoster(rithmId)
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getSupervisorRoster(rithmId).subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
     // outgoing request
     // eslint-disable-next-line max-len
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${rithmId}`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/supervisor-roster?stationRithmId=${rithmId}`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -193,15 +196,17 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: ''
-      }];
+        userAssigned: '',
+      },
+    ];
 
-    service.getPriorityQueueDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getPriorityQueueDocuments().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/priority-documents`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
@@ -219,19 +224,20 @@ describe('DashboardService', () => {
         flowedTimeUTC: '2021-06-18T21:17:34.3506612Z',
         updatedTimeUTC: '',
         isEscalated: false,
-        userAssigned: ''
-      }];
+        userAssigned: '',
+      },
+    ];
 
-    service.getPreviouslyStartedDocuments()
-      .subscribe((response) => {
-        expect(response.length).toBeGreaterThanOrEqual(0);
-      });
+    service.getPreviouslyStartedDocuments().subscribe((response) => {
+      expect(response.length).toBeGreaterThanOrEqual(0);
+    });
 
-    const req = httpTestingController.expectOne(`${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`);
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`
+    );
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
-
 });

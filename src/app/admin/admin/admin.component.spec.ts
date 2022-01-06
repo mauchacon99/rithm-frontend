@@ -12,10 +12,9 @@ describe('AdminComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         AdminComponent,
-        MockComponent(OrganizationManagementComponent)
-      ]
-    })
-    .compileComponents();
+        MockComponent(OrganizationManagementComponent),
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

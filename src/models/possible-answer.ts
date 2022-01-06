@@ -2,7 +2,6 @@
  * Represents info about a possible answer for a select dropdown or checklist.
  */
 export interface PossibleAnswer {
-
   /** The rithm id for possible answers. */
   rithmId: string;
 
@@ -14,5 +13,4 @@ export interface PossibleAnswer {
 
   /** Whether this answer is the default choice if left empty. */
   default: boolean;
-
 }

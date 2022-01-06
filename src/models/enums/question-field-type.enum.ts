@@ -2,7 +2,6 @@
  * Represents all the various types of a question/field.
  */
 export enum QuestionFieldType {
-
   /** Short text field. */
   ShortText = 'shortText',
 
@@ -62,5 +61,4 @@ export enum QuestionFieldType {
 
   /** Instruction input type. */
   Instructions = 'instructions',
-
 }

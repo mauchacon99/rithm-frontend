@@ -16,10 +16,7 @@
     "importHelpers": true,
     "target": "es2015", // TODO: figure out why updating this to es2017 breaks tests?
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

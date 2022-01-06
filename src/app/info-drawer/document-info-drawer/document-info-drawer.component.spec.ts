@@ -1,12 +1,28 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockErrorService, MockStationService, MockUserService, MockDocumentService, MockPopupService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockStationService,
+  MockUserService,
+  MockDocumentService,
+  MockPopupService,
+} from 'src/mocks';
 import { DocumentInfoDrawerComponent } from './document-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +31,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from 'src/app/core/user.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
-import { DialogOptions, MoveDocument } from 'src/models';
+import { DialogOptions } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
@@ -35,7 +51,7 @@ describe('DocumentInfoDrawerComponent', () => {
       declarations: [
         DocumentInfoDrawerComponent,
         MockComponent(LoadingIndicatorComponent),
-        ConnectedStationsModalComponent
+        ConnectedStationsModalComponent,
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -44,7 +60,7 @@ describe('DocumentInfoDrawerComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
-        { provide: PopupService, useClass: MockPopupService }
+        { provide: PopupService, useClass: MockPopupService },
       ],
       imports: [
         MatCheckboxModule,
@@ -56,10 +72,9 @@ describe('DocumentInfoDrawerComponent', () => {
         MatSelectModule,
         FormsModule,
         RouterTestingModule,
-        MatDialogModule
+        MatDialogModule,
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -77,71 +92,100 @@ describe('DocumentInfoDrawerComponent', () => {
   it('should update the editable status of the document in the station', async () => {
     const newStatus = true;
     component.stationRithmId = stationId;
-    const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStatusDocumentEditable').and.callThrough();
+    const updateGenerationStatusSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStatusDocumentEditable'
+    ).and.callThrough();
 
     await component.updateStatusDocumentEditable(newStatus);
 
-    expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
+    expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(
+      stationId,
+      newStatus
+    );
   });
 
   it('should get the current editable status of the document', async () => {
     component.stationRithmId = stationId;
-    const getGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'getStatusDocumentEditable').and.callThrough();
+    const getGenerationStatusSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStatusDocumentEditable'
+    ).and.callThrough();
     await component.getStatusDocumentEditable();
 
     expect(getGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
   it('should get document last updated date', () => {
-    const getLastUpdatedSpy = spyOn(TestBed.inject(DocumentService), 'getLastUpdated').and.callThrough();
+    const getLastUpdatedSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getLastUpdated'
+    ).and.callThrough();
 
     sideNavService.drawerData$.next({
       isStation: false,
-      documentRithmId: documentId
+      documentRithmId: documentId,
     });
 
     expect(getLastUpdatedSpy).toHaveBeenCalledOnceWith(documentId);
   });
 
   it('should get held time in station for document', () => {
-    const getDocumentTimeInStationSpy = spyOn(TestBed.inject(DocumentService), 'getDocumentTimeInStation').and.callThrough();
+    const getDocumentTimeInStationSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getDocumentTimeInStation'
+    ).and.callThrough();
 
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
 
-    expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(documentId, stationId);
+    expect(getDocumentTimeInStationSpy).toHaveBeenCalledOnceWith(
+      documentId,
+      stationId
+    );
   });
 
   it('should return the user assigned to the document', () => {
-    const getAssignedUserSpy = spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.callThrough();
+    const getAssignedUserSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'getAssignedUserToDocument'
+    ).and.callThrough();
     component.stationRithmId = stationId;
     component['getAssignedUserToDocument']();
 
-    expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(documentId, stationId, true);
+    expect(getAssignedUserSpy).toHaveBeenCalledOnceWith(
+      documentId,
+      stationId,
+      true
+    );
   });
 
   it('should show loading-last-update while get data last updated', () => {
     sideNavService.drawerData$.next({
       isStation: false,
-      documentRithmId: documentId
+      documentRithmId: documentId,
     });
     fixture.detectChanges();
     expect(component.lastUpdatedLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-last-update');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-last-update'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
   it('should delete a document', async () => {
-    const deleteDocumentSpy = spyOn(TestBed.inject(DocumentService), 'deleteDocument').and.callThrough();
+    const deleteDocumentSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'deleteDocument'
+    ).and.callThrough();
 
     await component.deleteDocument();
 
     expect(deleteDocumentSpy).toHaveBeenCalledOnceWith(documentId);
   });
-
 
   it('should open a confirm dialog to delete the document', async () => {
     const dialogExpectData: DialogOptions = {
@@ -149,9 +193,12 @@ describe('DocumentInfoDrawerComponent', () => {
       message: 'The document will be deleted.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
-      important: true
+      important: true,
     };
-    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
 
     await component.deleteDocument();
 
@@ -162,7 +209,8 @@ describe('DocumentInfoDrawerComponent', () => {
     component.isUserAdminOrOwner = true;
     fixture.detectChanges();
     const deleteDocumentSpy = spyOn(component, 'deleteDocument');
-    const buttonDelete = fixture.debugElement.nativeElement.querySelector('button.priority');
+    const buttonDelete =
+      fixture.debugElement.nativeElement.querySelector('button.priority');
     expect(buttonDelete).toBeTruthy();
     buttonDelete.click();
     tick();
@@ -173,11 +221,13 @@ describe('DocumentInfoDrawerComponent', () => {
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
     fixture.detectChanges();
     expect(component.timeInStationLoading).toBeTrue();
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-time-in-station');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-time-in-station'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
@@ -185,11 +235,13 @@ describe('DocumentInfoDrawerComponent', () => {
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
     fixture.detectChanges();
     expect(component.assignedUserLoading).toBeTrue();
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-loading');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#assigned-user-loading'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
@@ -197,105 +249,114 @@ describe('DocumentInfoDrawerComponent', () => {
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
-    const unassignSpy = spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.callThrough();
+    const unassignSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'unassignUserToDocument'
+    ).and.callThrough();
     component['unassignUserToDocument']();
-    expect(unassignSpy).toHaveBeenCalledOnceWith(component.documentRithmId, component.stationRithmId);
+    expect(unassignSpy).toHaveBeenCalledOnceWith(
+      component.documentRithmId,
+      component.stationRithmId
+    );
   });
 
   it('should show error message when request for assigned user fails', () => {
-    spyOn(TestBed.inject(DocumentService), 'getAssignedUserToDocument').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getAssignedUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
     fixture.detectChanges();
     expect(component.userErrorAssigned).toBeTrue();
-    const errorComponent = fixture.debugElement.nativeElement.querySelector('#assigned-user-error');
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#assigned-user-error'
+    );
     expect(errorComponent).toBeTruthy();
   });
 
   it('should show popup dialog to unassigned user', async () => {
     const dialogExpectData: DialogOptions = {
       title: 'Are you sure?',
-      message: 'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
+      message:
+        'Are you sure you would like to unassign this user? Doing so will return the document to the queue.',
       okButtonText: 'Unassign',
       cancelButtonText: 'Cancel',
-      important: true
+      important: true,
     };
-    const popupSpy = spyOn(TestBed.inject(PopupService), 'confirm').and.callThrough();
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
     await component.unassignUser();
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
   it('should catch error to document service', () => {
-    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
-    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
+    spyOn(
+      TestBed.inject(DocumentService),
+      'unassignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
     component['unassignUserToDocument']();
     expect(spyError).toHaveBeenCalled();
   });
 
   it('should show error message when request for unassigned user fails', () => {
-    spyOn(TestBed.inject(DocumentService), 'unassignUserToDocument').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
+    spyOn(
+      TestBed.inject(DocumentService),
+      'unassignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
     sideNavService.drawerData$.next({
       isStation: false,
       documentRithmId: documentId,
-      stationRithmId: stationId
+      stationRithmId: stationId,
     });
     component['unassignUserToDocument']();
     fixture.detectChanges();
     expect(component.userErrorUnassigned).toBeTrue();
-    const errorComponent = fixture.debugElement.nativeElement.querySelector('#unassigned-user-error');
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#unassigned-user-error'
+    );
     expect(errorComponent).toBeTruthy();
-  });
-
-  it('should call the service to move the document to another station', () => {
-    const dataExpect: MoveDocument = {
-      fromStationRithmId: stationId,
-      toStationRithmIds: ['123-654-789'],
-      documentRithmId: documentId
-    };
-
-    const spyMoveDocument = spyOn(TestBed.inject(DocumentService), 'moveDocument').and.callThrough();
-    component.moveDocument(dataExpect);
-    expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
-  });
-
-  it('should catch an error when moving the document if an error occurs', () => {
-    const dataExpect: MoveDocument = {
-      fromStationRithmId: stationId,
-      toStationRithmIds: ['123-654-789'],
-      documentRithmId: documentId
-    };
-
-    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(throwError(() => {
-      throw new Error();
-    }));
-
-    const spyError = spyOn(TestBed.inject(ErrorService), 'displayError').and.callThrough();
-    component.moveDocument(dataExpect);
-    expect(spyError).toHaveBeenCalled();
   });
 
   it('should to call method openModalMoveDocument after clicked in button', () => {
     component.isStation = false;
     component.isUserAdminOrOwner = true;
     fixture.detectChanges();
-    const openModalMoveDocumentSpy = spyOn(component, 'openModalMoveDocument').and.callThrough();
-    const btnMoveDocument = fixture.nativeElement.querySelector('#move-document-modal');
+    const openModalMoveDocumentSpy = spyOn(
+      component,
+      'openModalMoveDocument'
+    ).and.callThrough();
+    const btnMoveDocument = fixture.nativeElement.querySelector(
+      '#move-document-modal'
+    );
     expect(btnMoveDocument).toBeTruthy();
     btnMoveDocument.click();
     expect(openModalMoveDocumentSpy).toHaveBeenCalled();
@@ -307,11 +368,17 @@ describe('DocumentInfoDrawerComponent', () => {
     const expectDataModal = {
       data: {
         documentRithmId: documentId,
-        stationRithmId: stationId
-      }
+        stationRithmId: stationId,
+      },
     };
-    const dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.callThrough();
+    const dialogSpy = spyOn(
+      TestBed.inject(MatDialog),
+      'open'
+    ).and.callThrough();
     component.openModalMoveDocument();
-    expect(dialogSpy).toHaveBeenCalledOnceWith(ConnectedStationsModalComponent, expectDataModal);
+    expect(dialogSpy).toHaveBeenCalledOnceWith(
+      ConnectedStationsModalComponent,
+      expectDataModal
+    );
   });
 });

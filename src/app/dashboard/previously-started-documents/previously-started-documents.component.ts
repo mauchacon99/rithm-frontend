@@ -10,7 +10,7 @@ import { Document } from 'src/models';
 @Component({
   selector: 'app-previously-started-documents',
   templateUrl: './previously-started-documents.component.html',
-  styleUrls: ['./previously-started-documents.component.scss']
+  styleUrls: ['./previously-started-documents.component.scss'],
 })
 export class PreviouslyStartedDocumentsComponent implements OnInit {
   /** The list of documents that have been previously started. */
@@ -22,13 +22,14 @@ export class PreviouslyStartedDocumentsComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
-  ) { }
+  ) {}
 
   /**
    * Gets top 5 previously started documents on load.
    */
   ngOnInit(): void {
-    this.dashboardService.getPreviouslyStartedDocuments()
+    this.dashboardService
+      .getPreviouslyStartedDocuments()
       .pipe(first())
       .subscribe({
         next: (documents) => {
@@ -36,13 +37,14 @@ export class PreviouslyStartedDocumentsComponent implements OnInit {
           if (documents) {
             this.previouslyStartedDocuments = documents;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 }

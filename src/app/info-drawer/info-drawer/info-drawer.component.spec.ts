@@ -12,10 +12,9 @@ describe('InfoDrawerComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         InfoDrawerComponent,
-        MockComponent(StationInfoDrawerComponent)
-      ]
-    })
-    .compileComponents();
+        MockComponent(StationInfoDrawerComponent),
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

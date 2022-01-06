@@ -1,5 +1,15 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -14,16 +24,18 @@ import { QuestionFieldType, Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => NumberFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => NumberFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class NumberFieldComponent implements OnInit, ControlValueAccessor, Validator {
+export class NumberFieldComponent
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   numberFieldForm!: FormGroup;
 
@@ -36,16 +48,14 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(
-    private fb: FormBuilder,
-  ) { }
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up Formbuilder group.
    */
   ngOnInit(): void {
     this.numberFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []]
+      [this.field.questionType]: ['', []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -69,15 +79,16 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
         break;
     }
 
-    this.numberFieldForm.get(this.field.questionType)?.setValidators(validators);
-
+    this.numberFieldForm
+      .get(this.field.questionType)
+      ?.setValidators(validators);
   }
 
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -125,12 +136,13 @@ export class NumberFieldComponent implements OnInit, ControlValueAccessor, Valid
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.numberFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Number field form is invalid'
-      }
-    };
+    return this.numberFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Number field form is invalid',
+          },
+        };
   }
-
 }
