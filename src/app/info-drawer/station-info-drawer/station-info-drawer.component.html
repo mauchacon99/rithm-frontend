@@ -126,7 +126,7 @@
     class="w-full py-2"
     *ngIf="
       stationDocumentGenerationStatus === 'Manual' &&
-      (mapMode === 0 || mapMode === undefined)
+      (mapMode === 0 || mapMode === undefined) && !locallyCreated
     "
   >
     <button
