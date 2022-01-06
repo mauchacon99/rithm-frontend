@@ -13,11 +13,12 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService } from 'src/mocks/mock-error-service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
+import { Router } from '@angular/router';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -29,6 +30,10 @@ describe('ConnectedStationsModalComponent', () => {
   let fixture: ComponentFixture<ConnectedStationsModalComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
+  const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    close: () => {},
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -46,7 +51,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialogRef, useValue: dialogRefSpyObj },
       ],
     }).compileComponents();
   });
@@ -120,22 +125,24 @@ describe('ConnectedStationsModalComponent', () => {
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
   });
 
-  it('should catch an error when moving the document if an error occurs', () => {
+  it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
     component.selectedStation = '123-654-789';
 
-    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId,
+    };
+    const spyMoveDocument = spyOn(
+      TestBed.inject(DocumentService),
+      'moveDocument'
+    ).and.callFake(() => of(dataExpect));
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    const spyError = spyOn(
-      TestBed.inject(ErrorService),
-      'displayError'
-    ).and.callThrough();
     component.moveDocument();
-    expect(spyError).toHaveBeenCalled();
+    expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    expect(routerSpy).toHaveBeenCalledWith('dashboard');
   });
 });
