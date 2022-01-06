@@ -83,7 +83,6 @@ export class TextFieldComponent
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
-    // console.log(this.field);
     this.textFieldForm = this.fb.group({
       [this.field.questionType]: [this.field.value ? this.field.value : '', []],
     });
