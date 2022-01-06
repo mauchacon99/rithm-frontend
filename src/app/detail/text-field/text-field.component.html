@@ -16,8 +16,7 @@
       ></i>
       <i
         *ngIf="
-          field.questionType === fieldTypeEnum.LongText ||
-          field.questionType === fieldTypeEnum.LongTextLabel
+          field.questionType === fieldTypeEnum.LongText
         "
         class="fas fa-paragraph"
       ></i>
@@ -88,7 +87,7 @@
     </div>
     <input
       *ngIf="
-        field.questionType !== fieldTypeEnum.LongText &&
+        (isStation && field.questionType === fieldTypeEnum.LongText) ||
         field.questionType !== fieldTypeEnum.Instructions
       "
       matInput
@@ -100,7 +99,7 @@
     />
     <textarea
       *ngIf="
-        field.questionType === fieldTypeEnum.LongText ||
+      (!isStation && field.questionType === fieldTypeEnum.LongText) ||
         field.questionType === fieldTypeEnum.Instructions
       "
       matInput
