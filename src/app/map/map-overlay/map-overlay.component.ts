@@ -255,6 +255,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           next: () => {
             this.mapDataLoading = false;
             this.mapService.mapMode$.next(MapMode.View);
+
             this.popupService.notify('Map data published successfully.');
           },
           error: (error: unknown) => {
