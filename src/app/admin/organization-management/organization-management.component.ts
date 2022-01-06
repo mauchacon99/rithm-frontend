@@ -182,7 +182,7 @@ export class OrganizationManagementComponent implements OnInit {
     let message,
       title,
       buttonText = '';
-    if (!user.role || user.role.length === 0) {
+    if (!user.role || user.role.length === 0 || user.role !== 'admin') {
       role = 'admin';
       // eslint-disable-next-line max-len
       message = `Promoting ${user.firstName} ${user.lastName} to an admin will give this user additional privileges. Are you sure you want to do this?`;
@@ -215,11 +215,11 @@ export class OrganizationManagementComponent implements OnInit {
               : (user.role = null);
             user.role && user.role.length > 0
               ? this.popupService.notify(
-                  'User has been promoted to admin role.'
-                )
+                'User has been promoted to admin role.'
+              )
               : this.popupService.notify(
-                  'User has been de-promoted from admin role.'
-                );
+                'User has been de-promoted from admin role.'
+              );
           },
           error: (error: unknown) => {
             this.roleLoading[index] = false;
