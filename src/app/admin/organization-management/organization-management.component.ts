@@ -215,11 +215,11 @@ export class OrganizationManagementComponent implements OnInit {
               : (user.role = null);
             user.role && user.role.length > 0
               ? this.popupService.notify(
-                'User has been promoted to admin role.'
-              )
+                  'User has been promoted to admin role.'
+                )
               : this.popupService.notify(
-                'User has been de-promoted from admin role.'
-              );
+                  'User has been de-promoted from admin role.'
+                );
           },
           error: (error: unknown) => {
             this.roleLoading[index] = false;
