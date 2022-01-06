@@ -220,6 +220,11 @@ export class StationElementService {
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
 
+    //When a station has status set to updated, add an asterisk to reflect that.
+    if (station.status === MapItemStatus.Updated) {
+      firstLineArray.push('*');
+    }
+
     for (const word of sn) {
       if (
         word.length <= 12 &&
@@ -227,10 +232,6 @@ export class StationElementService {
         firstLineArray.join(' ').length + word.length <= 12 &&
         secondLineArray.length === 0
       ) {
-        //When a station has status set to updated, add an asterisk to reflect that.
-        if (station.status === MapItemStatus.Updated) {
-          firstLineArray.push('*');
-        }
         firstLineArray.push(word);
       } else {
         if (
