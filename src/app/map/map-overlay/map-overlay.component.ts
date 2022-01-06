@@ -201,6 +201,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
+    this.mapService.mapDataReceived$.next(false);
   }
 
   /**
@@ -254,6 +255,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           next: () => {
             this.mapDataLoading = false;
             this.mapService.mapMode$.next(MapMode.View);
+
             this.popupService.notify('Map data published successfully.');
           },
           error: (error: unknown) => {

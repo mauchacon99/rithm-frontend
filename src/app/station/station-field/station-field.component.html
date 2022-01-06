@@ -28,7 +28,7 @@
       </button>
     </div>
     <!-- Field -->
-    <!-- added conditions from sohw/hide instructions element -->
+    <!-- added conditions from show/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
       <ng-container
         *ngIf="
@@ -114,7 +114,8 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
-            [disabled]="
+            formControlName="isRequired"
+            [attr.disabled]="
               !field.isReadOnly &&
               stationRithmId !== field.originalStationRithmId
             "
@@ -132,6 +133,7 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
+            formControlName="isPrivate"
             [checked]="field.isPrivate"
             (change)="setPrivate($event)"
           >
@@ -142,6 +144,7 @@
           <div>
             <mat-checkbox
               [name]="field.rithmId"
+              formControlName="isReadOnly"
               [checked]="field.isReadOnly"
               (change)="setEditable($event)"
             >

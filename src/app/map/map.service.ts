@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   MapMode,
@@ -41,7 +41,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root',
 })
 export class MapService {
-  /** This behavior subject will track the array of stations and flows. */
+  /** This will track the array of stations and flows. */
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
@@ -463,10 +463,27 @@ export class MapService {
       flows: this.flowElements.filter((e) => e.status !== MapItemStatus.Normal),
     };
 
-    return this.http.post<void>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
-      filteredData
-    );
+    return this.http
+      .post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
+        filteredData
+      )
+      .pipe(
+        tap(() => {
+          this.stationElements = this.stationElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.flowElements = this.flowElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.stationElements.forEach(
+            (station) => (station.status = MapItemStatus.Normal)
+          );
+          this.flowElements.forEach(
+            (flow) => (flow.status = MapItemStatus.Normal)
+          );
+        })
+      );
   }
 
   /**
@@ -756,6 +773,11 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
+    //If there are no stations to center around, do nothing.
+    if (this.stationElements.length === 0) {
+      return;
+    }
+
     const centerLogic = () => {
       if (this.centerCount$.value > 0) {
         this.centerScale(onInit);

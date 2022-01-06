@@ -147,6 +147,9 @@ export class StationFieldComponent
       instructionsField: [''],
       [this.field.questionType]: [''],
       optionField: [''],
+      isRequired: [this.field.isRequired],
+      isPrivate: [this.field.isPrivate],
+      isReadOnly: [this.field.isReadOnly],
     });
     this.stationFieldForm.valueChanges
       .pipe(takeUntil(this.destroyed$))
