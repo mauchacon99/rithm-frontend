@@ -36,10 +36,10 @@
   <div class="w-full py-2">
     <p class="overline-font">station owners</p>
     <div
-      class="overline-font py-2 text-secondary-500"
+      class="py-2 text-secondary-500 text-xs"
       *ngIf="locallyCreated; else showOwnerRoster"
     >
-      Publish map to add roster members
+      {{ publishStationMessage }}station owners.
     </div>
     <ng-template #showOwnerRoster>
       <app-roster
@@ -55,10 +55,10 @@
     <div class="w-full py-2" *ngIf="!isWorker">
       <p class="overline-font">worker roster</p>
       <div
-        class="overline-font py-2 text-secondary-500"
+        class="py-2 text-secondary-500 text-xs"
         *ngIf="locallyCreated; else showWorkerRoster"
       >
-        Publish map to add roster members
+        {{ publishStationMessage }}roster members.
       </div>
       <ng-template #showWorkerRoster>
         <app-roster
@@ -73,19 +73,21 @@
   </ng-template>
   <div class="w-full py-2">
     <p class="overline-font">station priority</p>
+    <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
+      {{ publishStationMessage }}station priority.
+    </div>
     <button
-      [ngClass]="
-        !locallyCreated
-          ? 'mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn'
-          : 'pt-1 cursor-text outline-none'
-      "
+      *ngIf="!locallyCreated"
+      class="mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn"
     >
       {{ stationPriority }}
     </button>
   </div>
   <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
     <p class="overline-font">document generation</p>
-    <div class="py-1 text-sm" *ngIf="locallyCreated">None</div>
+    <div class="py-2 text-xs text-secondary-500" *ngIf="locallyCreated">
+      {{ publishStationMessage }}document generation status.
+    </div>
     <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
       <app-loading-indicator
         id="loading-indicator-status"
