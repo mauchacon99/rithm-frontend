@@ -313,7 +313,7 @@ export class StationElementService {
     }
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
-    ctx.fillStyle = station.status === MapItemStatus.Created ? BADGE_DEFAULT_COLOR: '#fff';
+    ctx.fillStyle = station.status === MapItemStatus.Created ? BADGE_DEFAULT_COLOR : '#fff';
     ctx.textAlign = 'center';
     ctx.fillText(
       station.status === MapItemStatus.Created ? 'New' : station.noOfDocuments.toString(),
