@@ -124,6 +124,7 @@ describe('TextFieldComponent', () => {
 
     it('should not require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
+      longText.setValue('dev');
       expect(longText.valid).toBeTrue();
       expect(longText.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();
