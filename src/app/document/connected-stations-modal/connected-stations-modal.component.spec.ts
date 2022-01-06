@@ -11,6 +11,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -31,11 +32,12 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
+        SharedModule
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: DocumentService, useClass: MockDocumentService },
+        { provide: DocumentService, useClass: MockDocumentService }
       ],
     }).compileComponents();
   });
@@ -127,5 +129,14 @@ describe('ConnectedStationsModalComponent', () => {
     ).and.callThrough();
     component.moveDocument();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should activate the connected station loading', () => {
+    const connectedStationLoading = fixture.debugElement.nativeElement.querySelector(
+      '#connected-stations-loading'
+    );
+    component.connectedStationLoading = true;
+    fixture.detectChanges();
+    expect(connectedStationLoading).toBeTruthy();
   });
 });
