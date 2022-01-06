@@ -201,6 +201,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
+    this.mapService.mapDataReceived$.next(false);
   }
 
   /**
