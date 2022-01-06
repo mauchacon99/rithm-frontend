@@ -8,6 +8,7 @@ import {
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for connected stations.
@@ -39,7 +40,8 @@ export class ConnectedStationsModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private popupService: PopupService
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
@@ -88,6 +90,13 @@ export class ConnectedStationsModalComponent implements OnInit {
       .moveDocument(moveDocument)
       .pipe(first())
       .subscribe({
+        next: () => {
+          this.popupService.alert({
+            title: 'Move Document',
+            message: 'The document has been moved successfully',
+            cancelButtonText: 'Close',
+          });
+        },
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
