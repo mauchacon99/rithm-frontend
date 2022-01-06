@@ -973,7 +973,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.dragItem !== MapDragItem.Node && this.dragItem !== MapDragItem.Station) {
+      //If a station or node is being dragged, we should not check for hover on a connection.
+      if (
+        this.dragItem !== MapDragItem.Node &&
+        this.dragItem !== MapDragItem.Station
+      ) {
         for (const connection of this.connections) {
           // Check if connection line was clicked. ContextPoint is used for connection lines.
           connection.checkElementHover(eventContextPoint, this.context);
