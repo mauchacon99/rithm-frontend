@@ -211,7 +211,9 @@ export class StationElementService {
     ctx.textAlign = 'left';
     ctx.fillStyle = 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
-    ctx.font = `normal ${fontSize}px Montserrat`;
+    //When a station has status set to updated, change the font style to reflect that.
+    const isItalic = station.status === MapItemStatus.Updated ? 'italic' : 'normal';
+    ctx.font = `${isItalic} ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
@@ -224,6 +226,10 @@ export class StationElementService {
         firstLineArray.join(' ').length + word.length <= 12 &&
         secondLineArray.length === 0
       ) {
+        //When a station has status set to updated, add an asterisk to reflect that.
+        if (station.status === MapItemStatus.Updated) {
+          firstLineArray.push('*');
+        }
         firstLineArray.push(word);
       } else {
         if (
