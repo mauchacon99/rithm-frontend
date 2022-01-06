@@ -11,6 +11,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -36,6 +38,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService,useClass:MockPopupService}
       ],
     }).compileComponents();
   });
