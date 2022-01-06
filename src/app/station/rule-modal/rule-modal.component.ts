@@ -23,7 +23,7 @@ export class RuleModalComponent {
   /**
    * Close rule Modal.
    */
-  onNoClick(): void {
+  closeModal(): void {
     this.dialogRef.close();
   }
 }
