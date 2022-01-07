@@ -240,34 +240,48 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Scales the canvas and does initial draw for elements.
+   * Sets this.stations, this.flows, and this.connections to the properties in mapService.
+   * Sets several properties and calls the center method.
    */
   ngOnInit(): void {
+    //The map needs the canvas context to be set to CanvasRenderingContext2D.
     this.context = this.mapCanvas.nativeElement.getContext(
       '2d'
     ) as CanvasRenderingContext2D;
     this.mapService.registerCanvasContext(this.context);
+
+    //Sets the canvas to the size and DPI of the screen.
     this.setCanvasSize();
+
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((dataReceived) => {
+        //When the mapDataReceived behavior subject changes, update class properties.
+        //Any stations with status set to deleted should not be rendered.
         this.stations = this.mapService.stationElements.filter(
           (e) => e.status !== MapItemStatus.Deleted
         );
         this.flows = this.mapService.flowElements;
         this.connections = this.mapService.connectionElements;
+
+        //If this is the first time the component is being initialized, center the map without animation.
         if (dataReceived && this.initLoad) {
           this.mapService.centerActive$.next(true);
           this.mapService.centerCount$.next(1);
           this.mapService.center(dataReceived);
           this.initLoad = false;
         }
+
+        //Redraw to reflect changes.
         this.drawElements();
       });
+
+    //Redraw again for good measure.
     this.drawElements();
   }
 
   /**
-   * Cleans up subscription.
+   * Cleans up subscription when the component is destroyed. Reset several mapService properties.
    */
   ngOnDestroy(): void {
     this.destroyed$.next();
