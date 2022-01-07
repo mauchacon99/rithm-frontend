@@ -5,6 +5,8 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { RuleModalComponent } from './rule-modal.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -13,7 +15,7 @@ describe('RuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, MatStepperModule, NoopAnimationsModule],
       declarations: [RuleModalComponent],
       providers: [
         { provide: MatDialogRef, useValue: {} },
