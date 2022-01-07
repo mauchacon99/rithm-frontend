@@ -380,7 +380,7 @@ export class DocumentService {
         `${environment.baseApiUrl}${MICROSERVICE_PATH}`,
         requestObject
       )
-      .pipe(map((response: RithmIdStringJSON) => response.rithmId));
+      .pipe(map((response) => response.rithmId));
   }
 
   /**
