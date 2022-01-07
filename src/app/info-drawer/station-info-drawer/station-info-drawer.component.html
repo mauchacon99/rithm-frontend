@@ -51,26 +51,24 @@
       </app-roster>
     </ng-template>
   </div>
-  <ng-template *ngIf="!locallyCreated">
-    <div class="w-full py-2" *ngIf="!isWorker">
-      <p class="overline-font">worker roster</p>
-      <div
-        class="py-2 text-secondary-500 text-xs"
-        *ngIf="locallyCreated; else showWorkerRoster"
-      >
-        {{ publishStationMessage }}roster members.
-      </div>
-      <ng-template #showWorkerRoster>
-        <app-roster
-          (modalClosed)="refreshInfoDrawer($event)"
-          [stationId]="stationRithmId"
-          [isWorker]="true"
-          [editMode]="editMode || isUserAdminOrOwner"
-        >
-        </app-roster>
-      </ng-template>
+  <div class="w-full py-2">
+    <p class="overline-font">worker roster</p>
+    <div
+      class="py-2 text-secondary-500 text-xs"
+      *ngIf="locallyCreated; else showWorkerRoster"
+    >
+      {{ publishStationMessage }}roster members
     </div>
-  </ng-template>
+    <ng-template #showWorkerRoster>
+      <app-roster
+        (modalClosed)="refreshInfoDrawer($event)"
+        [stationId]="stationRithmId"
+        [isWorker]="true"
+        [editMode]="editMode || isUserAdminOrOwner"
+      >
+      </app-roster>
+    </ng-template>
+  </div>
   <div class="w-full py-2">
     <p class="overline-font">station priority</p>
     <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
@@ -115,6 +113,7 @@
           >Manual
         </mat-radio-button>
       </mat-radio-group>
+
       <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
         <span class="text-error-500"
           >Error: unable to set document generation status</span
@@ -122,6 +121,25 @@
       </div>
     </div>
   </div>
+
+  <div
+    class="w-full py-2"
+    *ngIf="
+      stationDocumentGenerationStatus === 'Manual' &&
+      (mapMode === 0 || mapMode === undefined) &&
+      !locallyCreated
+    "
+  >
+    <button
+      data-testid="new-document"
+      id="new-document"
+      mat-stroked-button
+      color="accent"
+    >
+      New Document
+    </button>
+  </div>
+
   <div class="w-full py-2" *ngIf="!openedFromMap">
     <p class="overline-font">last updated</p>
     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">

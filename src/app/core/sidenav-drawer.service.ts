@@ -17,7 +17,12 @@ export class SidenavDrawerService {
 
   /** The name of the context for which the drawer is opened. */
   drawerContext$: Subject<
-    'comments' | 'history' | 'stationInfo' | 'documentInfo' | 'connectionInfo'
+    | 'comments'
+    | 'history'
+    | 'stationInfo'
+    | 'documentInfo'
+    | 'connectionInfo'
+    | 'stationGroupInfo'
   > = new ReplaySubject(1);
 
   /** Optional data that is available to the drawer. */
@@ -115,7 +120,8 @@ export class SidenavDrawerService {
       | 'history'
       | 'stationInfo'
       | 'documentInfo'
-      | 'connectionInfo',
+      | 'connectionInfo'
+      | 'stationGroupInfo',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {
@@ -153,7 +159,8 @@ export class SidenavDrawerService {
       | 'history'
       | 'stationInfo'
       | 'documentInfo'
-      | 'connectionInfo',
+      | 'connectionInfo'
+      | 'stationGroupInfo',
     data?: unknown
   ): void {
     if (!this.drawerComponent) {
