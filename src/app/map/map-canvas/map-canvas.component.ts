@@ -131,6 +131,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Storing broken connection line. */
   private storedConnectionLine: ConnectionMapElement | null = null;
 
+  /**Adding boundary box inner padding for top-left and bottom-right. */
+  readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
+
   /**
    * Add station mode active.
    *
@@ -753,6 +756,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.connectionElementService.drawConnection(connection);
       });
 
+      // Draw the Boundary box
+      this.drawBoundaryBox();
+
       // Draw the stations
       this.stations.forEach((station) => {
         this.stationElementService.drawStation(
@@ -865,10 +871,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension;
-    const topBoundaryEdge = minMapPoint.y - screenDimension;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+    const leftBoundaryEdge =
+      minMapPoint.x -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const topBoundaryEdge =
+      minMapPoint.y -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const rightBoundaryEdge =
+      maxMapPoint.x +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
+    const bottomBoundaryEdge =
+      maxMapPoint.y +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
 
     const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
     const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
@@ -973,7 +991,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.dragItem !== MapDragItem.Node) {
+      //If a station or node is being dragged, we should not check for hover on a connection.
+      if (
+        this.dragItem !== MapDragItem.Node &&
+        this.dragItem !== MapDragItem.Station
+      ) {
         for (const connection of this.connections) {
           // Check if connection line was clicked. ContextPoint is used for connection lines.
           connection.checkElementHover(eventContextPoint, this.context);
@@ -1391,7 +1413,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //Check if click was in a station. If so any code under this for loop will not run.
+    //Check if click was in a station. If so any code below this for loop will not run.
     for (const station of this.stations) {
       //Connection node.
       if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
@@ -1410,7 +1432,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //Document badge.
       } else if (
-        station.isPointInDocumentBadge(point, this.mapMode, this.scale)
+        station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
+        station.status !== MapItemStatus.Created
       ) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',
