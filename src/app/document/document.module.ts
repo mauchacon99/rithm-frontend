@@ -20,7 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
     DocumentComponent,
     DocumentFieldComponent,
     DocumentTemplateComponent,
-    ConnectedStationsModalComponent
+    ConnectedStationsModalComponent,
   ],
   imports: [
     CommonModule,
@@ -32,7 +32,7 @@ import { MatSelectModule } from '@angular/material/select';
     InfoDrawerModule,
     MatExpansionModule,
     MatSelectModule,
-    MatDialogModule
-  ]
+    MatDialogModule,
+  ],
 })
-export class DocumentModule { }
+export class DocumentModule {}

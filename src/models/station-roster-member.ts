@@ -1,11 +1,9 @@
-
 /**
  * Represents all information about a member on a roster for a station (both supervisor roster and worker roster).
  *
  * @see `StationRosterViewModel` model in the back end.
  */
 export interface StationRosterMember {
-
   /** The unique Rithm ID for the member on the roster. */
   readonly rithmId: string;
 

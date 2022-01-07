@@ -12,5 +12,5 @@ export enum UserType {
   Admin = 'admin',
 
   /** The user with no role assigned. */
-  None = 'none'
+  None = 'none',
 }

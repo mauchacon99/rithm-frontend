@@ -7,7 +7,7 @@ import { ValidationErrors } from '@angular/forms';
 @Component({
   selector: 'app-password-requirements[passReq][match]',
   templateUrl: './password-requirements.component.html',
-  styleUrls: ['./password-requirements.component.scss']
+  styleUrls: ['./password-requirements.component.scss'],
 })
 export class PasswordRequirementsComponent {
   /** Password requirements errors. */
@@ -15,5 +15,4 @@ export class PasswordRequirementsComponent {
 
   /** Show matching passwords requirement. */
   @Input() match = false;
-
 }

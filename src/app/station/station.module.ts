@@ -28,7 +28,7 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
     ToolbarComponent,
     StationFieldComponent,
     StationTemplateComponent,
-    RuleModalComponent
+    RuleModalComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +44,7 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
     MatExpansionModule,
     InfoDrawerModule,
     MatFormFieldModule,
-    MatInputModule
-  ]
+    MatInputModule,
+  ],
 })
-export class StationModule { }
+export class StationModule {}

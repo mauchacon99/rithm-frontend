@@ -1,4 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MockComponent } from 'ng-mocks';
@@ -14,28 +19,29 @@ import { User } from 'src/models';
 
 import { OrganizationManagementComponent } from './organization-management.component';
 
-const TEST_USERS: User[] = [{
-  rithmId: '1234',
-  firstName: 'Testy',
-  lastName: 'Test',
-  email: 'test@test.com',
-  isEmailVerified: true,
-  notificationSettings: null,
-  createdDate: '1/2/34',
-  role: null,
-  organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
-},
-{
-  rithmId: '123',
-  firstName: 'Testy',
-  lastName: 'Test',
-  email: 'test@test.com',
-  isEmailVerified: true,
-  notificationSettings: null,
-  createdDate: '1/2/34',
-  role: 'admin',
-  organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
-},
+const TEST_USERS: User[] = [
+  {
+    rithmId: '1234',
+    firstName: 'Testy',
+    lastName: 'Test',
+    email: 'test@test.com',
+    isEmailVerified: true,
+    notificationSettings: null,
+    createdDate: '1/2/34',
+    role: null,
+    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+  },
+  {
+    rithmId: '123',
+    firstName: 'Testy',
+    lastName: 'Test',
+    email: 'test@test.com',
+    isEmailVerified: true,
+    notificationSettings: null,
+    createdDate: '1/2/34',
+    role: 'admin',
+    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+  },
 ];
 
 describe('OrganizationManagementComponent', () => {
@@ -47,20 +53,16 @@ describe('OrganizationManagementComponent', () => {
       declarations: [
         OrganizationManagementComponent,
         MockComponent(LoadingIndicatorComponent),
-        MockComponent(PaginationComponent)
+        MockComponent(PaginationComponent),
       ],
-      imports: [
-        MatCardModule,
-        ReactiveFormsModule
-      ],
+      imports: [MatCardModule, ReactiveFormsModule],
       providers: [
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: OrganizationService, useClass: MockOrganizationService }
-      ]
-    })
-      .compileComponents();
+        { provide: OrganizationService, useClass: MockOrganizationService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -80,13 +82,22 @@ describe('OrganizationManagementComponent', () => {
   }));
 
   it('should make a userService call to remove a user', async () => {
-    const removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
+    const removeUserSpy = spyOn(
+      TestBed.inject(OrganizationService),
+      'removeUserFromOrganization'
+    ).and.callThrough();
     await component.removeUser(TEST_USERS[0]);
-    expect(removeUserSpy).toHaveBeenCalledOnceWith(TEST_USERS[0].organization, TEST_USERS[0].rithmId);
+    expect(removeUserSpy).toHaveBeenCalledOnceWith(
+      TEST_USERS[0].organization,
+      TEST_USERS[0].rithmId
+    );
   });
 
   it('should not make a userService call when id is same as current user', async () => {
-    const removeUserSpy = spyOn(TestBed.inject(OrganizationService), 'removeUserFromOrganization').and.callThrough();
+    const removeUserSpy = spyOn(
+      TestBed.inject(OrganizationService),
+      'removeUserFromOrganization'
+    ).and.callThrough();
     await component.removeUser(TEST_USERS[1]);
     expect(removeUserSpy).toHaveBeenCalledTimes(0);
   });
@@ -112,22 +123,38 @@ describe('OrganizationManagementComponent', () => {
   });
 
   it('should get organization information', () => {
-    const organizationSpy = spyOn(TestBed.inject(OrganizationService), 'getOrganizationInfo').and.callThrough();
+    const organizationSpy = spyOn(
+      TestBed.inject(OrganizationService),
+      'getOrganizationInfo'
+    ).and.callThrough();
     component.getOrganizationInfo();
     const organizationId = 'kdjfkd-kjdkfjd-jkjdfkdjk';
     expect(organizationSpy).toHaveBeenCalledOnceWith(organizationId);
   });
 
   it('should promote user to admin role.', async () => {
-    const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
+    const adminSpy = spyOn(
+      TestBed.inject(OrganizationService),
+      'updateUserRole'
+    ).and.callThrough();
     await component.updateUserRole(TEST_USERS[0], TEST_USERS[0].rithmId, 1);
-    expect(adminSpy).toHaveBeenCalledOnceWith('admin', TEST_USERS[0].organization, TEST_USERS[0].rithmId);
+    expect(adminSpy).toHaveBeenCalledOnceWith(
+      'admin',
+      TEST_USERS[0].organization,
+      TEST_USERS[0].rithmId
+    );
   });
 
   it('should demote user from admin role.', async () => {
-    const adminSpy = spyOn(TestBed.inject(OrganizationService), 'updateUserRole').and.callThrough();
+    const adminSpy = spyOn(
+      TestBed.inject(OrganizationService),
+      'updateUserRole'
+    ).and.callThrough();
     await component.updateUserRole(TEST_USERS[1], TEST_USERS[1].rithmId, 1);
-    expect(adminSpy).toHaveBeenCalledOnceWith(null, TEST_USERS[1].organization, TEST_USERS[1].rithmId);
+    expect(adminSpy).toHaveBeenCalledOnceWith(
+      null,
+      TEST_USERS[1].organization,
+      TEST_USERS[1].rithmId
+    );
   });
-
 });

@@ -1,5 +1,12 @@
 <mat-card class="w-full mt-5">
-  <div *ngIf="!isLoading" class="grid lg:grid-cols-3" [ngClass]="{'grid-cols-2 xl:grid-cols-4': !isPriority, 'grid-cols-1 md:grid-cols-2': isPriority}">
+  <div
+    *ngIf="!isLoading"
+    class="grid lg:grid-cols-3"
+    [ngClass]="{
+      'grid-cols-2 xl:grid-cols-4': !isPriority,
+      'grid-cols-1 md:grid-cols-2': isPriority
+    }"
+  >
     <ng-container *ngFor="let document of documents">
       <div class="flex items-center my-3">
         <div class="circle-30-accent float-left mr-2">
@@ -7,25 +14,40 @@
         </div>
         {{ document?.documentName }}
       </div>
-      <div class="flex items-center hidden" [ngClass]="{'md:flex': isPriority, 'lg:flex': !isPriority}">
+      <div
+        class="flex items-center hidden"
+        [ngClass]="{ 'md:flex': isPriority, 'lg:flex': !isPriority }"
+      >
         {{ document?.stationName }}
       </div>
-      <div class="flex items-center hidden" [ngClass]="{'lg:flex': isPriority, 'xl:flex': !isPriority}">
-        {{ ((getElapsedTime(document.flowedTimeUTC) === 'Unknown')) ? '' : getElapsedTime(document.flowedTimeUTC)  + ' in station'}}
+      <div
+        class="flex items-center hidden"
+        [ngClass]="{ 'lg:flex': isPriority, 'xl:flex': !isPriority }"
+      >
+        {{
+          getElapsedTime(document.flowedTimeUTC) === 'Unknown'
+            ? ''
+            : getElapsedTime(document.flowedTimeUTC) + ' in station'
+        }}
       </div>
-      <div class="flex items-center justify-end" [ngClass]="{'hidden': isPriority, 'flex': !isPriority}">
-        <button mat-stroked-button color="accent">
-          Continue
-        </button>
+      <div
+        class="flex items-center justify-end"
+        [ngClass]="{ hidden: isPriority, flex: !isPriority }"
+      >
+        <button mat-stroked-button color="accent">Continue</button>
       </div>
     </ng-container>
   </div>
-  <div class="w-full h-full absolute top-0 left-0 flex" *ngIf="(!documents || documents.length === 0) && !isLoading">
-    <div class="m-auto self-center">
-      No documents
-    </div>
+  <div
+    class="w-full h-full absolute top-0 left-0 flex"
+    *ngIf="(!documents || documents.length === 0) && !isLoading"
+  >
+    <div class="m-auto self-center">No documents</div>
   </div>
   <div class="w-full h-full absolute top-0 left-0 flex">
-    <app-loading-indicator class="m-auto self-center" *ngIf="isLoading"></app-loading-indicator>
+    <app-loading-indicator
+      class="m-auto self-center"
+      *ngIf="isLoading"
+    ></app-loading-indicator>
   </div>
 </mat-card>

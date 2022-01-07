@@ -1,24 +1,40 @@
-<div class="flex flex-col justify-start">
+<div *ngFor="let station of nextStations" class="flex flex-col justify-start">
   <div class="mb-6">
-    <p class="font-semibold mt-10">Price Change Rules</p>
-    <p class="text-error-500 mt-4">Documents will always flow here if there are no rules.</p>
+    <p class="font-semibold mt-10">{{ station.name }} Rules</p>
+    <p class="text-error-500 mt-4">
+      Documents will always flow here if there are no rules.
+    </p>
     <div>
-      <p class="mt-3">Flow to Price Change if ALL of the following are true.</p>
+      <p class="mt-3">
+        Flow to {{ station.name }} if ALL of the following are true.
+      </p>
       <div class="mt-4">
-        <button mat-stroked-button
-          class="px-4 py-1 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold">New
-          Rule</button>
+        <button
+          mat-stroked-button
+          (click)="openModal()"
+          data-testid="all-new-rule"
+          id="all-new-rule"
+          class="px-4 py-1 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
+        >
+          New Rule
+        </button>
       </div>
     </div>
     <div class="mt-5">
       <span>- OR -</span>
     </div>
     <div>
-      <p>Flow to Price Change if ANY of the following are true.</p>
+      <p>Flow to {{ station.name }} if ANY of the following are true.</p>
       <div class="mt-4">
-        <button mat-stroked-button
-          class="px-4 py-1 mt-4 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold">New
-          Rule</button>
+        <button
+          mat-stroked-button
+          (click)="openModal()"
+          data-testid="any-new-rule"
+          id="any-new-rule"
+          class="px-4 py-1 mt-4 rounded border-solid border-2 border-primary-200 text-accent-500 text-sm font-semibold"
+        >
+          New Rule
+        </button>
       </div>
     </div>
   </div>

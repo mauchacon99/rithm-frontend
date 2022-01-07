@@ -8,9 +8,8 @@ describe('HistoryDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistoryDrawerComponent ]
-    })
-    .compileComponents();
+      declarations: [HistoryDrawerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
