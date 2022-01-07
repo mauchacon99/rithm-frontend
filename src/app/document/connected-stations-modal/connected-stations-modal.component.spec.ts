@@ -11,6 +11,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
 
@@ -33,6 +34,7 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
+        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
@@ -130,5 +132,15 @@ describe('ConnectedStationsModalComponent', () => {
     ).and.callThrough();
     component.moveDocument();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should activate the connected station loading', () => {
+    const connectedStationLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#connected-stations-loading'
+      );
+    component.connectedStationLoading = true;
+    fixture.detectChanges();
+    expect(connectedStationLoading).toBeTruthy();
   });
 });
