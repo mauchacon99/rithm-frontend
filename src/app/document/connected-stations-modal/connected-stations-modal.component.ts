@@ -65,14 +65,9 @@ export class ConnectedStationsModalComponent implements OnInit {
       .subscribe({
         next: (connectedStations) => {
           this.connectedError = false;
-          const nextStation = connectedStations.nextStations
-            ? connectedStations.nextStations
-            : [];
-          const previousStation = connectedStations.previousStations
-            ? connectedStations.previousStations
-            : [];
-
-          this.connectedStations = nextStation.concat(previousStation);
+          this.connectedStations = connectedStations.nextStations.concat(
+            connectedStations.previousStations
+          );
         },
         error: (error: unknown) => {
           this.connectedError = true;

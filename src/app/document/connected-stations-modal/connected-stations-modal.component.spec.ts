@@ -128,4 +128,21 @@ describe('ConnectedStationsModalComponent', () => {
     component.moveDocument();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should show error in petition connected stations', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getConnectedStationInfo'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const reviewError =
+      fixture.debugElement.nativeElement.querySelector('#stations-error');
+    expect(component.connectedError).toBeTrue();
+    expect(reviewError).toBeTruthy();
+  });
 });
