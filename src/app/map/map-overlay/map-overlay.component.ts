@@ -252,14 +252,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
+      this.mapService.mapMode$.next(MapMode.View);
       this.mapService
         .publishMap()
         .pipe(first())
         .subscribe({
           next: () => {
             this.mapDataLoading = false;
-            this.mapService.mapMode$.next(MapMode.View);
-
             this.popupService.notify('Map data published successfully.');
           },
           error: (error: unknown) => {
