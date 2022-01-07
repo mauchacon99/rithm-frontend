@@ -17,6 +17,7 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
+  RithmIdStringJSON,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -555,9 +556,13 @@ describe('DocumentService', () => {
   });
 
   it('should create a new document', () => {
+    const expectedResponse: RithmIdStringJSON = {
+      rithmId: 'C0A71776-DF26-4C29-A07C-A6434F675077',
+    };
+
     const nameDocument = 'The name of Document';
     const priorityDocument = 0;
-    const expectRequestBody = {
+    const expectedRequestBody = {
       name: nameDocument,
       priority: priorityDocument,
       stationRithmId: stationId,
@@ -566,14 +571,14 @@ describe('DocumentService', () => {
     service
       .createNewDocument(nameDocument, priorityDocument, stationId)
       .subscribe((response) => {
-        expect(response).toBeFalsy();
+        expect(response).toEqual(expectedResponse.rithmId);
       });
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(expectRequestBody);
+    expect(req.request.body).toEqual(expectedRequestBody);
 
     req.flush(null);
     httpTestingController.verify();
