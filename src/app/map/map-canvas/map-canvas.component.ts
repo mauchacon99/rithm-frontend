@@ -871,10 +871,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension * this.scale / 2 + this.boundaryPadding.topLeft;
-    const topBoundaryEdge = minMapPoint.y - screenDimension * this.scale / 2 + this.boundaryPadding.topLeft;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension * this.scale / 2 - this.boundaryPadding.rightBottom;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension * this.scale / 2 - this.boundaryPadding.rightBottom;
+    const leftBoundaryEdge =
+      minMapPoint.x -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const topBoundaryEdge =
+      minMapPoint.y -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const rightBoundaryEdge =
+      maxMapPoint.x +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
+    const bottomBoundaryEdge =
+      maxMapPoint.y +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
 
     const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
     const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };

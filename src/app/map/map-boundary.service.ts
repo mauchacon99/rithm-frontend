@@ -32,8 +32,9 @@ export class MapBoundaryService {
     const ctx = this.canvasContext;
     const strokeColor = '#1b4387';
 
-    ctx.setLineDash([12, 12]);
+    ctx.setLineDash([1, 5]);
     ctx.beginPath();
+    ctx.lineCap = 'round';
     ctx.strokeStyle = strokeColor;
 
     ctx.moveTo(minBoundaryCoords.x, minBoundaryCoords.y);
