@@ -1,8 +1,7 @@
 /**
  * All of the various modes/states of the map.
  */
- export enum MapMode {
-
+export enum MapMode {
   /** The map is only allowed to be viewed without changes. */
   View,
 
@@ -13,5 +12,5 @@
   StationAdd,
 
   /** The map is waiting for a location to be selected for a new flow. */
-  FlowAdd
+  FlowAdd,
 }

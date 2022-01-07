@@ -36,7 +36,7 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     UserRemovalComponent,
     LoadingIndicatorComponent,
     DialogComponent,
-    RosterManagementModalComponent
+    RosterManagementModalComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +52,7 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     MatCardModule,
     MatMenuModule,
     MatTooltipModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   exports: [
     LoadingIndicatorComponent,
@@ -66,8 +66,7 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     PaginationComponent,
     UserFormComponent,
     UserRemovalComponent,
-    RosterComponent
-  ]
+    RosterComponent,
+  ],
 })
-
-export class SharedModule { }
+export class SharedModule {}
