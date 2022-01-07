@@ -65,10 +65,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** The rendering context for the canvas element for the map. */
   private context!: CanvasRenderingContext2D;
 
-  /** Modes for canvas element used for the map. */
+  /** Modes for canvas element used for the map. Set to view by default. */
   mapMode = MapMode.View;
 
-  /** Checks if automatic pan is triggered by being outside the bounding box. */
+  //The next several properties relate to automatically panning the map in a given direction.
+  /** Checks if automatic pan is triggered by being on the edge of the screen, or in other words: outside the pan bounding box. */
   private outsideBox = false;
 
   /** Checks if automatic pan is triggered by a fast map drag. */
@@ -77,65 +78,75 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Used to check if a fast drag should be cancelled. */
   private holdDrag = false;
 
-  /** Flag for auto pan checks. */
+  /** Flag for auto pan checks. While true, a pan loop will continually execute.*/
   private panActive?: boolean;
 
-  /** Track what the next pan velocity is. */
+  /** Track what the next pan velocity is. Pan velocity determines what direction and how fast the map automatically pans. */
   private nextPanVelocity: Point = { x: 0, y: 0 };
 
-  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  /**
+   * The coordinate at which the canvas is currently rendering in regards to the overall map.
+   * This point is the top left corner of the visible map.
+   */
   currentCanvasPoint: Point = { x: 0, y: 0 };
 
-  /** The coordinate at which the current mouse point in the overall map. */
+  /**
+   * The coordinate at which the current mouse point is being tracked on the canvas.
+   * While the mouse is not being tracked, it is set to { x: -1, y: -1 }.
+   */
   currentMousePoint: Point = DEFAULT_MOUSE_POINT;
 
-  /** Requested animation for raf. */
+  /** Requested animation frame for raf.*/
   private myReq?: number;
 
-  /** The coordinate where the mouse or touch event begins. */
+  /** The coordinate on the canvas where the mouse or touch event begins. */
   private eventStartCoords: Point = DEFAULT_MOUSE_POINT;
 
-  /** Used to track map movement on a touchscreen. */
+  /** Used to track last recorded position when calculating map movement. */
   private lastTouchCoords: Point[] = [DEFAULT_MOUSE_POINT];
 
   /** Used to track number of touches. Needed to handle multi-touch interactions with pointer events.*/
   private pointerCache: PointerEvent[] = [];
 
-  /** What type of thing is being dragged? */
+  /** What type of thing is being dragged? Set to default by default.*/
   private dragItem = MapDragItem.Default;
 
-  /** Data for station card used in the map. */
+  /** An array of data used to render and interact with station cards in the map. */
   stations: StationMapElement[] = [];
 
-  /** Data for flow used in the map. */
+  /** An array of data used to render and interact with station groups in the map. */
   flows: FlowMapElement[] = [];
 
-  /** Data for connection line path between stations. */
+  /** An array of data used to render and interact with connection line paths between stations in the map. */
   connections: ConnectionMapElement[] = [];
 
-  /** Initial Data Load. */
+  /**
+   * This is set to true initially than set to false once the map has initialized.
+   * Used to allow methods to have a separate behavior for when the map first loads. Such as the center method.
+   */
   private initLoad = true;
 
-  /** Scale to calculate canvas points. */
+  /** Scale to calculate canvas points. Defaults to 1. Zooming adjusts this scale exponentially. */
   private scale = DEFAULT_SCALE;
 
-  /**Track zoomCount. */
+  //The next two properties relate to zoom.
+  /**Track zoomCount. This count determines the number of times to run a zoom function and whether to zoom in or out.*/
   private zoomCount = 0;
 
-  /**Set up interval for zoom. */
+  /**Set up interval for zoom. This allows us animate zooming through a loop.*/
   private zoomInterval?: NodeJS.Timeout;
 
-  /** Boolean to check drag on connection line. */
+  /** Boolean to check drag on connection line. When true a connection line is currently being dragged. */
   private connectionLineDrag = false;
 
-  /** Storing broken connection line. */
+  /** Storing broken connection line. Used when moving a connection line.*/
   private storedConnectionLine: ConnectionMapElement | null = null;
 
   /**Adding boundary box inner padding for top-left and bottom-right. */
   readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
 
   /**
-   * Add station mode active.
+   * Add station mode active. This get is true when this.mapMode is set to stationAdd.
    *
    * @returns Boolean.
    */
@@ -153,6 +164,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private mapBoundaryService: MapBoundaryService
   ) {
+    //This subscribe sets this.mapMode when the behavior subject in mapService changes, then redraws the map.
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
@@ -160,6 +172,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    /* This subscribe sets this.scale when the behavior subject in mapService changes.
+    Then it executes a loop to more cleanly handle scale change animation. */
     this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
@@ -167,6 +181,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.scaleChangeDraw();
       });
 
+    //This subscribe sets this.currentCanvasPoint when the behavior subject in mapService changes, then redraws the map.
     this.mapService.currentCanvasPoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
@@ -174,6 +189,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    //This subscribe sets this.stations when the behavior subject in mapService changes, then redraws the map.
     this.mapService.stationElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
@@ -181,12 +197,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((count) => {
         this.zoomCount = count;
       });
 
+    /* This subscribe sets this.currentMousePoint when the behavior subject changes.
+    If this.dragItem is set to node or station:
+    checks to see if the mouse is on the edge of the screen, or in other words, outside the pan bounding box,
+    it then sets this.nextPanVelocity to the velocity set during that check and then activates auto pan if appropriate.
+
+    Simply put: if a station or node is dragged to the edge of the screen, the map should start panning.*/
     this.mapService.currentMousePoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
@@ -204,6 +227,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       });
 
+    /* This subscribe sets this.nextPanVelocity when the behavior subject in mapService changes.
+    Then it checks if auto pan should be activated.
+    This is needed to pan the map when the center method is called. */
     this.mapService.centerPanVelocity$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((velocity) => {
