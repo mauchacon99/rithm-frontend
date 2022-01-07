@@ -91,11 +91,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.popupService.alert({
-            title: 'Move Document',
-            message: 'The document has been moved successfully',
-            cancelButtonText: 'Close',
-          });
+          this.popupService.notify('The document has been moved successfully');
         },
         error: (error: unknown) => {
           this.errorService.displayError(
