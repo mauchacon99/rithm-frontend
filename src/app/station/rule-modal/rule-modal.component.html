@@ -3,6 +3,28 @@
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">New Rule</h4>
   </div>
+  <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+    <mat-step color="accent"  [completed]="false">
+      <ng-template matStepLabel>
+        <p class="truncate font-semibold ml-2">Select Field</p>
+      </ng-template>
+    </mat-step>
+    <mat-step color="primary" [completed]="false">
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Comparison Type</p>
+      </ng-template>
+    </mat-step>
+    <mat-step color="primary" [completed]="false">
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Comparison Value</p>
+      </ng-template>
+    </mat-step>
+    <mat-step color="primary" [completed]="false">
+      <ng-template matStepLabel>
+        <p class="truncate ml-2">Done</p>
+      </ng-template>
+    </mat-step>
+  </mat-stepper>
   <div mat-dialog-actions class="flex justify-end">
     <button mat-button mat-dialog-close (click)="closeModal()">Close</button>
   </div>
