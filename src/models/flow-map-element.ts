@@ -1,5 +1,4 @@
 import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '.';
-import { MapSelectItem } from './enums/map-select-item.enum';
 
 export interface FlowMapElement extends FlowMapData {
 
@@ -15,8 +14,11 @@ export interface FlowMapElement extends FlowMapData {
   /** The path of the flow boundary. */
   path: Path2D;
 
-  /** Whether the flow in available for selection to add into a new group or not. */
-  isSelected: MapSelectItem;
+  /** Whether the station group is disabled for selection or not. */
+  disabled: boolean;
+
+  /** Whether the station group is selected or not. */
+  selected: boolean;
 }
 
 /**
@@ -33,7 +35,8 @@ export class FlowMapElement {
     this.boundaryPoints = [];
     this.dragging = false;
     this.hoverActive = FlowElementHoverType.None;
-    this.isSelected = MapSelectItem.Available;
+    this.disabled = false;
+    this.selected = false;
     Object.assign(this, flowMapData);
   }
 

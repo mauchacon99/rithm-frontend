@@ -17,7 +17,6 @@ import { StationDocumentsModalComponent } from 'src/app/shared/station-documents
 import { MatDialog } from '@angular/material/dialog';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { StationService } from 'src/app/core/station.service';
-import { MapSelectItem } from 'src/models/enums/map-select-item.enum';
 
 /**
  * Component for the main `<canvas>` element used for the map.
@@ -1218,10 +1217,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
         if (this.mapMode === MapMode.FlowAdd) {
-          if (station.isSelected === MapSelectItem.Available) {
-            station.isSelected = MapSelectItem.Selected;
-          } else if (station.isSelected === MapSelectItem.Selected) {
-            station.isSelected = MapSelectItem.Available;
+          if (!station.disabled && !station.selected) {
+            station.selected = true;
+          } else if (!station.disabled && station.selected) {
+            station.selected = false;
           }
           return;
         } else {
@@ -1263,10 +1262,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     for (const flow of this.flows) {
       flow.checkElementHover(contextPoint, this.context);
       if (flow.hoverActive === FlowElementHoverType.Boundary) {
-        if (flow.isSelected === MapSelectItem.Available) {
-          flow.isSelected = MapSelectItem.Selected;
-        } else if (flow.isSelected === MapSelectItem.Selected) {
-          flow.isSelected = MapSelectItem.Available;
+        if (!flow.disabled && !flow.selected) {
+          flow.selected = true;
+        } else if (!flow.disabled && flow.selected) {
+          flow.selected = false;
         }
         break;
       }
