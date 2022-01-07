@@ -26,10 +26,6 @@ describe('StationGroupInfoDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationGroupInfoDrawerComponent);
     component = fixture.componentInstance;
-    component.connectionStartStationName =
-      component.connectedStations[0].stationName;
-    component.connectionEndStationName =
-      component.connectedStations[1].stationName;
     fixture.detectChanges();
   });
 
