@@ -12,6 +12,9 @@
         *ngIf="drawerMode === 'connectionInfo'"
       ></app-connection-info-drawer>
       <app-info-drawer *ngIf="drawerMode === 'stationInfo'"></app-info-drawer>
+      <app-station-group-info-drawer
+        *ngIf="drawerMode === 'stationGroupInfo'"
+      ></app-station-group-info-drawer>
     </mat-drawer>
     <mat-drawer-content>
       <div
