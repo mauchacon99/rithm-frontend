@@ -16,8 +16,8 @@ export class RuleModalComponent {
   /** Station Rithm id. */
   stationRithmId = '';
 
-    /** Orientation for stepper. */
-    stepperOrientation$ : Observable<StepperOrientation>;
+  /** Orientation for stepper. */
+  stepperOrientation$: Observable<StepperOrientation>;
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -26,8 +26,8 @@ export class RuleModalComponent {
   ) {
     this.stationRithmId = rithmId;
     this.stepperOrientation$ = breakpointObserver
-    .observe('(min-width: 800px)')
-    .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+      .observe('(min-width: 800px)')
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
 
   /**
