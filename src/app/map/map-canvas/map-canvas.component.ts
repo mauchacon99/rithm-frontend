@@ -693,8 +693,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
         if (
-          Math.floor(this.nextPanVelocity.x) >= 1 ||
-          Math.floor(this.nextPanVelocity.y) >= 1
+          Math.abs(this.nextPanVelocity.x) >= 1 ||
+          Math.abs(this.nextPanVelocity.y) >= 1
         ) {
           this.nextPanVelocity = {
             x: this.nextPanVelocity.x * PAN_DECAY_RATE,
@@ -1192,6 +1192,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ) {
         this.fastDrag = true;
         this.holdDrag = true;
+        //This is designed to trigger if a pointer event is ongoing. it wont have a chance to trigger if the event has ended already.
         setTimeout(() => {
           if (this.holdDrag) {
             this.fastDrag = false;
