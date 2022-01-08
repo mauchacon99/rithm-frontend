@@ -131,6 +131,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Storing broken connection line. */
   private storedConnectionLine: ConnectionMapElement | null = null;
 
+  /**Adding boundary box inner padding for top-left and bottom-right. */
+  readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
+
   /**
    * Add station mode active.
    *
@@ -693,8 +696,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
         if (
-          Math.floor(this.nextPanVelocity.x) >= 1 ||
-          Math.floor(this.nextPanVelocity.y) >= 1
+          Math.abs(this.nextPanVelocity.x) >= 1 ||
+          Math.abs(this.nextPanVelocity.y) >= 1
         ) {
           this.nextPanVelocity = {
             x: this.nextPanVelocity.x * PAN_DECAY_RATE,
@@ -752,6 +755,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.connections.forEach((connection) => {
         this.connectionElementService.drawConnection(connection);
       });
+
+      // Draw the Boundary box
+      this.drawBoundaryBox();
 
       // Draw the stations
       this.stations.forEach((station) => {
@@ -865,10 +871,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension;
-    const topBoundaryEdge = minMapPoint.y - screenDimension;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+    const leftBoundaryEdge =
+      minMapPoint.x -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const topBoundaryEdge =
+      minMapPoint.y -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const rightBoundaryEdge =
+      maxMapPoint.x +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
+    const bottomBoundaryEdge =
+      maxMapPoint.y +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
 
     const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
     const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
@@ -1192,6 +1210,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ) {
         this.fastDrag = true;
         this.holdDrag = true;
+        //This is designed to trigger if a pointer event is ongoing. it wont have a chance to trigger if the event has ended already.
         setTimeout(() => {
           if (this.holdDrag) {
             this.fastDrag = false;

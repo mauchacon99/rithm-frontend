@@ -19,6 +19,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -32,7 +33,7 @@ describe('ConnectedStationsModalComponent', () => {
   const documentId = 'E204F369-386F-4E41';
   const dialogRefSpyObj = jasmine.createSpyObj({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    close: () => {},
+    close: () => { },
   });
 
   beforeEach(async () => {
@@ -46,6 +47,7 @@ describe('ConnectedStationsModalComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
+        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
@@ -163,5 +165,15 @@ describe('ConnectedStationsModalComponent', () => {
     component.moveDocument();
     expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
     expect(routerSpy).toHaveBeenCalledWith('dashboard');
+  });
+
+  it('should activate the connected station loading', () => {
+    const connectedStationLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#connected-stations-loading'
+      );
+    component.connectedStationLoading = true;
+    fixture.detectChanges();
+    expect(connectedStationLoading).toBeTruthy();
   });
 });
