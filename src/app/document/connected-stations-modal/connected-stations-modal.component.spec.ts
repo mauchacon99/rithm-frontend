@@ -33,7 +33,7 @@ describe('ConnectedStationsModalComponent', () => {
   const documentId = 'E204F369-386F-4E41';
   const dialogRefSpyObj = jasmine.createSpyObj({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    close: () => { },
+    close: () => {},
   });
 
   beforeEach(async () => {
