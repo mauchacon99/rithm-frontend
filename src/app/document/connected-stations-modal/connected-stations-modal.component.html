@@ -23,7 +23,7 @@
   </div>
   <div *ngIf="connectedError" id="stations-error">
     <p class="text-left text-error-500">
-      Error: Unable to retrive connected Station
+      Error: Unable to retrive connected Stations
     </p>
   </div>
   <div mat-dialog-actions class="flex justify-end">
@@ -41,7 +41,6 @@
     <button
       mat-raised-button
       color="accent"
-      [mat-dialog-close]="true"
       data-testid="connected-modal-move"
       id="connected-modal-move"
       [disabled]="selectedStation === '' || selectedStation === null"
