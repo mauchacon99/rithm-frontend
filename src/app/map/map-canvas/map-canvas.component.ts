@@ -852,8 +852,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   private drawElements(): void {
     requestAnimationFrame(() => {
+      //Check the screen's DPI.
       const pixelRatio = window.devicePixelRatio || 1;
-      // Clear the canvas
+      // Clear the canvas. This erases everything on the map.
       this.context.clearRect(
         0,
         0,
@@ -895,26 +896,33 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--canvasvh', `${vh}px`);
 
+    //Check the screen's DPI.
     const pixelRatio = window.devicePixelRatio || 1;
     const canvasBoundingRect =
       this.mapCanvas.nativeElement.getBoundingClientRect();
-
+    //This sets the canvas to be a the size of the screen * the pixelRatio. This makes it bigger than what is displayed.
     this.mapCanvas.nativeElement.width = canvasBoundingRect.width * pixelRatio;
     this.mapCanvas.nativeElement.height =
       canvasBoundingRect.height * pixelRatio;
+    //This scales down the canvas to it's actual size. Doing it like this ensures that everything is crisp on HiDPI screens.
     this.context.scale(pixelRatio, pixelRatio);
   }
 
   /**
-   * Calculates a bounding box around the border of the canvas and returns a pan velocity.
+   * Calculates a bounding box around the border of the canvas.
+   * If a station or connection node is dragged outside this box,
+   * returns a pan velocity so that the map automatically starts panning.
    *
    * @param position The position of the pointer, etc event.
    * @returns Boolean.
    */
   private getOutsideBoundingBoxPanVelocity(position: Point): Point {
+    //Store the dimensions of the canvas.
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+    /* Sets a number that will be used to check the position of the cursor against.
+    This number is set dynamically based on screen size. The bounding box is set according to this number. */
     const box = () => {
-      //Dynamically set the size of the bounding box based on screen size.
+      //number will be 120 or greater.
       if (((window.innerHeight + window.innerWidth) / 2) * 0.05 > 120) {
         return ((window.innerHeight + window.innerWidth) / 2) * 0.05;
       } else {
@@ -922,23 +930,31 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     };
 
+    // Set up a panVelocity that will be adjusted later.
     const panVelocity: Point = { x: 0, y: 0 };
+    // The Publish and Cancel buttons are on the bottom of the screen in mobile, so we need to account for them.
     const mobileAdjust = window.innerWidth < 768 ? 36 : 0;
 
     //Set direction and speed to pan x.
+    //Check if cursor position is outside the left edge of the bounding box.
     if (position.x < box()) {
+      //Set the x coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const leftPan = Math.floor(
         ((box() - position.x) * MAX_PAN_VELOCITY * 0.01) / this.scale
       );
+      //If leftPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.x =
         leftPan <= Math.floor(MAX_PAN_VELOCITY / this.scale)
           ? leftPan
           : Math.floor(MAX_PAN_VELOCITY / this.scale);
+    //Check if cursor position is outside the right edge of the bounding box.
     } else if (position.x > canvasRect.width - box()) {
+      //Set the x coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const rightPan = Math.floor(
         ((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * 0.01) /
           this.scale
       );
+      //If rightPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.x =
         rightPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale)
           ? rightPan
@@ -946,21 +962,27 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Set direction and speed to pan y.
+    //Check if cursor position is outside the top edge of the bounding box.
     if (position.y < box()) {
+      //Set the y coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const topPan = Math.floor(
         ((box() - position.y) * MAX_PAN_VELOCITY * 0.01) / this.scale
       );
+      //If topPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.y =
         topPan <= Math.floor(MAX_PAN_VELOCITY / this.scale)
           ? topPan
           : Math.floor(MAX_PAN_VELOCITY / this.scale);
+    //Check if cursor position is outside the bottom edge of the bounding box.
     } else if (position.y > canvasRect.height - box() - mobileAdjust) {
+      //Set the y coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const bottomPan = Math.floor(
         ((canvasRect.height - box() - mobileAdjust - position.y) *
           MAX_PAN_VELOCITY *
           0.01) /
           this.scale
       );
+      //If bottomPan is > MAX_PAN_VELOCITY, used that instead.
       panVelocity.y =
         bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale)
           ? bottomPan
