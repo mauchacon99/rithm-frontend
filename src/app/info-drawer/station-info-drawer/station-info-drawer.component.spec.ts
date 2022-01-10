@@ -1,4 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import {
@@ -279,39 +284,35 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-   it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
-     component.stationLoading = false;
-     component.stationDocumentGenerationStatus =
-       DocumentGenerationStatus.Manual;
+  it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
 
-     fixture.detectChanges();
+    fixture.detectChanges();
 
-     const createDocumentSpy = spyOn(component, 'createNewDocument');
-     const btnNewDoc =
-       fixture.debugElement.nativeElement.querySelector('#new-document');
-     expect(btnNewDoc).toBeTruthy();
-     btnNewDoc.click();
-     tick();
-     expect(createDocumentSpy).toHaveBeenCalledOnceWith();
-   }));
+    const createDocumentSpy = spyOn(component, 'createNewDocument');
+    const btnNewDoc =
+      fixture.debugElement.nativeElement.querySelector('#new-document');
+    expect(btnNewDoc).toBeTruthy();
+    btnNewDoc.click();
+    tick();
+    expect(createDocumentSpy).toHaveBeenCalledOnceWith();
+  }));
 
+  it('should open a confirm dialog to create a document', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message:
+        'After the document creation you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Close',
+    };
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
 
-   it('should open a confirm dialog to create a document', async () => {
-     const dialogExpectData: DialogOptions = {
-       title: 'Are you sure?',
-       message:
-         'After the document creation you will be redirected to the document page.',
-       okButtonText: 'Confirm',
-       cancelButtonText: 'Close',
-     };
-     const popupSpy = spyOn(
-       TestBed.inject(PopupService),
-       'confirm'
-     ).and.callThrough();
-
-     await component.createNewDocument();
-     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
-   });
-
-
+    await component.createNewDocument();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
 });
