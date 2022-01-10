@@ -81,7 +81,7 @@
       {{ stationPriority }}
     </button>
   </div>
-  <div class="w-full py-2">
+  <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
     <p class="overline-font">document generation</p>
     <div class="py-2 text-xs text-secondary-500" *ngIf="locallyCreated">
       {{ publishStationMessage }}document generation status.

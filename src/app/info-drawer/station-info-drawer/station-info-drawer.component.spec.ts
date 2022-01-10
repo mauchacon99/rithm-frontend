@@ -156,8 +156,10 @@ describe('StationInfoDrawerComponent', () => {
   it('should show loading-indicators while get data the status station document', () => {
     component.stationLoading = false;
     component.getStationDocumentGenerationStatus();
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
+
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#loading-indicator-status'
     );
@@ -171,6 +173,7 @@ describe('StationInfoDrawerComponent', () => {
       component.stationRithmId,
       newStatus
     );
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
@@ -221,6 +224,8 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
     component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
+      '',
+      0,
       component.stationRithmId
     );
   });
