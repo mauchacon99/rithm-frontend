@@ -1,4 +1,9 @@
-import { FlowElementHoverType, FlowMapData, MapItemStatus, Point } from '.';
+import {
+  FlowElementHoverItem,
+  FlowMapData,
+  MapItemStatus,
+  Point,
+} from '../models';
 
 export interface FlowMapElement extends FlowMapData {
   /** The points used for the boundary shape of the flow (the points used for the convex hull). */
@@ -7,8 +12,8 @@ export interface FlowMapElement extends FlowMapData {
   /** Whether the flow is currently being dragged or not. */
   dragging: boolean;
 
-  /** Whether the flow is currently hovering? */
-  hoverActive: FlowElementHoverType;
+  /** What item the user is currently hovering over on this flow, if any. */
+  hoverItem: FlowElementHoverItem;
 
   /** The path of the flow boundary. */
   path: Path2D;
@@ -26,7 +31,7 @@ export class FlowMapElement {
   constructor(flowMapData: FlowMapData) {
     this.boundaryPoints = [];
     this.dragging = false;
-    this.hoverActive = FlowElementHoverType.None;
+    this.hoverItem = FlowElementHoverItem.None;
     Object.assign(this, flowMapData);
   }
 
@@ -40,9 +45,9 @@ export class FlowMapElement {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
-      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? FlowElementHoverType.Boundary
-        : FlowElementHoverType.None;
+      this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
+        ? FlowElementHoverItem.Boundary
+        : FlowElementHoverItem.None;
     }
     ctx.restore();
   }
@@ -53,7 +58,7 @@ export class FlowMapElement {
    * @returns Whether the flow is empty.
    */
   get isEmpty(): boolean {
-    return !this.stations && !this.subFlows;
+    return !this.stations.length && !this.subFlows.length;
   }
 
   /**

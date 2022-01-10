@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ConnectionMapElement } from 'src/models';
+import { ConnectionMapElement } from 'src/helpers';
 import {
   CONNECTION_DEFAULT_COLOR,
   CONNECTION_LINE_WIDTH,
@@ -48,7 +48,7 @@ export class ConnectionElementService {
       this.mapScale > SCALE_REDUCED_RENDER
         ? CONNECTION_LINE_WIDTH
         : CONNECTION_LINE_WIDTH_ZOOM_OUT;
-    ctx.strokeStyle = connection.hoverActive
+    ctx.strokeStyle = connection.hovering
       ? NODE_HOVER_COLOR
       : CONNECTION_DEFAULT_COLOR;
     ctx.stroke(connection.path);
