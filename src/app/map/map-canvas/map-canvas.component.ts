@@ -8,18 +8,20 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StationMapElement } from 'src/helpers';
+import {
+  ConnectionMapElement,
+  FlowMapElement,
+  StationMapElement,
+} from 'src/helpers';
 import {
   MapMode,
   Point,
   MapDragItem,
   MapItemStatus,
-  FlowMapElement,
-  StationElementHoverType,
+  StationElementHoverItem,
   StationInfoDrawerData,
   StationInformation,
-  ConnectionMapElement,
-  FlowElementHoverType,
+  FlowElementHoverItem,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -977,12 +979,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if clicked on an interactive station element.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         // clicked on a connection node.
-        if (station.hoverActive === StationElementHoverType.Node) {
+        if (station.hoverItem === StationElementHoverItem.Node) {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
           // Check for drag start on station
-        } else if (station.hoverActive !== StationElementHoverType.None) {
+        } else if (station.hoverItem !== StationElementHoverItem.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
             this.dragItem = MapDragItem.Station;
@@ -999,7 +1001,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const connection of this.connections) {
           // Check if connection line was clicked. ContextPoint is used for connection lines.
           connection.checkElementHover(eventContextPoint, this.context);
-          if (connection.hoverActive) {
+          if (connection.hovering) {
             const startStation = this.stations.find(
               (station) => station.rithmId === connection.startStationRithmId
             );
@@ -1089,7 +1091,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-        if (station.hoverActive !== StationElementHoverType.None) {
+        if (station.hoverItem !== StationElementHoverItem.None) {
           newNextStation = station;
           newPreviousStation = this.stations.find(
             (foundStation) => foundStation.dragging
@@ -1110,7 +1112,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-          if (station.hoverActive !== StationElementHoverType.None) {
+          if (station.hoverItem !== StationElementHoverItem.None) {
             //ensure we cant get duplicate ids.
             if (
               !station.previousStations.includes(newPreviousStation.rithmId) &&
@@ -1281,12 +1283,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Hovering over different station elements.
         for (const station of this.stations) {
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-          if (station.hoverActive !== StationElementHoverType.None) {
+          if (station.hoverItem !== StationElementHoverItem.None) {
             if (
               !(
                 this.mapMode === MapMode.View &&
-                (station.hoverActive === StationElementHoverType.Button ||
-                  station.hoverActive === StationElementHoverType.Node)
+                (station.hoverItem === StationElementHoverItem.Button ||
+                  station.hoverItem === StationElementHoverItem.Node)
               )
             ) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1301,18 +1303,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next two if statements ensure that while a station is being hovered a connection line is not.
         const hoveringOverStation = this.stations.some(
-          (station) => station.hoverActive !== StationElementHoverType.None
+          (station) => station.hoverItem !== StationElementHoverItem.None
         );
         const hoveringOverFlow = this.flows.some(
-          (flow) => flow.hoverActive !== FlowElementHoverType.None
+          (flow) => flow.hoverItem !== FlowElementHoverItem.None
         );
         if (!hoveringOverStation && !hoveringOverFlow) {
           this.connections.map((con) => {
-            con.hoverActive = false;
+            con.hovering = false;
           });
           for (const connection of this.connections) {
             connection.checkElementHover(eventContextPoint, this.context);
-            if (connection.hoverActive) {
+            if (connection.hovering) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
@@ -1322,7 +1324,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
         //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
         const hoveringOverConnection = this.connections.some(
-          (con) => con.hoverActive
+          (con) => con.hovering
         );
         if (
           !hoveringOverStation &&
@@ -1330,11 +1332,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapMode === MapMode.FlowAdd
         ) {
           this.flows.map((fl) => {
-            fl.hoverActive = FlowElementHoverType.None;
+            fl.hoverItem = FlowElementHoverItem.None;
           });
           for (const flow of this.flows) {
             flow.checkElementHover(eventContextPoint, this.context);
-            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+            if (flow.hoverItem === FlowElementHoverItem.Boundary) {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
@@ -1343,9 +1345,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }
         if (hoveringOverStation) {
-          this.connections.map((con) => (con.hoverActive = false));
+          this.connections.map((con) => (con.hovering = false));
           this.flows.map(
-            (flow) => (flow.hoverActive = FlowElementHoverType.None)
+            (flow) => (flow.hoverItem = FlowElementHoverItem.None)
           );
         }
       }
@@ -1494,7 +1496,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   checkConnectionClick(contextPoint: Point): void {
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
-      if (connectionLine.hoverActive) {
+      if (connectionLine.hovering) {
         this.sidenavDrawerService.toggleDrawer(
           'connectionInfo',
           connectionLine
@@ -1510,7 +1512,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   onConnectionDrag(): void {
     for (const connectionLine of this.connections) {
-      if (connectionLine.hoverActive && !this.connectionLineDrag) {
+      if (connectionLine.hovering && !this.connectionLineDrag) {
         const startStation = this.stations.find(
           (station) => station.rithmId === connectionLine.startStationRithmId
         );
@@ -1541,19 +1543,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param station The clicked station.
    */
   checkStationClick(station: StationMapElement): void {
-    // TODO: Remove this test rename prompt once renaming in the drawer is done
-    // this.popupService.prompt({
-    //   title: 'Rename Station',
-    //   message: 'Please provide a name for this station',
-    //   promptLabel: 'Station name',
-    //   promptValue: station.stationName
-    // }).then((newName) => {
-    //   if (newName && newName !== station.stationName) {
-    //     station.stationName = newName;
-    //     station.markAsUpdated();
-    //     this.drawElements();
-    //   }
-    // });
     const stationDataInfo: StationInformation = {
       rithmId: station.rithmId,
       name: '',
