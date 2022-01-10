@@ -1,9 +1,13 @@
 <div>
   <!-- Title -->
   <h4 id="title" class="m-2 font-semibold">{{ title }}</h4>
-
+  <app-loading-indicator
+    *ngIf="connectedStationLoading"
+    id="connected-stations-loading"
+    [inlineText]="'Loading...'"
+  ></app-loading-indicator>
   <!-- Select station. -->
-  <div class="grid grid-cols-1">
+  <div *ngIf="!connectedStationLoading" class="grid grid-cols-1">
     <!-- Select -->
     <mat-form-field class="w-4/5" appearance="outline">
       <mat-label> {{ label }} </mat-label>
@@ -17,13 +21,11 @@
       </mat-select>
     </mat-form-field>
   </div>
-
   <div *ngIf="connectedError" id="stations-error">
     <p class="text-left text-error-500">
       Error: Unable to retrive connected Station
     </p>
   </div>
-
   <div mat-dialog-actions class="flex justify-end">
     <!-- Close -->
     <button
