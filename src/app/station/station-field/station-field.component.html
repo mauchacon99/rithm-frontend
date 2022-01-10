@@ -114,7 +114,7 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
-            formControlName="isRequired"
+            [formControlName]="'isRequired-'+field.rithmId"
             [attr.disabled]="
               !field.isReadOnly &&
               stationRithmId !== field.originalStationRithmId
@@ -133,7 +133,7 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
-            formControlName="isPrivate"
+            [formControlName]="'isPrivate-'+field.rithmId"
             [checked]="field.isPrivate"
             (change)="setPrivate($event)"
           >
@@ -144,7 +144,7 @@
           <div>
             <mat-checkbox
               [name]="field.rithmId"
-              formControlName="isReadOnly"
+              [formControlName]="'isReadOnly-'+field.rithmId"
               [checked]="field.isReadOnly"
               (change)="setEditable($event)"
             >
