@@ -734,17 +734,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Animates at a set framerate when scale is changed.
+   * This allows us to limit the amount of draw elements calls we make when zooming, improving performance.
    *
    * @param fps The framerate to animate at.
    */
   private scaleChangeDraw(fps = 60): void {
+    //This should only trigger if the zoomCount is not 0.
     if (this.zoomCount !== 0) {
+      //If this.zoomInterval is not defined, set the interval.
       if (!this.zoomInterval) {
         this.zoomInterval = setInterval(() => {
+          /* Once this.zoomCount is 0, clear the interval and set This.zoomInterval to undefined.
+          This cancels the loop. Ending the animation. */
           if (this.zoomCount === 0 && this.zoomInterval) {
             clearInterval(this.zoomInterval);
             this.zoomInterval = undefined;
           }
+          //Redraw the map every second the loop is active.
           this.drawElements();
         }, 1000 / fps);
       }
@@ -753,7 +759,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Uses a setInterval to continuously check if the map should be auto panning.
-   * Used when outside the bounding box and dragging.
+   * Used when outside the auto pan bounding box and dragging a station or node.
+   * Used with a fast map drag.
+   * Used when center button is pressed.
    * //TODO: Allow use when middle wheel is active.
    */
   private checkAutoPan(): void {
@@ -763,34 +771,48 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.outsideBox &&
       this.currentMousePoint !== DEFAULT_MOUSE_POINT
     ) {
+      //Set this.panActive to true so that there can only be one auto pan look going at a time.
       this.panActive = true;
+      //The loop to run on each animation frame.
       const step = (): void => {
+        //Take the current nextPanvelocity, and for one animation frame, use that to autoPan.
         this.autoMapPan(this.nextPanVelocity);
+        //If we're currently tracking the mouse point and it is outside the auto pan bounding box.
         if (this.outsideBox && this.currentMousePoint !== DEFAULT_MOUSE_POINT) {
+          //Loop through again.
           this.myReq = requestAnimationFrame(step);
         } else {
+          //Close loop. Reset Properties.
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
         }
       };
+      //Begin loop.
       this.myReq = requestAnimationFrame(step);
     }
 
     //If panning is due to a fast drag.
     if (!this.panActive && this.fastDrag) {
+      //Set this.panActive to true so that there can only be one auto pan look going at a time.
       this.panActive = true;
+      //The loop to run on each animation frame.
       const step = (): void => {
+        //Take the current nextPanvelocity, and for one animation frame, use that to autoPan.
         this.autoMapPan(this.nextPanVelocity);
+        //If current nextPanVelocity is >= the absolute value of 1 in either direction.
         if (
           Math.abs(this.nextPanVelocity.x) >= 1 ||
           Math.abs(this.nextPanVelocity.y) >= 1
         ) {
+          //decrease the value of nextPanVelocity by a set amount.
           this.nextPanVelocity = {
             x: this.nextPanVelocity.x * PAN_DECAY_RATE,
             y: this.nextPanVelocity.y * PAN_DECAY_RATE,
           };
+          //Loop through again.
           this.myReq = requestAnimationFrame(step);
         } else {
+          //Close loop. Reset properties.
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
           this.fastDrag = false;
@@ -798,21 +820,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.mapService.currentCanvasPoint$.next(this.currentCanvasPoint);
         }
       };
+      //Begin loop.
       this.myReq = requestAnimationFrame(step);
     }
 
     //If panning is due to center button being pressed.
     if (!this.panActive && this.mapService.centerActive$.value) {
+      //Set this.panActive to true so that there can only be one auto pan look going at a time.
       this.panActive = true;
+      //The loop to run on each animation frame.
       const step = (): void => {
+        //Take the current nextPanvelocity, and for one animation frame, use that to autoPan.
         this.autoMapPan(this.nextPanVelocity);
+        //If center button was pressed, centerActive will be set to true, unless it was cancelled or finished.
         if (this.mapService.centerActive$.value) {
+          //Loop through again.
           this.myReq = requestAnimationFrame(step);
         } else {
+          //Close loop. Reset properties.
           cancelAnimationFrame(this.myReq as number);
           this.panActive = false;
         }
       };
+      //Begin loop.
       this.myReq = requestAnimationFrame(step);
     }
   }
