@@ -6,12 +6,13 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 
 import { TextFieldComponent } from './text-field.component';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks';
 
 const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 1',
-    instructions: 'Fake instructions 1',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
@@ -21,7 +22,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 2',
-    instructions: 'Fake instructions 2',
     questionType: QuestionFieldType.LongText,
     isReadOnly: false,
     isRequired: false,
@@ -31,7 +31,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 3',
-    instructions: '',
     questionType: QuestionFieldType.URL,
     isReadOnly: false,
     isRequired: false,
@@ -41,7 +40,6 @@ const FIELDS: Question[] = [
   {
     rithmId: '3j4k-3h2j-hj4j',
     prompt: 'Fake question 4',
-    instructions: 'Fake instructions 4',
     questionType: QuestionFieldType.Email,
     isReadOnly: false,
     isRequired: true,
@@ -57,18 +55,18 @@ describe('TextFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextFieldComponent ],
+      declarations: [TextFieldComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-      ]
-    })
-    .compileComponents();
+        { provide: StationService, useClass: MockStationService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -81,6 +79,24 @@ describe('TextFieldComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update the stationQuestion Bsubject ', () => {
+    const updatedQuestion: Question = {
+      rithmId: '3j4k-3h2j-hj4j',
+      prompt: 'Fake question 4',
+      questionType: QuestionFieldType.ShortText,
+      isReadOnly: false,
+      isRequired: true,
+      isPrivate: false,
+      children: [],
+    };
+    const stationSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStationQuestionInTemplate'
+    );
+    component.updateFieldPrompt(updatedQuestion);
+    expect(stationSpy).toHaveBeenCalledOnceWith(updatedQuestion);
   });
 
   describe('shortText field', () => {
@@ -97,7 +113,6 @@ describe('TextFieldComponent', () => {
       expect(shortText.hasError('required')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
-
   });
 
   describe('longText field', () => {
@@ -109,6 +124,7 @@ describe('TextFieldComponent', () => {
 
     it('should not require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
+      longText.setValue('dev');
       expect(longText.valid).toBeTrue();
       expect(longText.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();
@@ -118,6 +134,7 @@ describe('TextFieldComponent', () => {
   describe('url field', () => {
     beforeEach(() => {
       component.field = FIELDS[2];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -141,6 +158,7 @@ describe('TextFieldComponent', () => {
   describe('email field', () => {
     beforeEach(() => {
       component.field = FIELDS[3];
+      component.isStation = false;
       component.ngOnInit();
       fixture.detectChanges();
     });
@@ -160,5 +178,4 @@ describe('TextFieldComponent', () => {
       expect(component.textFieldForm.valid).toBeFalse();
     });
   });
-
 });

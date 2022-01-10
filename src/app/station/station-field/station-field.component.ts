@@ -1,11 +1,27 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator, Validators
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
 } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { Question, QuestionFieldType } from 'src/models';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StationService } from 'src/app/core/station.service';
+import { Question, QuestionFieldType, PossibleAnswer } from 'src/models';
+
 /**
  * Station Field Component.
  */
@@ -17,17 +33,18 @@ import { Question, QuestionFieldType } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => StationFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class StationFieldComponent implements OnInit, ControlValueAccessor, Validator {
-
+export class StationFieldComponent
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy
+{
   /** The document field to display. */
   @Input() field!: Question;
 
@@ -51,9 +68,8 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Instruction field to display. */
   instructionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Instructions',
-    instructions: '',
     questionType: QuestionFieldType.Instructions,
     isReadOnly: false,
     isRequired: true,
@@ -63,63 +79,91 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
 
   /** Label field to display. */
   labelField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+    rithmId: '',
     prompt: 'Name your field',
-    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
+    value: '',
   };
 
-  /** The field for adding an option to a select field. */
-  selectOptionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
+  /** The field for adding an option to a selectable fieldQuestionType. */
+  selectableOption: Question = {
+    rithmId: '',
     prompt: 'Add Option',
-    instructions: '',
     questionType: QuestionFieldType.ShortText,
     isReadOnly: false,
     isRequired: true,
     isPrivate: false,
     children: [],
-  };
-
-  /** The field for adding an item to a checklist field. */
-  checklistOptionField: Question = {
-    rithmId: '3j4k-3h2j-hj4j',
-    prompt: 'Add Item',
-    instructions: '',
-    questionType: QuestionFieldType.ShortText,
-    isReadOnly: false,
-    isRequired: true,
-    isPrivate: false,
-    children: [],
+    isPossibleAnswer: true,
   };
 
   /** Array of options for a select/multi-select/checklist field. */
   options: Question[] = [];
 
+  /** The RithmId of the Station. */
+  @Input() stationRithmId = '';
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
-  ) { }
+    private stationService: StationService
+  ) {}
 
   /**
    * On component initialization.
    */
   ngOnInit(): void {
+    this.instructionField.rithmId = this.field.rithmId;
+    this.instructionField.value = this.field.prompt;
+    this.labelField.rithmId = this.field.rithmId;
+    this.labelField.value = this.field.prompt;
     this.labelField.questionType = this.field.questionType;
-    if (this.field.questionType === this.fieldType.Select
-      || this.field.questionType === this.fieldType.MultiSelect
-      || this.field.questionType === this.fieldType.CheckList) {
-      this.addOption(this.field.questionType);
+    if (
+      this.field.questionType === this.fieldType.Select ||
+      this.field.questionType === this.fieldType.MultiSelect ||
+      this.field.questionType === this.fieldType.CheckList
+    ) {
+      if (this.field.possibleAnswers && this.field.possibleAnswers.length) {
+        this.populateAnswers(this.field.possibleAnswers);
+      } else {
+        this.addOption(this.field.questionType);
+      }
     }
-
     this.stationFieldForm = this.fb.group({
-      instructionsField: ['', []],
-      [this.field.questionType]: ['', [Validators.required]],
-      optionField: ['', [Validators.required]]
+      instructionsField: [''],
+      [this.field.questionType]: [''],
+      optionField: [''],
+      isRequired: [this.field.isRequired],
+      isPrivate: [this.field.isPrivate],
+      isReadOnly: [this.field.isReadOnly],
     });
+    this.stationFieldForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationService.touchStationForm();
+      });
+  }
+
+  /**
+   * Returns the correct label tag.
+   *
+   * @returns The Label tag for each additional field.
+   */
+  get labelTag(): string {
+    const label =
+      this.field.questionType === this.fieldType.Select
+        ? 'Add Option'
+        : this.field.questionType === this.fieldType.MultiSelect ||
+          this.field.questionType === this.fieldType.CheckList
+        ? 'Add Item'
+        : 'Name your field';
+    return label;
   }
 
   /**
@@ -140,12 +184,57 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   /**
+   * Display existing possibles Answers.
+   *
+   * @param answers THe array of answers to be shown.
+   */
+  private populateAnswers(answers: PossibleAnswer[]): void {
+    answers.forEach((answer) => {
+      const possibleAnswer: Question = {
+        rithmId: this.field.rithmId, //Rithm id of the question to track the answer
+        prompt:
+          this.field.questionType === QuestionFieldType.MultiSelect ||
+          this.field.questionType === QuestionFieldType.Select
+            ? 'Add option'
+            : this.field.questionType === QuestionFieldType.CheckList
+            ? 'Add item'
+            : '',
+        questionType: QuestionFieldType.ShortText,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+        isPossibleAnswer: true,
+        value: answer.text,
+        originalStationRithmId: answer.rithmId, //rithm id of the answer to update the answer
+      };
+      this.options.push(possibleAnswer);
+    });
+  }
+
+  /**
    * Add an option to the options array.
    *
    * @param fieldType The field type.
    */
   addOption(fieldType: QuestionFieldType): void {
-    this.options.push(fieldType === QuestionFieldType.Select ? this.selectOptionField : this.checklistOptionField);
+    const genRanHex = (size: number) =>
+      [...Array(size)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join('');
+    const answerRithmId = `ans-${genRanHex(8)}-${genRanHex(4)}-${genRanHex(
+      4
+    )}-${genRanHex(4)}-${genRanHex(12)}`;
+    this.selectableOption.prompt =
+      fieldType === QuestionFieldType.MultiSelect ||
+      fieldType === QuestionFieldType.Select
+        ? 'Add option'
+        : fieldType === QuestionFieldType.CheckList
+        ? 'Add item'
+        : '';
+    this.selectableOption.rithmId = this.field.rithmId;
+    this.selectableOption.originalStationRithmId = answerRithmId;
+    this.options.push(this.selectableOption);
   }
 
   /**
@@ -155,15 +244,20 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   removeOption(index: number): void {
     this.options.splice(index, 1);
+    if (this.field.possibleAnswers) {
+      this.field.possibleAnswers.splice(index, 1);
+    }
+    this.stationService.touchStationForm();
   }
 
   /**
    * Sets the required status of a field.
    *
-   * @param ob Observes MatCheckbox changes.
+   * @param checkboxEvent Event fired when the checkbox changes.
    */
-  setRequired(ob: MatCheckboxChange): void {
-    this.field.isRequired = ob.checked;
+  setRequired(checkboxEvent: MatCheckboxChange): void {
+    this.field.isRequired = checkboxEvent.checked;
+    this.stationService.touchStationForm();
   }
 
   /**
@@ -173,13 +267,27 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   setPrivate(checkboxEvent: MatCheckboxChange): void {
     this.field.isPrivate = checkboxEvent.checked;
+    this.stationService.touchStationForm();
+  }
+
+  /**
+   * Sets the read-only status of a field.
+   *
+   * @param checkboxEvent Event fired when the checkbox changes.
+   */
+  setEditable(checkboxEvent: MatCheckboxChange): void {
+    this.field.isReadOnly = checkboxEvent.checked;
+    if (!this.field.isReadOnly) {
+      this.field.isRequired = false;
+    }
+    this.stationService.touchStationForm();
   }
 
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -188,7 +296,7 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    */
   // eslint-disable-next-line
   writeValue(val: any): void {
-    val && this.stationFieldForm.setValue(val, { emitEvent: false });
+    val && this.stationFieldForm.patchValue(val, { emitEvent: false });
   }
 
   /**
@@ -218,7 +326,9 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.stationFieldForm.disable() : this.stationFieldForm.enable();
+    isDisabled
+      ? this.stationFieldForm.disable()
+      : this.stationFieldForm.enable();
   }
 
   /**
@@ -227,11 +337,21 @@ export class StationFieldComponent implements OnInit, ControlValueAccessor, Vali
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.stationFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Station field is invalid'
-      }
-    };
+    return this.stationFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Station field is invalid',
+          },
+        };
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -1,8 +1,12 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR,
-  ValidationErrors, Validator
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
 } from '@angular/forms';
 import { Question } from 'src/models';
 
@@ -17,16 +21,18 @@ import { Question } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DocumentTemplateComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => DocumentTemplateComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class DocumentTemplateComponent implements ControlValueAccessor, Validator {
+export class DocumentTemplateComponent
+  implements ControlValueAccessor, Validator
+{
   /** The form to add to document. */
   documentTemplateForm!: FormGroup;
 
@@ -36,13 +42,9 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
-
-
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.documentTemplateForm = this.fb.group({
-      documentFieldForm: this.fb.control('')
+      documentFieldForm: this.fb.control(''),
     });
   }
 
@@ -50,7 +52,7 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -89,7 +91,9 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    * @param isDisabled The disabled state to set.
    */
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.documentTemplateForm.disable() : this.documentTemplateForm.enable();
+    isDisabled
+      ? this.documentTemplateForm.disable()
+      : this.documentTemplateForm.enable();
   }
 
   /**
@@ -98,12 +102,13 @@ export class DocumentTemplateComponent implements ControlValueAccessor, Validato
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.documentTemplateForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'User form is invalid'
-      }
-    };
+    return this.documentTemplateForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'User form is invalid',
+          },
+        };
   }
-
 }

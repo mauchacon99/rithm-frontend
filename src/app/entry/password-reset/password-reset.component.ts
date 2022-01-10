@@ -13,7 +13,7 @@ import { PasswordRequirements } from 'src/helpers/password-requirements';
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.scss']
+  styleUrls: ['./password-reset.component.scss'],
 })
 export class PasswordResetComponent implements OnInit {
   /** The user's email address. */
@@ -58,8 +58,8 @@ export class PasswordResetComponent implements OnInit {
           this.passwordRequirements.hasOneLowerCaseChar(),
           this.passwordRequirements.hasOneUpperCaseChar(),
           this.passwordRequirements.hasOneDigitChar(),
-          this.passwordRequirements.hasOneSpecialChar()
-        ]
+          this.passwordRequirements.hasOneSpecialChar(),
+        ],
       ],
       confirmPassword: [
         '',
@@ -70,9 +70,9 @@ export class PasswordResetComponent implements OnInit {
           this.passwordRequirements.hasOneUpperCaseChar(),
           this.passwordRequirements.hasOneDigitChar(),
           this.passwordRequirements.hasOneSpecialChar(),
-          this.passwordRequirements.passwordsMatch()
-        ]
-      ]
+          this.passwordRequirements.passwordsMatch(),
+        ],
+      ],
     });
   }
 
@@ -81,19 +81,20 @@ export class PasswordResetComponent implements OnInit {
    */
   ngOnInit(): void {
     this.isLoading = true;
-    this.route.queryParamMap
-      .pipe(first())
-      .subscribe((params) => {
+    this.route.queryParamMap.pipe(first()).subscribe({
+      next: (params) => {
         this.isLoading = false;
         this.email = params.get('email') as string;
         this.guid = params.get('guid') as string;
-      }, (error: unknown) => {
+      },
+      error: (error: unknown) => {
         this.isLoading = false;
         this.errorService.displayError(
           'The link you followed was invalid. Please double check the link in your email and try again.',
           error
         );
-      });
+      },
+    });
   }
 
   /**
@@ -112,27 +113,31 @@ export class PasswordResetComponent implements OnInit {
    */
   resetPassword(): void {
     this.isLoading = true;
-    this.userService.resetPassword(this.guid, this.email, this.passResetForm.value.password)
-    .pipe(first())
-    .subscribe(() => {
-      this.isLoading = false;
-      this.openAlert();
-    }, (error: unknown) => {
-      this.isLoading = false;
-      this.errorService.displayError(
-        'Something went wrong and we were unable to reset your password. Please try again in a little while.',
-        error
-      );
-    });
+    this.userService
+      .resetPassword(this.guid, this.email, this.passResetForm.value.password)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.openAlert();
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            'Something went wrong and we were unable to reset your password. Please try again in a little while.',
+            error
+          );
+        },
+      });
   }
 
   /**
    * Open the alert that tells user to check email.
    */
-   openAlert(): void {
+  openAlert(): void {
     const data = {
       title: 'Success',
-      message: `Your password has been reset. Please sign in with your new password.`
+      message: `Your password has been reset. Please sign in with your new password.`,
     };
 
     this.popupService.alert(data).then(() => {

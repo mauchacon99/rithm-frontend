@@ -1,66 +1,193 @@
-<div class="h-full w-full flex justify-center items-center absolute" *ngIf="stationLoading">
-  <app-loading-indicator></app-loading-indicator>
+<div
+  class="h-full w-full flex justify-center items-center"
+  *ngIf="stationLoading"
+>
+  <app-loading-indicator id="loading-drawer-component"></app-loading-indicator>
 </div>
 <div class="grid grid-cols-1" *ngIf="!stationLoading">
   <div class="w-full py-2">
     <div class="col-span-12">
-      <p class="overline">Station Information</p>
+      <h6 class="text-center">Station Information</h6>
     </div>
-    <div class="col-span-12">
-      <p>{{stationName}}</p>
+    <div class="col-span-12 pt-2" *ngIf="!openedFromMap || !editMode">
+      <p class="overline-font">Station Name</p>
+      <p>{{ stationName }}</p>
+    </div>
+    <div class="col-span-12 pt-2" *ngIf="openedFromMap && editMode">
+      <form [formGroup]="stationNameForm">
+        <mat-form-field
+          appearance="outline"
+          class="col-span-12 sm:col-span-8 p-0"
+        >
+          <mat-label>Station name</mat-label>
+          <input
+            matInput
+            type="text"
+            id="station"
+            formControlName="name"
+            autocomplete="name"
+            data-testid="station-name-field"
+            (ngModelChange)="reportNewStationMapChange()"
+          />
+        </mat-form-field>
+      </form>
     </div>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station owners</p>
-    <app-roster [rosterMembers]="stationInformation.stationOwners" [rosterSize]="stationInformation.stationOwners.length"
-      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="false" [editMode]="editMode">
-    </app-roster>
-  </div>
-  <div class="w-full py-2" *ngIf="type !== 'worker'">
-    <p class="overline">worker roster</p>
-    <app-roster [rosterMembers]="stationInformation.workers" [rosterSize]="stationInformation.workers.length"
-      [stationId]="stationInformation.rithmId" [stationName]="stationName" [isWorker]="true" [editMode]="editMode">
-    </app-roster>
+    <p class="overline-font">station owners</p>
+    <div
+      class="py-2 text-secondary-500 text-xs"
+      *ngIf="locallyCreated; else showOwnerRoster"
+    >
+      {{ publishStationMessage }}station owners.
+    </div>
+    <ng-template #showOwnerRoster>
+      <app-roster
+        (modalClosed)="refreshInfoDrawer($event)"
+        [stationId]="stationRithmId"
+        [isWorker]="false"
+        [editMode]="editMode || isUserAdminOrOwner"
+      >
+      </app-roster>
+    </ng-template>
   </div>
   <div class="w-full py-2">
-    <p class="overline">station priority</p>
-    <button mat-mini-fab color="warn" class="priority">
-      1
+    <p class="overline-font">worker roster</p>
+    <div
+      class="py-2 text-secondary-500 text-xs"
+      *ngIf="locallyCreated; else showWorkerRoster"
+    >
+      {{ publishStationMessage }}roster members
+    </div>
+    <ng-template #showWorkerRoster>
+      <app-roster
+        (modalClosed)="refreshInfoDrawer($event)"
+        [stationId]="stationRithmId"
+        [isWorker]="true"
+        [editMode]="editMode || isUserAdminOrOwner"
+      >
+      </app-roster>
+    </ng-template>
+  </div>
+  <div class="w-full py-2">
+    <p class="overline-font">station priority</p>
+    <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
+      {{ publishStationMessage }}station priority.
+    </div>
+    <button
+      *ngIf="!locallyCreated"
+      class="mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn"
+    >
+      {{ stationPriority }}
     </button>
   </div>
-  <div class="w-full py-2">
-    <p class="overline">document generation</p>
-    <div class="w-24 items-center py-2" *ngIf="docGenLoading">
-      <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+  <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
+    <p class="overline-font">document generation</p>
+    <div class="py-2 text-xs text-secondary-500" *ngIf="locallyCreated">
+      {{ publishStationMessage }}document generation status.
     </div>
-    <div class="py-1" *ngIf="!docGenLoading">
-      <mat-radio-group class="text-sm" aria-label="Set the document generation" (change)="updateStatusStation($event)" *ngIf="!showDocumentGenerationError">
-        <mat-radio-button class="px-1" value="None" [checked]="stationDocumentGenerationStatus === 'None'? true: false">None
+    <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+      <app-loading-indicator
+        id="loading-indicator-status"
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+    <div class="py-1" *ngIf="!docGenLoading && !locallyCreated">
+      <mat-radio-group
+        class="text-sm"
+        aria-label="Set the document generation"
+        (change)="updateStatusStation($event)"
+        *ngIf="!showDocumentGenerationError"
+      >
+        <mat-radio-button
+          class="px-1"
+          value="None"
+          [checked]="stationDocumentGenerationStatus === 'None'"
+        >
+          None
         </mat-radio-button>
-        <mat-radio-button class="px-1" value="Manual" [checked]="stationDocumentGenerationStatus === 'Manual'? true: false">Manual
+        <mat-radio-button
+          class="px-1"
+          value="Manual"
+          [checked]="stationDocumentGenerationStatus === 'Manual'"
+          >Manual
         </mat-radio-button>
       </mat-radio-group>
+
       <div class="text-left text-xs py-2" *ngIf="showDocumentGenerationError">
-        <span class="text-error-500">Error: unable to set document generation status</span>
+        <span class="text-error-500"
+          >Error: unable to set document generation status</span
+        >
       </div>
     </div>
   </div>
-  <div class="w-full py-2">
-    <p class="overline">last updated</p>
-     <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
-      <app-loading-indicator [inlineText]="'Loading...'"></app-loading-indicator>
+
+  <div
+    class="w-full py-2"
+    *ngIf="
+      stationDocumentGenerationStatus === 'Manual' &&
+      (mapMode === 0 || mapMode === undefined) &&
+      !locallyCreated
+    "
+  >
+    <button
+      data-testid="new-document"
+      id="new-document"
+      mat-stroked-button
+      color="accent"
+      (click)="createNewDocument()"
+    >
+      New Document
+    </button>
+  </div>
+
+  <div class="w-full py-2" *ngIf="!openedFromMap">
+    <p class="overline-font">last updated</p>
+    <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
     </div>
-    <div class="col-span-8 md:col-span-4 text-left text-xs py-2" *ngIf="!lastUpdatedLoading">
-      <span class="{{colorMessage}}">{{lastUpdatedDate}} </span>
+    <div
+      class="col-span-8 md:col-span-4 text-left text-xs py-2"
+      *ngIf="!lastUpdatedLoading"
+    >
+      <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
     </div>
   </div>
-  <div class="w-full py-2">
-    <button mat-stroked-button color="warn" class="priority" (click)="deleteStation(stationInformation.rithmId)">Delete Station</button>
+  <div *ngIf="mapMode === mapModeEnum.Build">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Notes</mat-label>
+      <textarea
+        class="h-28"
+        matInput
+        [(ngModel)]="stationNotes"
+        (ngModelChange)="reportNewStationMapChange()"
+      ></textarea>
+    </mat-form-field>
   </div>
-</div>
-<div class="flex justify-center">
-  <div class="bottom-0 absolute mb-7">
-    <button mat-stroked-button color="accent" class="bottom-0 absolute mb-7"
-      (click)="toggleDrawer('stationInfo')">Done</button>
+  <div class="w-full py-2" *ngIf="openedFromMap && !locallyCreated">
+    <button mat-stroked-button color="accent" (click)="goToStation()">
+      View Station
+    </button>
+  </div>
+  <div
+    class="w-full py-2"
+    *ngIf="
+      locallyCreated ||
+      (openedFromMap && editMode && isUserAdminOrOwner) ||
+      (!openedFromMap && editMode) ||
+      (!openedFromMap && isUserAdminOrOwner)
+    "
+  >
+    <button
+      mat-stroked-button
+      id="delete-station-button"
+      color="warn"
+      class="priority"
+      (click)="deleteStation()"
+    >
+      Delete Station
+    </button>
   </div>
 </div>

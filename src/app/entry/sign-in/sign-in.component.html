@@ -4,8 +4,14 @@
       <!-- left column -->
       <div class="bg-darkBlue md:flex md:flex-col p-3 flex-none md:rounded-l">
         <div class="flex-grow">
-          <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
-          <p class="mb-2 text-white hidden md:block">Seamlessly connecting people and processes</p>
+          <img
+            class="w-40"
+            src="../../assets/logo/white-icon-white-text.svg"
+            alt="Rithm"
+          />
+          <p class="mb-2 text-white hidden md:block">
+            Seamlessly connecting people and processes
+          </p>
         </div>
         <p class="mb-2 text-white hidden md:block">We make business easy.</p>
       </div>
@@ -14,25 +20,75 @@
         <span *ngIf="!isLoading" class="flex-grow">
           <h4 class="mt-10 ml-5">Sign in</h4>
           <p class="mt-1 ml-5">Welcome to Rithm.</p>
-          <p id="invalid" [ngClass]="{'invisible': !invalidCredentials}" class="mat-error ml-5">Invalid email or password</p>
-          <form [formGroup]="signInForm" (ngSubmit)="signIn()" class="flex flex-col px-5 py-2 entry-form">
+          <p
+            id="invalid"
+            [ngClass]="{ invisible: !invalidCredentials }"
+            class="mat-error ml-5"
+          >
+            Invalid email or password
+          </p>
+          <form
+            [formGroup]="signInForm"
+            (ngSubmit)="signIn()"
+            class="flex flex-col px-5 py-2 entry-form"
+          >
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-              <input id="email" type="email" matInput placeholder="Email" formControlName="email" autocomplete="email">
+              <input
+                data-testid="email-field"
+                id="email"
+                type="email"
+                matInput
+                placeholder="Email"
+                formControlName="email"
+                autocomplete="email"
+              />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
-              <input id="password" type="password" matInput placeholder="Password" formControlName="password"
-                autocomplete="current-password">
+              <input
+                data-testid="password-field"
+                id="password"
+                type="password"
+                matInput
+                placeholder="Password"
+                formControlName="password"
+                autocomplete="current-password"
+              />
             </mat-form-field>
-            <button class="w-full" id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signInForm.valid">Sign In</button>
+            <button
+              data-testid="sign-in"
+              id="sign-in"
+              class="w-full"
+              id="submit"
+              type="submit"
+              mat-raised-button
+              color="accent"
+              [disabled]="!signInForm.valid"
+            >
+              Sign In
+            </button>
           </form>
-          <a id="forgot-password" routerLink="forgot-password" class="ml-5 text-accent-400">Forgot password?</a>
-          <p class="text-center mt-5">New here?
-            <a class="text-accent-400" id="create-account" routerLink="account-create">Create an account</a>
+          <a
+            id="forgot-password"
+            routerLink="forgot-password"
+            class="ml-5 text-accent-400"
+            >Forgot password?</a
+          >
+          <p class="text-center mt-5">
+            New here?
+            <a
+              class="text-accent-400"
+              id="create-account"
+              routerLink="account-create"
+              >Create an account</a
+            >
           </p>
         </span>
-        <app-loading-indicator class="m-auto" *ngIf="isLoading"></app-loading-indicator>
+        <app-loading-indicator
+          class="m-auto"
+          *ngIf="isLoading"
+        ></app-loading-indicator>
       </div>
     </div>
   </mat-card>

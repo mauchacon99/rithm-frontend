@@ -16,12 +16,12 @@ describe('DocumentFieldComponent', () => {
   let fixture: ComponentFixture<DocumentFieldComponent>;
   const formBuilder = new FormBuilder();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const fn = function() { };
+  const fn = function () {};
   const errorMessage = {
     invalidForm: {
       valid: false,
-      message: 'User form is invalid'
-    }
+      message: 'User form is invalid',
+    },
   };
 
   beforeEach(async () => {
@@ -35,14 +35,9 @@ describe('DocumentFieldComponent', () => {
         MockComponent(CheckFieldComponent),
         MockComponent(NestedFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -51,7 +46,6 @@ describe('DocumentFieldComponent', () => {
     component.field = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address line 1',
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,

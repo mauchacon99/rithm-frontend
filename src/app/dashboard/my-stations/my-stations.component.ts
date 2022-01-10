@@ -10,10 +10,9 @@ import { DashboardStationData } from 'src/models';
 @Component({
   selector: 'app-my-stations',
   templateUrl: './my-stations.component.html',
-  styleUrls: ['./my-stations.component.scss']
+  styleUrls: ['./my-stations.component.scss'],
 })
 export class MyStationsComponent implements OnInit {
-
   /** The stations where the user is part of the work roster. */
   stations: DashboardStationData[] = [];
 
@@ -23,26 +22,29 @@ export class MyStationsComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
-  ) { }
+  ) {}
 
   /**
    * Set the number of roster members to show when less than 3.
    */
   ngOnInit(): void {
-    this.dashboardService.getDashboardStations()
+    this.dashboardService
+      .getDashboardStations()
       .pipe(first())
-      .subscribe((stations) => {
-        if (stations) {
-          this.stations = stations;
-        }
-        this.isLoading = false;
-      }, (error: unknown) => {
-        this.isLoading = false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: (stations) => {
+          if (stations) {
+            this.stations = stations;
+          }
+          this.isLoading = false;
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
       });
   }
-
 }

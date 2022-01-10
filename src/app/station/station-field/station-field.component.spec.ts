@@ -5,9 +5,10 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
+import { StationService } from 'src/app/core/station.service';
 import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
+import { MockStationService } from 'src/mocks';
 import { QuestionFieldType } from 'src/models';
-
 import { StationFieldComponent } from './station-field.component';
 
 describe('StationFieldComponent', () => {
@@ -18,19 +19,13 @@ describe('StationFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        StationFieldComponent,
-        MockComponent(TextFieldComponent)
-      ],
-      imports: [
-        MatCheckboxModule,
-        ReactiveFormsModule
-      ],
+      declarations: [StationFieldComponent, MockComponent(TextFieldComponent)],
+      imports: [MatCheckboxModule, ReactiveFormsModule],
       providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: StationService, useClass: MockStationService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -40,13 +35,14 @@ describe('StationFieldComponent', () => {
     component.field = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'prompt',
-      instructions: 'instructions',
       questionType: QuestionFieldType.Number,
       isReadOnly: false,
       isRequired: false,
       isPrivate: false,
       children: [],
+      originalStationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c4',
     };
+    component.stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c4';
     fixture.detectChanges();
   });
 
@@ -59,7 +55,6 @@ describe('StationFieldComponent', () => {
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'prompt 1',
-        instructions: '',
         questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
@@ -69,13 +64,12 @@ describe('StationFieldComponent', () => {
       {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Prompt 2',
-        instructions: '',
         questionType: QuestionFieldType.LongText,
         isReadOnly: false,
         isRequired: false,
         isPrivate: false,
         children: [],
-      }
+      },
     ];
     expect(component.options.length).toBe(2);
     component.removeOption(1);
@@ -89,9 +83,11 @@ describe('StationFieldComponent', () => {
   });
 
   it('should set isRequired', async () => {
-    const checkbox = await loader.getHarness<MatCheckboxHarness>(MatCheckboxHarness.with({
-      name: component.field.rithmId
-    }));
+    const checkbox = await loader.getHarness<MatCheckboxHarness>(
+      MatCheckboxHarness.with({
+        name: component.field.rithmId,
+      })
+    );
 
     component.field.isRequired = true;
     expect(await checkbox.isChecked()).toBeTruthy();
@@ -105,15 +101,14 @@ describe('StationFieldComponent', () => {
 
     expect(await checkbox.isChecked()).toBeTruthy();
     expect(component.field.isRequired).toBeTrue();
-
   });
 
-  describe('label field', () => {
+  // TODO: Add tests for this describe; this doesn't do anything
+  xdescribe('label field', () => {
     beforeEach(() => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
-        instructions: '',
         questionType: QuestionFieldType.ShortText,
         isReadOnly: false,
         isRequired: false,
@@ -123,13 +118,6 @@ describe('StationFieldComponent', () => {
       component.ngOnInit();
       fixture.detectChanges();
     });
-
-    it('should require a label', () => {
-      const label = component.stationFieldForm.controls[component.field.questionType];
-      expect(label.valid).toBeFalse();
-      expect(label.hasError('required')).toBeTrue();
-      expect(component.stationFieldForm.valid).toBeFalse();
-    });
   });
 
   describe('handle field options', () => {
@@ -137,7 +125,6 @@ describe('StationFieldComponent', () => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',
         prompt: 'Label',
-        instructions: '',
         questionType: QuestionFieldType.Select,
         isReadOnly: false,
         isRequired: false,
@@ -148,16 +135,22 @@ describe('StationFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    it('option should be required', () => {
-      const option = component.stationFieldForm.controls['optionField'];
-      expect(option.valid).toBeFalse();
-      expect(option.hasError('required')).toBeTrue();
-      expect(component.stationFieldForm.valid).toBeFalse();
+    it("should automatically add an option to the array if there aren't answers", () => {
+      component.field.possibleAnswers = [];
+      const addOptionSpy = spyOn(component, 'addOption').and.callThrough();
+      expect(addOptionSpy).toHaveBeenCalled;
+      expect(component.options.length).toBeGreaterThan(0);
     });
 
-    it('should automatically add an option to the array', () => {
+    it('should automatically fill the options if there are possibleAnswers', () => {
+      component.field.possibleAnswers = [
+        {
+          default: false,
+          rithmId: '03BCE692-C347-484D-8EB3-3A2716F80BAF',
+          text: 'Light Armor',
+        },
+      ];
       expect(component.options.length).toBeGreaterThan(0);
     });
   });
-
 });

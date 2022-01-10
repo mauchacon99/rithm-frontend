@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
 import { Comment } from 'src/models/comment';
@@ -15,7 +18,7 @@ const testComment: Comment = {
   archived: true,
   userFirstName: 'Alex',
   userLastName: 'Can',
-  rithmId: 'string'
+  rithmId: 'string',
 };
 
 describe('CommentService', () => {
@@ -24,9 +27,7 @@ describe('CommentService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(CommentService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -44,7 +45,8 @@ describe('CommentService', () => {
 
     const expectedResponse: Comment[] = [testComment];
 
-    service.getDocumentComments(documentId, stationId, pageNum, commentsPerPage)
+    service
+      .getDocumentComments(documentId, stationId, pageNum, commentsPerPage)
       .subscribe((response) => {
         expect(response.length).toBeGreaterThanOrEqual(0);
       });
@@ -64,14 +66,13 @@ describe('CommentService', () => {
     const comment = {
       displayText: 'test',
       documentRithmId: '1234',
-      stationRithmId: '1234'
+      stationRithmId: '1234',
     };
     const expectedResponse: Comment = testComment;
 
-    service.postDocumentComment(comment)
-      .subscribe((response) => {
-        expect(response).toEqual(expectedResponse);
-      });
+    service.postDocumentComment(comment).subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
 
     // outgoing request
     const req = httpTestingController.expectOne(
@@ -83,5 +84,4 @@ describe('CommentService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
-
 });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { firstValueFrom } from 'rxjs';
 import { DialogData, DialogType } from 'src/models';
 import { DialogOptions } from 'src/models/dialog-options';
 import { DialogComponent } from '../shared/dialog/dialog.component';
@@ -12,14 +13,10 @@ const MAX_WIDTH = '1200px';
  * Allows the user to display simple popups to the user.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PopupService {
-
-  constructor(
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) { }
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   /**
    * Displays an alert dialog to the user.
@@ -30,16 +27,16 @@ export class PopupService {
   async alert(dialogOptions: DialogOptions): Promise<void> {
     const alertData: DialogData = {
       ...dialogOptions,
-      type: DialogType.Alert
+      type: DialogType.Alert,
     };
 
     const dialogRef = this.dialog.open(DialogComponent, {
       maxWidth: MAX_WIDTH,
       width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
-      data: alertData
+      data: alertData,
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -51,16 +48,16 @@ export class PopupService {
   async confirm(dialogOptions: DialogOptions): Promise<boolean> {
     const confirmData: DialogData = {
       ...dialogOptions,
-      type: DialogType.Confirm
+      type: DialogType.Confirm,
     };
 
     const dialogRef = this.dialog.open(DialogComponent, {
       maxWidth: MAX_WIDTH,
       width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
-      data: confirmData
+      data: confirmData,
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -72,17 +69,17 @@ export class PopupService {
   async prompt(dialogOptions: DialogOptions): Promise<string> {
     const promptData: DialogData = {
       ...dialogOptions,
-      type: DialogType.Prompt
+      type: DialogType.Prompt,
     };
     promptData.type = DialogType.Prompt;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       maxWidth: MAX_WIDTH,
       width: dialogOptions.width ? dialogOptions.width : DIALOG_WIDTH,
-      data: promptData
+      data: promptData,
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -94,17 +91,17 @@ export class PopupService {
   async terms(dialogOptions: DialogOptions): Promise<boolean> {
     const termsData: DialogData = {
       ...dialogOptions,
-      type: DialogType.Terms
+      type: DialogType.Terms,
     };
     termsData.type = DialogType.Terms;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       minWidth: '350px',
       width: '70%',
-      data: termsData
+      data: termsData,
     });
 
-    return await dialogRef.afterClosed().toPromise();
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 
   /**
@@ -116,7 +113,7 @@ export class PopupService {
   notify(message: string, error = false): void {
     this.snackBar.open(message, 'OK', {
       duration: 3500,
-      panelClass: error ? 'snackbar-error' : 'snackbar' // see in styles.scss
+      panelClass: error ? 'snackbar-error' : 'snackbar', // see in styles.scss
     });
   }
 }

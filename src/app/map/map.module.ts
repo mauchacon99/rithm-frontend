@@ -9,8 +9,10 @@ import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-
-
+import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connection-info-drawer.component';
+import { StationGroupInfoDrawerComponent } from './station-group-info-drawer/station-group-info-drawer.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -18,14 +20,18 @@ import { MatMenuModule } from '@angular/material/menu';
     MapSearchComponent,
     MapToolbarComponent,
     MapCanvasComponent,
-    MapOverlayComponent
+    MapOverlayComponent,
+    ConnectionInfoDrawerComponent,
+    StationGroupInfoDrawerComponent,
   ],
   imports: [
     CommonModule,
     MapRoutingModule,
     SharedModule,
     MatButtonModule,
-    MatMenuModule
-  ]
+    MatMenuModule,
+    MatSidenavModule,
+    InfoDrawerModule,
+  ],
 })
-export class MapModule { }
+export class MapModule {}

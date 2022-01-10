@@ -1,0 +1,46 @@
+::ng-deep.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop {
+  display: none;
+}
+
+:host {
+  touch-action: manipulation;
+}
+
+::ng-deep .mat-drawer-container {
+  background-color: transparent;
+}
+
+::ng-deep .deleteDrawer {
+  position: fixed !important;
+  top: 129px;
+
+  @media screen and (min-width: 992px) {
+    left: calc(100% - 20rem);
+  }
+}
+
+::ng-deep mat-drawer-container {
+  mat-drawer.mapStationInfo {
+    @apply mt-0;
+
+    position: absolute !important;
+    height: 100%;
+  }
+}
+
+//Needed for the center-map icon.
+.fa-stack-1x {
+  font-size: 0.5rem;
+}
+
+.mat-accent.mat-button-disabled {
+  background-color: #1b4387;
+  color: #fff;
+  opacity: 0.7;
+}
+
+.mat-basic.mat-button-disabled {
+  background-color: #fff;
+  color: #000000de;
+  opacity: 0.7;
+}

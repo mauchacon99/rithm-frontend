@@ -5,17 +5,15 @@ import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
 import { StationRosterMember } from 'src/models';
 
-
 /**
  * Component for roster management.
  */
 @Component({
   selector: 'app-roster-management-modal',
   templateUrl: './roster-management-modal.component.html',
-  styleUrls: ['./roster-management-modal.component.scss']
+  styleUrls: ['./roster-management-modal.component.scss'],
 })
 export class RosterManagementModalComponent implements OnInit {
-
   /** List users the organization. */
   listUsersOrganization: StationRosterMember[] = [];
 
@@ -29,33 +27,42 @@ export class RosterManagementModalComponent implements OnInit {
   organizationId = '';
 
   /** Array of list users. */
-  users: StationRosterMember[]=[];
+  users: StationRosterMember[] = [];
 
   /** The worker roster of the station given. */
   rosterMembers: StationRosterMember[] = [];
 
-
-  /** Loading members from roster. */
+  /** Loading current members from roster. */
   loadingMembers = true;
 
   /** The roster type received from modal data. */
-  rosterType: 'worker' | 'owner' = 'owner';
+  rosterType: 'workers' | 'owners' = 'owners';
 
   /** Total the of members in the list of organization members. */
   totalPotentialUsers = 0;
 
-  /** Charging indicator from loading users.  */
+  /** Check if there is an error when adding or deleting the owner of the station. */
+  addRemoveRosterError = false;
+
+  /** Last rithmId performed when adding or deleting. */
+  private lastUserIdClicked = '';
+
+  /** The current page number. */
+  activeNum = 1;
+
+  /** Is the list of organization members loading.  */
   listLoading = true;
 
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
-    @Inject(MAT_DIALOG_DATA) public modalData: {
+    @Inject(MAT_DIALOG_DATA)
+    public modalData: {
       /** The station rithmId. */
       stationId: string;
       /** The type of roster which will be showed.  */
-      type: 'worker' | 'owner';
-    },
+      type: 'workers' | 'owners';
+    }
   ) {
     this.stationRithmId = this.modalData.stationId;
     this.rosterType = this.modalData.type;
@@ -65,28 +72,40 @@ export class RosterManagementModalComponent implements OnInit {
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    this.getPotentialStationRosterMembers(this.stationRithmId, this.pageNumUsersOrganization);
-    this.getStationWorkerRoster(this.stationRithmId);
+    this.getPotentialStationRosterMembers(
+      this.stationRithmId,
+      this.pageNumUsersOrganization
+    );
+    this.getStationUsersRoster(this.stationRithmId);
   }
 
   /**
-   * Get Workers Roster for a given Station.
+   * Get Users Roster for a given Station.
    *
    * @param stationId The id of the given station.
    */
-  getStationWorkerRoster(stationId: string): void {
-    this.stationService.getStationWorkerRoster(stationId)
-      .pipe(first())
-      .subscribe((data) => {
+  getStationUsersRoster(stationId: string): void {
+    this.loadingMembers = true;
+    const stationUserRoster$ =
+      this.rosterType === 'workers'
+        ? this.stationService.getStationWorkerRoster(stationId)
+        : this.stationService.getStationOwnerRoster(stationId);
+
+    stationUserRoster$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
         if (data) {
           this.rosterMembers = data;
         }
-      }, (error: unknown) => {
+      },
+      error: (error: unknown) => {
+        this.loadingMembers = false;
         this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
         );
-      });
+      },
+    });
   }
 
   /**
@@ -95,25 +114,33 @@ export class RosterManagementModalComponent implements OnInit {
    * @param stationRithmId The Specific id of station.
    * @param pageNum The current page.
    */
-  getPotentialStationRosterMembers(stationRithmId: string, pageNum: number): void {
-    this.loadingMembers = true;
-    this.listLoading=true;
-    this.stationService.getPotentialStationRosterMembers(stationRithmId, pageNum)
+  getPotentialStationRosterMembers(
+    stationRithmId: string,
+    pageNum: number
+  ): void {
+    this.pageNumUsersOrganization = pageNum;
+    this.listLoading = true;
+    this.addRemoveRosterError = false;
+    this.lastUserIdClicked = '';
+    this.stationService
+      .getPotentialStationRosterMembers(stationRithmId, pageNum)
       .pipe(first())
-      .subscribe((potentialUsers) => {
-        this.loadingMembers = false;
-        this.listLoading=false;
-        if (potentialUsers) {
-          this.users = potentialUsers.users;
-          this.totalPotentialUsers = potentialUsers.totalUsers;
-        }
-      }, (error: unknown) => {
-        this.loadingMembers = false;
-        this.listLoading=false;
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: (potentialUsers) => {
+          if (potentialUsers) {
+            this.users = potentialUsers.users;
+            this.totalPotentialUsers = potentialUsers.totalUsers;
+          }
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+        complete: () => {
+          this.listLoading = false;
+        },
       });
   }
 
@@ -122,68 +149,121 @@ export class RosterManagementModalComponent implements OnInit {
    *
    * @param rithmId The index position of the user in the list to toggle.
    */
-   toggleSelectedWorker(rithmId: string): void {
-    this.users.filter(( data )=> {
-      if (data.rithmId === rithmId ) {
-          data.isWorker=!data.isWorker;
+  toggleSelectedUser(rithmId: string): void {
+    this.lastUserIdClicked = rithmId;
+    const selectedUser = this.users.find((user) => user.rithmId === rithmId);
+    const rosterUserType =
+      this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
+    if (selectedUser) {
+      selectedUser[rosterUserType] = !selectedUser[rosterUserType];
+      if (!selectedUser[rosterUserType]) {
+        /** If data.isWorker is false is because the user is being removed. */
+        this.removeMemberFromRoster(rithmId);
+      } else {
+        /** If data.isWorker is true is because the user is being add. */
+        this.addUserToRoster(rithmId);
       }
-    });
+    }
   }
 
   /**
    * Adds users to the worker roster.
    *
-   * @param stationId The Specific id of station.
    * @param userIds The users ids for assign in station.
    */
-  addUsersToRoster(stationId: string, userIds: string[]): void {
-    const addUserToRosterMethod$ = this.rosterType === 'worker'
-      ? this.stationService.addUsersToWorkerRoster(stationId, userIds)
-      : this.stationService.addUsersToOwnersRoster(stationId, userIds);
-      addUserToRosterMethod$
-      .pipe(first())
-      .subscribe((data) => {
+  addUserToRoster(userIds: string): void {
+    this.loadingMembers = true;
+    this.addRemoveRosterError = false;
+    const addUserToRosterMethod$ =
+      this.rosterType === 'workers'
+        ? this.stationService.addUsersToWorkerRoster(this.stationRithmId, [
+            userIds,
+          ])
+        : this.stationService.addUsersToOwnersRoster(this.stationRithmId, [
+            userIds,
+          ]);
+
+    addUserToRosterMethod$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
         if (data) {
           this.rosterMembers = data;
         }
-      }, (error: unknown) => {
+      },
+      error: (error: unknown) => {
+        this.addRemoveRosterError = true;
+        this.loadingMembers = false;
         this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
         );
-      });
+      },
+    });
   }
 
   /**
-   * Remove users to the worker roster.
+   * Remove users from the station roster.
    *
    * @param usersId The selected user id to remove.
    */
   removeMemberFromRoster(usersId: string): void {
-    if (this.rosterType === 'worker') {
-      this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [usersId])
-        .pipe(first())
-        .subscribe((data) => {
+    const rosterUserType =
+      this.rosterType === 'workers' ? 'isWorker' : 'isOwner';
+    this.users.find((user) => {
+      if (user.rithmId === usersId) {
+        user[rosterUserType] = false;
+      }
+    });
+    this.addRemoveRosterError = false;
+    this.loadingMembers = true;
+    const removeUserMemberRoster$ =
+      this.rosterType === 'workers'
+        ? this.stationService.removeUsersFromWorkerRoster(this.stationRithmId, [
+            usersId,
+          ])
+        : this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [
+            usersId,
+          ]);
+
+    removeUserMemberRoster$.pipe(first()).subscribe({
+      next: (data) => {
+        this.loadingMembers = false;
+        if (data) {
           this.rosterMembers = data;
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    } else if (this.rosterType === 'owner') {
-      this.stationService.removeUsersFromOwnerRoster(this.stationRithmId, [usersId])
-        .pipe(first())
-        .subscribe((data) => {
-          if (data) {
-            this.rosterMembers = data;
-          }
-        }, (error: unknown) => {
-          this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-            error
-          );
-        });
-    }
+        }
+      },
+      error: (error: unknown) => {
+        this.addRemoveRosterError = true;
+        this.loadingMembers = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
+
+  /**
+   * Switch de badge when user belongs to the station roster.
+   *
+   * @param user The user which will change its status.
+   * @returns Check badge when user is added or None badge when is removed.
+   */
+  getCurrentBadge(
+    user: StationRosterMember
+  ): 'none' | 'check' | 'minus' | 'plus' {
+    const enableBadge =
+      this.rosterType === 'workers' ? user.isWorker : user.isOwner;
+    return enableBadge ? 'check' : 'none';
+  }
+
+  /**
+   * Check error message in station worker.
+   *
+   * @param rithmId The id of the user in the list to check.
+   * @returns True If there is an error in the verification of the station owner.
+   */
+  userHadLastError(rithmId: string): boolean {
+    return this.addRemoveRosterError && this.lastUserIdClicked === rithmId;
   }
 }

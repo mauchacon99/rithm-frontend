@@ -10,28 +10,31 @@ import { SelectFieldComponent } from './select-field.component';
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
   prompt: 'Fake question 9',
-  instructions: 'Fake instructions 9',
   questionType: QuestionFieldType.Select,
   isReadOnly: false,
   isRequired: true,
   isPrivate: false,
   possibleAnswers: [
     {
+      rithmId: '3j4k-3h2j-hj41',
       text: 'Option 1',
-      default: false
+      default: false,
     },
     {
+      rithmId: '3j4k-3h2j-hj42',
       text: 'Option 2',
-      default: true
+      default: true,
     },
     {
+      rithmId: '3j4k-3h2j-hj43',
       text: 'Option 3',
-      default: false
+      default: false,
     },
     {
+      rithmId: '3j4k-3h2j-hj44',
       text: 'Option 4',
-      default: false
-    }
+      default: false,
+    },
   ],
   children: [],
 };
@@ -43,18 +46,15 @@ describe('SelectFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectFieldComponent ],
+      declarations: [SelectFieldComponent],
       imports: [
         MatFormFieldModule,
         MatSelectModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
-      providers: [
-        { provide: FormGroup, useValue: formBuilder },
-      ]
-    })
-    .compileComponents();
+      providers: [{ provide: FormGroup, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -77,5 +77,4 @@ describe('SelectFieldComponent', () => {
     // expect(select.hasError('required')).toBeTrue();
     // expect(component.selectFieldForm.valid).toBeFalse();
   });
-
 });

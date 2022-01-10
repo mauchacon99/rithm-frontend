@@ -2,14 +2,20 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccessToken } from 'src/helpers';
-import { NotificationSettings, SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import {
+  NotificationSettings,
+  SignInResponse,
+  TokenResponse,
+  User,
+  UserAccountInfo,
+  StationInformation,
+} from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Mocks methods of the `UserService`.
  */
 export class MockUserService {
-
   /** The access token to be used to authenticate for every request. */
   accessToken = new AccessToken('tokentokentokentokentoken');
 
@@ -23,7 +29,7 @@ export class MockUserService {
     notificationSettings: null,
     createdDate: '1/2/34',
     role: null,
-    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk'
+    organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
   };
 
   /**
@@ -34,34 +40,34 @@ export class MockUserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    let response;
+    let response: HttpErrorResponse;
 
     if (email.includes('unverified')) {
       response = new HttpErrorResponse({
         error: {
-          error: 'Unable to login before email has been verified.'
-        }
+          error: 'Unable to login before email has been verified.',
+        },
       });
     } else if (email.includes('incorrect')) {
       response = new HttpErrorResponse({
         error: {
-          error: 'Invalid username or password.'
-        }
+          error: 'Invalid username or password.',
+        },
       });
     } else if (email.includes('error')) {
       response = new HttpErrorResponse({
         status: 500,
-        error: ''
+        error: '',
       });
     } else {
       return of({
         accessToken: 'wowowowo',
         refreshTokenGuid: 'ab5d4-ae56g',
-        user: this.user
+        user: this.user,
       }).pipe(delay(1000));
     }
 
-    return throwError(response).pipe(delay(1000));
+    return throwError(() => response).pipe(delay(1000));
   }
 
   /**
@@ -98,13 +104,21 @@ export class MockUserService {
    * @param password The password set for the new user.
    * @returns An empty observable.
    */
-  register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
+  register(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Unable to login before email has been verified.'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Unable to login before email has been verified.',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
@@ -118,11 +132,14 @@ export class MockUserService {
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
@@ -135,11 +152,14 @@ export class MockUserService {
    */
   sendPasswordResetEmail(email: string): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
@@ -152,13 +172,20 @@ export class MockUserService {
    * @param password The new password to be set.
    * @returns An empty observable.
    */
-  resetPassword(guid: string, email: string, password: string): Observable<unknown> {
+  resetPassword(
+    guid: string,
+    email: string,
+    password: string
+  ): Observable<unknown> {
     if (email.includes('error')) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
@@ -171,11 +198,14 @@ export class MockUserService {
    */
   updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
     if (!accountInfo) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
@@ -219,15 +249,52 @@ export class MockUserService {
    * @param notificationSettings The user notification settings object.
    * @returns An empty observable.
    */
-  updateNotificationSettings(notificationSettings: NotificationSettings): Observable<unknown> {
+  updateNotificationSettings(
+    notificationSettings: NotificationSettings
+  ): Observable<unknown> {
     if (!notificationSettings) {
-      return throwError(new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     }
     return of().pipe(delay(1000));
   }
 
+  /**
+   * Checks to see if signed in user is an owner of the station.
+   *
+   * @param stationInformation The station used to check if user is an admin.
+   * @returns A boolean determining if the current user is an owner of the station.
+   */
+  isStationOwner(stationInformation: StationInformation): boolean {
+    return !!stationInformation.stationOwners.find(
+      (owner) => owner.rithmId === this.user.rithmId
+    );
+  }
+
+  /**
+   * Checked to see if signed in user is a worker.
+   *
+   * @param stationInformation The station used to check if user is a worker.
+   * @returns A boolean determining if the current user is a worker on the station.
+   */
+  isWorker(stationInformation: StationInformation): boolean {
+    return !!stationInformation.workers.find(
+      (worker) => worker.rithmId === this.user.rithmId
+    );
+  }
+
+  /**
+   * Checking if the current user is an admin.
+   *
+   * @returns The true or false if user is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.user.role === 'admin';
+  }
 }

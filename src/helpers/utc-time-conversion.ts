@@ -10,11 +10,39 @@ export class UtcTimeConversion {
    */
   getDateAndTime(timestamp: string): string {
     const d = new Date(timestamp),
-      minutes = d.getMinutes().toString().length === 1 ? '0' + d.getMinutes() : d.getMinutes(),
+      minutes =
+        d.getMinutes().toString().length === 1
+          ? '0' + d.getMinutes()
+          : d.getMinutes(),
       hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours(),
       ampm = d.getHours() >= 12 ? 'pm' : 'am',
-      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + hours + ':' + minutes + ' ' + ampm;
+      months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+    return (
+      months[d.getMonth()] +
+      ' ' +
+      d.getDate() +
+      ', ' +
+      d.getFullYear() +
+      ' at ' +
+      hours +
+      ':' +
+      minutes +
+      ' ' +
+      ampm
+    );
   }
 
   /**
@@ -23,7 +51,7 @@ export class UtcTimeConversion {
    * @param timeStamp A UTC time formatted string.
    * @returns Milliseconds in Unix time.
    */
-   getMilliseconds(timeStamp: string): number {
+  getMilliseconds(timeStamp: string): number {
     //Check if there's been a timestamp entered.
     if (timeStamp === '') {
       return 0;

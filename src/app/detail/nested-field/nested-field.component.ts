@@ -1,5 +1,12 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+} from '@angular/forms';
+import { STATES } from 'src/helpers';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { Question, QuestionFieldType } from 'src/models';
 
@@ -14,16 +21,16 @@ import { Question, QuestionFieldType } from 'src/models';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => NestedFieldComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => NestedFieldComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class NestedFieldComponent implements OnInit{
+export class NestedFieldComponent implements OnInit {
   /** The form to add this field in the template. */
   nestedFieldForm!: FormGroup;
 
@@ -39,9 +46,7 @@ export class NestedFieldComponent implements OnInit{
   /** They array of children fields. */
   childrenFields!: Question[];
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.nestedFieldForm = this.fb.group({
       textFieldForm: this.fb.control(''),
       numberFieldForm: this.fb.control(''),
@@ -54,13 +59,17 @@ export class NestedFieldComponent implements OnInit{
    */
   ngOnInit(): void {
     this.childrenFields = this.field.children;
+
+    if (this.childrenFields[3].questionType === 'state') {
+      this.childrenFields[3].possibleAnswers = STATES;
+    }
   }
 
   /**
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -108,95 +117,13 @@ export class NestedFieldComponent implements OnInit{
    * @returns Validation errors, if any.
    */
   validate(): ValidationErrors | null {
-    return this.nestedFieldForm.valid ? null : {
-      invalidForm: {
-        valid: false,
-        message: 'Nested field form is invalid'
-      }
-    };
+    return this.nestedFieldForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'Nested field form is invalid',
+          },
+        };
   }
 }
-
-//TODO: figure out how to correctly format the nested field upon creation.
-
-/* Nested field should be formatted like this: */
-/* {
-      prompt: '',
-      instructions: 'Enter the shipping address',
-      questionType: {
-        rithmId: '3j4k-3h2j-hj4j',
-        typeString: QuestionFieldType.Nested,
-        validationExpression: '.+'
-      },
-      isReadOnly: false,
-      isRequired: true,
-      isPrivate: false,
-      children: [
-        {
-          prompt: 'Address Line 1',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'Address Line 2',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.AddressLine,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: false,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'City',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.City,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'State',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.State,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          possibleAnswers: STATES,
-          children: [],
-        },
-        {
-          prompt: 'Zip',
-          instructions: '',
-          questionType: {
-            rithmId: '3j4k-3h2j-hj4j',
-            typeString: QuestionFieldType.Zip,
-            validationExpression: '.+'
-          },
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ],
-    } */

@@ -5,26 +5,29 @@ import { StationInfoDrawerComponent } from './station-info-drawer/station-info-d
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentInfoDrawerComponent } from './document-info-drawer/document-info-drawer.component';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
-import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     InfoDrawerComponent,
     StationInfoDrawerComponent,
     DocumentInfoDrawerComponent,
-    RosterManagementModalComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatRadioModule
+    MatRadioModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    FormsModule,
   ],
-  exports: [
-    InfoDrawerComponent
-  ]
+  exports: [InfoDrawerComponent],
 })
-export class InfoDrawerModule { }
+export class InfoDrawerModule {}

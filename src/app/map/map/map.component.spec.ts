@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
-import { MockMapService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
+import { MockErrorService, MockMapService } from 'src/mocks';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { MapOverlayComponent } from '../map-overlay/map-overlay.component';
 import { MapToolbarComponent } from '../map-toolbar/map-toolbar.component';
@@ -18,13 +19,13 @@ describe('MapComponent', () => {
         MapComponent,
         MockComponent(MapToolbarComponent),
         MockComponent(MapOverlayComponent),
-        MockComponent(MapCanvasComponent)
+        MockComponent(MapCanvasComponent),
       ],
       providers: [
-        { provide: MapService, useClass: MockMapService }
-      ]
-    })
-    .compileComponents();
+        { provide: MapService, useClass: MockMapService },
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

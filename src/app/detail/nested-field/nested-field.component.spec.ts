@@ -12,7 +12,6 @@ import { NestedFieldComponent } from './nested-field.component';
 const ADDRESS: Question = {
   rithmId: '3j4k-3h2j-hj4j',
   prompt: '',
-  instructions: 'Enter the shipping address',
   questionType: QuestionFieldType.Nested,
   isReadOnly: false,
   isRequired: true,
@@ -21,7 +20,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 1',
-      instructions: '',
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: true,
@@ -31,7 +29,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Address Line 2',
-      instructions: '',
       questionType: QuestionFieldType.AddressLine,
       isReadOnly: false,
       isRequired: false,
@@ -41,7 +38,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'City',
-      instructions: '',
       questionType: QuestionFieldType.City,
       isReadOnly: false,
       isRequired: true,
@@ -51,7 +47,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'State',
-      instructions: '',
       questionType: QuestionFieldType.State,
       isReadOnly: false,
       isRequired: true,
@@ -62,7 +57,6 @@ const ADDRESS: Question = {
     {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: 'Zip',
-      instructions: '',
       questionType: QuestionFieldType.Zip,
       isReadOnly: false,
       isRequired: true,
@@ -85,14 +79,9 @@ describe('NestedFieldComponent', () => {
         MockComponent(NumberFieldComponent),
         MockComponent(SelectFieldComponent),
       ],
-      imports: [
-        ReactiveFormsModule
-      ],
-      providers: [
-        { provide: FormBuilder, useValue: formBuilder }
-      ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -109,5 +98,14 @@ describe('NestedFieldComponent', () => {
 
   it('should have children', () => {
     expect(component.childrenFields.length).toEqual(5);
+  });
+
+  it('should check the field question type state when there are possibleAnswers options', () => {
+    component.ngOnInit();
+    const stateField = component.childrenFields.find(
+      (element) => element.questionType === 'state'
+    );
+    expect(stateField).toBeTruthy();
+    expect(stateField?.possibleAnswers).toEqual(STATES);
   });
 });

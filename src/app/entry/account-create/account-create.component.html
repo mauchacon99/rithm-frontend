@@ -4,31 +4,62 @@
       <!-- left column -->
       <div class="bg-darkBlue md:flex md:flex-col p-3 flex-none md:rounded-l">
         <div class="flex-grow">
-          <img class="w-40" src="../../assets/logo/white-icon-white-text.svg" alt="Rithm">
-          <p class="mb-2 text-white hidden md:block">Get started with a <b>free</b> Rithm account.</p>
+          <img
+            class="w-40"
+            src="../../assets/logo/white-icon-white-text.svg"
+            alt="Rithm"
+          />
+          <p class="mb-2 text-white hidden md:block">
+            Get started with a <b>free</b> Rithm account.
+          </p>
         </div>
-        <p class="mb-2 text-white hidden md:block">Create workflows. Manage permissions. Manage processes and people with enterprise-level-security.</p>
+        <p class="mb-2 text-white hidden md:block">
+          Create workflows. Manage permissions. Manage processes and people with
+          enterprise-level-security.
+        </p>
       </div>
       <!-- right column -->
       <div class="flex flex-col bg-white pt-1 md:rounded-r">
         <span *ngIf="!isLoading" class="flex-grow">
-          <a class="overline text-accent-400 ml-5" routerLink=""><i class="fas fa-chevron-left"></i> Back to sign in</a>
+          <a class="overline-font text-accent-400 ml-5" routerLink=""
+            ><i class="fas fa-chevron-left"></i> Back to sign in</a
+          >
           <h4 class="mt-3 ml-5">Create Account</h4>
           <p class="mt-1 ml-5">Enter your info to create your account.</p>
-          <form (ngSubmit)="createAccount()" [formGroup]="signUpForm" class="flex flex-col px-5 py-2 entry-form">
-            <app-user-form formControlName="userForm" class="relative" [accountCreate]="true"></app-user-form>
+          <form
+            (ngSubmit)="createAccount()"
+            [formGroup]="signUpForm"
+            class="flex flex-col px-5 py-2 entry-form"
+          >
+            <app-user-form
+              formControlName="userForm"
+              class="relative"
+              [accountCreate]="true"
+            ></app-user-form>
             <div class="w-full mb-5">
               <mat-checkbox id="agreeToTerms" formControlName="agreeToTerms">
                 I have read and agree to the&nbsp;
               </mat-checkbox>
-              <a class="text-accent-400" id="terms" (click)="openTerms()">terms & conditions</a>
+              <a class="text-accent-400" id="terms" (click)="openTerms()"
+                >terms & conditions</a
+              >
             </div>
-            <button id="submit" type="submit" mat-raised-button color="accent" [disabled]="!signUpForm.valid">
+            <button
+              data-testid="create-account"
+              id="submit"
+              type="submit"
+              mat-raised-button
+              color="accent"
+              [disabled]="!signUpForm.valid"
+            >
               Create Account
             </button>
           </form>
         </span>
-        <app-loading-indicator class="m-auto" *ngIf="isLoading"></app-loading-indicator>
+        <app-loading-indicator
+          class="m-auto"
+          *ngIf="isLoading"
+        ></app-loading-indicator>
       </div>
     </div>
   </mat-card>

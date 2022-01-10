@@ -1,0 +1,35 @@
+name: Test Deployments
+
+on:
+  push:
+    paths:
+      - 'src/**'
+    branches:
+      - 'uat'
+
+jobs:
+  # Deploys the web app
+  web-app:
+    runs-on: [self-hosted, uat]
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Installing dependencies
+        run: npm ci --no-audit
+
+      - name: Stopping IIS pool
+        run: c:\batch\elevate Stop-WebAppPool -Name uat.rithm.tech
+
+      - name: Compiling app
+        run: npm run build-test
+
+      - name: Deploying app
+        run: Copy-Item ./dist/rithm/* D:/inetpub/uat.rithm.tech -Recurse -Force
+
+      - name: Starting IIS pool
+        run: c:\batch\elevate Start-WebAppPool -Name uat.rithm.tech

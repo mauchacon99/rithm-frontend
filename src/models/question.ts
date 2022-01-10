@@ -1,4 +1,4 @@
-import { QuestionFieldType } from '.';
+import { QuestionFieldType, QuestionAnswer } from '.';
 import { PossibleAnswer } from './possible-answer';
 
 /**
@@ -10,9 +10,6 @@ export interface Question {
 
   /** The name/label of the question. */
   prompt: string;
-
-  /** Instructions for filling out the question. */
-  instructions?: string; // TODO: get this from the back end
 
   /** Type of the question. */
   questionType: QuestionFieldType;
@@ -35,4 +32,15 @@ export interface Question {
   /** The children for nested questions. */
   children: Question[];
 
+  /** Value of the new field (what do you call your field?). */
+  value?: string;
+
+  /** Value of the Rithm ID current station to identify previous field. */
+  originalStationRithmId?: string | null;
+
+  /** Whether the added item is a possibleAnswer (FrontEndOnly). */
+  isPossibleAnswer?: boolean;
+
+  /** The answers to each question.*/
+  answer?: QuestionAnswer;
 }

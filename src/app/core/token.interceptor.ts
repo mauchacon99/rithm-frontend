@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
@@ -13,7 +19,7 @@ const NO_AUTH_ROUTES = [
   '/validate-email',
   '/forgot-password',
   '/reset-password',
-  '/terms-and-conditions'
+  '/terms-and-conditions',
 ];
 
 /**
@@ -21,11 +27,10 @@ const NO_AUTH_ROUTES = [
  */
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-
   constructor(
     private userService: UserService,
     private popupService: PopupService
-  ) { }
+  ) {}
 
   /**
    * Intercepts HTTP requests and provides the access token in the header.
@@ -34,20 +39,21 @@ export class TokenInterceptor implements HttpInterceptor {
    * @param next The HTTP request to hand to the next interceptor.
    * @returns An HTTP event.
    */
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     // If an auth-required route
     if (NO_AUTH_ROUTES.every((route) => !request.url.includes(route))) {
-
       // Check if the user is signed in
       return this.checkSignIn().pipe(
         mergeMap((signedIn) => {
-
           if (!signedIn) {
             this.userService.signOut();
             this.popupService.alert({
               title: 'Session Expired',
-              message: 'Your session has expired. Please sign in again to complete that action.'
+              message:
+                'Your session has expired. Please sign in again to complete that action.',
             });
             return EMPTY;
           } else {
@@ -56,7 +62,6 @@ export class TokenInterceptor implements HttpInterceptor {
           }
         })
       );
-
     }
 
     return this.passRequest(request, next);
@@ -72,8 +77,8 @@ export class TokenInterceptor implements HttpInterceptor {
     const accessToken = this.userService.accessToken;
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken?.token}`
-      }
+        Authorization: `Bearer ${accessToken?.token}`,
+      },
     });
   }
 
@@ -93,15 +98,17 @@ export class TokenInterceptor implements HttpInterceptor {
    * @param next The HTTP request to hand to the next interceptor.
    * @returns An HTTP event.
    */
-  private passRequest(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  private passRequest(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: unknown) => {
-
         // If unauthorized, sign the user out
         if (error instanceof HttpErrorResponse && error.status === 401) {
           this.userService.signOut();
         }
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }

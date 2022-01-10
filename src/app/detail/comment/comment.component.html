@@ -1,10 +1,17 @@
-<div class="flex w-full m-0" [ngClass]="{'opacity-70': read}">
+<div class="flex w-full m-0" [ngClass]="{ 'opacity-70': read }">
   <div class="p-2 user-avatar">
-    <app-user-avatar [firstName]="comment.userFirstName!" [lastName]="comment.userLastName!"></app-user-avatar>
+    <app-user-avatar
+      [firstName]="comment.userFirstName!"
+      [lastName]="comment.userLastName!"
+    ></app-user-avatar>
   </div>
   <span class="p-0 py-2">
-    <h4 class="subtitle-medium text-accent-500 pb-1">{{ comment.userFirstName }} {{ comment.userLastName }}</h4>
+    <h4 class="subtitle-medium text-accent-500 pb-1">
+      {{ comment.userFirstName }} {{ comment.userLastName }}
+    </h4>
     <div class="leading-4">{{ comment.displayText }}</div>
-    <div class="overline text-secondary-400 pt-1">{{ convertTimecode(comment?.dateCreated) }}</div>
+    <div class="overline-font text-secondary-400 pt-1">
+      {{ convertTimecode(comment?.dateCreated) }}
+    </div>
   </span>
 </div>

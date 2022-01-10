@@ -1,8 +1,7 @@
 /**
  * All of the various modes/states of the map.
  */
- export enum MapDragItem {
-
+export enum MapDragItem {
   /** Nothing is currently being dragged. */
   Default,
 
@@ -14,4 +13,7 @@
 
   /** A connection node is being dragged. */
   Node,
+
+  /** A connection line is being dragged. */
+  Connection,
 }

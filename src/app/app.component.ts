@@ -1,4 +1,10 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -16,10 +22,9 @@ const RESET_PASSWORD_URL = 'password-reset';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   /** The sidenav displayed on mobile. */
   @ViewChild('sidenav', { static: true })
   sidenav!: MatSidenav;
@@ -38,69 +43,69 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       name: 'dashboard',
       icon: 'fa-th-large',
-      link: 'dashboard'
+      link: 'dashboard',
     },
     {
       name: 'map',
       icon: 'fa-project-diagram',
-      link: 'map'
+      link: 'map',
     },
     {
       name: 'My Account',
       icon: 'fa-cog',
-      link: 'settings/account'
+      link: 'settings/account',
     },
     {
       name: 'Sign Out',
-      icon: 'fa-sign-out-alt'
-    }
+      icon: 'fa-sign-out-alt',
+    },
   ];
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
     private router: Router
-  ) { }
+  ) {}
 
   /**
    * Check the URL path and show/hide the navigation.
    */
   ngOnInit(): void {
     this.userService.setUserData();
-    this.userService.userData$
-      .pipe(takeUntil(this.user$))
-      .subscribe((user) => {
-        const info = user as User;
-        if (info && info.role) {
-          const found = this.mobileLinks.findIndex(link => link.name === 'admin');
-          if (found === -1) {
-            this.mobileLinks.splice(2, 0, {
-              name: 'admin',
-              icon: 'fa-user-cog',
-              link: 'admin'
-            });
-          }
-        } else {
-          this.mobileLinks = this.mobileLinks.filter(e => e.name !== 'admin');
+    this.userService.userData$.pipe(takeUntil(this.user$)).subscribe((user) => {
+      const info = user as User;
+      if (info && info.role) {
+        const found = this.mobileLinks.findIndex(
+          (link) => link.name === 'admin'
+        );
+        if (found === -1) {
+          this.mobileLinks.splice(2, 0, {
+            name: 'admin',
+            icon: 'fa-user-cog',
+            link: 'admin',
+          });
         }
-      });
-
-    this.sidenavDrawerService.setSidenav(this.sidenav);
-    this.router.events.pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe((e) => {
-      if (e instanceof NavigationEnd) {
-        const path = e.url;
-        this.showTopNav =
-          path !== '' &&
-          path !== '/' &&
-          path !== '/forgot-password' &&
-          path !== '/account-create' &&
-          path !== '/password-reset' &&
-          (path?.toLowerCase().indexOf(REGISTER_URL) === -1) &&
-          (path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1);
+      } else {
+        this.mobileLinks = this.mobileLinks.filter((e) => e.name !== 'admin');
       }
     });
+
+    this.sidenavDrawerService.setSidenav(this.sidenav);
+    this.router.events
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((routerEvent) => {
+        if (routerEvent instanceof NavigationEnd) {
+          const path = routerEvent.url;
+          this.showTopNav =
+            path !== '' &&
+            path !== '/' &&
+            path !== '/forgot-password' &&
+            path !== '/account-create' &&
+            path !== '/password-reset' &&
+            path?.toLowerCase().indexOf(REGISTER_URL) === -1 &&
+            path?.toLowerCase().indexOf(RESET_PASSWORD_URL) === -1;
+        }
+      });
 
     //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;

@@ -1,3 +1,4 @@
+# High-level rules (these will be overridden by later rules)
 *.scss @belugasanity
 *.css @belugasanity
 .stylelintrc.json @belugasanity
@@ -17,17 +18,26 @@ src/app/map/**/*.scss @Gobsmack90
 src/app/map/**/*.html @HendricksonTyler @Gobsmack90
 
 # Team Lion rules
-src/app/detail/**/*.ts @HendricksonTyler @cqmdeveloper
-src/app/document/**/*.ts @HendricksonTyler @cqmdeveloper
-src/app/station/**/*.ts @HendricksonTyler @cqmdeveloper
-src/app/info-drawer/**/*.ts @HendricksonTyler @cqmdeveloper
+src/app/admin/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/dashboard/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/detail/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/document/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/info-drawer/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/settings/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+src/app/station/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
 
+src/app/admin/**/*.html @strut-software/team-lion-style-reviewers
+src/app/dashboard/**/*.html @strut-software/team-lion-style-reviewers
 src/app/detail/**/*.html @strut-software/team-lion-style-reviewers
 src/app/document/**/*.html @strut-software/team-lion-style-reviewers
-src/app/station/**/*.html @strut-software/team-lion-style-reviewers
 src/app/info-drawer/**/*.html @strut-software/team-lion-style-reviewers
+src/app/settings/**/*.html @strut-software/team-lion-style-reviewers
+src/app/station/**/*.html @strut-software/team-lion-style-reviewers
 
+src/app/admin/**/*.scss @strut-software/team-lion-style-reviewers
+src/app/dashboard/**/*.scss @strut-software/team-lion-style-reviewers
 src/app/detail/**/*.scss @strut-software/team-lion-style-reviewers
 src/app/document/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/station/**/*.scss @strut-software/team-lion-style-reviewers
 src/app/info-drawer/**/*.scss @strut-software/team-lion-style-reviewers
+src/app/settings/**/*.scss @strut-software/team-lion-style-reviewers
+src/app/station/**/*.scss @strut-software/team-lion-style-reviewers

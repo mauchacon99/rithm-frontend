@@ -14,14 +14,10 @@ describe('NotificationCardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         NotificationCardComponent,
-        MockComponent(UserAvatarComponent)
+        MockComponent(UserAvatarComponent),
       ],
-      imports: [
-        NoopAnimationsModule,
-        MatCardModule
-      ]
-    })
-    .compileComponents();
+      imports: [NoopAnimationsModule, MatCardModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

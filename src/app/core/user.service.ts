@@ -2,11 +2,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, ReplaySubject, throwError } from 'rxjs';
+import { firstValueFrom, Observable, ReplaySubject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AccessToken } from 'src/helpers';
-import { SignInResponse, TokenResponse, User, UserAccountInfo } from 'src/models';
+import {
+  SignInResponse,
+  TokenResponse,
+  User,
+  UserAccountInfo,
+  StationInformation,
+} from 'src/models';
 
 const MICROSERVICE_PATH = '/userservice/api/user';
 
@@ -14,10 +20,9 @@ const MICROSERVICE_PATH = '/userservice/api/user';
  * Service for all interactions involving a user.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
   /** The access token to be used to authenticate for every request. */
   accessToken: AccessToken | undefined;
 
@@ -28,7 +33,7 @@ export class UserService {
     private http: HttpClient,
     private cookieService: CookieService,
     private router: Router
-  ) { }
+  ) {}
 
   /**
    * The currently signed in user.
@@ -41,6 +46,15 @@ export class UserService {
   }
 
   /**
+   * Checking if the current user is an admin.
+   *
+   * @returns The true or false if user is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.user.role === 'admin';
+  }
+
+  /**
    * Signs the user in to the system.
    *
    * @param email The email address for the user.
@@ -48,18 +62,24 @@ export class UserService {
    * @returns The user and access/refresh tokens.
    */
   signIn(email: string, password: string): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/login`, {
-      email,
-      password
-    }, { withCredentials: true }).pipe(
-      map((response) => {
-        this.accessToken = new AccessToken(response.accessToken);
-        localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        this.userData$.next(response.user);
-        return response;
-      })
-    );
+    return this.http
+      .post<SignInResponse>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
+      .pipe(
+        map((response) => {
+          this.accessToken = new AccessToken(response.accessToken);
+          localStorage.setItem('refreshTokenGuid', response.refreshTokenGuid);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.userData$.next(response.user);
+          return response;
+        })
+      );
   }
 
   /**
@@ -84,8 +104,7 @@ export class UserService {
     }
 
     // Attempt to refresh the token
-    await this.refreshToken().toPromise()
-      .catch(() => false);
+    await firstValueFrom(this.refreshToken()).catch(() => false);
 
     // Check if token is good
     if (this.accessToken && !this.accessToken.isExpired()) {
@@ -105,13 +124,17 @@ export class UserService {
 
     if (!refreshTokenGuid) {
       this.signOut();
-      return throwError('Unable to refresh token without GUID');
+      return throwError(() => 'Unable to refresh token without GUID');
     }
 
     const params = new HttpParams().set('refreshTokenGuid', refreshTokenGuid);
 
-    return this.http.get<TokenResponse>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token`,
-      { withCredentials: true, params }).pipe(
+    return this.http
+      .get<TokenResponse>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/refresh-token`,
+        { withCredentials: true, params }
+      )
+      .pipe(
         map((tokenResponse) => {
           this.accessToken = new AccessToken(tokenResponse.accessToken);
           return tokenResponse;
@@ -128,13 +151,21 @@ export class UserService {
    * @param password The password set for the new user.
    * @returns An empty observable.
    */
-  register(firstName: string, lastName: string, email: string, password: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/register`, {
-      firstName,
-      lastName,
-      email,
-      password
-    });
+  register(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ): Observable<unknown> {
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/register`,
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+      }
+    );
   }
 
   /**
@@ -144,12 +175,15 @@ export class UserService {
    * @returns An empty observable.
    */
   delete(email: string): Observable<unknown> {
-    return this.http.delete<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: { email }
-    });
+    return this.http.delete<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/delete`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: { email },
+      }
+    );
   }
 
   /**
@@ -160,11 +194,13 @@ export class UserService {
    * @returns An empty observable.
    */
   validateEmail(guid: string, email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`,
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/validate-email`,
       {
         guid,
-        email
-      });
+        email,
+      }
+    );
   }
 
   /**
@@ -174,8 +210,10 @@ export class UserService {
    * @returns An empty observable.
    */
   sendPasswordResetEmail(email: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`,
-      { email });
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/forgot-password`,
+      { email }
+    );
   }
 
   /**
@@ -186,13 +224,19 @@ export class UserService {
    * @param password The new password to be set.
    * @returns An empty observable.
    */
-  resetPassword(guid: string, email: string, password: string): Observable<unknown> {
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`,
+  resetPassword(
+    guid: string,
+    email: string,
+    password: string
+  ): Observable<unknown> {
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/reset-password`,
       {
         guid,
         email,
-        password
-      });
+        password,
+      }
+    );
   }
 
   /**
@@ -203,20 +247,26 @@ export class UserService {
    */
   updateUserAccount(accountInfo: UserAccountInfo): Observable<unknown> {
     const changedAccountInfo = this.getChangedAccountInfo(accountInfo);
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/update`, changedAccountInfo)
-      .pipe(map(() => {
-        const user = this.user;
-        if (!this.user) {
-          throw new Error('There is no existing user to update');
-        }
-        if (changedAccountInfo.firstName) {
-          user.firstName = changedAccountInfo.firstName;
-        }
-        if (changedAccountInfo.lastName) {
-          user.lastName = changedAccountInfo.lastName;
-        }
-        localStorage.setItem('user', JSON.stringify(user));
-      }));
+    return this.http
+      .post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}/update`,
+        changedAccountInfo
+      )
+      .pipe(
+        map(() => {
+          const user = this.user;
+          if (!this.user) {
+            throw new Error('There is no existing user to update');
+          }
+          if (changedAccountInfo.firstName) {
+            user.firstName = changedAccountInfo.firstName;
+          }
+          if (changedAccountInfo.lastName) {
+            user.lastName = changedAccountInfo.lastName;
+          }
+          localStorage.setItem('user', JSON.stringify(user));
+        })
+      );
   }
 
   /**
@@ -249,7 +299,43 @@ export class UserService {
    * @returns A terms and conditions observable.
    */
   getTermsConditions(): Observable<string> {
-    return this.http.request('GET', `${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`, { responseType: 'text' });
+    return this.http.request(
+      'GET',
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/terms-and-conditions`,
+      { responseType: 'text' }
+    );
+  }
+
+  /**
+   * Sets user data to an observable.
+   */
+  setUserData(): void {
+    const user = localStorage.getItem('user');
+    this.userData$.next(JSON.parse(<string>user));
+  }
+
+  /**
+   * Checks to see if signed in user is an owner of the station.
+   *
+   * @param stationInformation The station used to check if user is an admin.
+   * @returns A boolean determining if the current user is an owner of the station.
+   */
+  isStationOwner(stationInformation: StationInformation): boolean {
+    return !!stationInformation.stationOwners.find(
+      (owner) => owner.rithmId === this.user.rithmId
+    );
+  }
+
+  /**
+   * Checked to see if signed in user is a worker.
+   *
+   * @param stationInformation The station used to check if user is a worker.
+   * @returns A boolean determining if the current user is a worker on the station.
+   */
+  isWorker(stationInformation: StationInformation): boolean {
+    return !!stationInformation.workers.find(
+      (worker) => worker.rithmId === this.user.rithmId
+    );
   }
 
   // TODO: Re-enable when addressing notification settings
@@ -263,13 +349,4 @@ export class UserService {
   //   return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/notifications`,
   //     notificationSettings);
   // }
-
-  /**
-   * Sets user data to an observable.
-   */
-  setUserData(): void {
-    const user = localStorage.getItem('user');
-    this.userData$.next(JSON.parse(<string>user));
-  }
-
 }

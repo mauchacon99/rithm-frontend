@@ -1,10 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentStationInformation, Question, QuestionFieldType, StationInformation } from 'src/models';
-import { StationInfoDrawerData } from '../../../models/station-info-drawer-data';
-import { StationService } from '../../core/station.service';
+import {
+  DocumentStationInformation,
+  Question,
+  QuestionFieldType,
+  StationInformation,
+  StationInfoDrawerData,
+} from 'src/models';
+import { StationService } from 'src/app/core/station.service';
+import { Subject } from 'rxjs';
 
 /**
  * Reusable component for the station information header.
@@ -12,9 +18,12 @@ import { StationService } from '../../core/station.service';
 @Component({
   selector: 'app-station-info-header[stationInformation][stationEditMode]',
   templateUrl: './station-info-header.component.html',
-  styleUrls: ['./station-info-header.component.scss']
+  styleUrls: ['./station-info-header.component.scss'],
 })
-export class StationInfoHeaderComponent implements OnInit {
+export class StationInfoHeaderComponent implements OnInit, OnDestroy {
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   /** Is component viewed in station edit mode? */
   @Input() stationEditMode!: boolean;
 
@@ -36,20 +45,21 @@ export class StationInfoHeaderComponent implements OnInit {
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService
   ) {
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
+    this.type =
+      this.userService.user.role === 'admin'
+        ? this.userService.user.role
+        : 'worker';
 
     this.stationNameForm = this.fb.group({
-      name: ['']
+      name: [''],
     });
   }
 
   /** Set this.info. */
   ngOnInit(): void {
-
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
-      instructions: '',
       questionType: QuestionFieldType.ShortText,
       isReadOnly: false,
       isRequired: true,
@@ -59,20 +69,46 @@ export class StationInfoHeaderComponent implements OnInit {
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
-  /** Get name of station from StationInformation based on type.
+  /**
+   * Whether the info-drawer is opened.
+   *
+   * @returns Return true if info-drawer is opened, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
+   * Get name of station from StationInformation based on type.
    *
    * @returns The Station Name.
    */
   get stationName(): string {
-    return 'stationName' in this.stationInformation ? this.stationInformation.stationName : this.stationInformation.name;
+    return 'stationName' in this.stationInformation
+      ? this.stationInformation.stationName
+      : this.stationInformation.name;
   }
 
-  /** Get the priority from StationInformation model.
+  /**
+   * Get the priority from StationInformation model.
    *
    * @returns The Priority of station.
    */
   get priority(): number | null {
-    return 'priority' in this.stationInformation ? this.stationInformation.priority : null;
+    return 'priority' in this.stationInformation
+      ? this.stationInformation.priority
+      : null;
+  }
+
+  /**
+   * The id of the station or document.
+   *
+   * @returns The id of the station or document.
+   */
+  get stationRithmId(): string {
+    return 'rithmId' in this.stationInformation
+      ? this.stationInformation.rithmId
+      : this.stationInformation.stationRithmId;
   }
 
   /**
@@ -82,20 +118,29 @@ export class StationInfoHeaderComponent implements OnInit {
    */
   toggleDrawer(drawerItem: 'stationInfo'): void {
     const dataInformationDrawer: StationInfoDrawerData = {
-      stationInformation: this.stationInformation as StationInformation,
+      stationRithmId: this.stationRithmId,
       stationName: this.stationName,
-      editMode: this.stationEditMode
+      editMode: this.stationEditMode,
+      openedFromMap: false,
     };
-
     this.sidenavDrawerService.toggleDrawer(drawerItem, dataInformationDrawer);
-    this.updStationInfoDrawerName();
+    this.updateStationInfoDrawerName();
   }
 
   /**
    * Update InfoDrawer Station Name.
    */
-     updStationInfoDrawerName(): void{
-      this.stationService.updatedStationNameText(this.stationNameForm.controls.name.value);
-    }
+  updateStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(
+      this.stationNameForm.controls.name.value
+    );
+  }
 
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }

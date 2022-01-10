@@ -14,7 +14,7 @@ const COMMENTS_PER_PAGE = 20;
 @Component({
   selector: 'app-comment-drawer',
   templateUrl: './comment-drawer.component.html',
-  styleUrls: ['./comment-drawer.component.scss']
+  styleUrls: ['./comment-drawer.component.scss'],
 })
 export class CommentDrawerComponent implements OnInit {
   /** Station this drawer is attached to. */
@@ -48,27 +48,28 @@ export class CommentDrawerComponent implements OnInit {
     private commentService: CommentService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService
-  ) { }
+  ) {}
 
   /**
    * Display initial group of comments.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.drawerData$
-      .pipe(first())
-      .subscribe((drawerData) => {
+    this.sidenavDrawerService.drawerData$.pipe(first()).subscribe({
+      next: (drawerData) => {
         const info = drawerData as DocumentStationInformation;
         if (info) {
           this.stationId = info.stationRithmId;
           this.documentId = info.documentRithmId;
           this.getDocumentComments(true);
         }
-      }, (error: unknown) => {
+      },
+      error: (error: unknown) => {
         this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
         );
-      });
+      },
+    });
   }
 
   /**
@@ -93,26 +94,37 @@ export class CommentDrawerComponent implements OnInit {
      * @param loading Set the variables to true or false.
      */
     const setLoading = (loading: boolean) => {
-      initialGet ? this.isLoading = loading : this.loadingMoreComments = loading;
+      initialGet
+        ? (this.isLoading = loading)
+        : (this.loadingMoreComments = loading);
     };
 
     setLoading(true);
-    this.commentService.getDocumentComments(this.documentId, this.stationId, this.commentPage, COMMENTS_PER_PAGE)
+    this.commentService
+      .getDocumentComments(
+        this.documentId,
+        this.stationId,
+        this.commentPage,
+        COMMENTS_PER_PAGE
+      )
       .pipe(first())
-      .subscribe((commentsResponse) => {
-        this.comments = this.comments.concat(commentsResponse);
-        if (commentsResponse.length === COMMENTS_PER_PAGE) {
-          ++this.commentPage;
-        } else {
-          this.commentsEnd = true;
-        }
-        setLoading(false);
-      }, (error: unknown) => {
-        setLoading(false);
-        this.errorService.displayError(
-          'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-          error
-        );
+      .subscribe({
+        next: (commentsResponse) => {
+          this.comments = this.comments.concat(commentsResponse);
+          if (commentsResponse.length === COMMENTS_PER_PAGE) {
+            ++this.commentPage;
+          } else {
+            this.commentsEnd = true;
+          }
+          setLoading(false);
+        },
+        error: (error: unknown) => {
+          setLoading(false);
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
       });
   }
 
