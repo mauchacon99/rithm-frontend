@@ -5,6 +5,7 @@
   </div>
   <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
     <mat-step color="accent" [completed]="false">
+      <!-- Step 1 -->
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
@@ -14,22 +15,25 @@
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Select Field</mat-label>
-          <mat-select></mat-select>
+          <mat-select [(value)]="fieldSetRule"></mat-select>
         </mat-form-field>
         <button mat-button matStepperNext class="w-1/12">Next</button>
       </div>
     </mat-step>
     <mat-step color="primary" [completed]="false">
+      <!-- Step 2 -->
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Type</p>
       </ng-template>
     </mat-step>
     <mat-step color="primary" [completed]="false">
+      <!-- Step 3 -->
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
     </mat-step>
     <mat-step color="primary" [completed]="false">
+      <!-- Step 4 -->
       <ng-template matStepLabel>
         <p class="truncate ml-2">Done</p>
       </ng-template>
