@@ -555,7 +555,9 @@ describe('DocumentService', () => {
   });
 
   it('should create a new document', () => {
-    const expectedResponse = {/** Document Rithm Id. */rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F'};
+    const expectedResponse = {
+      /** Document Rithm Id. */ rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F',
+    };
 
     const nameDocument = 'The name of Document';
     const priorityDocument = 0;

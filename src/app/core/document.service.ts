@@ -375,10 +375,11 @@ export class DocumentService {
       stationRithmId,
     };
     return this.http
-      .post<{/** Document Rithm Id. */rithmId: string}>(
+      .post<{ /** Document Rithm Id. */ rithmId: string }>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}`,
         requestObject
-      ).pipe(map(response => response.rithmId));
+      )
+      .pipe(map((response) => response.rithmId));
   }
 
   /**
