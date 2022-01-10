@@ -329,6 +329,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.pointerCache.push(event);
       }
 
+      //If using a single touch or click, calculate it, then run the event start logic.
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -336,6 +337,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.eventStartLogic(event);
       }
 
+      //If using two touches, make sure both touches are accounted for.
       if (this.pointerCache.length === 2) {
         const pointer1 = this.pointerCache[0];
         const pointer2 = this.pointerCache[1];
@@ -347,6 +349,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.eventStartCoords = this.getEventCanvasPoint(pointer1);
       }
 
+      /* If something is being dragged, capture the pointer event in the canvas element.
+      This allows the mouse/touch to leave the canvas boundaries and continue registering events. */
       if (this.dragItem !== MapDragItem.Default) {
         const map = document.getElementById('map');
         map?.setPointerCapture(event.pointerId);
@@ -357,7 +361,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Handles user input when releasing and a pointer event is fired.
    *
-   * @param event The mouseup event that was triggered.
+   * @param event The pointerup event that was triggered.
    */
   @HostListener('pointerup', ['$event'])
   pointerUp(event: PointerEvent): void {
@@ -371,7 +375,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
-      // remove event from cache.
+      /* Remove event from cache. This ensures that if there are multiple pointer events being tracked,
+      like in the case of a pinch drag, instead of cancelling the entire event when a finger lifts,
+      we'll simply track the leftover input and use the corresponding event logic. */
       for (let i = 0; i < this.pointerCache.length; i++) {
         if (this.pointerCache[i].pointerId === event.pointerId) {
           this.pointerCache.splice(i, 1);
@@ -379,13 +385,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      //If there are no more pointer events cached.
       if (this.pointerCache.length === 0) {
+        //Release the pointer capture so that you can interact with other elements.
         if (this.dragItem !== MapDragItem.Default) {
           const map = document.getElementById('map');
           map?.releasePointerCapture(event.pointerId);
         }
 
+        //Trigger the logic for when an event ends.
         this.eventEndLogic(event);
+      //If there are still pointer events, set lastTouchCoords to leftover pointer.
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -423,12 +433,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.pointerCache.push(event);
       }
 
+      //If there's only a single pointer event, trigger the appropriate logic.
       if (this.pointerCache.length === 1) {
         const pointer = this.pointerCache[0];
         this.singleInputMoveLogic(pointer);
       }
 
-      // Pinch event.
+      // If there are two pointer events, trigger pinch zoom logic.
       if (this.pointerCache.length === 2) {
         const pointer1 = this.pointerCache[0];
         const pointer2 = this.pointerCache[1];
@@ -991,7 +1002,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles mouseDown and touchStart logic.
+   * Handles pointer, touch and mouse events starts when a single start/down event is registered.
    *
    * @param event Is an input event.
    */
