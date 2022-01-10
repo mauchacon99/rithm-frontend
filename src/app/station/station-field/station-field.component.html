@@ -144,7 +144,7 @@
           <div>
             <mat-checkbox
               [name]="field.rithmId"
-              [formControlName]="'isReadOnly-'+field.rithmId"
+              [attr.formControlName]="'isReadOnly-'+field.rithmId"
               [checked]="field.isReadOnly"
               (change)="setEditable($event)"
             >
