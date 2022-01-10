@@ -4,12 +4,13 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
   DocumentStationInformation,
   StandardStringJSON,
+  RithmIdStringJSON,
   DocumentAnswer,
   DocumentName,
   StationRosterMember,
@@ -359,26 +360,27 @@ export class DocumentService {
   /**
    * Creates a new document.
    *
-   * @param stationRithmId The station where we want to create a new document.
-   * @returns The id of the document object that has been saved.
+   * @param name The name of document.
+   * @param priority The priority of the document.
+   * @param stationRithmId The rithmid of the station where this document should start.
+   * @returns Return string rithmId.
    */
-  createNewDocument(stationRithmId: string): Observable<string> {
-    const documentResponse = {
-      rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F',
-      name: '',
-      priority: 0,
-      currentStations: [
-        {
-          name: 'So long',
-          instructions: '',
-          rithmId: stationRithmId,
-          assignedUser: null,
-        },
-      ],
-      children: [],
-      parents: [],
+  createNewDocument(
+    name: string,
+    priority: number,
+    stationRithmId: string
+  ): Observable<string> {
+    const requestObject = {
+      name,
+      priority,
+      stationRithmId,
     };
-    return of(documentResponse.rithmId).pipe(delay(1000));
+    return this.http
+      .post<RithmIdStringJSON>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}`,
+        requestObject
+      )
+      .pipe(map((response) => response.rithmId));
   }
 
   /**
@@ -394,18 +396,14 @@ export class DocumentService {
     stationRithmId: string,
     documentRithmId: string
   ): Observable<unknown> {
-    if (!userRithmId || !stationRithmId || !documentRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error:
-                'Data invalid, new user cannot be assigned to the document.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return of().pipe(delay(1000));
-    }
+    const requestObject = {
+      userRithmId: userRithmId,
+      documentRithmId: documentRithmId,
+      stationRithmId: stationRithmId,
+    };
+    return this.http.post<void>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,
+      requestObject
+    );
   }
 }

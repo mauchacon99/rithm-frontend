@@ -133,6 +133,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Storing broken connection line. */
   private storedConnectionLine: ConnectionMapElement | null = null;
 
+  /**Adding boundary box inner padding for top-left and bottom-right. */
+  readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
+
   /**
    * Add station mode active.
    *
@@ -245,6 +248,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.mapService.stationElements = [];
+    this.mapService.flowElements = [];
+    this.mapService.connectionElements = [];
   }
 
   /**
@@ -692,8 +698,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       const step = (): void => {
         this.autoMapPan(this.nextPanVelocity);
         if (
-          Math.floor(this.nextPanVelocity.x) >= 1 ||
-          Math.floor(this.nextPanVelocity.y) >= 1
+          Math.abs(this.nextPanVelocity.x) >= 1 ||
+          Math.abs(this.nextPanVelocity.y) >= 1
         ) {
           this.nextPanVelocity = {
             x: this.nextPanVelocity.x * PAN_DECAY_RATE,
@@ -751,6 +757,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.connections.forEach((connection) => {
         this.connectionElementService.drawConnection(connection);
       });
+
+      // Draw the Boundary box
+      this.drawBoundaryBox();
 
       // Draw the stations
       this.stations.forEach((station) => {
@@ -864,10 +873,22 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
-    const leftBoundaryEdge = minMapPoint.x - screenDimension;
-    const topBoundaryEdge = minMapPoint.y - screenDimension;
-    const rightBoundaryEdge = maxMapPoint.x + screenDimension;
-    const bottomBoundaryEdge = maxMapPoint.y + screenDimension;
+    const leftBoundaryEdge =
+      minMapPoint.x -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const topBoundaryEdge =
+      minMapPoint.y -
+      (screenDimension * this.scale) / 2 +
+      this.boundaryPadding.topLeft;
+    const rightBoundaryEdge =
+      maxMapPoint.x +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
+    const bottomBoundaryEdge =
+      maxMapPoint.y +
+      (screenDimension * this.scale) / 2 -
+      this.boundaryPadding.rightBottom;
 
     const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
     const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
@@ -972,7 +993,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.dragItem !== MapDragItem.Node) {
+      //If a station or node is being dragged, we should not check for hover on a connection.
+      if (
+        this.dragItem !== MapDragItem.Node &&
+        this.dragItem !== MapDragItem.Station
+      ) {
         for (const connection of this.connections) {
           // Check if connection line was clicked. ContextPoint is used for connection lines.
           connection.checkElementHover(eventContextPoint, this.context);
@@ -1187,6 +1212,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ) {
         this.fastDrag = true;
         this.holdDrag = true;
+        //This is designed to trigger if a pointer event is ongoing. it wont have a chance to trigger if the event has ended already.
         setTimeout(() => {
           if (this.holdDrag) {
             this.fastDrag = false;
@@ -1390,7 +1416,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //Check if click was in a station. If so any code under this for loop will not run.
+    //Check if click was in a station. If so any code below this for loop will not run.
     for (const station of this.stations) {
       //Connection node.
       if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
@@ -1409,7 +1435,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //Document badge.
       } else if (
-        station.isPointInDocumentBadge(point, this.mapMode, this.scale)
+        station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
+        station.status !== MapItemStatus.Created
       ) {
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',

@@ -1,12 +1,16 @@
 <!-- Title -->
 <h4 id="title" class="m-2 font-semibold">{{ title }}</h4>
-
+<app-loading-indicator
+  *ngIf="connectedStationLoading"
+  id="connected-stations-loading"
+  [inlineText]="'Loading...'"
+></app-loading-indicator>
 <!-- Select station. -->
-<div class="grid grid-cols-1">
+<div *ngIf="!connectedStationLoading" class="grid grid-cols-1">
   <!-- Select -->
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{ label }} </mat-label>
-    <mat-select>
+    <mat-select [(value)]="selectedStation">
       <mat-option
         *ngFor="let station of connectedStations"
         [value]="station.rithmId"
@@ -32,8 +36,10 @@
   <button
     mat-raised-button
     color="accent"
-    [mat-dialog-close]="true"
     data-testid="connected-modal-move"
+    id="connected-modal-move"
+    [disabled]="selectedStation === '' || selectedStation === null"
+    (click)="moveDocument()"
   >
     Move
   </button>

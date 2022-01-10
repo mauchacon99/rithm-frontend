@@ -88,6 +88,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The priority for current station once the info is loaded.*/
   stationPriority: number | '--' = '--';
 
+  /** The default message to prompt user to publish local changes.*/
+  publishStationMessage = 'Publish map changes to update ';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -443,7 +446,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   createNewDocument(): void {
     this.documentService
-      .createNewDocument(this.stationRithmId)
+      .createNewDocument('', 0, this.stationRithmId)
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function

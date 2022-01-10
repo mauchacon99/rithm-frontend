@@ -75,7 +75,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   mapMode = MapMode;
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
-  drawerMode: '' | 'stationInfo' | 'connectionInfo' = '';
+  drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
 
   /**
    * Whether the map is in any building mode.
@@ -179,7 +179,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        if (data === 'connectionInfo' || data === 'stationInfo') {
+        if (
+          data === 'connectionInfo' ||
+          data === 'stationInfo' ||
+          data === 'stationGroupInfo'
+        ) {
           this.drawerMode = data;
         }
       });
@@ -201,6 +205,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.mapService.mapMode$.next(MapMode.View);
+    this.mapService.mapDataReceived$.next(false);
   }
 
   /**
@@ -247,13 +252,13 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     });
     if (confirm) {
       this.mapDataLoading = true;
+      this.mapService.mapMode$.next(MapMode.View);
       this.mapService
         .publishMap()
         .pipe(first())
         .subscribe({
           next: () => {
             this.mapDataLoading = false;
-            this.mapService.mapMode$.next(MapMode.View);
             this.popupService.notify('Map data published successfully.');
           },
           error: (error: unknown) => {
@@ -414,7 +419,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    *
    * @param drawerItem The drawer item to toggle.
    */
-  toggleDrawer(drawerItem: 'connectionInfo'): void {
+  toggleDrawer(drawerItem: 'stationGroupInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 }

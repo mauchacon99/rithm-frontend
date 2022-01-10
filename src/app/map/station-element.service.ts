@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import {
   MapDragItem,
+  MapItemStatus,
   MapMode,
   Point,
   StationElementHoverItem,
@@ -77,7 +78,9 @@ export class StationElementService {
     this.drawStationCard(station, dragItem);
 
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
-      this.drawDocumentBadge(station, dragItem);
+      station.status === MapItemStatus.Created
+        ? this.drawNewBadge(station)
+        : this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
       if (
@@ -208,11 +211,19 @@ export class StationElementService {
     ctx.textAlign = 'left';
     ctx.fillStyle = 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
-    ctx.font = `normal ${fontSize}px Montserrat`;
+    //When a station has status set to updated, change the font style to reflect that.
+    const isItalic =
+      station.status === MapItemStatus.Updated ? 'italic' : 'normal';
+    ctx.font = `${isItalic} ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
+
+    //When a station has status set to updated, add an asterisk to reflect that.
+    if (station.status === MapItemStatus.Updated) {
+      firstLineArray.push('*');
+    }
 
     for (const word of sn) {
       if (
@@ -316,6 +327,38 @@ export class StationElementService {
       station.noOfDocuments.toString(),
       startingX + scaledStationWidth - scaledBadgeMargin,
       startingY + scaledBadgeMargin + 6 * this.mapScale
+    );
+    ctx.closePath();
+  }
+
+  /**
+   * Draws the "New" badge, indicating the station has been newly created, at the top right of the station card.
+   *
+   * @param station The station for which to draw the badge.
+   */
+  private drawNewBadge(station: StationMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot draw the document badge when canvas context is not set'
+      );
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    ctx.beginPath();
+    const fontSize = Math.ceil(16 * this.mapScale);
+    ctx.font = `600 ${fontSize}px Montserrat`;
+    ctx.fillStyle = BADGE_DEFAULT_COLOR;
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      'New',
+      startingX + scaledStationWidth - scaledBadgeMargin - 3,
+      startingY + scaledBadgeMargin
     );
     ctx.closePath();
   }
