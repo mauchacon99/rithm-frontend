@@ -30,7 +30,7 @@ export const PAN_DECAY_RATE = .9;
  */
 export const CENTER_ZOOM_BUFFER = 10;
 
-// Group
+// Station Group
 export const STATION_GROUP_PADDING = 20;
 export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
