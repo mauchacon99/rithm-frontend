@@ -183,6 +183,8 @@ describe('ConnectedStationsModalComponent', () => {
         throw new Error();
       })
     );
+    component.stationRithmId = stationId;
+    component.documentRithmId = documentId;
     component.moveDocument();
     fixture.detectChanges();
     expect(component.moveDocumentError).toBeTrue();
