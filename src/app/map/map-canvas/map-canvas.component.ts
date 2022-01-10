@@ -314,6 +314,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const is_android =
       navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
+    /* Make sure that the browser is compatible with pointer events.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
       //If event exists in pointerCache, update event in cache.
@@ -372,6 +374,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const is_android =
       navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
+    /* Make sure that the browser is compatible with pointer events.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
@@ -417,6 +421,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const is_android =
       navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
+    /* Make sure that the browser is compatible with pointer events.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (window.PointerEvent && !(is_android && is_firefox)) {
       event.preventDefault();
 
@@ -461,6 +467,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mousedown', ['$event'])
   mouseDown(event: MouseEvent): void {
+    //When browser isn't compatible with pointer events, we use mouse events instead.
     if (!window.PointerEvent) {
       this.eventStartCoords = this.getEventCanvasPoint(event);
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
@@ -477,6 +484,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mouseup', ['$event'])
   mouseUp(event: MouseEvent): void {
+    //When browser isn't compatible with pointer events, we use mouse events instead.
     if (!window.PointerEvent) {
       this.lastTouchCoords[0] = this.getEventCanvasPoint(event);
       this.eventEndLogic(event);
@@ -491,6 +499,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('mousemove', ['$event'])
   mouseMove(event: MouseEvent): void {
+    //When browser isn't compatible with pointer events, we use mouse events instead.
     if (!window.PointerEvent) {
       this.singleInputMoveLogic(event);
     }
@@ -513,7 +522,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     event.preventDefault();
 
+    /* When browser isn't compatible with pointer events, we use mouse events instead.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (!window.PointerEvent || (is_android && is_firefox)) {
+      //If using a single touch, calculate it, then run the event start logic.
       if (event.touches.length === 1) {
         const touchPoint = event.touches[0];
         const eventCanvasPoint = this.getEventCanvasPoint(touchPoint);
@@ -524,6 +536,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.eventStartLogic(touchPoint);
       }
 
+      //If using two touches, make sure both touches are accounted for.
       if (event.touches.length === 2) {
         const touchPoint1 = event.touches[0];
         const touchPoint2 = event.touches[1];
@@ -554,6 +567,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     event.preventDefault();
 
+    /* When browser isn't compatible with pointer events, we use mouse events instead.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (!window.PointerEvent || (is_android && is_firefox)) {
       const touchPoint = event.changedTouches[0];
       this.eventEndLogic(touchPoint);
@@ -577,14 +592,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
     event.preventDefault();
 
+    /* When browser isn't compatible with pointer events, we use mouse events instead.
+    Also in the case of Firefox for Android, we use touch events instead of pointer events. */
     if (!window.PointerEvent || (is_android && is_firefox)) {
-      //Single touch.
+      //If there's only a single touch event, trigger the appropriate logic.
       if (event.touches.length === 1) {
         const touchPoint = event.changedTouches[0];
         this.singleInputMoveLogic(touchPoint);
       }
 
-      //Pinch event.
+      //If there are two touch events, trigger pinch zoom logic.
       if (event.touches.length === 2) {
         const touchPoint = event.changedTouches;
         const pos = [
