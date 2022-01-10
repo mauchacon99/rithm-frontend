@@ -30,6 +30,8 @@ export interface StationMapElement extends StationMapData {
   /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
 
+  // TODO: Update to store paths in these properties instead to use `isPointInPath`?
+
   /** The path used for the card used to display the station. */
   cardPath: Path2D;
 
