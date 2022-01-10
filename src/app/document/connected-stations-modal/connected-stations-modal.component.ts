@@ -43,7 +43,6 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** Enable error message if move document request fails. */
   moveDocumentError = false;
 
-
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
