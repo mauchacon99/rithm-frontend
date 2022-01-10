@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -9,8 +13,13 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MockErrorService } from 'src/mocks/mock-error-service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { MoveDocument } from 'src/models';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
+import { MockComponent } from 'ng-mocks';
+import { Router } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -22,6 +31,10 @@ describe('ConnectedStationsModalComponent', () => {
   let fixture: ComponentFixture<ConnectedStationsModalComponent>;
   const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
   const documentId = 'E204F369-386F-4E41';
+  const dialogRefSpyObj = jasmine.createSpyObj({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    close: () => {},
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,11 +44,16 @@ describe('ConnectedStationsModalComponent', () => {
         MatDialogModule,
         MatButtonModule,
         MatSelectModule,
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: MockComponent(DashboardComponent) },
+        ]),
+        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: MatDialogRef, useValue: dialogRefSpyObj },
       ],
     }).compileComponents();
   });
@@ -101,7 +119,6 @@ describe('ConnectedStationsModalComponent', () => {
       toStationRithmIds: ['123-654-789'],
       documentRithmId: documentId,
     };
-
     const spyMoveDocument = spyOn(
       TestBed.inject(DocumentService),
       'moveDocument'
@@ -127,5 +144,36 @@ describe('ConnectedStationsModalComponent', () => {
     ).and.callThrough();
     component.moveDocument();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should redirect to dashboard when document is moved', () => {
+    component.stationRithmId = stationId;
+    component.documentRithmId = documentId;
+    component.selectedStation = '123-654-789';
+
+    const dataExpect: MoveDocument = {
+      fromStationRithmId: stationId,
+      toStationRithmIds: ['123-654-789'],
+      documentRithmId: documentId,
+    };
+    const spyMoveDocument = spyOn(
+      TestBed.inject(DocumentService),
+      'moveDocument'
+    ).and.callFake(() => of(dataExpect));
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+
+    component.moveDocument();
+    expect(spyMoveDocument).toHaveBeenCalledOnceWith(dataExpect);
+    expect(routerSpy).toHaveBeenCalledWith('dashboard');
+  });
+
+  it('should activate the connected station loading', () => {
+    const connectedStationLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#connected-stations-loading'
+      );
+    component.connectedStationLoading = true;
+    fixture.detectChanges();
+    expect(connectedStationLoading).toBeTruthy();
   });
 });

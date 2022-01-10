@@ -56,9 +56,6 @@ export enum QuestionFieldType {
   /** Checklist input type. */
   CheckList = 'checklist',
 
-  /** Text area label for station edit mode. */
-  LongTextLabel = 'LongTextLabel',
-
   /** Instruction input type. */
   Instructions = 'instructions',
 }
