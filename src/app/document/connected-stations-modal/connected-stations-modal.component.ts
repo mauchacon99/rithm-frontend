@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   ConnectedModalData,
   ConnectedStationInfo,
@@ -9,6 +9,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
+import { Router } from '@angular/router';
 
 /**
  * Component for connected stations.
@@ -44,7 +45,9 @@ export class ConnectedStationsModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private matDialogRef: MatDialogRef<void>,
+    private router: Router
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
@@ -98,6 +101,8 @@ export class ConnectedStationsModalComponent implements OnInit {
       .subscribe({
         next: () => {
           this.popupService.notify('The document has been moved successfully');
+          this.matDialogRef.close();
+          this.router.navigateByUrl('dashboard');
         },
         error: (error: unknown) => {
           this.errorService.displayError(
