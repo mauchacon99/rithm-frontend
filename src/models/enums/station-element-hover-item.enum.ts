@@ -1,7 +1,7 @@
 /**
- * Represents all the types of hover interactions on a station in the map.
+ * Represents all the items of hover interactions on a station in the map.
  */
-export enum StationElementHoverType {
+export enum StationElementHoverItem {
   /** The map cursor is currently hovering over a station. */
   Station = 'station',
 
