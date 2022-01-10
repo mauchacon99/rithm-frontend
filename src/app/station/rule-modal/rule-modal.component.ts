@@ -20,7 +20,7 @@ export class RuleModalComponent {
   stepperOrientation$: Observable<StepperOrientation>;
 
   /** Description for step one. */
-  fieldSetRule = [];
+  fieldSetRule = '';
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
