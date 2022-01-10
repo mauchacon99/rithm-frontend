@@ -36,6 +36,7 @@ export * from './station-potential-roster-users';
 export * from './connection-map-element';
 export * from './document-name-field';
 export * from './standard-string-json';
+export * from './rithm-id-string-json';
 export * from './document-answer';
 export * from './document-name';
 export * from './question-answer';
