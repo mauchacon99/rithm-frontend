@@ -17,7 +17,6 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
-  RithmIdStringJSON,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -556,9 +555,7 @@ describe('DocumentService', () => {
   });
 
   it('should create a new document', () => {
-    const expectedResponse: RithmIdStringJSON = {
-      rithmId: 'C0A71776-DF26-4C29-A07C-A6434F675077',
-    };
+    const expectedResponse = {/** Document Rithm Id. */rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F'};
 
     const nameDocument = 'The name of Document';
     const priorityDocument = 0;
@@ -580,7 +577,7 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedRequestBody);
 
-    req.flush(null);
+    req.flush(expectedResponse);
     httpTestingController.verify();
   });
 });
