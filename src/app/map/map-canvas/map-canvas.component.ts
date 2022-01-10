@@ -643,8 +643,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    */
   @HostListener('document:keypress', ['$event'])
   keyPress(event: KeyboardEvent): void {
+    //Make sure there is no drawer currently open on the map.
     if (!this.sidenavDrawerService.isDrawerOpen) {
+      // Allow plus and minus keys to trigger zooming in and out.
       if (event.key === '+' || event.key === '=' || event.key === '-') {
+        //If station menu is open, close it.
         this.mapService.matMenuStatus$.next(true);
         this.mapService.zoomCount$.next(
           this.zoomCount + (event.key === '+' || event.key === '=' ? 50 : -50)
@@ -662,35 +665,48 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   @HostListener('wheel', ['$event'])
   wheel(event: WheelEvent): void {
     event.preventDefault();
-    //Clear center zoom animations.
+    //If map is in the middle of a center animation, cancel it.
     this.mapService.centerActive$.next(false);
     this.mapService.centerPanVelocity$.next({ x: 0, y: 0 });
     this.mapService.centerCount$.next(0);
 
+    //Track where the mouse is located on the canvas after the wheel event is triggered.
     const mousePoint = this.getEventCanvasPoint(event);
+    /* Wheel events return a number based on how fast you scrolled.
+    The higher the number the faster you're scrolling.
+    We need to track that number to determine how much to increment/decrement zoomCount. */
     const eventAmount =
+      //Is the zoom out attempt fast?
       event.deltaY >= 100
+        //If so, set eventAmount divided by 100.
         ? Math.floor(event.deltaY / 100)
+        //is the zoom in attempt fast?
         : event.deltaY <= -100
+        //If so, set eventAmount divided by 100.
         ? Math.ceil(event.deltaY / 100)
+        //If not fast, only divide by 3.
         : event.deltaY / 3;
 
+    //If a zoom in is attempted when scrolling.
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
       if (this.scale >= MAX_SCALE) {
         this.mapService.zoomCount$.next(0);
         return;
       }
-      // Zoom in
+      //If map is in the middle of zooming out, cancel it.
       if (this.zoomCount < 0) {
         this.mapService.zoomCount$.next(0);
       }
+      //Adjust the zoomCount based on the eventAmount.
       this.mapService.zoomCount$.next(
         this.zoomCount + Math.floor(10 * -eventAmount)
       );
+      //Trigger zoom logic.
       this.mapService.handleZoom(false, mousePoint);
+    //If a zoom out is attempted when scrolling.
     } else {
-      // Do nothing if already at min zoom.
+      // Do nothing if already at min zoom, in build or view mode.
       if (
         this.scale <= MIN_SCALE ||
         (this.mapService.mapMode$.value !== MapMode.View &&
@@ -699,13 +715,15 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.zoomCount$.next(0);
         return;
       }
-      // Zoom out
+      //If map is in the middle of zooming in, cancel it.
       if (this.zoomCount > 0) {
         this.mapService.zoomCount$.next(0);
       }
+      //Adjust the zoomCount based on the eventAmount.
       this.mapService.zoomCount$.next(
         this.zoomCount - Math.floor(10 * eventAmount)
       );
+      //Trigger zoom logic.
       this.mapService.handleZoom(false, mousePoint);
     }
     // Overlay option menu close state.
