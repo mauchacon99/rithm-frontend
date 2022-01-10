@@ -30,7 +30,7 @@ export class ToolbarComponent {
     {
       name: 'Long Text',
       icon: 'fas fa-paragraph',
-      typeString: this.fieldTypeEnum.LongTextLabel,
+      typeString: this.fieldTypeEnum.LongText,
       dataTestId: 'add-long-text',
     },
     {
