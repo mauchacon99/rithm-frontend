@@ -1013,8 +1013,8 @@ export class MapService {
       if (stationGroupsThatContainThisStationGroup.length > 1) {
         // eslint-disable-next-line no-console
         console.error(
-          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${
-            stationGroupsThatContainThisStationGroup.length} station groups!`
+          // eslint-disable-next-line max-len
+          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
         );
       } else if (
         !stationGroupsThatContainThisStationGroup.length &&
