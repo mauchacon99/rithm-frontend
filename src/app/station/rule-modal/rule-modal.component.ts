@@ -25,6 +25,9 @@ export class RuleModalComponent {
   /** The station Flow Logic Rule. */
   stationFlowLogic!: FlowLogicRule;
 
+  /** The value of the first operand. */
+  firstOperand = '';
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
@@ -47,12 +50,10 @@ export class RuleModalComponent {
 
   /**
    * Get each station flow rules.
-   *
-   * @param nextStationRithmId The specific next station id.
    */
-  private getStationFlowLogicRule(nextStationRithmId: string): void {
+  private getStationFlowLogicRule(): void {
     this.stationService
-      .getStationFlowLogicRule(this.stationRithmId, nextStationRithmId)
+      .getStationFlowLogicRule(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (stationFlowLogic) => {

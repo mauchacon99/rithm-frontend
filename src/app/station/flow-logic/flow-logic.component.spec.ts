@@ -8,6 +8,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { MatSelectModule } from '@angular/material/select';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -22,7 +23,12 @@ describe('FlowLogicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, BrowserAnimationsModule, MatStepperModule],
+      imports: [
+        MatDialogModule,
+        BrowserAnimationsModule,
+        MatStepperModule,
+        MatSelectModule,
+      ],
       declarations: [FlowLogicComponent, RuleModalComponent],
       providers: [
         { provide: StationService, useClass: MockStationService },

@@ -899,8 +899,7 @@ describe('StationService', () => {
   });
 
   it('should return the Station flow logic rule', () => {
-    const currentStationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
-    const nextStationRithmId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+    const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
 
     const expectStationFlowLogic: FlowLogicRule = {
       stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
@@ -972,7 +971,7 @@ describe('StationService', () => {
     };
 
     service
-      .getStationFlowLogicRule(currentStationRithmId, nextStationRithmId)
+      .getStationFlowLogicRule(stationRithmId)
       .subscribe((stationFlowLogic) => {
         expect(stationFlowLogic).toEqual(expectStationFlowLogic);
       });
