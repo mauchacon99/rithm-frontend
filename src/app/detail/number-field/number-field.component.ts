@@ -83,6 +83,9 @@ export class NumberFieldComponent
     this.numberFieldForm
       .get(this.field.questionType)
       ?.setValidators(validators);
+
+    this.numberFieldForm.get(this.field.questionType)?.markAsTouched();
+    this.numberFieldForm.get(this.field.questionType)?.updateValueAndValidity();
   }
 
   /**

@@ -10,7 +10,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { first } from 'rxjs';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -66,6 +65,9 @@ export class SelectFieldComponent
     this.selectFieldForm
       .get(this.field.questionType)
       ?.setValidators(validators);
+
+    this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
+    this.selectFieldForm.get(this.field.questionType)?.updateValueAndValidity();
   }
 
   /**
@@ -94,12 +96,6 @@ export class SelectFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.selectFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable.pipe(first()).subscribe(() => {
-      this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
-      this.selectFieldForm
-        .get(this.field.questionType)
-        ?.updateValueAndValidity();
-    });
   }
 
   /**

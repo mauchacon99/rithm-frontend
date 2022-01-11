@@ -10,7 +10,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -45,6 +45,9 @@ export class CheckFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
@@ -55,10 +58,7 @@ export class CheckFieldComponent
     let fields: { [key: string]: unknown } = {};
 
     this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem${index}`] = [
-        '',
-        this.field.isRequired ? [Validators.required] : [],
-      ];
+      fields[`checkItem${index}`] = [false];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -71,7 +71,19 @@ export class CheckFieldComponent
       validators.push(Validators.required);
     }
 
-    this.checkFieldForm.get(this.field.questionType)?.setValidators(validators);
+    //Set required error if no checkbox has been checked.
+    this.checkFieldForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((checkItem) => {
+        const checks = Object.values(checkItem);
+        if (checks.some((check) => check)) {
+          this.checkFieldForm.setErrors(null);
+        } else {
+          this.checkFieldForm.setErrors({ required: true });
+        }
+      });
+
+    this.checkFieldForm.setValidators(validators);
   }
 
   /**
@@ -101,10 +113,8 @@ export class CheckFieldComponent
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.checkFieldForm.valueChanges.subscribe(fn);
     this.ngZone.onStable.pipe(first()).subscribe(() => {
-      this.checkFieldForm.get(this.field.questionType)?.markAsTouched();
-      this.checkFieldForm
-        .get(this.field.questionType)
-        ?.updateValueAndValidity();
+      this.checkFieldForm.markAsTouched();
+      this.checkFieldForm.updateValueAndValidity();
     });
   }
 

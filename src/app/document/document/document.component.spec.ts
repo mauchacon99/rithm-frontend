@@ -379,8 +379,6 @@ describe('DocumentComponent', () => {
     component.documentForm
       .get('documentTemplateForm')
       ?.addValidators(Validators.required);
-    component.documentForm.markAsDirty();
-    component.documentForm.controls['documentTemplateForm'].markAsTouched();
     fixture.detectChanges();
     const btnFlow =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
@@ -390,7 +388,6 @@ describe('DocumentComponent', () => {
   it('should show button as enabled if form is valid', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
-    component.documentForm.markAsDirty();
     fixture.detectChanges();
     const btnFlow =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
@@ -473,7 +470,6 @@ describe('DocumentComponent', () => {
   it('should call the method that saves the responses and the flow of the document when you click on the flow button', () => {
     component.documentLoading = false;
     component.documentForm.controls['documentTemplateForm'].setValue('Dev');
-    component.documentForm.markAsDirty();
     fixture.detectChanges();
     const spyMethod = spyOn(component, 'autoFlowDocument').and.callThrough();
     const button =
