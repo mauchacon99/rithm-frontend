@@ -1307,7 +1307,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         );
         const hoveringOverStationGroup = this.stationGroups.some(
           (stationGroup) =>
-            stationGroup.hoverActive !== StationGroupElementHoverItem.None
+            stationGroup.hoverItem !== StationGroupElementHoverItem.None
         );
         if (!hoveringOverStation && !hoveringOverStationGroup) {
           this.connections.map((con) => {

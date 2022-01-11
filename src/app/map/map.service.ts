@@ -989,7 +989,8 @@ export class MapService {
           )
           .toString();
         // eslint-disable-next-line no-console
-        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${
+          stationGroupsThatContainThisStation.length} station groups:
           ${stationGroupDetails}`);
       } else if (!stationGroupsThatContainThisStation.length) {
         // eslint-disable-next-line no-console
@@ -1008,16 +1009,17 @@ export class MapService {
     for (const stationGroup of this.stationGroupElements) {
       const stationGroupsThatContainThisStationGroup =
         this.stationGroupElements.filter((stationGroupElement) =>
-          stationGroupElement.subFlows.includes(stationGroup.rithmId)
+          stationGroupElement.subStationGroups.includes(stationGroup.rithmId)
         );
       if (stationGroupsThatContainThisStationGroup.length > 1) {
         // eslint-disable-next-line no-console
         console.error(
-          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
+          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${
+            stationGroupsThatContainThisStationGroup.length} station groups!`
         );
       } else if (
         !stationGroupsThatContainThisStationGroup.length &&
-        !stationGroup.isReadOnlyRootFlow
+        !stationGroup.isReadOnlyRootStationGroup
       ) {
         // eslint-disable-next-line no-console
         console.error(

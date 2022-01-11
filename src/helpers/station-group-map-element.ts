@@ -1,9 +1,9 @@
 import {
-  StationGroupElementHoverType,
+  StationGroupElementHoverItem,
   StationGroupMapData,
   MapItemStatus,
   Point,
-} from '.';
+} from '../models';
 
 export interface StationGroupMapElement extends StationGroupMapData {
   /** The points used for the boundary shape of the station group (the points used for the convex hull). */
@@ -12,8 +12,8 @@ export interface StationGroupMapElement extends StationGroupMapData {
   /** Whether the station group is currently being dragged or not. */
   dragging: boolean;
 
-  /** Whether the station group is currently hovering? */
-  hoverActive: StationGroupElementHoverType;
+  /** What item the user is currently hovering over on this station group, if any. */
+  hoverItem: StationGroupElementHoverItem;
 
   /** The path of the station group boundary. */
   path: Path2D;
@@ -31,7 +31,7 @@ export class StationGroupMapElement {
   constructor(stationGroupMapData: StationGroupMapData) {
     this.boundaryPoints = [];
     this.dragging = false;
-    this.hoverActive = StationGroupElementHoverType.None;
+    this.hoverItem = StationGroupElementHoverItem.None;
     Object.assign(this, stationGroupMapData);
   }
 
@@ -45,9 +45,9 @@ export class StationGroupMapElement {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
-      this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? StationGroupElementHoverType.Boundary
-        : StationGroupElementHoverType.None;
+      this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
+        ? StationGroupElementHoverItem.Boundary
+        : StationGroupElementHoverItem.None;
     }
     ctx.restore();
   }
@@ -58,7 +58,7 @@ export class StationGroupMapElement {
    * @returns Whether the station group is empty.
    */
   get isEmpty(): boolean {
-    return !this.stations && !this.subFlows;
+    return !this.stations.length && !this.subStationGroups.length;
   }
 
   /**

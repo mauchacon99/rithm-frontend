@@ -24,11 +24,11 @@ export interface StationGroupMapData {
    * Does not include station groups nested more than one level deep (immediate children
    * only).
    */
-  subFlows: string[];
+  subStationGroups: string[];
 
   /** The status of the station group (what should happen to this station group). */
   status: MapItemStatus;
 
   /** Whether this station group is the implicit, root station group for the whole map. This should not be sent to the API. */
-  readonly isReadOnlyRootFlow: boolean;
+  readonly isReadOnlyRootStationGroup: boolean;
 }

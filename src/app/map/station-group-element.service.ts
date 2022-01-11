@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  StationGroupElementHoverType,
-  StationGroupMapElement,
-  Point,
-} from 'src/models';
+import { StationGroupMapElement } from 'src/helpers';
+import { StationGroupElementHoverItem, Point } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   STATION_GROUP_PADDING,
@@ -43,7 +40,7 @@ export class StationGroupElementService {
       return;
     }
     const rootStationGroup = this.mapService.stationGroupElements.find(
-      (stationGroup) => stationGroup.isReadOnlyRootFlow
+      (stationGroup) => stationGroup.isReadOnlyRootStationGroup
     );
     if (!rootStationGroup) {
       throw new Error('Root station group could not be found');
@@ -58,7 +55,7 @@ export class StationGroupElementService {
    */
   private drawStationGroup(stationGroup: StationGroupMapElement): void {
     // If station group has a sub-station-group, draw that first
-    stationGroup.subFlows.forEach((subStationGroupId) => {
+    stationGroup.subStationGroups.forEach((subStationGroupId) => {
       const subStationGroup = this.mapService.stationGroupElements.find(
         (stationGroupElement) =>
           stationGroupElement.rithmId === subStationGroupId
@@ -71,7 +68,7 @@ export class StationGroupElementService {
       this.drawStationGroup(subStationGroup);
     });
 
-    if (stationGroup.isReadOnlyRootFlow) {
+    if (stationGroup.isReadOnlyRootStationGroup) {
       return; // No need to calculate/render the root station group.
     }
 
@@ -114,7 +111,7 @@ export class StationGroupElementService {
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
-      stationGroup.hoverActive === StationGroupElementHoverType.Boundary
+      stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
         ? NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
@@ -228,13 +225,13 @@ export class StationGroupElementService {
   private getSubStationGroupPointsForStationGroup(
     stationGroup: StationGroupMapElement
   ): Point[] {
-    if (!stationGroup.subFlows.length) {
+    if (!stationGroup.subStationGroups.length) {
       return [];
     }
     // Get the sub-station-groups within the station group.
     const subStationGroups = this.mapService.stationGroupElements.filter(
       (subStationGroup) =>
-        stationGroup.subFlows.includes(subStationGroup.rithmId)
+        stationGroup.subStationGroups.includes(subStationGroup.rithmId)
     );
 
     // Get all the points for sub-station-groups.
