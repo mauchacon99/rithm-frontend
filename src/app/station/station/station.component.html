@@ -35,6 +35,7 @@
           [formGroup]="stationForm"
           autocomplete="off"
           class="station-base-form"
+          (ngSubmit)="saveStationInformation()"
         >
           <app-station-info-header
             [stationInformation]="stationInformation"
@@ -164,7 +165,7 @@
                   color="accent"
                   class="mx-2"
                   id="station-save"
-                  (click)="saveStationInformation()"
+                  type="submit"
                   [disabled]="
                     !stationForm.valid &&
                     !(
