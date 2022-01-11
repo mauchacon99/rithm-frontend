@@ -46,7 +46,7 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Gets station information.
@@ -518,7 +518,7 @@ export class StationService {
     } else {
       const stationFlowLogic: FlowLogicRule = {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-        destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
         flowRule: {
           ruleType: 'or',
           equations: [

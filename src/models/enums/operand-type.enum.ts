@@ -1,5 +1,5 @@
 /**
- * Represents all the different types of operands.
+ * Represents all the different types of operands for rules.
  */
 export enum OperandType {
   /** Number field. */

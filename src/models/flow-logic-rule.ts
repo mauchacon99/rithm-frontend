@@ -8,7 +8,7 @@ export interface FlowLogicRule {
   stationRithmId: string;
 
   /** The destination station rithm id. */
-  destinationStationRithmID: string;
+  destinationStationRithmId: string;
 
   /** The Flow rule. */
   flowRule: Rule;

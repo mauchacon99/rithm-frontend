@@ -1,5 +1,5 @@
 /**
- * Represents all the different types of operators.
+ * Represents all the different types of operators for rules.
  */
 export enum OperatorType {
   /** Greater Than Field. */
