@@ -442,22 +442,31 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Creates a new document.
+   * Open a modal to create a new document.
    */
-  createNewDocument(): void {
-    this.documentService
-      .createNewDocument('', 0, this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        next: () => {},
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+  async createNewDocument(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message:
+        'After the document is created you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm) {
+      this.documentService
+        .createNewDocument('', 0, this.stationRithmId)
+        .pipe(first())
+        .subscribe({
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          next: () => {},
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
+    }
   }
 
   /**

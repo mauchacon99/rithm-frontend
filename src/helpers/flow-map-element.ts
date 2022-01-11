@@ -17,6 +17,12 @@ export interface FlowMapElement extends FlowMapData {
 
   /** The path of the flow boundary. */
   path: Path2D;
+
+  /** Whether the station group is disabled for selection or not. */
+  disabled: boolean;
+
+  /** Whether the station group is selected or not. */
+  selected: boolean;
 }
 
 /**
@@ -31,12 +37,14 @@ export class FlowMapElement {
   constructor(flowMapData: FlowMapData) {
     this.boundaryPoints = [];
     this.dragging = false;
+    this.disabled = false;
+    this.selected = false;
     this.hoverItem = FlowElementHoverItem.None;
     Object.assign(this, flowMapData);
   }
 
   /**
-   * Checks whether an element in the station is being hovered over.
+   * Checks whether the flow boundary is being hovered over.
    *
    * @param point The cursor location.
    * @param ctx The rendering context for the canvas.

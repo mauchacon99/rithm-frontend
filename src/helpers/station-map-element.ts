@@ -30,6 +30,11 @@ export interface StationMapElement extends StationMapData {
   /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
 
+  /** Whether the station is disabled for selection or not. */
+  disabled: boolean;
+
+  /** Whether the station is selected or not. */
+  selected: boolean;
   // TODO: Update to store paths in these properties instead to use `isPointInPath`?
 
   /** The path used for the card used to display the station. */
@@ -59,6 +64,8 @@ export class StationMapElement {
     this.dragging = false;
     this.hoverItem = StationElementHoverItem.None;
     this.isAddingConnected = false;
+    this.disabled = false;
+    this.selected = false;
     Object.assign(this, stationMapData);
   }
 
