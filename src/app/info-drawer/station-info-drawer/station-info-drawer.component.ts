@@ -137,7 +137,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * Gets info about the station as well as forward and previous stations for a specific station.
    */
   ngOnInit(): void {
-    if (this.stationInformation && this.stationStatus !== MapItemStatus.Created) {
+    if (
+      this.stationInformation &&
+      this.stationStatus !== MapItemStatus.Created
+    ) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
 
