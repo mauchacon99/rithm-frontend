@@ -233,6 +233,7 @@ describe('StationInfoDrawerComponent', () => {
       0,
       component.stationRithmId
     );
+    expect(component.assignUserToDocument).toHaveBeenCalled();
   });
 
   it('should catch an error if creating the document fails', async () => {
