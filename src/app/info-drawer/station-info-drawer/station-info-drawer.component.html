@@ -14,23 +14,20 @@
       <p>{{ stationName }}</p>
     </div>
     <div class="col-span-12 pt-2" *ngIf="openedFromMap && editMode">
-      <form [formGroup]="stationNameForm">
-        <mat-form-field
-          appearance="outline"
-          class="col-span-12 sm:col-span-8 p-0"
+<!--      <p class="overline-font">Station Name</p>-->
+      <mat-form-field
+        appearance="outline"
+        class="col-span-12 sm:col-span-8 p-0">
+        <mat-label>Station Name</mat-label>
+        <input
+          matInput
+          type="text"
+          id="station"
+          data-testid="station-name-field"
+          [(ngModel)]="stationName"
+          (ngModelChange)="reportNewStationMapChange()"
         >
-          <mat-label>Station name</mat-label>
-          <input
-            matInput
-            type="text"
-            id="station"
-            formControlName="name"
-            autocomplete="name"
-            data-testid="station-name-field"
-            (ngModelChange)="reportNewStationMapChange()"
-          />
-        </mat-form-field>
-      </form>
+      </mat-form-field>
     </div>
   </div>
   <div class="w-full py-2">
