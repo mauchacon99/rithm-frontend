@@ -46,7 +46,7 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets station information.
