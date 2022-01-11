@@ -564,7 +564,6 @@ describe('DocumentService', () => {
     const expectedRequestBody = {
       name: nameDocument,
       priority: priorityDocument,
-      stationRithmId: stationId,
     };
 
     service
@@ -574,7 +573,7 @@ describe('DocumentService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}?stationRithmId=${stationId}`
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(expectedRequestBody);
