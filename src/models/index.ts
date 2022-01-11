@@ -33,7 +33,6 @@ export * from './station-group-map-element';
 export * from './station-info-drawer-data';
 export * from './dialog-options';
 export * from './station-potential-roster-users';
-export * from './connection-map-element';
 export * from './document-name-field';
 export * from './standard-string-json';
 export * from './document-answer';

@@ -4,7 +4,6 @@ import { QuestionFieldType } from './enums';
  * Represents the answers to the document questions.
  */
 export interface DocumentAnswer {
-
   /** The id the question. */
   readonly questionRithmId: string;
 

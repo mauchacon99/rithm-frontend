@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
-import { StationGroupElementHoverType, StationGroupMapElement, Point } from 'src/models';
 import {
-CONNECTION_DEFAULT_COLOR, STATION_GROUP_PADDING, STATION_HEIGHT, STATION_WIDTH, CONNECTION_LINE_WIDTH, BUTTON_DEFAULT_COLOR,
-  DEFAULT_SCALE, STATION_GROUP_NAME_PADDING, FONT_SIZE_MODIFIER, NODE_HOVER_COLOR,
+  StationGroupElementHoverType,
+  StationGroupMapElement,
+  Point,
+} from 'src/models';
+import {
+  CONNECTION_DEFAULT_COLOR,
+  STATION_GROUP_PADDING,
+  STATION_HEIGHT,
+  STATION_WIDTH,
+  CONNECTION_LINE_WIDTH,
+  BUTTON_DEFAULT_COLOR,
+  DEFAULT_SCALE,
+  STATION_GROUP_NAME_PADDING,
+  FONT_SIZE_MODIFIER,
+  NODE_HOVER_COLOR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -10,20 +22,17 @@ import { MapService } from './map.service';
  * Service for rendering and other behavior for a station group on the map.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StationGroupElementService {
-
   /** The rendering this.canvasContext for the canvas element for the map. */
   private canvasContext?: CanvasRenderingContext2D;
 
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
-  constructor(
-    private mapService: MapService
-  ) {
-    this.mapService.mapScale$.subscribe((scale)=> this.mapScale = scale);
+  constructor(private mapService: MapService) {
+    this.mapService.mapScale$.subscribe((scale) => (this.mapScale = scale));
   }
 
   /**
@@ -33,7 +42,9 @@ export class StationGroupElementService {
     if (!this.mapService.stationGroupElements.length) {
       return;
     }
-    const rootStationGroup = this.mapService.stationGroupElements.find((stationGroup) => stationGroup.isReadOnlyRootFlow);
+    const rootStationGroup = this.mapService.stationGroupElements.find(
+      (stationGroup) => stationGroup.isReadOnlyRootFlow
+    );
     if (!rootStationGroup) {
       throw new Error('Root station group could not be found');
     }
@@ -46,13 +57,16 @@ export class StationGroupElementService {
    * @param stationGroup The station group to be drawn on the map.
    */
   private drawStationGroup(stationGroup: StationGroupMapElement): void {
-
     // If station group has a sub-station-group, draw that first
     stationGroup.subFlows.forEach((subStationGroupId) => {
-      const subStationGroup =
-        this.mapService.stationGroupElements.find((stationGroupElement) => stationGroupElement.rithmId === subStationGroupId);
+      const subStationGroup = this.mapService.stationGroupElements.find(
+        (stationGroupElement) =>
+          stationGroupElement.rithmId === subStationGroupId
+      );
       if (!subStationGroup) {
-        throw new Error(`Couldn't find a sub-station-group for which an id exists: ${subStationGroupId}`);
+        throw new Error(
+          `Couldn't find a sub-station-group for which an id exists: ${subStationGroupId}`
+        );
       }
       this.drawStationGroup(subStationGroup);
     });
@@ -63,8 +77,12 @@ export class StationGroupElementService {
 
     // Determine the points within the station group.
     const pointsWithinStationGroup: Point[] = [];
-    pointsWithinStationGroup.push(...this.getStationPointsForStationGroup(stationGroup));
-    pointsWithinStationGroup.push(...this.getSubStationGroupPointsForStationGroup(stationGroup));
+    pointsWithinStationGroup.push(
+      ...this.getStationPointsForStationGroup(stationGroup)
+    );
+    pointsWithinStationGroup.push(
+      ...this.getSubStationGroupPointsForStationGroup(stationGroup)
+    );
 
     // Determine the points for the boundary line
     stationGroup.boundaryPoints = this.getConvexHull(pointsWithinStationGroup);
@@ -82,16 +100,23 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the station group boundary line.
    */
-  private drawStationGroupBoundaryLine(stationGroup: StationGroupMapElement): void {
+  private drawStationGroupBoundaryLine(
+    stationGroup: StationGroupMapElement
+  ): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw station group boundary line if context is not defined');
+      throw new Error(
+        'Cannot draw station group boundary line if context is not defined'
+      );
     }
     const ctx = this.canvasContext;
 
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
-    ctx.strokeStyle = stationGroup.hoverActive === StationGroupElementHoverType.Boundary ? NODE_HOVER_COLOR : CONNECTION_DEFAULT_COLOR;
+    ctx.strokeStyle =
+      stationGroup.hoverActive === StationGroupElementHoverType.Boundary
+        ? NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
@@ -105,14 +130,20 @@ export class StationGroupElementService {
   private drawStationGroupName(stationGroup: StationGroupMapElement): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error('Cannot draw station group name if context is not defined');
+      throw new Error(
+        'Cannot draw station group name if context is not defined'
+      );
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle = BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    this.canvasContext.fillText(stationGroup.title, stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
-      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y + STATION_GROUP_NAME_PADDING);
+    this.canvasContext.fillText(
+      stationGroup.title,
+      stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
+        STATION_GROUP_NAME_PADDING
+    );
   }
 
   /**
@@ -120,12 +151,18 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which path needs to be set.
    */
-   private setStationGroupBoundaryPath(stationGroup: StationGroupMapElement): void {
+  private setStationGroupBoundaryPath(
+    stationGroup: StationGroupMapElement
+  ): void {
     const path = new Path2D();
 
-    path.moveTo(stationGroup.boundaryPoints[0].x, stationGroup.boundaryPoints[0].y);
-    stationGroup.boundaryPoints =
-      stationGroup.boundaryPoints.concat(stationGroup.boundaryPoints.splice(0, 1)); // Shift the first point to the back
+    path.moveTo(
+      stationGroup.boundaryPoints[0].x,
+      stationGroup.boundaryPoints[0].y
+    );
+    stationGroup.boundaryPoints = stationGroup.boundaryPoints.concat(
+      stationGroup.boundaryPoints.splice(0, 1)
+    ); // Shift the first point to the back
 
     for (const boundaryPoint of stationGroup.boundaryPoints) {
       path.lineTo(boundaryPoint.x, boundaryPoint.y);
@@ -139,25 +176,45 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to get the points.
    * @returns A list of contained points representing the stations.
    */
-  private getStationPointsForStationGroup(stationGroup: StationGroupMapElement): Point[] {
+  private getStationPointsForStationGroup(
+    stationGroup: StationGroupMapElement
+  ): Point[] {
     if (!stationGroup.stations.length) {
       return []; // Nothing to do here
     }
 
     // Get the stations within the station group.
-    const stationGroupStations = this.mapService.stationElements.filter((station) => stationGroup.stations.includes(station.rithmId));
+    const stationGroupStations = this.mapService.stationElements.filter(
+      (station) => stationGroup.stations.includes(station.rithmId)
+    );
 
     // Get all the station points within this station group.
     const stationPointsWithinStationGroup: Point[] = [];
     for (const station of stationGroupStations) {
-      const scaledPadding = STATION_GROUP_PADDING * this.mapService.mapScale$.value;
-      const maxX = station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
-      const maxY = station.canvasPoint.y + STATION_HEIGHT * this.mapService.mapScale$.value;
+      const scaledPadding =
+        STATION_GROUP_PADDING * this.mapService.mapScale$.value;
+      const maxX =
+        station.canvasPoint.x + STATION_WIDTH * this.mapService.mapScale$.value;
+      const maxY =
+        station.canvasPoint.y +
+        STATION_HEIGHT * this.mapService.mapScale$.value;
 
-      stationPointsWithinStationGroup.push({ x: station.canvasPoint.x - scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TL
-      stationPointsWithinStationGroup.push({ x: maxX + scaledPadding, y: station.canvasPoint.y - scaledPadding }); // TR
-      stationPointsWithinStationGroup.push({ x: station.canvasPoint.x - scaledPadding, y: maxY + scaledPadding }); // BL
-      stationPointsWithinStationGroup.push({ x: maxX + scaledPadding, y: maxY + scaledPadding }); // BR
+      stationPointsWithinStationGroup.push({
+        x: station.canvasPoint.x - scaledPadding,
+        y: station.canvasPoint.y - scaledPadding,
+      }); // TL
+      stationPointsWithinStationGroup.push({
+        x: maxX + scaledPadding,
+        y: station.canvasPoint.y - scaledPadding,
+      }); // TR
+      stationPointsWithinStationGroup.push({
+        x: station.canvasPoint.x - scaledPadding,
+        y: maxY + scaledPadding,
+      }); // BL
+      stationPointsWithinStationGroup.push({
+        x: maxX + scaledPadding,
+        y: maxY + scaledPadding,
+      }); // BR
     }
     return stationPointsWithinStationGroup;
   }
@@ -168,18 +225,26 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to get the points.
    * @returns A list of contained points representing the station group boundary of the sub-station-groups.
    */
-  private getSubStationGroupPointsForStationGroup(stationGroup: StationGroupMapElement): Point[] {
+  private getSubStationGroupPointsForStationGroup(
+    stationGroup: StationGroupMapElement
+  ): Point[] {
     if (!stationGroup.subFlows.length) {
       return [];
     }
     // Get the sub-station-groups within the station group.
-    const subStationGroups =
-      this.mapService.stationGroupElements.filter((subStationGroup) => stationGroup.subFlows.includes(subStationGroup.rithmId));
+    const subStationGroups = this.mapService.stationGroupElements.filter(
+      (subStationGroup) =>
+        stationGroup.subFlows.includes(subStationGroup.rithmId)
+    );
 
     // Get all the points for sub-station-groups.
     const subStationGroupPointsWithinStationGroup: Point[] = [];
     subStationGroups.forEach((subStationGroup) => {
-      subStationGroupPointsWithinStationGroup.push(...this.getPaddedStationGroupBoundaryPoints(subStationGroup.boundaryPoints));
+      subStationGroupPointsWithinStationGroup.push(
+        ...this.getPaddedStationGroupBoundaryPoints(
+          subStationGroup.boundaryPoints
+        )
+      );
     });
     return subStationGroupPointsWithinStationGroup;
   }
@@ -190,7 +255,9 @@ export class StationGroupElementService {
    * @param boundaryPoints The existing station group boundary points for which to add padding.
    * @returns The padded station group boundary points.
    */
-  private getPaddedStationGroupBoundaryPoints(boundaryPoints: Point[]): Point[] {
+  private getPaddedStationGroupBoundaryPoints(
+    boundaryPoints: Point[]
+  ): Point[] {
     const updatedBoundaryPoints = [...boundaryPoints]; // Deep copy
     const minX = Math.min(...updatedBoundaryPoints.map((point) => point.x));
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
@@ -203,7 +270,6 @@ export class StationGroupElementService {
     // };
 
     for (const point of updatedBoundaryPoints) {
-
       if (point.x === maxX) {
         point.x += STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       } else if (point.x === minX) {
@@ -215,7 +281,6 @@ export class StationGroupElementService {
       } else if (point.y === minY) {
         point.y -= STATION_GROUP_PADDING * this.mapService.mapScale$.value;
       }
-
     }
 
     return updatedBoundaryPoints;
@@ -283,7 +348,12 @@ export class StationGroupElementService {
     }
     lowerHull.pop();
 
-    if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) {
+    if (
+      upperHull.length === 1 &&
+      lowerHull.length === 1 &&
+      upperHull[0].x === lowerHull[0].x &&
+      upperHull[0].y === lowerHull[0].y
+    ) {
       return upperHull;
     } else {
       return upperHull.concat(lowerHull);

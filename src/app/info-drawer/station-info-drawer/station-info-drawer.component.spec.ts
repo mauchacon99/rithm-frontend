@@ -1,7 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
-import {MockErrorService, MockMapService, MockPopupService, MockStationService, MockUserService} from 'src/mocks';
+import {
+  MockErrorService,
+  MockMapService,
+  MockPopupService,
+  MockStationService,
+  MockUserService,
+  MockDocumentService,
+} from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/core/user.service';
@@ -16,6 +23,8 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { PopupService } from 'src/app/core/popup.service';
 import { DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from 'src/app/core/document.service';
+import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -36,7 +45,7 @@ describe('StationInfoDrawerComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule,
         MatButtonModule,
-        MatRadioModule
+        MatRadioModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -44,10 +53,10 @@ describe('StationInfoDrawerComponent', () => {
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
-        { provide: MapService, useClass: MockMapService}
-      ]
-    })
-      .compileComponents();
+        { provide: MapService, useClass: MockMapService },
+        { provide: DocumentService, useClass: MockDocumentService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -66,7 +75,7 @@ describe('StationInfoDrawerComponent', () => {
       updatedByRithmId: 'AO970Z9-PBK8-408E-A210-9242B2735B1C',
       updatedDate: '2021-07-18T17:26:47.3506612Z',
       questions: [],
-      priority: 2
+      priority: 2,
     };
     component.stationRithmId = stationId;
     fixture.detectChanges();
@@ -77,7 +86,10 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should get station last updated date', () => {
-    const getLastUpdatedSpy = spyOn(TestBed.inject(StationService), 'getLastUpdated').and.callThrough();
+    const getLastUpdatedSpy = spyOn(
+      TestBed.inject(StationService),
+      'getLastUpdated'
+    ).and.callThrough();
 
     component.getLastUpdated();
 
@@ -85,33 +97,49 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should delete a station', async () => {
-    const deleteStationSpy = spyOn(TestBed.inject(StationService), 'deleteStation').and.callThrough();
+    const deleteStationSpy = spyOn(
+      TestBed.inject(StationService),
+      'deleteStation'
+    ).and.callThrough();
     await component.deleteStation();
 
     expect(deleteStationSpy).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
   it('should update station document generation status', () => {
-    const updateGenerationStatusSpy = spyOn(TestBed.inject(StationService), 'updateStationDocumentGenerationStatus').and.callThrough();
+    const updateGenerationStatusSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStationDocumentGenerationStatus'
+    ).and.callThrough();
 
     const newStatus = DocumentGenerationStatus.Manual;
 
     component.updateStationDocumentGenerationStatus(stationId, newStatus);
 
-    expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(stationId, newStatus);
+    expect(updateGenerationStatusSpy).toHaveBeenCalledOnceWith(
+      stationId,
+      newStatus
+    );
   });
 
   it('should update the component data', () => {
-    const refreshDataComponent = spyOn(TestBed.inject(StationService), 'getStationInfo').and.callThrough();
+    const refreshDataComponent = spyOn(
+      TestBed.inject(StationService),
+      'getStationInfo'
+    ).and.callThrough();
     component.getStationInfo();
-    expect(refreshDataComponent).toHaveBeenCalledOnceWith(component.stationRithmId);
+    expect(refreshDataComponent).toHaveBeenCalledOnceWith(
+      component.stationRithmId
+    );
   });
 
   it('should show loading-indicators while get data component', () => {
     component.getStationInfo();
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-drawer-component'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
@@ -119,26 +147,38 @@ describe('StationInfoDrawerComponent', () => {
     component.getLastUpdated();
     fixture.detectChanges();
     expect(component.stationLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-drawer-component');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-drawer-component'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
   it('should show loading-indicators while get data the status station document', () => {
     component.stationLoading = false;
     component.getStationDocumentGenerationStatus();
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-status'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
   it('should show loading-indicators while update data the status station document', () => {
     component.stationLoading = false;
     const newStatus = DocumentGenerationStatus.Manual;
-    component.updateStationDocumentGenerationStatus(component.stationRithmId, newStatus);
+    component.updateStationDocumentGenerationStatus(
+      component.stationRithmId,
+      newStatus
+    );
+    spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     fixture.detectChanges();
     expect(component.docGenLoading).toBe(true);
-    const loadingComponent = fixture.debugElement.nativeElement.querySelector('#loading-indicator-status');
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-status'
+    );
     expect(loadingComponent).toBeTruthy();
   });
 
@@ -154,16 +194,20 @@ describe('StationInfoDrawerComponent', () => {
     component.editMode = true;
     fixture.detectChanges();
     expect(component.editMode).toBeTrue();
-    const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-station-button'
+    );
     expect(deleteButton).toBeTruthy();
   });
 
   it('should not show the delete-station-button on the station information if the user is a worker', () => {
     component.stationLoading = false;
     component.editMode = false;
-    spyOnProperty(component,'isWorker').and.returnValue(true);
+    spyOnProperty(component, 'isWorker').and.returnValue(true);
     expect(component.editMode).toBeFalse();
-    const deleteButton = fixture.debugElement.nativeElement.querySelector('#delete-station-button');
+    const deleteButton = fixture.debugElement.nativeElement.querySelector(
+      '#delete-station-button'
+    );
     expect(deleteButton).toBeFalsy();
   });
 
@@ -171,5 +215,67 @@ describe('StationInfoDrawerComponent', () => {
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
     const valueExpected = component.isUserAdminOrOwner;
     expect(valueExpected).toBeTrue();
+  });
+
+  it('should create a document from station-info-drawer', () => {
+    const createDocumentSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.callThrough();
+    component.createNewDocument();
+    expect(createDocumentSpy).toHaveBeenCalledOnceWith(
+      '',
+      0,
+      component.stationRithmId
+    );
+  });
+
+  it('should catch an error if creating the document fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.createNewDocument();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should create new document and called services', () => {
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    const spyPetition = spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.callThrough();
+    component.assignUserToDocument(userExpect, newDocumentExpect);
+    expect(spyPetition).toHaveBeenCalledOnceWith(
+      userExpect,
+      component.stationRithmId,
+      newDocumentExpect
+    );
+  });
+
+  it('should catch error and executed error service', () => {
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.assignUserToDocument(userExpect, newDocumentExpect);
+    expect(spyError).toHaveBeenCalled();
   });
 });

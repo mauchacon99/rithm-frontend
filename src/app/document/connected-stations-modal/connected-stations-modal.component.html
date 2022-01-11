@@ -1,23 +1,53 @@
 <!-- Title -->
-<h4 id="title" class="m-2 font-semibold"> {{title}} </h4>
-
+<h4 id="title" class="m-2 font-semibold">{{ title }}</h4>
+<div
+  class="col-span-full text-error-500"
+  id="move-document-error"
+  *ngIf="moveDocumentError"
+>
+  Unable to move document
+</div>
+<app-loading-indicator
+  *ngIf="connectedStationLoading"
+  id="connected-stations-loading"
+  [inlineText]="'Loading...'"
+></app-loading-indicator>
 <!-- Select station. -->
-<div class="grid grid-cols-1">
+<div *ngIf="!connectedStationLoading" class="grid grid-cols-1">
   <!-- Select -->
   <mat-form-field class="w-4/5" appearance="outline">
-    <mat-label> {{label}} </mat-label>
-    <mat-select>
-      <mat-option *ngFor="let station of stationsDocument" [value]="station.rithmId">
-        {{station.name}}
+    <mat-label> {{ label }} </mat-label>
+    <mat-select [(value)]="selectedStation">
+      <mat-option
+        *ngFor="let station of connectedStations"
+        [value]="station.rithmId"
+      >
+        {{ station.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
 
 <div mat-dialog-actions class="flex justify-end">
-    <!-- Close -->
-    <button mat-button color="accent" [mat-dialog-close]="false" data-testid="connected-modal-close">Close</button>
+  <!-- Close -->
+  <button
+    mat-button
+    color="accent"
+    [mat-dialog-close]="false"
+    data-testid="connected-modal-close"
+  >
+    Close
+  </button>
 
   <!-- Move -->
-  <button mat-raised-button color="accent" [mat-dialog-close]="true" data-testid="connected-modal-move">Move</button>
+  <button
+    mat-raised-button
+    color="accent"
+    data-testid="connected-modal-move"
+    id="connected-modal-move"
+    [disabled]="selectedStation === '' || selectedStation === null"
+    (click)="moveDocument()"
+  >
+    Move
+  </button>
 </div>

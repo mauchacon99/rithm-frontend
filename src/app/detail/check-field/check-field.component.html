@@ -1,8 +1,15 @@
 <p *ngIf="field.prompt" class="pb-1 italic">{{ field.prompt }}</p>
 
-<div [formGroup]="checkFieldForm" class="w-full text-secondary-400 leading-7 pb-4">
+<div
+  [formGroup]="checkFieldForm"
+  class="w-full text-secondary-400 leading-7 pb-4"
+>
   <div class="flex flex-col">
-    <mat-checkbox *ngFor="let possibleAnswer of field.possibleAnswers; let i = index;" [required]="field.isRequired" formControlName="checkItem{{i}}">
+    <mat-checkbox
+      *ngFor="let possibleAnswer of field.possibleAnswers; let i = index"
+      [required]="field.isRequired"
+      formControlName="checkItem{{ i }}"
+    >
       {{ possibleAnswer.text }}
     </mat-checkbox>
   </div>

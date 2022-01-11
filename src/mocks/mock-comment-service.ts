@@ -7,7 +7,6 @@ import { Comment } from 'src/models';
  * Mocks methods of the `CommentService`.
  */
 export class MockCommentService {
-
   /**
    * Gets a list of comments.
    *
@@ -17,24 +16,32 @@ export class MockCommentService {
    * @param commentsPerPage The limit of comments per page.
    * @returns A list of comments based on documentId and stationId.
    */
-  getDocumentComments(documentId: string, stationId: string, pageNum: number, commentsPerPage: number): Observable<Comment[]> {
-    const comments: Comment[] = [{
-      displayText: 'This is first comment',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      dateCreated: '2021-06-16T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-14T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }, {
-      displayText: 'This is second comment',
-      stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      dateCreated: '2021-06-15T17:26:47.3506612Z',
-      dateLastEdited: '2021-07-12T17:26:47.3506612Z',
-      archived: false,
-      rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
-      userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C'
-    }];
+  getDocumentComments(
+    documentId: string,
+    stationId: string,
+    pageNum: number,
+    commentsPerPage: number
+  ): Observable<Comment[]> {
+    const comments: Comment[] = [
+      {
+        displayText: 'This is first comment',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        dateCreated: '2021-06-16T17:26:47.3506612Z',
+        dateLastEdited: '2021-07-14T17:26:47.3506612Z',
+        archived: false,
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      },
+      {
+        displayText: 'This is second comment',
+        stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        dateCreated: '2021-06-15T17:26:47.3506612Z',
+        dateLastEdited: '2021-07-12T17:26:47.3506612Z',
+        archived: false,
+        rithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+        userRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
+      },
+    ];
     return of(comments).pipe(delay(1000));
   }
 
@@ -54,10 +61,9 @@ export class MockCommentService {
       archived: true,
       userFirstName: 'Alex',
       userLastName: 'Can',
-      rithmId: 'string'
+      rithmId: 'string',
     };
 
     return of(response).pipe(delay(1000));
   }
-
 }

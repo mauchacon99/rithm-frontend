@@ -19,7 +19,7 @@ describe('CommentInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentInputComponent ],
+      declarations: [CommentInputComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -28,10 +28,9 @@ describe('CommentInputComponent', () => {
       ],
       providers: [
         { provide: CommentService, useClass: MockCommentService },
-        { provide: ErrorService, useClass: MockErrorService }
-      ]
-    })
-    .compileComponents();
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -46,7 +45,9 @@ describe('CommentInputComponent', () => {
   });
 
   it('should require a comment before posting', async () => {
-    const buttonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#commentPostButton' }));
+    const buttonHarness = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#commentPostButton' })
+    );
     const comment = component.commentForm.controls['comment'];
     expect(comment.valid).toBeFalse();
     expect(comment.hasError('required')).toBeTrue();
@@ -58,5 +59,4 @@ describe('CommentInputComponent', () => {
     component.addComment();
     expect(component.commentForm.disabled).toBe(true);
   });
-
 });

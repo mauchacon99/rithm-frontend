@@ -26,10 +26,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatAutocompleteModule,
     MatSelectModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
   ],
-  exports: [
-    InfoDrawerComponent
-  ]
+  exports: [InfoDrawerComponent],
 })
-export class InfoDrawerModule { }
+export class InfoDrawerModule {}

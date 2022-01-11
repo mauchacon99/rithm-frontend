@@ -25,7 +25,7 @@ describe('MapOverlayComponent', () => {
       declarations: [
         MapOverlayComponent,
         MockComponent(LoadingIndicatorComponent),
-        MockComponent(ConnectionInfoDrawerComponent)
+        MockComponent(ConnectionInfoDrawerComponent),
       ],
       imports: [
         HttpClientTestingModule,
@@ -33,16 +33,15 @@ describe('MapOverlayComponent', () => {
         MatSnackBarModule,
         MatMenuModule,
         MatSidenavModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: MapService, useClass: MockMapService },
-        { provide: UserService, useClass: MockUserService }
-      ]
-    })
-      .compileComponents();
+        { provide: UserService, useClass: MockUserService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -56,7 +55,9 @@ describe('MapOverlayComponent', () => {
   });
 
   it('should display confirmation prompt when cancel', () => {
-    spyOnProperty(TestBed.inject(MapService), 'mapHasChanges').and.returnValue(true);
+    spyOnProperty(TestBed.inject(MapService), 'mapHasChanges').and.returnValue(
+      true
+    );
     component.mapHasChanges;
 
     const dialogSpy = spyOn(TestBed.inject(PopupService), 'confirm');
@@ -66,5 +67,24 @@ describe('MapOverlayComponent', () => {
       message: `Are you sure you want to cancel these changes? All map changes will be lost`,
       okButtonText: 'Confirm',
     });
+  });
+
+  it('should disable zoom buttons while the map is loading', () => {
+    component.mapDataLoading = true;
+    fixture.detectChanges();
+    const zoomInButton =
+      fixture.debugElement.nativeElement.querySelector('#zoomIn');
+    expect(zoomInButton.disabled).toBeTruthy();
+    const zoomOutButton =
+      fixture.debugElement.nativeElement.querySelector('#zoomOut');
+    expect(zoomOutButton.disabled).toBeTruthy();
+  });
+
+  it('should disable center button while the map is loading', () => {
+    component.mapDataLoading = true;
+    fixture.detectChanges();
+    const centerButton =
+      fixture.debugElement.nativeElement.querySelector('#centerButton');
+    expect(centerButton.disabled).toBeTruthy();
   });
 });

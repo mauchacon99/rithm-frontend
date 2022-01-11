@@ -60,14 +60,13 @@ describe('TextFieldComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
-      ]
-    })
-      .compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -92,7 +91,10 @@ describe('TextFieldComponent', () => {
       isPrivate: false,
       children: [],
     };
-    const stationSpy = spyOn(TestBed.inject(StationService), 'updateStationQuestionInTemplate');
+    const stationSpy = spyOn(
+      TestBed.inject(StationService),
+      'updateStationQuestionInTemplate'
+    );
     component.updateFieldPrompt(updatedQuestion);
     expect(stationSpy).toHaveBeenCalledOnceWith(updatedQuestion);
   });
@@ -111,7 +113,6 @@ describe('TextFieldComponent', () => {
       expect(shortText.hasError('required')).toBeTrue();
       expect(component.textFieldForm.valid).toBeFalse();
     });
-
   });
 
   describe('longText field', () => {
@@ -123,6 +124,7 @@ describe('TextFieldComponent', () => {
 
     it('should not require an input in long text field', () => {
       const longText = component.textFieldForm.controls['longText'];
+      longText.setValue('dev');
       expect(longText.valid).toBeTrue();
       expect(longText.hasError('required')).toBeFalse();
       expect(component.textFieldForm.valid).toBeTrue();

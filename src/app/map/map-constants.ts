@@ -8,20 +8,22 @@ export const TOUCH_EVENT_MARGIN = 5;
 
 // Scale
 export const DEFAULT_SCALE = 1;
-export const ZOOM_VELOCITY = .99;
-export const MAX_SCALE = DEFAULT_SCALE/Math.pow(ZOOM_VELOCITY,50);
-export const MIN_SCALE = DEFAULT_SCALE*Math.pow(ZOOM_VELOCITY,190);
+export const ZOOM_VELOCITY = 0.99;
+export const MAX_SCALE = DEFAULT_SCALE / Math.pow(ZOOM_VELOCITY, 50);
+export const MIN_SCALE = DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY, 190);
 /** Needed to solve a bug related to map zoom. */
-export const ABOVE_MAX = MAX_SCALE/ZOOM_VELOCITY;
-export const BELOW_MIN = MIN_SCALE*ZOOM_VELOCITY;
+export const ABOVE_MAX = MAX_SCALE / ZOOM_VELOCITY;
+export const BELOW_MIN = MIN_SCALE * ZOOM_VELOCITY;
 /** The scale at which Station Elements are no longer rendered. */
-export const SCALE_RENDER_STATION_ELEMENTS = DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY,100);
-export const SCALE_REDUCED_RENDER = SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
+export const SCALE_RENDER_STATION_ELEMENTS =
+  DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY, 100);
+export const SCALE_REDUCED_RENDER =
+  SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
 
 // Pan
 export const MAX_PAN_VELOCITY = 25;
 export const PAN_TRIGGER_LIMIT = 10;
-export const PAN_DECAY_RATE = .9;
+export const PAN_DECAY_RATE = 0.9;
 
 // Center
 /**

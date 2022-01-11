@@ -4,7 +4,12 @@ import { ErrorService } from 'src/app/core/error.service';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { UserService } from 'src/app/core/user.service';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
-import { MockErrorService, MockMapService, MockOrganizationService, MockUserService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockMapService,
+  MockOrganizationService,
+  MockUserService,
+} from 'src/mocks';
 import { MapMode } from 'src/models';
 import { MapService } from '../map.service';
 
@@ -25,8 +30,8 @@ describe('MapToolbarComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
-        { provide: MapService, useClass: MockMapService }
-      ]
+        { provide: MapService, useClass: MockMapService },
+      ],
     }).compileComponents();
     service = TestBed.inject(MapService);
   });
@@ -42,17 +47,22 @@ describe('MapToolbarComponent', () => {
   });
 
   it('should toggle mapMode add station', () => {
-    const mapServiceSpy = spyOn(TestBed.inject(MapService), 'disableConnectedStationMode');
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService),
+      'disableConnectedStationMode'
+    );
     component.addStation();
     expect(component.stationAddActive).toBeTrue();
     expect(component.mapMode).toEqual(MapMode.StationAdd);
     component.addStation();
     expect(component.stationAddActive).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);
-    const connectedStationMode = service.stationElements.some(st => st.isAddingConnected);
+    const connectedStationMode = service.stationElements.some(
+      (st) => st.isAddingConnected
+    );
     expect(connectedStationMode).toBeTrue();
     expect(mapServiceSpy).toHaveBeenCalled();
-    service.mapDataReceived$.subscribe(res => expect(res).toBe(true));
+    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
 
   it('should toggle mapMode add station group', () => {

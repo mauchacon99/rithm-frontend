@@ -1,14 +1,36 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapMode, Point, MapData, MapItemStatus, StationGroupMapElement, EnvironmentName, ConnectionMapElement } from 'src/models';
-import { ABOVE_MAX, BELOW_MIN, DEFAULT_CANVAS_POINT, DEFAULT_SCALE,
-  MAX_SCALE, MIN_SCALE, SCALE_RENDER_STATION_ELEMENTS,
-  ZOOM_VELOCITY, DEFAULT_MOUSE_POINT, STATION_WIDTH, STATION_HEIGHT, SCALE_REDUCED_RENDER, CENTER_ZOOM_BUFFER } from './map-constants';
+import {
+  MapMode,
+  Point,
+  MapData,
+  MapItemStatus,
+  EnvironmentName,
+} from 'src/models';
+import {
+  ABOVE_MAX,
+  BELOW_MIN,
+  DEFAULT_CANVAS_POINT,
+  DEFAULT_SCALE,
+  MAX_SCALE,
+  MIN_SCALE,
+  SCALE_RENDER_STATION_ELEMENTS,
+  ZOOM_VELOCITY,
+  DEFAULT_MOUSE_POINT,
+  STATION_WIDTH,
+  STATION_HEIGHT,
+  SCALE_REDUCED_RENDER,
+  CENTER_ZOOM_BUFFER,
+} from './map-constants';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { StationMapElement } from 'src/helpers';
+import {
+  ConnectionMapElement,
+  StationGroupMapElement,
+  StationMapElement,
+} from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
@@ -18,10 +40,10 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
  * Service for all general map behavior.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MapService {
-  /** This behavior subject will track the array of stations and station groups. */
+  /** This will track the array of stations and station groups. */
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
@@ -61,10 +83,14 @@ export class MapService {
   zoomCount$ = new BehaviorSubject(0);
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
-  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_CANVAS_POINT);
+  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(
+    DEFAULT_CANVAS_POINT
+  );
 
   /** The coordinate at which the current mouse point in the overall map. */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(DEFAULT_MOUSE_POINT);
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(
+    DEFAULT_MOUSE_POINT
+  );
 
   /** Check current mouse click if clicked the station option button. */
   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
@@ -81,8 +107,7 @@ export class MapService {
   /** The number of times this.center() should be called. */
   centerCount$ = new BehaviorSubject(0);
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Registers the canvas rendering context from the component for use elsewhere.
@@ -99,30 +124,40 @@ export class MapService {
    * @returns The map data for the organization.
    */
   getMapData(): Observable<MapData> {
-    return this.http.get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
-      .pipe(map((data) => {
-        data.stations.map((e) => {
-          e.status = MapItemStatus.Normal;
-        });
-        data.flows.map((e) => {
-          e.status = MapItemStatus.Normal;
-        });
-        this.mapData = data;
-        this.useStationData();
-        if (environment.name === EnvironmentName.Dev || environment.name === EnvironmentName.Test) {
-          this.validateMapData();
-        }
-        this.mapDataReceived$.next(true);
-        return data;
-      }));
+    return this.http
+      .get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
+      .pipe(
+        map((data) => {
+          data.stations.map((e) => {
+            e.status = MapItemStatus.Normal;
+          });
+          data.flows.map((e) => {
+            e.status = MapItemStatus.Normal;
+          });
+          this.mapData = data;
+          this.useStationData();
+          if (
+            environment.name === EnvironmentName.Dev ||
+            environment.name === EnvironmentName.Test
+          ) {
+            this.validateMapData();
+          }
+          this.mapDataReceived$.next(true);
+          return data;
+        })
+      );
   }
 
   /**
    * Converts station data so it can be drawn on the canvas.
    */
   private useStationData(): void {
-    this.stationElements = this.mapData.stations.map((e) => new StationMapElement(e));
-    this.stationGroupElements = this.mapData.flows.map((e) => new StationGroupMapElement(e));
+    this.stationElements = this.mapData.stations.map(
+      (e) => new StationMapElement(e)
+    );
+    this.stationGroupElements = this.mapData.flows.map(
+      (e) => new StationGroupMapElement(e)
+    );
     this.setConnections();
     this.updateStationCanvasPoints();
   }
@@ -145,14 +180,20 @@ export class MapService {
     this.connectionElements = [];
     for (const station of this.stationElements) {
       for (const connection of station.nextStations) {
-        const outgoingStation = this.stationElements.find((foundStation) => foundStation.rithmId === connection);
+        const outgoingStation = this.stationElements.find(
+          (foundStation) => foundStation.rithmId === connection
+        );
 
         if (!outgoingStation) {
           throw new Error(`An outgoing station was not found for the stationId: ${connection} which appears in the
             nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
-        const lineInfo = new ConnectionMapElement(station, outgoingStation, this.mapScale$.value);
+        const lineInfo = new ConnectionMapElement(
+          station,
+          outgoingStation,
+          this.mapScale$.value
+        );
 
         if (!this.connectionElements.includes(lineInfo)) {
           this.connectionElements.push(lineInfo);
@@ -174,7 +215,11 @@ export class MapService {
       if (connection.endStationRithmId === station.rithmId) {
         connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
       }
-      connection.path = connection.getConnectionLine(connection.startPoint, connection.endPoint, this.mapScale$.value);
+      connection.path = connection.getConnectionLine(
+        connection.startPoint,
+        connection.endPoint,
+        this.mapScale$.value
+      );
     }
   }
 
@@ -197,25 +242,46 @@ export class MapService {
     });
 
     // Connected station create changes
-    const connectedStations = this.stationElements.filter(station => station.isAddingConnected);
+    const connectedStations = this.stationElements.filter(
+      (station) => station.isAddingConnected
+    );
     if (connectedStations.length === 1) {
-      const stationIndex = this.stationElements.findIndex(station => station.rithmId === connectedStations[0].rithmId);
-      const stationGroupIndex =
-        this.stationGroupElements.findIndex(stationGroup => stationGroup.stations.includes(connectedStations[0].rithmId));
+      const stationIndex = this.stationElements.findIndex(
+        (station) => station.rithmId === connectedStations[0].rithmId
+      );
+      const stationGroupIndex = this.stationGroupElements.findIndex(
+        (stationGroup) =>
+          stationGroup.stations.includes(connectedStations[0].rithmId)
+      );
       if (stationIndex >= 0) {
         this.stationElements[stationIndex].isAddingConnected = false;
-        this.stationElements[stationIndex].nextStations.push(newStation.rithmId);
-        newStation.previousStations.push(this.stationElements[stationIndex].rithmId);
+        this.stationElements[stationIndex].nextStations.push(
+          newStation.rithmId
+        );
+        newStation.previousStations.push(
+          this.stationElements[stationIndex].rithmId
+        );
 
-        const lineInfo = new ConnectionMapElement(this.stationElements[stationIndex], newStation, this.mapScale$.value);
+        const lineInfo = new ConnectionMapElement(
+          this.stationElements[stationIndex],
+          newStation,
+          this.mapScale$.value
+        );
         if (!this.connectionElements.includes(lineInfo)) {
           this.connectionElements.push(lineInfo);
         }
         this.mapMode$.next(MapMode.Build);
         this.stationElements[stationIndex].markAsUpdated();
 
-        if (stationGroupIndex >= 0 && (!this.stationGroupElements[stationGroupIndex].stations.includes(newStation.rithmId))) {
-          this.stationGroupElements[stationGroupIndex].stations.push(newStation.rithmId);
+        if (
+          stationGroupIndex >= 0 &&
+          !this.stationGroupElements[stationGroupIndex].stations.includes(
+            newStation.rithmId
+          )
+        ) {
+          this.stationGroupElements[stationGroupIndex].stations.push(
+            newStation.rithmId
+          );
           this.stationGroupElements[stationGroupIndex].markAsUpdated();
         }
         this.disableConnectedStationMode();
@@ -232,9 +298,11 @@ export class MapService {
    *
    * @param stationId The station for which status has to be set to delete.
    */
-   deleteStation(stationId: string): void {
-    const index = this.stationElements.findIndex(e => e.rithmId === stationId);
-    if (index >= 0 ) {
+  deleteStation(stationId: string): void {
+    const index = this.stationElements.findIndex(
+      (e) => e.rithmId === stationId
+    );
+    if (index >= 0) {
       if (this.stationElements[index].status === MapItemStatus.Created) {
         this.stationElements.splice(index, 1);
       } else {
@@ -243,7 +311,9 @@ export class MapService {
     }
     this.stationGroupElements.map((stationGroup) => {
       if (stationGroup.stations.includes(stationId)) {
-        stationGroup.stations = stationGroup.stations.filter(stn => stn !== stationId);
+        stationGroup.stations = stationGroup.stations.filter(
+          (stn) => stn !== stationId
+        );
         stationGroup.markAsUpdated();
       }
     });
@@ -255,7 +325,7 @@ export class MapService {
    *
    * @param stationId The station ID for which connections have to be removed.
    */
-   removeAllStationConnections(stationId: string): void {
+  removeAllStationConnections(stationId: string): void {
     this.stationElements.map((e) => {
       //Remove the previous and next stations from the station.
       if (e.rithmId === stationId) {
@@ -278,7 +348,9 @@ export class MapService {
     });
     //Remove the connections from this.connectionElements.
     const filteredConnections = this.connectionElements.filter(
-      (e) => e.startStationRithmId !== stationId && e.endStationRithmId !== stationId);
+      (e) =>
+        e.startStationRithmId !== stationId && e.endStationRithmId !== stationId
+    );
     this.connectionElements = filteredConnections;
     this.mapDataReceived$.next(true);
   }
@@ -291,18 +363,22 @@ export class MapService {
    */
   private deepCopy<T>(source: T): T {
     return Array.isArray(source)
-      ? source.map(item => this.deepCopy(item))
+      ? source.map((item) => this.deepCopy(item))
       : source instanceof Date
-        ? new Date(source.getTime())
-        : source && typeof source === 'object'
-          ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+      ? new Date(source.getTime())
+      : source && typeof source === 'object'
+      ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+          Object.defineProperty(
+            o,
+            prop,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
-            return o;
-          }, Object.create(Object.getPrototypeOf(source)))
-          : source as T;
+            Object.getOwnPropertyDescriptor(source, prop)!
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          o[prop] = this.deepCopy((source as { [key: string]: any })[prop]);
+          return o;
+        }, Object.create(Object.getPrototypeOf(source)))
+      : (source as T);
   }
 
   /**
@@ -324,7 +400,9 @@ export class MapService {
       this.storedStationElements = [];
     }
     if (this.storedStationGroupElements.length > 0) {
-      this.stationGroupElements = this.deepCopy(this.storedStationGroupElements);
+      this.stationGroupElements = this.deepCopy(
+        this.storedStationGroupElements
+      );
       this.storedStationGroupElements = [];
     }
     if (this.storedConnectionElements.length > 0) {
@@ -343,18 +421,29 @@ export class MapService {
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
     // Get two stations for which connection line belongs to
-    const startStation = this.stationElements.find(e => e.nextStations.includes(endStationId) && e.rithmId === startStationId);
-    const endStation = this.stationElements.find(e => e.previousStations.includes(startStationId) && e.rithmId === endStationId);
-    if (!startStation){
+    const startStation = this.stationElements.find(
+      (e) =>
+        e.nextStations.includes(endStationId) && e.rithmId === startStationId
+    );
+    const endStation = this.stationElements.find(
+      (e) =>
+        e.previousStations.includes(startStationId) &&
+        e.rithmId === endStationId
+    );
+    if (!startStation) {
       throw new Error(`A start station was not found for ${startStationId}`);
     }
-    if (!endStation){
+    if (!endStation) {
       throw new Error(`An end station was not found for ${endStationId}`);
     }
 
     // Find the index from each stations between nextStations and previousStations
-    const nextStationIndex = startStation.nextStations.findIndex(e => e === endStationId);
-    const prevStationIndex = endStation.previousStations.findIndex(e => e === startStationId);
+    const nextStationIndex = startStation.nextStations.findIndex(
+      (e) => e === endStationId
+    );
+    const prevStationIndex = endStation.previousStations.findIndex(
+      (e) => e === startStationId
+    );
 
     // Remove station rithm ids from nextStations and previousStations properties also update station status
     startStation.nextStations.splice(nextStationIndex, 1);
@@ -364,10 +453,13 @@ export class MapService {
 
     //Remove the connection from this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
-      (e) => e.startStationRithmId === startStationId && e.endStationRithmId === endStationId);
-      if (filteredConnectionIndex !== -1) {
-        this.connectionElements.splice(filteredConnectionIndex, 1);
-      }
+      (e) =>
+        e.startStationRithmId === startStationId &&
+        e.endStationRithmId === endStationId
+    );
+    if (filteredConnectionIndex !== -1) {
+      this.connectionElements.splice(filteredConnectionIndex, 1);
+    }
     this.mapDataReceived$.next(true);
   }
 
@@ -378,11 +470,35 @@ export class MapService {
    */
   publishMap(): Observable<unknown> {
     const filteredData: MapData = {
-      stations: this.stationElements.filter((e) => e.status !== MapItemStatus.Normal),
-      flows: this.stationGroupElements.filter((e) => e.status !== MapItemStatus.Normal)
+      stations: this.stationElements.filter(
+        (e) => e.status !== MapItemStatus.Normal
+      ),
+      flows: this.stationGroupElements.filter(
+        (e) => e.status !== MapItemStatus.Normal
+      ),
     };
 
-    return this.http.post<void>(`${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`, filteredData);
+    return this.http
+      .post<void>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
+        filteredData
+      )
+      .pipe(
+        tap(() => {
+          this.stationElements = this.stationElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.stationGroupElements = this.stationGroupElements.filter(
+            (e) => e.status !== MapItemStatus.Deleted
+          );
+          this.stationElements.forEach(
+            (station) => (station.status = MapItemStatus.Normal)
+          );
+          this.stationGroupElements.forEach(
+            (flow) => (flow.status = MapItemStatus.Normal)
+          );
+        })
+      );
   }
 
   /**
@@ -392,7 +508,6 @@ export class MapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
   handleZoom(pinch: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
-
     const zoomLogic = () => {
       if (this.zoomCount$.value > 0) {
         this.zoom(true, zoomOrigin);
@@ -412,9 +527,12 @@ export class MapService {
     };
 
     if (!pinch) {
-      setTimeout(() => {
-        zoomLogic();
-      }, this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10);
+      setTimeout(
+        () => {
+          zoomLogic();
+        },
+        this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10
+      );
     } else {
       zoomLogic();
     }
@@ -427,16 +545,26 @@ export class MapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-  zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void {
-
+  zoom(
+    zoomingIn: boolean,
+    zoomOrigin = this.getCanvasCenterPoint(),
+    zoomAmount = ZOOM_VELOCITY
+  ): void {
     // Don't zoom if limits are reached
-    if (this.mapScale$.value <= MIN_SCALE && !zoomingIn || this.mapScale$.value >= MAX_SCALE && zoomingIn) {
+    if (
+      (this.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
+      (this.mapScale$.value >= MAX_SCALE && zoomingIn)
+    ) {
       this.zoomCount$.next(0);
       return;
     }
 
     // Don't zoom out past a certain point if in build mode
-    if (this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS/zoomAmount && !zoomingIn && this.mapMode$.value !== MapMode.View) {
+    if (
+      this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
+      !zoomingIn &&
+      this.mapMode$.value !== MapMode.View
+    ) {
       this.zoomCount$.next(0);
       return;
     }
@@ -444,16 +572,22 @@ export class MapService {
     const translateDirection = zoomingIn ? -1 : 1;
 
     // translate current viewport position
-    const newScale = zoomingIn ? this.mapScale$.value / zoomAmount : this.mapScale$.value * zoomAmount;
+    const newScale = zoomingIn
+      ? this.mapScale$.value / zoomAmount
+      : this.mapScale$.value * zoomAmount;
 
     const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
       if (zoom) {
         return Math.round(
-          (zoomOrigin[coord] / this.mapScale$.value - zoomOrigin[coord] / newScale) * translateDirection
+          (zoomOrigin[coord] / this.mapScale$.value -
+            zoomOrigin[coord] / newScale) *
+            translateDirection
         );
       } else {
         return Math.round(
-          (zoomOrigin[coord] / newScale - zoomOrigin[coord] / this.mapScale$.value) * translateDirection
+          (zoomOrigin[coord] / newScale -
+            zoomOrigin[coord] / this.mapScale$.value) *
+            translateDirection
         );
       }
     };
@@ -462,7 +596,9 @@ export class MapService {
     this.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
 
     // scale
-    this.mapScale$.next(zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale));
+    this.mapScale$.next(
+      zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale)
+    );
   }
 
   /**
@@ -473,9 +609,9 @@ export class MapService {
    */
   centerBoundingBox(): number {
     //Dynamically set the size of the bounding box based on screen size.
-    if (((window.innerHeight + window.innerWidth) / 2) * .01 < 30) {
+    if (((window.innerHeight + window.innerWidth) / 2) * 0.01 < 30) {
       //Set the size of the box based on screen size.
-      return Math.floor(((window.innerHeight + window.innerWidth) / 2) * .01);
+      return Math.floor(((window.innerHeight + window.innerWidth) / 2) * 0.01);
     } else {
       //If a screen is above a certain size just return 30.
       return 30;
@@ -489,16 +625,27 @@ export class MapService {
    * @param isMax Is the point the top-left corner of the map or the bottom-right? Bottom-right is the max.
    * @returns An object with the points.
    */
-  private getEdgePoint(pointType: 'mapPoint' | 'canvasPoint', isMax: boolean): Point {
-    const orderedYPoints = this.stationElements.map((station) => station[pointType].y).sort((a, b) => a - b);
-    const orderedXPoints = this.stationElements.map((station) => station[pointType].x).sort((a, b) => a - b);
+  private getEdgePoint(
+    pointType: 'mapPoint' | 'canvasPoint',
+    isMax: boolean
+  ): Point {
+    const orderedYPoints = this.stationElements
+      .map((station) => station[pointType].y)
+      .sort((a, b) => a - b);
+    const orderedXPoints = this.stationElements
+      .map((station) => station[pointType].x)
+      .sort((a, b) => a - b);
 
-    const x = isMax ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH : orderedXPoints[0];
-    const y = isMax ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT : orderedYPoints[0];
+    const x = isMax
+      ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH
+      : orderedXPoints[0];
+    const y = isMax
+      ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT
+      : orderedYPoints[0];
 
     return {
       x: x,
-      y: y
+      y: y,
     };
   }
 
@@ -545,9 +692,12 @@ export class MapService {
    */
   private centerScale(onInit = false): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot get center point of canvas when canvas context is not set');
+      throw new Error(
+        'Cannot get center point of canvas when canvas context is not set'
+      );
     }
-    const canvasBoundingRect = this.canvasContext.canvas.getBoundingClientRect();
+    const canvasBoundingRect =
+      this.canvasContext.canvas.getBoundingClientRect();
 
     //We use the canvas points of each station here.
     const minPoint = this.getMinCanvasPoint();
@@ -555,24 +705,30 @@ export class MapService {
 
     //Zooming in and zooming out need to have different sized bounding boxes to work.
     const pixelRatio = window.devicePixelRatio || 1;
-    const zoomInBox = (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
-    const zoomOutBox = (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
+    const zoomInBox =
+      (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
+    const zoomOutBox =
+      (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
 
     //Zoom in.
-    if ((zoomInBox < minPoint.y
-      && canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT
-      && canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH
-      && zoomInBox < minPoint.y
-      && this.mapScale$.value < MAX_SCALE) || this.mapScale$.value < SCALE_REDUCED_RENDER
+    if (
+      (zoomInBox < minPoint.y &&
+        canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT &&
+        canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH &&
+        zoomInBox < minPoint.y &&
+        this.mapScale$.value < MAX_SCALE) ||
+      this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
       this.zoomCount$.next(this.zoomCount$.value + 1);
       this.centerCount$.next(this.centerCount$.value + 1);
       this.handleZoom(onInit);
-    //Zoom out.
-    } else if ((zoomOutBox > minPoint.y
-      || canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT
-      || canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH
-      || zoomOutBox > minPoint.y) && this.mapScale$.value > SCALE_REDUCED_RENDER/ZOOM_VELOCITY
+      //Zoom out.
+    } else if (
+      (zoomOutBox > minPoint.y ||
+        canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT ||
+        canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH ||
+        zoomOutBox > minPoint.y) &&
+      this.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
     ) {
       this.zoomCount$.next(this.zoomCount$.value - 1);
       this.centerCount$.next(this.centerCount$.value + 1);
@@ -592,7 +748,7 @@ export class MapService {
     //The point on the canvas needed to center of the map.
     adjustedCenter = {
       x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
-      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value
+      y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
     };
 
     //On Init, immediately set the currentCanvasPoint to the center of the map.
@@ -603,19 +759,19 @@ export class MapService {
 
     const totalPanNeeded = {
       x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
-      y: this.currentCanvasPoint$.value.y - adjustedCenter.y
+      y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
     };
 
     //initialize variable needed to set panVelocity.
     const panAmount: Point = { x: 0, y: 0 };
 
     //Set x axis of panAmount.
-    panAmount.x = totalPanNeeded.x * .1;
+    panAmount.x = totalPanNeeded.x * 0.1;
 
     //Set y axis of panAmount.
-    panAmount.y = totalPanNeeded.y * .1;
+    panAmount.y = totalPanNeeded.y * 0.1;
 
-    if ( Math.abs(panAmount.x) >= .12 || Math.abs(panAmount.y) >= .12 ) {
+    if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);
       this.centerCount$.next(this.centerCount$.value + 1);
@@ -632,6 +788,11 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   center(onInit = false): void {
+    //If there are no stations to center around, do nothing.
+    if (this.stationElements.length === 0) {
+      return;
+    }
+
     const centerLogic = () => {
       if (this.centerCount$.value > 0) {
         this.centerScale(onInit);
@@ -655,7 +816,6 @@ export class MapService {
     } else {
       centerLogic();
     }
-
   }
 
   /**
@@ -665,12 +825,15 @@ export class MapService {
    */
   getCanvasCenterPoint(): Point {
     if (!this.canvasContext) {
-      throw new Error('Cannot get center point of canvas when canvas context is not set');
+      throw new Error(
+        'Cannot get center point of canvas when canvas context is not set'
+      );
     }
-    const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
+    const canvasBoundingRect =
+      this.canvasContext?.canvas.getBoundingClientRect();
     return {
       x: canvasBoundingRect.width / 2,
-      y: canvasBoundingRect.height / 2
+      y: canvasBoundingRect.height / 2,
     };
   }
 
@@ -703,7 +866,7 @@ export class MapService {
   getCanvasPoint(mapPoint: Point): Point {
     return {
       x: this.getCanvasX(mapPoint.x),
-      y: this.getCanvasY(mapPoint.y)
+      y: this.getCanvasY(mapPoint.y),
     };
   }
 
@@ -717,7 +880,10 @@ export class MapService {
     const minPoint = this.getMinMapPoint();
     const maxPoint = this.getMaxMapPoint();
 
-    const center: Point = { x: Math.floor((minPoint.x + maxPoint.x) / 2), y: Math.floor((minPoint.y + maxPoint.y) / 2) };
+    const center: Point = {
+      x: Math.floor((minPoint.x + maxPoint.x) / 2),
+      y: Math.floor((minPoint.y + maxPoint.y) / 2),
+    };
     return center;
   }
 
@@ -728,7 +894,9 @@ export class MapService {
    * @returns The x-coordinate for the map.
    */
   getMapX(canvasX: number): number {
-    return Math.floor(canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x);
+    return Math.floor(
+      canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x
+    );
   }
 
   /**
@@ -738,7 +906,9 @@ export class MapService {
    * @returns The y-coordinate for the map.
    */
   getMapY(canvasY: number): number {
-    return Math.floor(canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y);
+    return Math.floor(
+      canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y
+    );
   }
 
   /**
@@ -750,7 +920,7 @@ export class MapService {
   getMapPoint(canvasPoint: Point): Point {
     return {
       x: this.getMapX(canvasPoint.x),
-      y: this.getMapY(canvasPoint.y)
+      y: this.getMapY(canvasPoint.y),
     };
   }
 
@@ -758,10 +928,11 @@ export class MapService {
    * Set's isAddingConnected property of station to false if it's true.
    */
   disableConnectedStationMode(): void {
-    this.stationElements.filter(station => station.isAddingConnected)
-    .map(connectedStation => {
-      connectedStation.isAddingConnected = false;
-    });
+    this.stationElements
+      .filter((station) => station.isAddingConnected)
+      .map((connectedStation) => {
+        connectedStation.isAddingConnected = false;
+      });
   }
 
   /**
@@ -779,13 +950,17 @@ export class MapService {
   private validateConnections(): void {
     for (const station of this.stationElements) {
       for (const outgoingStationId of station.nextStations) {
-        const outgoingConnectedStation = this.stationElements.find((stationElement) => stationElement.rithmId === outgoingStationId);
+        const outgoingConnectedStation = this.stationElements.find(
+          (stationElement) => stationElement.rithmId === outgoingStationId
+        );
         if (!outgoingConnectedStation) {
           // eslint-disable-next-line no-console
           console.error(`Station ${station.stationName} is connected to a next station ${outgoingStationId},
            but no station element was found with that id.`);
         } else {
-          if (!outgoingConnectedStation.previousStations.includes(station.rithmId)) {
+          if (
+            !outgoingConnectedStation.previousStations.includes(station.rithmId)
+          ) {
             // eslint-disable-next-line no-console
             console.error(`Station ${station.stationName}:${station.rithmId} is connected to a next station
               ${outgoingConnectedStation.stationName}:${outgoingStationId}, but that station doesn't report the originating id in the
@@ -803,18 +978,24 @@ export class MapService {
     // Each station should belong to exactly one station group.
     for (const station of this.stationElements) {
       const stationGroupsThatContainThisStation =
-        this.stationGroupElements.filter((stationGroup) => stationGroup.stations.includes(station.rithmId));
+        this.stationGroupElements.filter((stationGroup) =>
+          stationGroup.stations.includes(station.rithmId)
+        );
       if (stationGroupsThatContainThisStation.length > 1) {
-        const stationGroupDetails: string =
-          stationGroupsThatContainThisStation.map(
-            (stationGroupInfo) => `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`).toString();
+        const stationGroupDetails: string = stationGroupsThatContainThisStation
+          .map(
+            (stationGroupInfo) =>
+              `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`
+          )
+          .toString();
         // eslint-disable-next-line no-console
-        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${
-          stationGroupsThatContainThisStation.length} station groups:
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
           ${stationGroupDetails}`);
       } else if (!stationGroupsThatContainThisStation.length) {
         // eslint-disable-next-line no-console
-        console.error(`No station groups contain the station: ${station.stationName}: ${station.rithmId}`);
+        console.error(
+          `No station groups contain the station: ${station.stationName}: ${station.rithmId}`
+        );
       }
     }
   }
@@ -826,14 +1007,22 @@ export class MapService {
     // Each station group should belong to exactly one station group.
     for (const stationGroup of this.stationGroupElements) {
       const stationGroupsThatContainThisStationGroup =
-        this.stationGroupElements.filter((stationGroupElement) => stationGroupElement.subFlows.includes(stationGroup.rithmId));
+        this.stationGroupElements.filter((stationGroupElement) =>
+          stationGroupElement.subFlows.includes(stationGroup.rithmId)
+        );
       if (stationGroupsThatContainThisStationGroup.length > 1) {
         // eslint-disable-next-line no-console
-        console.error(`The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${
-          stationGroupsThatContainThisStationGroup.length} station groups!`);
-      } else if (!stationGroupsThatContainThisStationGroup.length && !stationGroup.isReadOnlyRootFlow) {
+        console.error(
+          `The station group ${stationGroup.rithmId}: ${stationGroup.title} is contained in ${stationGroupsThatContainThisStationGroup.length} station groups!`
+        );
+      } else if (
+        !stationGroupsThatContainThisStationGroup.length &&
+        !stationGroup.isReadOnlyRootFlow
+      ) {
         // eslint-disable-next-line no-console
-        console.error(`No station groups contain the station group: ${stationGroup.title} ${stationGroup.rithmId}`);
+        console.error(
+          `No station groups contain the station group: ${stationGroup.title} ${stationGroup.rithmId}`
+        );
       }
     }
   }
@@ -844,9 +1033,13 @@ export class MapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
-    const updatedStations = this.stationElements.filter((station) => station.status === MapItemStatus.Updated);
+    const updatedStations = this.stationElements.filter(
+      (station) => station.status === MapItemStatus.Updated
+    );
     for (const updatedStation of updatedStations) {
-      const storedStation = this.storedStationElements.find((station) => station.rithmId === updatedStation.rithmId);
+      const storedStation = this.storedStationElements.find(
+        (station) => station.rithmId === updatedStation.rithmId
+      );
       if (!storedStation) {
         throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
           but does not exist in stored stations.`);
@@ -855,7 +1048,8 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
+    return this.stationElements.some(
+      (station) => station.status !== MapItemStatus.Normal
+    );
   }
-
 }
