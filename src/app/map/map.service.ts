@@ -988,7 +988,7 @@ export class MapService {
               `${stationGroupInfo.rithmId}: ${stationGroupInfo.title}`
           )
           .toString();
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line no-console,max-len
         console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
           ${stationGroupDetails}`);
       } else if (!stationGroupsThatContainThisStation.length) {
