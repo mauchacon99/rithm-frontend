@@ -1,5 +1,12 @@
 <!-- Title -->
 <h4 id="title" class="m-2 font-semibold">{{ title }}</h4>
+<div
+  class="col-span-full text-error-500"
+  id="move-document-error"
+  *ngIf="moveDocumentError"
+>
+  Unable to move document
+</div>
 <app-loading-indicator
   *ngIf="connectedStationLoading"
   id="connected-stations-loading"
