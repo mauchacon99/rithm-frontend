@@ -5,6 +5,7 @@ import { ConnectedStationInfo } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -19,7 +20,12 @@ describe('FlowLogicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, BrowserAnimationsModule, MatStepperModule],
+      imports: [
+        MatDialogModule,
+        BrowserAnimationsModule,
+        MatStepperModule,
+        MatSelectModule,
+      ],
       declarations: [FlowLogicComponent, RuleModalComponent],
     }).compileComponents();
   });

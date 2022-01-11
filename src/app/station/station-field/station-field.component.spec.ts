@@ -103,7 +103,8 @@ describe('StationFieldComponent', () => {
     expect(component.field.isRequired).toBeTrue();
   });
 
-  describe('label field', () => {
+  // TODO: Add tests for this describe; this doesn't do anything
+  xdescribe('label field', () => {
     beforeEach(() => {
       component.field = {
         rithmId: '3j4k-3h2j-hj4j',

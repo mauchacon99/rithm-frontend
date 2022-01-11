@@ -6,7 +6,7 @@ import {
   STATION_WIDTH,
 } from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
-import { Point } from '.';
+import { Point } from '../models';
 
 /**
  * Represents all information about a connection line between any two stations.
@@ -34,8 +34,8 @@ export interface ConnectionMapElement {
   /** The path of the connection line. */
   path: Path2D;
 
-  /** Whether the connection line is currently hovering? */
-  hoverActive: boolean;
+  /** Whether the user is currently hovering over this connection. */
+  hovering: boolean;
 }
 
 /**
@@ -61,7 +61,7 @@ export class ConnectionMapElement {
     this.endStationRithmId = connectionEndStation.rithmId;
     this.setEndPoint(connectionEndStation.canvasPoint, scale);
     this.path = this.getConnectionLine(this.startPoint, this.endPoint, scale);
-    this.hoverActive = false;
+    this.hovering = false;
   }
 
   /**
@@ -73,7 +73,7 @@ export class ConnectionMapElement {
   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.lineWidth = 30;
-    this.hoverActive = ctx.isPointInStroke(this.path, point.x, point.y);
+    this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
     ctx.restore();
   }
 

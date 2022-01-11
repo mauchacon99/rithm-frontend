@@ -6,9 +6,7 @@ import {
   Point,
   MapData,
   MapItemStatus,
-  FlowMapElement,
   EnvironmentName,
-  ConnectionMapElement,
 } from 'src/models';
 import {
   ABOVE_MAX,
@@ -28,7 +26,11 @@ import {
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { StationMapElement } from 'src/helpers';
+import {
+  ConnectionMapElement,
+  FlowMapElement,
+  StationMapElement,
+} from 'src/helpers';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
 
