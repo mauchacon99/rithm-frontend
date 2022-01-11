@@ -813,16 +813,13 @@ export class MockStationService {
    * @param stationRithmId The specific  station id.
    * @returns Station flow logic rule.
    */
-  getStationFlowLogicRule(
-    stationRithmId: string,
-  ): Observable<FlowLogicRule> {
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
     if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
-              error:
-                'The id of the Station cannot be empty.',
+              error: 'The id of the Station cannot be empty.',
             },
           })
       ).pipe(delay(1000));
