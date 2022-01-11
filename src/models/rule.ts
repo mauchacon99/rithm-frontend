@@ -11,5 +11,5 @@ export interface Rule {
   equations: RuleEquation[];
 
   /** A list of rules that can be compared in an and/or situation, can be empty. */
-  subRules: Rule[];
+  subRules?: Rule[];
 }

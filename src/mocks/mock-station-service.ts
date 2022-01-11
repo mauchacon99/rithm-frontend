@@ -843,54 +843,6 @@ export class MockStationService {
               },
             },
           ],
-          subRules: [
-            {
-              ruleType: RuleType.Or,
-              equations: [
-                {
-                  leftOperand: {
-                    type: OperandType.Field,
-                    value: 'z',
-                  },
-                  operatorType: OperatorType.EqualTo,
-                  rightOperand: {
-                    type: OperandType.String,
-                    value: 'Jeff',
-                  },
-                },
-              ],
-              subRules: [
-                {
-                  ruleType: RuleType.And,
-                  equations: [
-                    {
-                      leftOperand: {
-                        type: OperandType.Field,
-                        value: 'x',
-                      },
-                      operatorType: OperatorType.GreaterThan,
-                      rightOperand: {
-                        type: OperandType.Number,
-                        value: '2',
-                      },
-                    },
-                    {
-                      leftOperand: {
-                        type: OperandType.Field,
-                        value: 'y',
-                      },
-                      operatorType: OperatorType.LesserThan,
-                      rightOperand: {
-                        type: OperandType.Number,
-                        value: '3',
-                      },
-                    },
-                  ],
-                  subRules: [],
-                },
-              ],
-            },
-          ],
         },
       };
       return of(stationFlowLogic).pipe(delay(1000));
