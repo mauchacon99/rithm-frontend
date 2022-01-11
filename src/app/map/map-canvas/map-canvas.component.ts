@@ -917,6 +917,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns Boolean.
    */
   private getOutsideBoundingBoxPanVelocity(position: Point): Point {
+    /*TODO: change name of method and related terminology to avoid confusion with the boundary box.
+    For now: *bounding box* refers to an invisible box that, when the cursor is moved outside of, triggers a function.
+    *boundary box* is a visible box surrounding a user's map that prevents stations from being placed too far away.*/
     //Store the dimensions of the canvas.
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     /* Sets a number that will be used to check the position of the cursor against.
@@ -996,19 +999,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Draws the boundary edges of a user's map.
-   *
+   * Draws the boundary edges of a user's map using the map's station coordinates.
    */
   private drawBoundaryBox(): void {
+    //Set to width or height depending on which is longer.
     const screenDimension =
       window.innerWidth > window.innerHeight
         ? window.innerWidth
         : window.innerHeight;
 
-    // To find out corner's of map using the min and max canvas points.
+    /* Find corners of map using the min and max canvas points.
+    Corners are set using the canvas points of the topmost, leftmost, rightmost and bottommost stations.
+    minMapPoint is the topleft corner of the map. maxMapPoint is the bottom right corner of the map. */
     const minMapPoint = this.mapService.getMinCanvasPoint();
     const maxMapPoint = this.mapService.getMaxCanvasPoint();
 
+    /* We will draw each line of the box using the minMapPoint and maxMapPoint
+    and then offsetting that using screenDimension and this.boundaryPadding. */
     const leftBoundaryEdge =
       minMapPoint.x -
       (screenDimension * this.scale) / 2 +
@@ -1035,17 +1042,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /**
    * Pans the map a given direction based on panVelocity.
    * Used when outside the bounding box and dragging.
+   * Used when center button is pressed.
+   * Used when a fast drag is initiated.
    * //TODO: Allow use when middle wheel is active.
    *
    * @param panVelocity How much to pan in each direction.
    */
   private autoMapPan(panVelocity: Point): void {
+    //Will offset the currentCanvasPoint by panVelocity.
     const xMove = panVelocity.x;
     const yMove = panVelocity.y;
 
     this.currentCanvasPoint.x -= xMove;
     this.currentCanvasPoint.y -= yMove;
 
+    //If dragging a station, need to offset the station's mapPoint too so that it doesn't get left behind while panning.
     if (this.dragItem === MapDragItem.Station) {
       for (const station of this.stations) {
         if (station.dragging) {
@@ -1064,8 +1075,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @returns An accurate point for the cursor or touch position on the canvas.
    */
   private getEventCanvasPoint(event: MouseEvent | PointerEvent | Touch): Point {
+    //Get the dimensions of the canvas element.
     const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
     return {
+      //We use Math.floor because we need all coordinates to be integers instead of floats.
       x: Math.floor(event.clientX - canvasRect.left),
       y: Math.floor(event.clientY - canvasRect.top),
     };
@@ -1081,8 +1094,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private getEventContextPoint(
     event: MouseEvent | PointerEvent | Touch
   ): Point {
+    //Get the dimensions of the canvas element.
     const canvasPoint = this.getEventCanvasPoint(event);
     return {
+      //We use Math.floor because we need all coordinates to be integers instead of floats.
       x: Math.floor(canvasPoint.x * window.devicePixelRatio),
       y: Math.floor(canvasPoint.y * window.devicePixelRatio),
     };
