@@ -5,7 +5,7 @@ import {
   MapItemStatus,
   MapMode,
   Point,
-  StationElementHoverType,
+  StationElementHoverItem,
 } from 'src/models';
 import {
   BADGE_DEFAULT_COLOR,
@@ -128,7 +128,7 @@ export class StationElementService {
     ctx.shadowOffsetX = shadowEquation(3);
     ctx.shadowOffsetY = shadowEquation(3);
     if (
-      station.hoverActive === StationElementHoverType.Station &&
+      station.hoverItem === StationElementHoverItem.Station &&
       dragItem === MapDragItem.Station &&
       station.dragging
     ) {
@@ -179,13 +179,13 @@ export class StationElementService {
     // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle =
-      station.hoverActive !== StationElementHoverType.None &&
+      station.hoverItem !== StationElementHoverItem.None &&
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
         ? '#ebebeb'
         : '#fff';
     ctx.strokeStyle =
-      station.hoverActive !== StationElementHoverType.None &&
+      station.hoverItem !== StationElementHoverItem.None &&
       dragItem === MapDragItem.Node &&
       !station.dragging
         ? NODE_HOVER_COLOR
@@ -313,7 +313,7 @@ export class StationElementService {
       2 * Math.PI
     );
     ctx.fillStyle =
-      station.hoverActive === StationElementHoverType.Badge &&
+      station.hoverItem === StationElementHoverItem.Badge &&
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BADGE_HOVER_COLOR
@@ -420,7 +420,7 @@ export class StationElementService {
       2 * Math.PI
     );
     ctx.fillStyle =
-      station.hoverActive === StationElementHoverType.Button &&
+      station.hoverItem === StationElementHoverItem.Button &&
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BUTTON_HOVER_COLOR
@@ -469,7 +469,7 @@ export class StationElementService {
         station.dragging) ||
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
-        : station.hoverActive === StationElementHoverType.Node &&
+        : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
