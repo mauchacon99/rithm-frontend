@@ -40,29 +40,41 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** The different modes available. */
   mapModeEnum = MapMode;
 
+  /** The drawer context for connectionInfo. */
+  drawerContext = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
     private popupService: PopupService
   ) {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.drawerContext = data;
+      });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const connection = data as ConnectionMapElement;
-        if (connection) {
-          this.connectedStations = this.mapService.stationElements.filter(
-            (e) =>
-              e.rithmId === connection.startStationRithmId ||
-              e.rithmId === connection.endStationRithmId
-          );
-          this.connectedStations.sort((a) =>
-            a.rithmId === connection.startStationRithmId ? -1 : 1
-          );
-          this.connectionStartStationName =
-            this.connectedStations[0].stationName;
-          this.connectionEndStationName = this.connectedStations[1].stationName;
-          this.connectionStartStationId = this.connectedStations[0].rithmId;
-          this.connectionEndStationId = this.connectedStations[1].rithmId;
+        if (this.drawerContext === 'connectionInfo') {
+          if (connection) {
+            this.connectedStations = this.mapService.stationElements.filter(
+              (e) =>
+                e.rithmId === connection.startStationRithmId ||
+                e.rithmId === connection.endStationRithmId
+            );
+            this.connectedStations.sort((a) =>
+              a.rithmId === connection.startStationRithmId ? -1 : 1
+            );
+            this.connectionStartStationName =
+              this.connectedStations[0].stationName;
+            this.connectionEndStationName =
+              this.connectedStations[1].stationName;
+            this.connectionStartStationId = this.connectedStations[0].rithmId;
+            this.connectionEndStationId = this.connectedStations[1].rithmId;
+          }
         }
       });
 
