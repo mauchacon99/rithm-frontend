@@ -13,6 +13,9 @@ import {
   DocumentNameField,
   ForwardPreviousStationsDocument,
   StandardStringJSON,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
 } from 'src/models';
 
 /**
@@ -802,5 +805,99 @@ export class MockStationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param currentStationRithmId The specific current station id.
+   * @param nextStationRithmId The specific next station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(
+    currentStationRithmId: string,
+    nextStationRithmId: string
+  ): Observable<FlowLogicRule> {
+    if (!currentStationRithmId || !nextStationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error:
+                'The id of the current Station or the next station cannot be empty.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationFlowLogic: FlowLogicRule = {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRule: {
+          ruleType: 'or',
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+          subRules: [
+            {
+              ruleType: 'or',
+              equations: [
+                {
+                  leftOperand: {
+                    type: OperandType.Field,
+                    value: 'z',
+                  },
+                  operatorType: OperatorType.EqualTo,
+                  rightOperand: {
+                    type: OperandType.String,
+                    value: 'Jeff',
+                  },
+                },
+              ],
+              subRules: [
+                {
+                  ruleType: 'and',
+                  equations: [
+                    {
+                      leftOperand: {
+                        type: OperandType.Field,
+                        value: 'x',
+                      },
+                      operatorType: OperatorType.GreaterThan,
+                      rightOperand: {
+                        type: OperandType.Number,
+                        value: '2',
+                      },
+                    },
+                    {
+                      leftOperand: {
+                        type: OperandType.Field,
+                        value: 'y',
+                      },
+                      operatorType: OperatorType.LesserThan,
+                      rightOperand: {
+                        type: OperandType.Number,
+                        value: '3',
+                      },
+                    },
+                  ],
+                  subRules: [],
+                },
+              ],
+            },
+          ],
+        },
+      };
+      return of(stationFlowLogic).pipe(delay(1000));
+    }
   }
 }

@@ -15,6 +15,9 @@ import {
   ForwardPreviousStationsDocument,
   StandardStringJSON,
   DocumentNameField,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -893,5 +896,85 @@ describe('StationService', () => {
     expect(req.request.body).toEqual({ data: instructions });
     req.flush({ data: instructions });
     httpTestingController.verify();
+  });
+
+  it('should return the Station flow logic rule', () => {
+    const currentStationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
+    const nextStationRithmId = '73d47261-1932-4fcf-82bd-159eb1a7243f';
+
+    const expectStationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmID: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRule: {
+        ruleType: 'or',
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              value: 'birthday',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              value: '5/27/1982',
+            },
+          },
+        ],
+        subRules: [
+          {
+            ruleType: 'or',
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'z',
+                },
+                operatorType: OperatorType.EqualTo,
+                rightOperand: {
+                  type: OperandType.String,
+                  value: 'Jeff',
+                },
+              },
+            ],
+            subRules: [
+              {
+                ruleType: 'and',
+                equations: [
+                  {
+                    leftOperand: {
+                      type: OperandType.Field,
+                      value: 'x',
+                    },
+                    operatorType: OperatorType.GreaterThan,
+                    rightOperand: {
+                      type: OperandType.Number,
+                      value: '2',
+                    },
+                  },
+                  {
+                    leftOperand: {
+                      type: OperandType.Field,
+                      value: 'y',
+                    },
+                    operatorType: OperatorType.LesserThan,
+                    rightOperand: {
+                      type: OperandType.Number,
+                      value: '3',
+                    },
+                  },
+                ],
+                subRules: [],
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    service
+      .getStationFlowLogicRule(currentStationRithmId, nextStationRithmId)
+      .subscribe((stationFlowLogic) => {
+        expect(stationFlowLogic).toEqual(expectStationFlowLogic);
+      });
   });
 });
