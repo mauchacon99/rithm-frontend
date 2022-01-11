@@ -58,22 +58,21 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const connection = data as ConnectionMapElement;
-          if (connection && this.drawerContext === 'connectionInfo') {
-            this.connectedStations = this.mapService.stationElements.filter(
-              (e) =>
-                e.rithmId === connection.startStationRithmId ||
-                e.rithmId === connection.endStationRithmId
-            );
-            this.connectedStations.sort((a) =>
-              a.rithmId === connection.startStationRithmId ? -1 : 1
-            );
-            this.connectionStartStationName =
-              this.connectedStations[0].stationName;
-            this.connectionEndStationName =
-              this.connectedStations[1].stationName;
-            this.connectionStartStationId = this.connectedStations[0].rithmId;
-            this.connectionEndStationId = this.connectedStations[1].rithmId;
-          }
+        if (connection && this.drawerContext === 'connectionInfo') {
+          this.connectedStations = this.mapService.stationElements.filter(
+            (e) =>
+              e.rithmId === connection.startStationRithmId ||
+              e.rithmId === connection.endStationRithmId
+          );
+          this.connectedStations.sort((a) =>
+            a.rithmId === connection.startStationRithmId ? -1 : 1
+          );
+          this.connectionStartStationName =
+            this.connectedStations[0].stationName;
+          this.connectionEndStationName = this.connectedStations[1].stationName;
+          this.connectionStartStationId = this.connectedStations[0].rithmId;
+          this.connectionEndStationId = this.connectedStations[1].rithmId;
+        }
       });
 
     this.mapService.mapMode$
