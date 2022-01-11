@@ -1112,7 +1112,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private eventStartLogic(event: MouseEvent | Touch) {
     //Gets the position of the cursor.
     const eventCanvasPoint = this.getEventCanvasPoint(event);
-
     //Gets the position of the cursor and multiplies it by the pixel ratio of the screen.
     const eventContextPoint = this.getEventContextPoint(event);
 
@@ -1203,54 +1202,77 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles mouseUp and touchEnd logic.
+   * Handles the logic that runs when a pointer, touch and mouse up/end event is registered.
    *
    * @param event Is a mouse or touch event.
    */
   private eventEndLogic(event: MouseEvent | Touch) {
+    //Gets the position of the cursor.
     const eventCanvasPoint = this.getEventCanvasPoint(event);
+    //Gets the position of the cursor and multiplies it by the pixel ratio of the screen.
     const eventContextPoint = this.getEventContextPoint(event);
+    //Set this to false so that if a fast drag has been activated it doesn't get cancelled.
     this.holdDrag = false;
 
-    // Overlay option menu close state.
+    // If there is a station option menu open, close it.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
 
-    //If it is a click and not a drag.
+    /* Check if event was a click and not a drag.
+
+    We have to manually check this because we can't use a click event in map-canvas.
+    The problem is that if you drag and happen to end your drag over anything that is watching for a click event,
+    the event will trigger. This is a result of the internal logic of click events,
+    which only watch to see if your click is in the same element when you lift your finger.
+    That doesn't work with our canvas, which is a giant element.
+
+    Instead of using a click event, we have an if check that better simulates click events.
+    This checks to see if you lift your finger in just about the same area as where you started a click.
+    This prevents weird issues with dragging.
+
+    There is some give, represented by TOUCH_EVENT_MARGIN,
+    that still considers an event a click if it is within a few pixels of where it started.
+    This allows users to be a little less precise. */
     if (
       Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) <
         TOUCH_EVENT_MARGIN &&
       Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) <
         TOUCH_EVENT_MARGIN
     ) {
+      //Reset properties that were changed by the event.
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
         station.dragging = false;
       });
+      //If the scale of the map is big enough to display station elements.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
+        //Trigger the logic that takes place after a simulated 'click'.
         this.clickEventHandler(eventCanvasPoint, eventContextPoint);
       }
       //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
       this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
+      //Don't run any of the rest of the method's code.
       return;
     }
 
     //If dragging the map.
     if (this.dragItem === MapDragItem.Map) {
-      //Check if nextPanVelocity is great enough to trigger autoPan.
+      //Check if nextPanVelocity is great enough to trigger autoPan, this is considered and referred to as a "fast drag".
       if (this.fastDrag) {
+        //Adjust the pan velocity by scale. It should pan faster when zoomed out.
         this.nextPanVelocity = {
           x: this.nextPanVelocity.x / this.scale,
           y: this.nextPanVelocity.y / this.scale,
         };
         this.checkAutoPan();
       } else {
+        //If not a fast drag, reset nextPanVelocity. This makes sure that a pan doesn't trigger auto pan when it shouldn't.
         this.nextPanVelocity = { x: 0, y: 0 };
       }
     }
 
-    //If dragging a connection node.
+    //If dragging a connection node or moving a connection to a different station.
     if (
       this.dragItem === MapDragItem.Node ||
       this.dragItem === MapDragItem.Connection
