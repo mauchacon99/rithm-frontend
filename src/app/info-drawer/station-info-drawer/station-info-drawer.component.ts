@@ -448,9 +448,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     const confirm = await this.popupService.confirm({
       title: 'Are you sure?',
       message:
-        'After the document creation you will be redirected to the document page.',
+        'After the document is created you will be redirected to the document page.',
       okButtonText: 'Confirm',
-      cancelButtonText: 'Close',
+      cancelButtonText: 'Cancel',
     });
     if (confirm) {
       this.documentService

@@ -303,9 +303,9 @@ describe('StationInfoDrawerComponent', () => {
     const dialogExpectData: DialogOptions = {
       title: 'Are you sure?',
       message:
-        'After the document creation you will be redirected to the document page.',
+        'After the document is created you will be redirected to the document page.',
       okButtonText: 'Confirm',
-      cancelButtonText: 'Close',
+      cancelButtonText: 'Cancel',
     };
     const popupSpy = spyOn(
       TestBed.inject(PopupService),
