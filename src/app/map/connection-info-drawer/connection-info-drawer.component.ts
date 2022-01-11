@@ -58,8 +58,7 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const connection = data as ConnectionMapElement;
-        if (this.drawerContext === 'connectionInfo') {
-          if (connection) {
+          if (connection && this.drawerContext === 'connectionInfo') {
             this.connectedStations = this.mapService.stationElements.filter(
               (e) =>
                 e.rithmId === connection.startStationRithmId ||
@@ -75,7 +74,6 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
             this.connectionStartStationId = this.connectedStations[0].rithmId;
             this.connectionEndStationId = this.connectedStations[1].rithmId;
           }
-        }
       });
 
     this.mapService.mapMode$
