@@ -12,3 +12,4 @@ export * from './field-name-separator.enum';
 export * from './environment-name.enum';
 export * from './operand-type.enum';
 export * from './operator-type.enum';
+export * from './rule-type.enum';

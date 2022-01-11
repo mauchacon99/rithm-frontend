@@ -18,6 +18,7 @@ import {
   FlowLogicRule,
   OperandType,
   OperatorType,
+  RuleType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -905,7 +906,7 @@ describe('StationService', () => {
       stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
       destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
       flowRule: {
-        ruleType: 'or',
+        ruleType: RuleType.Or,
         equations: [
           {
             leftOperand: {
@@ -921,7 +922,7 @@ describe('StationService', () => {
         ],
         subRules: [
           {
-            ruleType: 'or',
+            ruleType: RuleType.Or,
             equations: [
               {
                 leftOperand: {
@@ -937,7 +938,7 @@ describe('StationService', () => {
             ],
             subRules: [
               {
-                ruleType: 'and',
+                ruleType: RuleType.And,
                 equations: [
                   {
                     leftOperand: {
