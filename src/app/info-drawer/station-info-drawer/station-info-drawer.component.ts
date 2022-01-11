@@ -458,12 +458,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe({
           next: (documentId) => {
-            if (documentId) {
-              this.assignUserToDocument(
-                this.userService.user.rithmId,
-                documentId
-              );
-            }
+            this.assignUserToDocument(
+              this.userService.user.rithmId,
+              documentId
+            );
           },
           error: (error: unknown) => {
             this.errorService.displayError(

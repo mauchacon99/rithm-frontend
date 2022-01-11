@@ -222,18 +222,18 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should create a document from station-info-drawer', async () => {
+  it('should create a document', async () => {
     const createDocumentSpy = spyOn(
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.callThrough();
+
     await component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
       '',
       0,
       component.stationRithmId
     );
-    expect(component.assignUserToDocument).toHaveBeenCalled();
   });
 
   it('should catch an error if creating the document fails', async () => {
@@ -251,7 +251,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should create new document and called services', () => {
+  it('should call the service to assign a user to a document', () => {
     const userExpect = '123-957';
     const newDocumentExpect = '852-789-654-782';
     const spyPetition = spyOn(
@@ -266,7 +266,7 @@ describe('StationInfoDrawerComponent', () => {
     );
   });
 
-  it('should catch error and executed error service', () => {
+  it('should catch error and executed error service when assign a user.', () => {
     const userExpect = '123-957';
     const newDocumentExpect = '852-789-654-782';
     spyOn(
