@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
@@ -15,7 +15,7 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './rule-modal.component.html',
   styleUrls: ['./rule-modal.component.scss'],
 })
-export class RuleModalComponent {
+export class RuleModalComponent implements OnInit {
   /** Station Rithm id. */
   stationRithmId = '';
 
@@ -39,6 +39,13 @@ export class RuleModalComponent {
     this.stepperOrientation$ = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  /**
+   * Life cycle init the component.
+   */
+  ngOnInit(): void {
+    this.getStationFlowLogicRule();
   }
 
   /**

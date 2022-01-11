@@ -16,6 +16,7 @@ describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
   const DIALOG_TEST_DATA = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -47,5 +48,15 @@ describe('RuleModalComponent', () => {
 
   it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
     expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
+  });
+
+  it('should call the method that returns the logical flow rules of a station', () => {
+    component.stationRithmId = stationId;
+    const getStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationFlowLogicRule'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(getStationFlowLogicRuleSpy).toHaveBeenCalledWith(stationId);
   });
 });
