@@ -176,4 +176,21 @@ describe('ConnectedStationsModalComponent', () => {
     fixture.detectChanges();
     expect(connectedStationLoading).toBeTruthy();
   });
+
+  it('should show error message when request for move document fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.stationRithmId = stationId;
+    component.documentRithmId = documentId;
+    component.moveDocument();
+    fixture.detectChanges();
+    expect(component.moveDocumentError).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#move-document-error'
+    );
+    expect(errorComponent).toBeTruthy();
+  });
 });

@@ -10,7 +10,6 @@ import {
   ForwardPreviousStationsDocument,
   DocumentStationInformation,
   StandardStringJSON,
-  RithmIdStringJSON,
   DocumentAnswer,
   DocumentName,
   StationRosterMember,
@@ -373,11 +372,10 @@ export class DocumentService {
     const requestObject = {
       name,
       priority,
-      stationRithmId,
     };
     return this.http
-      .post<RithmIdStringJSON>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}`,
+      .post<{ /** Document Rithm Id. */ rithmId: string }>(
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}?stationRithmId=${stationRithmId}`,
         requestObject
       )
       .pipe(map((response) => response.rithmId));
