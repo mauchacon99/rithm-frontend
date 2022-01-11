@@ -46,7 +46,7 @@ export class StationService {
   /** The question to be updated when it changes in station page. */
   stationQuestion$ = new Subject<Question>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Gets station information.
@@ -502,7 +502,7 @@ export class StationService {
   /**
    * Get each station flow rules.
    *
-   * @param stationRithmId The specific current station id.
+   * @param stationRithmId The specific station id.
    * @returns Station flow logic rule.
    */
   getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {

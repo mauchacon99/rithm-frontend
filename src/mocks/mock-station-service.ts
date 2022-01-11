@@ -810,21 +810,19 @@ export class MockStationService {
   /**
    * Get each station flow rules.
    *
-   * @param currentStationRithmId The specific current station id.
-   * @param nextStationRithmId The specific next station id.
+   * @param stationRithmId The specific  station id.
    * @returns Station flow logic rule.
    */
   getStationFlowLogicRule(
-    currentStationRithmId: string,
-    nextStationRithmId: string
+    stationRithmId: string,
   ): Observable<FlowLogicRule> {
-    if (!currentStationRithmId || !nextStationRithmId) {
+    if (!stationRithmId) {
       return throwError(
         () =>
           new HttpErrorResponse({
             error: {
               error:
-                'The id of the current Station or the next station cannot be empty.',
+                'The id of the Station cannot be empty.',
             },
           })
       ).pipe(delay(1000));
