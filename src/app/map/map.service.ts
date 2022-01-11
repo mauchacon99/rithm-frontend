@@ -989,8 +989,7 @@ export class MapService {
           )
           .toString();
         // eslint-disable-next-line no-console
-        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${
-          stationGroupsThatContainThisStation.length} station groups:
+        console.error(`The station ${station.rithmId}: ${station.stationName} is contained in ${stationGroupsThatContainThisStation.length} station groups:
           ${stationGroupDetails}`);
       } else if (!stationGroupsThatContainThisStation.length) {
         // eslint-disable-next-line no-console
