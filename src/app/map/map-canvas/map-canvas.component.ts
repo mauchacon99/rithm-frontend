@@ -1069,7 +1069,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines the point on the canvas that the mouse cursor/pointer is positioned.
+   * Determines the point on the canvas that the mouse cursor/pointer is positioned when an event is triggered.
    *
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas.
@@ -1085,8 +1085,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines the point on the canvas context that the mouse cursor/pointer or touch event is positioned. This adjusts for the pixel
-   * ratio in order to report an accurate position when using `context` methods like `isPointInPath` or `isPointInStroke`.
+   * Determines the point on the canvas context that the mouse cursor/pointer or touch event is positioned.
+   * This adjusts for the pixel ratio in order to report an accurate position when using `context` methods
+   * like `isPointInPath` or `isPointInStroke`.
    *
    * @param event The event for the cursor or touch information.
    * @returns An accurate point for the cursor or touch position on the canvas context.
@@ -1104,14 +1105,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles pointer, touch and mouse events starts when a single start/down event is registered.
+   * Handles the logic that runs when a pointer, touch and mouse start/down event is registered.
    *
    * @param event Is an input event.
    */
   private eventStartLogic(event: MouseEvent | Touch) {
+    //Gets the position of the cursor.
     const eventCanvasPoint = this.getEventCanvasPoint(event);
+
+    //Gets the position of the cursor and multiplies it by the pixel ratio of the screen.
     const eventContextPoint = this.getEventContextPoint(event);
+
+    //Check if there is an auto pan loop going on.
     if (this.panActive) {
+      //Cancel the loop and reset related properties.
       cancelAnimationFrame(this.myReq as number);
       this.panActive = false;
       this.fastDrag = false;
@@ -1121,20 +1128,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 
-    // Overlay option menu close state.
+    //If there is a station option menu open, close it.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
+
+    //In build mode, there are things that can be clicked that cant be clicked in view mode.
     if (this.mapMode === MapMode.Build) {
+      //Loop through the stations array to check if there is a station being interacted with.
       for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
+        // Check if clicked on an interactive station element. This sets the station.hoverActive to wherever the mouse is.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
-        // clicked on a connection node.
+        // If clicked on a connection node, set properties so that we can begin a drag from it. Then break the for loop.
         if (station.hoverActive === StationElementHoverType.Node) {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
-          // Check for drag start on station
+        // If clicked on a station outside the connection node, set properties so we can drag it. Then break the for loop.
         } else if (station.hoverActive !== StationElementHoverType.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
@@ -1149,10 +1159,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.dragItem !== MapDragItem.Node &&
         this.dragItem !== MapDragItem.Station
       ) {
+        //Loop through the connections array to check if there is a station being interacted with.
         for (const connection of this.connections) {
-          // Check if connection line was clicked. ContextPoint is used for connection lines.
+          // Check if connection line was clicked. eventContextPoint is used for connection lines. Sets connection.hoverActive to true.
           connection.checkElementHover(eventContextPoint, this.context);
+          //Find the connection line that was clicked on.
           if (connection.hoverActive) {
+            //Get the station that starts the connection line.
             const startStation = this.stations.find(
               (station) => station.rithmId === connection.startStationRithmId
             );
@@ -1161,6 +1174,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
                 `Unable to find a start station with the id of ${connection.startStationRithmId} for a connection`
               );
             }
+            //Set appropriate properties that allow a connection line to be dragged.
             startStation.dragging = true;
             this.dragItem = MapDragItem.Connection;
             break;
@@ -1169,17 +1183,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
 
       //This ensures that when dragging a station or node connection, it will always display above other stations.
+      //Find the station that is being dragged.
       if (this.stations.find((obj) => obj.dragging === true)) {
+        //Isolate that station from array.
         const draggingStation = this.stations.filter(
           (obj) => obj.dragging === true
         );
+        //Remove the station from the stations array.
         this.stations = this.stations.filter((obj) => obj.dragging !== true);
+        //Put that station in the back of the stations array.
         this.stations.push(draggingStation[0]);
       }
     }
 
+    //If user didn't click on a station, etc than they must have clicked on the map.
     if (this.dragItem === MapDragItem.Default) {
-      // Assume map for now
       this.dragItem = MapDragItem.Map;
     }
   }
