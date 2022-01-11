@@ -12,7 +12,7 @@ import {
 import {
   StationMapData,
   Point,
-  StationElementHoverType,
+  StationElementHoverItem,
   MapMode,
   MapItemStatus,
 } from 'src/models';
@@ -21,11 +21,11 @@ export interface StationMapElement extends StationMapData {
   /** The coordinates for the location of the station as rendered in the viewport. */
   canvasPoint: Point;
 
-  /** Whether the station is currently being dragged or not. */
+  /** Whether the station itself is currently being dragged. */
   dragging: boolean;
 
-  /** Whether the station is currently hovering? */
-  hoverActive: StationElementHoverType;
+  /** The item the user is currently hovering over on this station, if any. */
+  hoverItem: StationElementHoverItem;
 
   /** Whether a connected station is being added from this station or not. */
   isAddingConnected: boolean;
@@ -35,6 +35,19 @@ export interface StationMapElement extends StationMapData {
 
   /** Whether the station is selected or not. */
   selected: boolean;
+  // TODO: Update to store paths in these properties instead to use `isPointInPath`?
+
+  /** The path used for the card used to display the station. */
+  cardPath: Path2D;
+
+  /** The path used for the document badge on the station. */
+  badgePath: Path2D;
+
+  /** The path used for the connection node on the station (in build mode). */
+  nodePath: Path2D;
+
+  /** The path used for the options button on the station (in build mode). */
+  buttonPath: Path2D;
 }
 
 /**
@@ -49,7 +62,7 @@ export class StationMapElement {
   constructor(stationMapData: StationMapData) {
     this.canvasPoint = DEFAULT_CANVAS_POINT;
     this.dragging = false;
-    this.hoverActive = StationElementHoverType.None;
+    this.hoverItem = StationElementHoverItem.None;
     this.isAddingConnected = false;
     this.disabled = false;
     this.selected = false;
@@ -66,19 +79,19 @@ export class StationMapElement {
   checkElementHover(point: Point, mode: MapMode, scale: number): void {
     //Connection node.
     if (this.isPointInConnectionNode(point, mode, scale)) {
-      this.hoverActive = StationElementHoverType.Node;
+      this.hoverItem = StationElementHoverItem.Node;
       //Option Button.
     } else if (this.isPointInOptionButton(point, mode, scale)) {
-      this.hoverActive = StationElementHoverType.Button;
+      this.hoverItem = StationElementHoverItem.Button;
       //Document badge.
     } else if (this.isPointInDocumentBadge(point, mode, scale)) {
-      this.hoverActive = StationElementHoverType.Badge;
+      this.hoverItem = StationElementHoverItem.Badge;
       //station itself.
     } else if (this.isPointInStation(point, mode, scale)) {
-      this.hoverActive = StationElementHoverType.Station;
+      this.hoverItem = StationElementHoverItem.Station;
       //No hover.
     } else {
-      this.hoverActive = StationElementHoverType.None;
+      this.hoverItem = StationElementHoverItem.None;
     }
   }
 
