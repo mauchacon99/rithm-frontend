@@ -91,6 +91,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The default message to prompt user to publish local changes.*/
   publishStationMessage = 'Publish map changes to update ';
 
+  /** The drawer context for stationInfo. */
+  drawerContext = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -103,29 +106,37 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private documentService: DocumentService
   ) {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.drawerContext = data;
+      });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .subscribe((data: any) => {
         const dataDrawer = data as StationInfoDrawerData;
-        if (dataDrawer) {
-          this.editMode = dataDrawer.editMode;
-          this.stationRithmId = dataDrawer.stationRithmId;
-          this.stationName = dataDrawer.stationName;
-          this.mapMode = dataDrawer.mapMode;
-          this.stationStatus = dataDrawer.stationStatus;
-          this.openedFromMap = dataDrawer.openedFromMap;
-          this.stationNotes = dataDrawer.notes;
-          if (
-            this.openedFromMap &&
-            this.stationStatus !== MapItemStatus.Created
-          ) {
-            this.getStationDocumentGenerationStatus();
+        if (this.drawerContext === 'stationInfo') {
+          if (dataDrawer) {
+            this.editMode = dataDrawer.editMode;
+            this.stationRithmId = dataDrawer.stationRithmId;
+            this.stationName = dataDrawer.stationName;
+            this.mapMode = dataDrawer.mapMode;
+            this.stationStatus = dataDrawer.stationStatus;
+            this.openedFromMap = dataDrawer.openedFromMap;
+            this.stationNotes = dataDrawer.notes;
+            if (
+              this.openedFromMap &&
+              this.stationStatus !== MapItemStatus.Created
+            ) {
+              this.getStationDocumentGenerationStatus();
+            }
+          } else {
+            throw new Error('There was no station info drawer data');
           }
-        } else {
-          throw new Error('There was no station info drawer data');
+          this.getStationInfo();
         }
-        this.getStationInfo();
       });
 
     this.stationNameForm = this.fb.group({
