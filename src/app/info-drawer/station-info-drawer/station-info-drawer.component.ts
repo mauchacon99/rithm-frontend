@@ -462,6 +462,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
               this.userService.user.rithmId,
               documentId
             );
+            this.popupService.notify(
+              'The document has been created successfully.'
+            );
           },
           error: (error: unknown) => {
             this.errorService.displayError(
@@ -484,11 +487,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({
-        next: () => {
-          this.popupService.notify(
-            'The document has been created successfully.'
-          );
-        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",

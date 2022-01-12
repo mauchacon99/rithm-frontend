@@ -222,19 +222,39 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should create a document', async () => {
+  it('should create a document', fakeAsync(() => {
+    const documentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
     const createDocumentSpy = spyOn(
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.callThrough();
 
-    await component.createNewDocument();
+    const notifySpy = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+
+    const userService = TestBed.inject(UserService);
+    const user = userService.user;
+
+    const assignUser = spyOn(
+      component,
+      'assignUserToDocument'
+    ).and.callThrough();
+
+    component.createNewDocument();
+    tick();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
       '',
       0,
       component.stationRithmId
     );
-  });
+    tick(1000);
+    expect(notifySpy).toHaveBeenCalledOnceWith(
+      'The document has been created successfully.'
+    );
+    expect(assignUser).toHaveBeenCalledWith(user.rithmId, documentId);
+  }));
 
   it('should catch an error if creating the document fails', async () => {
     spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
