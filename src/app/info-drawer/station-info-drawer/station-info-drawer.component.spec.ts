@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { StationInfoDrawerComponent } from './station-info-drawer.component';
 import { StationService } from 'src/app/core/station.service';
 import {
@@ -21,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { PopupService } from 'src/app/core/popup.service';
-import { DocumentGenerationStatus } from 'src/models';
+import { DialogOptions, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { throwError } from 'rxjs';
@@ -217,12 +222,12 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should create a document from station-info-drawer', () => {
+  it('should create a document from station-info-drawer', async () => {
     const createDocumentSpy = spyOn(
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.callThrough();
-    component.createNewDocument();
+    await component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
       '',
       0,
@@ -230,7 +235,7 @@ describe('StationInfoDrawerComponent', () => {
     );
   });
 
-  it('should catch an error if creating the document fails', () => {
+  it('should catch an error if creating the document fails', async () => {
     spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
       throwError(() => {
         throw new Error();
@@ -241,7 +246,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.createNewDocument();
+    await component.createNewDocument();
     expect(spyError).toHaveBeenCalled();
   });
 
@@ -277,5 +282,37 @@ describe('StationInfoDrawerComponent', () => {
     ).and.callThrough();
     component.assignUserToDocument(userExpect, newDocumentExpect);
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+
+    fixture.detectChanges();
+
+    const createDocumentSpy = spyOn(component, 'createNewDocument');
+    const btnNewDoc =
+      fixture.debugElement.nativeElement.querySelector('#new-document');
+    expect(btnNewDoc).toBeTruthy();
+    btnNewDoc.click();
+    tick();
+    expect(createDocumentSpy).toHaveBeenCalledOnceWith();
+  }));
+
+  it('should open a confirm dialog to create a document', async () => {
+    const dialogExpectData: DialogOptions = {
+      title: 'Are you sure?',
+      message:
+        'After the document is created you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    };
+    const popupSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+
+    await component.createNewDocument();
+    expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 });
