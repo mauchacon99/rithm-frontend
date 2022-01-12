@@ -41,3 +41,7 @@ export * from './document-auto-flow';
 export * from './move-document';
 export * from './connected-modal-data';
 export * from './dashboard-items';
+export * from './rule-operand';
+export * from './rule-equation';
+export * from './rule';
+export * from './flow-logic-rule';
