@@ -31,6 +31,9 @@ export class RuleModalComponent implements OnInit {
   /** Get current and previous Questions for Stations. */
   questionStation: Question[] = [];
 
+  /** The value of the operator. */
+  operator = '';
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,

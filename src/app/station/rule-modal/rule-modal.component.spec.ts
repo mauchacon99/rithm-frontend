@@ -80,4 +80,31 @@ describe('RuleModalComponent', () => {
     component.ngOnInit();
     expect(displayErrorSpy).toHaveBeenCalled();
   });
+
+  it('should call the method that returns the questions of a station.', () => {
+    component.stationRithmId = stationId;
+    const getStationQuestions = spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.callThrough();
+    component.getStationQuestions();
+    expect(getStationQuestions).toHaveBeenCalledWith(stationId);
+  });
+
+  it('should show error message when request for questions of a station fails.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getStationQuestions();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
