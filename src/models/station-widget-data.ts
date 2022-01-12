@@ -4,7 +4,7 @@ import { DocumentGenerationStatus } from './enums/document-generation-status.enu
 /**
  * Represents the data the station-widget.
  */
-export interface stationWidgetData {
+export interface StationWidgetData {
   /** Station name. */
   stationName: string;
   /** Station subtitle. */
