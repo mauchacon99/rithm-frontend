@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { DashboardMenuComponent } from './dashboard-menu/dashboard-dashboard-menu.component';
 import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
+import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu
     PriorityQueueComponent,
     DashboardMenuComponent,
     OptionsMenuComponent,
+    HeaderMenuComponent,
   ],
   imports: [
     CommonModule,
