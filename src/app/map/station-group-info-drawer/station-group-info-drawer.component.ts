@@ -32,11 +32,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
    *
    * @returns True if the map is in any building mode, false otherwise.
    */
-   get isBuilding(): boolean {
-    return (
-      this.currentMode === MapMode.Build
-    );
-   }
+  get isBuilding(): boolean {
+    return this.currentMode === MapMode.Build;
+  }
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
