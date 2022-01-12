@@ -20,6 +20,8 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { PopupService } from 'src/app/core/popup.service';
+import { MockPopupService } from 'src/mocks';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -53,6 +55,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: dialogRefSpyObj },
       ],
     }).compileComponents();
@@ -146,6 +149,22 @@ describe('ConnectedStationsModalComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should show error in petition connected stations', () => {
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getConnectedStationInfo'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const reviewError =
+      fixture.debugElement.nativeElement.querySelector('#stations-error');
+    expect(component.connectedError).toBeTrue();
+    expect(reviewError).toBeTruthy();
+  });
   it('should redirect to dashboard when document is moved', () => {
     component.stationRithmId = stationId;
     component.documentRithmId = documentId;
@@ -175,5 +194,22 @@ describe('ConnectedStationsModalComponent', () => {
     component.connectedStationLoading = true;
     fixture.detectChanges();
     expect(connectedStationLoading).toBeTruthy();
+  });
+
+  it('should show error message when request for move document fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'moveDocument').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.stationRithmId = stationId;
+    component.documentRithmId = documentId;
+    component.moveDocument();
+    fixture.detectChanges();
+    expect(component.moveDocumentError).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#move-document-error'
+    );
+    expect(errorComponent).toBeTruthy();
   });
 });

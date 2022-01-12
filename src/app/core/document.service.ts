@@ -372,11 +372,10 @@ export class DocumentService {
     const requestObject = {
       name,
       priority,
-      stationRithmId,
     };
     return this.http
       .post<{ /** Document Rithm Id. */ rithmId: string }>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}`,
+        `${environment.baseApiUrl}${MICROSERVICE_PATH}?stationRithmId=${stationRithmId}`,
         requestObject
       )
       .pipe(map((response) => response.rithmId));

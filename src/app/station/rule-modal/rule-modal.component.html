@@ -3,22 +3,52 @@
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">New Rule</h4>
   </div>
+  <!-- Stepper for new rule -->
   <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+    <!-- Step 1 -->
     <mat-step color="accent" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
+      <div class="flex flex-col md:w-5/12 justify-start">
+        <p class="text-sm mt-1">
+          Select the field-set you'd like to apply a rule to.
+        </p>
+        <mat-form-field appearance="outline" class="mt-2">
+          <mat-label>Select Field</mat-label>
+          <mat-select [(value)]="firstOperand"></mat-select>
+        </mat-form-field>
+        <button mat-button matStepperNext class="w-1/12">Next</button>
+      </div>
     </mat-step>
+    <!-- Step 2 -->
     <mat-step color="primary" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Type</p>
       </ng-template>
+      <div class="flex flex-col md:w-5/12 justify-start">
+        <p class="text-sm mt-1">
+          Select the comparasion value for field type: <b>Short Text</b>
+        </p>
+        <mat-form-field appearance="outline" class="mt-2">
+          <mat-label>Comparison Type</mat-label>
+          <mat-select [(value)]="operator"></mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button mat-button matStepperPrevious class="w-1/12">Back</button>
+        <button mat-button matStepperNext class="w-1/12 text-accent-500">
+          Next
+        </button>
+      </div>
     </mat-step>
+    <!-- Step 3 -->
     <mat-step color="primary" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
     </mat-step>
+    <!-- Step 4 -->
     <mat-step color="primary" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Done</p>

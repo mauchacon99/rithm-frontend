@@ -192,13 +192,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
           this.showDocumentGenerationError = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -224,12 +229,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+            // return;
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -341,8 +352,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             }
             this.stationLoading = false;
           },
-          error: (error: unknown) => {
-            this.stationLoading = false;
+          // eslint-disable-next-line
+          error: (error: any) => {
+            if (error?.status === 400) {
+              this.sidenavDrawerService.closeDrawer();
+            } else {
+              this.stationLoading = false;
+            }
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -453,22 +469,38 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Creates a new document.
+   * Open a modal to create a new document.
    */
-  createNewDocument(): void {
-    this.documentService
-      .createNewDocument('', 0, this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        next: () => {},
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+  async createNewDocument(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message:
+        'After the document is created you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm) {
+      this.documentService
+        .createNewDocument('', 0, this.stationRithmId)
+        .pipe(first())
+        .subscribe({
+          next: (documentId) => {
+            this.assignUserToDocument(
+              this.userService.user.rithmId,
+              documentId
+            );
+            this.popupService.notify(
+              'The document has been created successfully.'
+            );
+          },
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
+    }
   }
 
   /**
@@ -482,6 +514,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {},
         error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",

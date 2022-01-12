@@ -1448,12 +1448,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
-        this.checkStationClick(station);
-        return;
+        if (this.mapMode === MapMode.FlowAdd) {
+          if (!station.disabled) {
+            station.selected = !station.selected;
+          }
+          return;
+        } else {
+          this.checkStationClick(station);
+          return;
+        }
       }
     }
     //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
     this.checkConnectionClick(contextPoint);
+
+    //Check if click was on a flow boundary.
+    if (this.mapMode === MapMode.FlowAdd) {
+      this.checkFlowClick(contextPoint);
+    }
   }
 
   /**
@@ -1498,6 +1510,21 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hovering) {
         this.sidenavDrawerService.openDrawer('connectionInfo', connectionLine);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Handles user input on a clicked flow.
+   *
+   * @param contextPoint Calculated position of click.
+   */
+  checkFlowClick(contextPoint: Point): void {
+    for (const flow of this.flows) {
+      flow.checkElementHover(contextPoint, this.context);
+      if (flow.hoverItem === FlowElementHoverItem.Boundary && !flow.disabled) {
+        flow.selected = !flow.selected;
         break;
       }
     }

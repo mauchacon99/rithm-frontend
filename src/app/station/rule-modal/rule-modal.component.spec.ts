@@ -7,19 +7,32 @@ import {
 import { RuleModalComponent } from './rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
+import { MatSelectModule } from '@angular/material/select';
+import { throwError } from 'rxjs';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
   let fixture: ComponentFixture<RuleModalComponent>;
   const DIALOG_TEST_DATA = '34904ac2-6bdd-4157-a818-50ffb37fdfbc';
+  const stationId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatStepperModule, NoopAnimationsModule],
+      imports: [
+        MatDialogModule,
+        MatStepperModule,
+        NoopAnimationsModule,
+        MatSelectModule,
+      ],
       declarations: [RuleModalComponent],
       providers: [
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
   });
@@ -36,5 +49,32 @@ describe('RuleModalComponent', () => {
 
   it('should be stationRithmId to equal MAT_DIALOG_DATA', () => {
     expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
+  });
+
+  it('should call the method that returns the logical flow rules of a station.', () => {
+    component.stationRithmId = stationId;
+    const getStationFlowLogicRuleSpy = spyOn(
+      TestBed.inject(StationService),
+      'getStationFlowLogicRule'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(getStationFlowLogicRuleSpy).toHaveBeenCalledWith(stationId);
+  });
+
+  it('should show error message when request for logical flow rules of a station fails.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationFlowLogicRule'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const displayErrorSpy = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(displayErrorSpy).toHaveBeenCalled();
   });
 });
