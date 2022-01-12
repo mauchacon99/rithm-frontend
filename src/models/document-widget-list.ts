@@ -7,7 +7,7 @@ export interface DocumentWidgetList {
   /** Document name. */
   DocumentName: string;
   /** User assigned. */
-  AssignedUser: User;
+  AssignedUser: StationRosterMember;
   /** Document priority. */
   Priority: number;
   /** Time in station. */
