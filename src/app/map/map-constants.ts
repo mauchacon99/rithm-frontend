@@ -37,6 +37,7 @@ export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;
 export const GROUP_NAME_PADDING = 6;
 export const FLOW_NAME_HEIGHT = 20;
+export const FLOW_CHARACTER_SIZE = 10;
 
 // Station
 export const STATION_PADDING = 10;

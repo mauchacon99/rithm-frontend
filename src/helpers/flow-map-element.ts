@@ -1,4 +1,4 @@
-import { FLOW_NAME_HEIGHT } from 'src/app/map/map-constants';
+import { FLOW_CHARACTER_SIZE, FLOW_NAME_HEIGHT, GROUP_NAME_PADDING } from 'src/app/map/map-constants';
 import {
   FlowElementHoverItem,
   FlowMapData,
@@ -64,8 +64,8 @@ export class FlowMapElement {
       this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
         ? FlowElementHoverItem.Boundary
         : this.isPointInFlowName(canvasPoint, scale)
-        ? FlowElementHoverItem.Name
-        : FlowElementHoverItem.None;
+          ? FlowElementHoverItem.Name
+          : FlowElementHoverItem.None;
     }
     ctx.restore();
   }
@@ -79,15 +79,15 @@ export class FlowMapElement {
    */
   isPointInFlowName(point: Point, scale: number): boolean {
     const scaledStationHeight = FLOW_NAME_HEIGHT * scale;
-    const scaledStationWidth = 100 * scale;
+    const scaledStationWidth = (this.title.length * FLOW_CHARACTER_SIZE) * scale;
 
     return (
-      point.x >= this.boundaryPoints[0].x &&
+      point.x >= this.boundaryPoints[0].x - GROUP_NAME_PADDING &&
       point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
-      point.y >= this.boundaryPoints[this.boundaryPoints.length - 1].y &&
+      point.y >= this.boundaryPoints[this.boundaryPoints.length - 1].y - GROUP_NAME_PADDING &&
       point.y <=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y +
-          scaledStationHeight
+      this.boundaryPoints[this.boundaryPoints.length - 1].y +
+      scaledStationHeight
     );
   }
 
@@ -121,7 +121,7 @@ export class FlowMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created flow group as deleted. ' +
-          'You should instead remove it from the array of flows.'
+        'You should instead remove it from the array of flows.'
       );
     }
   }
