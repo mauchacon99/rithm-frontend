@@ -606,8 +606,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       event.deltaY >= 100
         ? Math.floor(event.deltaY / 100)
         : event.deltaY <= -100
-          ? Math.ceil(event.deltaY / 100)
-          : event.deltaY / 3;
+        ? Math.ceil(event.deltaY / 100)
+        : event.deltaY / 3;
 
     if (event.deltaY < 0) {
       // Do nothing if already at max zoom.
@@ -823,7 +823,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     } else if (position.x > canvasRect.width - box()) {
       const rightPan = Math.floor(
         ((canvasRect.width - box() - position.x) * MAX_PAN_VELOCITY * 0.01) /
-        this.scale
+          this.scale
       );
       panVelocity.x =
         rightPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale)
@@ -845,7 +845,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         ((canvasRect.height - box() - mobileAdjust - position.y) *
           MAX_PAN_VELOCITY *
           0.01) /
-        this.scale
+          this.scale
       );
       panVelocity.y =
         bottomPan >= Math.floor(-MAX_PAN_VELOCITY / this.scale)
@@ -1051,9 +1051,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //If it is a click and not a drag.
     if (
       Math.abs(eventCanvasPoint.x - this.eventStartCoords.x) <
-      TOUCH_EVENT_MARGIN &&
+        TOUCH_EVENT_MARGIN &&
       Math.abs(eventCanvasPoint.y - this.eventStartCoords.y) <
-      TOUCH_EVENT_MARGIN
+        TOUCH_EVENT_MARGIN
     ) {
       this.dragItem = MapDragItem.Default;
       this.stations.forEach((station) => {
@@ -1539,12 +1539,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.scale
       );
       if (this.mapMode === MapMode.FlowAdd) {
-        if (flow.hoverItem === FlowElementHoverItem.Boundary && !flow.disabled) {
+        if (
+          flow.hoverItem === FlowElementHoverItem.Boundary &&
+          !flow.disabled
+        ) {
           flow.selected = !flow.selected;
           break;
         }
       } else if (this.mapMode === MapMode.View) {
-        if (flow.hoverItem === FlowElementHoverItem.Boundary || flow.hoverItem === FlowElementHoverItem.Name) {
+        if (
+          flow.hoverItem === FlowElementHoverItem.Boundary ||
+          flow.hoverItem === FlowElementHoverItem.Name
+        ) {
           this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
           break;
         }
