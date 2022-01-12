@@ -8,6 +8,7 @@ import {
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 
 /**
@@ -47,6 +48,7 @@ export class ConnectedStationsModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
     private errorService: ErrorService,
+    private popupService: PopupService,
     private matDialogRef: MatDialogRef<void>,
     private router: Router,
     public dialogRef: MatDialogRef<ConnectedStationsModalComponent>
@@ -103,6 +105,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.popupService.notify('The document has been moved successfully');
           this.moveDocumentError = false;
           this.matDialogRef.close();
           this.router.navigateByUrl('dashboard');
