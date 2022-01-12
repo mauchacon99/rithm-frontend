@@ -11,9 +11,8 @@ export interface DashboardItem {
   y: number;
   /** The widget type, enum of flow, station, document or other. */
   widgetType: WidgetType;
-  /** Data to pass to the widget.*/
   /**
-   * Data will be different for each widget, document widget will have the documentRithmId
+   * Data to pass to the widget, Data will be different for each widget, document widget will have the documentRithmId
    * that will be passed to a widget component that will make a request to get the document.
    */
   data: string;
