@@ -11,6 +11,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
 
 describe('RuleModalComponent', () => {
@@ -26,9 +27,11 @@ describe('RuleModalComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         MatSelectModule,
+        MatSnackBarModule,
       ],
       declarations: [RuleModalComponent],
       providers: [
+        { provide: StationService, useClass: MockStationService },
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: StationService, useClass: MockStationService },
@@ -76,5 +79,32 @@ describe('RuleModalComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(displayErrorSpy).toHaveBeenCalled();
+  });
+
+  it('should call the method that returns the questions of a station.', () => {
+    component.stationRithmId = stationId;
+    const getStationQuestions = spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.callThrough();
+    component.getStationQuestions();
+    expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
+  });
+
+  it('should show error message when request for questions of a station fails.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.getStationQuestions();
+    expect(spyError).toHaveBeenCalled();
   });
 });
