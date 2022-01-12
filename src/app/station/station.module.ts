@@ -20,6 +20,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
 import { MatInputModule } from '@angular/material/input';
 import { RuleModalComponent } from './rule-modal/rule-modal.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
+
 @NgModule({
   declarations: [
     StationComponent,
@@ -28,7 +31,7 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
     ToolbarComponent,
     StationFieldComponent,
     StationTemplateComponent,
-    RuleModalComponent
+    RuleModalComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +47,9 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
     MatExpansionModule,
     InfoDrawerModule,
     MatFormFieldModule,
-    MatInputModule
-  ]
+    MatInputModule,
+    MatStepperModule,
+    MatSelectModule,
+  ],
 })
-export class StationModule { }
+export class StationModule {}

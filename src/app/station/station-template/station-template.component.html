@@ -1,7 +1,15 @@
 <ng-container [formGroup]="stationTemplateForm">
   <div class="w-full">
-    <app-station-field *ngFor="let field of fields; let i = index" formControlName="stationFieldForm" [field]="field" [stationRithmId]="stationRithmId"
-      [movableUp]="canFieldMoveUp(i)" [movableDown]="canFieldMoveDown(i)" (move)="move($event, i)" (remove)="remove(field)"></app-station-field>
+    <app-station-field
+      *ngFor="let field of fields; let i = index"
+      formControlName="stationFieldForm"
+      [field]="field"
+      [stationRithmId]="stationRithmId"
+      [movableUp]="canFieldMoveUp(i)"
+      [movableDown]="canFieldMoveDown(i)"
+      (move)="move($event, i)"
+      (remove)="remove(field)"
+    ></app-station-field>
   </div>
   <!-- TODO: All items expansion panel here -->
 

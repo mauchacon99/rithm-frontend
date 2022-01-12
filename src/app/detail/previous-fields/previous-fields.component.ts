@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -13,10 +20,9 @@ import { DocumentService } from 'src/app/core/document.service';
 @Component({
   selector: 'app-previous-fields[stationId][isPrivate][isStation]',
   templateUrl: './previous-fields.component.html',
-  styleUrls: ['./previous-fields.component.scss']
+  styleUrls: ['./previous-fields.component.scss'],
 })
 export class PreviousFieldsComponent implements OnInit, OnDestroy {
-
   /** The station id used to get previous fields. */
   @Input() stationId!: string;
 
@@ -44,15 +50,12 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** The Previous Questions.*/
-  documentPreviousQuestions: Question[] = [];
-
   constructor(
     private stationService: StationService,
     private errorService: ErrorService,
     private popupService: PopupService,
     private documentService: DocumentService
-  ) { }
+  ) {}
 
   /**
    * Load private/all Questions.
@@ -79,7 +82,8 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    */
   private getStationPreviousQuestions(): void {
     this.isLoading = true;
-    this.stationService.getStationPreviousQuestions(this.stationId, this.isPrivate)
+    this.stationService
+      .getStationPreviousQuestions(this.stationId, this.isPrivate)
       .pipe(first())
       .subscribe({
         next: (questions: Question[]) => {
@@ -87,14 +91,15 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
             this.questions = questions;
           }
           this.isLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.questionsError = true;
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -106,12 +111,15 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   async moveFieldToTemplate(previousField: Question): Promise<void> {
     const confirm = await this.popupService.confirm({
       title: 'Move field?',
-      message: 'Are you sure you want to move this field into the template area?',
+      message:
+        'Are you sure you want to move this field into the template area?',
       okButtonText: 'Confirm',
-      cancelButtonText: 'Close'
+      cancelButtonText: 'Close',
     });
     if (confirm) {
-      this.questions = this.questions.filter((question: Question) => question.rithmId !== previousField.rithmId);
+      this.questions = this.questions.filter(
+        (question: Question) => question.rithmId !== previousField.rithmId
+      );
       this.movingQuestion.emit(previousField);
     }
   }
@@ -130,19 +138,39 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    */
   private getDocumentPreviousQuestions(): void {
     this.isLoading = true;
-    this.documentService.getDocumentPreviousQuestions(this.documentId, this.stationId, this.isPrivate)
+    this.documentService
+      .getDocumentPreviousQuestions(
+        this.documentId,
+        this.stationId,
+        this.isPrivate
+      )
       .pipe(first())
       .subscribe({
         next: (previousQuestions) => {
           this.isLoading = false;
-          this.documentPreviousQuestions = previousQuestions;
-        }, error: (error: unknown) => {
+          this.questions = previousQuestions;
+        },
+        error: (error: unknown) => {
           this.isLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
+  }
+
+  /**
+   * Open The Modal display of previous questions.
+   *
+   * @param previousQuestion The Question of the document.
+   */
+  openModalPreviousQuestions(previousQuestion: Question): void {
+    this.popupService.confirm({
+      title: `${previousQuestion.prompt}`,
+      message: `${previousQuestion.answer?.value}`,
+      okButtonText: 'Ok',
+      cancelButtonText: 'Cancel',
+    });
   }
 }

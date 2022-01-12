@@ -3,14 +3,19 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ZOOM_VELOCITY } from 'src/app/map/map-constants';
 import { StationMapElement } from 'src/helpers';
-import { MapData, MapItemStatus, MapMode, Point, StationMapData } from 'src/models';
+import {
+  MapData,
+  MapItemStatus,
+  MapMode,
+  Point,
+  StationMapData,
+} from 'src/models';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Mocks methods of the `MapService`.
  */
 export class MockMapService {
-
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
 
@@ -29,13 +34,13 @@ export class MockMapService {
     stationName: 'Untitled Station',
     mapPoint: {
       x: 12,
-      y: 15
+      y: 15,
     },
     noOfDocuments: 0,
     previousStations: [],
     nextStations: [],
     status: MapItemStatus.Created,
-    notes: ''
+    notes: '',
   });
 
   /** The current mode of interaction on the map. */
@@ -45,10 +50,16 @@ export class MockMapService {
   mapScale$ = new BehaviorSubject(1);
 
   /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
-  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
+  currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject({
+    x: 0,
+    y: 0,
+  });
 
   /** The coordinate at which the current mouse point in the overall map. */
-  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({ x: 0, y: 0 });
+  currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject({
+    x: 0,
+    y: 0,
+  });
 
   /** Check current mouse click if clicked the station option button. */
   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
@@ -61,6 +72,12 @@ export class MockMapService {
 
   /** Informs the map when station elements have changed. */
   stationElementsChanged$ = new BehaviorSubject(false);
+
+  /** Checks if there should be panning towards the center of the map. */
+  centerPan$ = new BehaviorSubject(false);
+
+  /** Passes pan info to the map-canvas. */
+  centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
 
   /**
    * Creates a new `MockMapService`.
@@ -94,12 +111,12 @@ export class MockMapService {
           noOfDocuments: 5,
           mapPoint: {
             x: 12,
-            y: 15
+            y: 15,
           },
           previousStations: [],
           nextStations: ['CCAEBE24-AF01-48AB-A7BB-279CC25B0988'],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -107,12 +124,12 @@ export class MockMapService {
           noOfDocuments: 5,
           mapPoint: {
             x: 200,
-            y: 80
+            y: 80,
           },
           previousStations: ['ED6148C9-ABB7-408E-A210-9242B2735B1C'],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
@@ -120,12 +137,12 @@ export class MockMapService {
           noOfDocuments: 5,
           mapPoint: {
             x: 500,
-            y: 400
+            y: 400,
           },
           previousStations: [],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
+          notes: '',
         },
         {
           rithmId: 'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
@@ -133,13 +150,13 @@ export class MockMapService {
           noOfDocuments: 5,
           mapPoint: {
             x: 50,
-            y: 240
+            y: 240,
           },
           previousStations: [],
           nextStations: [],
           status: MapItemStatus.Normal,
-          notes: ''
-        }
+          notes: '',
+        },
       ],
       flows: [
         {
@@ -152,11 +169,11 @@ export class MockMapService {
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0990',
             'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
-            'CCAEBE94-AF01-48AB-A7BB-279CC25B0989'
+            'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
           ],
           subFlows: [],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: false
+          isReadOnlyRootFlow: false,
         },
         {
           rithmId: '',
@@ -164,9 +181,9 @@ export class MockMapService {
           stations: [],
           subFlows: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: true
-        }
-      ]
+          isReadOnlyRootFlow: true,
+        },
+      ],
     };
     return of(data).pipe(delay(1000));
   }
@@ -176,8 +193,8 @@ export class MockMapService {
    *
    * @param coords The coordinates where the station will be placed.
    */
-   // eslint-disable-next-line
-   createNewStation(coords: Point): void { }
+  // eslint-disable-next-line
+  createNewStation(coords: Point): void {}
 
   /**
    * Updates station status to delete.
@@ -185,19 +202,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void { }
+  deleteStation(station: StationMapElement): void {}
 
   /**
    * Enters build mode for the map.
    */
-   // eslint-disable-next-line @typescript-eslint/no-empty-function
-   buildMap(): void { }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  buildMap(): void {}
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void { }
+  cancelMapChanges(): void {}
 
   /**
    * Publishes local map changes to the server.
@@ -207,11 +224,14 @@ export class MockMapService {
    */
   publishMap(mapData: MapData): Observable<unknown> {
     if (!mapData) {
-      return throwError(() => new HttpErrorResponse({
-        error: {
-          error: 'Some error message'
-        }
-      })).pipe(delay(1000));
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Some error message',
+            },
+          })
+      ).pipe(delay(1000));
     } else {
       return of().pipe(delay(1000));
     }
@@ -224,8 +244,13 @@ export class MockMapService {
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    * @param zoomAmount How much to zoom in/out.
    */
-   // eslint-disable-next-line
-   zoom(zoomingIn: boolean, zoomOrigin = this.getCanvasCenterPoint(), zoomAmount = ZOOM_VELOCITY): void { }
+  zoom(
+    /* eslint-disable */
+    zoomingIn: boolean,
+    zoomOrigin = this.getCanvasCenterPoint(),
+    zoomAmount = ZOOM_VELOCITY
+  ): void {}
+  /* eslint-enable */
 
   /**
    * Gets the center point of the canvas.
@@ -234,12 +259,15 @@ export class MockMapService {
    */
   getCanvasCenterPoint(): Point {
     if (!this.canvasContext) {
-      throw new Error('Cannot get center point of canvas when canvas context is not set');
+      throw new Error(
+        'Cannot get center point of canvas when canvas context is not set'
+      );
     }
-    const canvasBoundingRect = this.canvasContext?.canvas.getBoundingClientRect();
+    const canvasBoundingRect =
+      this.canvasContext?.canvas.getBoundingClientRect();
     return {
       x: canvasBoundingRect.width / 2,
-      y: canvasBoundingRect.height / 2
+      y: canvasBoundingRect.height / 2,
     };
   }
 
@@ -250,7 +278,9 @@ export class MockMapService {
    * @returns The x-coordinate for the canvas.
    */
   getCanvasX(mapX: number): number {
-    return Math.floor((mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value);
+    return Math.floor(
+      (mapX - this.currentCanvasPoint$.value.x) * this.mapScale$.value
+    );
   }
 
   /**
@@ -260,7 +290,9 @@ export class MockMapService {
    * @returns The y-coordinate for the canvas.
    */
   getCanvasY(mapY: number): number {
-    return Math.floor((mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value);
+    return Math.floor(
+      (mapY - this.currentCanvasPoint$.value.y) * this.mapScale$.value
+    );
   }
 
   /**
@@ -272,7 +304,7 @@ export class MockMapService {
   getCanvasPoint(mapPoint: Point): Point {
     return {
       x: this.getCanvasX(mapPoint.x),
-      y: this.getCanvasY(mapPoint.y)
+      y: this.getCanvasY(mapPoint.y),
     };
   }
 
@@ -283,7 +315,9 @@ export class MockMapService {
    * @returns The x-coordinate for the map.
    */
   getMapX(canvasX: number): number {
-    return Math.floor(canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x);
+    return Math.floor(
+      canvasX * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.x
+    );
   }
 
   /**
@@ -293,7 +327,9 @@ export class MockMapService {
    * @returns The y-coordinate for the map.
    */
   getMapY(canvasY: number): number {
-    return Math.floor(canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y);
+    return Math.floor(
+      canvasY * (1 / this.mapScale$.value) + this.currentCanvasPoint$.value.y
+    );
   }
 
   /**
@@ -305,7 +341,7 @@ export class MockMapService {
   getMapPoint(canvasPoint: Point): Point {
     return {
       x: this.getMapX(canvasPoint.x),
-      y: this.getMapY(canvasPoint.y)
+      y: this.getMapY(canvasPoint.y),
     };
   }
 
@@ -315,17 +351,19 @@ export class MockMapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
-    return this.stationElements.some((station) => station.status !== MapItemStatus.Normal);
+    return this.stationElements.some(
+      (station) => station.status !== MapItemStatus.Normal
+    );
   }
 
   /**
    * Set's isAddingConnected property of station to false if it's true.
    */
   disableConnectedStationMode(): void {
-    this.stationElements.filter(station => station.isAddingConnected)
-    .map(connectedStation => {
-      connectedStation.isAddingConnected = false;
-    });
+    this.stationElements
+      .filter((station) => station.isAddingConnected)
+      .map((connectedStation) => {
+        connectedStation.isAddingConnected = false;
+      });
   }
-
 }

@@ -1,35 +1,88 @@
 <ng-container [formGroup]="stationFieldForm">
-  <div class="grid grid-cols-12 gap-2 my-4" [ngClass]="{'pb-2': stationRithmId === field.originalStationRithmId}">
+  <div
+    class="grid grid-cols-12 gap-2 my-4"
+    [ngClass]="{ 'pb-2': stationRithmId === field.originalStationRithmId }"
+  >
     <!-- Controls -->
-    <div class="col-span-2 sm:col-span-1 flex flex-col border-r border-accent-100 justify-between pr-2 md:mr-4 items-center">
-      <button mat-icon-button [ngClass]="{'move' : movableUp}" [disabled]="!movableUp" (click)="moveFieldUp()">
+    <div
+      class="col-span-2 sm:col-span-1 flex flex-col border-r border-accent-100 justify-between pr-2 md:mr-4 items-center"
+    >
+      <button
+        mat-icon-button
+        [ngClass]="{ move: movableUp }"
+        [disabled]="!movableUp"
+        (click)="moveFieldUp()"
+        type="button"
+      >
         <i class="fas fa-chevron-up text-accent-100"></i>
       </button>
       <button mat-icon-button (click)="removeField()">
         <i class="fas fa-times text-accent-50"></i>
       </button>
-      <button mat-icon-button [ngClass]="{'move' : movableDown}" [disabled]="!movableDown" (click)="moveFieldDown()">
+      <button
+        mat-icon-button
+        [ngClass]="{ move: movableDown }"
+        [disabled]="!movableDown"
+        (click)="moveFieldDown()"
+        type="button"
+      >
         <i class="fas fa-chevron-down text-accent-100"></i>
       </button>
     </div>
     <!-- Field -->
-    <!-- added conditions from sohw/hide instructions element -->
+    <!-- added conditions from show/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
-      <ng-container *ngIf="stationRithmId === field.originalStationRithmId; else previousFieldText">
+      <ng-container
+        *ngIf="
+          stationRithmId === field.originalStationRithmId;
+          else previousFieldText
+        "
+      >
         <div *ngIf="field.questionType === 'instructions'">
-          <app-text-field [field]="instructionField" formControlName="instructionsField" [toolBar]="true" [labelTag]="'Instructions'"></app-text-field>
+          <app-text-field
+            [field]="instructionField"
+            formControlName="instructionsField"
+            [toolBar]="true"
+            [labelTag]="'Instructions'"
+          ></app-text-field>
         </div>
         <div *ngIf="field.questionType !== 'instructions'">
-          <app-text-field [field]="labelField" [formControlName]="field.questionType" [toolBar]="true" [labelTag]="'Name your field'"></app-text-field>
+          <app-text-field
+            [field]="labelField"
+            [formControlName]="field.questionType"
+            [toolBar]="true"
+            [labelTag]="'Name your field'"
+          ></app-text-field>
         </div>
         <!-- Options/Items -->
         <ng-container
-          *ngIf="field.questionType === fieldType.Select || field.questionType === fieldType.MultiSelect || field.questionType === fieldType.CheckList">
-          <app-text-field *ngFor="let field of options; let i = index" [field]="field" formControlName="optionField"
-            [removableField]="i > 0 ? true : false" (removeOptionField)="removeOption(i)" [labelTag]="labelTag"></app-text-field>
+          *ngIf="
+            field.questionType === fieldType.Select ||
+            field.questionType === fieldType.MultiSelect ||
+            field.questionType === fieldType.CheckList
+          "
+        >
+          <app-text-field
+            *ngFor="let field of options; let i = index"
+            [field]="field"
+            formControlName="optionField"
+            [removableField]="i > 0 ? true : false"
+            (removeOptionField)="removeOption(i)"
+            [labelTag]="labelTag"
+          ></app-text-field>
           <div class="mb-3">
-            <button mat-stroked-button color="accent" (click)="addOption(field.questionType)">
-              <span *ngIf="field.questionType === fieldType.Select || field.questionType === fieldType.MultiSelect">
+            <button
+              mat-stroked-button
+              color="accent"
+              type="button"
+              (click)="addOption(field.questionType)"
+            >
+              <span
+                *ngIf="
+                  field.questionType === fieldType.Select ||
+                  field.questionType === fieldType.MultiSelect
+                "
+              >
                 New Option
               </span>
               <span *ngIf="field.questionType === fieldType.CheckList">
@@ -43,26 +96,61 @@
       <!--if private/all of previous fields -->
       <ng-template #previousFieldText>
         <div class="flex justify-start flex-col">
-          <span class="text-secondary-300 text-xs">PREVIOUS FIELD | {{ field.isPrivate ? 'PRIVATE' : 'ALL'
-            }}</span>
-          <span class="py-3">{{field.prompt}}</span>
+          <span class="text-secondary-300 text-xs"
+            >PREVIOUS FIELD | {{ field.isPrivate ? 'PRIVATE' : 'ALL' }}</span
+          >
+          <span class="py-3">{{ field.prompt }}</span>
         </div>
       </ng-template>
       <!-- Required Checkbox -->
-      <div class="flex space-x-4" [ngClass]="{'space-x-reverse': stationRithmId !== field.originalStationRithmId}" *ngIf="field.questionType !== 'instructions'">
-        <div [ngClass]="{'order-last': stationRithmId !== field.originalStationRithmId}">
-          <mat-checkbox [name]="field.rithmId" [disabled]="!field.isReadOnly && stationRithmId !== field.originalStationRithmId" [checked]="field.isRequired" (change)="setRequired($event)">
+      <div
+        class="flex space-x-4"
+        [ngClass]="{
+          'space-x-reverse': stationRithmId !== field.originalStationRithmId
+        }"
+        *ngIf="field.questionType !== 'instructions'"
+      >
+        <div
+          [ngClass]="{
+            'order-last': stationRithmId !== field.originalStationRithmId
+          }"
+        >
+          <mat-checkbox
+            [name]="field.rithmId"
+            [formControlName]="'isRequired-' + field.rithmId"
+            [attr.disabled]="
+              !field.isReadOnly &&
+              stationRithmId !== field.originalStationRithmId
+            "
+            [checked]="field.isRequired"
+            (change)="setRequired($event)"
+          >
             Required Field
           </mat-checkbox>
         </div>
-        <div *ngIf="stationRithmId === field.originalStationRithmId else previousFieldCheck">
-          <mat-checkbox [name]="field.rithmId" [checked]="field.isPrivate" (change)="setPrivate($event)">
+        <div
+          *ngIf="
+            stationRithmId === field.originalStationRithmId;
+            else previousFieldCheck
+          "
+        >
+          <mat-checkbox
+            [name]="field.rithmId"
+            [formControlName]="'isPrivate-' + field.rithmId"
+            [checked]="field.isPrivate"
+            (change)="setPrivate($event)"
+          >
             Private Field
           </mat-checkbox>
         </div>
         <ng-template #previousFieldCheck>
           <div>
-            <mat-checkbox [name]="field.rithmId" [checked]="field.isReadOnly" (change)="setEditable($event)">
+            <mat-checkbox
+              [name]="field.rithmId"
+              [attr.formControlName]="'isReadOnly-' + field.rithmId"
+              [checked]="field.isReadOnly"
+              (change)="setEditable($event)"
+            >
               Editable Field
             </mat-checkbox>
           </div>

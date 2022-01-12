@@ -8,10 +8,17 @@ import { UtcTimeConversion } from 'src/helpers';
 import { Router } from '@angular/router';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
-import { DocumentGenerationStatus, MapItemStatus, MapMode, StationInfoDrawerData, StationInformation } from 'src/models';
+import {
+  DocumentGenerationStatus,
+  MapItemStatus,
+  MapMode,
+  StationInfoDrawerData,
+  StationInformation,
+} from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for info station.
@@ -20,15 +27,14 @@ import { MapService } from 'src/app/map/map.service';
   selector: 'app-station-info-drawer',
   templateUrl: './station-info-drawer.component.html',
   styleUrls: ['./station-info-drawer.component.scss'],
-  providers: [UtcTimeConversion]
+  providers: [UtcTimeConversion],
 })
-
 export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   /** Whether the request to get the station info is currently underway. */
-  stationLoading = false;
+  stationLoading = true;
 
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
@@ -39,14 +45,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
-  /** Type of user looking at a document. */
-  type: 'admin' | 'super' | 'worker';
-
   /** Is component viewed in station edit mode. */
   editMode = false;
 
   /** Station information object. */
-  stationInformation!: StationInformation;
+  stationInformation?: StationInformation;
 
   /** Station Id passed from parent. */
   stationRithmId = '';
@@ -70,7 +73,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   lastUpdatedDate = '';
 
   /** Status by default the document in station. */
-  stationDocumentGenerationStatus: DocumentGenerationStatus = DocumentGenerationStatus.None;
+  stationDocumentGenerationStatus: DocumentGenerationStatus =
+    DocumentGenerationStatus.None;
 
   /** Color message LastUpdated. */
   colorMessage = '';
@@ -84,6 +88,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The priority for current station once the info is loaded.*/
   stationPriority: number | '--' = '--';
 
+  /** The default message to prompt user to publish local changes.*/
+  publishStationMessage = 'Publish map changes to update ';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -93,7 +100,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private popupService: PopupService,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private documentService: DocumentService
   ) {
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
@@ -108,17 +116,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.stationStatus = dataDrawer.stationStatus;
           this.openedFromMap = dataDrawer.openedFromMap;
           this.stationNotes = dataDrawer.notes;
-          this.editMode = dataDrawer.editMode;
-          if (this.openedFromMap && this.stationStatus !== MapItemStatus.Created) {
+          if (
+            this.openedFromMap &&
+            this.stationStatus !== MapItemStatus.Created
+          ) {
             this.getStationDocumentGenerationStatus();
           }
+        } else {
+          throw new Error('There was no station info drawer data');
         }
         this.getStationInfo();
       });
 
-    this.type = this.userService.user.role === 'admin' ? this.userService.user.role : 'worker';
     this.stationNameForm = this.fb.group({
-      name: [this.stationName]
+      name: [this.stationName],
     });
   }
 
@@ -135,12 +146,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (data) => {
             this.stationName = data.length > 0 ? data : 'Untitled Station';
-          }, error: (error: unknown) => {
+          },
+          error: (error: unknown) => {
             this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
             );
-          }
+          },
         });
     }
   }
@@ -159,7 +171,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    */
   getStationDocumentGenerationStatus(): void {
     this.docGenLoading = true;
-    this.stationService.getStationDocumentGenerationStatus(this.stationRithmId)
+    this.stationService
+      .getStationDocumentGenerationStatus(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (status: DocumentGenerationStatus) => {
@@ -167,14 +180,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (status) {
             this.stationDocumentGenerationStatus = status;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.docGenLoading = false;
           this.showDocumentGenerationError = true;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -184,9 +198,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param stationId The id of the station return status document.
    * @param statusNew The new status set in station document.
    */
-  updateStationDocumentGenerationStatus(stationId: string, statusNew: DocumentGenerationStatus): void {
+  updateStationDocumentGenerationStatus(
+    stationId: string,
+    statusNew: DocumentGenerationStatus
+  ): void {
     this.docGenLoading = true;
-    this.stationService.updateStationDocumentGenerationStatus(stationId, statusNew)
+    this.stationService
+      .updateStationDocumentGenerationStatus(stationId, statusNew)
       .pipe(first())
       .subscribe({
         next: (status) => {
@@ -194,13 +212,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           if (status) {
             this.stationDocumentGenerationStatus = status;
           }
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.docGenLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-        }
+        },
       });
   }
 
@@ -210,13 +229,15 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getLastUpdated(): void {
     this.stationLoading = true;
     this.lastUpdatedLoading = true;
-    this.stationService.getLastUpdated(this.stationRithmId)
+    this.stationService
+      .getLastUpdated(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (updatedDate) => {
           if (updatedDate && updatedDate !== 'Unknown') {
             this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate));
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate)
+            );
             this.colorMessage = 'text-accent-500';
             if (this.lastUpdatedDate === '1 day') {
               this.lastUpdatedDate = ' Yesterday';
@@ -227,48 +248,55 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.colorMessage = 'text-error-500';
             this.lastUpdatedDate = 'Unable to retrieve time';
           }
-          this.stationLoading = false;
           this.lastUpdatedLoading = false;
-        }, error: (error: unknown) => {
+        },
+        error: (error: unknown) => {
           this.colorMessage = 'text-error-500';
           this.lastUpdatedLoading = false;
-          this.stationLoading = false;
           this.errorService.displayError(
-            'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
           this.lastUpdatedDate = 'Unable to retrieve time';
           this.colorMessage = 'text-error-500';
-        }
+        },
       });
   }
 
   /**
    * This will delete the current station.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deleteStation(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message: 'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+      message:
+        'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
       okButtonText: 'Delete',
       cancelButtonText: 'Cancel',
       important: true,
     });
     if (response) {
-      this.stationService.deleteStation(this.stationRithmId)
-        .pipe(first())
-        .subscribe({
-          next: () => {
-            this.popupService.notify('The station has been deleted.');
-            this.router.navigateByUrl('dashboard');
-          }, error: (error: unknown) => {
-            this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
-              error
-            );
-          }
-        });
+      if (this.openedFromMap) {
+        this.mapService.removeAllStationConnections(this.stationRithmId);
+        this.mapService.deleteStation(this.stationRithmId);
+        this.sidenavDrawerService.closeDrawer();
+      } else {
+        this.stationService
+          .deleteStation(this.stationRithmId)
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.popupService.notify('The station has been deleted.');
+              this.router.navigateByUrl('dashboard');
+            },
+            error: (error: unknown) => {
+              this.errorService.displayError(
+                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+                error
+              );
+            },
+          });
+      }
     }
   }
 
@@ -278,7 +306,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param statusNew New status the station update.
    */
   updateStatusStation(statusNew: MatRadioChange): void {
-    this.updateStationDocumentGenerationStatus(this.stationRithmId, statusNew.value);
+    this.updateStationDocumentGenerationStatus(
+      this.stationRithmId,
+      statusNew.value
+    );
   }
 
   /**
@@ -288,23 +319,24 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   getStationInfo(): void {
     this.stationLoading = true;
     if (this.stationStatus !== MapItemStatus.Created) {
-      this.stationService.getStationInfo(this.stationRithmId)
+      this.stationService
+        .getStationInfo(this.stationRithmId)
         .pipe(first())
         .subscribe({
           next: (stationInfo) => {
-            this.stationLoading = false;
             if (stationInfo) {
               this.stationInformation = stationInfo;
               this.stationPriority = stationInfo.priority;
             }
+            this.stationLoading = false;
           },
           error: (error: unknown) => {
             this.stationLoading = false;
             this.errorService.displayError(
-              'Something went wrong on our end and we\'re looking into it. Please try again in a little while.',
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
             );
-          }
+          },
         });
     } else {
       this.stationLoading = false;
@@ -357,7 +389,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationNotes === undefined) {
       throw new Error('Station notes not found');
     }
-    const openStation = this.mapService.stationElements.find((station) => this.stationInformation.rithmId === station.rithmId);
+    const openStation = this.mapService.stationElements.find(
+      (station) => this.stationRithmId === station.rithmId
+    );
     if (openStation === undefined) {
       throw new Error('Station was not found.');
     }
@@ -371,18 +405,87 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Completes all subscriptions.
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
 
- /**
-  * Is the current user an owner or an admin for this station.
-  *
-  * @returns Validate if user is owner or admin of current station.
-  */
+  /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
   get isUserAdminOrOwner(): boolean {
-    return this.stationInformation.stationOwners?.find((owner) => this.userService.user.rithmId === owner.rithmId)
-    !== undefined  ? true : (this.type === 'admin') ? true : false;
+    if (!this.stationInformation) {
+      throw new Error(
+        `The stationInformation is undefined when checking if user is admin or owner.`
+      );
+    }
+    return (
+      this.userService.isStationOwner(this.stationInformation) ||
+      this.userService.isAdmin
+    );
+  }
+
+  /**
+   * Is the current user a worker on the station.
+   *
+   * @returns A boolean if user is worker on current station.
+   */
+  get isWorker(): boolean {
+    if (!this.stationInformation) {
+      throw new Error(
+        `The stationInformation is undefined when checking if user is a worker.`
+      );
+    }
+    return this.userService.isWorker(this.stationInformation);
+  }
+
+  /**
+   * Open a modal to create a new document.
+   */
+  async createNewDocument(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message:
+        'After the document is created you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm) {
+      this.documentService
+        .createNewDocument('', 0, this.stationRithmId)
+        .pipe(first())
+        .subscribe({
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          next: () => {},
+          error: (error: unknown) => {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
+    }
+  }
+
+  /**
+   * Assign an user to a document.
+   *
+   * @param userRithmId The Specific id of user assign.
+   * @param documentRithmId The Specific id of document.
+   */
+  assignUserToDocument(userRithmId: string, documentRithmId: string): void {
+    this.documentService
+      .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
