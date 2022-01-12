@@ -29,7 +29,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DialogOptions, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { throwError } from 'rxjs';
+import { throwError, of, Observable } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -335,5 +335,63 @@ describe('StationInfoDrawerComponent', () => {
 
     await component.createNewDocument();
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
+  });
+
+  it('should show loading-indicators while creating a new document is underway', async () => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    await component.createNewDocument();
+    fixture.detectChanges();
+    expect(component.docCreationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-status'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show an error message if creating document fails', async () => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    const createDocSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    await component.createNewDocument();
+    fixture.detectChanges();
+    expect(createDocSpy).toHaveBeenCalled();
+    expect(component.createDocumentError).toBeTrue();
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#create-button-error-message'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should show an error message if assign user fails', async () => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    const createDocSpy = spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    await component.assignUserToDocument(userExpect, newDocumentExpect);
+    fixture.detectChanges();
+    expect(createDocSpy).toHaveBeenCalled();
+    expect(component.assignUserError).toBeTrue();
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#create-button-error-message'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });

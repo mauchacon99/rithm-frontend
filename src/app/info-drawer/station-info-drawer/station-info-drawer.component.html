@@ -130,15 +130,31 @@
       !locallyCreated
     "
   >
-    <button
-      data-testid="new-document"
-      id="new-document"
-      mat-stroked-button
-      color="accent"
-      (click)="createNewDocument()"
-    >
-      New Document
-    </button>
+    <div class="py-1" *ngIf="docCreationLoading; else createDocument">
+      <app-loading-indicator
+        id="loading-indicator-status"
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+    <ng-template #createDocument>
+      <button
+        data-testid="new-document"
+        id="new-document"
+        mat-stroked-button
+        color="accent"
+        (click)="createNewDocument()"
+      >
+        New Document
+      </button>
+      <div
+        class="text-left text-xs py-2"
+        *ngIf="createDocumentError || assignUserError"
+      >
+        <span class="text-error-500" id="create-button-error-message"
+          >Error: Unable to {{ createDocumentErrorMessage }}</span
+        >
+      </div>
+    </ng-template>
   </div>
 
   <div class="w-full py-2" *ngIf="!openedFromMap">
