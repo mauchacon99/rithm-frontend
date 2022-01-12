@@ -1277,82 +1277,106 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.dragItem === MapDragItem.Node ||
       this.dragItem === MapDragItem.Connection
     ) {
+      //Declare variables.
       let newNextStation: StationMapElement | undefined;
       let newPreviousStation: StationMapElement | undefined;
+      //Loop through stations to check which station the mouse was over.
       for (const station of this.stations) {
         // Check if clicked on an interactive station element.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
+        //If there was a station being hovered over set that to newNextStation.
         if (station.hoverActive !== StationElementHoverType.None) {
           newNextStation = station;
+          //Set newPreviousStation to the station with dragging set to true.
           newPreviousStation = this.stations.find(
             (foundStation) => foundStation.dragging
           );
           break;
         }
       }
+      //If a user attempted to change a connection line, but wasn't hovering over a new station.
       if (!newNextStation && this.dragItem === MapDragItem.Connection) {
         if (this.storedConnectionLine === null) {
           throw new Error('The connection line was not stored!');
         }
+        //Run the logic to reset the connection line and reset properties.
         this.restoreConnection();
         this.connections.push(this.storedConnectionLine);
         this.storedConnectionLine = null;
       }
 
+      //If a new connection was set properly.
       if (newNextStation && newPreviousStation) {
+        //Loop through stations to check which station the mouse was over.
         for (const station of this.stations) {
           // Check if clicked on an interactive station element.
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
+          //If the mouse was over a station.
           if (station.hoverActive !== StationElementHoverType.None) {
-            //ensure we cant get duplicate ids.
+            /*ensure we cant get duplicate ids by making sure there wasn't
+            already a connection between the starting and ending stations. */
             if (
               !station.previousStations.includes(newPreviousStation.rithmId) &&
               station.rithmId !== newPreviousStation.rithmId
             ) {
+              //If the stations have rithmIds set. This is a check to make sure we don't have bad data.
               if (
                 newPreviousStation.rithmId.length > 0 &&
                 newNextStation.rithmId.length > 0
               ) {
+                //Add the new previous station the the array.
                 station.previousStations.push(newPreviousStation.rithmId);
               }
             }
+            //If the station isn't new, it will now be set as updated.
             station.markAsUpdated();
           }
+          //Find the station that user was dragging from.
           if (station.dragging) {
-            //ensure we cant get duplicate ids.
+            /*ensure we cant get duplicate ids by making sure there wasn't
+            already a connection between the starting and ending stations. */
             if (
               !station.nextStations.includes(newNextStation.rithmId) &&
               station.rithmId !== newNextStation.rithmId
             ) {
+              //If the stations have rithmIds set. This is a check to make sure we don't have bad data.
               if (
                 newPreviousStation.rithmId.length > 0 &&
                 newNextStation.rithmId.length > 0
               ) {
+                //Add the new next station to the array.
                 station.nextStations.push(newNextStation.rithmId);
               }
             }
           }
         }
 
+        //Create a new connection element using the newPreviousStation and newNextStation.
         const lineInfo: ConnectionMapElement = new ConnectionMapElement(
           newPreviousStation,
           newNextStation,
           this.scale
         );
 
+        /* Check that there isn't already an existing connection line with the same data as
+        lineInfo. Also check that lineInfo isn't a station attempting to connect to itself. */
         if (
           !this.mapService.connectionElements
             .map((e) => JSON.stringify(e))
             .includes(JSON.stringify(lineInfo)) &&
           newPreviousStation.rithmId !== newNextStation.rithmId
         ) {
+          //Add lineInfo to the array of connections.
           this.mapService.connectionElements.push(lineInfo);
           // Set storedConnectionLine to null to avoid restoring it to previous state once it's moved successfully.
           if (this.storedConnectionLine) {
             this.storedConnectionLine = null;
           }
         }
+        /* If storedConnectionLine hasn't been reset to null by now,
+        that means that we need it to restore a removed connection line. */
         if (this.storedConnectionLine) {
+          //Run the logic to reset the connection line and reset properties.
           this.restoreConnection();
           this.mapService.connectionElements.push(this.storedConnectionLine);
           this.storedConnectionLine = null;
@@ -1360,6 +1384,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    //Reset properties.
     this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
     this.stations.forEach((station) => {
@@ -1367,6 +1392,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       station.mapPoint.x = Math.floor(station.mapPoint.x);
       station.mapPoint.y = Math.floor(station.mapPoint.y);
 
+      //Update stations after we're done with them.
       if (station.dragging) {
         station.dragging = false;
         station.markAsUpdated();
@@ -1374,6 +1400,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     });
 
+    //Reset properties.
     this.eventStartCoords = DEFAULT_MOUSE_POINT;
     this.lastTouchCoords = [DEFAULT_MOUSE_POINT];
     this.mapCanvas.nativeElement.style.cursor = 'default';
