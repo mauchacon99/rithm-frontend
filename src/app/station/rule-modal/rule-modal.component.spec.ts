@@ -7,7 +7,10 @@ import {
 import { RuleModalComponent } from './rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks/mock-station-service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -21,9 +24,11 @@ describe('RuleModalComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         MatSelectModule,
+        MatSnackBarModule,
       ],
       declarations: [RuleModalComponent],
       providers: [
+        { provide: StationService, useClass: MockStationService },
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
       ],

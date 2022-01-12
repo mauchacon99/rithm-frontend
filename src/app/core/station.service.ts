@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -17,6 +17,7 @@ import {
   DocumentNameField,
   StandardStringJSON,
   ForwardPreviousStationsDocument,
+  QuestionFieldType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -494,5 +495,51 @@ export class StationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
+  }
+
+  /**
+   * Get the stations questions.
+   *
+   * @param stationRithmId  The station id.
+   * @param includePreviousQuestions If is true contains previous questions.
+   * @returns An array of current and previous for stations.
+   */
+  getStationQuestions(
+    stationRithmId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    includePreviousQuestions = false
+  ): Observable<Question[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The station id cannot be is null or undefined',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockQuestions: Question[] = [
+        {
+          prompt: 'Fake question 1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 2',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
+      return of(mockQuestions).pipe(delay(1000));
+    }
   }
 }

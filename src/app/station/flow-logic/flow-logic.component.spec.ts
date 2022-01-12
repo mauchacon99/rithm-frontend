@@ -6,6 +6,9 @@ import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { StationService } from 'src/app/core/station.service';
+import { MockStationService } from 'src/mocks/mock-station-service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -25,8 +28,10 @@ describe('FlowLogicComponent', () => {
         BrowserAnimationsModule,
         MatStepperModule,
         MatSelectModule,
+        MatSnackBarModule,
       ],
       declarations: [FlowLogicComponent, RuleModalComponent],
+      providers: [{ provide: StationService, useClass: MockStationService }],
     }).compileComponents();
   });
 

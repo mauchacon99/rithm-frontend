@@ -894,4 +894,34 @@ describe('StationService', () => {
     req.flush({ data: instructions });
     httpTestingController.verify();
   });
+
+  it('should return a list of current and previous questions for stations', () => {
+    const includePreviousQuestions = true;
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service
+      .getStationQuestions(stationId, includePreviousQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
 });
