@@ -1,4 +1,4 @@
-import { DocumentWidgetList } from './document-widget-list';
+import { WidgetDocument } from './document-widget-list';
 import { DocumentGenerationStatus } from './enums/document-generation-status.enum';
 
 /**
@@ -10,7 +10,7 @@ export interface StationWidgetData {
   /** Station subtitle. */
   subtitle: string;
   /** The documents list. */
-  documents: DocumentWidgetList[];
+  documents: WidgetDocument[];
   /** Way to generate document. */
   generationStatus: DocumentGenerationStatus;
 }
