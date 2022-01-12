@@ -399,7 +399,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //Trigger the logic for when an event ends.
         this.eventEndLogic(event);
-      //If there are still pointer events, set lastTouchCoords to leftover pointer.
+        //If there are still pointer events, set lastTouchCoords to leftover pointer.
       } else {
         const pointer = this.pointerCache[0];
         this.lastTouchCoords[0] = this.getEventCanvasPoint(pointer);
@@ -678,14 +678,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const eventAmount =
       //Is the zoom out attempt fast?
       event.deltaY >= 100
-        //If so, set eventAmount divided by 100.
-        ? Math.floor(event.deltaY / 100)
-        //is the zoom in attempt fast?
-        : event.deltaY <= -100
-        //If so, set eventAmount divided by 100.
-        ? Math.ceil(event.deltaY / 100)
-        //If not fast, only divide by 3.
-        : event.deltaY / 3;
+        ? //If so, set eventAmount divided by 100.
+          Math.floor(event.deltaY / 100)
+        : //is the zoom in attempt fast?
+        event.deltaY <= -100
+        ? //If so, set eventAmount divided by 100.
+          Math.ceil(event.deltaY / 100)
+        : //If not fast, only divide by 3.
+          event.deltaY / 3;
 
     //If a zoom in is attempted when scrolling.
     if (event.deltaY < 0) {
@@ -704,7 +704,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
       //Trigger zoom logic.
       this.mapService.handleZoom(false, mousePoint);
-    //If a zoom out is attempted when scrolling.
+      //If a zoom out is attempted when scrolling.
     } else {
       // Do nothing if already at min zoom, in build or view mode.
       if (
@@ -950,7 +950,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         leftPan <= Math.floor(MAX_PAN_VELOCITY / this.scale)
           ? leftPan
           : Math.floor(MAX_PAN_VELOCITY / this.scale);
-    //Check if cursor position is outside the right edge of the bounding box.
+      //Check if cursor position is outside the right edge of the bounding box.
     } else if (position.x > canvasRect.width - box()) {
       //Set the x coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const rightPan = Math.floor(
@@ -976,7 +976,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         topPan <= Math.floor(MAX_PAN_VELOCITY / this.scale)
           ? topPan
           : Math.floor(MAX_PAN_VELOCITY / this.scale);
-    //Check if cursor position is outside the bottom edge of the bounding box.
+      //Check if cursor position is outside the bottom edge of the bounding box.
     } else if (position.y > canvasRect.height - box() - mobileAdjust) {
       //Set the y coord of the panVelocity based on how close to the edge of the screen the cursor is.
       const bottomPan = Math.floor(
@@ -1143,7 +1143,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
-        // If clicked on a station outside the connection node, set properties so we can drag it. Then break the for loop.
+          // If clicked on a station outside the connection node, set properties so we can drag it. Then break the for loop.
         } else if (station.hoverActive !== StationElementHoverType.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
