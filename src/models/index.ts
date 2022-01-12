@@ -45,5 +45,5 @@ export * from './rule-operand';
 export * from './rule-equation';
 export * from './rule';
 export * from './flow-logic-rule';
-export * from './document-widget-list';
+export * from './widget-document';
 export * from './station-widget-data';

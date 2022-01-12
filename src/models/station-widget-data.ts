@@ -1,4 +1,4 @@
-import { WidgetDocument } from './document-widget-list';
+import { WidgetDocument } from './widget-document';
 import { DocumentGenerationStatus } from './enums/document-generation-status.enum';
 
 /**
