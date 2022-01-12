@@ -5,13 +5,13 @@ import { StationRosterMember } from './station-roster-member';
  */
 export interface WidgetDocument {
   /** Document name. */
-  DocumentName: string;
+  documentName: string;
   /** User assigned. */
-  AssignedUser: StationRosterMember;
+  assignedUser: StationRosterMember;
   /** Document priority. */
-  Priority: number;
+  priority: number;
   /** Time in station. */
-  TimeInStation: string;
+  timeInStation: string;
   /** Document Rithm Id. */
-  DocumentRithmId: string;
+  documentRithmId: string;
 }
