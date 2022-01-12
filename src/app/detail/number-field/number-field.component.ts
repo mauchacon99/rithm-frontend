@@ -10,7 +10,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { first } from 'rxjs';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -114,12 +113,6 @@ export class NumberFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.numberFieldForm.valueChanges.subscribe(fn);
-    this.ngZone.onStable.pipe(first()).subscribe(() => {
-      this.numberFieldForm.get(this.field.questionType)?.markAsTouched();
-      this.numberFieldForm
-        .get(this.field.questionType)
-        ?.updateValueAndValidity();
-    });
   }
 
   /**

@@ -61,8 +61,8 @@ export class DateFieldComponent
       this.dateFieldForm.get('date')?.setValidators([Validators.required]);
     }
 
-    this.dateFieldForm.get(this.field.questionType)?.markAsTouched();
-    this.dateFieldForm.get(this.field.questionType)?.updateValueAndValidity();
+    this.dateFieldForm.get('date')?.markAsTouched();
+    this.dateFieldForm.get('date')?.updateValueAndValidity();
   }
 
   /**
