@@ -38,6 +38,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The selected Station for move document. */
   selectedStation = '';
 
+  /* Load if exists error in the stations */
+  connectedError = false;
+
   /* Loading in modal the list of connected stations */
   connectedStationLoading = false;
 
@@ -80,6 +83,7 @@ export class ConnectedStationsModalComponent implements OnInit {
           );
         },
         error: (error: unknown) => {
+          this.connectedError = true;
           this.connectedStationLoading = false;
           this.errorService.displayError(
             'Failed to get connected stations for this document.',
