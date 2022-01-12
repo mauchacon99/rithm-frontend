@@ -11,6 +11,7 @@ import { PreviouslyStartedDocumentsComponent } from './previously-started-docume
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { GridsterModule } from 'angular-gridster2';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MatInputModule } from '@angular/material/input';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
+    GridsterModule,
   ],
 })
 export class DashboardModule {}
