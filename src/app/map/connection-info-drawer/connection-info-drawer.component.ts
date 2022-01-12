@@ -40,16 +40,25 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   /** The different modes available. */
   mapModeEnum = MapMode;
 
+  /** The drawer context for connectionInfo. */
+  drawerContext = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private mapService: MapService,
     private popupService: PopupService
   ) {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.drawerContext = data;
+      });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         const connection = data as ConnectionMapElement;
-        if (connection) {
+        if (connection && this.drawerContext === 'connectionInfo') {
           this.connectedStations = this.mapService.stationElements.filter(
             (e) =>
               e.rithmId === connection.startStationRithmId ||
