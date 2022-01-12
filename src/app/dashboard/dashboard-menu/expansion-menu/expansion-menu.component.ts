@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 /**
- * Expandable menu component for the dashboard menu.
+ * Expansion menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-expansion-dashboard-menu',
+  selector: 'app-expansion-menu',
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })

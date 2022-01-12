@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 /**
- * Options component for the dashboard menu.
+ * Options menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-options-dashboard-menu',
+  selector: 'app-options-menu',
   templateUrl: './options-menu.component.html',
   styleUrls: ['./options-menu.component.scss'],
 })
