@@ -3,7 +3,7 @@ import { StationRosterMember } from './station-roster-member';
 /**
  * Represents the document that show in station-widget.
  */
-export interface DocumentWidgetList {
+export interface WidgetDocument {
   /** Document name. */
   DocumentName: string;
   /** User assigned. */
