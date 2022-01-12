@@ -12,6 +12,7 @@
         [ngClass]="{ move: movableUp }"
         [disabled]="!movableUp"
         (click)="moveFieldUp()"
+        type="button"
       >
         <i class="fas fa-chevron-up text-accent-100"></i>
       </button>
@@ -23,12 +24,13 @@
         [ngClass]="{ move: movableDown }"
         [disabled]="!movableDown"
         (click)="moveFieldDown()"
+        type="button"
       >
         <i class="fas fa-chevron-down text-accent-100"></i>
       </button>
     </div>
     <!-- Field -->
-    <!-- added conditions from sohw/hide instructions element -->
+    <!-- added conditions from show/hide instructions element -->
     <div class="col-span-10 sm:col-span-11">
       <ng-container
         *ngIf="
@@ -72,6 +74,7 @@
             <button
               mat-stroked-button
               color="accent"
+              type="button"
               (click)="addOption(field.questionType)"
             >
               <span
@@ -114,7 +117,8 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
-            [disabled]="
+            [formControlName]="'isRequired-' + field.rithmId"
+            [attr.disabled]="
               !field.isReadOnly &&
               stationRithmId !== field.originalStationRithmId
             "
@@ -132,6 +136,7 @@
         >
           <mat-checkbox
             [name]="field.rithmId"
+            [formControlName]="'isPrivate-' + field.rithmId"
             [checked]="field.isPrivate"
             (change)="setPrivate($event)"
           >
@@ -142,6 +147,7 @@
           <div>
             <mat-checkbox
               [name]="field.rithmId"
+              [attr.formControlName]="'isReadOnly-' + field.rithmId"
               [checked]="field.isReadOnly"
               (change)="setEditable($event)"
             >

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { StationMapElement } from 'src/helpers';
 import {
   MapDragItem,
+  MapItemStatus,
   MapMode,
   Point,
-  StationElementHoverType,
+  StationElementHoverItem,
 } from 'src/models';
 import {
   BADGE_DEFAULT_COLOR,
@@ -77,7 +78,9 @@ export class StationElementService {
     this.drawStationCard(station, dragItem);
 
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
-      this.drawDocumentBadge(station, dragItem);
+      station.status === MapItemStatus.Created
+        ? this.drawNewBadge(station)
+        : this.drawDocumentBadge(station, dragItem);
       this.drawStationName(station);
 
       if (
@@ -125,7 +128,7 @@ export class StationElementService {
     ctx.shadowOffsetX = shadowEquation(3);
     ctx.shadowOffsetY = shadowEquation(3);
     if (
-      station.hoverActive === StationElementHoverType.Station &&
+      station.hoverItem === StationElementHoverItem.Station &&
       dragItem === MapDragItem.Station &&
       station.dragging
     ) {
@@ -176,13 +179,13 @@ export class StationElementService {
     // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle =
-      station.hoverActive !== StationElementHoverType.None &&
+      station.hoverItem !== StationElementHoverItem.None &&
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
         ? '#ebebeb'
         : '#fff';
     ctx.strokeStyle =
-      station.hoverActive !== StationElementHoverType.None &&
+      station.hoverItem !== StationElementHoverItem.None &&
       dragItem === MapDragItem.Node &&
       !station.dragging
         ? NODE_HOVER_COLOR
@@ -208,11 +211,19 @@ export class StationElementService {
     ctx.textAlign = 'left';
     ctx.fillStyle = 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
-    ctx.font = `normal ${fontSize}px Montserrat`;
+    //When a station has status set to updated, change the font style to reflect that.
+    const isItalic =
+      station.status === MapItemStatus.Updated ? 'italic' : 'normal';
+    ctx.font = `${isItalic} ${fontSize}px Montserrat`;
 
     const sn = station.stationName.trim().split(' ');
     const firstLineArray: string[] = [];
     const secondLineArray: string[] = [];
+
+    //When a station has status set to updated, add an asterisk to reflect that.
+    if (station.status === MapItemStatus.Updated) {
+      firstLineArray.push('*');
+    }
 
     for (const word of sn) {
       if (
@@ -302,7 +313,7 @@ export class StationElementService {
       2 * Math.PI
     );
     ctx.fillStyle =
-      station.hoverActive === StationElementHoverType.Badge &&
+      station.hoverItem === StationElementHoverItem.Badge &&
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BADGE_HOVER_COLOR
@@ -316,6 +327,38 @@ export class StationElementService {
       station.noOfDocuments.toString(),
       startingX + scaledStationWidth - scaledBadgeMargin,
       startingY + scaledBadgeMargin + 6 * this.mapScale
+    );
+    ctx.closePath();
+  }
+
+  /**
+   * Draws the "New" badge, indicating the station has been newly created, at the top right of the station card.
+   *
+   * @param station The station for which to draw the badge.
+   */
+  private drawNewBadge(station: StationMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot draw the document badge when canvas context is not set'
+      );
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y;
+
+    const scaledBadgeMargin = BADGE_MARGIN * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+
+    ctx.beginPath();
+    const fontSize = Math.ceil(16 * this.mapScale);
+    ctx.font = `600 ${fontSize}px Montserrat`;
+    ctx.fillStyle = BADGE_DEFAULT_COLOR;
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      'New',
+      startingX + scaledStationWidth - scaledBadgeMargin - 3,
+      startingY + scaledBadgeMargin
     );
     ctx.closePath();
   }
@@ -377,7 +420,7 @@ export class StationElementService {
       2 * Math.PI
     );
     ctx.fillStyle =
-      station.hoverActive === StationElementHoverType.Button &&
+      station.hoverItem === StationElementHoverItem.Button &&
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BUTTON_HOVER_COLOR
@@ -426,7 +469,7 @@ export class StationElementService {
         station.dragging) ||
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
-        : station.hoverActive === StationElementHoverType.Node &&
+        : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
