@@ -19,6 +19,9 @@ export class RuleModalComponent {
   /** Orientation for stepper. */
   stepperOrientation$: Observable<StepperOrientation>;
 
+  /** The value of the first operand. */
+  firstOperand = '';
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
