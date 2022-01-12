@@ -1509,10 +1509,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hovering) {
-        this.sidenavDrawerService.toggleDrawer(
-          'connectionInfo',
-          connectionLine
-        );
+        this.sidenavDrawerService.openDrawer('connectionInfo', connectionLine);
         break;
       }
     }
