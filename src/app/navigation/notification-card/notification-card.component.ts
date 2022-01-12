@@ -53,7 +53,7 @@ export class NotificationCardComponent {
   /** When was the notification sent. */
   @Input() time = '10 minutes ago'; // TODO: this should be passed in as an ISO string, so we should calculate the format
 
-  /** Whether the notification is from the menu. */
+  /** Whether the notification is from the dashboard-menu. */
   @Input() fromMenu = false;
 
   /** Users initials for profile photo/icon. */

@@ -46,7 +46,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Map data request loading indicator. */
   mapDataLoading = true;
 
-  /** Station user has selected and opened the dropdown menu. */
+  /** Station user has selected and opened the dropdown dashboard-menu. */
   private openedMenuStation?: StationMapElement;
 
   /** Map scale. */
@@ -68,7 +68,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /**Track zoomCount. */
   zoomCount = 0;
 
-  /** Option menu button cursor handler. */
+  /** Option dashboard-menu button cursor handler. */
   optionMenuNone = false;
 
   /** Map mode variable form comparison in html. */
@@ -319,7 +319,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Display menu option for station on option button is clicked.
+   * Display dashboard-menu option for station on option button is clicked.
    *
    * @param point The points coordinates values.
    */
@@ -333,7 +333,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Close display menu option to default state.
+   * Close display dashboard-menu option to default state.
    *
    */
   closeOptionMenu(): void {

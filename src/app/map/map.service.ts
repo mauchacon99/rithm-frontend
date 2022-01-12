@@ -95,7 +95,7 @@ export class MapService {
   /** Check current mouse click if clicked the station option button. */
   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
 
-  /** Check if mouse clicked outside of the option menu in canvas area. */
+  /** Check if mouse clicked outside of the option dashboard-menu in canvas area. */
   matMenuStatus$ = new BehaviorSubject(false);
 
   /** Checks if there should be panning towards the center of the map. */
