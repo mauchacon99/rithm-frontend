@@ -30,8 +30,7 @@ src/app/navigation/**/*.html @HendricksonTyler @belugasanity
 src/app/navigation/**/*.scss @belugasanity
 
 # Team Falcon rules
-src/app/map/ @HendricksonTyler @strut-software/team-falcon
-# src/app/map/ @HendricksonTyler @Gobsmack90 @adarsh3593 @manojk82
+src/app/map/ @HendricksonTyler @strut-software/map-reviewers
 
 # Team Lion rules
 src/app/admin/ @strut-software/team-lion
@@ -42,3 +41,4 @@ src/app/station/ @strut-software/team-lion
 # Team Eagle rules
 src/app/dashboard/ @strut-software/team-eagle
 src/app/widgets/ @strut-software/team-eagle
+src/app/dashboard-menu/ @strut-software/team-eagle
