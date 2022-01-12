@@ -52,13 +52,20 @@ export class FlowMapElement {
    * @param ctx The rendering context for the canvas.
    * @param scale The scale of the map.
    */
-  checkElementHover(point: Point, canvasPoint: Point, ctx: CanvasRenderingContext2D, scale: number): void {
+  checkElementHover(
+    point: Point,
+    canvasPoint: Point,
+    ctx: CanvasRenderingContext2D,
+    scale: number
+  ): void {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
       this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? FlowElementHoverItem.Boundary : this.isPointInFlowName(canvasPoint, scale) ? FlowElementHoverItem.Name
-          : FlowElementHoverItem.None;
+        ? FlowElementHoverItem.Boundary
+        : this.isPointInFlowName(canvasPoint, scale)
+        ? FlowElementHoverItem.Name
+        : FlowElementHoverItem.None;
     }
     ctx.restore();
   }
@@ -78,7 +85,9 @@ export class FlowMapElement {
       point.x >= this.boundaryPoints[0].x &&
       point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
       point.y >= this.boundaryPoints[this.boundaryPoints.length - 1].y &&
-      point.y <= this.boundaryPoints[this.boundaryPoints.length - 1].y + scaledStationHeight
+      point.y <=
+        this.boundaryPoints[this.boundaryPoints.length - 1].y +
+          scaledStationHeight
     );
   }
 
@@ -112,7 +121,7 @@ export class FlowMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created flow group as deleted. ' +
-        'You should instead remove it from the array of flows.'
+          'You should instead remove it from the array of flows.'
       );
     }
   }

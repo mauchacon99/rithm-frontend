@@ -123,7 +123,10 @@ export class FlowElementService {
       throw new Error('Cannot draw flow name if context is not defined');
     }
     // TODO: Update this to be more dynamic
-    this.canvasContext.fillStyle = flow.hoverItem === FlowElementHoverItem.Name ? NODE_HOVER_COLOR : BUTTON_DEFAULT_COLOR;
+    this.canvasContext.fillStyle =
+      flow.hoverItem === FlowElementHoverItem.Name
+        ? NODE_HOVER_COLOR
+        : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(
