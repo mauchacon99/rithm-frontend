@@ -5,6 +5,9 @@ import { ConnectedStationInfo } from 'src/models';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatStepperModule } from '@angular/material/stepper';
+import { StationService } from 'src/app/core/station.service';
+import { MockErrorService, MockStationService } from 'src/mocks';
+import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 
 describe('FlowLogicComponent', () => {
@@ -27,6 +30,10 @@ describe('FlowLogicComponent', () => {
         MatSelectModule,
       ],
       declarations: [FlowLogicComponent, RuleModalComponent],
+      providers: [
+        { provide: StationService, useClass: MockStationService },
+        { provide: ErrorService, useClass: MockErrorService },
+      ],
     }).compileComponents();
   });
 

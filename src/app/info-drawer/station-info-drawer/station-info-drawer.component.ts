@@ -174,13 +174,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
           this.showDocumentGenerationError = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -206,12 +211,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+            // return;
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -323,8 +334,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             }
             this.stationLoading = false;
           },
-          error: (error: unknown) => {
-            this.stationLoading = false;
+          // eslint-disable-next-line
+          error: (error: any) => {
+            if (error?.status === 400) {
+              this.sidenavDrawerService.closeDrawer();
+            } else {
+              this.stationLoading = false;
+            }
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
