@@ -88,7 +88,7 @@ describe('RuleModalComponent', () => {
       'getStationQuestions'
     ).and.callThrough();
     component.getStationQuestions();
-    expect(getStationQuestions).toHaveBeenCalledWith(stationId);
+    expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
   });
 
   it('should show error message when request for questions of a station fails.', () => {
