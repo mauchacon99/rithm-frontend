@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Header component for the dashboard menu.
+ * The header component for the dashboard menu.
  */
 @Component({
   selector: 'app-header-menu',
