@@ -9,6 +9,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -28,6 +29,7 @@ describe('FlowLogicComponent', () => {
         BrowserAnimationsModule,
         MatStepperModule,
         MatSelectModule,
+        MatSnackBarModule,
       ],
       declarations: [FlowLogicComponent, RuleModalComponent],
       providers: [

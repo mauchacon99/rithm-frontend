@@ -5,8 +5,8 @@ import { StepperOrientation } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
-import { FlowLogicRule } from 'src/models';
 import { ErrorService } from 'src/app/core/error.service';
+import { FlowLogicRule, Question } from 'src/models';
 /**
  * Reusable component for displaying the information to add a new rule.
  */
@@ -27,6 +27,9 @@ export class RuleModalComponent implements OnInit {
 
   /** The value of the first operand. */
   firstOperand = '';
+
+  /** Get current and previous Questions for Stations. */
+  questionStation: Question[] = [];
 
   /** The value of the operator. */
   operator = '';
@@ -68,6 +71,26 @@ export class RuleModalComponent implements OnInit {
       .subscribe({
         next: (stationFlowLogic) => {
           this.stationFlowLogic = stationFlowLogic;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get current and previous questions.
+   */
+  getStationQuestions(): void {
+    this.stationService
+      .getStationQuestions(this.stationRithmId, true)
+      .pipe(first())
+      .subscribe({
+        next: (questions) => {
+          this.questionStation = questions;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
