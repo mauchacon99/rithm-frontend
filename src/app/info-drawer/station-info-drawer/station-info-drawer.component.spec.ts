@@ -29,7 +29,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DialogOptions, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { throwError, of, Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
