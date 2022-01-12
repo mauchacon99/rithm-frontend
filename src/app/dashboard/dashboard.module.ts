@@ -11,7 +11,7 @@ import { PreviouslyStartedDocumentsComponent } from './previously-started-docume
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { DashboardMenuComponent } from './dashboard-menu/dashboard-dashboard-menu.component';
+import { DashboardMenuComponent } from './dashboard-menu/dashboard-menu/dashboard-menu.component';
 import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
 import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.component';
 

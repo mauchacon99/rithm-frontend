@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
   /** Used to show top nav. */
   showTopNav = false;
 
-  /** User data to hide/show admin dashboard-menu. */
+  /** User data to hide/show admin menu. */
   private user$: ReplaySubject<unknown> = new ReplaySubject(1);
 
   /** Mobile links. */

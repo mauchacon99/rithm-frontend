@@ -549,7 +549,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input when a mouse button is right clicked. Used for bringing up the right click dashboard-menu.
+   * Handles user input when a mouse button is right clicked. Used for bringing up the right click menu.
    *
    * @param event The contextmenu event that was triggered.
    */
@@ -642,7 +642,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
       this.mapService.handleZoom(false, mousePoint);
     }
-    // Overlay option dashboard-menu close state.
+    // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
@@ -970,7 +970,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.nextPanVelocity = { x: 0, y: 0 };
     }
 
-    // Overlay option dashboard-menu close state.
+    // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }
@@ -1043,7 +1043,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const eventContextPoint = this.getEventContextPoint(event);
     this.holdDrag = false;
 
-    // Overlay option dashboard-menu close state.
+    // Overlay option menu close state.
     if (this.mapService.matMenuStatus$ && this.mapMode === MapMode.Build) {
       this.mapService.matMenuStatus$.next(true);
     }

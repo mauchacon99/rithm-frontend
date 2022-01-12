@@ -16,7 +16,7 @@ import { User } from 'src/models';
   styleUrls: ['./top-nav.component.scss'],
 })
 export class TopNavComponent implements OnInit {
-  /** Trigger for user dashboard-menu. */
+  /** Trigger for user menu. */
   @ViewChild(MatMenuTrigger)
   private userMenuTrigger!: MatMenuTrigger;
 
@@ -72,7 +72,7 @@ export class TopNavComponent implements OnInit {
 
   /**
    * Check if screen size changes to hide mobile nav.
-   * Close user dashboard-menu if screen size changes.
+   * Close user menu if screen size changes.
    */
   @HostListener('window:resize', ['$event'])
   onResize(): void {

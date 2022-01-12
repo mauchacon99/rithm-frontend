@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Notification } from 'src/models/notification';
 /** Notification container component. */
 @Component({
-  selector: 'app-notification-dashboard-menu-container',
+  selector: 'app-notification-menu-container',
   templateUrl: './notification-menu-container.component.html',
   styleUrls: ['./notification-menu-container.component.scss'],
 })

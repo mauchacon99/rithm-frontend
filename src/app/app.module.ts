@@ -14,11 +14,9 @@ import { SettingsModule } from './settings/settings.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AdminModule } from './admin/admin.module';
-import { MenuComponent } from './dashboard/dashboard-menu/dashboard-menu/menu.component';
-import { ExpansionMenuComponent } from './dashboard/dashboard-menu/expansion-menu/expansion-menu.component';
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent, ExpansionMenuComponent],
+  declarations: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
