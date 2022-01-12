@@ -1,4 +1,4 @@
-import { User } from './user';
+import { StationRosterMember } from './station-roster-member';
 
 /**
  * Represents the document that show in station-widget.
