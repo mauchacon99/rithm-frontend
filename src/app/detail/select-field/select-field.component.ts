@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, NgZone } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -44,7 +44,7 @@ export class SelectFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up FormBuilder group.

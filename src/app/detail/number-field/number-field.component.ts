@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, NgZone } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -48,7 +48,7 @@ export class NumberFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up Formbuilder group.
