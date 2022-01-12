@@ -2,7 +2,7 @@ import { DocumentWidgetList } from './document-widget-list';
 import { DocumentGenerationStatus } from './enums/document-generation-status.enum';
 
 /**
- * Represents the data the widget.
+ * Represents the data the station-widget.
  */
 export interface stationWidgetData {
   /** Station name. */
