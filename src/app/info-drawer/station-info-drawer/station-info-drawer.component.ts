@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -65,9 +65,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** If component is being viewed on the map, what status does the station have? */
   stationStatus?: MapItemStatus;
-
-  /** Station name form. */
-  stationNameForm: FormGroup;
 
   /** The Last Updated Date. */
   lastUpdatedDate = '';
@@ -138,10 +135,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           this.getStationInfo();
         }
       });
-
-    this.stationNameForm = this.fb.group({
-      name: [this.stationName],
-    });
   }
 
   /**
@@ -422,7 +415,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (openStation === undefined) {
       throw new Error('Station was not found.');
     }
-    this.stationName = this.stationNameForm.value.name;
     openStation.stationName = this.stationName;
     openStation.notes = this.stationNotes;
     openStation.markAsUpdated();
