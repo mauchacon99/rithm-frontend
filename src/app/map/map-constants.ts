@@ -36,6 +36,7 @@ export const CENTER_ZOOM_BUFFER = 10;
 export const FLOW_PADDING = 20;
 export const FLOW_POINT_RADIUS = 15;
 export const GROUP_NAME_PADDING = 6;
+export const FLOW_NAME_HEIGHT = 20;
 
 // Station
 export const STATION_PADDING = 10;

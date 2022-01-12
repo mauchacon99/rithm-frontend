@@ -1,3 +1,4 @@
+import { FLOW_NAME_HEIGHT } from 'src/app/map/map-constants';
 import {
   FlowElementHoverItem,
   FlowMapData,
@@ -47,17 +48,38 @@ export class FlowMapElement {
    * Checks whether the flow boundary is being hovered over.
    *
    * @param point The cursor location.
+   * @param canvasPoint The event canvas point.
    * @param ctx The rendering context for the canvas.
+   * @param scale The scale of the map.
    */
-  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+  checkElementHover(point: Point, canvasPoint: Point, ctx: CanvasRenderingContext2D, scale: number): void {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
       this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
-        ? FlowElementHoverItem.Boundary
-        : FlowElementHoverItem.None;
+        ? FlowElementHoverItem.Boundary : this.isPointInFlowName(canvasPoint, scale) ? FlowElementHoverItem.Name
+          : FlowElementHoverItem.None;
     }
     ctx.restore();
+  }
+
+  /**
+   * Checks whether point is in a flow name or not.
+   *
+   * @param point The cursor location.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInFlowName(point: Point, scale: number): boolean {
+    const scaledStationHeight = FLOW_NAME_HEIGHT * scale;
+    const scaledStationWidth = 100 * scale;
+
+    return (
+      point.x >= this.boundaryPoints[0].x &&
+      point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
+      point.y >= this.boundaryPoints[this.boundaryPoints.length - 1].y &&
+      point.y <= this.boundaryPoints[this.boundaryPoints.length - 1].y + scaledStationHeight
+    );
   }
 
   /**
@@ -90,7 +112,7 @@ export class FlowMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created flow group as deleted. ' +
-          'You should instead remove it from the array of flows.'
+        'You should instead remove it from the array of flows.'
       );
     }
   }
