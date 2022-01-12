@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RuleModalComponent } from './rule-modal/rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { TextFieldModule } from '../fields/text-field/text-field.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatStepperModule,
     MatSelectModule,
+    TextFieldModule,
   ],
 })
 export class StationModule {}

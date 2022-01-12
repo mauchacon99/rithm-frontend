@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
-import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
+import { TextFieldComponent } from 'src/app/fields/text-field/text-field.component';
 import { MockStationService } from 'src/mocks';
 import { Question, QuestionFieldType } from 'src/models';
 import { StationFieldComponent } from '../station-field/station-field.component';

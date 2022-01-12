@@ -16,15 +16,9 @@ import { CommentDrawerComponent } from './comment-drawer/comment-drawer.componen
 import { DetailDrawerComponent } from './detail-drawer/detail-drawer.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommentInputComponent } from './comment-input/comment-input.component';
-import { TextFieldComponent } from './text-field/text-field.component';
-import { NumberFieldComponent } from './number-field/number-field.component';
-import { DateFieldComponent } from './date-field/date-field.component';
-import { SelectFieldComponent } from './select-field/select-field.component';
-import { CheckFieldComponent } from './check-field/check-field.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { NestedFieldComponent } from './nested-field/nested-field.component';
 import { PreviousFieldsComponent } from './previous-fields/previous-fields.component';
 import { MatChipsModule } from '@angular/material/chips';
 
@@ -43,12 +37,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CommentDrawerComponent,
     DetailDrawerComponent,
     CommentInputComponent,
-    TextFieldComponent,
-    NumberFieldComponent,
-    DateFieldComponent,
-    SelectFieldComponent,
-    CheckFieldComponent,
-    NestedFieldComponent,
     PreviousFieldsComponent,
   ],
   imports: [
@@ -72,12 +60,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     DocumentInfoHeaderComponent,
     CommentDrawerComponent,
     DetailDrawerComponent,
-    TextFieldComponent,
-    NumberFieldComponent,
-    DateFieldComponent,
-    SelectFieldComponent,
-    CheckFieldComponent,
-    NestedFieldComponent,
     PreviousFieldsComponent,
   ],
 })
