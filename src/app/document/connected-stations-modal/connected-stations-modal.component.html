@@ -13,7 +13,11 @@
   [inlineText]="'Loading...'"
 ></app-loading-indicator>
 <!-- Select station. -->
-<div *ngIf="!connectedStationLoading" class="grid grid-cols-1">
+<div
+  *ngIf="!connectedStationLoading"
+  class="grid grid-cols-1"
+  [attr.disabled]="connectedError"
+>
   <!-- Select -->
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{ label }} </mat-label>
@@ -27,7 +31,11 @@
     </mat-select>
   </mat-form-field>
 </div>
-
+<div *ngIf="connectedError" id="stations-error">
+  <p class="text-left text-error-500">
+    Error: Unable to retrive connected Stations.
+  </p>
+</div>
 <div mat-dialog-actions class="flex justify-end">
   <!-- Close -->
   <button

@@ -8,6 +8,7 @@ import {
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 
 /**
@@ -37,6 +38,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The selected Station for move document. */
   selectedStation = '';
 
+  /* Load if exists error in the stations */
+  connectedError = false;
+
   /* Loading in modal the list of connected stations */
   connectedStationLoading = false;
 
@@ -47,6 +51,7 @@ export class ConnectedStationsModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
     private errorService: ErrorService,
+    private popupService: PopupService,
     private matDialogRef: MatDialogRef<void>,
     private router: Router,
     public dialogRef: MatDialogRef<ConnectedStationsModalComponent>
@@ -78,6 +83,7 @@ export class ConnectedStationsModalComponent implements OnInit {
           );
         },
         error: (error: unknown) => {
+          this.connectedError = true;
           this.connectedStationLoading = false;
           this.errorService.displayError(
             'Failed to get connected stations for this document.',
@@ -103,6 +109,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
+          this.popupService.notify('The document has been moved successfully');
           this.moveDocumentError = false;
           this.matDialogRef.close();
           this.router.navigateByUrl('dashboard');
