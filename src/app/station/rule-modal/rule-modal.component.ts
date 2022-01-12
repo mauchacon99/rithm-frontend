@@ -22,8 +22,8 @@ export class RuleModalComponent {
   /** The value of the first operand. */
   firstOperand = '';
 
-  /** The value of the comparision type. */
-  comparisionType = '';
+  /** The value of the operator. */
+  operator = '';
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
