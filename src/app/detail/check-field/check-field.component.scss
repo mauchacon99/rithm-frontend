@@ -1,1 +1,5 @@
 @import '../custom-fields.scss';
+
+::ng-deep .mat-checkbox.required .mat-checkbox-frame {
+  border-color: rgb(145 55 44);
+}

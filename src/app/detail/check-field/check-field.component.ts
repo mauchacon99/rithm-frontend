@@ -69,19 +69,19 @@ export class CheckFieldComponent
     //The field is required. Validators.required must be included.
     if (this.field.isRequired) {
       validators.push(Validators.required);
-    }
 
-    //Set required error if no checkbox has been checked.
-    this.checkFieldForm.valueChanges
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((checkItem) => {
-        const checks = Object.values(checkItem);
-        if (checks.some((check) => check)) {
-          this.checkFieldForm.setErrors(null);
-        } else {
-          this.checkFieldForm.setErrors({ required: true });
-        }
-      });
+      //Set required error if no checkbox has been checked.
+      this.checkFieldForm.valueChanges
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((checkItem) => {
+          const checks = Object.values(checkItem);
+          if (checks.some((check) => check)) {
+            this.checkFieldForm.setErrors(null);
+          } else {
+            this.checkFieldForm.setErrors({ required: true });
+          }
+        });
+    }
 
     this.checkFieldForm.setValidators(validators);
   }
