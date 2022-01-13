@@ -900,7 +900,7 @@ describe('StationService', () => {
   });
 
   it('should return a list of current and previous questions for stations', () => {
-    const includePreviousQuestions = true;
+    const includePreviousQuestions = false;
     const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
@@ -957,5 +957,45 @@ describe('StationService', () => {
       .subscribe((stationFlowLogic) => {
         expect(stationFlowLogic).toEqual(expectStationFlowLogic);
       });
+  });
+
+  it('should get the questions for station', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const includePreviousQuestions = false;
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service
+      .getStationQuestions(stationRithmId, includePreviousQuestions)
+      .subscribe((response) => {
+        expect(response).toBeDefined();
+      });
+
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationRithmId}&includePreviousQuestions=${includePreviousQuestions}`
+    );
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
