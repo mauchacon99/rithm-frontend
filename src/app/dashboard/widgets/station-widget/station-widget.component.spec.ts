@@ -24,8 +24,8 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     component.stationRithmId = '321-321-256';
+    fixture.detectChanges();
   });
 
   it('should create', () => {
