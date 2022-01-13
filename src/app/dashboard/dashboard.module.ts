@@ -11,6 +11,11 @@ import { PreviouslyStartedDocumentsComponent } from './previously-started-docume
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { GridsterModule } from 'angular-gridster2';
+import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.component';
+import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
+import { ExpansionMenuComponent } from './dashboard-menu/expansion-menu/expansion-menu.component';
+import { MenuComponent } from './dashboard-menu/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +26,10 @@ import { MatInputModule } from '@angular/material/input';
     MyStationsComponent,
     PreviouslyStartedDocumentsComponent,
     PriorityQueueComponent,
+    HeaderMenuComponent,
+    OptionsMenuComponent,
+    ExpansionMenuComponent,
+    MenuComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +37,7 @@ import { MatInputModule } from '@angular/material/input';
     SharedModule,
     MatInputModule,
     ReactiveFormsModule,
+    GridsterModule,
   ],
 })
 export class DashboardModule {}
