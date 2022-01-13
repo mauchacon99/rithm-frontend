@@ -34,6 +34,12 @@ export class RuleModalComponent implements OnInit {
   /** The value of the operator. */
   operator = '';
 
+  /** The value of the placeholder. */
+  placeholder = '';
+
+  /** The value of the previous field. */
+  previousField = '';
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,

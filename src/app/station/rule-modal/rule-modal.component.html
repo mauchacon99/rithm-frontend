@@ -47,6 +47,32 @@
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm mt-1">
+          Enter the value you`d like to compare your field to
+        </p>
+      </div>
+      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Placeholder</mat-label>
+          <div matPrefix class="icon">
+            <!-- Text Icons -->
+            <i class="fas fa-font"></i>
+          </div>
+          <input matInput type="text" [(ngModel)]="placeholder" autocomplete="off" />
+        </mat-form-field>
+        <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Previous field</mat-label>
+          <mat-select [(value)]="previousField"></mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button mat-button matStepperPrevious class="w-1/12">Back</button>
+        <button mat-button matStepperNext class="w-1/12 text-accent-500">
+          Next
+        </button>
+      </div>
     </mat-step>
     <!-- Step 4 -->
     <mat-step color="primary" [completed]="false">
