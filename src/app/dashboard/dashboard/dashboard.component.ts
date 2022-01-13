@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    this.getWidgetsToDashboard();
+    this.getDashboardWidgets();
   }
 
   /**
@@ -79,9 +79,9 @@ export class DashboardComponent implements OnInit {
   /**
    * Gets widgets for dashboard.
    */
-  private getWidgetsToDashboard(): void {
+  private getDashboardWidgets(): void {
     this.dashboardService
-      .getWidgetsToDashboard()
+      .getDashboardWidgets()
       .pipe(first())
       .subscribe({
         next: (widgets) => {

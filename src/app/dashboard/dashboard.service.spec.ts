@@ -261,7 +261,7 @@ describe('DashboardService', () => {
         maxItemRows: 12,
       },
     ];
-    service.getWidgetsToDashboard().subscribe((response) => {
+    service.getDashboardWidgets().subscribe((response) => {
       expect(response).toEqual(widgetsExpected);
     });
   });

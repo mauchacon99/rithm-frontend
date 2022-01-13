@@ -205,7 +205,7 @@ export class MockDashboardService {
    *
    * @returns Returns the list of widgets.
    */
-  getWidgetsToDashboard(): Observable<DashboardItem[]> {
+  getDashboardWidgets(): Observable<DashboardItem[]> {
     const widgets: DashboardItem[] = [
       {
         cols: 4,

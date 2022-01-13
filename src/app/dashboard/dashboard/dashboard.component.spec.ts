@@ -54,7 +54,7 @@ describe('DashboardComponent', () => {
   it('should call service from return data widgets', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'getWidgetsToDashboard'
+      'getDashboardWidgets'
     ).and.callThrough();
 
     component.ngOnInit();
@@ -65,7 +65,7 @@ describe('DashboardComponent', () => {
   it('should catch error if petition to service fails', () => {
     spyOn(
       TestBed.inject(DashboardService),
-      'getWidgetsToDashboard'
+      'getDashboardWidgets'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
