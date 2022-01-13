@@ -1,7 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { ConnectedStationInfo } from 'src/models';
+import { Component, Input, OnInit } from '@angular/core';
+import { ConnectedStationInfo, FlowLogicRule } from 'src/models';
 import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.component';
+import { StationService } from 'src/app/core/station.service';
+import { ErrorService } from 'src/app/core/error.service';
+import { first } from 'rxjs';
 
 /**
  * Component for the flow logic tab on a station.
@@ -11,14 +14,28 @@ import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.compon
   templateUrl: './flow-logic.component.html',
   styleUrls: ['./flow-logic.component.scss'],
 })
-export class FlowLogicComponent {
+export class FlowLogicComponent implements OnInit {
   /** The list of stations to display in the pane. */
   @Input() nextStations: ConnectedStationInfo[] = [];
 
   /** Station Rithm id. */
   @Input() rithmId = '';
 
-  constructor(private dialog: MatDialog) {}
+  /** The station Flow Logic Rule. */
+  stationFlowLogic!: FlowLogicRule;
+
+  constructor(
+    private dialog: MatDialog,
+    private stationService: StationService,
+    private errorService: ErrorService
+  ) {}
+
+  /**
+   * Life cycle init the component.
+   */
+  ngOnInit(): void {
+    this.getStationFlowLogicRule();
+  }
 
   /**
    * Open a modal rule-modal.
@@ -34,5 +51,25 @@ export class FlowLogicComponent {
     } else {
       // handle error
     }
+  }
+
+  /**
+   * Get each station flow rules.
+   */
+  private getStationFlowLogicRule(): void {
+    this.stationService
+      .getStationFlowLogicRule(this.rithmId)
+      .pipe(first())
+      .subscribe({
+        next: (stationFlowLogic) => {
+          this.stationFlowLogic = stationFlowLogic;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
