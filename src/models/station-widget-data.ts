@@ -7,7 +7,7 @@ import { DocumentGenerationStatus } from './enums/document-generation-status.enu
 export interface StationWidgetData {
   /** Station name. */
   stationName: string;
-  /** Way to generate document. */
+  /** Station document generation status. */
   documentGeneratorStatus: DocumentGenerationStatus;
   /** The documents list. */
   documents: WidgetDocument[];
