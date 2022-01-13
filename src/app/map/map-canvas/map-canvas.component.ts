@@ -81,7 +81,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private holdDrag = false;
 
   /** Flag for auto pan checks. While true, a pan loop will continually execute.*/
-  private panActive?: boolean;
+  private panActive = false;
 
   /** Track what the next pan velocity is. Pan velocity determines what direction and how fast the map automatically pans. */
   private nextPanVelocity: Point = { x: 0, y: 0 };
@@ -752,7 +752,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             clearInterval(this.zoomInterval);
             this.zoomInterval = undefined;
           }
-          //Redraw the map every second the loop is active.
+          //Redraw the map every frame the loop is active.
           this.drawElements();
         }, 1000 / fps);
       }
@@ -856,7 +856,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     requestAnimationFrame(() => {
       //Check the screen's DPI.
       const pixelRatio = window.devicePixelRatio || 1;
-      // Clear the canvas. This erases everything on the map.
+      // Clear the canvas. This erases everything drawn on the map.
       this.context.clearRect(
         0,
         0,
@@ -1002,6 +1002,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Draws the boundary edges of a user's map using the map's station coordinates.
+   * TODO: we might want to factor in the boundaries for the station groups into this too at some point.
+   * We might run into situations on the edges of the map where the boundary edge and station group
+   * boundary overlap otherwise.
    */
   private drawBoundaryBox(): void {
     //Set to width or height depending on which is longer.
