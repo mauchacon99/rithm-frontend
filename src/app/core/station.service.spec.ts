@@ -15,6 +15,10 @@ import {
   ForwardPreviousStationsDocument,
   StandardStringJSON,
   DocumentNameField,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  RuleType,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -893,5 +897,65 @@ describe('StationService', () => {
     expect(req.request.body).toEqual({ data: instructions });
     req.flush({ data: instructions });
     httpTestingController.verify();
+  });
+
+  it('should return a list of current and previous questions for stations', () => {
+    const includePreviousQuestions = true;
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service
+      .getStationQuestions(stationId, includePreviousQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+  });
+  it('should return the Station flow logic rule', () => {
+    const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
+
+    const expectStationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRule: {
+        ruleType: RuleType.Or,
+        equations: [
+          {
+            leftOperand: {
+              type: OperandType.Field,
+              value: 'birthday',
+            },
+            operatorType: OperatorType.Before,
+            rightOperand: {
+              type: OperandType.Date,
+              value: '5/27/1982',
+            },
+          },
+        ],
+      },
+    };
+
+    service
+      .getStationFlowLogicRule(stationRithmId)
+      .subscribe((stationFlowLogic) => {
+        expect(stationFlowLogic).toEqual(expectStationFlowLogic);
+      });
   });
 });

@@ -14,23 +14,20 @@
       <p>{{ stationName }}</p>
     </div>
     <div class="col-span-12 pt-2" *ngIf="openedFromMap && editMode">
-      <form [formGroup]="stationNameForm">
-        <mat-form-field
-          appearance="outline"
-          class="col-span-12 sm:col-span-8 p-0"
-        >
-          <mat-label>Station name</mat-label>
-          <input
-            matInput
-            type="text"
-            id="station"
-            formControlName="name"
-            autocomplete="name"
-            data-testid="station-name-field"
-            (ngModelChange)="reportNewStationMapChange()"
-          />
-        </mat-form-field>
-      </form>
+      <mat-form-field
+        appearance="outline"
+        class="col-span-12 sm:col-span-8 p-0"
+      >
+        <mat-label>Station Name</mat-label>
+        <input
+          matInput
+          type="text"
+          id="station"
+          data-testid="station-name-field"
+          [(ngModel)]="stationName"
+          (ngModelChange)="reportNewStationMapChange()"
+        />
+      </mat-form-field>
     </div>
   </div>
   <div class="w-full py-2">
@@ -81,7 +78,7 @@
       {{ stationPriority }}
     </button>
   </div>
-  <div class="w-full py-2">
+  <div class="w-full py-2" *ngIf="isUserAdminOrOwner">
     <p class="overline-font">document generation</p>
     <div class="py-2 text-xs text-secondary-500" *ngIf="locallyCreated">
       {{ publishStationMessage }}document generation status.
@@ -130,14 +127,23 @@
       !locallyCreated
     "
   >
-    <button
-      data-testid="new-document"
-      id="new-document"
-      mat-stroked-button
-      color="accent"
-    >
-      New Document
-    </button>
+    <div class="py-1" *ngIf="docCreationLoading; else createDocument">
+      <app-loading-indicator
+        id="loading-indicator-status"
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+    <ng-template #createDocument>
+      <button
+        data-testid="new-document"
+        id="new-document"
+        mat-stroked-button
+        color="accent"
+        (click)="createNewDocument()"
+      >
+        New Document
+      </button>
+    </ng-template>
   </div>
 
   <div class="w-full py-2" *ngIf="!openedFromMap">

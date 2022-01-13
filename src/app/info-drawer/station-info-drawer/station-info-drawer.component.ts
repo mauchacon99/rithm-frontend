@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
@@ -42,6 +42,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docGenLoading = false;
 
+  /** Loading in the document generation section. */
+  docCreationLoading = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -66,9 +69,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** If component is being viewed on the map, what status does the station have? */
   stationStatus?: MapItemStatus;
 
-  /** Station name form. */
-  stationNameForm: FormGroup;
-
   /** The Last Updated Date. */
   lastUpdatedDate = '';
 
@@ -91,6 +91,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The default message to prompt user to publish local changes.*/
   publishStationMessage = 'Publish map changes to update ';
 
+  /** The drawer context for stationInfo. */
+  drawerContext = '';
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -103,34 +106,38 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private documentService: DocumentService
   ) {
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.drawerContext = data;
+      });
+
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .subscribe((data: any) => {
         const dataDrawer = data as StationInfoDrawerData;
-        if (dataDrawer) {
-          this.editMode = dataDrawer.editMode;
-          this.stationRithmId = dataDrawer.stationRithmId;
-          this.stationName = dataDrawer.stationName;
-          this.mapMode = dataDrawer.mapMode;
-          this.stationStatus = dataDrawer.stationStatus;
-          this.openedFromMap = dataDrawer.openedFromMap;
-          this.stationNotes = dataDrawer.notes;
-          if (
-            this.openedFromMap &&
-            this.stationStatus !== MapItemStatus.Created
-          ) {
-            this.getStationDocumentGenerationStatus();
+        if (this.drawerContext === 'stationInfo') {
+          if (dataDrawer) {
+            this.editMode = dataDrawer.editMode;
+            this.stationRithmId = dataDrawer.stationRithmId;
+            this.stationName = dataDrawer.stationName;
+            this.mapMode = dataDrawer.mapMode;
+            this.stationStatus = dataDrawer.stationStatus;
+            this.openedFromMap = dataDrawer.openedFromMap;
+            this.stationNotes = dataDrawer.notes;
+            if (
+              this.openedFromMap &&
+              this.stationStatus !== MapItemStatus.Created
+            ) {
+              this.getStationDocumentGenerationStatus();
+            }
+          } else {
+            throw new Error('There was no station info drawer data');
           }
-        } else {
-          throw new Error('There was no station info drawer data');
+          this.getStationInfo();
         }
-        this.getStationInfo();
       });
-
-    this.stationNameForm = this.fb.group({
-      name: [this.stationName],
-    });
   }
 
   /**
@@ -181,13 +188,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
           this.showDocumentGenerationError = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -213,12 +225,18 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationDocumentGenerationStatus = status;
           }
         },
-        error: (error: unknown) => {
+        // eslint-disable-next-line
+        error: (error: any) => {
           this.docGenLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+            // return;
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
         },
       });
   }
@@ -330,8 +348,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             }
             this.stationLoading = false;
           },
-          error: (error: unknown) => {
-            this.stationLoading = false;
+          // eslint-disable-next-line
+          error: (error: any) => {
+            if (error?.status === 400) {
+              this.sidenavDrawerService.closeDrawer();
+            } else {
+              this.stationLoading = false;
+            }
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -395,7 +418,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (openStation === undefined) {
       throw new Error('Station was not found.');
     }
-    this.stationName = this.stationNameForm.value.name;
     openStation.stationName = this.stationName;
     openStation.notes = this.stationNotes;
     openStation.markAsUpdated();
@@ -442,22 +464,40 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Creates a new document.
+   * Open a modal to create a new document.
    */
-  createNewDocument(): void {
-    this.documentService
-      .createNewDocument(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        next: () => {},
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+  async createNewDocument(): Promise<void> {
+    const confirm = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message:
+        'After the document is created you will be redirected to the document page.',
+      okButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm) {
+      this.docCreationLoading = true;
+      this.documentService
+        .createNewDocument('', 0, this.stationRithmId)
+        .pipe(first())
+        .subscribe({
+          next: (documentId) => {
+            this.assignUserToDocument(
+              this.userService.user.rithmId,
+              documentId
+            );
+            this.popupService.notify(
+              'The document has been created successfully.'
+            );
+          },
+          error: (error: unknown) => {
+            this.docCreationLoading = false;
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          },
+        });
+    }
   }
 
   /**
@@ -471,7 +511,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        next: () => {
+          this.docCreationLoading = false;
+        },
         error: (error: unknown) => {
+          this.docCreationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

@@ -8,18 +8,20 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StationMapElement } from 'src/helpers';
+import {
+  ConnectionMapElement,
+  FlowMapElement,
+  StationMapElement,
+} from 'src/helpers';
 import {
   MapMode,
   Point,
   MapDragItem,
   MapItemStatus,
-  FlowMapElement,
-  StationElementHoverType,
+  StationElementHoverItem,
   StationInfoDrawerData,
   StationInformation,
-  ConnectionMapElement,
-  FlowElementHoverType,
+  FlowElementHoverItem,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -1139,12 +1141,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if clicked on an interactive station element. This sets the station.hoverActive to wherever the mouse is.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         // If clicked on a connection node, set properties so that we can begin a drag from it. Then break the for loop.
-        if (station.hoverActive === StationElementHoverType.Node) {
+        if (station.hoverItem === StationElementHoverItem.Node) {
           station.dragging = true;
           this.dragItem = MapDragItem.Node;
           break;
           // If clicked on a station outside the connection node, set properties so we can drag it. Then break the for loop.
-        } else if (station.hoverActive !== StationElementHoverType.None) {
+        } else if (station.hoverItem !== StationElementHoverItem.None) {
           station.dragging = true;
           if (this.dragItem !== MapDragItem.Node) {
             this.dragItem = MapDragItem.Station;
@@ -1163,7 +1165,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           // Check if connection line was clicked. eventContextPoint is used for connection lines. Sets connection.hoverActive to true.
           connection.checkElementHover(eventContextPoint, this.context);
           //Find the connection line that was clicked on.
-          if (connection.hoverActive) {
+          if (connection.hovering) {
             //Get the station that starts the connection line.
             const startStation = this.stations.find(
               (station) => station.rithmId === connection.startStationRithmId
@@ -1285,7 +1287,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         // Check if clicked on an interactive station element.
         station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
         //If there was a station being hovered over set that to newNextStation.
-        if (station.hoverActive !== StationElementHoverType.None) {
+        if (station.hoverItem !== StationElementHoverItem.None) {
           newNextStation = station;
           //Set newPreviousStation to the station with dragging set to true.
           newPreviousStation = this.stations.find(
@@ -1312,7 +1314,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           // Check if clicked on an interactive station element.
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
           //If the mouse was over a station.
-          if (station.hoverActive !== StationElementHoverType.None) {
+          if (station.hoverItem !== StationElementHoverItem.None) {
             /*ensure we cant get duplicate ids by making sure there wasn't
             already a connection between the starting and ending stations. */
             if (
@@ -1539,13 +1541,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         for (const station of this.stations) {
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
           //If cursor is hovering over a part of a station.
-          if (station.hoverActive !== StationElementHoverType.None) {
+          if (station.hoverItem !== StationElementHoverItem.None) {
             //If the user is not in view mode, and they're hovering over a station button or node.
             if (
               !(
                 this.mapMode === MapMode.View &&
-                (station.hoverActive === StationElementHoverType.Button ||
-                  station.hoverActive === StationElementHoverType.Node)
+                (station.hoverItem === StationElementHoverItem.Button ||
+                  station.hoverItem === StationElementHoverItem.Node)
               )
             ) {
               //Set cursor style.
@@ -1568,24 +1570,24 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Ensure that while a station is being hovered a connection line is not.
         //True if currently hovering over a station.
         const hoveringOverStation = this.stations.some(
-          (station) => station.hoverActive !== StationElementHoverType.None
+          (station) => station.hoverItem !== StationElementHoverItem.None
         );
         //True if currently hovering over a group.
         const hoveringOverFlow = this.flows.some(
-          (flow) => flow.hoverActive !== FlowElementHoverType.None
+          (flow) => flow.hoverItem !== FlowElementHoverItem.None
         );
         //If not hovering over a station or group.
         if (!hoveringOverStation && !hoveringOverFlow) {
           /*Set all connections hoverActive status to false.
           This ensures only one connection line can be hovered at a time. */
           this.connections.map((con) => {
-            con.hoverActive = false;
+            con.hovering = false;
           });
           //Loop through connections to check if there is a connection being hovered over.
           for (const connection of this.connections) {
             connection.checkElementHover(eventContextPoint, this.context);
             //Find the hovered connection.
-            if (connection.hoverActive) {
+            if (connection.hovering) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
@@ -1599,7 +1601,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Ensure that while a station or connection is being hovered a flow is not.
         //True if currently hovering over a connection.
         const hoveringOverConnection = this.connections.some(
-          (con) => con.hoverActive
+          (con) => con.hovering
         );
         //If not hovering over a station or connection, and the mapmode is FlowAdd.
         if (
@@ -1610,13 +1612,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           /*Set all group hoverActive status to None.
           This ensures only one group can be hovered at a time. */
           this.flows.map((fl) => {
-            fl.hoverActive = FlowElementHoverType.None;
+            fl.hoverItem = FlowElementHoverItem.None;
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const flow of this.flows) {
             flow.checkElementHover(eventContextPoint, this.context);
             //If cursor is over a group boundary.
-            if (flow.hoverActive === FlowElementHoverType.Boundary) {
+            if (flow.hoverItem === FlowElementHoverItem.Boundary) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
@@ -1630,9 +1632,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //If hovering of a station.
         if (hoveringOverStation) {
           //disable hover on connections and flows.
-          this.connections.map((con) => (con.hoverActive = false));
+          this.connections.map((con) => (con.hovering = false));
           this.flows.map(
-            (flow) => (flow.hoverActive = FlowElementHoverType.None)
+            (flow) => (flow.hoverItem = FlowElementHoverItem.None)
           );
         }
       }
@@ -1760,15 +1762,30 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
-        //run logic to open station drawer.
-        this.checkStationClick(station);
-        return;
+        //If clicking on station to add it to a group.
+        if (this.mapMode === MapMode.FlowAdd) {
+          //If the station is clickable.
+          if (!station.disabled) {
+            //Toggle whether a station is selected to be added to the flow or not.
+            station.selected = !station.selected;
+          }
+          return;
+        } else {
+          //run logic for when a station is clicked on.
+          this.checkStationClick(station);
+          return;
+        }
       }
     }
     /* Check if click was on a connection line.
     This line placed after station for loop to not trigger
     a connection click while clicking a station. */
     this.checkConnectionClick(contextPoint);
+
+    //Check if click was on a flow boundary.
+    if (this.mapMode === MapMode.FlowAdd) {
+      this.checkFlowClick(contextPoint);
+    }
   }
 
   /**
@@ -1814,12 +1831,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Loop through connections to find the connection that was clicked.
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
-      if (connectionLine.hoverActive) {
+      if (connectionLine.hovering) {
         //Open the connection info drawer.
-        this.sidenavDrawerService.toggleDrawer(
-          'connectionInfo',
-          connectionLine
-        );
+        this.sidenavDrawerService.openDrawer('connectionInfo', connectionLine);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Handles user input on a clicked flow.
+   *
+   * @param contextPoint Calculated position of click.
+   */
+  checkFlowClick(contextPoint: Point): void {
+    //Loop through groups to find the group that was clicked.
+    for (const flow of this.flows) {
+      flow.checkElementHover(contextPoint, this.context);
+      //If the cursor is over the group boundary and the group is not disabled.
+      if (flow.hoverItem === FlowElementHoverItem.Boundary && !flow.disabled) {
+        flow.selected = !flow.selected;
         break;
       }
     }
@@ -1833,7 +1864,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Loop through connections to find connection with hoveractive = true.
     for (const connectionLine of this.connections) {
       //If there is a connection is being dragged.
-      if (connectionLine.hoverActive && !this.connectionLineDrag) {
+      if (connectionLine.hovering && !this.connectionLineDrag) {
         //Find the start and end stations of the connection.
         const startStation = this.stations.find(
           (station) => station.rithmId === connectionLine.startStationRithmId
