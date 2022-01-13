@@ -185,8 +185,9 @@ describe('FlowLogicComponent', () => {
     );
     component.ngOnInit();
     fixture.detectChanges();
-    const reviewError =
-      fixture.debugElement.nativeElement.querySelector('#flow-logic-rules-error');
+    const reviewError = fixture.debugElement.nativeElement.querySelector(
+      '#flow-logic-rules-error'
+    );
     expect(component.flowRuleError).toBeTrue();
     expect(reviewError).toBeTruthy();
   });
