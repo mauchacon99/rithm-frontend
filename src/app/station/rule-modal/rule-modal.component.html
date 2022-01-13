@@ -6,7 +6,7 @@
   <!-- Stepper for new rule -->
   <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
     <!-- Step 1 -->
-    <mat-step color="accent" [completed]="false">
+    <mat-step color="accent" [completed]="firstOperand !== ''">
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
