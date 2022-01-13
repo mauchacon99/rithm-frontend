@@ -29,7 +29,9 @@ import { PopupService } from 'src/app/core/popup.service';
 import { DialogOptions, DocumentGenerationStatus } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { DocumentComponent } from 'src/app/document/document/document.component';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -51,6 +53,9 @@ describe('StationInfoDrawerComponent', () => {
         RouterTestingModule,
         MatButtonModule,
         MatRadioModule,
+        RouterTestingModule.withRoutes([
+          { path: 'document', component: MockComponent(DocumentComponent) },
+        ]),
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
@@ -347,5 +352,26 @@ describe('StationInfoDrawerComponent', () => {
       '#loading-indicator-status'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should redirect to the document if you have assigned a user to the document successfully', () => {
+    const userExpect = '123-957';
+    const newDocumentExpect = '852-789-654-782';
+    const expectData: unknown = [];
+    spyOn(
+      TestBed.inject(DocumentService),
+      'assignUserToDocument'
+    ).and.returnValue(of(expectData));
+
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    component.assignUserToDocument(userExpect, newDocumentExpect);
+
+    expect(routerSpy).toHaveBeenCalledWith([`/document/${newDocumentExpect}`], {
+      queryParams: {
+        documentId: newDocumentExpect,
+        stationId: component.stationRithmId,
+      },
+    });
   });
 });
