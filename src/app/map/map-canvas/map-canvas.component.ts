@@ -1453,7 +1453,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         return;
         //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
-        if (this.mapMode === MapMode.FlowAdd) {
+        if (this.mapMode === MapMode.StationGroupAdd) {
           if (!station.disabled) {
             station.selected = !station.selected;
           }
@@ -1467,9 +1467,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
     this.checkConnectionClick(contextPoint);
 
-    //Check if click was on a flow boundary.
-    if (this.mapMode === MapMode.FlowAdd) {
-      this.checkFlowClick(contextPoint);
+    //Check if click was on a station group boundary.
+    if (this.mapMode === MapMode.StationGroupAdd) {
+      this.checkStationGroupClick(contextPoint);
     }
   }
 
@@ -1521,15 +1521,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input on a clicked flow.
+   * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
    */
-  checkFlowClick(contextPoint: Point): void {
-    for (const flow of this.flows) {
-      flow.checkElementHover(contextPoint, this.context);
-      if (flow.hoverItem === FlowElementHoverItem.Boundary && !flow.disabled) {
-        flow.selected = !flow.selected;
+  checkStationGroupClick(contextPoint: Point): void {
+    for (const stationGroup of this.stationGroups) {
+      stationGroup.checkElementHover(contextPoint, this.context);
+      if (
+        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+        !stationGroup.disabled
+      ) {
+        stationGroup.selected = !stationGroup.selected;
         break;
       }
     }
