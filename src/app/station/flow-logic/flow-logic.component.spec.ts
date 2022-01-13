@@ -17,6 +17,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -37,6 +38,7 @@ describe('FlowLogicComponent', () => {
         MatStepperModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatInputModule,
       ],
       declarations: [FlowLogicComponent, RuleModalComponent],
       providers: [

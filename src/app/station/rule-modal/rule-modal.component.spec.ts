@@ -13,6 +13,7 @@ import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { MatInputModule } from '@angular/material/input';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -28,6 +29,7 @@ describe('RuleModalComponent', () => {
         NoopAnimationsModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatInputModule,
       ],
       declarations: [RuleModalComponent],
       providers: [
