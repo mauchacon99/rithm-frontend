@@ -14,6 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 import { GridsterModule } from 'angular-gridster2';
 import { StationWidgetComponent } from './widgets/station-widget/station-widget.component';
 import { MatCardModule } from '@angular/material/card';
+import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.component';
+import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
+import { ExpansionMenuComponent } from './dashboard-menu/expansion-menu/expansion-menu.component';
+import { MenuComponent } from './dashboard-menu/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,10 @@ import { MatCardModule } from '@angular/material/card';
     PreviouslyStartedDocumentsComponent,
     PriorityQueueComponent,
     StationWidgetComponent,
+    HeaderMenuComponent,
+    OptionsMenuComponent,
+    ExpansionMenuComponent,
+    MenuComponent,
   ],
   imports: [
     CommonModule,
