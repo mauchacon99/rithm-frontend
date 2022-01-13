@@ -988,7 +988,7 @@ describe('StationService', () => {
     service
       .getStationQuestions(stationRithmId, includePreviousQuestions)
       .subscribe((response) => {
-        expect(response).toBeDefined();
+        expect(response).toEqual(expectedResponse);
       });
 
     const req = httpTestingController.expectOne(
