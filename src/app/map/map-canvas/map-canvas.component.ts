@@ -1647,45 +1647,60 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Logic for handling pinch to zoom.
+   * Logic for handling pinch to zoom on a mobile device.
    *
    * @param position An array of points representing your two fingers.
    */
   private pinchZoomLogic(position: Point[]) {
+    //Set the distance between your two fingers when you initiated a pinch.
     const xBeginDiff = Math.abs(
       this.lastTouchCoords[0].x - this.lastTouchCoords[1].x
     );
     const yBeginDiff = Math.abs(
       this.lastTouchCoords[0].y - this.lastTouchCoords[1].y
     );
+
+    //Set the current distance between your two fingers.
     const xCurrentDiff = Math.abs(position[0].x - position[1].x);
     const yCurrentDiff = Math.abs(position[0].y - position[1].y);
+    //Average the beginning distance for the y coord and x coord.
     const averageStart = Math.floor((xBeginDiff + yBeginDiff) / 2);
+    //Average the current distance for the y coord and x coord.
     const averageEnd = Math.floor((xCurrentDiff + yCurrentDiff) / 2);
+    //Average the start and end y and x coords.
     const averageDiff = Math.floor(
       (xCurrentDiff - xBeginDiff + (yCurrentDiff - yBeginDiff)) / 2
     );
 
+    //Find the middle point between your two fingers.
     const middlePoint = {
       x: (position[0].x + position[1].x) / 2,
       y: (position[0].y + position[1].y) / 2,
     };
 
+    //If there is more distance between your fingers than when you started.
     if (averageEnd > averageStart) {
       // Zoom in
+      // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
+      //Update zoomCount by adding the average difference.
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      //Call handleZoom with pinch set to true, and zoom at the centerPoint.
       this.mapService.handleZoom(true, middlePoint);
+    //If there is less distance between your fingers than when you started.
     } else if (averageEnd < averageStart) {
       // Zoom out
+      // Update lastTouchCoords with current position of fingers.
       this.lastTouchCoords = position;
+      //Update zoomCount by adding the average difference.
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
+      //Call handleZoom with pinch set to true, and zoom at the centerPoint.
       this.mapService.handleZoom(true, middlePoint);
     }
   }
 
   /**
-   * Handle click events.
+   * Handle simulated click events. See note in eventEndLogic regarding why we simulate a click event.
    *
    * @param point The position of mouse click event.
    * @param contextPoint Calculated position of click.
@@ -1693,7 +1708,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   private clickEventHandler(point: Point, contextPoint: Point) {
     //Add station.
     if (this.mapMode === MapMode.StationAdd) {
+      //Set coords where new station will be placed.
       const coords: Point = { x: 0, y: 0 };
+      //Place middle of station where clicked.
       coords.x = Math.floor(point.x - (STATION_WIDTH / 2) * this.scale);
       coords.y = Math.floor(point.y - (STATION_HEIGHT / 2) * this.scale);
 
@@ -1709,24 +1726,29 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     for (const station of this.stations) {
       //Connection node.
       if (station.isPointInConnectionNode(point, this.mapMode, this.scale)) {
-        //TODO: Add functionality to allow clicking a node.
-        //You would then click on a station to create a new connection instead of dragging.
+        /* TODO: Add functionality to allow clicking a node.
+        You would then click on a station to create a new connection instead of dragging. */
         return;
-        //Option Button.
+
+      //Option Button.
       } else if (
         station.isPointInOptionButton(point, this.mapMode, this.scale)
       ) {
+        //set mousePoint to the tracked cursor position.
         this.mapService.currentMousePoint$.next(point);
+        //Note which station was clicked so we can open the option menu for the correct station.
         this.mapService.stationButtonClick$.next({
           click: true,
           data: station,
         });
         return;
-        //Document badge.
+
+      //Document badge. Cannot click on a document Badge for a new station.
       } else if (
         station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
         station.status !== MapItemStatus.Created
       ) {
+        //open documents modal for clicked station.
         this.dialog.open(StationDocumentsModalComponent, {
           minWidth: '370px',
           data: {
@@ -1735,24 +1757,28 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           },
         });
         return;
-        //station itself.
+
+      //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
+        //run logic to open station drawer.
         this.checkStationClick(station);
         return;
       }
     }
-    //Check if click was on a connection line. Code after station for loop to not trigger a connection click while clicking a station.
+    /* Check if click was on a connection line.
+    This line placed after station for loop to not trigger
+    a connection click while clicking a station. */
     this.checkConnectionClick(contextPoint);
   }
 
   /**
    * Restores the connection line to previous state if something fails while moving current connection line.
-   *
    */
   private restoreConnection(): void {
     if (this.storedConnectionLine === null) {
       throw new Error('The connection line was not stored!');
     }
+    //Loop through stationElements to find a station with same rithmId as storedConnectionLine.startStationRithmId.
     const startStation = this.mapService.stationElements.find(
       (station) =>
         station.rithmId === this.storedConnectionLine?.startStationRithmId
@@ -1761,6 +1787,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       throw new Error(`Start station ${this.storedConnectionLine.startStationRithmId} was
       not found when trying to restore a station`);
     }
+    //Loop through stationElements to find a station with same rithmId as storedConnectionLine.endStationRithmId.
     const endStation = this.mapService.stationElements.find(
       (station) =>
         station.rithmId === this.storedConnectionLine?.endStationRithmId
@@ -1771,6 +1798,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       );
     }
 
+    //Restore the end and start station to their respective nextStation and previousStation arrays.
     startStation.nextStations.push(this.storedConnectionLine.endStationRithmId);
     endStation.previousStations.push(
       this.storedConnectionLine.startStationRithmId
@@ -1783,9 +1811,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param contextPoint Calculated position of click.
    */
   checkConnectionClick(contextPoint: Point): void {
+    //Loop through connections to find the connection that was clicked.
     for (const connectionLine of this.connections) {
       connectionLine.checkElementHover(contextPoint, this.context);
       if (connectionLine.hoverActive) {
+        //Open the connection info drawer.
         this.sidenavDrawerService.toggleDrawer(
           'connectionInfo',
           connectionLine
@@ -1800,8 +1830,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    *
    */
   onConnectionDrag(): void {
+    //Loop through connections to find connection with hoveractive = true.
     for (const connectionLine of this.connections) {
+      //If there is a connection is being dragged.
       if (connectionLine.hoverActive && !this.connectionLineDrag) {
+        //Find the start and end stations of the connection.
         const startStation = this.stations.find(
           (station) => station.rithmId === connectionLine.startStationRithmId
         );
@@ -1811,15 +1844,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (!startStation || !endStation) {
           throw new Error('This start or end station was not found.');
         }
+        //Store the connection in case moving the connection gets cancelled.
         this.storedConnectionLine = new ConnectionMapElement(
           startStation,
           endStation,
           this.scale
         );
+        //Remove the connection from the array.
         this.mapService.removeConnectionLine(
           connectionLine.startStationRithmId,
           connectionLine.endStationRithmId
         );
+        //note that you are dragging a connection.
         this.connectionLineDrag = true;
         break;
       }
@@ -1827,24 +1863,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input on a clicked connection line.
+   * Handles user input on a clicked station.
    *
    * @param station The clicked station.
    */
   checkStationClick(station: StationMapElement): void {
-    // TODO: Remove this test rename prompt once renaming in the drawer is done
-    // this.popupService.prompt({
-    //   title: 'Rename Station',
-    //   message: 'Please provide a name for this station',
-    //   promptLabel: 'Station name',
-    //   promptValue: station.stationName
-    // }).then((newName) => {
-    //   if (newName && newName !== station.stationName) {
-    //     station.stationName = newName;
-    //     station.markAsUpdated();
-    //     this.drawElements();
-    //   }
-    // });
+    //declare variable for later.
     const stationDataInfo: StationInformation = {
       rithmId: station.rithmId,
       name: '',
@@ -1860,6 +1884,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       questions: [],
       priority: 1,
     };
+    //set this variable to use the information from passed in station, except use stationDataInfo for stationRithmId.
     const dataInformationDrawer: StationInfoDrawerData = {
       stationRithmId: stationDataInfo.rithmId,
       stationName: station.stationName,
@@ -1869,7 +1894,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       openedFromMap: true,
       notes: station.notes,
     };
+    //Use dataInformationDrawer to open the station info drawer.
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
+    //update station name.
     this.stationService.updatedStationNameText(station.stationName);
   }
 }
