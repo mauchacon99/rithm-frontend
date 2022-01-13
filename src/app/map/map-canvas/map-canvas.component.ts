@@ -1408,29 +1408,43 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Logic for handling panning, dragging, etc on a mobile device.
+   * Handles the logic that runs when a pointer, touch and mouse move event is registered.
    *
    * @param event Is an input event.
    */
   private singleInputMoveLogic(event: PointerEvent | MouseEvent | Touch) {
+    //Gets the position of the cursor.
     const eventCanvasPoint = this.getEventCanvasPoint(event);
+    //Gets the position of the cursor and multiplies it by the pixel ratio of the screen.
     const eventContextPoint = this.getEventContextPoint(event);
-    if (this.dragItem === MapDragItem.Map) {
-      const moveAmountX = this.lastTouchCoords[0].x - eventCanvasPoint.x;
-      const moveAmountY = this.lastTouchCoords[0].y - eventCanvasPoint.y;
 
+    //Track how much the cursor has moved since it was last tracked.
+    const moveAmountX = this.lastTouchCoords[0].x - eventCanvasPoint.x;
+    const moveAmountY = this.lastTouchCoords[0].y - eventCanvasPoint.y;
+
+    //If dragging the map.
+    if (this.dragItem === MapDragItem.Map) {
+      //Set cursor style
       this.mapCanvas.nativeElement.style.cursor = 'move';
+      //Adjust the currentCanvasPoint by tracked movement, adjusted for scale.
       this.currentCanvasPoint.x += moveAmountX / this.scale;
       this.currentCanvasPoint.y += moveAmountY / this.scale;
+      //Set the cursor tracking to current position.
       this.lastTouchCoords[0] = eventCanvasPoint;
+      //Prepare for a fast drag by setting nextPanVelocity to -moveAmount.
       this.nextPanVelocity = { x: -moveAmountX, y: -moveAmountY };
+      //We only want to actually trigger the fast drag if nextPanVelocity is high enough.
       if (
         Math.abs(this.nextPanVelocity.x) > PAN_TRIGGER_LIMIT ||
         Math.abs(this.nextPanVelocity.y) > PAN_TRIGGER_LIMIT
       ) {
         this.fastDrag = true;
         this.holdDrag = true;
-        //This is designed to trigger if a pointer event is ongoing. it wont have a chance to trigger if the event has ended already.
+        /* This is designed to trigger if a move event is ongoing.
+        It wont have a chance to trigger if the event has ended already
+        because this.holdDrag will be set to false by the time the timeout triggers.
+        If we're in the middle of a move event we don't want to auto pan the map yet
+        so we reset the properties that would trigger it.*/
         setTimeout(() => {
           if (this.holdDrag) {
             this.fastDrag = false;
@@ -1438,41 +1452,55 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           }
         }, 100);
       }
-    } else if (this.dragItem === MapDragItem.Station) {
-      const moveAmountX = this.lastTouchCoords[0].x - eventCanvasPoint.x;
-      const moveAmountY = this.lastTouchCoords[0].y - eventCanvasPoint.y;
 
+    //If dragging a station.
+    } else if (this.dragItem === MapDragItem.Station) {
+      //Loop through stations to find the station that is being dragged.
       for (const station of this.stations) {
         if (station.dragging) {
+          //set mousePoint to the tracked cursor position.
           this.mapService.currentMousePoint$.next(eventCanvasPoint);
+          //Set cursor style.
           this.mapCanvas.nativeElement.style.cursor = 'grabbing';
 
+          //Adjust the station's mapPoint by tracked movement, adjusted for scale.
           station.mapPoint.x -= moveAmountX / this.scale;
           station.mapPoint.y -= moveAmountY / this.scale;
 
+          //Set the cursor tracking to current position.
           this.lastTouchCoords[0] = eventCanvasPoint;
         }
       }
+
+    //If dragging a node.
     } else if (this.dragItem === MapDragItem.Node) {
+      //Set cursor style.
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+      //Loop through stations to find the station whose node is being dragged.
       for (const station of this.stations) {
-        // Check if clicked on an interactive station element.
+        // Check if hovering over an interactive station element.
         station.checkElementHover(
           this.mapService.currentMousePoint$.value,
           this.mapMode,
           this.scale
         );
         if (station.dragging) {
+          //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
           this.mapService.currentMousePoint$.next(eventCanvasPoint);
         }
       }
-      // Check for Add New Connected Station mode is enabled or not also draw a temporary line from station's node.
+
+    //If adding a new connected station.
     } else if (
       this.mapMode === MapMode.StationAdd &&
       this.mapService.stationElements.some((e) => e.isAddingConnected)
     ) {
+      //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
       this.mapService.currentMousePoint$.next(eventCanvasPoint);
+
+    //If dragging a previously created connection line.
     } else if (this.dragItem === MapDragItem.Connection) {
+      //Loop through stations to check if a station is being hovered over.
       for (const station of this.stations) {
         station.checkElementHover(
           this.mapService.currentMousePoint$.value,
@@ -1480,28 +1508,39 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.scale
         );
       }
-      //If it is a drag and not a click.
+
+      //If it is a drag and not a click. See comment in eventEndLogic for why we check for this.
       const moveFromStartX = this.eventStartCoords.x - eventCanvasPoint.x;
       const moveFromStartY = this.eventStartCoords.y - eventCanvasPoint.y;
       if (
         Math.abs(moveFromStartX) > MOUSE_MOVEMENT_OVER_CONNECTION ||
         Math.abs(moveFromStartY) > MOUSE_MOVEMENT_OVER_CONNECTION
       ) {
+        //Run logic for dragging a previously existing connection.
         this.onConnectionDrag();
       }
+
+      //If a connection is being dragged.
       if (this.connectionLineDrag) {
+        //Set cursor style.
         this.mapCanvas.nativeElement.style.cursor = 'grabbing';
         if (this.stations.some((station) => station.dragging)) {
+          //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
           this.mapService.currentMousePoint$.next(eventCanvasPoint);
         }
       }
+
+    /* This is where we check to see if a station, group or connection line is being hovered,
+    and nothing is currently being dragged. */
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
-        //Hovering over different station elements.
+        //Check if hovering over different station elements.
         for (const station of this.stations) {
           station.checkElementHover(eventCanvasPoint, this.mapMode, this.scale);
+          //If cursor is hovering over a part of a station.
           if (station.hoverActive !== StationElementHoverType.None) {
+            //If the user is not in view mode, and they're hovering over a station button or node.
             if (
               !(
                 this.mapMode === MapMode.View &&
@@ -1509,60 +1548,88 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
                   station.hoverActive === StationElementHoverType.Node)
               )
             ) {
+              //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
             }
+
+            //If the user is in build mode.
             if (this.mapMode === MapMode.Build) {
+              //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
             }
             break;
+          //If the user is not hovering over a station.
           } else {
+            //Set cursor style.
             this.mapCanvas.nativeElement.style.cursor = 'default';
           }
         }
-        //These next two if statements ensure that while a station is being hovered a connection line is not.
+
+        //Ensure that while a station is being hovered a connection line is not.
+        //True if currently hovering over a station.
         const hoveringOverStation = this.stations.some(
           (station) => station.hoverActive !== StationElementHoverType.None
         );
+        //True if currently hovering over a group.
         const hoveringOverFlow = this.flows.some(
           (flow) => flow.hoverActive !== FlowElementHoverType.None
         );
+        //If not hovering over a station or group.
         if (!hoveringOverStation && !hoveringOverFlow) {
+          /*Set all connections hoverActive status to false.
+          This ensures only one connection line can be hovered at a time. */
           this.connections.map((con) => {
             con.hoverActive = false;
           });
+          //Loop through connections to check if there is a connection being hovered over.
           for (const connection of this.connections) {
             connection.checkElementHover(eventContextPoint, this.context);
+            //Find the hovered connection.
             if (connection.hoverActive) {
+              //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
+              //If no connections are being hovered over.
               this.mapCanvas.nativeElement.style.cursor = 'default';
             }
           }
         }
-        //These next if statement ensure that while a station or connection is being hovered a flow is not also map mode should be AddFlow.
+
+        //Ensure that while a station or connection is being hovered a flow is not.
+        //True if currently hovering over a connection.
         const hoveringOverConnection = this.connections.some(
           (con) => con.hoverActive
         );
+        //If not hovering over a station or connection, and the mapmode is FlowAdd.
         if (
           !hoveringOverStation &&
           !hoveringOverConnection &&
           this.mapMode === MapMode.FlowAdd
         ) {
+          /*Set all group hoverActive status to None.
+          This ensures only one group can be hovered at a time. */
           this.flows.map((fl) => {
             fl.hoverActive = FlowElementHoverType.None;
           });
+          //Loop through groups to check if there is a group being hovered over.
           for (const flow of this.flows) {
             flow.checkElementHover(eventContextPoint, this.context);
+            //If cursor is over a group boundary.
             if (flow.hoverActive === FlowElementHoverType.Boundary) {
+              //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
               break;
             } else {
+              //If no group is being hovered over.
               this.mapCanvas.nativeElement.style.cursor = 'default';
             }
           }
         }
+
+        //If hovering of a station.
         if (hoveringOverStation) {
+          //disable hover on connections and flows.
           this.connections.map((con) => (con.hoverActive = false));
           this.flows.map(
             (flow) => (flow.hoverActive = FlowElementHoverType.None)
@@ -1570,6 +1637,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     }
+
+    /* while panActive is true, don't trigger draw elements,
+    we'll draw with checkAutoPan instead.
+    This is to help with performance. Drawing too often creates lag. */
     if (!this.panActive) {
       this.drawElements();
     }
