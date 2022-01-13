@@ -17,6 +17,12 @@ export interface StationGroupMapElement extends StationGroupMapData {
 
   /** The path of the station group boundary. */
   path: Path2D;
+
+  /** Whether the station group is disabled for selection or not.*/
+  disabled: boolean;
+
+  /** Whether the station group is selected or not. */
+  selected: boolean;
 }
 
 /**
@@ -31,6 +37,8 @@ export class StationGroupMapElement {
   constructor(stationGroupMapData: StationGroupMapData) {
     this.boundaryPoints = [];
     this.dragging = false;
+    this.disabled = false;
+    this.selected = false;
     this.hoverItem = StationGroupElementHoverItem.None;
     Object.assign(this, stationGroupMapData);
   }
