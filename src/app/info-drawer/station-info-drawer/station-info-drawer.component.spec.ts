@@ -336,4 +336,16 @@ describe('StationInfoDrawerComponent', () => {
     await component.createNewDocument();
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
+
+  it('should show loading-indicators while creating a new document is underway', async () => {
+    component.stationLoading = false;
+    component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    await component.createNewDocument();
+    fixture.detectChanges();
+    expect(component.docCreationLoading).toBe(true);
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-status'
+    );
+    expect(loadingComponent).toBeTruthy();
+  });
 });

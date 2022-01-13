@@ -42,6 +42,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Loading in the document generation section. */
   docGenLoading = false;
 
+  /** Loading in the document generation section. */
+  docCreationLoading = false;
+
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
@@ -472,6 +475,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancel',
     });
     if (confirm) {
+      this.docCreationLoading = true;
       this.documentService
         .createNewDocument('', 0, this.stationRithmId)
         .pipe(first())
@@ -486,6 +490,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             );
           },
           error: (error: unknown) => {
+            this.docCreationLoading = false;
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -507,8 +512,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        next: () => {},
+        next: () => {
+          this.docCreationLoading = false;
+        },
         error: (error: unknown) => {
+          this.docCreationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
