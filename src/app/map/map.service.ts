@@ -43,7 +43,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
   providedIn: 'root',
 })
 export class MapService {
-  /** This will track the array of stations and flows. */
+  /** This will track the arrays of stations and flows received from the backend. */
   mapData: MapData = { stations: [], flows: [] };
 
   /** Notifies when the map data has been received. */
@@ -64,7 +64,7 @@ export class MapService {
   /** An array that stores a backup of flowElements when buildMap is called. */
   storedFlowElements: FlowMapElement[] = [];
 
-  /** Data for connection line path between stations. */
+  /** Data for connection line paths between stations. */
   connectionElements: ConnectionMapElement[] = [];
 
   /** An array that stores a backup of connectionElements when buildMap is called. */
@@ -73,38 +73,51 @@ export class MapService {
   /** The rendering context for the canvas element for the map. */
   canvasContext?: CanvasRenderingContext2D;
 
-  /** The current mode of interaction on the map. */
+  /** The current mode of interaction on the map. Default is View. */
   mapMode$ = new BehaviorSubject(MapMode.View);
 
-  /** The current scale of the map. */
+  /** The current scale of the map. Default is 1. */
   mapScale$ = new BehaviorSubject(DEFAULT_SCALE);
 
-  /** The number of zoom levels to increment or decrement. */
+  /**
+   * The number of zoom levels to increment or decrement.
+   * Scale should be slowly changed as this happens.
+   */
   zoomCount$ = new BehaviorSubject(0);
 
-  /** The coordinate at which the canvas is currently rendering in regards to the overall map. */
+  /**
+   * The coordinate at which the canvas is currently rendering in regards to the overall map.
+   * Default is { x: 0, y: 0 }. The top-left corner of the canvas is where this point is set.
+   */
   currentCanvasPoint$: BehaviorSubject<Point> = new BehaviorSubject(
     DEFAULT_CANVAS_POINT
   );
 
-  /** The coordinate at which the current mouse point in the overall map. */
+  /**
+   * The coordinate at which the current cursor is located in the overall map.
+   * When the cursor is not currently being tracked,
+   * it should be set to {x: -1, y: -1} to show it is not currently on the canvas.
+   */
   currentMousePoint$: BehaviorSubject<Point> = new BehaviorSubject(
     DEFAULT_MOUSE_POINT
   );
 
-  /** Check current mouse click if clicked the station option button. */
+  /**
+   * Note if, and which station option button was clicked.
+   * This is required so that the option menu pulls down on the right station.
+   */
   stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
 
-  /** Check if mouse clicked outside of the option menu in canvas area. */
+  /** Check if clicked outside of the option menu in canvas area. This closes the option menu. */
   matMenuStatus$ = new BehaviorSubject(false);
 
   /** Checks if there should be panning towards the center of the map. */
   centerActive$ = new BehaviorSubject(false);
 
-  /** Passes pan info to the map-canvas. */
+  /** Passes auto pan velocity for when the center button is pressed to the map-canvas. */
   centerPanVelocity$ = new BehaviorSubject<Point>({ x: 0, y: 0 });
 
-  /** The number of times this.center() should be called. */
+  /** The number of times this.center() should be called. It will continually be incremented until centering is done.*/
   centerCount$ = new BehaviorSubject(0);
 
   constructor(private http: HttpClient) {}
@@ -128,20 +141,25 @@ export class MapService {
       .get<MapData>(`${environment.baseApiUrl}${MICROSERVICE_PATH}/all`)
       .pipe(
         map((data) => {
+          //Add statuses to the stations and flows.
           data.stations.map((e) => {
             e.status = MapItemStatus.Normal;
           });
           data.flows.map((e) => {
             e.status = MapItemStatus.Normal;
           });
+          //Set mapData to the data received.
           this.mapData = data;
+          //trigger logic for handling the data received.
           this.useStationData();
+          //if the code is run in a test or development environment, trigger logic for validating the map data.
           if (
             environment.name === EnvironmentName.Dev ||
             environment.name === EnvironmentName.Test
           ) {
             this.validateMapData();
           }
+          //Note that the map data has been received.
           this.mapDataReceived$.next(true);
           return data;
         })
