@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -39,6 +40,7 @@ describe('FlowLogicComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
         MatInputModule,
+        FormsModule,
       ],
       declarations: [FlowLogicComponent, RuleModalComponent],
       providers: [

@@ -31,11 +31,8 @@ export class RuleModalComponent {
   /** The value of the operator. */
   operator = '';
 
-  /** The value of the placeholder. */
-  placeholder = '';
-
-  /** The value of the previous field. */
-  previousField = '';
+  /** The value of the second operand. */
+  secondOperand = '';
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,

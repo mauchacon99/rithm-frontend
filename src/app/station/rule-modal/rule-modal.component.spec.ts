@@ -14,6 +14,7 @@ import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -30,6 +31,7 @@ describe('RuleModalComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
         MatInputModule,
+        FormsModule,
       ],
       declarations: [RuleModalComponent],
       providers: [

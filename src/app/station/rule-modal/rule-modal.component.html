@@ -54,7 +54,7 @@
       </div>
       <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
         <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Placeholder</mat-label>
+          <mat-label>Custom Value</mat-label>
           <div matPrefix class="icon">
             <!-- Text Icons -->
             <i class="fas fa-font"></i>
@@ -62,14 +62,14 @@
           <input
             matInput
             type="text"
-            [value]="placeholder"
+            [(ngModel)]="secondOperand"
             autocomplete="off"
           />
         </mat-form-field>
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
-          <mat-select [(value)]="previousField"></mat-select>
+          <mat-select [(ngModel)]="secondOperand"></mat-select>
         </mat-form-field>
       </div>
       <div class="flex flex-row space-x-2">
