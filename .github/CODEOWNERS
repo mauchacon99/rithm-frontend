@@ -40,5 +40,3 @@ src/app/station/ @strut-software/team-lion
 
 # Team Eagle rules
 src/app/dashboard/ @strut-software/team-eagle
-src/app/widgets/ @strut-software/team-eagle
-src/app/dashboard-menu/ @strut-software/team-eagle
