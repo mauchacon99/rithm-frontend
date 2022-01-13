@@ -14,6 +14,9 @@ import {
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MenuComponent } from '../dashboard-menu/menu/menu.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -27,6 +30,7 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
+        MockComponent(MenuComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -34,6 +38,7 @@ describe('DashboardComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService },
       ],
+      imports: [MatSidenavModule, NoopAnimationsModule],
     }).compileComponents();
   });
 

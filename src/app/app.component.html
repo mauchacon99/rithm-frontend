@@ -2,7 +2,7 @@
 <app-notification-toasts-container></app-notification-toasts-container>
 
 <!-- Top nav -->
-<app-top-nav *ngIf="showTopNav"></app-top-nav>
+<app-top-nav *ngIf="showTopNav" [sidenav]="sidenav"></app-top-nav>
 
 <mat-sidenav-container
   [ngClass]="{ 'mt-0 h-screen': !showTopNav, 'mt-16 h-calc': showTopNav }"

@@ -1,4 +1,10 @@
-import { Component, HostListener, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  ViewChild,
+  OnInit,
+  Input,
+} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -6,6 +12,7 @@ import { AccountSettingsService } from 'src/app/core/account-settings.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { UserService } from 'src/app/core/user.service';
 import { User } from 'src/models';
+import { MatSidenav } from '@angular/material/sidenav';
 
 /**
  * Component for the top site navigation.
@@ -19,6 +26,10 @@ export class TopNavComponent implements OnInit {
   /** Trigger for user menu. */
   @ViewChild(MatMenuTrigger)
   private userMenuTrigger!: MatMenuTrigger;
+
+  /** The sidenav displayed on mobile. */
+  @Input()
+  sidenav!: MatSidenav;
 
   /** List of navigation items. */
   navItems = ['dashboard', 'map'];
@@ -67,6 +78,7 @@ export class TopNavComponent implements OnInit {
    * Toggle opening and closing of the mobile navigation.
    */
   toggle(): void {
+    this.sidenavDrawerService.setSidenav(this.sidenav);
     this.sidenavDrawerService.toggleSidenav();
   }
 

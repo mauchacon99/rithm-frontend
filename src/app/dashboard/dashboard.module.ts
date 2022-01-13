@@ -18,6 +18,7 @@ import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.co
 import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
 import { ExpansionMenuComponent } from './dashboard-menu/expansion-menu/expansion-menu.component';
 import { MenuComponent } from './dashboard-menu/menu/menu.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MenuComponent } from './dashboard-menu/menu/menu.component';
     ReactiveFormsModule,
     GridsterModule,
     MatCardModule,
+    MatSidenavModule,
   ],
 })
 export class DashboardModule {}

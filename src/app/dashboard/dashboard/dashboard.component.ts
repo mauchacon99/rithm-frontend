@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { Station } from 'src/models';
+import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 /**
  * Main component for the dashboard screens.
@@ -15,17 +17,40 @@ import { Station } from 'src/models';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  /** The component for the side nav on the dashboard. */
+  @ViewChild('menu', { static: false })
+  menu!: MatSidenav;
+
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
 
   viewNewDashboard = false;
 
+  /**
+   * Whether the signed in user is an admin or not.
+   *
+   * @returns True if the user is an admin, false otherwise.
+   */
+  get isAdmin(): boolean {
+    return this.userService.user.role === 'admin';
+  }
+
+  /**
+   * Whether to show the backdrop for the menu drawer.
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
     private splitService: SplitService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -61,11 +86,10 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Whether the signed in user is an admin or not.
-   *
-   * @returns True if the user is an admin, false otherwise.
+   * Opens side nav on the dashboard.
    */
-  get isAdmin(): boolean {
-    return this.userService.user.role === 'admin';
+  toggleSideNav(): void {
+    this.sidenavDrawerService.setSidenav(this.menu);
+    this.sidenavDrawerService.toggleSidenav();
   }
 }
