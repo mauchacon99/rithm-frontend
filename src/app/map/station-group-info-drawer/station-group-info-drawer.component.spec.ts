@@ -18,11 +18,13 @@ describe('StationGroupInfoDrawerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationGroupInfoDrawerComponent],
-      imports: [MatButtonModule,
-                MatInputModule,
-                ReactiveFormsModule,
-                FormsModule,
-                NoopAnimationsModule],
+      imports: [
+        MatButtonModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        FormsModule,
+        NoopAnimationsModule,
+      ],
       providers: [
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },

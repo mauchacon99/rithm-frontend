@@ -8,19 +8,19 @@
       <p>{{ 'groupName' }}</p>
     </div>
     <div class="col-span-12 pt-2" *ngIf="isBuilding">
-        <mat-form-field
-          appearance="outline"
-          class="col-span-12 sm:col-span-8 p-0"
-        >
-          <mat-label>Group Name</mat-label>
-          <input
-            matInput
-            type="text"
-            id="group"
-            data-testId="group-name-field"
-            [(ngModel)]="groupName"
-          />
-        </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="col-span-12 sm:col-span-8 p-0"
+      >
+        <mat-label>Group Name</mat-label>
+        <input
+          matInput
+          type="text"
+          id="group"
+          data-testId="group-name-field"
+          [(ngModel)]="groupName"
+        />
+      </mat-form-field>
     </div>
   </div>
 </div>
