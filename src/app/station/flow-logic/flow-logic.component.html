@@ -1,7 +1,14 @@
 <div *ngFor="let station of nextStations" class="flex flex-col justify-start">
   <div class="mb-6">
     <p class="font-semibold mt-10">{{ station.name }} Rules</p>
-    <p class="text-error-500 mt-4">
+    <p
+      class="text-error-500 mt-4"
+      *ngIf="
+        stationFlowLogic === undefined || stationFlowLogic.flowRules.length <= 0
+      "
+      data-testid="there-not-rules"
+      id="there-not-rules"
+    >
       Documents will always flow here if there are no rules.
     </p>
     <div>
