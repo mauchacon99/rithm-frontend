@@ -13,6 +13,10 @@ import {
   DocumentNameField,
   ForwardPreviousStationsDocument,
   StandardStringJSON,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  RuleType,
 } from 'src/models';
 
 /**
@@ -802,5 +806,93 @@ export class MockStationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param stationRithmId The specific  station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The id of the Station cannot be empty.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationFlowLogic: FlowLogicRule = {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
+              },
+            ],
+          },
+        ],
+      };
+      return of(stationFlowLogic).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the stations questions.
+   *
+   * @param stationRithmId  The station id.
+   * @param includePreviousQuestions If is true contains previous questions.
+   * @returns An array of current and previous for stations.
+   */
+  getStationQuestions(
+    stationRithmId: string,
+    includePreviousQuestions: boolean
+  ): Observable<Question[]> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The station id cannot be is null or undefined',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockQuestions: Question[] = [
+        {
+          prompt: 'Fake question 1',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+        {
+          prompt: 'Fake question 2',
+          rithmId: '3j4k-3h2j-hj4j',
+          questionType: QuestionFieldType.Number,
+          isReadOnly: false,
+          isRequired: true,
+          isPrivate: false,
+          children: [],
+        },
+      ];
+      return of(mockQuestions).pipe(delay(1000));
+    }
   }
 }
