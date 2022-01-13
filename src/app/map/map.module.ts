@@ -13,6 +13,9 @@ import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connecti
 import { StationGroupInfoDrawerComponent } from './station-group-info-drawer/station-group-info-drawer.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,10 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
     MatMenuModule,
     MatSidenavModule,
     InfoDrawerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
 })
 export class MapModule {}

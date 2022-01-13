@@ -511,8 +511,13 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .assignUserToDocument(userRithmId, this.stationRithmId, documentRithmId)
       .pipe(first())
       .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         next: () => {
+          this.router.navigate([`/document/${documentRithmId}`], {
+            queryParams: {
+              documentId: documentRithmId,
+              stationId: this.stationRithmId,
+            },
+          });
           this.docCreationLoading = false;
         },
         error: (error: unknown) => {
