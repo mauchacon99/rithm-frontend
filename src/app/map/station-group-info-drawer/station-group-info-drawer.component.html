@@ -8,7 +8,6 @@
       <p>{{ 'groupName' }}</p>
     </div>
     <div class="col-span-12 pt-2" *ngIf="isBuilding">
-      <form [formGroup]="groupNameForm">
         <mat-form-field
           appearance="outline"
           class="col-span-12 sm:col-span-8 p-0"
@@ -18,12 +17,10 @@
             matInput
             type="text"
             id="group"
-            formControlName="name"
-            autocomplete="name"
             data-testId="group-name-field"
+            [(ngModel)]="groupName"
           />
         </mat-form-field>
-      </form>
     </div>
   </div>
 </div>

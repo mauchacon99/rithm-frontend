@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from '../map.service';
 import { PopupService } from 'src/app/core/popup.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MapMode } from 'src/models';
 
 /**
@@ -21,8 +21,8 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /** Form field viewed in Build mode. */
   editMode = false;
 
-  /** Group name form. */
-  groupNameForm: FormGroup;
+  /** Edit Mode. */
+  groupName = '';
 
   /** The current mode of the map. */
   currentMode = MapMode.View;
@@ -42,9 +42,6 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     private fb: FormBuilder,
     private popupService: PopupService
   ) {
-    this.groupNameForm = this.fb.group({
-      name: [''],
-    });
     this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (mapMode) => {
         this.currentMode = mapMode;
