@@ -170,11 +170,15 @@ export class MapService {
    * Converts station data so it can be drawn on the canvas.
    */
   private useStationData(): void {
+    //Turns station data into StationMapElements and sets this.stationElements to that.
     this.stationElements = this.mapData.stations.map(
       (e) => new StationMapElement(e)
     );
+    //Turns group data into StationMapElements and sets this.flowElements to that.
     this.flowElements = this.mapData.flows.map((e) => new FlowMapElement(e));
+    //Trigger logic to set connections based on station data.
     this.setConnections();
+    //Trigger logic to use station map points and update stationCanvasPoints accordingly.
     this.updateStationCanvasPoints();
   }
 
