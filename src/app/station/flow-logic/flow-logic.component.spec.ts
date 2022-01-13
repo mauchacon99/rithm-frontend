@@ -17,6 +17,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MockComponent } from 'ng-mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -38,7 +40,11 @@ describe('FlowLogicComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [FlowLogicComponent, RuleModalComponent],
+      declarations: [
+        FlowLogicComponent,
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -77,6 +83,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call method openModal after clicked in button with id: all-new-rule', () => {
+      component.flowLogicLoading = false;
+      fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
       expect(btnOpenModal).toBeTruthy();
@@ -85,6 +93,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call method openModal after clicked in button with id: any-new-rule', () => {
+      component.flowLogicLoading = false;
+      fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
       expect(btnOpenModal).toBeTruthy();
@@ -155,6 +165,8 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show the display message when there are not rules.', () => {
+    component.flowLogicLoading = false;
+    fixture.detectChanges();
     const expectStationFlowLogic: FlowLogicRule = {
       stationRithmId: rithmId,
       destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
@@ -172,5 +184,15 @@ describe('FlowLogicComponent', () => {
     const messageNotRules =
       fixture.debugElement.nativeElement.querySelector('#there-not-rules');
     expect(messageNotRules).toBeTruthy();
+  });
+
+  it('should activate the loading in flow logic station', () => {
+    component.flowLogicLoading = true;
+    fixture.detectChanges();
+    const flowLogicLoading = fixture.debugElement.nativeElement.querySelector(
+      '#flow-logic-loading'
+    );
+    expect(component.flowLogicLoading).toBeTrue();
+    expect(flowLogicLoading).toBeTruthy();
   });
 });
