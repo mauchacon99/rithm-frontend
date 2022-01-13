@@ -97,7 +97,7 @@ export class DashboardService {
    *
    * @returns Returns the list of widgets.
    */
-   getDashboardWidgets(): Observable<DashboardItem[]> {
+  getDashboardWidgets(): Observable<DashboardItem[]> {
     const widgets: DashboardItem[] = [
       {
         cols: 4,
