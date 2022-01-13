@@ -1453,7 +1453,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }, 100);
       }
 
-    //If dragging a station.
+      //If dragging a station.
     } else if (this.dragItem === MapDragItem.Station) {
       //Loop through stations to find the station that is being dragged.
       for (const station of this.stations) {
@@ -1472,7 +1472,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-    //If dragging a node.
+      //If dragging a node.
     } else if (this.dragItem === MapDragItem.Node) {
       //Set cursor style.
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
@@ -1490,7 +1490,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-    //If adding a new connected station.
+      //If adding a new connected station.
     } else if (
       this.mapMode === MapMode.StationAdd &&
       this.mapService.stationElements.some((e) => e.isAddingConnected)
@@ -1498,7 +1498,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //set mousePoint to the tracked cursor position. This allows us to draw a line from the node to the cursor.
       this.mapService.currentMousePoint$.next(eventCanvasPoint);
 
-    //If dragging a previously created connection line.
+      //If dragging a previously created connection line.
     } else if (this.dragItem === MapDragItem.Connection) {
       //Loop through stations to check if a station is being hovered over.
       for (const station of this.stations) {
@@ -1530,7 +1530,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-    /* This is where we check to see if a station, group or connection line is being hovered,
+      /* This is where we check to see if a station, group or connection line is being hovered,
     and nothing is currently being dragged. */
     } else {
       // Only trigger when station elements are visible.
@@ -1558,7 +1558,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
             }
             break;
-          //If the user is not hovering over a station.
+            //If the user is not hovering over a station.
           } else {
             //Set cursor style.
             this.mapCanvas.nativeElement.style.cursor = 'default';
@@ -1687,7 +1687,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapService.zoomCount$.next(this.zoomCount + averageDiff);
       //Call handleZoom with pinch set to true, and zoom at the centerPoint.
       this.mapService.handleZoom(true, middlePoint);
-    //If there is less distance between your fingers than when you started.
+      //If there is less distance between your fingers than when you started.
     } else if (averageEnd < averageStart) {
       // Zoom out
       // Update lastTouchCoords with current position of fingers.
@@ -1730,7 +1730,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         You would then click on a station to create a new connection instead of dragging. */
         return;
 
-      //Option Button.
+        //Option Button.
       } else if (
         station.isPointInOptionButton(point, this.mapMode, this.scale)
       ) {
@@ -1743,7 +1743,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         });
         return;
 
-      //Document badge. Cannot click on a document Badge for a new station.
+        //Document badge. Cannot click on a document Badge for a new station.
       } else if (
         station.isPointInDocumentBadge(point, this.mapMode, this.scale) &&
         station.status !== MapItemStatus.Created
@@ -1758,7 +1758,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         });
         return;
 
-      //station itself.
+        //station itself.
       } else if (station.isPointInStation(point, this.mapMode, this.scale)) {
         //run logic to open station drawer.
         this.checkStationClick(station);
