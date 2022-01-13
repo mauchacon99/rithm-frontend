@@ -48,15 +48,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Use to determinate generation of document. */
   showDocumentGenerationError = false;
 
-  /** Whether creating a document / assigning user fails. */
-  createDocumentError = false;
-
-  /** Whether creating a document / assigning user fails. */
-  assignUserError = false;
-
-  /** The message to show whether creatingDocument/assignUser fails. */
-  createDocumentErrorMessage = '';
-
   /** Is component viewed in station edit mode. */
   editMode = false;
 
@@ -497,8 +488,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           },
           error: (error: unknown) => {
             this.docCreationLoading = false;
-            this.createDocumentError = true;
-            this.createDocumentErrorMessage = 'create a new document.';
             this.errorService.displayError(
               "Something went wrong on our end and we're looking into it. Please try again in a little while.",
               error
@@ -525,8 +514,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         },
         error: (error: unknown) => {
           this.docCreationLoading = false;
-          this.assignUserError = true;
-          this.createDocumentErrorMessage = 'assign user to the new document.';
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
