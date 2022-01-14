@@ -14,7 +14,7 @@ import {
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Comment } from 'src/models';
-import { CommentService } from '../comment.service';
+import { CommentService } from 'src/app/core/comment.service';
 
 /**
  * Comment input component.

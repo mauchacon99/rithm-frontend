@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommentService } from '../comment.service';
+import { CommentService } from 'src/app/core/comment.service';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { Comment, DocumentStationInformation } from 'src/models';
