@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
 
   /** Config grid. */
   options: GridsterConfig = {
-    gridType: 'horizontalFixed',
+    gridType: 'verticalFixed',
     displayGrid: 'onDrag&Resize',
     pushItems: true,
     draggable: {
