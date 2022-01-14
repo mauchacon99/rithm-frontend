@@ -17,25 +17,27 @@
       color="accent"
       data-testid="flow"
       [ngClass]="{
-        'bg-secondary-50 group-hover:bg-secondary-100': flowAddActive
+        'bg-secondary-50 group-hover:bg-secondary-100': stationGroupAddActive
       }"
       class="w-16 mr-1 max-h-12 flex flex-col items-center group"
-      (click)="addFlow()"
+      (click)="addStationGroup()"
     >
       <i
         [ngClass]="{
-          'text-secondary-500 group-hover:text-secondary-300': !flowAddActive,
-          'text-accent-500 group-hover:text-accent-600': flowAddActive
+          'text-secondary-500 group-hover:text-secondary-300':
+            !stationGroupAddActive,
+          'text-accent-500 group-hover:text-accent-600': stationGroupAddActive
         }"
         class="block far fa-plus-square text-2xl"
       ></i>
       <span
         [ngClass]="{
-          'text-secondary-500 group-hover:text-secondary-300': !flowAddActive,
-          'text-accent-500 group-hover:text-accent-600': flowAddActive
+          'text-secondary-500 group-hover:text-secondary-300':
+            !stationGroupAddActive,
+          'text-accent-500 group-hover:text-accent-600': stationGroupAddActive
         }"
         class="block text-sm leading-3 pb-1.5 font-semibold"
-        >Flow</span
+        >Group</span
       >
     </button>
     <button

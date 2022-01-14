@@ -12,5 +12,5 @@ export enum MapMode {
   StationAdd,
 
   /** The map is waiting for a location to be selected for a new flow. */
-  FlowAdd,
+  StationGroupAdd,
 }
