@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -83,7 +82,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Gets widgets for dashboard.
    */
-  private getDashboardWidgets(): Observable<unknown> {
+  private getDashboardWidgets(): void {
     this.errorLoadingWidgets = false;
     this.dashboardService
       .getDashboardWidgets()

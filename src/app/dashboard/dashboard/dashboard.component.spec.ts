@@ -82,14 +82,16 @@ describe('DashboardComponent', () => {
   });
 
   it('should show error message when request for station widgets', () => {
+    component.viewNewDashboard= true;
     spyOn(
-      TestBed.inject(DashboardComponent),
+      TestBed.inject(DashboardService),
       'getDashboardWidgets'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
+    component.ngOnInit();
     fixture.detectChanges();
     expect(component.errorLoadingWidgets).toBeTrue();
     const errorComponent = fixture.debugElement.nativeElement.querySelector(
