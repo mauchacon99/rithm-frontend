@@ -5,6 +5,7 @@ import { HeaderComponent } from '../header/header.component';
 import { PriorityQueueComponent } from '../priority-queue/priority-queue.component';
 import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
 import {
   MockErrorService,
@@ -18,6 +19,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from '../dashboard.service';
 import { throwError } from 'rxjs';
 
+
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -30,6 +32,7 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
+        MockComponent(LoadingIndicatorComponent)
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
