@@ -33,8 +33,7 @@ import { QuestionFieldType, Question } from 'src/models';
   ],
 })
 export class SelectFieldComponent
-  implements OnInit, ControlValueAccessor, Validator
-{
+  implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
   selectFieldForm!: FormGroup;
 
@@ -44,7 +43,7 @@ export class SelectFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   /**
    * Set up FormBuilder group.
@@ -74,7 +73,7 @@ export class SelectFieldComponent
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => { };
 
   /**
    * Writes a value to this form.
@@ -125,10 +124,10 @@ export class SelectFieldComponent
     return this.selectFieldForm.valid
       ? null
       : {
-          invalidForm: {
-            valid: false,
-            message: 'Select field form is invalid',
-          },
-        };
+        invalidForm: {
+          valid: false,
+          message: 'Select field form is invalid',
+        },
+      };
   }
 }

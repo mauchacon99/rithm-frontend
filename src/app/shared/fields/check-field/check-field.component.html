@@ -2,16 +2,10 @@
   {{ field.prompt }}
   <span class="text-error-500" *ngIf="field.isRequired"> (*) </span>
 </p>
-<div
-  [formGroup]="checkFieldForm"
-  class="w-full text-secondary-400 leading-7 pb-4"
->
+<div [formGroup]="checkFieldForm" class="w-full text-secondary-400 leading-7 pb-4">
   <div class="flex flex-col">
-    <mat-checkbox
-      [ngClass]="{ required: !checkFieldForm.valid }"
-      *ngFor="let possibleAnswer of field.possibleAnswers; let i = index"
-      formControlName="checkItem{{ i }}"
-    >
+    <mat-checkbox [ngClass]="{ required: !checkFieldForm.valid }"
+      *ngFor="let possibleAnswer of field.possibleAnswers; let i = index" formControlName="checkItem{{ i }}">
       {{ possibleAnswer.text }}
     </mat-checkbox>
   </div>

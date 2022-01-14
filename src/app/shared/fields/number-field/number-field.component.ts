@@ -34,8 +34,7 @@ import { QuestionFieldType, Question } from 'src/models';
   ],
 })
 export class NumberFieldComponent
-  implements OnInit, ControlValueAccessor, Validator
-{
+  implements OnInit, ControlValueAccessor, Validator {
   /** The form to add this field in the template. */
   numberFieldForm!: FormGroup;
 
@@ -48,7 +47,7 @@ export class NumberFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   /**
    * Set up Formbuilder group.
@@ -91,7 +90,7 @@ export class NumberFieldComponent
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => { };
 
   /**
    * Writes a value to this form.
@@ -142,10 +141,10 @@ export class NumberFieldComponent
     return this.numberFieldForm.valid
       ? null
       : {
-          invalidForm: {
-            valid: false,
-            message: 'Number field form is invalid',
-          },
-        };
+        invalidForm: {
+          valid: false,
+          message: 'Number field form is invalid',
+        },
+      };
   }
 }
