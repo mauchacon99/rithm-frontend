@@ -24,7 +24,8 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId = '321-321-256';
+    component.stationRithmId =
+      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
     fixture.detectChanges();
   });
 
@@ -33,6 +34,8 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should call service that return station widget data', () => {
+    component.stationRithmId =
+      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
@@ -42,6 +45,8 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should show error message when request station widget document  data', () => {
+    component.stationRithmId =
+      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
     spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
