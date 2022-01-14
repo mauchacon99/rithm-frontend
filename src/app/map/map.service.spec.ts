@@ -88,7 +88,7 @@ describe('MapService', () => {
         {
           rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
           organizationRithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
-          title: 'Flow 1',
+          title: 'Group 1',
           stations: [
             'ED6148C9-ABB7-408E-A210-9242B2735B1C',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',

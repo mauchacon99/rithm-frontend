@@ -495,7 +495,7 @@ export class MapService {
             (station) => (station.status = MapItemStatus.Normal)
           );
           this.stationGroupElements.forEach(
-            (flow) => (flow.status = MapItemStatus.Normal)
+            (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
           );
         })
       );
