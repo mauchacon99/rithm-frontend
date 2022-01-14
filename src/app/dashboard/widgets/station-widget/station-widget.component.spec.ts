@@ -60,4 +60,14 @@ describe('StationWidgetComponent', () => {
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
+
+  it('should try request again  listing documents if fails', () => {
+    component.failedLoadDocument = true;
+    fixture.detectChanges();
+    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
+    const tryAgain = fixture.debugElement.nativeElement.querySelector('#try-again');
+    expect(tryAgain).toBeTruthy();
+    tryAgain.click();
+    expect(methodCalled).toHaveBeenCalled();
+  });
 });

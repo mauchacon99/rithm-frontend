@@ -20,6 +20,7 @@ import { MenuComponent } from './dashboard-menu/menu/menu.component';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { RosterModule } from '../shared/roster/roster.module';
 import { StationDocumentsModalModule } from '../shared/station-documents-modal/station-documents-modal.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { StationDocumentsModalModule } from '../shared/station-documents-modal/s
     LoadingIndicatorModule,
     RosterModule,
     StationDocumentsModalModule,
+    MatIconModule,
   ],
 })
 export class DashboardModule {}
