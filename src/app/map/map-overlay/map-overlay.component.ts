@@ -86,19 +86,19 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     return (
       this.currentMode === MapMode.Build ||
       this.currentMode === MapMode.StationAdd ||
-      this.currentMode === MapMode.FlowAdd
+      this.currentMode === MapMode.StationGroupAdd
     );
   }
 
   /**
-   * Station the map is in stationAdd or FlowAdd mode.
+   * Station the map is in stationAdd or StationGroupAdd mode.
    *
-   * @returns True if the map is in stationAdd or FlowAdd mode, false otherwise.
+   * @returns True if the map is in stationAdd or StationGroupAdd mode, false otherwise.
    */
-  get isStationOrFlowAdd(): boolean {
+  get isStationOrStationGroupAdd(): boolean {
     return (
       this.currentMode === MapMode.StationAdd ||
-      this.currentMode === MapMode.FlowAdd
+      this.currentMode === MapMode.StationGroupAdd
     );
   }
 
