@@ -27,6 +27,9 @@ export class FlowLogicComponent implements OnInit {
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
 
+  /** The error if rules fails . */
+  flowRuleError = false;
+
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
@@ -70,6 +73,7 @@ export class FlowLogicComponent implements OnInit {
         },
         error: (error: unknown) => {
           this.flowLogicLoading = false;
+          this.flowRuleError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

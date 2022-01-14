@@ -1,7 +1,7 @@
 <div *ngFor="let station of nextStations" class="flex flex-col justify-start">
   <div class="mb-6">
     <p class="font-semibold mt-10">{{ station.name }} Rules</p>
-    <div *ngIf="!flowLogicLoading; else loaderFlowLogic">
+    <div *ngIf="!flowLogicLoading || !flowRuleError">
       <p
         class="text-error-500 mt-4"
         *ngIf="
@@ -48,12 +48,20 @@
       </div>
     </div>
     <!-- Loader for flow logic -->
-    <ng-template #loaderFlowLogic>
-      <div class="flex justify-start" id="flow-logic-loading">
-        <app-loading-indicator
-          [inlineText]="'Loading...'"
-        ></app-loading-indicator>
-      </div>
-    </ng-template>
+    <div
+      *ngIf="flowLogicLoading"
+      class="flex justify-start"
+      id="flow-logic-loading"
+    >
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+    <!-- Error in rules flow logic -->
+    <div *ngIf="flowRuleError" id="flow-logic-rules-error">
+      <p class="text-left text-error-500">
+        Error: Unable to retrive station rules.
+      </p>
+    </div>
   </div>
 </div>
