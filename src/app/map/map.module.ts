@@ -16,6 +16,7 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RecognitionModule } from './recognition/recognition.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     MatFormFieldModule,
     ReactiveFormsModule,
     FormsModule,
+    RecognitionModule,
   ],
 })
 export class MapModule {}
