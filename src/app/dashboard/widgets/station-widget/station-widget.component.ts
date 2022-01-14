@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs';
+import { finalize, first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
@@ -19,6 +19,9 @@ export class StationWidgetComponent implements OnInit {
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
 
+  /** Loading documents of station. */
+  isLoading = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService
@@ -36,9 +39,13 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   private getStationWidgetDocuments(): void {
+    this.isLoading = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
-      .pipe(first())
+      .pipe(
+        first(),
+        finalize(() => (this.isLoading = false))
+      )
       .subscribe({
         next: (dataStationWidget) => {
           this.dataStationWidget = dataStationWidget;

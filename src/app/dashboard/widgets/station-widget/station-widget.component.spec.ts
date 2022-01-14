@@ -5,6 +5,8 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { StationWidgetComponent } from './station-widget.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -13,7 +15,10 @@ describe('StationWidgetComponent', () => {
     '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StationWidgetComponent],
+      declarations: [
+        StationWidgetComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [MatCardModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
