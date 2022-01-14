@@ -65,7 +65,8 @@ describe('StationWidgetComponent', () => {
     component.failedLoadDocument = true;
     fixture.detectChanges();
     const methodCalled = spyOn(component, 'getStationWidgetDocuments');
-    const tryAgain = fixture.debugElement.nativeElement.querySelector('#try-again');
+    const tryAgain =
+      fixture.debugElement.nativeElement.querySelector('#try-again');
     expect(tryAgain).toBeTruthy();
     tryAgain.click();
     expect(methodCalled).toHaveBeenCalled();
