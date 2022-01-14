@@ -117,7 +117,7 @@ describe('RuleModalComponent', () => {
       'getStationQuestions'
     ).and.returnValue(of(questions));
     fixture.detectChanges();
-    expect(component.questionStationLoading).toBe(true);
+    expect(component.questionStationLoading).toBeTrue();
 
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#loading-indicator-questions'
