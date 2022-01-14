@@ -22,12 +22,16 @@
     </div>
   </ng-container>
   <ng-template #newDashboard>
-    <p>New dashboard goes here.</p>
-    <gridster class="h-screen" [options]="options">
-      <gridster-item [item]="item" *ngFor="let item of widgetsOfDashboard">
+    <p>General</p>
+    <gridster class="h-screen bg-transparent" [options]="options">
+      <gridster-item
+        [item]="item"
+        class="drop-shadow-md rounded"
+        *ngFor="let item of widgetsOfDashboard"
+      >
         <app-station-widget
           *ngIf="item.widgetType === 'station'"
-          [rithmId]="item.data"
+          [stationRithmId]="item.data"
         ></app-station-widget>
       </gridster-item>
     </gridster>

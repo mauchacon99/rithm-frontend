@@ -4,14 +4,16 @@ import { StationRosterMember } from './station-roster-member';
  * Represents the document that show in station-widget.
  */
 export interface WidgetDocument {
+  /** Document Rithm Id. */
+  rithmId: string;
   /** Document name. */
-  documentName: string;
-  /** User assigned. */
-  assignedUser: StationRosterMember;
+  name: string;
   /** Document priority. */
   priority: number;
   /** Time in station. */
-  timeInStation: string;
-  /** Document Rithm Id. */
-  documentRithmId: string;
+  flowedTimeUTC: string;
+  /** Last Updated. */
+  lastUpdatedUTC: string;
+  /** User assigned. */
+  assignedUser: StationRosterMember;
 }

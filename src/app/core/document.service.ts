@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -16,6 +16,8 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
+  StationWidgetData,
+  DocumentGenerationStatus,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -403,5 +405,52 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/assign-user`,
       requestObject
     );
+  }
+
+  /**
+   * Get document for station widgets.
+   *
+   * @param stationRithmId The Specific ID of station.
+   * @returns Returns data station widget.
+   */
+  getStationWidgetDocuments(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    stationRithmId: string
+  ): Observable<StationWidgetData> {
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+        {
+          rithmId: '321-123-123',
+          name: 'Almond',
+          priority: 3,
+          flowedTimeUTC: '2022-01-15T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-15T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '321-123-123',
+            firstName: 'Pablo',
+            lastName: 'Santos',
+            email: 'Jaime@mundo2.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+    return of(dataWidgetStation).pipe(delay(1000));
   }
 }

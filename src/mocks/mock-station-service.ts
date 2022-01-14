@@ -881,6 +881,7 @@ export class MockStationService {
           isRequired: true,
           isPrivate: false,
           children: [],
+          value: '1',
         },
         {
           prompt: 'Fake question 2',
@@ -890,6 +891,7 @@ export class MockStationService {
           isRequired: true,
           isPrivate: false,
           children: [],
+          value: '2',
         },
       ];
       return of(mockQuestions).pipe(delay(1000));

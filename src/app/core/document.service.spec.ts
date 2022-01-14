@@ -17,6 +17,8 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
+  StationWidgetData,
+  DocumentGenerationStatus,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -580,5 +582,45 @@ describe('DocumentService', () => {
 
     req.flush(expectedResponse);
     httpTestingController.verify();
+  });
+
+  it('should return data station widget', () => {
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+        {
+          rithmId: '321-123-123',
+          name: 'Almond',
+          priority: 3,
+          flowedTimeUTC: '2022-01-15T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-15T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '321-123-123',
+            firstName: 'Pablo',
+            lastName: 'Santos',
+            email: 'Jaime@mundo2.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+    service.getStationWidgetDocuments(stationId).subscribe((response) => {
+      expect(response).toEqual(dataWidgetStation);
+    });
   });
 });
