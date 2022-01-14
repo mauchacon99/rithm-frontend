@@ -7,7 +7,7 @@ export * from './map-item-status.enum';
 export * from './map-drag-item.enum';
 export * from './dialog-type.enum';
 export * from './document-generation-status.enum';
-export * from './flow-element-hover-item.enum';
+export * from './station-group-element-hover-item.enum';
 export * from './field-name-separator.enum';
 export * from './environment-name.enum';
 export * from './widget-type.enum';

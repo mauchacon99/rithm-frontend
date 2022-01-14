@@ -86,7 +86,7 @@ export class StationElementService {
       if (
         mapMode === MapMode.Build ||
         mapMode === MapMode.StationAdd ||
-        mapMode === MapMode.FlowAdd
+        mapMode === MapMode.StationGroupAdd
       ) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
