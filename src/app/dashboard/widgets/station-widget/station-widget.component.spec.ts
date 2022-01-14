@@ -9,7 +9,8 @@ import { StationWidgetComponent } from './station-widget.component';
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
-
+  const stationRithmId =
+    '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationWidgetComponent],
@@ -24,7 +25,7 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId = '321-321-256';
+    component.stationRithmId = stationRithmId;
     fixture.detectChanges();
   });
 
@@ -37,6 +38,7 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
     ).and.callThrough();
+    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
@@ -54,6 +56,7 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
+    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
