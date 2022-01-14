@@ -30,11 +30,11 @@ src/app/navigation/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
 # Team Falcon rules -- map
 src/app/map/ @strut-software/map-reviewers
 
-# Team Lion rules
+# Team Lion rules -- admin, document, settings, station
 src/app/admin/ @strut-software/team-lion
 src/app/document/ @strut-software/team-lion
 src/app/settings/ @strut-software/team-lion
 src/app/station/ @strut-software/team-lion
 
-# Team Eagle rules
+# Team Eagle rules -- dashboard
 src/app/dashboard/ @strut-software/team-eagle
