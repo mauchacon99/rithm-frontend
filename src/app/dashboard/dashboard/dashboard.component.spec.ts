@@ -11,6 +11,7 @@ import {
   MockStationService,
   MockUserService,
   MockDashboardService,
+  MockSplitService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
@@ -20,6 +21,9 @@ import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from '../dashboard-menu/menu/menu.component';
+import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { By } from '@angular/platform-browser';
+import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -34,12 +38,13 @@ describe('DashboardComponent', () => {
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
         MockComponent(MenuComponent),
+        MockComponent(StationWidgetComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: SplitService },
+        { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
       ],
       imports: [MatSidenavModule, NoopAnimationsModule],
@@ -84,5 +89,20 @@ describe('DashboardComponent', () => {
 
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the `toggle` method on the `SidenavService`', async () => {
+    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleSidenav');
+    component.toggleSideNav();
+    expect(spy).toHaveBeenCalledOnceWith();
+  });
+
+  it('should click the dashboard menu button ', async () => {
+    component.viewNewDashboard = true;
+    fixture.detectChanges();
+    const spy = spyOn(component, 'toggleSideNav');
+    const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
+    menuBtn.triggerEventHandler('click', null);
+    expect(spy).toHaveBeenCalled();
   });
 });
