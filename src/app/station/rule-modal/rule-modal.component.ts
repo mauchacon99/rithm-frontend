@@ -31,6 +31,9 @@ export class RuleModalComponent implements OnInit {
   /** The value of the operator. */
   operator = '';
 
+  /** The error if question stations fails . */
+  questionStationError = false;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
@@ -70,6 +73,7 @@ export class RuleModalComponent implements OnInit {
           this.questionStation = questions;
         },
         error: (error: unknown) => {
+          this.questionStationError = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
