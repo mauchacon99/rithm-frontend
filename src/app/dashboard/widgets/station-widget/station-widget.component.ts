@@ -8,7 +8,7 @@ import { StationWidgetData } from 'src/models';
  * Component for Station widget.
  */
 @Component({
-  selector: 'app-station-widget',
+  selector: 'app-station-widget[stationRithmId]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
 })
@@ -28,6 +28,7 @@ export class StationWidgetComponent implements OnInit {
    * Initial Method.
    */
   ngOnInit(): void {
+    this.stationRithmId = JSON.parse(this.stationRithmId).stationRithmId;
     this.getStationWidgetDocuments();
   }
 
@@ -35,7 +36,6 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   private getStationWidgetDocuments(): void {
-    this.stationRithmId = JSON.parse(this.stationRithmId).rithmId;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())

@@ -9,7 +9,8 @@ import { StationWidgetComponent } from './station-widget.component';
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
   let fixture: ComponentFixture<StationWidgetComponent>;
-
+  const stationRithmId =
+    '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationWidgetComponent],
@@ -24,8 +25,7 @@ describe('StationWidgetComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
-    component.stationRithmId =
-      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
+    component.stationRithmId = stationRithmId;
     fixture.detectChanges();
   });
 
@@ -34,19 +34,16 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should call service that return station widget data', () => {
-    component.stationRithmId =
-      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
     const spyService = spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
     ).and.callThrough();
+    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith(component.stationRithmId);
   });
 
   it('should show error message when request station widget document  data', () => {
-    component.stationRithmId =
-      '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
     spyOn(
       TestBed.inject(DocumentService),
       'getStationWidgetDocuments'
@@ -59,6 +56,7 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
+    component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
   });
