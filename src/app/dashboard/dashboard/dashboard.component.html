@@ -23,6 +23,13 @@
   </ng-container>
   <ng-template #newDashboard>
     <p>New dashboard goes here.</p>
-    <app-station-widget></app-station-widget>
+    <gridster class="h-screen" [options]="options">
+      <gridster-item [item]="item" *ngFor="let item of widgetsOfDashboard">
+        <app-station-widget
+          *ngIf="item.widgetType === 'station'"
+          [rithmId]="item.data"
+        ></app-station-widget>
+      </gridster-item>
+    </gridster>
   </ng-template>
 </div>

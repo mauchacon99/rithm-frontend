@@ -6,6 +6,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
+import { GridsterConfig } from 'angular-gridster2';
 
 /**
  * Main component for the dashboard screens.
@@ -24,6 +25,34 @@ export class DashboardComponent implements OnInit {
 
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
+
+  /** Config grid. */
+  options: GridsterConfig = {
+    gridType: 'horizontalFixed',
+    displayGrid: 'onDrag&Resize',
+    pushItems: true,
+    draggable: {
+      enabled: true,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    },
+    resizable: {
+      enabled: true,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    },
+    margin: 16,
+    minCols: 12,
+    maxCols: 12,
+  };
 
   constructor(
     private stationService: StationService,

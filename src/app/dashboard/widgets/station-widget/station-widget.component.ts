@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Component for Station widget.
@@ -8,4 +8,6 @@ import { Component } from '@angular/core';
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
 })
-export class StationWidgetComponent {}
+export class StationWidgetComponent {
+  @Input() rithmId!: string;
+}
