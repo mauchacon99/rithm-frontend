@@ -19,7 +19,6 @@ import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from '../dashboard.service';
 import { throwError } from 'rxjs';
 
-
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -32,7 +31,7 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
-        MockComponent(LoadingIndicatorComponent)
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
