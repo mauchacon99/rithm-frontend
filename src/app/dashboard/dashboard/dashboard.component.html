@@ -23,6 +23,13 @@
   </ng-container>
   <ng-template #newDashboard>
     <p>New dashboard goes here.</p>
-    <app-station-widget></app-station-widget>
+    <div
+          class="col-span-full text-error-500"
+          id="error-loading-widgets"
+          *ngIf="errorLoadingWidgets"
+        >
+          Unable to retrieve widgets
+        </div>
+    <app-station-widget *ngIf="!errorLoadingWidgets"></app-station-widget>
   </ng-template>
 </div>

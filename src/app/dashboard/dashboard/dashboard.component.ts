@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -24,6 +25,9 @@ export class DashboardComponent implements OnInit {
 
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
+
+  /** Error Loading loading widget. */
+  errorLoadingWidgets = false;
 
   constructor(
     private stationService: StationService,
@@ -79,15 +83,18 @@ export class DashboardComponent implements OnInit {
   /**
    * Gets widgets for dashboard.
    */
-  private getDashboardWidgets(): void {
+  private getDashboardWidgets(): Observable<unknown> {
+    this.errorLoadingWidgets = false;
     this.dashboardService
       .getDashboardWidgets()
       .pipe(first())
       .subscribe({
         next: (widgets) => {
+          this.errorLoadingWidgets = false;
           this.widgetsOfDashboard = widgets;
         },
         error: (error: unknown) => {
+          this.errorLoadingWidgets = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

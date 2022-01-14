@@ -80,4 +80,21 @@ describe('DashboardComponent', () => {
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
   });
+
+  it('should show error message when request for station widgets', () => {
+    spyOn(
+      TestBed.inject(DashboardComponent),
+      'getDashboardWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    fixture.detectChanges();
+    expect(component.errorLoadingWidgets).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#error-loading-widgets'
+    );
+    expect(errorComponent).toBeTruthy();
+  });
 });
