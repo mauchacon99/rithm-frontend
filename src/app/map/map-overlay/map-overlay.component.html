@@ -60,7 +60,7 @@
   </mat-drawer-container>
 </div>
 <div
-  *ngIf="isStationOrFlowAdd"
+  *ngIf="isStationOrStationGroupAdd"
   class="text-center absolute left-0 right-0 m-auto mt-2 w-auto"
 >
   <div
@@ -69,8 +69,8 @@
     {{
       currentMode === mapMode.StationAdd
         ? 'Select a location for this new station'
-        : currentMode === mapMode.FlowAdd
-        ? 'Select flows and stations to add to new flow'
+        : currentMode === mapMode.StationGroupAdd
+        ? 'Select station groups and stations to add to new station group'
         : ''
     }}
   </div>

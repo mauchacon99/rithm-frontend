@@ -1,12 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
-import { FlowLogicRule } from 'src/models';
 import { ErrorService } from 'src/app/core/error.service';
+import { Question } from 'src/models';
 /**
  * Reusable component for displaying the information to add a new rule.
  */
@@ -15,18 +15,18 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './rule-modal.component.html',
   styleUrls: ['./rule-modal.component.scss'],
 })
-export class RuleModalComponent implements OnInit {
+export class RuleModalComponent {
   /** Station Rithm id. */
   stationRithmId = '';
 
   /** Orientation for stepper. */
   stepperOrientation$: Observable<StepperOrientation>;
 
-  /** The station Flow Logic Rule. */
-  stationFlowLogic!: FlowLogicRule;
-
   /** The value of the first operand. */
   firstOperand = '';
+
+  /** Get current and previous Questions for Stations. */
+  questionStation: Question[] = [];
 
   /** The value of the operator. */
   operator = '';
@@ -45,13 +45,6 @@ export class RuleModalComponent implements OnInit {
   }
 
   /**
-   * Life cycle init the component.
-   */
-  ngOnInit(): void {
-    this.getStationFlowLogicRule();
-  }
-
-  /**
    * Close rule Modal.
    */
   closeModal(): void {
@@ -59,15 +52,15 @@ export class RuleModalComponent implements OnInit {
   }
 
   /**
-   * Get each station flow rules.
+   * Get current and previous questions.
    */
-  private getStationFlowLogicRule(): void {
+  getStationQuestions(): void {
     this.stationService
-      .getStationFlowLogicRule(this.stationRithmId)
+      .getStationQuestions(this.stationRithmId, true)
       .pipe(first())
       .subscribe({
-        next: (stationFlowLogic) => {
-          this.stationFlowLogic = stationFlowLogic;
+        next: (questions) => {
+          this.questionStation = questions;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

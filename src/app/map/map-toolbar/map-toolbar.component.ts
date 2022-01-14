@@ -40,7 +40,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     return (
       this.mapMode === MapMode.Build ||
       this.mapMode === MapMode.StationAdd ||
-      this.mapMode === MapMode.FlowAdd
+      this.mapMode === MapMode.StationGroupAdd
     );
   }
 
@@ -54,12 +54,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add flow mode active.
+   * Add station group mode active.
    *
    * @returns Boolean.
    */
-  get flowAddActive(): boolean {
-    return this.mapMode === MapMode.FlowAdd;
+  get stationGroupAddActive(): boolean {
+    return this.mapMode === MapMode.StationGroupAdd;
   }
 
   constructor(
@@ -83,16 +83,16 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Sets the map to add flow mode in preparation for a flow to be selected.
+   * Sets the map to add station group mode in preparation for a station group to be selected.
    */
-  addFlow(): void {
-    if (!this.flowAddActive) {
-      this.mapService.mapMode$.next(MapMode.FlowAdd);
+  addStationGroup(): void {
+    if (!this.stationGroupAddActive) {
+      this.mapService.mapMode$.next(MapMode.StationGroupAdd);
       this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
     }
-    // TODO: Implement add flow
+    // TODO: Implement add station group.
   }
 
   /**
