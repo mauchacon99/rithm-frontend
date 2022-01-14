@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { StationRoutingModule } from './station-routing.module';
 import { StationComponent } from './station/station.component';
-import { DetailModule } from '../detail/detail.module';
 import { FlowLogicComponent } from './flow-logic/flow-logic.component';
 import { PowersComponent } from './powers/powers.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +23,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '../shared/fields/text-field/text-field.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SubHeaderModule } from '../shared/sub-header/sub-header.module';
+import { DetailDrawerModule } from '../shared/detail-drawer/detail-drawer.module';
+import { ConnectedStationPaneModule } from '../shared/connected-station-pane/connected-station-pane.module';
+import { StationInfoHeaderModule } from '../shared/station-info-header/station-info-header.module';
+import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
+import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +43,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   imports: [
     CommonModule,
     StationRoutingModule,
-    DetailModule,
     MatButtonModule,
     MatSidenavModule,
     MatTabsModule,
@@ -54,6 +58,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     TextFieldModule,
     LoadingIndicatorModule,
     MatCheckboxModule,
+    SubHeaderModule,
+    DetailDrawerModule,
+    ConnectedStationPaneModule,
+    StationInfoHeaderModule,
+    DocumentInfoHeaderModule,
+    PreviousFieldsModule,
   ],
 })
 export class StationModule {}

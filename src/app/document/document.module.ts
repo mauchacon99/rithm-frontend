@@ -3,7 +3,6 @@ import { DocumentComponent } from './document/document.component';
 
 import { CommonModule } from '@angular/common';
 import { DocumentRoutingModule } from './document-routing.module';
-import { DetailModule } from '../detail/detail.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DocumentFieldComponent } from './document-field/document-field.component';
@@ -20,6 +19,12 @@ import { DateFieldModule } from '../shared/fields/date-field/date-field.module';
 import { NumberFieldModule } from '../shared/fields/number-field/number-field.module';
 import { NestedFieldModule } from '../shared/fields/nested-field/nested-field.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { SubHeaderModule } from '../shared/sub-header/sub-header.module';
+import { DetailDrawerModule } from '../shared/detail-drawer/detail-drawer.module';
+import { ConnectedStationPaneModule } from '../shared/connected-station-pane/connected-station-pane.module';
+import { StationInfoHeaderModule } from '../shared/station-info-header/station-info-header.module';
+import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
+import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +37,6 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     CommonModule,
     DocumentRoutingModule,
     MatSidenavModule,
-    DetailModule,
     ReactiveFormsModule,
     InfoDrawerModule,
     MatExpansionModule,
@@ -45,6 +49,12 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     NumberFieldModule,
     NestedFieldModule,
     LoadingIndicatorModule,
+    SubHeaderModule,
+    DetailDrawerModule,
+    ConnectedStationPaneModule,
+    StationInfoHeaderModule,
+    DocumentInfoHeaderModule,
+    PreviousFieldsModule,
   ],
 })
 export class DocumentModule {}
