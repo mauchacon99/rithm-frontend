@@ -82,7 +82,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should show error message when request for station widgets', () => {
-    component.viewNewDashboard= true;
+    component.viewNewDashboard = true;
     spyOn(
       TestBed.inject(DashboardService),
       'getDashboardWidgets'
