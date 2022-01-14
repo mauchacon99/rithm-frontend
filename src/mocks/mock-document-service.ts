@@ -14,6 +14,8 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
+  StationWidgetData,
+  DocumentGenerationStatus,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1192,5 +1194,51 @@ export class MockDocumentService {
     } else {
       return of().pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get document for station widgets.
+   *
+   * @param stationRithmId The Specific ID of station.
+   * @returns Returns data station widget.
+   */
+  getStationWidgetDocuments(
+    stationRithmId: string
+  ): Observable<StationWidgetData> {
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+        {
+          rithmId: '321-123-123',
+          name: 'Almond',
+          priority: 3,
+          flowedTimeUTC: '2022-01-15T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-15T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '321-123-123',
+            firstName: 'Pablo',
+            lastName: 'Santos',
+            email: 'Jaime@mundo2.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+    return of(dataWidgetStation).pipe(delay(1000));
   }
 }

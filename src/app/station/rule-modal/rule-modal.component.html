@@ -16,9 +16,25 @@
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Select Field</mat-label>
-          <mat-select [(value)]="firstOperand"></mat-select>
+          <mat-select [(value)]="firstOperand">
+            <mat-option
+              *ngFor="let question of questionStation"
+              [value]="question.value"
+            >
+              {{ question.prompt }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
-        <button mat-button matStepperNext class="w-1/12">Next</button>
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12"
+          data-testid="next-step-1"
+          id="next-step-1"
+          [disabled]="firstOperand === ''"
+        >
+          Next
+        </button>
       </div>
     </mat-step>
     <!-- Step 2 -->
