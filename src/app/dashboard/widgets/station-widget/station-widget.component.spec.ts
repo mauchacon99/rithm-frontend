@@ -90,6 +90,9 @@ describe('StationWidgetComponent', () => {
 
     component.ngOnInit();
     fixture.detectChanges();
+    expect(component.dataStationWidget.documentGeneratorStatus).toBe(
+      DocumentGenerationStatus.Manual
+    );
     const button = fixture.debugElement.nativeElement.querySelector(
       '#create-new-document'
     );
