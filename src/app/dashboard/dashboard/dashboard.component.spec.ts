@@ -21,7 +21,7 @@ import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from '../dashboard-menu/menu/menu.component';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
