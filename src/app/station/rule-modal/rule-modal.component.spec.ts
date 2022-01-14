@@ -59,7 +59,7 @@ describe('RuleModalComponent', () => {
       TestBed.inject(StationService),
       'getStationQuestions'
     ).and.callThrough();
-    component.getStationQuestions();
+    component.ngOnInit();
     expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
   });
 
@@ -76,7 +76,17 @@ describe('RuleModalComponent', () => {
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
-    component.getStationQuestions();
+    component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should activate the next button in step 1.', () => {
+    const btnNextInStep1 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-1');
+    const valueStationQuestion = 'value 1';
+    expect(btnNextInStep1.disabled).toBeTruthy();
+    component.firstOperand = valueStationQuestion;
+    fixture.detectChanges();
+    expect(btnNextInStep1.disabled).toBeFalsy();
   });
 });
