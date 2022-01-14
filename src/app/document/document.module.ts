@@ -25,6 +25,7 @@ import { StationInfoHeaderModule } from '../shared/station-info-header/station-i
 import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
 import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
 import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
     DocumentInfoHeaderModule,
     PreviousFieldsModule,
     InfoDrawerModule,
+    MatButtonModule,
   ],
 })
 export class DocumentModule {}
