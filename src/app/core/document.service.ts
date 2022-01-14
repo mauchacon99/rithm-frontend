@@ -417,10 +417,9 @@ export class DocumentService {
     stationRithmId: string
   ): Observable<StationWidgetData> {
     const params = new HttpParams().set('stationRithmId', stationRithmId);
-    return this.http
-      .get<StationWidgetData>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
-        { params }
-      );
+    return this.http.get<StationWidgetData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
+      { params }
+    );
   }
 }
