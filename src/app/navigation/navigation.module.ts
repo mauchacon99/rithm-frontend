@@ -9,7 +9,7 @@ import { NotificationToastsContainerComponent } from './notification-toasts-cont
 import { MatCardModule } from '@angular/material/card';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatButtonModule } from '@angular/material/button';
-import { SharedModule } from '../shared/shared.module';
+import { UserAvatarModule } from '../shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { SharedModule } from '../shared/shared.module';
     MatMenuModule,
     MatCardModule,
     ClickOutsideModule,
-    SharedModule,
+    UserAvatarModule,
   ],
   exports: [
     TopNavComponent,
