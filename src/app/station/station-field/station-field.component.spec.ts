@@ -6,7 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MockComponent } from 'ng-mocks';
 import { StationService } from 'src/app/core/station.service';
-import { TextFieldComponent } from 'src/app/detail/text-field/text-field.component';
+import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { MockStationService } from 'src/mocks';
 import { QuestionFieldType } from 'src/models';
 import { StationFieldComponent } from './station-field.component';

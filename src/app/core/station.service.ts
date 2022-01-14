@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -17,6 +17,10 @@ import {
   DocumentNameField,
   StandardStringJSON,
   ForwardPreviousStationsDocument,
+  OperandType,
+  OperatorType,
+  FlowLogicRule,
+  RuleType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -494,5 +498,68 @@ export class StationService {
   /** Set touch to station template form. */
   touchStationForm(): void {
     this.stationFormTouched$.next();
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param stationRithmId The specific station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The id of the Station cannot be empty.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationFlowLogic: FlowLogicRule = {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
+              },
+            ],
+          },
+        ],
+      };
+      return of(stationFlowLogic).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get the stations questions.
+   *
+   * @param stationRithmId  The station id.
+   * @param includePreviousQuestions If is true contains previous questions.
+   * @returns An array of current and previous for stations.
+   */
+  getStationQuestions(
+    stationRithmId: string,
+    includePreviousQuestions = false
+  ): Observable<Question[]> {
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId)
+      .set('includePreviousQuestions', includePreviousQuestions);
+    return this.http.get<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+      { params }
+    );
   }
 }

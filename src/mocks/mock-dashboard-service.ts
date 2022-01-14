@@ -3,6 +3,8 @@ import {
   WorkerDashboardHeader,
   DashboardStationData,
   StationRosterMember,
+  DashboardItem,
+  WidgetType,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -196,5 +198,29 @@ export class MockDashboardService {
       },
     ];
     return of(filterData).pipe(delay(1000));
+  }
+
+  /**
+   * Gets widgets for dashboard.
+   *
+   * @returns Returns the list of widgets.
+   */
+  getDashboardWidgets(): Observable<DashboardItem[]> {
+    const widgets: DashboardItem[] = [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ];
+
+    return of(widgets).pipe(delay(1000));
   }
 }
