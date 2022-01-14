@@ -6,12 +6,17 @@ import { MapSearchComponent } from './map-search/map-search.component';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { MapCanvasComponent } from './map-canvas/map-canvas.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
-import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connection-info-drawer.component';
+import { StationGroupInfoDrawerComponent } from './station-group-info-drawer/station-group-info-drawer.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RecognitionModule } from './recognition/recognition.module';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -21,14 +26,20 @@ import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
     MapCanvasComponent,
     MapOverlayComponent,
     ConnectionInfoDrawerComponent,
+    StationGroupInfoDrawerComponent,
   ],
   imports: [
     CommonModule,
     MapRoutingModule,
-    SharedModule,
     MatButtonModule,
     MatMenuModule,
     MatSidenavModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RecognitionModule,
+    LoadingIndicatorModule,
     InfoDrawerModule,
   ],
 })

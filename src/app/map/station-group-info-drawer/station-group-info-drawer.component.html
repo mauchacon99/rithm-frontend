@@ -1,0 +1,31 @@
+<div class="grid grid-cols-1 p-4 w-72 overflow-y-auto drawer-content-h-map">
+  <div class="w-full py-2">
+    <div class="col-span-12 mb-3">
+      <h6 class="text-center">Station Group Information</h6>
+    </div>
+    <div class="col-span-12 pt-2" *ngIf="!isBuilding">
+      <p class="overline-font">Group Name</p>
+      <p>{{ 'groupName' }}</p>
+    </div>
+    <div class="col-span-12 pt-2" *ngIf="isBuilding">
+      <mat-form-field
+        appearance="outline"
+        class="col-span-12 sm:col-span-8 p-0"
+      >
+        <mat-label>Group Name</mat-label>
+        <input
+          matInput
+          type="text"
+          id="group"
+          data-testId="group-name-field"
+          [(ngModel)]="groupName"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div class="flex justify-center border-t border-solid border-secondary-50">
+  <button mat-button color="accent" (click)="toggleDrawer('stationGroupInfo')">
+    Close
+  </button>
+</div>
