@@ -1,6 +1,6 @@
-<mat-sidenav-container [hasBackdrop]="drawerHasBackdrop" class="mt-0 h-screen">
-  <mat-sidenav-content class="textured-bg">
-    <div class="container mx-auto px-3 py-5 lg:px-0">
+<mat-sidenav-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
+  <mat-sidenav-content class="textured-bg h-calc">
+    <div class="container mx-auto px-3 py-5 lg:px-0 h-full">
       <ng-container *ngIf="!viewNewDashboard; else newDashboard">
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
           <app-header class="lg:col-span-6"></app-header>
@@ -26,14 +26,14 @@
       <ng-template #newDashboard class="relative">
         <button
           id="menu-button"
-          class="transition ease-in-out bg-darkBlue w-9 px-2 pb-1.5 pt-2 rounded hover:scale-x-110 hover:translate-x-1 fixed -left-1 top-34 z-10 shadow-lg"
+          class="transition ease-in-out bg-darkBlue w-9 px-2 pb-1.5 pt-2 rounded hover:scale-x-110 hover:translate-x-1 fixed -left-1 top-36 z-10 shadow-lg"
           (click)="toggleSideNav()"
         >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
-        <div class="mx-5">
+        <div class="mx-5 h-full">
           <h2 class="my-2 font-semibold">General</h2>
-          <gridster class="h-screen bg-transparent" [options]="options">
+          <gridster class="bg-transparent" [options]="options">
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded"

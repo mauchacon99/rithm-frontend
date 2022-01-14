@@ -1,0 +1,4 @@
+.h-calc {
+  height: calc(100vh - 64px); //this height is set for browser compatibility.
+  height: calc(var(--dashboardvh, 1vh) * 100 - 64px);
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
@@ -119,6 +119,9 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getDashboardWidgets();
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
   /**
@@ -147,5 +150,15 @@ export class DashboardComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Needed to resize a mobile browser when the scrollbar hides.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 }

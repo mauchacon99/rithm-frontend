@@ -100,7 +100,7 @@ export class SidenavDrawerService {
   }
 
   /**
-   * Sets the instance of the drawer component fo rfurther action.
+   * Sets the instance of the drawer component for further action.
    *
    * @param component The component used for the drawer.
    */

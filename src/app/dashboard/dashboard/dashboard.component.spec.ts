@@ -24,6 +24,7 @@ import { MenuComponent } from '../dashboard-menu/menu/menu.component';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
+import { GridsterModule } from 'angular-gridster2';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -47,7 +48,7 @@ describe('DashboardComponent', () => {
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
       ],
-      imports: [MatSidenavModule, NoopAnimationsModule],
+      imports: [MatSidenavModule, NoopAnimationsModule, GridsterModule],
     }).compileComponents();
   });
 
@@ -91,13 +92,13 @@ describe('DashboardComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call the `toggle` method on the `SidenavService`', async () => {
+  it('should call the `toggle` method on the `SidenavService`', () => {
     const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleSidenav');
     component.toggleSideNav();
     expect(spy).toHaveBeenCalledOnceWith();
   });
 
-  it('should click the dashboard menu button ', async () => {
+  it('should click the dashboard menu button ', () => {
     component.viewNewDashboard = true;
     fixture.detectChanges();
     const spy = spyOn(component, 'toggleSideNav');
