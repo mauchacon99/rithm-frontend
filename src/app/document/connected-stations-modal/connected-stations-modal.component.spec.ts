@@ -19,7 +19,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
 
@@ -49,7 +48,6 @@ describe('ConnectedStationsModalComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
-        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },

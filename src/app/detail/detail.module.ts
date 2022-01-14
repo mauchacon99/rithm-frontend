@@ -7,7 +7,6 @@ import { ConnectedStationPaneComponent } from './connected-station-pane/connecte
 import { HistoryDrawerComponent } from './history-drawer/history-drawer.component';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { ConnectedStationCardComponent } from './connected-station-card/connected-station-card.component';
-import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +19,7 @@ import { PreviousFieldsComponent } from './previous-fields/previous-fields.compo
 import { MatChipsModule } from '@angular/material/chips';
 import { CommentDrawerModule } from '../comment/comment-drawer/comment-drawer.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { MatCardModule } from '@angular/material/card';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -38,7 +38,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
   imports: [
     CommonModule,
     MatButtonModule,
-    SharedModule,
     MatInputModule,
     ReactiveFormsModule,
     MatTabsModule,
@@ -49,7 +48,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatButtonModule,
     MatChipsModule,
     CommentDrawerModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
+    MatCardModule
   ],
   exports: [
     SubHeaderComponent,

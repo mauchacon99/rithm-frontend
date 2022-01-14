@@ -4,7 +4,6 @@ import { DocumentComponent } from './document/document.component';
 import { CommonModule } from '@angular/common';
 import { DocumentRoutingModule } from './document-routing.module';
 import { DetailModule } from '../detail/detail.module';
-import { SharedModule } from '../shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DocumentFieldComponent } from './document-field/document-field.component';
@@ -34,7 +33,6 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     DocumentRoutingModule,
     MatSidenavModule,
     DetailModule,
-    SharedModule,
     ReactiveFormsModule,
     InfoDrawerModule,
     MatExpansionModule,

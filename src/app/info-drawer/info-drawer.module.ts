@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfoDrawerComponent } from './info-drawer/info-drawer.component';
 import { StationInfoDrawerComponent } from './station-info-drawer/station-info-drawer.component';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentInfoDrawerComponent } from './document-info-drawer/document-info-drawer.component';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -11,6 +10,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { RosterModule } from '../shared/roster/roster.module';
+import { UserAvatarModule } from '../shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,6 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
   ],
   imports: [
     CommonModule,
-    SharedModule,
     MatInputModule,
     ReactiveFormsModule,
     MatRadioModule,
@@ -28,7 +28,9 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatSelectModule,
     MatFormFieldModule,
     FormsModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
+    RosterModule,
+    UserAvatarModule
   ],
   exports: [InfoDrawerComponent],
 })

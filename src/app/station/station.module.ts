@@ -12,7 +12,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
@@ -24,6 +23,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '../fields/text-field/text-field.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,6 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatTabsModule,
     ReactiveFormsModule,
     ClickOutsideModule,
-    SharedModule,
     FormsModule,
     MatExpansionModule,
     InfoDrawerModule,
@@ -53,7 +52,8 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatStepperModule,
     MatSelectModule,
     TextFieldModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
+    MatCheckboxModule,
   ],
 })
 export class StationModule {}
