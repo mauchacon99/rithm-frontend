@@ -23,6 +23,7 @@ import { RuleModalComponent } from './rule-modal/rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '../fields/text-field/text-field.module';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { TextFieldModule } from '../fields/text-field/text-field.module';
     MatStepperModule,
     MatSelectModule,
     TextFieldModule,
+    LoadingIndicatorModule
   ],
 })
 export class StationModule {}

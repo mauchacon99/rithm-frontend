@@ -10,6 +10,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatSelectModule,
     MatFormFieldModule,
     FormsModule,
+    LoadingIndicatorModule
   ],
   exports: [InfoDrawerComponent],
 })

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
-import { CommentDrawerComponent } from '../comment-drawer/comment-drawer.component';
+import { CommentDrawerComponent } from 'src/app/comment/comment-drawer/comment-drawer.component';
 import { HistoryDrawerComponent } from '../history-drawer/history-drawer.component';
 
 import { DetailDrawerComponent } from './detail-drawer.component';

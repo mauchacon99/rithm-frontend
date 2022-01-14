@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [AccountSettingsComponent, NotificationSettingsComponent],
@@ -17,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCardModule,
     MatButtonModule,
     ReactiveFormsModule,
+    LoadingIndicatorModule
   ],
 })
 export class SettingsModule {}

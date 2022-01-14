@@ -19,10 +19,10 @@ import { StationDocumentsModalComponent } from './station-documents-modal/statio
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserRemovalComponent } from './user-removal/user-removal.component';
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { RosterManagementModalComponent } from '../shared/roster-management-modal/roster-management-modal.component';
+import { LoadingIndicatorModule } from './loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,6 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     UserAvatarComponent,
     UserFormComponent,
     UserRemovalComponent,
-    LoadingIndicatorComponent,
     DialogComponent,
     RosterManagementModalComponent,
   ],
@@ -53,9 +52,9 @@ import { RosterManagementModalComponent } from '../shared/roster-management-moda
     MatMenuModule,
     MatTooltipModule,
     MatBadgeModule,
+    LoadingIndicatorModule,
   ],
   exports: [
-    LoadingIndicatorComponent,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,

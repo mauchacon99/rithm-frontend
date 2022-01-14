@@ -6,9 +6,9 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CommentService } from 'src/app/core/comment.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockCommentService, MockErrorService } from 'src/mocks';
-import { CommentService } from '../comment.service';
 
 import { CommentInputComponent } from './comment-input.component';
 

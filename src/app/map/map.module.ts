@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RecognitionModule } from './recognition/recognition.module';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { RecognitionModule } from './recognition/recognition.module';
     ReactiveFormsModule,
     FormsModule,
     RecognitionModule,
+    LoadingIndicatorModule
   ],
 })
 export class MapModule {}

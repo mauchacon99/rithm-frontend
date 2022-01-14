@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { PreviousFieldsComponent } from './previous-fields/previous-fields.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { CommentDrawerModule } from '../comment/comment-drawer/comment-drawer.module';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 //This is required by ngx-mask. See here for details: https://www.npmjs.com/package/ngx-mask
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
@@ -47,7 +48,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MatSelectModule,
     MatButtonModule,
     MatChipsModule,
-    CommentDrawerModule
+    CommentDrawerModule,
+    LoadingIndicatorModule
   ],
   exports: [
     SubHeaderComponent,

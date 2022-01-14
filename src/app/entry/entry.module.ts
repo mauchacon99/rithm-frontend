@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    LoadingIndicatorModule,
   ],
 })
 export class EntryModule {}

@@ -20,6 +20,7 @@ import { CheckFieldModule } from '../fields/check-field/check-field.module';
 import { DateFieldModule } from '../fields/date-field/date-field.module';
 import { NumberFieldModule } from '../fields/number-field/number-field.module';
 import { NestedFieldModule } from '../fields/nested-field/nested-field.module';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NestedFieldModule } from '../fields/nested-field/nested-field.module';
     DateFieldModule,
     NumberFieldModule,
     NestedFieldModule,
+    LoadingIndicatorModule,
   ],
 })
 export class DocumentModule {}

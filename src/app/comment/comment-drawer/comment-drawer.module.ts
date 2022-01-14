@@ -7,10 +7,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommentModule } from '../comment/comment.module';
 import { CommentInputModule } from '../comment-input/comment-input.module';
+import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
   declarations: [CommentDrawerComponent],
-  imports: [CommonModule, MatCheckboxModule, ReactiveFormsModule, SharedModule, MatTabsModule, CommentModule, CommentInputModule],
+  imports: [CommonModule, MatCheckboxModule, ReactiveFormsModule, SharedModule, MatTabsModule, CommentModule, CommentInputModule, LoadingIndicatorModule],
   exports: [CommentDrawerComponent],
 })
 export class CommentDrawerModule {}
