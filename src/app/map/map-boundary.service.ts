@@ -26,7 +26,7 @@ export class MapBoundaryService {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
-        'Cannot draw flow boundary line if context is not defined'
+        'Cannot draw boundary line if context is not defined'
       );
     }
     const ctx = this.canvasContext;

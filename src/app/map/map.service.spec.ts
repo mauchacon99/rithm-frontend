@@ -84,11 +84,11 @@ describe('MapService', () => {
           notes: '',
         },
       ],
-      flows: [
+      stationGroups: [
         {
           rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
           organizationRithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
-          title: 'Flow 1',
+          title: 'Group 1',
           stations: [
             'ED6148C9-ABB7-408E-A210-9242B2735B1C',
             'CCAEBE24-AF01-48AB-A7BB-279CC25B0988',
@@ -97,17 +97,17 @@ describe('MapService', () => {
             'CCAEBE54-AF01-48AB-A7BB-279CC25B0990',
             'CCAEBE94-AF01-48AB-A7BB-279CC25B0989',
           ],
-          subFlows: [],
+          subStationGroups: [],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: false,
+          isReadOnlyRootStationGroup: false,
         },
         {
           rithmId: '',
           title: '',
           stations: [],
-          subFlows: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+          subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
           status: MapItemStatus.Normal,
-          isReadOnlyRootFlow: true,
+          isReadOnlyRootStationGroup: true,
         },
       ],
     };
@@ -312,7 +312,7 @@ describe('MapService', () => {
           notes: '',
         },
       ],
-      flows: [],
+      stationGroups: [],
     };
 
     service.publishMap().subscribe((response) => {
