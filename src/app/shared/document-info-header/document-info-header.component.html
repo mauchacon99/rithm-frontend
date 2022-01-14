@@ -14,6 +14,7 @@
             {{ field.prompt }}
             <button
               mat-icon-button
+              type="button"
               class="mat-icon-6"
               (click)="removeAppendedFieldFromDocumentName(i)"
             >
@@ -28,6 +29,7 @@
     </div>
     <button
       *ngIf="isStation"
+      type="button"
       data-testid="document-info-drawer"
       id="info-drawer-button-document"
       mat-icon-button
@@ -57,6 +59,7 @@
           (keyup)="updateDocumentNameBS()"
         />
         <button
+          type="button"
           data-testid="document-info-drawer"
           mat-icon-button
           matSuffix
@@ -79,6 +82,7 @@
       <div class="flex items-center justify-between w-full">
         <p>Document Name: {{ documentName }} {{ appendedDocumentName }}</p>
         <button
+          type="button"
           data-testid="document-info-drawer"
           mat-icon-button
           matSuffix
@@ -98,7 +102,7 @@
         userType === userTypeEnum.StationOwner
       "
     >
-      <button mat-icon-button color="accent">
+      <button mat-icon-button color="accent" type="button">
         <!-- TODO: Display if not locked -->
         <i class="fas fa-pen"></i>
         <!-- TODO: Display if someone is editing/working -->
