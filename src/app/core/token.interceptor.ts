@@ -106,7 +106,10 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: unknown) => {
         // If unauthorized, sign the user out
-        if (error instanceof HttpErrorResponse && error.status === HttpStatusCode.Unauthorized) {
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === HttpStatusCode.Unauthorized
+        ) {
           this.userService.signOut();
         }
         return throwError(() => error);
