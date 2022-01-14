@@ -75,7 +75,7 @@ export class RuleModalComponent implements OnInit {
           this.questionStation = questions;
         },
         error: (error: unknown) => {
-          this.questionStationLoading = true;
+          this.questionStationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
