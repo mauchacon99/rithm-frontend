@@ -25,9 +25,7 @@ export class MapBoundaryService {
   drawBox(minBoundaryCoords: Point, maxBoundaryCoords: Point): void {
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
-      throw new Error(
-        'Cannot draw boundary line if context is not defined'
-      );
+      throw new Error('Cannot draw boundary line if context is not defined');
     }
     const ctx = this.canvasContext;
     const strokeColor = '#1b4387';
