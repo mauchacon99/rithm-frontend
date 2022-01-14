@@ -17,7 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { PreviousFieldsComponent } from './previous-fields/previous-fields.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { CommentDrawerModule } from '../comment/comment-drawer/comment-drawer.module';
+import { CommentDrawerModule } from '../shared/comment/comment-drawer/comment-drawer.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { MatCardModule } from '@angular/material/card';
 

@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RuleModalComponent } from './rule-modal/rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
-import { TextFieldModule } from '../fields/text-field/text-field.module';
+import { TextFieldModule } from '../shared/fields/text-field/text-field.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 

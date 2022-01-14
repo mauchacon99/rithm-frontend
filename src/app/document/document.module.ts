@@ -13,12 +13,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ConnectedStationsModalComponent } from './connected-stations-modal/connected-stations-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import { TextFieldModule } from '../fields/text-field/text-field.module';
-import { SelectFieldModule } from '../fields/select-field/select-field.module';
-import { CheckFieldModule } from '../fields/check-field/check-field.module';
-import { DateFieldModule } from '../fields/date-field/date-field.module';
-import { NumberFieldModule } from '../fields/number-field/number-field.module';
-import { NestedFieldModule } from '../fields/nested-field/nested-field.module';
+import { TextFieldModule } from '../shared/fields/text-field/text-field.module';
+import { SelectFieldModule } from '../shared/fields/select-field/select-field.module';
+import { CheckFieldModule } from '../shared/fields/check-field/check-field.module';
+import { DateFieldModule } from '../shared/fields/date-field/date-field.module';
+import { NumberFieldModule } from '../shared/fields/number-field/number-field.module';
+import { NestedFieldModule } from '../shared/fields/nested-field/nested-field.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 
 @NgModule({
