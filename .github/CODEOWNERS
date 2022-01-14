@@ -5,32 +5,30 @@
 src/assets/**/* @belugasanity
 .browserslistrc @belugasanity
 
-*.ts @HendricksonTyler
-*.js @HendricksonTyler
-*.spec.ts @HendricksonTyler
-*.json @HendricksonTyler
+*.ts @belugasanity
+*.js @belugasanity
+*.spec.ts @belugasanity
+*.json @belugasanity
 
-*.html @HendricksonTyler @belugasanity
-index.html @HendricksonTyler @belugasanity
-index.testing.html @HendricksonTyler @belugasanity
+*.html @belugasanity
+index.html @belugasanity
+index.testing.html @belugasanity
+
+# Core rules
+src/app/core/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
 
 # Shared Module rules
-src/app/core/**/*.ts @HendricksonTyler @belugasanity
+src/app/shared/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/shared/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/shared/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
 
-src/app/detail/**/*.ts @HendricksonTyler @belugasanity
-src/app/detail/**/*.html @HendricksonTyler @belugasanity
-src/app/detail/**/*.scss @belugasanity
+# Navigation module rules
+src/app/navigation/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/navigation/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/navigation/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
 
-src/app/info-drawer/**/*.ts @HendricksonTyler @belugasanity
-src/app/info-drawer/**/*.html @HendricksonTyler @belugasanity
-src/app/info-drawer/**/*.scss @belugasanity
-
-src/app/navigation/**/*.ts @HendricksonTyler @belugasanity
-src/app/navigation/**/*.html @HendricksonTyler @belugasanity
-src/app/navigation/**/*.scss @belugasanity
-
-# Team Falcon rules
-src/app/map/ @HendricksonTyler @strut-software/map-reviewers
+# Team Falcon rules -- map
+src/app/map/ @strut-software/map-reviewers
 
 # Team Lion rules
 src/app/admin/ @strut-software/team-lion
