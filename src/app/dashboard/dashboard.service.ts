@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -8,7 +8,6 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
-  WidgetType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -98,21 +97,8 @@ export class DashboardService {
    * @returns Returns the list of widgets.
    */
   getDashboardWidgets(): Observable<DashboardItem[]> {
-    const widgets: DashboardItem[] = [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ];
-
-    return of(widgets).pipe(delay(1000));
+    return this.http.get<DashboardItem[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+    );
   }
 }
