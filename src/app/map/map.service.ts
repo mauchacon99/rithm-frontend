@@ -44,7 +44,7 @@ const MICROSERVICE_PATH = '/mapservice/api/map';
 })
 export class MapService {
   /** This will track the array of stations and station groups. */
-  mapData: MapData = { stations: [], flows: [] };
+  mapData: MapData = { stations: [], stationGroups: [] };
 
   /** Notifies when the map data has been received. */
   mapDataReceived$ = new BehaviorSubject(false);
@@ -131,7 +131,7 @@ export class MapService {
           data.stations.map((e) => {
             e.status = MapItemStatus.Normal;
           });
-          data.flows.map((e) => {
+          data.stationGroups.map((e) => {
             e.status = MapItemStatus.Normal;
           });
           this.mapData = data;
@@ -155,7 +155,7 @@ export class MapService {
     this.stationElements = this.mapData.stations.map(
       (e) => new StationMapElement(e)
     );
-    this.stationGroupElements = this.mapData.flows.map(
+    this.stationGroupElements = this.mapData.stationGroups.map(
       (e) => new StationGroupMapElement(e)
     );
     this.setConnections();
@@ -473,7 +473,7 @@ export class MapService {
       stations: this.stationElements.filter(
         (e) => e.status !== MapItemStatus.Normal
       ),
-      flows: this.stationGroupElements.filter(
+      stationGroups: this.stationGroupElements.filter(
         (e) => e.status !== MapItemStatus.Normal
       ),
     };

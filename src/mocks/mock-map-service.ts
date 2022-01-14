@@ -158,7 +158,7 @@ export class MockMapService {
           notes: '',
         },
       ],
-      flows: [
+      stationGroups: [
         {
           rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
           organizationRithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',

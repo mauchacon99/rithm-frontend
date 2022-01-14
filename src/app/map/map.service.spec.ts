@@ -84,7 +84,7 @@ describe('MapService', () => {
           notes: '',
         },
       ],
-      flows: [
+      stationGroups: [
         {
           rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
           organizationRithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
@@ -312,7 +312,7 @@ describe('MapService', () => {
           notes: '',
         },
       ],
-      flows: [],
+      stationGroups: [],
     };
 
     service.publishMap().subscribe((response) => {

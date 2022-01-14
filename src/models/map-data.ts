@@ -7,6 +7,6 @@ export interface MapData {
   /** List of all stations in the map. */
   stations: StationMapData[];
 
-  /** List of all flows in the map. */
-  flows: StationGroupMapData[];
+  /** List of all station groups in the map. */
+  stationGroups: StationGroupMapData[];
 }
