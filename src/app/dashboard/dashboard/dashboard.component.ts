@@ -8,6 +8,7 @@ import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
+import { GridsterConfig } from 'angular-gridster2';
 
 /**
  * Main component for the dashboard screens.
@@ -30,6 +31,34 @@ export class DashboardComponent implements OnInit {
 
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
+
+  /** Config grid. */
+  options: GridsterConfig = {
+    gridType: 'verticalFixed',
+    displayGrid: 'onDrag&Resize',
+    pushItems: true,
+    draggable: {
+      enabled: true,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    },
+    resizable: {
+      enabled: true,
+      start: () => {
+        /** Do something. */
+      },
+      stop: () => {
+        /** Do something. */
+      },
+    },
+    margin: 16,
+    minCols: 12,
+    maxCols: 12,
+  };
 
   /**
    * Whether the signed in user is an admin or not.
