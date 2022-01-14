@@ -15,7 +15,6 @@ import { StationFieldComponent } from './station-field/station-field.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { StationTemplateComponent } from './station-template/station-template.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
 import { MatInputModule } from '@angular/material/input';
 import { RuleModalComponent } from './rule-modal/rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -29,6 +28,7 @@ import { ConnectedStationPaneModule } from '../shared/connected-station-pane/con
 import { StationInfoHeaderModule } from '../shared/station-info-header/station-info-header.module';
 import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
 import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
+import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +50,6 @@ import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.
     ClickOutsideModule,
     FormsModule,
     MatExpansionModule,
-    InfoDrawerModule,
     MatFormFieldModule,
     MatInputModule,
     MatStepperModule,
@@ -64,6 +63,7 @@ import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.
     StationInfoHeaderModule,
     DocumentInfoHeaderModule,
     PreviousFieldsModule,
+    InfoDrawerModule,
   ],
 })
 export class StationModule {}

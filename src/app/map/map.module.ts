@@ -11,12 +11,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connection-info-drawer.component';
 import { StationGroupInfoDrawerComponent } from './station-group-info-drawer/station-group-info-drawer.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { InfoDrawerModule } from '../info-drawer/info-drawer.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RecognitionModule } from './recognition/recognition.module';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -34,13 +34,13 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatButtonModule,
     MatMenuModule,
     MatSidenavModule,
-    InfoDrawerModule,
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     FormsModule,
     RecognitionModule,
     LoadingIndicatorModule,
+    InfoDrawerModule,
   ],
 })
 export class MapModule {}

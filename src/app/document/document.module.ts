@@ -7,7 +7,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DocumentFieldComponent } from './document-field/document-field.component';
 import { DocumentTemplateComponent } from './document-template/document-template.component';
-import { InfoDrawerModule } from 'src/app/info-drawer/info-drawer.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ConnectedStationsModalComponent } from './connected-stations-modal/connected-stations-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -25,6 +24,7 @@ import { ConnectedStationPaneModule } from '../shared/connected-station-pane/con
 import { StationInfoHeaderModule } from '../shared/station-info-header/station-info-header.module';
 import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
 import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
+import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,6 @@ import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.
     DocumentRoutingModule,
     MatSidenavModule,
     ReactiveFormsModule,
-    InfoDrawerModule,
     MatExpansionModule,
     MatSelectModule,
     MatDialogModule,
@@ -55,6 +54,7 @@ import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.
     StationInfoHeaderModule,
     DocumentInfoHeaderModule,
     PreviousFieldsModule,
+    InfoDrawerModule,
   ],
 })
 export class DocumentModule {}
