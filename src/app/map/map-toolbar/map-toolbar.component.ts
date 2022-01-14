@@ -6,7 +6,7 @@ import { UserService } from 'src/app/core/user.service';
 import { User, OrganizationInfo, MapMode } from 'src/models';
 import { MapService } from '../map.service';
 import { Subject } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 /**
  * Component for managing the toolbar on the map.
  */
@@ -138,7 +138,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
             "Something went wrong on our end and we're looking into it. Please try again in a little while.";
           if (error instanceof HttpErrorResponse) {
             switch (error.status) {
-              case 401:
+              case HttpStatusCode.Unauthorized:
                 errorMessage =
                   'The user does not have rights to access the map.';
             }
