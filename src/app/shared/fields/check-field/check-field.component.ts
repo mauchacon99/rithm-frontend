@@ -34,7 +34,8 @@ import { QuestionFieldType, Question } from 'src/models';
   ],
 })
 export class CheckFieldComponent
-  implements OnInit, ControlValueAccessor, Validator {
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   checkFieldForm!: FormGroup;
 
@@ -47,7 +48,7 @@ export class CheckFieldComponent
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private ngZone: NgZone) { }
+  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
    * Set up FormBuilder group.
@@ -89,7 +90,7 @@ export class CheckFieldComponent
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -144,10 +145,10 @@ export class CheckFieldComponent
     return this.checkFieldForm.valid
       ? null
       : {
-        invalidForm: {
-          valid: false,
-          message: 'Check field form is invalid',
-        },
-      };
+          invalidForm: {
+            valid: false,
+            message: 'Check field form is invalid',
+          },
+        };
   }
 }

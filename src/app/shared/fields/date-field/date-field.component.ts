@@ -33,7 +33,8 @@ import { QuestionFieldType, Question } from 'src/models';
   ],
 })
 export class DateFieldComponent
-  implements OnInit, ControlValueAccessor, Validator {
+  implements OnInit, ControlValueAccessor, Validator
+{
   /** The form to add this field in the template. */
   dateFieldForm!: FormGroup;
 
@@ -46,7 +47,7 @@ export class DateFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   /**
    * Set up FormBuilder group.
@@ -68,7 +69,7 @@ export class DateFieldComponent
    * The `onTouched` function.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: () => void = () => { };
+  onTouched: () => void = () => {};
 
   /**
    * Writes a value to this form.
@@ -119,10 +120,10 @@ export class DateFieldComponent
     return this.dateFieldForm.valid
       ? null
       : {
-        invalidForm: {
-          valid: false,
-          message: 'Date field form is invalid',
-        },
-      };
+          invalidForm: {
+            valid: false,
+            message: 'Date field form is invalid',
+          },
+        };
   }
 }
