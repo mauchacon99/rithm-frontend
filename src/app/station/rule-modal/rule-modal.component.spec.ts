@@ -9,10 +9,13 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { Question, QuestionFieldType } from 'src/models';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -29,7 +32,10 @@ describe('RuleModalComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [RuleModalComponent],
+      declarations: [
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: MatDialogRef, useValue: {} },
@@ -88,5 +94,34 @@ describe('RuleModalComponent', () => {
     component.firstOperand = valueStationQuestion;
     fixture.detectChanges();
     expect(btnNextInStep1.disabled).toBeFalsy();
+  });
+
+  it('should show loading-indicator-questions while get current and previous questions', () => {
+    component.questionStationLoading = false;
+    component.stationRithmId = stationId;
+    const questions: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+        value: '1',
+      },
+    ];
+    component.getStationQuestions();
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(of(questions));
+    fixture.detectChanges();
+    expect(component.questionStationLoading).toBe(true);
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-questions'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });
