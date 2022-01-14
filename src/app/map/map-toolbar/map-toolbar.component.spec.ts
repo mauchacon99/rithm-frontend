@@ -65,12 +65,12 @@ describe('MapToolbarComponent', () => {
     service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
 
-  it('should toggle mapMode add flow', () => {
-    component.addFlow();
-    expect(component.flowAddActive).toBeTrue();
-    expect(component.mapMode).toEqual(MapMode.FlowAdd);
-    component.addFlow();
-    expect(component.flowAddActive).toBeFalse();
+  it('should toggle mapMode add station group', () => {
+    component.addStationGroup();
+    expect(component.stationGroupAddActive).toBeTrue();
+    expect(component.mapMode).toEqual(MapMode.StationGroupAdd);
+    component.addStationGroup();
+    expect(component.stationGroupAddActive).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);
   });
 });

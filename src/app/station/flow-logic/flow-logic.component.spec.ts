@@ -173,4 +173,22 @@ describe('FlowLogicComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#there-not-rules');
     expect(messageNotRules).toBeTruthy();
   });
+
+  it('should show error if petition rules fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationFlowLogicRule'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const reviewError = fixture.debugElement.nativeElement.querySelector(
+      '#flow-logic-rules-error'
+    );
+    expect(component.flowRuleError).toBeTrue();
+    expect(reviewError).toBeTruthy();
+  });
 });

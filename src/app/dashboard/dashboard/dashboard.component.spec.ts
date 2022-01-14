@@ -10,10 +10,13 @@ import {
   MockErrorService,
   MockStationService,
   MockUserService,
+  MockDashboardService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
+import { DashboardService } from '../dashboard.service';
+import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from '../dashboard-menu/menu/menu.component';
@@ -37,6 +40,7 @@ describe('DashboardComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService },
+        { provide: DashboardService, useClass: MockDashboardService },
       ],
       imports: [MatSidenavModule, NoopAnimationsModule],
     }).compileComponents();
@@ -50,5 +54,35 @@ describe('DashboardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call service from return data widgets', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.callThrough();
+
+    component.ngOnInit();
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to service fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
   });
 });

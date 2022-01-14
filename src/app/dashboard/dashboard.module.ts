@@ -6,7 +6,6 @@ import { StationCardComponent } from './station-card/station-card.component';
 import { DocumentListCardComponent } from './document-list-card/document-list-card.component';
 import { HeaderComponent } from './header/header.component';
 import { MyStationsComponent } from './my-stations/my-stations.component';
-import { SharedModule } from '../shared/shared.module';
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents/previously-started-documents.component';
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +17,9 @@ import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.co
 import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
 import { ExpansionMenuComponent } from './dashboard-menu/expansion-menu/expansion-menu.component';
 import { MenuComponent } from './dashboard-menu/menu/menu.component';
+import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
+import { RosterModule } from '../shared/roster/roster.module';
+import { StationDocumentsModalModule } from '../shared/station-documents-modal/station-documents-modal.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
@@ -38,11 +40,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule,
     MatInputModule,
     ReactiveFormsModule,
     GridsterModule,
     MatCardModule,
+    LoadingIndicatorModule,
+    RosterModule,
+    StationDocumentsModalModule,
     MatSidenavModule,
   ],
 })

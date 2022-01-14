@@ -4,9 +4,10 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { Station } from 'src/models';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { MatSidenav } from '@angular/material/sidenav';
+import { DashboardItem, Station } from 'src/models';
+import { DashboardService } from '../dashboard.service';
 
 /**
  * Main component for the dashboard screens.
@@ -26,6 +27,9 @@ export class DashboardComponent implements OnInit {
   stations: Station[] = [];
 
   viewNewDashboard = false;
+
+  /** Widgets for dashboard. */
+  widgetsOfDashboard: DashboardItem[] = [];
 
   /**
    * Whether the signed in user is an admin or not.
@@ -50,7 +54,8 @@ export class DashboardComponent implements OnInit {
     private userService: UserService,
     private splitService: SplitService,
     private errorService: ErrorService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private dashboardService: DashboardService
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -83,6 +88,8 @@ export class DashboardComponent implements OnInit {
         this.errorService.logError(error);
       },
     });
+
+    this.getDashboardWidgets();
   }
 
   /**
@@ -91,5 +98,25 @@ export class DashboardComponent implements OnInit {
   toggleSideNav(): void {
     this.sidenavDrawerService.setSidenav(this.menu);
     this.sidenavDrawerService.toggleSidenav();
+  }
+
+  /**
+   * Gets widgets for dashboard.
+   */
+  private getDashboardWidgets(): void {
+    this.dashboardService
+      .getDashboardWidgets()
+      .pipe(first())
+      .subscribe({
+        next: (widgets) => {
+          this.widgetsOfDashboard = widgets;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
