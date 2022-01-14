@@ -5,6 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpErrorResponse,
+  HttpStatusCode,
 } from '@angular/common/http';
 import { UserService } from './user.service';
 import { EMPTY, from, Observable, throwError } from 'rxjs';
@@ -105,7 +106,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: unknown) => {
         // If unauthorized, sign the user out
-        if (error instanceof HttpErrorResponse && error.status === 401) {
+        if (error instanceof HttpErrorResponse && error.status === HttpStatusCode.Unauthorized) {
           this.userService.signOut();
         }
         return throwError(() => error);
