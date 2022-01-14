@@ -21,7 +21,6 @@ import {
   OperatorType,
   FlowLogicRule,
   RuleType,
-  QuestionFieldType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -521,22 +520,24 @@ export class StationService {
       const stationFlowLogic: FlowLogicRule = {
         stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
         destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-        flowRule: {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-        },
+            ],
+          },
+        ],
       };
       return of(stationFlowLogic).pipe(delay(1000));
     }
@@ -551,40 +552,14 @@ export class StationService {
    */
   getStationQuestions(
     stationRithmId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     includePreviousQuestions = false
   ): Observable<Question[]> {
-    if (!stationRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'The station id cannot be is null or undefined',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const mockQuestions: Question[] = [
-        {
-          prompt: 'Fake question 1',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-        {
-          prompt: 'Fake question 2',
-          rithmId: '3j4k-3h2j-hj4j',
-          questionType: QuestionFieldType.Number,
-          isReadOnly: false,
-          isRequired: true,
-          isPrivate: false,
-          children: [],
-        },
-      ];
-      return of(mockQuestions).pipe(delay(1000));
-    }
+    const params = new HttpParams()
+      .set('stationRithmId', stationRithmId)
+      .set('includePreviousQuestions', includePreviousQuestions);
+    return this.http.get<Question[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+      { params }
+    );
   }
 }

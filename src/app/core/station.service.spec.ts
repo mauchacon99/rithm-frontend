@@ -900,7 +900,7 @@ describe('StationService', () => {
   });
 
   it('should return a list of current and previous questions for stations', () => {
-    const includePreviousQuestions = true;
+    const includePreviousQuestions = false;
     const expectedResponse: Question[] = [
       {
         prompt: 'Fake question 1',
@@ -934,22 +934,24 @@ describe('StationService', () => {
     const expectStationFlowLogic: FlowLogicRule = {
       stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
       destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRule: {
-        ruleType: RuleType.Or,
-        equations: [
-          {
-            leftOperand: {
-              type: OperandType.Field,
-              value: 'birthday',
+      flowRules: [
+        {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
             },
-            operatorType: OperatorType.Before,
-            rightOperand: {
-              type: OperandType.Date,
-              value: '5/27/1982',
-            },
-          },
-        ],
-      },
+          ],
+        },
+      ],
     };
 
     service
@@ -957,5 +959,45 @@ describe('StationService', () => {
       .subscribe((stationFlowLogic) => {
         expect(stationFlowLogic).toEqual(expectStationFlowLogic);
       });
+  });
+
+  it('should get the questions for station', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const includePreviousQuestions = false;
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+
+    service
+      .getStationQuestions(stationRithmId, includePreviousQuestions)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse);
+      });
+
+    const req = httpTestingController.expectOne(
+      // eslint-disable-next-line max-len
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?stationRithmId=${stationRithmId}&includePreviousQuestions=${includePreviousQuestions}`
+    );
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });
