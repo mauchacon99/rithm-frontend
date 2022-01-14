@@ -8,7 +8,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [RosterManagementModalComponent],
-  imports: [CommonModule, UserAvatarModule, LoadingIndicatorModule, PaginationModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    UserAvatarModule,
+    LoadingIndicatorModule,
+    PaginationModule,
+    MatDialogModule,
+  ],
   exports: [RosterManagementModalComponent],
 })
 export class RosterManagementModalModule {}

@@ -8,7 +8,13 @@ import { RosterModalModule } from '../roster-modal/roster-modal.module';
 
 @NgModule({
   declarations: [RosterComponent],
-  imports: [CommonModule, UserAvatarModule, LoadingIndicatorModule, RosterManagementModalModule, RosterModalModule],
+  imports: [
+    CommonModule,
+    UserAvatarModule,
+    LoadingIndicatorModule,
+    RosterManagementModalModule,
+    RosterModalModule,
+  ],
   exports: [RosterComponent],
 })
 export class RosterModule {}

@@ -7,7 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [CommentInputComponent],
-  imports: [CommonModule, MatCheckboxModule, ReactiveFormsModule, MatFormFieldModule],
+  imports: [
+    CommonModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+  ],
   exports: [CommentInputComponent],
 })
 export class CommentInputModule {}

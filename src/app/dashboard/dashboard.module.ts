@@ -45,7 +45,7 @@ import { StationDocumentsModalModule } from '../shared/station-documents-modal/s
     MatCardModule,
     LoadingIndicatorModule,
     RosterModule,
-    StationDocumentsModalModule
+    StationDocumentsModalModule,
   ],
 })
 export class DashboardModule {}

@@ -10,7 +10,15 @@ import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading
 
 @NgModule({
   declarations: [CommentDrawerComponent],
-  imports: [CommonModule, MatCheckboxModule, ReactiveFormsModule, MatTabsModule, CommentModule, CommentInputModule, LoadingIndicatorModule],
+  imports: [
+    CommonModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatTabsModule,
+    CommentModule,
+    CommentInputModule,
+    LoadingIndicatorModule,
+  ],
   exports: [CommentDrawerComponent],
 })
 export class CommentDrawerModule {}

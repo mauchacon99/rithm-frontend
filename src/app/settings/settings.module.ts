@@ -16,7 +16,7 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     MatCardModule,
     MatButtonModule,
     ReactiveFormsModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
   ],
 })
 export class SettingsModule {}

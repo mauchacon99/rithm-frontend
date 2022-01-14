@@ -40,7 +40,10 @@ describe('ConnectedStationsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConnectedStationsModalComponent, MockComponent(LoadingIndicatorComponent)],
+      declarations: [
+        ConnectedStationsModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         NoopAnimationsModule,
         MatDialogModule,

@@ -8,7 +8,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [DialogComponent],
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+  ],
   exports: [DialogComponent],
 })
 export class DialogModule {}

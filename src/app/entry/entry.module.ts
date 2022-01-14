@@ -30,7 +30,7 @@ import { PasswordRequirementsModule } from '../shared/password-requirements/pass
     ReactiveFormsModule,
     LoadingIndicatorModule,
     UserFormModule,
-    PasswordRequirementsModule
+    PasswordRequirementsModule,
   ],
 })
 export class EntryModule {}

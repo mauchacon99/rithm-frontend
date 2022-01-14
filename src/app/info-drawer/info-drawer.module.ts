@@ -30,7 +30,7 @@ import { UserAvatarModule } from '../shared/user-avatar/user-avatar.module';
     FormsModule,
     LoadingIndicatorModule,
     RosterModule,
-    UserAvatarModule
+    UserAvatarModule,
   ],
   exports: [InfoDrawerComponent],
 })

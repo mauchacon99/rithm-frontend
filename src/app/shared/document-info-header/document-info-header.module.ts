@@ -7,7 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [DocumentInfoHeaderComponent],
-  imports: [CommonModule, MatChipsModule, ReactiveFormsModule, MatFormFieldModule],
+  imports: [
+    CommonModule,
+    MatChipsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+  ],
   exports: [DocumentInfoHeaderComponent],
 })
 export class DocumentInfoHeaderModule {}

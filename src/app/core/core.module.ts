@@ -9,7 +9,13 @@ import { DialogModule } from '../shared/dialog/dialog.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, HttpClientModule, MatDialogModule, MatSnackBarModule, DialogModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    DialogModule,
+  ],
   providers: [
     CookieService,
     {

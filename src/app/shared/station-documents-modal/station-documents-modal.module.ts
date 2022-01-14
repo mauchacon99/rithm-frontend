@@ -9,7 +9,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [StationDocumentsModalComponent],
-  imports: [CommonModule, MatTooltipModule, UserAvatarModule, LoadingIndicatorModule, PaginationModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    MatTooltipModule,
+    UserAvatarModule,
+    LoadingIndicatorModule,
+    PaginationModule,
+    MatDialogModule,
+  ],
   exports: [StationDocumentsModalComponent],
 })
 export class StationDocumentsModalModule {}

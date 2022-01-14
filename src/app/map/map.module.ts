@@ -40,7 +40,7 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
     ReactiveFormsModule,
     FormsModule,
     RecognitionModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
   ],
 })
 export class MapModule {}

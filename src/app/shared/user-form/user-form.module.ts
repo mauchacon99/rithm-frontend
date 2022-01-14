@@ -7,7 +7,12 @@ import { PasswordRequirementsModule } from '../password-requirements/password-re
 
 @NgModule({
   declarations: [UserFormComponent],
-  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, PasswordRequirementsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    PasswordRequirementsModule,
+  ],
   exports: [UserFormComponent],
 })
 export class UserFormModule {}

@@ -21,7 +21,7 @@ import { PaginationModule } from '../shared/pagination/pagination.module';
     MatButtonModule,
     ReactiveFormsModule,
     LoadingIndicatorModule,
-    PaginationModule
+    PaginationModule,
   ],
 })
 export class AdminModule {}
