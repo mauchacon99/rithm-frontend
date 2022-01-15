@@ -23,8 +23,8 @@
   </ng-container>
   <ng-template #newDashboard>
     <div class="loading" *ngIf="dashboardLoading">
-    <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
-  </div>
+      <app-loading-indicator class="flex-grow m-auto"></app-loading-indicator>
+    </div>
     <div *ngIf="!dashboardLoading">
       <p>New dashboard goes here.</p>
       <app-station-widget></app-station-widget>
