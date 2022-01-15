@@ -18,6 +18,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from '../dashboard.service';
 import { throwError } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -81,5 +82,13 @@ describe('DashboardComponent', () => {
 
     component.ngOnInit();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should render the app-loading-indicator component', () => {
+    component.viewNewDashboard = true;
+    component.dashboardLoading = true;
+    fixture.detectChanges();
+    const loader = fixture.debugElement.query(By.css('.loading')).nativeElement;
+    expect(loader).toBeTruthy();
   });
 });
