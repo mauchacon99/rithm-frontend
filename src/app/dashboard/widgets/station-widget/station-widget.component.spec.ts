@@ -98,4 +98,43 @@ describe('StationWidgetComponent', () => {
     );
     expect(button).toBeTruthy();
   });
+
+  it('should no show button if station is different to manual', () => {
+    component.stationRithmId = stationRithmId;
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.None,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getStationWidgetDocuments'
+    ).and.returnValue(of(dataWidgetStation));
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.dataStationWidget.documentGeneratorStatus).not.toBe(
+      DocumentGenerationStatus.Manual
+    );
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#create-new-document'
+    );
+    expect(button).not.toBeTruthy();
+  });
 });
