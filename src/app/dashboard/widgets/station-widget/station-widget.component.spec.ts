@@ -135,6 +135,6 @@ describe('StationWidgetComponent', () => {
     const button = fixture.debugElement.nativeElement.querySelector(
       '#create-new-document'
     );
-    expect(button).not.toBeTruthy();
+    expect(button).toBeFalsy();
   });
 });
