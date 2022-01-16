@@ -622,5 +622,13 @@ describe('DocumentService', () => {
     service.getStationWidgetDocuments(stationId).subscribe((response) => {
       expect(response).toEqual(dataWidgetStation);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(dataWidgetStation);
+    httpTestingController.verify();
   });
 });
