@@ -1,10 +1,15 @@
 <div class="p-3">
   <p>station-widget works!</p>
-  <div *ngIf="!isLoading; else loading"></div>
+  <div *ngIf="!isLoading; else loading"
+       data-testid="showDocs"
+       id="showDocs"></div>
 </div>
 
 <ng-template #loading>
-  <div class="flex justify-center items-center flex-col">
+  <div
+    data-testid="loadingDocs"
+    id="loadingDocs"
+    class="flex justify-center items-center flex-col">
     <p class="py-2">Loading</p>
     <app-loading-indicator></app-loading-indicator>
   </div>

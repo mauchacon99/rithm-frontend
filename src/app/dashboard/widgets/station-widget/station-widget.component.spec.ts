@@ -7,6 +7,7 @@ import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { By } from '@angular/platform-browser';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -64,5 +65,35 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  describe('Loading documents', () => {
+    it('should be to show loading-indicator', () => {
+      component.isLoading = true;
+      fixture.detectChanges();
+      const loadingDocs = fixture.debugElement.query(By.css('#loadingDocs'));
+      const showDocs = fixture.debugElement.query(By.css('#showDocs'));
+      const loadingIndicator = fixture.debugElement.query(
+        By.css('app-loading-indicator')
+      );
+
+      expect(loadingDocs).toBeTruthy();
+      expect(loadingIndicator).toBeTruthy();
+      expect(showDocs).toBeNull();
+    });
+
+    it('should not be to show loading-indicator', () => {
+      component.isLoading = false;
+      fixture.detectChanges();
+      const loadingDocs = fixture.debugElement.query(By.css('#loadingDocs'));
+      const showDocs = fixture.debugElement.query(By.css('#showDocs'));
+      const loadingIndicator = fixture.debugElement.query(
+        By.css('app-loading-indicator')
+      );
+
+      expect(loadingDocs).toBeNull();
+      expect(loadingIndicator).toBeNull();
+      expect(showDocs).toBeTruthy();
+    });
   });
 });
