@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationGroupMapElement } from 'src/helpers';
-import { StationGroupElementHoverItem, Point } from 'src/models';
+import { StationGroupElementHoverItem, Point, MapMode } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   STATION_GROUP_PADDING,
@@ -111,7 +111,13 @@ export class StationGroupElementService {
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      stationGroup.selected
+        ? '#1b4387'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled
+        ? '#ebebeb'
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
         ? NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;

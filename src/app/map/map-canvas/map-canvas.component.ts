@@ -1773,7 +1773,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           //If the station is clickable.
           if (!station.disabled) {
             //Toggle whether a station is selected to be added to the station group or not.
+            this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
+            this.mapService.setSelectedStation(station);
           }
           return;
         } else {
@@ -1789,9 +1791,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.checkConnectionClick(contextPoint);
 
     //Check if click was on a station group boundary.
-    if (this.mapMode === MapMode.StationGroupAdd) {
-      this.checkStationGroupClick(contextPoint);
-    }
+    this.checkStationGroupClick(contextPoint);
   }
 
   /**
@@ -1860,9 +1860,42 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         !stationGroup.disabled
       ) {
         stationGroup.selected = !stationGroup.selected;
+        if (stationGroup.selected) {
+          this.mapService.setStationGroupStationStatus();
+        } else {
+          if (
+            !this.mapService.stationElements.some((st) => st.selected) &&
+            !this.mapService.stationGroupElements.some(
+              (stGroup) => stGroup.selected
+            )
+          ) {
+            this.mapService.resetSelectedStationGroupStationStatus();
+          }
+        }
+        // To make sure it's not disabled and should allow user to undo previous action.
+        stationGroup.disabled = false;
+        this.stationGroupSelectStatus(stationGroup);
+        this.mapService.updateParentStationGroup(stationGroup.rithmId);
+        this.mapService.updateChildStationGroup(stationGroup);
+        this.drawElements();
         break;
       }
     }
+  }
+
+  /**
+   * Handle Selected status for stations.
+   *
+   * @param stationGroup The station group whose station status has to be updated.
+   */
+  private stationGroupSelectStatus(stationGroup: StationGroupMapElement): void {
+    const isSelected = stationGroup.selected;
+    stationGroup.stations.map((st) => {
+      const stationIndex = this.stations.findIndex(
+        (station) => station.rithmId === st
+      );
+      this.stations[stationIndex].selected = isSelected;
+    });
   }
 
   /**

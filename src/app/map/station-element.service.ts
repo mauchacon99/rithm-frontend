@@ -183,6 +183,13 @@ export class StationElementService {
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
         ? '#ebebeb'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.selected &&
+          !station.dragging
+        ? '#1b4387'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled
+        ? '#ebebeb'
         : '#fff';
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
