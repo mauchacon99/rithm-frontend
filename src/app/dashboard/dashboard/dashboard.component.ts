@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
 
+  /** Load indicator in dashboard. */
+  dashboardLoading = false;
+
   /** Config grid. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -141,14 +144,17 @@ export class DashboardComponent implements OnInit {
    * Gets widgets for dashboard.
    */
   private getDashboardWidgets(): void {
+    this.dashboardLoading = true;
     this.dashboardService
       .getDashboardWidgets()
       .pipe(first())
       .subscribe({
         next: (widgets) => {
+          this.dashboardLoading = false;
           this.widgetsOfDashboard = widgets;
         },
         error: (error: unknown) => {
+          this.dashboardLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
