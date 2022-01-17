@@ -25,20 +25,20 @@
     <div class="mx-5">
       <h2 class="my-2 font-semibold">General</h2>
       <div
-        class="col-span-full text-error-500 text-center"
+        class="col-span-full text-error-500 text-center my-4"
         id="error-loading-widgets"
         *ngIf="errorLoadingWidgets"
       >
         Unable to retrieve widgets
       </div>
-      <gridster class="h-screen bg-transparent" [options]="options">
+      <gridster class="h-screen bg-transparent" [options]="options" *ngIf="!errorLoadingWidgets">
         <gridster-item
           [item]="item"
           class="drop-shadow-md rounded"
           *ngFor="let item of widgetsOfDashboard"
         >
           <app-station-widget
-            *ngIf="item.widgetType === 'station' && !errorLoadingWidgets"
+            *ngIf="item.widgetType === 'station'"
             [stationRithmId]="item.data"
           ></app-station-widget>
         </gridster-item>
