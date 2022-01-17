@@ -205,7 +205,7 @@ export class MapService {
     for (const station of this.stationElements) {
       //Loop through the nextStations array of each station.
       for (const connection of station.nextStations) {
-
+        //Find the station with the same rithmId as connection.
         const outgoingStation = this.stationElements.find(
           (foundStation) => foundStation.rithmId === connection
         );
@@ -215,12 +215,15 @@ export class MapService {
             nextStations of the station${station.stationName}: ${station.rithmId}.`);
         }
 
+        //Create a new connectionMapElement using the station and outgoingStation data.
         const lineInfo = new ConnectionMapElement(
           station,
           outgoingStation,
           this.mapScale$.value
         );
 
+        /* Make sure we aren't duplicating and connections already inside connectionElements.
+        The connection elements array will get filled in as the station elements for loop progresses. */
         if (!this.connectionElements.includes(lineInfo)) {
           this.connectionElements.push(lineInfo);
         }
@@ -229,18 +232,22 @@ export class MapService {
   }
 
   /**
-   * Update connection information.
+   * Update information used to draw a connection when a connection has changed.
    *
    * @param station The station that is being updated.
    */
   updateConnection(station: StationMapElement): void {
+    //Loop through the connectionElements array.
     for (const connection of this.connectionElements) {
+      //If connection start is consistent with the station parameter, update the connections start point.
       if (connection.startStationRithmId === station.rithmId) {
         connection.setStartPoint(station.canvasPoint, this.mapScale$.value);
       }
+      //If connection end is consistent with the station parameter, update the connections end point.
       if (connection.endStationRithmId === station.rithmId) {
         connection.setEndPoint(station.canvasPoint, this.mapScale$.value);
       }
+      //Draw the connection using its startPoint and EndPoint.
       connection.path = connection.getConnectionLine(
         connection.startPoint,
         connection.endPoint,
@@ -250,12 +257,14 @@ export class MapService {
   }
 
   /**
-   * Create a new Station.
+   * Create a new Station. Add connection if station is built off "Add Connected Station".
    *
    * @param coords The coordinates where the station will be placed.
    */
   createNewStation(coords: Point): void {
+    //Set the coordinates used for mapPoint.
     const mapCoords = this.getMapPoint(coords);
+    //Create new stationMapElement with default data.
     const newStation = new StationMapElement({
       rithmId: uuidv4(),
       stationName: 'Untitled Station',
@@ -267,55 +276,73 @@ export class MapService {
       notes: '',
     });
 
-    // Connected station create changes
+    // Find the station that has isAddingConnected set to true.
     const connectedStations = this.stationElements.filter(
       (station) => station.isAddingConnected
     );
+    //Make sure there isn't more than one station with isAddingConnected = true.
     if (connectedStations.length === 1) {
+      //find the index of the station whose rithmId matches the connectedStation const.
       const stationIndex = this.stationElements.findIndex(
         (station) => station.rithmId === connectedStations[0].rithmId
       );
+      //Find the index of the station group that incudes the station matching connectedStation.
       const stationGroupIndex = this.stationGroupElements.findIndex(
         (stationGroup) =>
           stationGroup.stations.includes(connectedStations[0].rithmId)
       );
+      //If a station matching connectedStation was found.
       if (stationIndex >= 0) {
+        //Reset connecting station's isAddingConnected.
         this.stationElements[stationIndex].isAddingConnected = false;
+        //Add the new station to the nextStations array of the connecting station.
         this.stationElements[stationIndex].nextStations.push(
           newStation.rithmId
         );
+        //Add the connecting station to the previousStations array of the new station.
         newStation.previousStations.push(
           this.stationElements[stationIndex].rithmId
         );
 
+        //Use the connecting station and the next station to create a new connectedMapElement.
         const lineInfo = new ConnectionMapElement(
           this.stationElements[stationIndex],
           newStation,
           this.mapScale$.value
         );
+
+        /* Make sure we aren't duplicating and connections already inside connectionElements.
+        The connection elements array will get filled in as the station elements for loop progresses. */
         if (!this.connectionElements.includes(lineInfo)) {
           this.connectionElements.push(lineInfo);
         }
+        //Set mapMode back to build from addStation.
         this.mapMode$.next(MapMode.Build);
+        //Unless station is new, it should be marked as updated.
         this.stationElements[stationIndex].markAsUpdated();
 
+        //The connecting station is found in a group, and the newStation is not found in that group.
         if (
           stationGroupIndex >= 0 &&
           !this.stationGroupElements[stationGroupIndex].stations.includes(
             newStation.rithmId
           )
         ) {
+          //push newStation to the stations array of the same group as the connecting station.
           this.stationGroupElements[stationGroupIndex].stations.push(
             newStation.rithmId
           );
+          //Unless group is new, mark it as updated.
           this.stationGroupElements[stationGroupIndex].markAsUpdated();
         }
+        //if isAddingConnected property is true, set it to false.
         this.disableConnectedStationMode();
       }
     }
 
-    //update the stationElements array.
+    //Update the stationElements array.
     this.stationElements.push(newStation);
+    //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
 
