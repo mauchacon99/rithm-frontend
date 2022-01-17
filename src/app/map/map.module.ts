@@ -12,6 +12,7 @@ import { ConnectionInfoDrawerComponent } from './connection-info-drawer/connecti
 import { StationGroupInfoDrawerComponent } from './station-group-info-drawer/station-group-info-drawer.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RecognitionModule } from './recognition/recognition.module';
@@ -35,6 +36,7 @@ import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
     MatMenuModule,
     MatSidenavModule,
     MatInputModule,
+    MatSlideToggleModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     FormsModule,
