@@ -17,6 +17,8 @@ import {
   Question,
   DocumentAutoFlow,
   MoveDocument,
+  StationWidgetData,
+  DocumentGenerationStatus,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -555,10 +557,78 @@ describe('DocumentService', () => {
   });
 
   it('should create a new document', () => {
-    const expectDocumentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+    const expectedResponse = {
+      /** Document Rithm Id. */ rithmId: '78DF8E53-549E-44CD-8056-A2CBA055F32F',
+    };
 
-    service.createNewDocument(stationId).subscribe((response) => {
-      expect(response).toEqual(expectDocumentId);
+    const nameDocument = 'The name of Document';
+    const priorityDocument = 0;
+    const expectedRequestBody = {
+      name: nameDocument,
+      priority: priorityDocument,
+    };
+
+    service
+      .createNewDocument(nameDocument, priorityDocument, stationId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectedResponse.rithmId);
+      });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectedRequestBody);
+
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return data station widget', () => {
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+        {
+          rithmId: '321-123-123',
+          name: 'Almond',
+          priority: 3,
+          flowedTimeUTC: '2022-01-15T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-15T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '321-123-123',
+            firstName: 'Pablo',
+            lastName: 'Santos',
+            email: 'Jaime@mundo2.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+    service.getStationWidgetDocuments(stationId).subscribe((response) => {
+      expect(response).toEqual(dataWidgetStation);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station?stationRithmId=${stationId}`
+    );
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.params.get('stationRithmId')).toBe(stationId);
+    req.flush(dataWidgetStation);
+    httpTestingController.verify();
   });
 });

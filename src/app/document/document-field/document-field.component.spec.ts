@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
-import { NestedFieldComponent } from 'src/app/detail/nested-field/nested-field.component';
+import { NestedFieldComponent } from 'src/app/shared/fields/nested-field/nested-field.component';
 import { QuestionFieldType } from 'src/models';
-import { CheckFieldComponent } from '../../detail/check-field/check-field.component';
-import { DateFieldComponent } from '../../detail/date-field/date-field.component';
-import { NumberFieldComponent } from '../../detail/number-field/number-field.component';
-import { SelectFieldComponent } from '../../detail/select-field/select-field.component';
-import { TextFieldComponent } from '../../detail/text-field/text-field.component';
+import { CheckFieldComponent } from '../../shared/fields/check-field/check-field.component';
+import { DateFieldComponent } from '../../shared/fields/date-field/date-field.component';
+import { NumberFieldComponent } from '../../shared/fields/number-field/number-field.component';
+import { SelectFieldComponent } from '../../shared/fields/select-field/select-field.component';
+import { TextFieldComponent } from '../../shared/fields/text-field/text-field.component';
 
 import { DocumentFieldComponent } from './document-field.component';
 

@@ -1,0 +1,115 @@
+<div [formGroup]="textFieldForm">
+  <mat-form-field
+    class="w-full"
+    appearance="outline"
+    [ngClass]="{
+      'long-text': field.questionType === fieldTypeEnum.LongText,
+      'information-field': field.questionType === fieldTypeEnum.Instructions
+    }"
+  >
+    <mat-label>{{ labelTag }}</mat-label>
+    <div matPrefix class="icon">
+      <!-- Text Icons -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.ShortText"
+        class="fas fa-font"
+      ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.LongText"
+        class="fas fa-paragraph"
+      ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.URL"
+        class="fas fa-link"
+      ></i>
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Email"
+        class="far fa-envelope"
+      ></i>
+      <!-- Number Icons -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Number"
+        class="fas fa-calculator"
+      ></i>
+      <!-- Currency -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Currency"
+        class="fas fa-money-bill-wave"
+      ></i>
+      <!-- Phone Number -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Phone"
+        class="fa fa-phone"
+      ></i>
+      <!-- Date Icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Date"
+        class="fas fa-calendar-day"
+      ></i>
+      <!-- Select Icon -->
+      <i
+        *ngIf="
+          field.questionType === fieldTypeEnum.Select ||
+          field.questionType === fieldTypeEnum.MultiSelect
+        "
+        class="fas fa-chevron-circle-down"
+      ></i>
+      <!-- Checklist Icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.CheckList"
+        class="fas fa-list"
+      ></i>
+      <!-- Address icon -->
+      <i
+        *ngIf="
+          field.questionType === fieldTypeEnum.Nested ||
+          field.questionType === fieldTypeEnum.AddressLine
+        "
+        class="far fa-address-card"
+      ></i>
+      <!-- City icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.City"
+        class="fas fa-city"
+      ></i>
+      <!-- Instructions icon -->
+      <i
+        *ngIf="field.questionType === fieldTypeEnum.Instructions"
+        class="fas fa-sticky-note"
+      ></i>
+    </div>
+    <div *ngIf="removableField" matSuffix class="icon">
+      <button mat-icon-button (click)="removeField(field)">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <input
+      *ngIf="
+        (isStation && field.questionType === fieldTypeEnum.LongText) ||
+        field.questionType !== fieldTypeEnum.Instructions
+      "
+      matInput
+      type="{{ toolBar ? 'text' : field.questionType }}"
+      [required]="field.isRequired"
+      [formControlName]="field.questionType"
+      autocomplete="off"
+      (change)="updateFieldPrompt(field)"
+    />
+    <textarea
+      *ngIf="
+        (!isStation && field.questionType === fieldTypeEnum.LongText) ||
+        field.questionType === fieldTypeEnum.Instructions
+      "
+      matInput
+      placeholder="{{ field?.prompt }}"
+      rows="3"
+      spellcheck="true"
+      [required]="
+        field.isRequired || field.questionType === fieldTypeEnum.Instructions
+      "
+      [formControlName]="field.questionType"
+      (change)="updateFieldPrompt(field)"
+    >
+    </textarea>
+  </mat-form-field>
+</div>

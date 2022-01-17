@@ -7,12 +7,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
-import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
-import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
-import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
+import { ConnectedStationPaneComponent } from 'src/app/shared/connected-station-pane/connected-station-pane.component';
+import { DetailDrawerComponent } from 'src/app/shared/detail-drawer/detail-drawer.component';
+import { DocumentInfoHeaderComponent } from 'src/app/shared/document-info-header/document-info-header.component';
 import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
-import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
-import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
+import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/station-info-header.component';
+import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ToolbarComponent } from 'src/app/station/toolbar/toolbar.component';
@@ -174,6 +174,7 @@ describe('StationComponent', () => {
 
   it('should call service methods to update data when save button is clicked ', () => {
     component.stationForm.get('stationTemplateForm')?.markAsTouched();
+    component.stationForm.get('stationTemplateForm')?.markAsDirty();
     const spyUpdateStationName = spyOn(
       TestBed.inject(StationService),
       'updateStationName'
@@ -197,6 +198,7 @@ describe('StationComponent', () => {
     const button =
       fixture.debugElement.nativeElement.querySelector('#station-save');
 
+    fixture.detectChanges();
     button.click();
 
     expect(spyFunctionSave).toHaveBeenCalled();

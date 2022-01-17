@@ -3,7 +3,12 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { WorkerDashboardHeader, Document } from 'src/models';
+import {
+  WorkerDashboardHeader,
+  Document,
+  DashboardItem,
+  WidgetType,
+} from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
 import { DashboardStationData, StationRosterMember } from 'src/models';
@@ -238,6 +243,34 @@ describe('DashboardService', () => {
     expect(req.request.method).toEqual('GET');
 
     req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should return a list of widgets for dashboard', () => {
+    const widgetsExpected: DashboardItem[] = [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ];
+    service.getDashboardWidgets().subscribe((response) => {
+      expect(response).toEqual(widgetsExpected);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(widgetsExpected);
     httpTestingController.verify();
   });
 });

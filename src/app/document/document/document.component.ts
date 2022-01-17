@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewChecked,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +30,7 @@ import { Subject, forkJoin } from 'rxjs';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss'],
 })
-export class DocumentComponent implements OnInit, OnDestroy {
+export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Document form. */
   documentForm: FormGroup;
 
@@ -71,7 +78,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private readonly changeDetectorR: ChangeDetectorRef
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control(''),
@@ -96,6 +104,13 @@ export class DocumentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
     this.getParams();
+  }
+
+  /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.changeDetectorR.detectChanges();
   }
 
   /**
@@ -226,32 +241,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update the document name.
-   */
-  private updateDocumentName(): void {
-    this.documentLoading = true;
-    const newDocumentName = 'Provisional Name while BSubject is done';
-    this.documentService
-      .updateDocumentName(
-        this.documentInformation.documentRithmId,
-        newDocumentName
-      )
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.documentLoading = false;
-        },
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
    * Completes all subscriptions.
    */
   ngOnDestroy(): void {
@@ -260,21 +249,30 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Save the document answers.
+   * Save document changes with the save button.
    */
-  saveDocumentAnswer(): void {
+  saveDocumentChanges(): void {
     this.documentLoading = true;
-    this.documentService
-      .saveDocumentAnswer(
+
+    const requestArray = [
+      // Update the document name.
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
+      ),
+
+      // Save the document answers.
+      this.documentService.saveDocumentAnswer(
         this.documentInformation.documentRithmId,
         this.documentAnswer
-      )
+      ),
+    ];
+
+    forkJoin(requestArray)
       .pipe(first())
       .subscribe({
-        next: (docAnswers) => {
-          if (docAnswers) {
-            this.documentAnswer = docAnswers;
-          }
+        next: (data) => {
+          this.documentAnswer = data[1] as DocumentAnswer[];
           this.documentLoading = false;
         },
         error: (error: unknown) => {
@@ -304,6 +302,11 @@ export class DocumentComponent implements OnInit, OnDestroy {
       this.documentService.saveDocumentAnswer(
         this.documentInformation.documentRithmId,
         this.documentAnswer
+      ),
+      // Update the document name.
+      this.documentService.updateDocumentName(
+        this.documentInformation.documentRithmId,
+        this.documentName
       ),
 
       // Flow a document.
