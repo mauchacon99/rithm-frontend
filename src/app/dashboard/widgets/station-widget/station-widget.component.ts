@@ -45,7 +45,7 @@ export class StationWidgetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
-          this.failedLoadWidget = false;
+          this.failedLoadWidget = true;
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {
