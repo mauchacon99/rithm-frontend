@@ -67,7 +67,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "ng-mocks": "^v13.0.0-alpha.1",
+    "ng-mocks": "^v13.0.0-alpha.4",
     "pa11y-ci": "3.0.1",
     "postcss": "^8.4.5",
     "postcss-cli": "^9.1.0",
