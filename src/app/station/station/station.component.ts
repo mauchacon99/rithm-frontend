@@ -369,9 +369,12 @@ export class StationComponent
     forkJoin(petitionsUpdateStation)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (data) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
+          if (data[3]) { //in case of save/update questions the station questions object is updated.
+            this.stationInformation.questions = data[3] as Question[];
+          }
         },
         error: (error: unknown) => {
           this.stationLoading = false;
