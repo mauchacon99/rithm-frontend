@@ -42,15 +42,14 @@ export class StationWidgetComponent implements OnInit {
     this.isLoading = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
-      .pipe(
-        first(),
-        finalize(() => (this.isLoading = false))
-      )
+      .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
+          this.isLoading = false;
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

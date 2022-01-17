@@ -20,7 +20,6 @@ describe('StationWidgetComponent', () => {
         StationWidgetComponent,
         MockComponent(LoadingIndicatorComponent),
       ],
-      imports: [MatCardModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
