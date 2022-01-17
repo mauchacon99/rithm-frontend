@@ -88,7 +88,7 @@ describe('DashboardComponent', () => {
     component.viewNewDashboard = true;
     component.dashboardLoading = true;
     fixture.detectChanges();
-    const loader = fixture.debugElement.query(By.css('.loading')).nativeElement;
+    const loader = fixture.debugElement.nativeElement.querySelector('#loading-dashboard-widgets');;
     expect(loader).toBeTruthy();
   });
 });
