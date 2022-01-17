@@ -17,8 +17,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
