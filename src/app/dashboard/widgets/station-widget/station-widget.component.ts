@@ -39,17 +39,17 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   getStationWidgetDocuments(): void {
-    this.failedLoadDocument = false;
+    this.failedLoadWidget = false;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
-          this.failedLoadDocument = false;
+          this.failedLoadWidget = false;
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {
-          this.failedLoadDocument = true;
+          this.failedLoadWidget = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

@@ -62,7 +62,7 @@ describe('StationWidgetComponent', () => {
   });
 
   it('should try request again  listing documents if fails', () => {
-    component.failedLoadDocument = true;
+    component.failedLoadWidget = true;
     fixture.detectChanges();
 
     const card =
