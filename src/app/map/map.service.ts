@@ -388,6 +388,7 @@ export class MapService {
    * @param stationId The station ID for which connections have to be removed.
    */
   removeAllStationConnections(stationId: string): void {
+    //Find all stations that have a connection line that has stationId as part of it.
     this.stationElements.map((e) => {
       //Remove the previous and next stations from the station.
       if (e.rithmId === stationId) {
@@ -413,12 +414,16 @@ export class MapService {
       (e) =>
         e.startStationRithmId !== stationId && e.endStationRithmId !== stationId
     );
+    //Set connectionElements to the filtered array.
     this.connectionElements = filteredConnections;
+    //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
 
   /**
    * Deep copy an array or object to retain type.
+   * This helper method is added to allow us to create copies of arrays and objects instead of referencing them.
+   * TODO: Separate this into separate file since it's not specific to the map.
    *
    * @param source The array or object to copy.
    * @returns The copied array or object.
@@ -447,9 +452,11 @@ export class MapService {
    * Enters build mode for the map.
    */
   buildMap(): void {
+    //Create copies of all the stations, groups and connections so we can revert to those copies if we cancel our changes.
     this.storedStationElements = this.deepCopy(this.stationElements);
     this.storedStationGroupElements = this.deepCopy(this.stationGroupElements);
     this.storedConnectionElements = this.deepCopy(this.connectionElements);
+    //Set mapMode to build.
     this.mapMode$.next(MapMode.Build);
   }
 
@@ -457,21 +464,29 @@ export class MapService {
    * Cancels local map changes and returns to view mode.
    */
   cancelMapChanges(): void {
+    //Make sure that there are copies stored.
     if (this.storedStationElements.length > 0) {
+      //Revert stationElements to a copy of storedStationElements and reset storedStationElements.
       this.stationElements = this.deepCopy(this.storedStationElements);
       this.storedStationElements = [];
     }
+    //Make sure that there are copies stored.
     if (this.storedStationGroupElements.length > 0) {
+      //Revert stationGroupElements to a copy of storedStationGroupElements and reset storedStationGroupElements.
       this.stationGroupElements = this.deepCopy(
         this.storedStationGroupElements
       );
       this.storedStationGroupElements = [];
     }
+    //Make sure that there are copies stored.
     if (this.storedConnectionElements.length > 0) {
+      //Revert connectionElements to a copy of storedConnectionElements and reset storedConnectionElements.
       this.connectionElements = this.deepCopy(this.storedConnectionElements);
       this.storedConnectionElements = [];
     }
+    //Set mapMode to view.
     this.mapMode$.next(MapMode.View);
+    //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
 
