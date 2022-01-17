@@ -71,8 +71,8 @@ describe('StationWidgetComponent', () => {
     it('should be to show loading-indicator', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const loadingDocs = fixture.debugElement.query(By.css('#loadingDocs'));
-      const showDocs = fixture.debugElement.query(By.css('#showDocs'));
+      const loadingDocs = fixture.debugElement.query(By.css('#loading-docs'));
+      const showDocs = fixture.debugElement.query(By.css('#show-docs'));
       const loadingIndicator = fixture.debugElement.query(
         By.css('app-loading-indicator')
       );
@@ -85,8 +85,8 @@ describe('StationWidgetComponent', () => {
     it('should not be to show loading-indicator', () => {
       component.isLoading = false;
       fixture.detectChanges();
-      const loadingDocs = fixture.debugElement.query(By.css('#loadingDocs'));
-      const showDocs = fixture.debugElement.query(By.css('#showDocs'));
+      const loadingDocs = fixture.debugElement.query(By.css('#loading-docs'));
+      const showDocs = fixture.debugElement.query(By.css('#show-docs'));
       const loadingIndicator = fixture.debugElement.query(
         By.css('app-loading-indicator')
       );

@@ -2,15 +2,15 @@
   <p>station-widget works!</p>
   <div
     *ngIf="!isLoading; else loading"
-    data-testid="showDocs"
-    id="showDocs"
+    data-testid="show-docs"
+    id="show-docs"
   ></div>
 </div>
 
 <ng-template #loading>
   <div
-    data-testid="loadingDocs"
-    id="loadingDocs"
+    data-testid="loading-docs"
+    id="loading-docs"
     class="flex justify-center items-center flex-col"
   >
     <p class="py-2">Loading</p>
