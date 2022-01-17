@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   NgZone,
+  Inject,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -79,7 +80,7 @@ export class TextFieldComponent
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
-    private ngZone: NgZone
+    @Inject(NgZone) private ngZone: NgZone
   ) {}
 
   /**

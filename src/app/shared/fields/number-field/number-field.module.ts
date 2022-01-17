@@ -4,6 +4,7 @@ import { NumberFieldComponent } from './number-field.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgxMaskModule } from 'ngx-mask';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [NumberFieldComponent],
@@ -12,6 +13,7 @@ import { NgxMaskModule } from 'ngx-mask';
     ReactiveFormsModule,
     MatFormFieldModule,
     NgxMaskModule.forRoot(),
+    MatInputModule,
   ],
   exports: [NumberFieldComponent],
 })
