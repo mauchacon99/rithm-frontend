@@ -1,4 +1,4 @@
-<mat-card *ngIf="failedLoadDocument">
+<mat-card *ngIf="failedLoadDocument" class="m-2">
   <mat-card-header>
     <mat-card-title class="bold">Station Name</mat-card-title>
     <mat-card-subtitle>Subtitle</mat-card-subtitle>
@@ -10,8 +10,8 @@
     <h3 class="bold red">ERROR</h3>
     <p class="text-sm">Unable to retrieve station data</p>
     <button
-      class="px-2 py-1 border red mt-10"
-      (click)="getStationWidgetDocuments()"
+      class="px-2 py-1 border border-primary-100 red mt-10"
+      (touchstart)="getStationWidgetDocuments()"
       id="try-again"
       data-testid="try-again"
     >

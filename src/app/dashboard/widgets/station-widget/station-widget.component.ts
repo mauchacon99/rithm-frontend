@@ -20,7 +20,7 @@ export class StationWidgetComponent implements OnInit {
   dataStationWidget!: StationWidgetData;
 
   /** Show error loading document. */
-  failedLoadDocument = true;
+  failedLoadDocument = false;
 
   constructor(
     private documentService: DocumentService,
