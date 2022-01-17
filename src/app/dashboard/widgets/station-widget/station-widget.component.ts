@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { finalize, first } from 'rxjs';
+import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
