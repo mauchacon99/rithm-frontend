@@ -22,7 +22,26 @@
     </div>
   </ng-container>
   <ng-template #newDashboard>
-    <p>New dashboard goes here.</p>
-    <app-station-widget></app-station-widget>
+    <div class="loading flex" *ngIf="dashboardLoading">
+      <app-loading-indicator
+        class="flex-grow m-auto"
+        id="loading-dashboard-widgets"
+      ></app-loading-indicator>
+    </div>
+    <div class="mx-5" *ngIf="!dashboardLoading">
+      <h2 class="my-2 font-semibold">General</h2>
+      <gridster class="h-screen bg-transparent" [options]="options">
+        <gridster-item
+          [item]="item"
+          class="drop-shadow-md rounded"
+          *ngFor="let item of widgetsOfDashboard"
+        >
+          <app-station-widget
+            *ngIf="item.widgetType === 'station'"
+            [stationRithmId]="item.data"
+          ></app-station-widget>
+        </gridster-item>
+      </gridster>
+    </div>
   </ng-template>
 </div>

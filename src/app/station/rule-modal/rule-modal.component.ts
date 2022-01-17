@@ -34,6 +34,9 @@ export class RuleModalComponent implements OnInit {
   /** The error if question stations fails . */
   questionStationError = false;
 
+  /** Loading in current and previous questions for stations. */
+  questionStationLoading = false;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
@@ -65,15 +68,18 @@ export class RuleModalComponent implements OnInit {
    * Get current and previous questions.
    */
   getStationQuestions(): void {
+    this.questionStationLoading = true;
     this.stationService
       .getStationQuestions(this.stationRithmId, true)
       .pipe(first())
       .subscribe({
         next: (questions) => {
+          this.questionStationLoading = false;
           this.questionStation = questions;
         },
         error: (error: unknown) => {
           this.questionStationError = true;
+          this.questionStationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

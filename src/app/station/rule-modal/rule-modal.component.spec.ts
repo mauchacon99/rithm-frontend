@@ -13,6 +13,8 @@ import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -29,7 +31,10 @@ describe('RuleModalComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [RuleModalComponent],
+      declarations: [
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: MatDialogRef, useValue: {} },
@@ -106,5 +111,21 @@ describe('RuleModalComponent', () => {
     );
     expect(component.questionStationError).toBeTrue();
     expect(reviewError).toBeTruthy();
+  });
+  it('should show loading-indicator-questions while get current and previous questions', () => {
+    component.questionStationLoading = false;
+    component.stationRithmId = stationId;
+    component.getStationQuestions();
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.callThrough();
+    fixture.detectChanges();
+    expect(component.questionStationLoading).toBeTrue();
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-questions'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });
