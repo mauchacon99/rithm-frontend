@@ -40,8 +40,8 @@ export class StationWidgetComponent implements OnInit {
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())
       .subscribe({
-        next: (dataStationWidget) => {
-          this.dataStationWidget = dataStationWidget;
+        next: (dataStation) => {
+          this.dataStationWidget = dataStation;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

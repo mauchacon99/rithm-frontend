@@ -4,6 +4,7 @@ import { throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
+import { DocumentGenerationStatus } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 
 describe('StationWidgetComponent', () => {
@@ -26,6 +27,26 @@ describe('StationWidgetComponent', () => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
     component.stationRithmId = stationRithmId;
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-',
+          name: 'Document Name',
+          priority: 0,
+          lastUpdatedUTC: '2022-01-17T15:03:26.371Z',
+          flowedTimeUTC: '2022-01-17T15:03:26.371Z',
+          assignedUser: {
+            rithmId: 'string',
+            firstName: 'string',
+            lastName: 'string',
+            email: 'string',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
     fixture.detectChanges();
   });
 
