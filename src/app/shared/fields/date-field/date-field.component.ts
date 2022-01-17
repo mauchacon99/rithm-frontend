@@ -60,6 +60,9 @@ export class DateFieldComponent
     if (this.field.isRequired) {
       this.dateFieldForm.get('date')?.setValidators([Validators.required]);
     }
+
+    this.dateFieldForm.get('date')?.markAsTouched();
+    this.dateFieldForm.get('date')?.updateValueAndValidity();
   }
 
   /**
