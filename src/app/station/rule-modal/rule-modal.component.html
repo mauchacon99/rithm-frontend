@@ -10,11 +10,18 @@
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
-      <div class="flex flex-col md:w-5/12 justify-start">
+      <div
+        class="flex flex-col md:w-5/12 justify-start"
+        [ngClass]="{ 'text-center': questionStationLoading }"
+      >
         <p class="text-sm mt-1">
           Select the field-set you'd like to apply a rule to.
         </p>
-        <mat-form-field appearance="outline" class="mt-2">
+        <mat-form-field
+          appearance="outline"
+          class="mt-2"
+          *ngIf="!questionStationLoading; else selectFieldLoading"
+        >
           <mat-label>Select Field</mat-label>
           <mat-select [(value)]="firstOperand">
             <mat-option
@@ -25,6 +32,14 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <ng-template #selectFieldLoading>
+          <div class="mt-2">
+            <app-loading-indicator
+              id="loading-indicator-questions"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+        </ng-template>
         <button
           mat-button
           matStepperNext

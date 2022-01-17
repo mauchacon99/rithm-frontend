@@ -19,6 +19,8 @@ import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -42,7 +44,11 @@ describe('FlowLogicComponent', () => {
         MatInputModule,
         FormsModule,
       ],
-      declarations: [FlowLogicComponent, RuleModalComponent],
+      declarations: [
+        FlowLogicComponent,
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
