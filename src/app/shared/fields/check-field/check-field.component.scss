@@ -1,1 +1,5 @@
 @import '../custom-fields.scss';
+
+::ng-deep .mat-checkbox.required .mat-checkbox-frame {
+  @apply border-error-500;
+}
