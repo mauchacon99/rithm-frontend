@@ -21,6 +21,7 @@ import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indi
 import { RosterModule } from '../shared/roster/roster.module';
 import { StationDocumentsModalModule } from '../shared/station-documents-modal/station-documents-modal.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     RosterModule,
     StationDocumentsModalModule,
     MatSidenavModule,
+    MatButtonModule,
   ],
 })
 export class DashboardModule {}

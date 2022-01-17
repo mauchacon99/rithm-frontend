@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   drawer!: MatDrawer;
 
   /** Show the dashboard menu. */
-  drawerContext!: 'menuDashboard';
+  drawerContext = 'menuDashboard';
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
@@ -160,10 +160,10 @@ export class DashboardComponent implements OnInit {
   /**
    * Needed to resize a mobile browser when the scrollbar hides.
    */
-  // @HostListener('window:resize', ['$event'])
-  // windowResize(): void {
-  //   //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
-  //   const vh = window.innerHeight * 0.01;
-  //   document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
-  // }
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
 }
