@@ -5,7 +5,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { RuleModalComponent } from './rule-modal.component';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { By } from '@angular/platform-browser';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -114,5 +115,47 @@ describe('RuleModalComponent', () => {
       '#loading-indicator-questions'
     );
     expect(loadingComponent).toBeTruthy();
+  });
+
+  it('should activate the next button in step 2', () => {
+    const btnNextInStep2 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-2');
+    const option = 'is not';
+    expect(btnNextInStep2.disabled).toBeTrue();
+    component.operator = option;
+    fixture.detectChanges();
+    expect(btnNextInStep2.disabled).toBeFalse();
+  });
+
+  it('should show step 2 completed', () => {
+    const stepperComponent = fixture.debugElement.query(
+      By.directive(MatStepper)
+    )?.componentInstance;
+    const step2 = stepperComponent.steps.toArray()[1];
+    expect(step2.completed).toBeFalse();
+    component.operator = 'is not';
+    fixture.detectChanges();
+    expect(step2.completed).toBeTrue();
+  });
+
+  it('should activate the next button in step 3', () => {
+    const btnNextInStep3 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-3');
+    const option = 'Fieldset #2';
+    expect(btnNextInStep3.disabled).toBeTrue();
+    component.secondOperand = option;
+    fixture.detectChanges();
+    expect(btnNextInStep3.disabled).toBeFalse();
+  });
+
+  it('should show step 3 completed', () => {
+    const stepperComponent = fixture.debugElement.query(
+      By.directive(MatStepper)
+    )?.componentInstance;
+    const step3 = stepperComponent.steps.toArray()[2];
+    expect(step3.completed).toBeFalse();
+    component.secondOperand = 'Fieldset #2';
+    fixture.detectChanges();
+    expect(step3.completed).toBeTrue();
   });
 });
