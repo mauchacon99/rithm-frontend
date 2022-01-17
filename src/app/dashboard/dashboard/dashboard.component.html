@@ -1,5 +1,9 @@
-<mat-sidenav-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
-  <mat-sidenav-content class="textured-bg h-calc">
+<mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
+  <mat-drawer #drawer mode="over" class="w-56">
+    <app-menu
+      *ngIf="drawerContext === 'menuDashboard'"></app-menu>
+  </mat-drawer>
+  <mat-drawer-content class="textured-bg h-calc">
     <div class="container mx-auto px-3 py-5 lg:px-0 h-full">
       <ng-container *ngIf="!viewNewDashboard; else newDashboard">
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
@@ -27,7 +31,7 @@
         <button
           id="menu-button"
           class="transition ease-in-out bg-darkBlue w-9 px-2 pb-1.5 pt-2 rounded hover:scale-x-110 hover:translate-x-1 fixed -left-1 top-36 z-10 shadow-lg"
-          (click)="toggleSideNav()"
+          (click)="toggleMenu('menuDashboard')"
         >
           <i class="fas fa-chevron-circle-right fa-lg" style="color: white"></i>
         </button>
@@ -48,8 +52,5 @@
         </div>
       </ng-template>
     </div>
-  </mat-sidenav-content>
-  <mat-sidenav #menu mode="over" class="w-56">
-    <app-menu></app-menu>
-  </mat-sidenav>
-</mat-sidenav-container>
+  </mat-drawer-content>
+</mat-drawer-container>

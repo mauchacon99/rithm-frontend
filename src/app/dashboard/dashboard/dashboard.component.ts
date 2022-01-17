@@ -5,7 +5,7 @@ import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
@@ -20,8 +20,11 @@ import { GridsterConfig } from 'angular-gridster2';
 })
 export class DashboardComponent implements OnInit {
   /** The component for the side nav on the dashboard. */
-  @ViewChild('menu', { static: false })
-  menu!: MatSidenav;
+  @ViewChild('drawer', { static: true })
+  drawer!: MatDrawer;
+
+  /** Show the dashboard menu. */
+  drawerContext!: 'menuDashboard';
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
@@ -101,6 +104,7 @@ export class DashboardComponent implements OnInit {
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
       this.splitService.initSdk(user.rithmId);
@@ -126,10 +130,11 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Opens side nav on the dashboard.
+   *
+   * @param drawerItem The information that will be displayed in the side drawer.
    */
-  toggleSideNav(): void {
-    this.sidenavDrawerService.setSidenav(this.menu);
-    this.sidenavDrawerService.toggleSidenav();
+  toggleMenu(drawerItem: 'menuDashboard'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 
   /**
@@ -155,10 +160,10 @@ export class DashboardComponent implements OnInit {
   /**
    * Needed to resize a mobile browser when the scrollbar hides.
    */
-  @HostListener('window:resize', ['$event'])
-  windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
-  }
+  // @HostListener('window:resize', ['$event'])
+  // windowResize(): void {
+  //   //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+  //   const vh = window.innerHeight * 0.01;
+  //   document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  // }
 }
