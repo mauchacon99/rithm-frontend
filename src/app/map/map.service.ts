@@ -347,29 +347,38 @@ export class MapService {
   }
 
   /**
-   * Updates station status to delete.
+   * Updates the status of a station to deleted.
    *
    * @param stationId The station for which status has to be set to delete.
    */
   deleteStation(stationId: string): void {
+    //Get the index of the stationElement that matches the stationId.
     const index = this.stationElements.findIndex(
       (e) => e.rithmId === stationId
     );
+    //If there is a station that matches stationId.
     if (index >= 0) {
+      /* If the station is newly created, remove it from the stationElements array,
+      otherwise mark that station as deleted. */
       if (this.stationElements[index].status === MapItemStatus.Created) {
         this.stationElements.splice(index, 1);
       } else {
         this.stationElements[index].markAsDeleted();
       }
     }
+    //Loop through and change the stationGroupElements array.
     this.stationGroupElements.map((stationGroup) => {
+      //Find the station group that includes the station.
       if (stationGroup.stations.includes(stationId)) {
+        //Remove the station from the group.
         stationGroup.stations = stationGroup.stations.filter(
           (stn) => stn !== stationId
         );
+        //Unless group is new, mark it as updated.
         stationGroup.markAsUpdated();
       }
     });
+    //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
 
@@ -848,7 +857,12 @@ export class MapService {
 
     const centerLogic = () => {
       if (this.centerCount$.value > 0) {
-        this.centerScale(onInit);
+        /* Smoothly change the scale of the map.
+        TODO: The performance on centerScale isn't up to par,
+        so it is disabled when not onInit until we can spend some time improving it. */
+        if (onInit) {
+          this.centerScale(onInit);
+        }
         this.centerPan(onInit);
         this.centerCount$.next(this.centerCount$.value - 1);
         this.center(onInit);
