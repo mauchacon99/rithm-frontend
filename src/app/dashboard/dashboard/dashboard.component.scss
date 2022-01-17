@@ -1,7 +1,6 @@
 @import 'functions', 'variables';
 
 .loading {
-  @apply flex;
 
   height: calc(100vh - 162px);
 }
