@@ -23,7 +23,10 @@
   </ng-container>
   <ng-template #newDashboard>
     <div class="loading" *ngIf="dashboardLoading">
-      <app-loading-indicator class="flex-grow m-auto" id="loading-dashboard-widgets"></app-loading-indicator>
+      <app-loading-indicator
+        class="flex-grow m-auto"
+        id="loading-dashboard-widgets"
+      ></app-loading-indicator>
     </div>
     <div class="mx-5" *ngIf="!dashboardLoading">
       <h2 class="my-2 font-semibold">General</h2>

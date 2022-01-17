@@ -18,7 +18,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from '../dashboard.service';
 import { throwError } from 'rxjs';
-import { By } from '@angular/platform-browser';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -88,7 +87,9 @@ describe('DashboardComponent', () => {
     component.viewNewDashboard = true;
     component.dashboardLoading = true;
     fixture.detectChanges();
-    const loader = fixture.debugElement.nativeElement.querySelector('#loading-dashboard-widgets');;
+    const loader = fixture.debugElement.nativeElement.querySelector(
+      '#loading-dashboard-widgets'
+    );
     expect(loader).toBeTruthy();
   });
 });
