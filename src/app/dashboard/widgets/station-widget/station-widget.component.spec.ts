@@ -64,6 +64,11 @@ describe('StationWidgetComponent', () => {
   it('should try request again  listing documents if fails', () => {
     component.failedLoadDocument = true;
     fixture.detectChanges();
+
+    const card =
+      fixture.debugElement.nativeElement.querySelector('#card-error');
+    expect(card).toBeTruthy();
+
     const methodCalled = spyOn(component, 'getStationWidgetDocuments');
     const tryAgain =
       fixture.debugElement.nativeElement.querySelector('#try-again');
