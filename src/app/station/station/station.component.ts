@@ -372,7 +372,8 @@ export class StationComponent
         next: (data) => {
           this.stationLoading = false;
           this.stationInformation.name = this.stationName;
-          if (data[3]) { //in case of save/update questions the station questions object is updated.
+          if (data[3]) {
+            //in case of save/update questions the station questions object is updated.
             this.stationInformation.questions = data[3] as Question[];
           }
         },
