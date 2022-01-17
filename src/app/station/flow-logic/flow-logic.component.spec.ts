@@ -165,16 +165,11 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show the display message when there are not rules.', () => {
-    component.flowLogicLoading = false;
-    fixture.detectChanges();
     const expectStationFlowLogic: FlowLogicRule = {
       stationRithmId: rithmId,
       destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
       flowRules: [],
     };
-    const messageNotRulesDefault =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
-    expect(messageNotRulesDefault).toBeTruthy();
     spyOn(
       TestBed.inject(StationService),
       'getStationFlowLogicRule'
