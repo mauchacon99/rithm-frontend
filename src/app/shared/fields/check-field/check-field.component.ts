@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, NgZone, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -10,6 +10,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { first, Subject, takeUntil } from 'rxjs';
 import { QuestionFieldType, Question } from 'src/models';
 
 /**
@@ -44,7 +45,10 @@ export class CheckFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(private fb: FormBuilder) {}
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
 
   /**
    * Set up FormBuilder group.
@@ -54,10 +58,7 @@ export class CheckFieldComponent
     let fields: { [key: string]: unknown } = {};
 
     this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem${index}`] = [
-        '',
-        this.field.isRequired ? [Validators.required] : [],
-      ];
+      fields[`checkItem${index}`] = [false];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -68,9 +69,21 @@ export class CheckFieldComponent
     //The field is required. Validators.required must be included.
     if (this.field.isRequired) {
       validators.push(Validators.required);
+
+      //Set required error if no checkbox has been checked.
+      this.checkFieldForm.valueChanges
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((checkItem) => {
+          const checks = Object.values(checkItem);
+          if (checks.some((check) => check)) {
+            this.checkFieldForm.setErrors(null);
+          } else {
+            this.checkFieldForm.setErrors({ required: true });
+          }
+        });
     }
 
-    this.checkFieldForm.get(this.field.questionType)?.setValidators(validators);
+    this.checkFieldForm.setValidators(validators);
   }
 
   /**
@@ -99,6 +112,10 @@ export class CheckFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.checkFieldForm.valueChanges.subscribe(fn);
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.checkFieldForm.markAsTouched();
+      this.checkFieldForm.updateValueAndValidity();
+    });
   }
 
   /**

@@ -254,7 +254,7 @@ describe('DashboardService', () => {
         x: 0,
         y: 0,
         widgetType: WidgetType.Station,
-        data: '{"rithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
         minItemCols: 4,
         minItemRows: 4,
         maxItemCols: 12,
@@ -264,5 +264,13 @@ describe('DashboardService', () => {
     service.getDashboardWidgets().subscribe((response) => {
       expect(response).toEqual(widgetsExpected);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(widgetsExpected);
+    httpTestingController.verify();
   });
 });
