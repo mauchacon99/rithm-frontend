@@ -5,39 +5,36 @@
 src/assets/**/* @belugasanity
 .browserslistrc @belugasanity
 
-*.ts @HendricksonTyler
-*.js @HendricksonTyler
-*.spec.ts @HendricksonTyler
-*.json @HendricksonTyler
+*.ts @belugasanity
+*.js @belugasanity
+*.spec.ts @belugasanity
+*.json @belugasanity
 
-*.html @HendricksonTyler @belugasanity
+*.html @belugasanity
+index.html @belugasanity
+index.testing.html @belugasanity
 
-# Team Falcon rules
-src/app/map/*.scss @Gobsmack90
-src/app/map/**/*.scss @Gobsmack90
-src/app/map/**/*.html @HendricksonTyler @Gobsmack90
+# Core rules
+src/app/core/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
 
-# Team Lion rules
-src/app/admin/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/dashboard/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/detail/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/document/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/info-drawer/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/settings/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
-src/app/station/**/*.ts @belugasanity @cqmdeveloper @AdamsContreras999
+# Shared Module rules
+src/app/shared/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/shared/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/shared/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
 
-src/app/admin/**/*.html @strut-software/team-lion-style-reviewers
-src/app/dashboard/**/*.html @strut-software/team-lion-style-reviewers
-src/app/detail/**/*.html @strut-software/team-lion-style-reviewers
-src/app/document/**/*.html @strut-software/team-lion-style-reviewers
-src/app/info-drawer/**/*.html @strut-software/team-lion-style-reviewers
-src/app/settings/**/*.html @strut-software/team-lion-style-reviewers
-src/app/station/**/*.html @strut-software/team-lion-style-reviewers
+# Navigation module rules
+src/app/navigation/**/*.ts @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/navigation/**/*.html @belugasanity @AdamsContreras999 @cqmdeveloper
+src/app/navigation/**/*.scss @belugasanity @AdamsContreras999 @cqmdeveloper
 
-src/app/admin/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/dashboard/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/detail/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/document/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/info-drawer/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/settings/**/*.scss @strut-software/team-lion-style-reviewers
-src/app/station/**/*.scss @strut-software/team-lion-style-reviewers
+# Team Falcon rules -- map
+src/app/map/ @strut-software/map-reviewers
+
+# Team Lion rules -- admin, document, settings, station
+src/app/admin/ @strut-software/team-lion
+src/app/document/ @strut-software/team-lion
+src/app/settings/ @strut-software/team-lion
+src/app/station/ @strut-software/team-lion
+
+# Team Eagle rules -- dashboard
+src/app/dashboard/ @strut-software/team-eagle
