@@ -5,6 +5,7 @@ import {
   ViewChild,
   AfterContentChecked,
   ChangeDetectorRef,
+  Inject,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -86,7 +87,7 @@ export class StationComponent
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private ref: ChangeDetectorRef
+    @Inject(ChangeDetectorRef) private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
       stationTemplateForm: this.fb.control(''),

@@ -28,7 +28,7 @@ export * from './organization-info';
 export * from './point';
 export * from './station-map-data';
 export * from './map-data';
-export * from './flow-map-data';
+export * from './station-group-map-data';
 export * from './station-info-drawer-data';
 export * from './dialog-options';
 export * from './station-potential-roster-users';

@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { ConnectedStationPaneComponent } from 'src/app/detail/connected-station-pane/connected-station-pane.component';
-import { DocumentInfoHeaderComponent } from 'src/app/detail/document-info-header/document-info-header.component';
+import { ConnectedStationPaneComponent } from 'src/app/shared/connected-station-pane/connected-station-pane.component';
+import { DocumentInfoHeaderComponent } from 'src/app/shared/document-info-header/document-info-header.component';
 import { DocumentTemplateComponent } from 'src/app/document/document-template/document-template.component';
-import { StationInfoHeaderComponent } from 'src/app/detail/station-info-header/station-info-header.component';
-import { SubHeaderComponent } from 'src/app/detail/sub-header/sub-header.component';
+import { StationInfoHeaderComponent } from 'src/app/shared/station-info-header/station-info-header.component';
+import { SubHeaderComponent } from 'src/app/shared/sub-header/sub-header.component';
 import { DocumentComponent } from './document.component';
 import {
   MockDocumentService,
@@ -15,7 +15,7 @@ import {
 } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DetailDrawerComponent } from 'src/app/detail/detail-drawer/detail-drawer.component';
+import { DetailDrawerComponent } from 'src/app/shared/detail-drawer/detail-drawer.component';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';

@@ -19,9 +19,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -40,7 +40,10 @@ describe('ConnectedStationsModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConnectedStationsModalComponent],
+      declarations: [
+        ConnectedStationsModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       imports: [
         NoopAnimationsModule,
         MatDialogModule,
@@ -49,7 +52,6 @@ describe('ConnectedStationsModalComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
-        SharedModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },

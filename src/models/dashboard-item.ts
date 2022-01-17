@@ -9,7 +9,7 @@ export interface DashboardItem {
   x: number;
   /** The y position of the item in the grid. */
   y: number;
-  /** The widget type, enum of flow, station, document or other. */
+  /** The widget type, enum of station group, station, document or other. */
   widgetType: WidgetType;
   /**
    * Data to pass to the widget, Data will be different for each widget, document widget will have the documentRithmId
