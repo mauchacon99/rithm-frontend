@@ -65,6 +65,9 @@ export class SelectFieldComponent
     this.selectFieldForm
       .get(this.field.questionType)
       ?.setValidators(validators);
+
+    this.selectFieldForm.get(this.field.questionType)?.markAsTouched();
+    this.selectFieldForm.get(this.field.questionType)?.updateValueAndValidity();
   }
 
   /**

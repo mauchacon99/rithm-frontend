@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [StationInfoDrawerComponent],
@@ -16,6 +18,8 @@ import { MatRadioModule } from '@angular/material/radio';
     FormsModule,
     RosterModule,
     MatRadioModule,
+    MatButtonModule,
+    MatInputModule,
   ],
   exports: [StationInfoDrawerComponent],
 })
