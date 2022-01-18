@@ -363,6 +363,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         });
     } else {
       this.stationLoading = false;
+      //Fill with blank station info if the station is newly created.
       this.stationInformation = {
         rithmId: this.stationRithmId,
         name: this.stationName,
