@@ -1,12 +1,38 @@
-<div>
-  <h3>Station Name</h3>
-  <p>Subtitle</p>
-</div>
-<div>
-  <div>
-    <p>Document</p>
+<div class="w-full flex justify-between p-2">
+  <h3 *ngIf="dataStationWidget">{{ dataStationWidget.stationName }}</h3>
+  <div class="text-brightBlue">
+    <button mat-button>New Document <i class="fas fa-plus"></i></button>
   </div>
 </div>
-<mat-card>
-  <p>station-widget works!</p>
-</mat-card>
+<div class="grid grid-cols-12 text-xs text-secondary-500 p-2">
+  <p class="col-span-5 overline-font">Document</p>
+  <p class="col-span-2 overline-font">Assigned</p>
+  <p class="col-span-2 overline-font">Priority</p>
+  <p class="col-span-3 overline-font">Time in Station</p>
+</div>
+<div
+  *ngIf="dataStationWidget"
+  class="grid grid-cols-12 text-xs text-secondary-500 p-2"
+>
+  <ng-container *ngFor="let document of dataStationWidget?.documents">
+    <div class="col-span-5 py-1.5border-solid border-b-2 border-black">
+      {{ document.name }}
+    </div>
+    <div class="col-span-2 border-solid border-b-2 border-black">
+      {{ document.assignedUser }}
+    </div>
+    <div class="col-span-2 border-solid border-b-2 border-black">
+      {{ document.priority }}
+    </div>
+    <div class="col-span-2 border-solid border-b-2 border-black">
+      {{
+        getElapsedTime(document.flowedTimeUTC) === 'Unknown'
+          ? ''
+          : getElapsedTime(document.flowedTimeUTC)
+      }}
+    </div>
+    <button class="col-span-1">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+  </ng-container>
+</div>

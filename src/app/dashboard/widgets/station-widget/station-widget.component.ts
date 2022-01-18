@@ -3,6 +3,7 @@ import { first } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
+import { UtcTimeConversion } from 'src/helpers';
 
 /**
  * Component for Station widget.
@@ -11,6 +12,7 @@ import { StationWidgetData } from 'src/models';
   selector: 'app-station-widget[stationRithmId]',
   templateUrl: './station-widget.component.html',
   styleUrls: ['./station-widget.component.scss'],
+  providers: [UtcTimeConversion],
 })
 export class StationWidgetComponent implements OnInit {
   /** Station rithmId. */
@@ -21,7 +23,8 @@ export class StationWidgetComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private utcTimeConversion: UtcTimeConversion
   ) {}
 
   /**
@@ -50,5 +53,18 @@ export class StationWidgetComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Uses the helper: UtcTimeConversion.
+   * Tells how long a document has been in a station for.
+   *
+   * @param timeEntered Reflects time a document entered a station.
+   * @returns A string reading something like "4 days" or "32 minutes".
+   */
+  getElapsedTime(timeEntered: string): string {
+    return this.utcTimeConversion.getElapsedTimeText(
+      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+    );
   }
 }
