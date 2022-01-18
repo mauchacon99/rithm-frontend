@@ -676,7 +676,8 @@ export class MapService {
     const translateDirection = zoomingIn ? -1 : 1;
 
     /* What will we change the scale to when we're finished?
-    When we zoom out we make the scale smaller, when we zoom in we make it larger. */
+    When we zoom out we make the scale smaller, when we zoom in we make it larger.
+    zoomAmount is set up to be exponential. */
     const newScale = zoomingIn
       ? this.mapScale$.value / zoomAmount
       : this.mapScale$.value * zoomAmount;
@@ -725,6 +726,7 @@ export class MapService {
     /*TODO: change name of method and related terminology to avoid confusion with the boundary box.
     For now: *bounding box* refers to an invisible box that tracks if any stations are placed outside it, then triggers a function.
     *boundary box* is a visible box surrounding a user's map that prevents stations from being placed too far away.*/
+
     //Dynamically set the size of the bounding box based on screen size.
     if (((window.innerHeight + window.innerWidth) / 2) * 0.01 < 30) {
       //Set the size of the box based on screen size.
@@ -746,16 +748,22 @@ export class MapService {
     pointType: 'mapPoint' | 'canvasPoint',
     isMax: boolean
   ): Point {
+    //An array of all station y coords in order from top to bottom.
     const orderedYPoints = this.stationElements
       .map((station) => station[pointType].y)
       .sort((a, b) => a - b);
+    //An array of all station x coords in order from left to right.
     const orderedXPoints = this.stationElements
       .map((station) => station[pointType].x)
       .sort((a, b) => a - b);
 
+    /* If isMax = true, set X to the last x coord in the array plus the width of a station, or the rightmost station.
+    Otherwise set it to the first x coord in the array, leftmost. */
     const x = isMax
       ? orderedXPoints[orderedXPoints.length - 1] + STATION_WIDTH
       : orderedXPoints[0];
+    /* If isMax = true, set Y to the last y coord in the array plus the height of a station, or the bottommost station.
+    Otherwise set it to the first y coord in the array, or the topmost station. */
     const y = isMax
       ? orderedYPoints[orderedYPoints.length - 1] + STATION_HEIGHT
       : orderedYPoints[0];
