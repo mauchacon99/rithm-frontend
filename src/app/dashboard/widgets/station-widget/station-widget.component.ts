@@ -39,13 +39,12 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   getStationWidgetDocuments(): void {
-    this.failedLoadWidget = false;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
-          this.failedLoadWidget = false;
+          this.failedLoadWidget = true;
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {
