@@ -17,6 +17,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 
@@ -39,6 +41,8 @@ describe('FlowLogicComponent', () => {
         MatStepperModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatInputModule,
+        FormsModule,
       ],
       declarations: [
         FlowLogicComponent,
