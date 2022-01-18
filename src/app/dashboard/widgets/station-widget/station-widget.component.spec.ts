@@ -6,7 +6,6 @@ import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
-import { By } from '@angular/platform-browser';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -69,10 +68,12 @@ describe('StationWidgetComponent', () => {
     it('should be to show loading-indicator', () => {
       component.isLoading = true;
       fixture.detectChanges();
-      const loadingDocs = fixture.debugElement.query(By.css('#loading-docs'));
-      const showDocs = fixture.debugElement.query(By.css('#show-docs'));
-      const loadingIndicator = fixture.debugElement.query(
-        By.css('app-loading-indicator')
+      const loadingDocs =
+        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+        'app-loading-indicator'
       );
 
       expect(loadingDocs).toBeTruthy();
@@ -83,10 +84,12 @@ describe('StationWidgetComponent', () => {
     it('should not be to show loading-indicator', () => {
       component.isLoading = false;
       fixture.detectChanges();
-      const loadingDocs = fixture.debugElement.query(By.css('#loading-docs'));
-      const showDocs = fixture.debugElement.query(By.css('#show-docs'));
-      const loadingIndicator = fixture.debugElement.query(
-        By.css('app-loading-indicator')
+      const loadingDocs =
+        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+        'app-loading-indicator'
       );
 
       expect(loadingDocs).toBeNull();
