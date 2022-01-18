@@ -31,6 +31,9 @@ export class RuleModalComponent implements OnInit {
   /** The value of the operator. */
   operator = '';
 
+  /** The value of the second operand. */
+  secondOperand = '';
+
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
 
