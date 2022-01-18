@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
         /** Do something. */
       },
     },
-    margin: 16,
+    margin: 0,
     minCols: 12,
     maxCols: 12,
   };
