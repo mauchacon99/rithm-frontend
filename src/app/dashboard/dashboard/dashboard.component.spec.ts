@@ -49,6 +49,7 @@ describe('DashboardComponent', () => {
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
       imports: [MatSidenavModule, NoopAnimationsModule, GridsterModule],
     }).compileComponents();
