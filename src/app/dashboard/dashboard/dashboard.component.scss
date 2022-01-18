@@ -9,4 +9,9 @@
 
 #menu-button {
   position: fixed;
+  padding-bottom: 3px;
+
+  ::ng-deep {
+    min-width: 50px;
+  }
 }
