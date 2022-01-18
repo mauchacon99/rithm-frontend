@@ -491,22 +491,24 @@ export class MapService {
   }
 
   /**
-   * Removes the single connection between stations.
+   * Removes a single connection between stations.
    *
    * @param startStationId The station from which connection starts.
    * @param endStationId The station for which connection end.
    */
   removeConnectionLine(startStationId: string, endStationId: string): void {
-    // Get two stations for which connection line belongs to
+    //Get starting station of the connection line.
     const startStation = this.stationElements.find(
       (e) =>
         e.nextStations.includes(endStationId) && e.rithmId === startStationId
     );
+    //Get the end station of the connection line.
     const endStation = this.stationElements.find(
       (e) =>
         e.previousStations.includes(startStationId) &&
         e.rithmId === endStationId
     );
+
     if (!startStation) {
       throw new Error(`A start station was not found for ${startStationId}`);
     }
@@ -514,29 +516,33 @@ export class MapService {
       throw new Error(`An end station was not found for ${endStationId}`);
     }
 
-    // Find the index from each stations between nextStations and previousStations
+    // Find the index for the end station in the nextStations array of startStation.
     const nextStationIndex = startStation.nextStations.findIndex(
       (e) => e === endStationId
     );
+    // Find the index for the starting station in the previousStations array of endStation.
     const prevStationIndex = endStation.previousStations.findIndex(
       (e) => e === startStationId
     );
 
-    // Remove station rithm ids from nextStations and previousStations properties also update station status
+    // Remove station rithm ids from nextStations and previousStations properties.
     startStation.nextStations.splice(nextStationIndex, 1);
     endStation.previousStations.splice(prevStationIndex, 1);
+    //Mark the two stations as updated if they aren't new.
     startStation.markAsUpdated();
     endStation.markAsUpdated();
 
-    //Remove the connection from this.connectionElements.
+    //Find the index of the connection in this.connectionElements.
     const filteredConnectionIndex = this.connectionElements.findIndex(
       (e) =>
         e.startStationRithmId === startStationId &&
         e.endStationRithmId === endStationId
     );
+    //Remove the connection from this.connectionElements.
     if (filteredConnectionIndex !== -1) {
       this.connectionElements.splice(filteredConnectionIndex, 1);
     }
+    //Note a change in map data.
     this.mapDataReceived$.next(true);
   }
 
@@ -546,6 +552,7 @@ export class MapService {
    * @returns Observable of publish data.
    */
   publishMap(): Observable<unknown> {
+    //Get all updated, new and deleted stations and groups.
     const filteredData: MapData = {
       stations: this.stationElements.filter(
         (e) => e.status !== MapItemStatus.Normal
@@ -555,19 +562,23 @@ export class MapService {
       ),
     };
 
+    //Post an http call.
     return this.http
+      //Send the filtered data in the post.
       .post<void>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
         filteredData
       )
       .pipe(
         tap(() => {
+          //After the post, remove deleted stations and groups from their respective arrays.
           this.stationElements = this.stationElements.filter(
             (e) => e.status !== MapItemStatus.Deleted
           );
           this.stationGroupElements = this.stationGroupElements.filter(
             (e) => e.status !== MapItemStatus.Deleted
           );
+          //After the post, set all new and updated stations' and groups' statuses back to normal.
           this.stationElements.forEach(
             (station) => (station.status = MapItemStatus.Normal)
           );
