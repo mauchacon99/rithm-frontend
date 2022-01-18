@@ -17,9 +17,10 @@ import { HeaderMenuComponent } from './dashboard-menu/header-menu/header-menu.co
 import { OptionsMenuComponent } from './dashboard-menu/options-menu/options-menu.component';
 import { ExpansionMenuComponent } from './dashboard-menu/expansion-menu/expansion-menu.component';
 import { MenuComponent } from './dashboard-menu/menu/menu.component';
-import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
-import { RosterModule } from '../shared/roster/roster.module';
-import { StationDocumentsModalModule } from '../shared/station-documents-modal/station-documents-modal.module';
+import { LoadingIndicatorModule } from 'src/app/shared/loading-indicator/loading-indicator.module';
+import { RosterModule } from 'src/app/shared/roster/roster.module';
+import { StationDocumentsModalModule } from 'src/app/shared/station-documents-modal/station-documents-modal.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { StationDocumentsModalModule } from '../shared/station-documents-modal/s
     LoadingIndicatorModule,
     RosterModule,
     StationDocumentsModalModule,
+    MatButtonModule,
   ],
 })
 export class DashboardModule {}
