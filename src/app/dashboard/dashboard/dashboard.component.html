@@ -50,7 +50,11 @@
           >
             Unable to retrieve widgets
           </div>
-          <gridster class="h-screen bg-transparent" [options]="options" *ngIf="!errorLoadingWidgets">
+          <gridster
+            class="h-screen bg-transparent"
+            [options]="options"
+            *ngIf="!errorLoadingWidgets"
+          >
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded"
