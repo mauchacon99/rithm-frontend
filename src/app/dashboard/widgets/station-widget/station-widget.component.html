@@ -4,13 +4,14 @@
   </div>
   <div class="w-full h-full flex items-center justify-center">
     <div class="w-full text-center">
-      <div class="mb-5">
+      <div>
         <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
       </div>
       <h3 class="text-error-500 truncate">ERROR</h3>
-      <p class="text-sm truncate">Unable to retrieve station data</p>
+      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
       <button
-        class="px-2 py-1 border border-primary-100 text-error-500 mt-5"
+        mat-stroked-button
+        color="warn"
         (click)="getStationWidgetDocuments()"
         (touchstart)="getStationWidgetDocuments()"
         id="try-again"
@@ -18,20 +19,22 @@
       >
         Try Again
       </button>
-</div>
-<!-- Header widget -->
-<div class="m-2">
-  <div
-    class="text-right"
-    *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
-  >
-    <button
-      mat-stroked-button
-      color="accent"
-      data-testid="create-new-document"
-      id="create-new-document"
-    >
-      New Document <i class="fas fa-plus"></i>
-    </button>
+    </div>
+    <!-- Header widget -->
+    <div class="m-2">
+      <div
+        class="text-right"
+        *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
+      >
+        <button
+          mat-stroked-button
+          color="accent"
+          data-testid="create-new-document"
+          id="create-new-document"
+        >
+          New Document <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
