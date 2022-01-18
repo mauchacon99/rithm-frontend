@@ -29,6 +29,9 @@ export class DashboardComponent implements OnInit {
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
 
+  /** Load indicator in dashboard. */
+  dashboardLoading = false;
+
   /** Config grid. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -113,6 +116,7 @@ export class DashboardComponent implements OnInit {
    */
   private getDashboardWidgets(): void {
     this.errorLoadingWidgets = false;
+    this.dashboardLoading = true;
     this.dashboardService
       .getDashboardWidgets()
       .pipe(first())
@@ -121,13 +125,10 @@ export class DashboardComponent implements OnInit {
           this.errorLoadingWidgets = false;
           this.widgetsOfDashboard = widgets;
         },
-        error: (error: unknown) => {
+        error: () => {
           this.errorLoadingWidgets = true;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
+          this.dashboardLoading = false;
+        }
       });
   }
 }

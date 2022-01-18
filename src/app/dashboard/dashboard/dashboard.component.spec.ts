@@ -5,6 +5,7 @@ import { HeaderComponent } from '../header/header.component';
 import { PriorityQueueComponent } from '../priority-queue/priority-queue.component';
 import { PreviouslyStartedDocumentsComponent } from '../previously-started-documents/previously-started-documents.component';
 import { MyStationsComponent } from '../my-stations/my-stations.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { StationService } from 'src/app/core/station.service';
 import {
   MockErrorService,
@@ -30,6 +31,7 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
+        MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
@@ -98,5 +100,16 @@ describe('DashboardComponent', () => {
       '#error-loading-widgets'
     );
     expect(errorComponent).toBeTruthy();
+    });
+
+  it('should render the app-loading-indicator component', () => {
+    component.viewNewDashboard = true;
+    component.dashboardLoading = true;
+    fixture.detectChanges();
+    const loader = fixture.debugElement.nativeElement.querySelector(
+      '#loading-dashboard-widgets'
+    );
+    expect(loader).toBeTruthy();
   });
+
 });
