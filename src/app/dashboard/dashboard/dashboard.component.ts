@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
+import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
@@ -17,6 +19,13 @@ import { GridsterConfig } from 'angular-gridster2';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  /** The component for the side nav on the dashboard. */
+  @ViewChild('drawer', { static: true })
+  drawer!: MatDrawer;
+
+  /** Show the dashboard menu. */
+  drawerContext = 'menuDashboard';
+
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
@@ -57,11 +66,30 @@ export class DashboardComponent implements OnInit {
     maxCols: 12,
   };
 
+  /**
+   * Whether the signed in user is an admin or not.
+   *
+   * @returns True if the user is an admin, false otherwise.
+   */
+  get isAdmin(): boolean {
+    return this.userService.user.role === 'admin';
+  }
+
+  /**
+   * Whether to show the backdrop for the menu drawer.
+   *
+   * @returns Whether to show the backdrop.
+   */
+  get drawerHasBackdrop(): boolean {
+    return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
   constructor(
     private stationService: StationService,
     private userService: UserService,
     private splitService: SplitService,
     private errorService: ErrorService,
+    private sidenavDrawerService: SidenavDrawerService,
     private dashboardService: DashboardService
   ) {
     // TODO: remove when admin users can access stations through map
@@ -79,6 +107,7 @@ export class DashboardComponent implements OnInit {
    * Initialize split on page load.
    */
   ngOnInit(): void {
+    this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
       this.splitService.initSdk(user.rithmId);
@@ -97,15 +126,18 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getDashboardWidgets();
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
   /**
-   * Whether the signed in user is an admin or not.
+   * Opens side nav on the dashboard.
    *
-   * @returns True if the user is an admin, false otherwise.
+   * @param drawerItem The information that will be displayed in the side drawer.
    */
-  get isAdmin(): boolean {
-    return this.userService.user.role === 'admin';
+  toggleMenu(drawerItem: 'menuDashboard'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 
   /**
@@ -129,5 +161,15 @@ export class DashboardComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Needed to resize a mobile browser when the scrollbar hides.
+   */
+  @HostListener('window:resize', ['$event'])
+  windowResize(): void {
+    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 }
