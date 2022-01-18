@@ -124,11 +124,16 @@ export class DashboardComponent implements OnInit {
         next: (widgets) => {
           this.errorLoadingWidgets = false;
           this.widgetsOfDashboard = widgets;
+          this.dashboardLoading = false;
         },
-        error: () => {
+        error: (error: unknown) => {
           this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
-        }
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
       });
   }
 }

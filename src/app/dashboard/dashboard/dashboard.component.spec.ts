@@ -100,7 +100,7 @@ describe('DashboardComponent', () => {
       '#error-loading-widgets'
     );
     expect(errorComponent).toBeTruthy();
-    });
+  });
 
   it('should render the app-loading-indicator component', () => {
     component.viewNewDashboard = true;
@@ -111,5 +111,4 @@ describe('DashboardComponent', () => {
     );
     expect(loader).toBeTruthy();
   });
-
 });
