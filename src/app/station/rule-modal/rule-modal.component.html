@@ -5,8 +5,11 @@
   </div>
   <!-- Stepper for new rule -->
   <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+    <ng-template matStepperIcon="edit">
+      <i class="fas fa-check"></i>
+    </ng-template>
     <!-- Step 1 -->
-    <mat-step color="accent" [completed]="false">
+    <mat-step color="accent" [completed]="firstOperand !== ''">
       <ng-template matStepLabel>
         <p class="truncate font-semibold ml-2">Select Field</p>
       </ng-template>
@@ -60,7 +63,7 @@
       </div>
     </mat-step>
     <!-- Step 2 -->
-    <mat-step color="primary" [completed]="false">
+    <mat-step color="primary" [completed]="operator !== ''">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Type</p>
       </ng-template>
@@ -75,16 +78,68 @@
       </div>
       <div class="flex flex-row space-x-2">
         <button mat-button matStepperPrevious class="w-1/12">Back</button>
-        <button mat-button matStepperNext class="w-1/12 text-accent-500">
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12 text-accent-500"
+          data-testid="next-step-2"
+          id="next-step-2"
+          [disabled]="operator === ''"
+        >
           Next
         </button>
       </div>
     </mat-step>
     <!-- Step 3 -->
-    <mat-step color="primary" [completed]="false">
+    <mat-step color="primary" [completed]="secondOperand !== ''">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm mt-1">
+          Enter the value you'd like to compare your field to.
+        </p>
+      </div>
+      <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Custom Value</mat-label>
+          <div matPrefix class="icon">
+            <i class="fas fa-font"></i>
+          </div>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="secondOperand"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Previous field</mat-label>
+          <mat-select [(ngModel)]="secondOperand"></mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button
+          mat-button
+          matStepperPrevious
+          class="w-1/12"
+          data-testid="back-step-3"
+          id="back-step-3"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          matStepperNext
+          class="w-1/12 text-accent-500"
+          data-testid="next-step-3"
+          id="next-step-3"
+          [disabled]="secondOperand === ''"
+        >
+          Next
+        </button>
+      </div>
     </mat-step>
     <!-- Step 4 -->
     <mat-step color="primary" [completed]="false">

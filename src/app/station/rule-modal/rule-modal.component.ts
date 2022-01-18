@@ -33,6 +33,9 @@ export class RuleModalComponent implements OnInit {
 
   /** The error if question stations fails . */
   questionStationError = false;
+  
+  /** The value of the second operand. */
+  secondOperand = '';
 
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
