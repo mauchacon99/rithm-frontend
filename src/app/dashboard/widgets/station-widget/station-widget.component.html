@@ -18,6 +18,20 @@
       >
         Try Again
       </button>
-    </div>
+</div>
+<!-- Header widget -->
+<div class="m-2">
+  <div
+    class="text-right"
+    *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
+  >
+    <button
+      mat-stroked-button
+      color="accent"
+      data-testid="create-new-document"
+      id="create-new-document"
+    >
+      New Document <i class="fas fa-plus"></i>
+    </button>
   </div>
 </div>
