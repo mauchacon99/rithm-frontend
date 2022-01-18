@@ -154,7 +154,6 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.errorLoadingWidgets = false;
           this.widgetsOfDashboard = widgets;
           this.dashboardLoading = false;
         },
