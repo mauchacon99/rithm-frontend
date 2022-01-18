@@ -563,30 +563,32 @@ export class MapService {
     };
 
     //Post an http call.
-    return this.http
-      //Send the filtered data in the post.
-      .post<void>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
-        filteredData
-      )
-      .pipe(
-        tap(() => {
-          //After the post, remove deleted stations and groups from their respective arrays.
-          this.stationElements = this.stationElements.filter(
-            (e) => e.status !== MapItemStatus.Deleted
-          );
-          this.stationGroupElements = this.stationGroupElements.filter(
-            (e) => e.status !== MapItemStatus.Deleted
-          );
-          //After the post, set all new and updated stations' and groups' statuses back to normal.
-          this.stationElements.forEach(
-            (station) => (station.status = MapItemStatus.Normal)
-          );
-          this.stationGroupElements.forEach(
-            (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
-          );
-        })
-      );
+    return (
+      this.http
+        //Send the filtered data in the post.
+        .post<void>(
+          `${environment.baseApiUrl}${MICROSERVICE_PATH_STATION}/map`,
+          filteredData
+        )
+        .pipe(
+          tap(() => {
+            //After the post, remove deleted stations and groups from their respective arrays.
+            this.stationElements = this.stationElements.filter(
+              (e) => e.status !== MapItemStatus.Deleted
+            );
+            this.stationGroupElements = this.stationGroupElements.filter(
+              (e) => e.status !== MapItemStatus.Deleted
+            );
+            //After the post, set all new and updated stations' and groups' statuses back to normal.
+            this.stationElements.forEach(
+              (station) => (station.status = MapItemStatus.Normal)
+            );
+            this.stationGroupElements.forEach(
+              (stationGroup) => (stationGroup.status = MapItemStatus.Normal)
+            );
+          })
+        )
+    );
   }
 
   /**
@@ -613,8 +615,8 @@ export class MapService {
       }
 
       //If zoomCount is negative, we're zooming out.
-     if (this.zoomCount$.value < 0) {
-       //Run this.zoom(), marking it as zooming out.
+      if (this.zoomCount$.value < 0) {
+        //Run this.zoom(), marking it as zooming out.
         this.zoom(false, zoomOrigin);
         //Increment the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value + 1);
@@ -693,7 +695,7 @@ export class MapService {
             zoomOrigin[coord] / newScale) *
             translateDirection
         );
-      //If zooming out.
+        //If zooming out.
       } else {
         //Return amount to translate a given coord based on the arithmetic.
         return Math.round(
@@ -821,6 +823,8 @@ export class MapService {
         'Cannot get center point of canvas when canvas context is not set'
       );
     }
+
+    //Get correct size of the canvas.
     const canvasBoundingRect =
       this.canvasContext.canvas.getBoundingClientRect();
 
