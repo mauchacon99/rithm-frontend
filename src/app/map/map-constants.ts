@@ -32,12 +32,12 @@ export const PAN_DECAY_RATE = 0.9;
  */
 export const CENTER_ZOOM_BUFFER = 10;
 
-// Flow
-export const FLOW_PADDING = 20;
-export const FLOW_POINT_RADIUS = 15;
-export const GROUP_NAME_PADDING = 6;
-export const FLOW_NAME_HEIGHT = 20;
-export const FLOW_CHARACTER_SIZE = 10;
+// Station Group
+export const STATION_GROUP_PADDING = 20;
+export const STATION_GROUP_POINT_RADIUS = 15;
+export const STATION_GROUP_NAME_PADDING = 6;
+export const GROUP_NAME_HEIGHT = 20;
+export const GROUP_CHARACTER_SIZE = 10;
 
 // Station
 export const STATION_PADDING = 10;

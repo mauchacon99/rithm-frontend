@@ -7,6 +7,7 @@ import {
   DashboardStationData,
   StationRosterMember,
   Document,
+  DashboardItem,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -87,6 +88,17 @@ export class DashboardService {
   getPreviouslyStartedDocuments(): Observable<Document[]> {
     return this.http.get<Document[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/previously-started-documents`
+    );
+  }
+
+  /**
+   * Gets widgets for dashboard.
+   *
+   * @returns Returns the list of widgets.
+   */
+  getDashboardWidgets(): Observable<DashboardItem[]> {
+    return this.http.get<DashboardItem[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
     );
   }
 }

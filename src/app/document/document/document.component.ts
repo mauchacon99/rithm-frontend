@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewChecked,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +30,7 @@ import { Subject, forkJoin } from 'rxjs';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss'],
 })
-export class DocumentComponent implements OnInit, OnDestroy {
+export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Document form. */
   documentForm: FormGroup;
 
@@ -71,7 +78,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private readonly changeDetectorR: ChangeDetectorRef
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control(''),
@@ -96,6 +104,13 @@ export class DocumentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
     this.getParams();
+  }
+
+  /**
+   * Checks after the component views and child views.
+   */
+  ngAfterViewChecked(): void {
+    this.changeDetectorR.detectChanges();
   }
 
   /**

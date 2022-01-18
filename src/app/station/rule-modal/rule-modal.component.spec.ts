@@ -7,11 +7,14 @@ import {
 import { RuleModalComponent } from './rule-modal.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
 import { MockErrorService, MockStationService } from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
-import { MatSelectModule } from '@angular/material/select';
-import { throwError } from 'rxjs';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -26,12 +29,16 @@ describe('RuleModalComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         MatSelectModule,
+        MatSnackBarModule,
       ],
-      declarations: [RuleModalComponent],
+      declarations: [
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
+        { provide: StationService, useClass: MockStationService },
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
-        { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
@@ -51,30 +58,57 @@ describe('RuleModalComponent', () => {
     expect(component.stationRithmId).toEqual(DIALOG_TEST_DATA);
   });
 
-  it('should call the method that returns the logical flow rules of a station.', () => {
+  it('should call the method that returns the questions of a station.', () => {
     component.stationRithmId = stationId;
-    const getStationFlowLogicRuleSpy = spyOn(
+    const getStationQuestions = spyOn(
       TestBed.inject(StationService),
-      'getStationFlowLogicRule'
+      'getStationQuestions'
     ).and.callThrough();
     component.ngOnInit();
-    expect(getStationFlowLogicRuleSpy).toHaveBeenCalledWith(stationId);
+    expect(getStationQuestions).toHaveBeenCalledWith(stationId, true);
   });
 
-  it('should show error message when request for logical flow rules of a station fails.', () => {
+  it('should show error message when request for questions of a station fails.', () => {
     spyOn(
       TestBed.inject(StationService),
-      'getStationFlowLogicRule'
+      'getStationQuestions'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
       })
     );
-    const displayErrorSpy = spyOn(
+    const spyError = spyOn(
       TestBed.inject(ErrorService),
       'displayError'
     ).and.callThrough();
     component.ngOnInit();
-    expect(displayErrorSpy).toHaveBeenCalled();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should activate the next button in step 1.', () => {
+    const btnNextInStep1 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-1');
+    const valueStationQuestion = 'value 1';
+    expect(btnNextInStep1.disabled).toBeTruthy();
+    component.firstOperand = valueStationQuestion;
+    fixture.detectChanges();
+    expect(btnNextInStep1.disabled).toBeFalsy();
+  });
+
+  it('should show loading-indicator-questions while get current and previous questions', () => {
+    component.questionStationLoading = false;
+    component.stationRithmId = stationId;
+    component.getStationQuestions();
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.callThrough();
+    fixture.detectChanges();
+    expect(component.questionStationLoading).toBeTrue();
+
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#loading-indicator-questions'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });
