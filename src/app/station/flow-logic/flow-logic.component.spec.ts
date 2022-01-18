@@ -17,6 +17,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -38,7 +40,11 @@ describe('FlowLogicComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [FlowLogicComponent, RuleModalComponent],
+      declarations: [
+        FlowLogicComponent,
+        RuleModalComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
