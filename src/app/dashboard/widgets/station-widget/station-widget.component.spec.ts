@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
-import { DocumentGenerationStatus } from 'src/models';
+import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 
 describe('StationWidgetComponent', () => {
@@ -15,7 +14,6 @@ describe('StationWidgetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationWidgetComponent],
-      imports: [MatCardModule],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -80,5 +78,83 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show button if station is manual', () => {
+    component.stationRithmId = stationRithmId;
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getStationWidgetDocuments'
+    ).and.returnValue(of(dataWidgetStation));
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.dataStationWidget.documentGeneratorStatus).toBe(
+      DocumentGenerationStatus.Manual
+    );
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#create-new-document'
+    );
+    expect(button).toBeTruthy();
+  });
+
+  it('should no show button if station is different to manual', () => {
+    component.stationRithmId = stationRithmId;
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.None,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getStationWidgetDocuments'
+    ).and.returnValue(of(dataWidgetStation));
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.dataStationWidget.documentGeneratorStatus).not.toBe(
+      DocumentGenerationStatus.Manual
+    );
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#create-new-document'
+    );
+    expect(button).toBeFalsy();
   });
 });
