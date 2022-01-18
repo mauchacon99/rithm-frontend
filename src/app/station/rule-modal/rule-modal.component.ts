@@ -33,7 +33,7 @@ export class RuleModalComponent implements OnInit {
 
   /** The error if question stations fails . */
   questionStationError = false;
-  
+
   /** The value of the second operand. */
   secondOperand = '';
 
