@@ -591,37 +591,52 @@ export class MapService {
 
   /**
    * Calls the zoom() method a number of times equal to the zoomCount.
+   * This method is required for a smooth zoom, since we recursively call it every time the scale changes.
    *
    * @param pinch Remove delay if zoom is a pinch zoom.
    * @param zoomOrigin The specific location on the canvas to zoom. Optional; defaults to the center of the canvas.
    */
   handleZoom(pinch: boolean, zoomOrigin = this.getCanvasCenterPoint()): void {
+    //We put our logic in a const so we can call it later.
     const zoomLogic = () => {
+      //zoomCount can be positive or negative.
+      //If zoomCount is positive, we're zooming in.
       if (this.zoomCount$.value > 0) {
+        //run this.zoom(), marking it as zooming in.
         this.zoom(true, zoomOrigin);
+        //Decrement the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value - 1);
+        //If zoomCount still isn't 0, recursively call this.handleZoom().
         if (this.zoomCount$.value > 0) {
           this.handleZoom(pinch, zoomOrigin);
         }
       }
 
-      if (this.zoomCount$.value < 0) {
+      //If zoomCount is negative, we're zooming out.
+     if (this.zoomCount$.value < 0) {
+       //Run this.zoom(), marking it as zooming out.
         this.zoom(false, zoomOrigin);
+        //Increment the zoomCount. Getting it closer to 0.
         this.zoomCount$.next(this.zoomCount$.value + 1);
+        //If zoomCount still isn't 0, recursively call this.handleZoom().
         if (this.zoomCount$.value < 0) {
           this.handleZoom(pinch, zoomOrigin);
         }
       }
     };
 
+    //When not a pinch to zoom.
     if (!pinch) {
+      //delay calling zoomLogic so that we can get an animation effect from the zoom.
       setTimeout(
         () => {
           zoomLogic();
         },
+        //We want to speed up the animation when zoomCount is higher, like when the zoom buttons are pressed.
         this.zoomCount$.value > 10 || this.zoomCount$.value < -10 ? 4 : 10
       );
     } else {
+      //We don't want any delay in response when a user is doing a pinch to zoom.
       zoomLogic();
     }
   }
@@ -638,7 +653,7 @@ export class MapService {
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
   ): void {
-    // Don't zoom if limits are reached
+    //Reset zoomCount and return if attempting to zoom past min or max scale.
     if (
       (this.mapScale$.value <= MIN_SCALE && !zoomingIn) ||
       (this.mapScale$.value >= MAX_SCALE && zoomingIn)
@@ -647,7 +662,7 @@ export class MapService {
       return;
     }
 
-    // Don't zoom out past a certain point if in build mode
+    // Reset zoomCount and return if attempting to zoom out past a certain point while not in view mode.
     if (
       this.mapScale$.value <= SCALE_RENDER_STATION_ELEMENTS / zoomAmount &&
       !zoomingIn &&
@@ -657,22 +672,31 @@ export class MapService {
       return;
     }
 
+    //Set so that we can move the currentCanvasPoint closer or further away based on zoom direction.
     const translateDirection = zoomingIn ? -1 : 1;
 
-    // translate current viewport position
+    /* What will we change the scale to when we're finished?
+    When we zoom out we make the scale smaller, when we zoom in we make it larger. */
     const newScale = zoomingIn
       ? this.mapScale$.value / zoomAmount
       : this.mapScale$.value * zoomAmount;
 
+    //We have translateLogic in a const so that we don't have to repeat code for both x and y coords.
     const translateLogic = (zoom: boolean, coord: 'x' | 'y'): number => {
+      //If zooming in.
       if (zoom) {
+        //Return amount to translate a given coord based on the arithmetic.
         return Math.round(
+          //current scale to new scale
           (zoomOrigin[coord] / this.mapScale$.value -
             zoomOrigin[coord] / newScale) *
             translateDirection
         );
+      //If zooming out.
       } else {
+        //Return amount to translate a given coord based on the arithmetic.
         return Math.round(
+          //new scale to current scale
           (zoomOrigin[coord] / newScale -
             zoomOrigin[coord] / this.mapScale$.value) *
             translateDirection
@@ -680,10 +704,12 @@ export class MapService {
       }
     };
 
+    //Subtract the number returned from translateLogic from x coord of currentCanvasPoint to pan the map that amount.
     this.currentCanvasPoint$.value.x -= translateLogic(zoomingIn, 'x');
+    //Subtract the number returned from translateLogic from y coord of currentCanvasPoint to pan the map that amount.
     this.currentCanvasPoint$.value.y -= translateLogic(zoomingIn, 'y');
 
-    // scale
+    //Set the mapScale to the new scale as long as it isn't above or below the max or min allowed.
     this.mapScale$.next(
       zoomingIn ? Math.min(ABOVE_MAX, newScale) : Math.max(BELOW_MIN, newScale)
     );
@@ -696,6 +722,9 @@ export class MapService {
    * @returns A number representing how for out from the edge of the screen a box should be.
    */
   centerBoundingBox(): number {
+    /*TODO: change name of method and related terminology to avoid confusion with the boundary box.
+    For now: *bounding box* refers to an invisible box that tracks if any stations are placed outside it, then triggers a function.
+    *boundary box* is a visible box surrounding a user's map that prevents stations from being placed too far away.*/
     //Dynamically set the size of the bounding box based on screen size.
     if (((window.innerHeight + window.innerWidth) / 2) * 0.01 < 30) {
       //Set the size of the box based on screen size.
