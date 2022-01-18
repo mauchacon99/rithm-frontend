@@ -22,7 +22,13 @@
     </div>
   </ng-container>
   <ng-template #newDashboard>
-    <div class="mx-5">
+    <div class="loading flex" *ngIf="dashboardLoading">
+      <app-loading-indicator
+        class="flex-grow m-auto"
+        id="loading-dashboard-widgets"
+      ></app-loading-indicator>
+    </div>
+    <div class="mx-5" *ngIf="!dashboardLoading">
       <h2 class="my-2 font-semibold">General</h2>
       <gridster class="h-screen bg-transparent" [options]="options">
         <gridster-item
