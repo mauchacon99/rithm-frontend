@@ -1,37 +1,46 @@
 <div class="w-full flex justify-between p-2">
-  <h3 *ngIf="dataStationWidget">{{ dataStationWidget.stationName }}</h3>
+  <h3 *ngIf="dataStationWidget" class="font-semibold">
+    {{ dataStationWidget.stationName }}
+  </h3>
   <div class="text-brightBlue">
-    <button mat-button>New Document <i class="fas fa-plus"></i></button>
+    <button mat-button class="text-xs">
+      New Document <i class="fas fa-plus"></i>
+    </button>
   </div>
 </div>
-<div class="grid grid-cols-12 text-xs text-secondary-500 p-2">
+<div class="grid grid-cols-12 text-xs text-secondary-500 pt-2 px-2">
   <p class="col-span-5 overline-font">Document</p>
   <p class="col-span-2 overline-font">Assigned</p>
   <p class="col-span-2 overline-font">Priority</p>
   <p class="col-span-3 overline-font">Time in Station</p>
 </div>
-<div
-  *ngIf="dataStationWidget"
-  class="grid grid-cols-12 text-xs text-secondary-500 p-2"
->
+<div *ngIf="dataStationWidget" class="grid grid-cols-12 text-secondary-500 p-2">
   <ng-container *ngFor="let document of dataStationWidget?.documents">
-    <div class="col-span-5 py-1.5border-solid border-b-2 border-black">
+    <div
+      class="col-span-5 py-2 border-solid border-b border-b-primary-100 text-xs"
+    >
       {{ document.name }}
     </div>
-    <div class="col-span-2 border-solid border-b-2 border-black">
+    <div
+      class="col-span-2 py-2 border-solid border-b border-b-primary-100 text-xs"
+    >
       {{ document.assignedUser }}
     </div>
-    <div class="col-span-2 border-solid border-b-2 border-black">
+    <div
+      class="col-span-2 py-2 border-solid border-b border-b-primary-100 text-xs"
+    >
       {{ document.priority }}
     </div>
-    <div class="col-span-2 border-solid border-b-2 border-black">
+    <div
+      class="col-span-2 py-2 border-solid border-b border-b-primary-100 text-xs"
+    >
       {{
         getElapsedTime(document.flowedTimeUTC) === 'Unknown'
           ? ''
           : getElapsedTime(document.flowedTimeUTC)
       }}
     </div>
-    <button class="col-span-1">
+    <button class="col-span-1 py-2 border-solid border-b border-b-primary-100">
       <i class="fas fa-angle-double-right"></i>
     </button>
   </ng-container>
