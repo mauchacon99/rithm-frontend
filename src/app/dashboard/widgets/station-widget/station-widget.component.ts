@@ -41,8 +41,9 @@ export class StationWidgetComponent implements OnInit {
   /**
    * Get document for station widgets.
    */
-  private getStationWidgetDocuments(): void {
+  getStationWidgetDocuments(): void {
     this.isLoading = true;
+    this.failedLoadWidget = false;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())
