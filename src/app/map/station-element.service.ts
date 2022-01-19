@@ -76,7 +76,13 @@ export class StationElementService {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station, dragItem);
-    // this.drawStationToolTip(station, dragItem);
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      station.disabled &&
+      station.hoverItem === StationElementHoverItem.Station
+    ) {
+      this.drawStationToolTip(station, dragItem);
+    }
 
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
       station.status === MapItemStatus.Created
@@ -223,8 +229,8 @@ export class StationElementService {
     }
     const ctx = this.canvasContext;
 
-    const startingX = station.canvasPoint.x - 100;
-    const startingY = station.canvasPoint.y - 100;
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y - 55 * this.mapScale;
 
     const scaledStationRadius = STATION_RADIUS * this.mapScale;
     const scaledStationHeight = 55 * this.mapScale;
@@ -290,44 +296,23 @@ export class StationElementService {
     );
     // top left curve to line going top right
     ctx.closePath();
-    ctx.fillStyle =
-      station.hoverItem !== StationElementHoverItem.None &&
-      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
-      !station.dragging
-        ? '#ebebeb'
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.disabled
-        ? '#ebebeb'
-        : '#fff';
-    ctx.strokeStyle =
-      station.hoverItem !== StationElementHoverItem.None &&
-      dragItem === MapDragItem.Node &&
-      !station.dragging
-        ? NODE_HOVER_COLOR
-        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-            station.selected) ||
-          (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-            station.hoverItem === StationElementHoverItem.Station &&
-            !station.disabled)
-        ? '#1b4387'
-        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.disabled
-        ? '#ebebeb'
-        : '#fff';
+    ctx.fillStyle = '#000000';
+    ctx.globalAlpha = 0.6;
     ctx.stroke();
     ctx.fill();
     ctx.restore();
+    ctx.fillStyle = '#fff';
     ctx.fillText(
       'Cannot group station',
       startingX + scaledStationPadding,
       startingY + 12 * this.mapScale + scaledStationPadding,
-      114 * this.mapScale
+      140 * this.mapScale
     );
     ctx.fillText(
       'with current selection',
       startingX + scaledStationPadding,
       startingY + 32 * this.mapScale + scaledStationPadding,
-      114 * this.mapScale
+      140 * this.mapScale
     );
   }
 
@@ -453,6 +438,8 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BADGE_HOVER_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? BADGE_HOVER_COLOR
         : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16 * this.mapScale);
@@ -560,6 +547,8 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BUTTON_HOVER_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? BADGE_HOVER_COLOR
         : buttonColor;
     ctx.fill();
     ctx.closePath();
@@ -606,7 +595,8 @@ export class StationElementService {
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
-          dragItem !== MapDragItem.Node
+          dragItem !== MapDragItem.Node &&
+          this.mapService.mapMode$.value !== MapMode.StationGroupAdd
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
     ctx.fill();

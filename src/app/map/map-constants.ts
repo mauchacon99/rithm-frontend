@@ -51,6 +51,7 @@ export const BADGE_HOVER_COLOR = '#7D8593';
 
 // Connection
 export const CONNECTION_LINE_WIDTH = 2;
+export const CONNECTION_LINE_WIDTH_SELECTED = 3;
 export const CONNECTION_LINE_WIDTH_ZOOM_OUT = 1;
 export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';

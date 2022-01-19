@@ -12,6 +12,7 @@ import {
   STATION_GROUP_NAME_PADDING,
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
+  CONNECTION_LINE_WIDTH_SELECTED,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -122,7 +123,15 @@ export class StationGroupElementService {
           ? '#1b4387'
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
-    ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (stationGroup.selected ||
+        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary)
+    ) {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH_SELECTED;
+    } else {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
   }
