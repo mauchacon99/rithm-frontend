@@ -15,6 +15,7 @@
       </ng-template>
       <div
         class="flex flex-col md:w-5/12 justify-start"
+        *ngIf="!questionStationError"
         [ngClass]="{ 'text-center': questionStationLoading }"
       >
         <p class="text-sm mt-1">
@@ -53,6 +54,12 @@
         >
           Next
         </button>
+      </div>
+      <!-- Error in question stations -->
+      <div *ngIf="questionStationError" id="question-stations-error">
+        <p class="text-left text-error-500 mt-2 ml-2 mb-2">
+          Error: Unable to retrive station questions.
+        </p>
       </div>
     </mat-step>
     <!-- Step 2 -->

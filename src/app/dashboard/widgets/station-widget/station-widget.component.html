@@ -1,16 +1,35 @@
-<!-- Header widget -->
-<div class="m-2">
-  <div
-    class="text-right"
-    *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
-  >
-    <button
-      mat-stroked-button
-      color="accent"
-      data-testid="create-new-document"
-      id="create-new-document"
+<div class="h-full">
+  <!-- Header widget -->
+  <div class="m-2">
+    <div
+      class="text-right"
+      *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
     >
-      New Document <i class="fas fa-plus"></i>
-    </button>
+      <button
+        mat-stroked-button
+        color="accent"
+        data-testid="create-new-document"
+        id="create-new-document"
+      >
+        New Document <i class="fas fa-plus"></i>
+      </button>
+    </div>
   </div>
+
+  <div
+    *ngIf="!isLoading; else loading"
+    data-testid="show-docs"
+    id="show-docs"
+  ></div>
 </div>
+
+<ng-template #loading>
+  <div
+    data-testid="loading-docs"
+    id="loading-docs"
+    class="h-full flex justify-center items-center flex-col"
+  >
+    <p class="py-2 truncate">Loading</p>
+    <app-loading-indicator></app-loading-indicator>
+  </div>
+</ng-template>

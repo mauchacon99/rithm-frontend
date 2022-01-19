@@ -1,3 +1,22 @@
+.h-calc {
+  height: calc(100vh - 64px); //this height is set for browser compatibility.
+  height: calc(var(--dashboardvh, 1vh) * 100 - 64px);
+}
+
 .loading {
   height: calc(100vh - 162px);
+}
+
+#menu-button {
+  position: fixed;
+  padding-bottom: 3px;
+
+  ::ng-deep {
+    min-width: 50px;
+  }
+}
+/* stylelint-disable-next-line */
+gridster {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
