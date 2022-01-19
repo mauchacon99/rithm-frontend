@@ -818,6 +818,7 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   private centerScale(onInit = false): void {
+    //TODO: This method needs work in general. It especially needs help when used in conjunction with centerPan().
     if (!this.canvasContext) {
       throw new Error(
         'Cannot get center point of canvas when canvas context is not set'
@@ -828,39 +829,52 @@ export class MapService {
     const canvasBoundingRect =
       this.canvasContext.canvas.getBoundingClientRect();
 
-    //We use the canvas points of each station here.
+    //Get the canvas points of the top-left corner and bottom-right corner of the map.
     const minPoint = this.getMinCanvasPoint();
     const maxPoint = this.getMaxCanvasPoint();
 
-    //Zooming in and zooming out need to have different sized bounding boxes to work.
+    //Get the DPI of the screen.
     const pixelRatio = window.devicePixelRatio || 1;
+    /* Zooming in and zooming out need to have different sized bounding boxes to work.
+    So we have a buffer const that is the difference between the two. */
     const zoomInBox =
       (this.centerBoundingBox() + CENTER_ZOOM_BUFFER) * pixelRatio;
     const zoomOutBox =
       (this.centerBoundingBox() - CENTER_ZOOM_BUFFER) * pixelRatio;
 
     //Zoom in.
+    /* If the topmost, the bottommost, rightmost, and leftmost station are all within the bounding box,
+    and mapScale isn't at max scale yet.
+    OR mapScale is less than the scale set as the preferred scale.*/
     if (
       (zoomInBox < minPoint.y &&
         canvasBoundingRect.height - zoomInBox > maxPoint.y + STATION_HEIGHT &&
         canvasBoundingRect.width - zoomInBox > maxPoint.x + STATION_WIDTH &&
-        zoomInBox < minPoint.y &&
+        zoomInBox < minPoint.x &&
         this.mapScale$.value < MAX_SCALE) ||
       this.mapScale$.value < SCALE_REDUCED_RENDER
     ) {
+      //Increment the zoomCount. This lets handleZoom know we need to zoom in.
       this.zoomCount$.next(this.zoomCount$.value + 1);
+      //Increment the centerCount. This lets the center method know we aren't done centering.
       this.centerCount$.next(this.centerCount$.value + 1);
+      //Call handleZoom with onInit in order to determine whether there should be a delay in zooming.
       this.handleZoom(onInit);
-      //Zoom out.
+    //Zoom out.
+    /* If the topmost, the bottommost, rightmost, or leftmost station are outside the bounding box,
+    AND mapScale is bigger than the scale set as the preferred  scale. */
     } else if (
       (zoomOutBox > minPoint.y ||
         canvasBoundingRect.height - zoomOutBox < maxPoint.y + STATION_HEIGHT ||
         canvasBoundingRect.width - zoomOutBox < maxPoint.x + STATION_WIDTH ||
-        zoomOutBox > minPoint.y) &&
+        zoomOutBox > minPoint.x) &&
       this.mapScale$.value > SCALE_REDUCED_RENDER / ZOOM_VELOCITY
     ) {
+      //Decrement the zoomCount. This lets handleZoom know we need to zoom out.
       this.zoomCount$.next(this.zoomCount$.value - 1);
+      //Increment the centerCount. This lets the center method know we aren't done centering.
       this.centerCount$.next(this.centerCount$.value + 1);
+      //Call handleZoom with onInit in order to determine whether there should be a delay in zooming.
       this.handleZoom(onInit);
     }
   }
@@ -871,10 +885,11 @@ export class MapService {
    * @param onInit Determines if this is called during mapCanvas init.
    */
   private centerPan(onInit = false): void {
+    //Get the center of the map and the center of the canvas.
     let adjustedCenter = this.getMapCenterPoint();
     const canvasCenter = this.getCanvasCenterPoint();
 
-    //The point on the canvas needed to center of the map.
+    //Get the point that currentCanvasPoint needs to be set to.
     adjustedCenter = {
       x: adjustedCenter.x - canvasCenter.x / this.mapScale$.value,
       y: adjustedCenter.y - canvasCenter.y / this.mapScale$.value,
@@ -886,6 +901,7 @@ export class MapService {
       return;
     }
 
+    //How far away is the currentCanvasPoint from the map center?
     const totalPanNeeded = {
       x: this.currentCanvasPoint$.value.x - adjustedCenter.x,
       y: this.currentCanvasPoint$.value.y - adjustedCenter.y,
@@ -894,18 +910,25 @@ export class MapService {
     //initialize variable needed to set panVelocity.
     const panAmount: Point = { x: 0, y: 0 };
 
-    //Set x axis of panAmount.
+    //Set x axis of panAmount as 1% of totalPanNeeded.
     panAmount.x = totalPanNeeded.x * 0.1;
 
-    //Set y axis of panAmount.
+    //Set y axis of panAmount as 1% of totalPanNeeded.
     panAmount.y = totalPanNeeded.y * 0.1;
 
+    /* In order to have a fade out animation effect we exponentially decrement the totalPanNeeded with each recursive call of centerPan().
+    This means that panAmount wil never reach 0, so we need to decide on a number thats close enough.
+    If we waited for 0 we'd get caught in an infinite loop.
+    The number settled on for now is .12. */
     if (Math.abs(panAmount.x) >= 0.12 || Math.abs(panAmount.y) >= 0.12) {
       //nextPanVelocity on map canvas will be set to this.
       this.centerPanVelocity$.next(panAmount);
+      //Increment the centerCount. This lets the center method know we aren't done centering.
       this.centerCount$.next(this.centerCount$.value + 1);
     } else {
+      //After the animation is finished, jump to the map center.
       this.currentCanvasPoint$.next(adjustedCenter);
+      //Cancel panning by setting panVelocity to 0,0.
       this.centerPanVelocity$.next({ x: 0, y: 0 });
     }
   }
@@ -922,7 +945,9 @@ export class MapService {
       return;
     }
 
+    //We put our logic in a const so we can call it later.
     const centerLogic = () => {
+      //If there is still centering that needs to be done.
       if (this.centerCount$.value > 0) {
         /* Smoothly change the scale of the map.
         TODO: The performance on centerScale isn't up to par,
@@ -930,24 +955,33 @@ export class MapService {
         if (onInit) {
           this.centerScale(onInit);
         }
+        //Smoothly pan to the center.
         this.centerPan(onInit);
+        //Decrement centerCount to note that we've moved a step further to the center.
         this.centerCount$.next(this.centerCount$.value - 1);
+        //Recursively call method so we can animate a smooth pan and scale.
         this.center(onInit);
+      //If centering is finished.
       } else {
+        //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
         this.centerCount$.next(0);
       }
     };
 
+    //End method if centerActive is false.
     if (!this.centerActive$.value) {
       return;
     }
 
+    //If center is being done after map-canvas has already been initialized, animate centering.
     if (!onInit) {
+      //Use a setTimeout on centering so that center is animated.
       setTimeout(() => {
         centerLogic();
       }, 4);
     } else {
+      //Don't use setTimeout so that centering is instant.
       centerLogic();
     }
   }
