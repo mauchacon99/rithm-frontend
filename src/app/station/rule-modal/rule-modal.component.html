@@ -124,7 +124,16 @@
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
-          <mat-select [(ngModel)]="secondOperand"></mat-select>
+          <mat-select [(ngModel)]="secondOperand">
+            <ng-container *ngFor="let question of questionStation">
+              <mat-option
+                *ngIf="question.rithmId !== firstOperand"
+                [value]="question.rithmId"
+              >
+                {{ question.prompt }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="flex flex-row space-x-2">

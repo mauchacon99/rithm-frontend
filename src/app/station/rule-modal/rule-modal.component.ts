@@ -189,6 +189,7 @@ export class RuleModalComponent implements OnInit {
    */
   setOperatorList(fieldType: QuestionFieldType): void {
     this.operatorList = [];
+    this.operator = '';
     switch (fieldType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
