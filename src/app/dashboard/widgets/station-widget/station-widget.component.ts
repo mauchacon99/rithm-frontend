@@ -19,6 +19,9 @@ export class StationWidgetComponent implements OnInit {
   /** Data to station widget. */
   dataStationWidget!: StationWidgetData;
 
+  /** Loading documents of station. */
+  isLoading = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService
@@ -36,14 +39,17 @@ export class StationWidgetComponent implements OnInit {
    * Get document for station widgets.
    */
   private getStationWidgetDocuments(): void {
+    this.isLoading = true;
     this.documentService
       .getStationWidgetDocuments(this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
+          this.isLoading = false;
           this.dataStationWidget = dataStationWidget;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
