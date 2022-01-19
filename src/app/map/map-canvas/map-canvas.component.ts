@@ -1610,8 +1610,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (
           !hoveringOverStation &&
           !hoveringOverConnection &&
-          (this.mapMode === MapMode.StationGroupAdd ||
-            this.mapMode === MapMode.View)
+          this.mapMode !== MapMode.StationAdd
         ) {
           /*Set all group hoverActive status to None.
           This ensures only one group can be hovered at a time. */
@@ -1626,7 +1625,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.context,
               this.scale
             );
-            //If cursor is over a group boundary.
+            //If cursor is over a group boundary or name.
             if (
               stationGroup.hoverItem ===
                 StationGroupElementHoverItem.Boundary ||
@@ -1855,7 +1854,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
-   * @param canvasPoint Calculated position of click.
+   * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
   checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
     //Loop through groups to find the group that was clicked.
@@ -1872,35 +1871,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           !stationGroup.disabled
         ) {
+          //Set status of station group to true or false depending upon current status
           stationGroup.selected = !stationGroup.selected;
           break;
         }
-      } else if (this.mapMode === MapMode.View) {
-        //If map mode is view, then should open station group info drawer.
+      } else if (
+        this.mapMode === MapMode.View ||
+        this.mapMode === MapMode.Build
+      ) {
+        //If map mode is view or build, then should open station group info drawer.
         if (
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
           stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ) {
+          //Open station group info drawer when clicked on station group boundary or name.
           this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
           break;
         }
       }
     }
   }
-  // checkStationGroupClick(contextPoint: Point): void {
-  //   //Loop through groups to find the group that was clicked.
-  //   for (const stationGroup of this.stationGroups) {
-  //     stationGroup.checkElementHover(contextPoint, this.context);
-  //     //If the cursor is over the group boundary and the group is not disabled.
-  //     if (
-  //       stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-  //       !stationGroup.disabled
-  //     ) {
-  //       stationGroup.selected = !stationGroup.selected;
-  //       break;
-  //     }
-  //   }
-  // }
 
   /**
    * Handles when a user drags an existing connection line.
