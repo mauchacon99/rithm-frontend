@@ -6,9 +6,12 @@
         {{ dataStationWidget.stationName }}
       </p>
     </div>
-    <div class="justify-self-end">
+    <div
+      class="justify-self-end"
+      *ngIf="dataStationWidget.documentGeneratorStatus"
+    >
       <button
-        *ngIf="dataStationWidget?.documentGeneratorStatus === 'Manual'"
+        *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
         mat-stroked-button
         color="accent"
         data-testid="create-new-document"
