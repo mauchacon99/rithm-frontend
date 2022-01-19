@@ -45,7 +45,18 @@
         </div>
         <div class="mx-5" *ngIf="!dashboardLoading">
           <h2 class="my-2 font-semibold">General</h2>
-          <gridster class="h-screen bg-transparent px-0" [options]="options">
+          <div
+            class="col-span-full text-error-500 text-center my-4"
+            id="error-loading-widgets"
+            *ngIf="errorLoadingWidgets"
+          >
+            Unable to retrieve widgets
+          </div>
+          <gridster
+            class="h-screen bg-transparent px-0"
+            [options]="options"
+            *ngIf="!errorLoadingWidgets"
+          >
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded"
