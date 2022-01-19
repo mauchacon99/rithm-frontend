@@ -8,3 +8,4 @@ export * from './mock-station-service';
 export * from './mock-user-service';
 export * from './mock-organization-service';
 export * from './mock-map-service';
+export * from './mock-split-sevice';

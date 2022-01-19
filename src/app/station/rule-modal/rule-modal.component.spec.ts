@@ -100,6 +100,23 @@ describe('RuleModalComponent', () => {
     expect(btnNextInStep1.disabled).toBeFalsy();
   });
 
+  it('should show error if question stations fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getStationQuestions'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    const reviewError = fixture.debugElement.nativeElement.querySelector(
+      '#question-stations-error'
+    );
+    expect(component.questionStationError).toBeTrue();
+    expect(reviewError).toBeTruthy();
+  });
   it('should show loading-indicator-questions while get current and previous questions', () => {
     component.questionStationLoading = false;
     component.stationRithmId = stationId;
