@@ -1581,7 +1581,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroup.hoverItem !== StationGroupElementHoverItem.None
         );
         //If not hovering over a station or group.
-        if (!hoveringOverStation && !hoveringOverStationGroup) {
+        if (
+          !hoveringOverStation &&
+          !hoveringOverStationGroup &&
+          this.mapMode !== MapMode.StationGroupAdd
+        ) {
           /*Set all connections hoverActive status to false.
           This ensures only one connection line can be hovered at a time. */
           this.connections.map((con) => {
@@ -1776,6 +1780,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
+            this.drawElements();
           }
           return;
         } else {
@@ -1788,7 +1793,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     /* Check if click was on a connection line.
     This line placed after station for loop to not trigger
     a connection click while clicking a station. */
-    this.checkConnectionClick(contextPoint);
+    if (this.mapMode !== MapMode.StationGroupAdd) {
+      this.checkConnectionClick(contextPoint);
+    }
 
     //Check if click was on a station group boundary.
     this.checkStationGroupClick(contextPoint);
@@ -1857,26 +1864,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //If the cursor is over the group boundary and the group is not disabled.
       if (
         stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-        !stationGroup.disabled
+        !stationGroup.disabled &&
+        this.mapMode === MapMode.StationGroupAdd
       ) {
         stationGroup.selected = !stationGroup.selected;
         if (stationGroup.selected) {
           this.mapService.setStationGroupStationStatus();
-        } else {
-          if (
-            !this.mapService.stationElements.some((st) => st.selected) &&
-            !this.mapService.stationGroupElements.some(
-              (stGroup) => stGroup.selected
-            )
-          ) {
-            this.mapService.resetSelectedStationGroupStationStatus();
-          }
         }
         // To make sure it's not disabled and should allow user to undo previous action.
         stationGroup.disabled = false;
         this.stationGroupSelectStatus(stationGroup);
         this.mapService.updateParentStationGroup(stationGroup.rithmId);
         this.mapService.updateChildStationGroup(stationGroup);
+        if (
+          !this.mapService.stationElements.some((st) => st.selected) &&
+          !this.mapService.stationGroupElements.some(
+            (stGroup) => stGroup.selected
+          )
+        ) {
+          this.mapService.resetSelectedStationGroupStationStatus();
+        }
         this.drawElements();
         break;
       }
@@ -1895,7 +1902,27 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         (station) => station.rithmId === st
       );
       this.stations[stationIndex].selected = isSelected;
+      this.stations[stationIndex].disabled = !isSelected;
     });
+    if (isSelected) {
+      //Enable/set disable status to false of adjacent station-groups and stations of a selected station-group.
+      this.stationGroups.forEach((stGroup) => {
+        if (stGroup.subStationGroups.includes(stationGroup.rithmId)) {
+          stGroup.subStationGroups.forEach((grp) => {
+            const index = this.stationGroups.findIndex(
+              (stGrp) => stGrp.rithmId === grp
+            );
+            this.stationGroups[index].disabled = false;
+          });
+          stGroup.stations.map((st) => {
+            const stationIndex = this.stations.findIndex(
+              (station) => station.rithmId === st
+            );
+            this.stations[stationIndex].disabled = false;
+          });
+        }
+      });
+    }
   }
 
   /**

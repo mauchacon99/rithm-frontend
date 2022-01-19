@@ -76,6 +76,7 @@ export class StationElementService {
     this.canvasContext = this.mapService.canvasContext;
 
     this.drawStationCard(station, dragItem);
+    // this.drawStationToolTip(station, dragItem);
 
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
       station.status === MapItemStatus.Created
@@ -184,9 +185,116 @@ export class StationElementService {
       !station.dragging
         ? '#ebebeb'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.selected &&
-          !station.dragging
+          station.disabled
+        ? '#ebebeb'
+        : '#fff';
+    ctx.strokeStyle =
+      station.hoverItem !== StationElementHoverItem.None &&
+      dragItem === MapDragItem.Node &&
+      !station.dragging
+        ? NODE_HOVER_COLOR
+        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.selected) ||
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.hoverItem === StationElementHoverItem.Station &&
+            !station.disabled)
         ? '#1b4387'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled
+        ? '#ebebeb'
+        : '#fff';
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /**
+   * Draws the station card on the map for a station.
+   *
+   * @param station The station for which to draw the card.
+   * @param dragItem Checks which item is being dragged on the map.
+   */
+  private drawStationToolTip(
+    station: StationMapElement,
+    dragItem: MapDragItem
+  ): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the station card if context is not defined');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x - 100;
+    const startingY = station.canvasPoint.y - 100;
+
+    const scaledStationRadius = STATION_RADIUS * this.mapScale;
+    const scaledStationHeight = 55 * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+    const scaledStationPadding = STATION_PADDING * this.mapScale;
+
+    const shadowEquation = (num: number) =>
+      Math.floor(num * this.mapScale) > 0 ? Math.floor(num * this.mapScale) : 1;
+
+    ctx.save();
+    ctx.shadowColor = '#ccc';
+    ctx.shadowBlur = shadowEquation(6);
+    ctx.shadowOffsetX = shadowEquation(3);
+    ctx.shadowOffsetY = shadowEquation(3);
+    if (
+      station.hoverItem === StationElementHoverItem.Station &&
+      dragItem === MapDragItem.Station &&
+      station.dragging
+    ) {
+      ctx.shadowOffsetY = shadowEquation(20);
+      ctx.shadowBlur = shadowEquation(40);
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledStationRadius, startingY);
+    ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX + scaledStationWidth,
+      startingY,
+      startingX + scaledStationWidth,
+      startingY + scaledStationRadius
+    );
+    // eslint-disable-next-line max-len
+    ctx.lineTo(
+      startingX + scaledStationWidth,
+      startingY + scaledStationHeight - scaledStationRadius
+    ); // line going to bottom right
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX + scaledStationWidth,
+      startingY + scaledStationHeight,
+      startingX + scaledStationWidth - scaledStationRadius,
+      startingY + scaledStationHeight
+    ); // bottom right curve to line going to bottom left
+    ctx.lineTo(
+      startingX + scaledStationRadius,
+      startingY + scaledStationHeight
+    ); // line going to bottom left
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY + scaledStationHeight,
+      startingX,
+      startingY + scaledStationHeight - scaledStationRadius
+    ); // bottom left curve to line going to top left
+    ctx.lineTo(startingX, startingY + scaledStationRadius); // line going to top left
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY,
+      startingX + scaledStationRadius,
+      startingY
+    );
+    // top left curve to line going top right
+    ctx.closePath();
+    ctx.fillStyle =
+      station.hoverItem !== StationElementHoverItem.None &&
+      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
+      !station.dragging
+        ? '#ebebeb'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           station.disabled
         ? '#ebebeb'
@@ -196,10 +304,31 @@ export class StationElementService {
       dragItem === MapDragItem.Node &&
       !station.dragging
         ? NODE_HOVER_COLOR
+        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.selected) ||
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.hoverItem === StationElementHoverItem.Station &&
+            !station.disabled)
+        ? '#1b4387'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled
+        ? '#ebebeb'
         : '#fff';
     ctx.stroke();
     ctx.fill();
     ctx.restore();
+    ctx.fillText(
+      'Cannot group station',
+      startingX + scaledStationPadding,
+      startingY + 12 * this.mapScale + scaledStationPadding,
+      114 * this.mapScale
+    );
+    ctx.fillText(
+      'with current selection',
+      startingX + scaledStationPadding,
+      startingY + 32 * this.mapScale + scaledStationPadding,
+      114 * this.mapScale
+    );
   }
 
   /**

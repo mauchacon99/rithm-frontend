@@ -1072,12 +1072,12 @@ export class MapService {
         stationGroup.isReadOnlyRootStationGroup !== true
       ) {
         stationGroup.disabled = false;
-        stationGroup.stations.forEach((st) => {
-          const stationIndex = this.stationElements.findIndex(
-            (station) => station.rithmId === st
-          );
-          this.stationElements[stationIndex].disabled = false;
-        });
+        // stationGroup.stations.forEach((st) => {
+        //   const stationIndex = this.stationElements.findIndex(
+        //     (station) => station.rithmId === st
+        //   );
+        //   this.stationElements[stationIndex].disabled = false;
+        // });
         this.updateParentStationGroup(stationGroup.rithmId);
       }
     });
@@ -1105,6 +1105,9 @@ export class MapService {
           (station) => station.rithmId === st
         );
         this.stationElements[stationIndex].selected = isSelected ? true : false;
+        this.stationElements[stationIndex].disabled = !isSelected
+          ? true
+          : false;
       });
       this.updateChildStationGroup(subStationGroup);
     });
@@ -1121,7 +1124,9 @@ export class MapService {
         const stationIndex = this.stationElements.findIndex(
           (st) => st.rithmId === station
         );
-        this.stationElements[stationIndex].disabled = true;
+        if (!this.stationElements[stationIndex].selected) {
+          this.stationElements[stationIndex].disabled = true;
+        }
       });
     });
   }
@@ -1158,6 +1163,7 @@ export class MapService {
           );
           this.stationElements[stationIndex].disabled = false;
         });
+        stationGroup.disabled = false;
         stationGroup.subStationGroups.forEach((subStationGroupId) => {
           const stationGroupIndex = this.stationGroupElements.findIndex(
             (group) => group.rithmId === subStationGroupId

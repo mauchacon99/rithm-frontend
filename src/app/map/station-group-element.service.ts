@@ -118,7 +118,9 @@ export class StationGroupElementService {
           stationGroup.disabled
         ? '#ebebeb'
         : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? NODE_HOVER_COLOR
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? '#1b4387'
+          : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     ctx.lineWidth = CONNECTION_LINE_WIDTH;
     ctx.stroke(stationGroup.path);
