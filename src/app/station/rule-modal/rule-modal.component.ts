@@ -40,9 +40,6 @@ export class RuleModalComponent implements OnInit {
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
 
-  /** The value of the operands to be compared. */
-  result = 'Fieldset #1 is not Fieldset #2';
-
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
