@@ -185,7 +185,7 @@ export class RuleModalComponent implements OnInit {
   /**
    * Set operator list for the comparison type.
    *
-   * @param fieldType The field type to show the options of the corresponding operator group.
+   * @param fieldType The field type to show the options of the corresponding operator list.
    */
   setOperatorList(fieldType: QuestionFieldType): void {
     this.operatorList = [];
