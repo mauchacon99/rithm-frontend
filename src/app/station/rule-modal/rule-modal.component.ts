@@ -31,6 +31,12 @@ export class RuleModalComponent implements OnInit {
   /** The value of the operator. */
   operator = '';
 
+  /** The error if question stations fails . */
+  questionStationError = false;
+
+  /** The value of the second operand. */
+  secondOperand = '';
+
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
 
@@ -75,6 +81,7 @@ export class RuleModalComponent implements OnInit {
           this.questionStation = questions;
         },
         error: (error: unknown) => {
+          this.questionStationError = true;
           this.questionStationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
