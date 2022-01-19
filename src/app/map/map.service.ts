@@ -860,8 +860,8 @@ export class MapService {
       this.centerCount$.next(this.centerCount$.value + 1);
       //Call handleZoom with onInit in order to determine whether there should be a delay in zooming.
       this.handleZoom(onInit);
-    //Zoom out.
-    /* If the topmost, the bottommost, rightmost, or leftmost station are outside the bounding box,
+      //Zoom out.
+      /* If the topmost, the bottommost, rightmost, or leftmost station are outside the bounding box,
     AND mapScale is bigger than the scale set as the preferred  scale. */
     } else if (
       (zoomOutBox > minPoint.y ||
@@ -961,7 +961,7 @@ export class MapService {
         this.centerCount$.next(this.centerCount$.value - 1);
         //Recursively call method so we can animate a smooth pan and scale.
         this.center(onInit);
-      //If centering is finished.
+        //If centering is finished.
       } else {
         //Reset properties that mark that more centering needs to happen.
         this.centerActive$.next(false);
@@ -997,8 +997,11 @@ export class MapService {
         'Cannot get center point of canvas when canvas context is not set'
       );
     }
+
+    //Get the canvas dimensions.
     const canvasBoundingRect =
       this.canvasContext?.canvas.getBoundingClientRect();
+    //Return half the width and height of the canvas.
     return {
       x: canvasBoundingRect.width / 2,
       y: canvasBoundingRect.height / 2,
@@ -1093,9 +1096,10 @@ export class MapService {
   }
 
   /**
-   * Set's isAddingConnected property of station to false if it's true.
+   * Sets isAddingConnected property of station to false if it's true.
    */
   disableConnectedStationMode(): void {
+    //looks through the stationElements array and sets isAddingConnected to false on all stations.
     this.stationElements
       .filter((station) => station.isAddingConnected)
       .map((connectedStation) => {
@@ -1202,10 +1206,12 @@ export class MapService {
    * @returns Returns true if no stations are updated and false if any station is updated.
    */
   get mapHasChanges(): boolean {
+    //All stations that have MapItemStatus set to updated.
     const updatedStations = this.stationElements.filter(
       (station) => station.status === MapItemStatus.Updated
     );
     for (const updatedStation of updatedStations) {
+      //Find any stored stations that match the updated station.
       const storedStation = this.storedStationElements.find(
         (station) => station.rithmId === updatedStation.rithmId
       );
@@ -1213,10 +1219,12 @@ export class MapService {
         throw new Error(`The station ${updatedStation.stationName}: ${updatedStation.rithmId} was marked as updated,
           but does not exist in stored stations.`);
       }
+      //If all the settings on updated station are identical to its stored counterpart, set that station's status to normal.
       if (storedStation.isIdenticalTo(updatedStation)) {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
+    //If there are still stations with status not normal, return true.
     return this.stationElements.some(
       (station) => station.status !== MapItemStatus.Normal
     );
