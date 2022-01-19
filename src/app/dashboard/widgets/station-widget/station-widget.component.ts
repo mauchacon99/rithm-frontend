@@ -49,7 +49,6 @@ export class StationWidgetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (dataStationWidget) => {
-          this.failedLoadWidget = false;
           this.isLoading = false;
           this.dataStationWidget = dataStationWidget;
         },
