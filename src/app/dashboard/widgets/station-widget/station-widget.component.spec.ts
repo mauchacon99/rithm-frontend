@@ -5,6 +5,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -13,7 +15,10 @@ describe('StationWidgetComponent', () => {
     '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StationWidgetComponent],
+      declarations: [
+        StationWidgetComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
@@ -136,5 +141,39 @@ describe('StationWidgetComponent', () => {
       '#create-new-document'
     );
     expect(button).toBeFalsy();
+  });
+
+  describe('Loading documents', () => {
+    it('should be to show loading-indicator', () => {
+      component.isLoading = true;
+      fixture.detectChanges();
+      const loadingDocs =
+        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+        'app-loading-indicator'
+      );
+
+      expect(loadingDocs).toBeTruthy();
+      expect(loadingIndicator).toBeTruthy();
+      expect(showDocs).toBeNull();
+    });
+
+    it('should not be to show loading-indicator', () => {
+      component.isLoading = false;
+      fixture.detectChanges();
+      const loadingDocs =
+        fixture.debugElement.nativeElement.querySelector('#loading-docs');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+      const loadingIndicator = fixture.debugElement.nativeElement.querySelector(
+        'app-loading-indicator'
+      );
+
+      expect(loadingDocs).toBeNull();
+      expect(loadingIndicator).toBeNull();
+      expect(showDocs).toBeTruthy();
+    });
   });
 });
