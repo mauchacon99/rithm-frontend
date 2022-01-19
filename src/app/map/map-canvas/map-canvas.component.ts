@@ -1606,7 +1606,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const hoveringOverConnection = this.connections.some(
           (con) => con.hovering
         );
-        //If not hovering over a station or connection, and the mapmode is StationGroupAdd or View.
+        //If not hovering over a station or connection, and the mapmode is not stationAdd.
         if (
           !hoveringOverStation &&
           !hoveringOverConnection &&
@@ -1865,6 +1865,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.context,
         this.scale
       );
+      //If MapMode is StationGroupAdd we select the group.
       if (this.mapMode === MapMode.StationGroupAdd) {
         //If the cursor is over the group boundary and the group is not disabled.
         if (
@@ -1885,7 +1886,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ) {
           //Open station group info drawer when clicked on station group boundary or name.
-          this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
+          this.sidenavDrawerService.openDrawer('stationGroupInfo');
           break;
         }
       }
