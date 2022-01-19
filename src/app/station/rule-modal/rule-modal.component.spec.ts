@@ -177,9 +177,9 @@ describe('RuleModalComponent', () => {
     expect(step3.completed).toBeTrue();
   });
 
-  it('should set the operator group as operator options when adding the field type question', () => {
-    expect(component.operatorGroup).toHaveSize(0);
-    component.setOperatorGroup(QuestionFieldType.ShortText);
-    expect(component.operatorGroup.length > 0).toBeTrue();
+  it('should set the operator list as operator options when adding the field type question', () => {
+    expect(component.operatorList).toHaveSize(0);
+    component.setOperatorList(QuestionFieldType.ShortText);
+    expect(component.operatorList.length > 0).toBeTrue();
   });
 });

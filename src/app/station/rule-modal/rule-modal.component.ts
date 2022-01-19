@@ -8,7 +8,6 @@ import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { Question, QuestionFieldType } from 'src/models';
 import { OperatorType } from 'src/models/enums/operator-type.enum';
-import { OperatorGroup } from 'src/models/operator-group';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -44,7 +43,7 @@ export class RuleModalComponent implements OnInit {
   questionStationLoading = false;
 
   /** Text group for the operator options. */
-  textGroup: OperatorGroup[] = [
+  textGroup = [
     {
       text: 'is',
       value: OperatorType.EqualTo,
@@ -60,7 +59,7 @@ export class RuleModalComponent implements OnInit {
   ];
 
   /** Content group for the operator options. */
-  contentGroup: OperatorGroup[] = [
+  contentGroup = [
     {
       text: 'contains',
       value: OperatorType.Contains,
@@ -72,7 +71,7 @@ export class RuleModalComponent implements OnInit {
   ];
 
   /** Number group for the operator options. */
-  numberGroup: OperatorGroup[] = [
+  numberGroup = [
     {
       text: 'is',
       value: OperatorType.EqualTo,
@@ -92,7 +91,7 @@ export class RuleModalComponent implements OnInit {
   ];
 
   /** Date group for the operator options. */
-  dateGroup: OperatorGroup[] = [
+  dateGroup = [
     {
       text: 'before',
       value: OperatorType.Before,
@@ -108,7 +107,7 @@ export class RuleModalComponent implements OnInit {
   ];
 
   /** Select group for the operator options. */
-  selectGroup: OperatorGroup[] = [
+  selectGroup = [
     {
       text: 'is',
       value: OperatorType.EqualTo,
@@ -119,8 +118,13 @@ export class RuleModalComponent implements OnInit {
     },
   ];
 
-  /** The options of the comparison type. */
-  operatorGroup: OperatorGroup[] = [];
+  /** The operatorList to be shown. */
+  operatorList: {
+    /** The operator selector text to show.*/
+    text: string;
+    /** The operator selector value.*/
+    value: OperatorType;
+  }[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -161,6 +165,11 @@ export class RuleModalComponent implements OnInit {
         next: (questions) => {
           this.questionStationLoading = false;
           this.questionStation = questions;
+          //Filter to show questions that are different to Instructions
+          this.questionStation = this.questionStation.filter(
+            (question: Question) =>
+              question.questionType !== QuestionFieldType.Instructions
+          );
         },
         error: (error: unknown) => {
           this.questionStationError = true;
@@ -174,12 +183,12 @@ export class RuleModalComponent implements OnInit {
   }
 
   /**
-   * Set operator group for the comparison type.
+   * Set operator list for the comparison type.
    *
    * @param fieldType The field type to show the options of the corresponding operator group.
    */
-  setOperatorGroup(fieldType: QuestionFieldType): void {
-    this.operatorGroup = [];
+  setOperatorList(fieldType: QuestionFieldType): void {
+    this.operatorList = [];
     switch (fieldType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
@@ -187,21 +196,21 @@ export class RuleModalComponent implements OnInit {
       case QuestionFieldType.AddressLine:
       case QuestionFieldType.Phone:
       case QuestionFieldType.MultiSelect:
-        this.operatorGroup = [...this.textGroup];
+        this.operatorList = this.textGroup;
         break;
       case QuestionFieldType.LongText:
       case QuestionFieldType.CheckList:
-        this.operatorGroup = [...this.contentGroup];
+        this.operatorList = this.contentGroup;
         break;
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
-        this.operatorGroup = [...this.numberGroup];
+        this.operatorList = this.numberGroup;
         break;
       case QuestionFieldType.Date:
-        this.operatorGroup = [...this.dateGroup];
+        this.operatorList = this.dateGroup;
         break;
       case QuestionFieldType.Select:
-        this.operatorGroup = [...this.selectGroup];
+        this.operatorList = this.selectGroup;
     }
   }
 }

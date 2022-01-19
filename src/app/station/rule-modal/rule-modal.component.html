@@ -31,7 +31,7 @@
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="setOperatorGroup(question.questionType)"
+              (click)="setOperatorList(question.questionType)"
             >
               {{ question.prompt }}
             </mat-option>
@@ -76,7 +76,7 @@
           <mat-label>Comparison Type</mat-label>
           <mat-select [(value)]="operator">
             <mat-option
-              *ngFor="let option of operatorGroup"
+              *ngFor="let option of operatorList"
               [value]="option.value"
             >
               {{ option.text }}
