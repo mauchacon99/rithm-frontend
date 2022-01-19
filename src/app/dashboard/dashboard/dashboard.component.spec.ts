@@ -12,12 +12,20 @@ import {
   MockStationService,
   MockUserService,
   MockDashboardService,
+  MockSplitService,
 } from 'src/mocks';
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from '../dashboard.service';
 import { throwError } from 'rxjs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MenuComponent } from '../dashboard-menu/menu/menu.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { By } from '@angular/platform-browser';
+import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
+import { GridsterModule } from 'angular-gridster2';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -31,15 +39,19 @@ describe('DashboardComponent', () => {
         MockComponent(PriorityQueueComponent),
         MockComponent(PreviouslyStartedDocumentsComponent),
         MockComponent(MyStationsComponent),
+        MockComponent(MenuComponent),
+        MockComponent(StationWidgetComponent),
         MockComponent(LoadingIndicatorComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
-        { provide: SplitService },
+        { provide: SplitService, useClass: MockSplitService },
         { provide: DashboardService, useClass: MockDashboardService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
+      imports: [MatSidenavModule, NoopAnimationsModule, GridsterModule],
     }).compileComponents();
   });
 
@@ -83,6 +95,25 @@ describe('DashboardComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
+  it('should show error message when request for station widgets', () => {
+    component.viewNewDashboard = true;
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.errorLoadingWidgets).toBeTrue();
+    const errorComponent = fixture.debugElement.nativeElement.querySelector(
+      '#error-loading-widgets'
+    );
+    expect(errorComponent).toBeTruthy();
+  });
+
   it('should render the app-loading-indicator component', () => {
     component.viewNewDashboard = true;
     component.dashboardLoading = true;
@@ -91,5 +122,20 @@ describe('DashboardComponent', () => {
       '#loading-dashboard-widgets'
     );
     expect(loader).toBeTruthy();
+  });
+
+  it('should call the `toggle` method on the `SidenavService`', () => {
+    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+    component.toggleMenu('menuDashboard');
+    expect(spy).toHaveBeenCalledOnceWith('menuDashboard');
+  });
+
+  it('should click the dashboard menu button ', () => {
+    component.viewNewDashboard = true;
+    fixture.detectChanges();
+    const spy = spyOn(component, 'toggleMenu');
+    const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
+    menuBtn.triggerEventHandler('click', null);
+    expect(spy).toHaveBeenCalled();
   });
 });
