@@ -34,7 +34,7 @@ describe('HistoryDrawerComponent', () => {
     component.documentRithmId = 'E204F369-386F-4E41';
     const getEventDocument = spyOn(
       TestBed.inject(DocumentService),
-      'getEventDocument'
+      'getDocumentEvents'
     ).and.callThrough();
     component.ngOnInit();
     expect(getEventDocument).toHaveBeenCalledWith(component.documentRithmId);

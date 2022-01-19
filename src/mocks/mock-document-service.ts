@@ -1244,12 +1244,12 @@ export class MockDocumentService {
   }
 
   /**
-   * Get events for document.
+   * Get events for the document history.
    *
    * @param documentRithmId The Specific ID of document.
-   * @returns Returns data event document.
+   * @returns Returns an array of events for the document history.
    */
-  getEventDocument(documentRithmId: string): Observable<DocumentEvent[]> {
+  getDocumentEvents(documentRithmId: string): Observable<DocumentEvent[]> {
     if (!documentRithmId) {
       return throwError(
         () =>

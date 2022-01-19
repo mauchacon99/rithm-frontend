@@ -30,15 +30,15 @@ export class HistoryDrawerComponent implements OnInit {
    * Life cycle init the component.
    */
   ngOnInit(): void {
-    this.getEventDocument();
+    this.getDocumentEvents();
   }
 
   /**
-   * Get events document.
+   * Get events for the document history.
    */
-  getEventDocument(): void {
+  getDocumentEvents(): void {
     this.documentService
-      .getEventDocument(this.documentRithmId)
+      .getDocumentEvents(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (events) => {

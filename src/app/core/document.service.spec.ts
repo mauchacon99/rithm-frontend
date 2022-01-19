@@ -652,7 +652,7 @@ describe('DocumentService', () => {
         },
       },
     ];
-    service.getEventDocument(documentRithmId).subscribe((response) => {
+    service.getDocumentEvents(documentRithmId).subscribe((response) => {
       expect(response).toEqual(expectedEventsResponse);
     });
   });
