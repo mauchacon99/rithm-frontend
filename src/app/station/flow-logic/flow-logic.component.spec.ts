@@ -17,6 +17,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 
@@ -39,6 +41,8 @@ describe('FlowLogicComponent', () => {
         MatStepperModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatInputModule,
+        FormsModule,
       ],
       declarations: [
         FlowLogicComponent,
@@ -83,6 +87,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call method openModal after clicked in button with id: all-new-rule', () => {
+      component.flowLogicLoading = false;
+      fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#all-new-rule');
       expect(btnOpenModal).toBeTruthy();
@@ -91,6 +97,8 @@ describe('FlowLogicComponent', () => {
     });
 
     it('should to call method openModal after clicked in button with id: any-new-rule', () => {
+      component.flowLogicLoading = false;
+      fixture.detectChanges();
       const spyFunc = spyOn(component, 'openModal').and.callThrough();
       const btnOpenModal = fixture.nativeElement.querySelector('#any-new-rule');
       expect(btnOpenModal).toBeTruthy();
@@ -166,9 +174,6 @@ describe('FlowLogicComponent', () => {
       destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
       flowRules: [],
     };
-    const messageNotRulesDefault =
-      fixture.debugElement.nativeElement.querySelector('#there-not-rules');
-    expect(messageNotRulesDefault).toBeTruthy();
     spyOn(
       TestBed.inject(StationService),
       'getStationFlowLogicRule'
@@ -180,6 +185,15 @@ describe('FlowLogicComponent', () => {
     expect(messageNotRules).toBeTruthy();
   });
 
+  it('should activate the loading in flow logic station', () => {
+    component.flowLogicLoading = true;
+    fixture.detectChanges();
+    const flowLogicLoading = fixture.debugElement.nativeElement.querySelector(
+      '#flow-logic-loading'
+    );
+    expect(component.flowLogicLoading).toBeTrue();
+    expect(flowLogicLoading).toBeTruthy();
+  });
   it('should show error if petition rules fails', () => {
     spyOn(
       TestBed.inject(StationService),

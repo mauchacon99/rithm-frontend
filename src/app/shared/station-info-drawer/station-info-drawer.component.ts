@@ -363,7 +363,22 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         });
     } else {
       this.stationLoading = false;
-      //Is there any information for a new station that needs to be populated here?
+      //Fill with blank station info if the station is newly created.
+      this.stationInformation = {
+        rithmId: this.stationRithmId,
+        name: this.stationName,
+        instructions: '',
+        nextStations: [],
+        previousStations: [],
+        stationOwners: [],
+        workers: [],
+        createdByRithmId: '',
+        createdDate: '',
+        updatedByRithmId: '',
+        updatedDate: '',
+        questions: [],
+        priority: 0,
+      };
     }
   }
 
