@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -17,6 +17,7 @@ import {
   DocumentAutoFlow,
   MoveDocument,
   StationWidgetData,
+  DocumentEvent,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -421,5 +422,43 @@ export class DocumentService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
       { params }
     );
+  }
+
+  /**
+   * Get events for document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data event document.
+   */
+  getEventDocument(documentRithmId: string): Observable<DocumentEvent[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get information about the event.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const eventDocument: DocumentEvent[] = [
+        {
+          date: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(eventDocument).pipe(delay(1000));
+    }
   }
 }

@@ -16,6 +16,7 @@ import {
   MoveDocument,
   StationWidgetData,
   DocumentGenerationStatus,
+  DocumentEvent,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -1240,5 +1241,43 @@ export class MockDocumentService {
       ],
     };
     return of(dataWidgetStation).pipe(delay(1000));
+  }
+
+  /**
+   * Get events for document.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns data event document.
+   */
+  getEventDocument(documentRithmId: string): Observable<DocumentEvent[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get information about the event.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const eventDocument: DocumentEvent[] = [
+        {
+          date: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(eventDocument).pipe(delay(1000));
+    }
   }
 }

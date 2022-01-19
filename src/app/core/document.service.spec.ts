@@ -19,6 +19,7 @@ import {
   MoveDocument,
   StationWidgetData,
   DocumentGenerationStatus,
+  DocumentEvent,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -630,5 +631,29 @@ describe('DocumentService', () => {
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
     req.flush(dataWidgetStation);
     httpTestingController.verify();
+  });
+
+  it('should return events for document', () => {
+    const documentRithmId = documentId;
+    const expectedEventsResponse: DocumentEvent[] = [
+      {
+        date: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getEventDocument(documentRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
   });
 });
