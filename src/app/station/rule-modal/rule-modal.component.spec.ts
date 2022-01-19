@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
+import { QuestionFieldType } from 'src/models';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -174,5 +175,11 @@ describe('RuleModalComponent', () => {
     component.secondOperand = 'Fieldset #2';
     fixture.detectChanges();
     expect(step3.completed).toBeTrue();
+  });
+
+  it('should set the operator group as operator options when adding the field type question', () => {
+    expect(component.operatorGroup).toHaveSize(0);
+    component.setOperatorGroup(QuestionFieldType.ShortText);
+    expect(component.operatorGroup.length > 0).toBeTrue();
   });
 });
