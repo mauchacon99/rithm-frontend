@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
 
+  /** Error Loading loading widget. */
+  errorLoadingWidgets = false;
+
   /** Load indicator in dashboard. */
   dashboardLoading = false;
 
@@ -144,16 +147,18 @@ export class DashboardComponent implements OnInit {
    * Gets widgets for dashboard.
    */
   private getDashboardWidgets(): void {
+    this.errorLoadingWidgets = false;
     this.dashboardLoading = true;
     this.dashboardService
       .getDashboardWidgets()
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.dashboardLoading = false;
           this.widgetsOfDashboard = widgets;
+          this.dashboardLoading = false;
         },
         error: (error: unknown) => {
+          this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
