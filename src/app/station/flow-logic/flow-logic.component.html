@@ -1,7 +1,7 @@
 <div *ngFor="let station of nextStations" class="flex flex-col justify-start">
   <div class="mb-6">
     <p class="font-semibold mt-10">{{ station.name }} Rules</p>
-    <div *ngIf="!flowLogicLoading || !flowRuleError">
+    <div *ngIf="!flowLogicLoading && !flowRuleError">
       <p
         class="text-error-500 mt-4"
         *ngIf="stationFlowLogic && stationFlowLogic.flowRules!.length === 0"
