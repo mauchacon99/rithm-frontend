@@ -1,8 +1,84 @@
-<div class="h-full w-full flex justify-center items-center absolute"></div>
 <div class="grid grid-cols-1">
-  <div class="w-full py-2">
-    <div class="col-span-12">
+  <div class="flex w-full py-2 justify-center">
+    <div class="col-span-12 mb-4">
       <p class="font-semibold text-center mt-1">Document History</p>
+    </div>
+  </div>
+  <div>
+    <div class="flex">
+      <div class="flex justify-center w-1/4">
+        <app-user-avatar
+          class="cursor-pointer"
+          [firstName]="'Natalia'"
+          [lastName]="'Romanov'"
+          [navProfile]="true"
+        ></app-user-avatar>
+      </div>
+      <div class="w-3/4">
+        <p class="font-semibold text-sm truncate">Natalia Romanov</p>
+        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
+      </div>
+    </div>
+    <div class="flex my-3">
+      <div class="flex justify-center w-1/4">
+        <div class="border-r-2 border-primary-100"></div>
+      </div>
+      <div class="w-3/4">
+        <p class="text-sm text-clip">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ut
+          illo deserunt, tempore unde quos, earum a maxime pariatur veniam qui
+          provident sapiente nostrum voluptatum. Vel, dicta necessitatibus.
+          Rerum, similique.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="flex">
+      <div class="flex justify-center w-1/4">
+        <app-user-avatar
+          class="cursor-pointer"
+          [firstName]="'Clint'"
+          [lastName]="'Barton'"
+          [navProfile]="true"
+        ></app-user-avatar>
+      </div>
+      <div class="w-3/4">
+        <p class="font-semibold text-sm truncate">Clint Barton</p>
+        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
+      </div>
+    </div>
+    <div class="flex my-3">
+      <div class="flex justify-center w-1/4">
+        <div class="border-r-2 border-primary-100 mr-1"></div>
+      </div>
+      <div class="w-3/4">
+        <p class="text-sm text-clip">Flowed to Station Name.</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="flex">
+      <div class="flex justify-center w-1/4">
+        <app-user-avatar
+          class="cursor-pointer"
+          [firstName]="'Rithm'"
+          [lastName]="'Automation'"
+          [navProfile]="true"
+        ></app-user-avatar>
+      </div>
+      <div class="w-3/4">
+        <p class="font-semibold text-sm truncate">Rithm Automation</p>
+        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
+      </div>
+    </div>
+    <div class="flex my-3">
+      <div class="flex justify-center w-1/4">
+        <div class="border-r-2 border-primary-100 mr-1"></div>
+      </div>
+      <div class="w-3/4">
+        <p class="text-sm text-clip">Field Name Updated.</p>
+      </div>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HistoryDrawerComponent } from './history-drawer.component';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks';
+import { UserAvatarModule } from '../user-avatar/user-avatar.module';
 
 describe('HistoryDrawerComponent', () => {
   let component: HistoryDrawerComponent;
@@ -11,7 +12,7 @@ describe('HistoryDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatSnackBarModule],
+      imports: [MatDialogModule, MatSnackBarModule, UserAvatarModule],
       declarations: [HistoryDrawerComponent],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
