@@ -5,6 +5,7 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MockErrorService, MockMapService, MockPopupService } from 'src/mocks';
 import { MapService } from '../map.service';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,6 +22,7 @@ describe('StationGroupInfoDrawerComponent', () => {
       imports: [
         MatButtonModule,
         MatInputModule,
+        MatSlideToggleModule,
         ReactiveFormsModule,
         FormsModule,
         NoopAnimationsModule,
