@@ -20,6 +20,9 @@ export const SCALE_RENDER_STATION_ELEMENTS =
 export const SCALE_REDUCED_RENDER =
   SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
 
+// Zoom
+export const BUTTON_ZOOM_COUNT_INCREMENT = 50;
+
 // Pan
 export const MAX_PAN_VELOCITY = 25;
 export const PAN_TRIGGER_LIMIT = 10;
