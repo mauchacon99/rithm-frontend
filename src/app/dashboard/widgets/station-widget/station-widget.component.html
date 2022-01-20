@@ -1,25 +1,5 @@
-<div *ngIf="failedLoadWidget" class="m-2 h-full" id="card-error">
-  <div class="w-full h-full flex items-center justify-center">
-    <div class="w-full text-center">
-      <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
-      <h3 class="text-error-500 truncate">ERROR</h3>
-      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="getStationWidgetDocuments()"
-        (touchstart)="getStationWidgetDocuments()"
-        id="try-again"
-        data-testid="try-again"
-      >
-        Try Again
-      </button>
-    </div>
-  </div>
-</div>
-
 <!-- Header widget -->
-<div class="m-2" *ngIf="!failedLoadWidget">
+<div class="m-2" *ngIf="!isLoading && !failedLoadWidget" id="show-docs">
   <div class="flex justify-between">
     <div class="justify-self-start">
       <p class="font-semibold text-2xl text-left">
@@ -41,21 +21,34 @@
       </button>
     </div>
   </div>
-
-  <div
-    *ngIf="!isLoading; else loading"
-    data-testid="show-docs"
-    id="show-docs"
-  ></div>
 </div>
 
-<ng-template #loading>
+<div *ngIf="isLoading" class="h-full flex justify-center items-center flex-col">
   <div
-    data-testid="loading-docs"
     id="loading-docs"
     class="h-full flex justify-center items-center flex-col"
   >
     <p class="py-2 truncate">Loading</p>
     <app-loading-indicator></app-loading-indicator>
   </div>
-</ng-template>
+</div>
+
+<div *ngIf="failedLoadWidget" class="h-full" id="card-error">
+  <div class="w-full h-full flex items-center justify-center">
+    <div class="w-full text-center">
+      <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
+      <h3 class="text-error-500 truncate">ERROR</h3>
+      <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="getStationWidgetDocuments()"
+        (touchstart)="getStationWidgetDocuments()"
+        id="try-again"
+        data-testid="try-again"
+      >
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>
