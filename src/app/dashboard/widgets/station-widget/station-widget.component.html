@@ -1,37 +1,37 @@
-<div class="w-full flex justify-between p-2">
+<div class="w-full justify-between p-2">
   <h3 *ngIf="dataStationWidget" class="font-semibold">
     {{ dataStationWidget.stationName }}
   </h3>
   <div class="text-brightBlue">
     <!-- Header widget -->
-<!--    <div class="m-2">-->
-<!--      <div class="flex justify-between">-->
-<!--        <div class="justify-self-start">-->
-<!--&lt;!&ndash;          <p class="font-semibold text-2xl text-left">&ndash;&gt;-->
-<!--&lt;!&ndash;            {{ dataStationWidget.stationName }}&ndash;&gt;-->
-<!--&lt;!&ndash;          </p>&ndash;&gt;-->
-<!--        </div>-->
-<!--        <div-->
-<!--          class="justify-self-end"-->
-<!--          *ngIf="dataStationWidget.documentGeneratorStatus"-->
-<!--        >-->
-<!--          <button-->
-<!--            *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"-->
-<!--            mat-stroked-button-->
-<!--            color="accent"-->
-<!--            data-testid="create-new-document"-->
-<!--            id="create-new-document"-->
-<!--          >-->
-<!--            New Document <i class="fas fa-plus"></i>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div-->
-<!--          *ngIf="!isLoading; else loading"-->
-<!--          data-testid="show-docs"-->
-<!--          id="show-docs"-->
-<!--        ></div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="m-2">
+      <div class="flex justify-between">
+        <div class="justify-self-start">
+          <!--          <p class="font-semibold text-2xl text-left">-->
+          <!--            {{ dataStationWidget.stationName }}-->
+          <!--          </p>-->
+        </div>
+        <div
+          class="justify-self-end"
+          *ngIf="dataStationWidget.documentGeneratorStatus"
+        >
+          <button
+            *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
+            mat-stroked-button
+            color="accent"
+            data-testid="create-new-document"
+            id="create-new-document"
+          >
+            New Document <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div
+          *ngIf="!isLoading; else loading"
+          data-testid="show-docs"
+          id="show-docs"
+        ></div>
+      </div>
+    </div>
     <div class="grid grid-cols-12 text-xs text-secondary-500 pt-2 px-2">
       <p class="col-span-5 overline-font truncate">Document</p>
       <p class="col-span-2 overline-font truncate">Assigned</p>
@@ -80,9 +80,9 @@
           class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
         >
           {{
-          getElapsedTime(document.flowedTimeUTC) === 'Unknown'
-            ? ''
-            : getElapsedTime(document.flowedTimeUTC)
+            getElapsedTime(document.flowedTimeUTC) === 'Unknown'
+              ? ''
+              : getElapsedTime(document.flowedTimeUTC)
           }}
         </div>
         <div class="col-span-1 border-solid border-b border-b-primary-100 pb-2">
