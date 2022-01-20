@@ -101,6 +101,17 @@ describe('RuleModalComponent', () => {
     expect(btnNextInStep1.disabled).toBeFalsy();
   });
 
+  it('should show step 1 completed', () => {
+    const stepperComponent = fixture.debugElement.query(
+      By.directive(MatStepper)
+    )?.componentInstance;
+    const step1 = stepperComponent.steps.toArray()[0];
+    expect(step1.completed).toBeFalse();
+    component.firstOperand = 'value-1';
+    fixture.detectChanges();
+    expect(step1.completed).toBeTrue();
+  });
+
   it('should show error if question stations fails', () => {
     spyOn(
       TestBed.inject(StationService),
@@ -118,6 +129,7 @@ describe('RuleModalComponent', () => {
     expect(component.questionStationError).toBeTrue();
     expect(reviewError).toBeTruthy();
   });
+
   it('should show loading-indicator-questions while get current and previous questions', () => {
     component.questionStationLoading = false;
     component.stationRithmId = stationId;
@@ -181,15 +193,5 @@ describe('RuleModalComponent', () => {
     expect(component.operatorList).toHaveSize(0);
     component.setOperatorList(QuestionFieldType.ShortText);
     expect(component.operatorList.length > 0).toBeTrue();
-  });
-
-  it('should show step 1 completed', () => {
-    const stepperComponent = fixture.debugElement.query(
-      By.directive(MatStepper)
-    )?.componentInstance;
-    const step1 = stepperComponent.steps.toArray()[0];
-    expect(step1.completed).toBeFalse();
-    component.firstOperand = 'value-1';
-    fixture.detectChanges();
   });
 });
