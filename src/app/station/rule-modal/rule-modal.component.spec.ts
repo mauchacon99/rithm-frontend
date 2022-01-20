@@ -175,4 +175,15 @@ describe('RuleModalComponent', () => {
     fixture.detectChanges();
     expect(step3.completed).toBeTrue();
   });
+
+  it('should show step 1 completed', () => {
+    const stepperComponent = fixture.debugElement.query(
+      By.directive(MatStepper)
+    )?.componentInstance;
+    const step1 = stepperComponent.steps.toArray()[0];
+    expect(step1.completed).toBeFalse();
+    component.firstOperand = 'value-1';
+    fixture.detectChanges();
+    expect(step1.completed).toBeTrue();
+  });
 });
