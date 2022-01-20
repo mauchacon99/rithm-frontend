@@ -23,6 +23,7 @@ import {
   OperandType,
   OperatorType,
   RuleType,
+  DocumentEvent,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -639,28 +640,30 @@ describe('DocumentService', () => {
   it('should return the Station flow logic rule', () => {
     const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
 
-    const expectStationFlowLogic: FlowLogicRule = {
-      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRules: [
-        {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+    const expectStationFlowLogic: FlowLogicRule[] = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-        },
-      ],
-    };
+            ],
+          },
+        ],
+      },
+    ];
 
     service
       .getStationFlowLogicRule(stationRithmId)
@@ -674,5 +677,29 @@ describe('DocumentService', () => {
     expect(req.request.params.get('stationRithmId')).toEqual(stationRithmId);
     req.flush(expectStationFlowLogic);
     httpTestingController.verify();
+  });
+
+  it('should return events for document', () => {
+    const documentRithmId = documentId;
+    const expectedEventsResponse: DocumentEvent[] = [
+      {
+        date: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getDocumentEvents(documentRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
   });
 });

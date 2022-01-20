@@ -149,28 +149,30 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should not show the display message when there are rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule = {
-      stationRithmId: rithmId,
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRules: [
-        {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+    const expectStationFlowLogic: FlowLogicRule[] = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-        },
-      ],
-    };
+            ],
+          },
+        ],
+      },
+    ];
     spyOn(
       TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
@@ -183,11 +185,9 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show the display message when there are not rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule = {
-      stationRithmId: rithmId,
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRules: [],
-    };
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    const expectStationFlowLogic: FlowLogicRule[] = [];
     spyOn(
       TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
@@ -210,6 +210,7 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show error if petition rules fails', () => {
+    component.flowLogicLoading = false;
     spyOn(
       TestBed.inject(DocumentService),
       'getStationFlowLogicRule'

@@ -23,7 +23,7 @@ export class FlowLogicComponent implements OnInit {
   @Input() rithmId = '';
 
   /** The station Flow Logic Rule. */
-  stationFlowLogic!: FlowLogicRule;
+  stationFlowLogic: FlowLogicRule[] = [];
 
   /* Loading the list of stations flow logic*/
   flowLogicLoading = true;
@@ -74,8 +74,8 @@ export class FlowLogicComponent implements OnInit {
           this.stationFlowLogic = stationFlowLogic;
         },
         error: (error: unknown) => {
-          this.flowLogicLoading = false;
           this.flowRuleError = true;
+          this.flowLogicLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

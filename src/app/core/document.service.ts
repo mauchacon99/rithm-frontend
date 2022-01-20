@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -18,6 +18,7 @@ import {
   MoveDocument,
   StationWidgetData,
   FlowLogicRule,
+  DocumentEvent,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -430,11 +431,49 @@ export class DocumentService {
    * @param stationRithmId The specific  station id.
    * @returns Station flow logic rule.
    */
-  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule[]> {
     const params = new HttpParams().set('stationRithmId', stationRithmId);
-    return this.http.get<FlowLogicRule>(
+    return this.http.get<FlowLogicRule[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       { params }
     );
+  }
+
+  /**
+   * Get events for the document history.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns an array of events for the document history.
+   */
+  getDocumentEvents(documentRithmId: string): Observable<DocumentEvent[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get information about the event.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const eventDocument: DocumentEvent[] = [
+        {
+          date: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(eventDocument).pipe(delay(1000));
+    }
   }
 }
