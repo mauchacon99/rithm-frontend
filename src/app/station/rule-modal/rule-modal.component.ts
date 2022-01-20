@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { Question, QuestionFieldType } from 'src/models';
-import { OperatorType } from 'src/models/enums/operator-type.enum';
+import { Question, QuestionFieldType, OperatorType } from 'src/models';
 
 /**
  * Reusable component for displaying the information to add a new rule.
