@@ -39,6 +39,7 @@ import {
   FONT_SIZE_MODIFIER,
   STATION_BORDER_LINE_WIDTH_SELECTED,
   STATION_BORDER_LINE_WIDTH,
+  STATION_TOOLTIP_HEIGHT,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -245,10 +246,11 @@ export class StationElementService {
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
-    const startingY = station.canvasPoint.y - 55 * this.mapScale;
+    const startingY =
+      station.canvasPoint.y - STATION_TOOLTIP_HEIGHT * this.mapScale;
 
     const scaledStationRadius = STATION_RADIUS * this.mapScale;
-    const scaledStationHeight = 55 * this.mapScale;
+    const scaledStationHeight = STATION_TOOLTIP_HEIGHT * this.mapScale;
     const scaledStationWidth = STATION_WIDTH * this.mapScale;
     const scaledStationPadding = STATION_PADDING * this.mapScale;
 
