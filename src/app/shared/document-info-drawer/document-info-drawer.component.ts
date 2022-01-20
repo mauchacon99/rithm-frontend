@@ -149,7 +149,7 @@ export class DocumentInfoDrawerComponent implements OnInit, OnDestroy {
               ? true
               : false;
         }
-        if (!this.isStation) {
+        if (!this.isStation && dataDrawer.documentRithmId) {
           this.getLastUpdated();
           this.getAssignedUserToDocument();
           this.getDocumentTimeInStation();
