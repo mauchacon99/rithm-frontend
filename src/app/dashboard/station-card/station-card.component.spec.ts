@@ -3,8 +3,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 import { RosterComponent } from 'src/app/shared/roster/roster.component';
-
 import { StationCardComponent } from './station-card.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StationCardComponent', () => {
   let component: StationCardComponent;
@@ -13,7 +13,7 @@ describe('StationCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationCardComponent, MockComponent(RosterComponent)],
-      imports: [MatDialogModule, MatCardModule],
+      imports: [MatDialogModule, MatCardModule, RouterTestingModule],
     }).compileComponents();
   });
 
