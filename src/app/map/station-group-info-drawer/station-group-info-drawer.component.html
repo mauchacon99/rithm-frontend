@@ -1,7 +1,7 @@
 <div class="p-4 w-72 overflow-y-auto drawer-content-h-map">
   <div class="grid grid-cols-1">
     <div class="w-full py-2">
-      <div class="col-span-12 mb-3">
+      <div class="col-span-12">
         <h6 class="text-center">Station Group Information</h6>
       </div>
       <div class="col-span-12 pt-2" *ngIf="!isBuilding">
@@ -41,13 +41,8 @@
     </div>
   </div>
 </div>
-<div class="flex justify-around px-10">
-  <button mat-stroked-button color="primary">Save</button>
-  <button
-    mat-stroked-button
-    color="warn"
-    (click)="toggleDrawer('stationGroupInfo')"
-  >
-    Cancel
+<div class="flex justify-center border-t border-solid border-secondary-50">
+  <button mat-button color="accent" (click)="toggleDrawer('stationGroupInfo')">
+    Close
   </button>
 </div>
