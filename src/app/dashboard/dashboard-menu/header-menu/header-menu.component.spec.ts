@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 import { HeaderMenuComponent } from './header-menu.component';
 import { OrganizationService } from 'src/app/core/organization.service';
@@ -22,6 +23,7 @@ describe('HeaderMenuComponent', () => {
         { provide: UserService, useClass: MockUserService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: OrganizationService, useClass: MockOrganizationService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
   });
@@ -64,5 +66,21 @@ describe('HeaderMenuComponent', () => {
 
     component.ngOnInit();
     expect(expectSpyService).toHaveBeenCalled();
+  });
+
+  it('should call to toggle sidenavService and hidden menu dashboard', () => {
+    const spyMenu = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+    component.toggleMenu('menuDashboard');
+    expect(spyMenu).toHaveBeenCalledOnceWith('menuDashboard');
+  });
+
+  it('should call method toggleMenu if clicked button close', () => {
+    const spyMethod = spyOn(component, 'toggleMenu');
+    const buttonClose = fixture.debugElement.nativeElement.querySelector(
+      '#close-menu-dashboard'
+    );
+    expect(buttonClose).toBeTruthy();
+    buttonClose.click();
+    expect(spyMethod).toHaveBeenCalledOnceWith('menuDashboard');
   });
 });

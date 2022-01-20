@@ -3,6 +3,7 @@ import { UserService } from 'src/app/core/user.service';
 import { OrganizationService } from 'src/app/core/organization.service';
 import { OrganizationInfo } from 'src/models';
 import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first } from 'rxjs/operators';
 
 /**
@@ -20,7 +21,8 @@ export class HeaderMenuComponent implements OnInit {
   constructor(
     private userService: UserService,
     private errorService: ErrorService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /** Get signed in user and information about organization. */
@@ -48,5 +50,14 @@ export class HeaderMenuComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Opens side nav on the dashboard.
+   *
+   * @param drawerItem The information that will be displayed in the side drawer.
+   */
+  toggleMenu(drawerItem: 'menuDashboard'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
   }
 }
