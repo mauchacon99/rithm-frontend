@@ -7,6 +7,7 @@ import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from '../../../shared/user-avatar/user-avatar.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -18,6 +19,7 @@ describe('StationWidgetComponent', () => {
       declarations: [
         StationWidgetComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(UserAvatarComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
