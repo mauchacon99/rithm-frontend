@@ -12,15 +12,20 @@ import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatStepperModule } from '@angular/material/stepper';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockErrorService,
+  MockStationService,
+  MockDocumentService,
+} from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
-import { of, throwError } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { DocumentService } from 'src/app/core/document.service';
+import { of, throwError } from 'rxjs';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -52,6 +57,7 @@ describe('FlowLogicComponent', () => {
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -69,6 +75,14 @@ describe('FlowLogicComponent', () => {
   });
 
   describe('New rule modal', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(FlowLogicComponent);
+      component = fixture.componentInstance;
+      component.nextStations = nextStations;
+      component.rithmId = rithmId;
+      fixture.detectChanges();
+    });
+
     it('should to call MatDialog service', async () => {
       const expectDataModal = {
         panelClass: ['w-5/6', 'sm:w-4/5'],
@@ -110,7 +124,7 @@ describe('FlowLogicComponent', () => {
   it('should call the method that returns the logical flow rules of a station.', () => {
     component.rithmId = rithmId;
     const getStationFlowLogicRuleSpy = spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
     ).and.callThrough();
     component.ngOnInit();
@@ -119,7 +133,7 @@ describe('FlowLogicComponent', () => {
 
   it('should show error message when request for logical flow rules of a station fails.', () => {
     spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
     ).and.returnValue(
       throwError(() => {
@@ -135,30 +149,32 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should not show the display message when there are rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule = {
-      stationRithmId: rithmId,
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRules: [
-        {
-          ruleType: RuleType.Or,
-          equations: [
-            {
-              leftOperand: {
-                type: OperandType.Field,
-                value: 'birthday',
+    const expectStationFlowLogic: FlowLogicRule[] = [
+      {
+        stationRithmId: rithmId,
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
               },
-              operatorType: OperatorType.Before,
-              rightOperand: {
-                type: OperandType.Date,
-                value: '5/27/1982',
-              },
-            },
-          ],
-        },
-      ],
-    };
+            ],
+          },
+        ],
+      },
+    ];
     spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
     ).and.returnValue(of(expectStationFlowLogic));
     component.ngOnInit();
@@ -169,13 +185,11 @@ describe('FlowLogicComponent', () => {
   });
 
   it('should show the display message when there are not rules.', () => {
-    const expectStationFlowLogic: FlowLogicRule = {
-      stationRithmId: rithmId,
-      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
-      flowRules: [],
-    };
+    component.flowLogicLoading = false;
+    component.flowRuleError = false;
+    const expectStationFlowLogic: FlowLogicRule[] = [];
     spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
     ).and.returnValue(of(expectStationFlowLogic));
     component.ngOnInit();
@@ -194,9 +208,11 @@ describe('FlowLogicComponent', () => {
     expect(component.flowLogicLoading).toBeTrue();
     expect(flowLogicLoading).toBeTruthy();
   });
+
   it('should show error if petition rules fails', () => {
+    component.flowLogicLoading = false;
     spyOn(
-      TestBed.inject(StationService),
+      TestBed.inject(DocumentService),
       'getStationFlowLogicRule'
     ).and.returnValue(
       throwError(() => {
