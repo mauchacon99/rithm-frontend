@@ -13,15 +13,15 @@
   </div>
 
   <!-- Header information of the organization. -->
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-end">
     <div class="flex items-end">
       <img
-        src="assets/logo/black-icon-black-text.svg"
-        class="w-24 mr-2"
+        src="assets/logo/black-icon-only.svg"
+        class="w-10 mr-2"
         alt="Logo Rithm"
       />
-      <p *ngIf="organizationInfo" class="font-semibold truncate">
-        {{ organizationInfo.name }}
+      <p *ngIf="organizationName" class="font-semibold w-24 truncate">
+        {{ organizationName }}
       </p>
     </div>
 
