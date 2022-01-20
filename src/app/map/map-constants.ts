@@ -36,6 +36,8 @@ export const CENTER_ZOOM_BUFFER = 10;
 export const STATION_GROUP_PADDING = 20;
 export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
+export const GROUP_NAME_HEIGHT = 20;
+export const GROUP_CHARACTER_SIZE = 10;
 
 // Station
 export const STATION_PADDING = 10;

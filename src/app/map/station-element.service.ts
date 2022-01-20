@@ -79,7 +79,7 @@ export class StationElementService {
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       station.disabled &&
-      station.hoverItem === StationElementHoverItem.Station
+      station.hoverItem !== StationElementHoverItem.None
     ) {
       this.drawStationToolTip(station, dragItem);
     }

@@ -242,7 +242,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /**
    * Scales the canvas and does initial draw for elements.
-   * Sets this.stations, this.flows, and this.connections to the properties in mapService.
+   * Sets this.stations, this.stationGroupElements, and this.connections to the properties in mapService.
    * Sets several properties and calls the center method.
    */
   ngOnInit(): void {
@@ -1610,11 +1610,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         const hoveringOverConnection = this.connections.some(
           (con) => con.hovering
         );
-        //If not hovering over a station or connection, and the mapmode is FlowAdd.
+        //If not hovering over a station or connection, and the mapmode is not stationAdd.
         if (
           !hoveringOverStation &&
           !hoveringOverConnection &&
-          this.mapMode === MapMode.StationGroupAdd
+          this.mapMode !== MapMode.StationAdd
         ) {
           /*Set all group hoverActive status to None.
           This ensures only one group can be hovered at a time. */
@@ -1623,10 +1623,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           });
           //Loop through groups to check if there is a group being hovered over.
           for (const stationGroup of this.stationGroups) {
-            stationGroup.checkElementHover(eventContextPoint, this.context);
-            //If cursor is over a group boundary.
+            stationGroup.checkElementHover(
+              eventContextPoint,
+              eventCanvasPoint,
+              this.context,
+              this.scale
+            );
+            //If cursor is over a group boundary or name.
             if (
-              stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+              stationGroup.hoverItem ===
+                StationGroupElementHoverItem.Boundary ||
+              stationGroup.hoverItem === StationGroupElementHoverItem.Name
             ) {
               //Set cursor style.
               this.mapCanvas.nativeElement.style.cursor = 'pointer';
@@ -1640,7 +1647,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
         //If hovering of a station.
         if (hoveringOverStation) {
-          //disable hover on connections and flows.
+          //disable hover on connections and station group.
           this.connections.map((con) => (con.hovering = false));
           this.stationGroups.map(
             (stationGroup) =>
@@ -1798,7 +1805,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     }
 
     //Check if click was on a station group boundary.
-    this.checkStationGroupClick(contextPoint);
+    this.checkStationGroupClick(contextPoint, point);
   }
 
   /**
@@ -1856,36 +1863,61 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Handles user input on a clicked station group.
    *
    * @param contextPoint Calculated position of click.
+   * @param canvasPoint Calculated canvas position of click which is used to identify position of boundary name.
    */
-  checkStationGroupClick(contextPoint: Point): void {
+  checkStationGroupClick(contextPoint: Point, canvasPoint: Point): void {
     //Loop through groups to find the group that was clicked.
     for (const stationGroup of this.stationGroups) {
-      stationGroup.checkElementHover(contextPoint, this.context);
-      //If the cursor is over the group boundary and the group is not disabled.
-      if (
-        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
-        !stationGroup.disabled &&
-        this.mapMode === MapMode.StationGroupAdd
-      ) {
-        stationGroup.selected = !stationGroup.selected;
-        if (stationGroup.selected) {
-          this.mapService.setStationGroupStationStatus();
-        }
-        // To make sure it's not disabled and should allow user to undo previous action.
-        stationGroup.disabled = false;
-        this.stationGroupSelectStatus(stationGroup);
-        this.mapService.updateParentStationGroup(stationGroup.rithmId);
-        this.mapService.updateChildStationGroup(stationGroup);
+      stationGroup.checkElementHover(
+        contextPoint,
+        canvasPoint,
+        this.context,
+        this.scale
+      );
+      //If MapMode is StationGroupAdd we select the group.
+      if (this.mapMode === MapMode.StationGroupAdd) {
+        //If the cursor is over the group boundary and the group is not disabled.
         if (
-          !this.mapService.stationElements.some((st) => st.selected) &&
-          !this.mapService.stationGroupElements.some(
-            (stGroup) => stGroup.selected
-          )
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          !stationGroup.disabled
         ) {
-          this.mapService.resetSelectedStationGroupStationStatus();
+          //Set status of station group to true or false depending upon current status
+          stationGroup.selected = !stationGroup.selected;
+          if (stationGroup.selected) {
+            this.mapService.setStationGroupStationStatus();
+          }
+          // To make sure it's not disabled and should allow user to undo previous action.
+          stationGroup.disabled = false;
+          this.stationGroupSelectStatus(stationGroup);
+          //Update parent station-group and respective stations status.
+          this.mapService.updateParentStationGroup(stationGroup.rithmId);
+          //Update descendent station-group and respective stations status.
+          this.mapService.updateChildStationGroup(stationGroup);
+          //Reset status of each station-group and station is nothing has been selected.
+          if (
+            !this.mapService.stationElements.some((st) => st.selected) &&
+            !this.mapService.stationGroupElements.some(
+              (stGroup) => stGroup.selected
+            )
+          ) {
+            this.mapService.resetSelectedStationGroupStationStatus();
+          }
+          this.drawElements();
+          break;
         }
-        this.drawElements();
-        break;
+      } else if (
+        this.mapMode === MapMode.View ||
+        this.mapMode === MapMode.Build
+      ) {
+        //If map mode is view or build, then should open station group info drawer.
+        if (
+          stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name
+        ) {
+          //Open station group info drawer when clicked on station group boundary or name.
+          this.sidenavDrawerService.openDrawer('stationGroupInfo');
+          break;
+        }
       }
     }
   }

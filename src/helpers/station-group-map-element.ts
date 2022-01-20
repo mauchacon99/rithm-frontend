@@ -4,6 +4,11 @@ import {
   MapItemStatus,
   Point,
 } from '../models';
+import {
+  GROUP_CHARACTER_SIZE,
+  GROUP_NAME_HEIGHT,
+  STATION_GROUP_NAME_PADDING,
+} from 'src/app/map/map-constants';
 
 export interface StationGroupMapElement extends StationGroupMapData {
   /** The points used for the boundary shape of the station group (the points used for the convex hull). */
@@ -44,20 +49,52 @@ export class StationGroupMapElement {
   }
 
   /**
-   * Checks whether an element in the station is being hovered over.
+   * Checks whether the station group boundary is being hovered over.
    *
    * @param point The cursor location.
+   * @param canvasPoint The event canvas point.
    * @param ctx The rendering context for the canvas.
+   * @param scale The scale of the map.
    */
-  checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+  checkElementHover(
+    point: Point,
+    canvasPoint: Point,
+    ctx: CanvasRenderingContext2D,
+    scale: number
+  ): void {
     ctx.save();
     ctx.lineWidth = 30;
     if (this.path) {
       this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
         ? StationGroupElementHoverItem.Boundary
+        : this.isPointInStationGroupName(canvasPoint, scale)
+        ? StationGroupElementHoverItem.Name
         : StationGroupElementHoverItem.None;
     }
     ctx.restore();
+  }
+
+  /**
+   * Checks whether point is in a station group name or not.
+   *
+   * @param point The cursor location.
+   * @param scale The scale of the map.
+   * @returns A boolean.
+   */
+  isPointInStationGroupName(point: Point, scale: number): boolean {
+    const scaledStationHeight = GROUP_NAME_HEIGHT * scale;
+    const scaledStationWidth = this.title.length * GROUP_CHARACTER_SIZE * scale;
+
+    return (
+      point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
+      point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
+      point.y >=
+        this.boundaryPoints[this.boundaryPoints.length - 1].y -
+          STATION_GROUP_NAME_PADDING &&
+      point.y <=
+        this.boundaryPoints[this.boundaryPoints.length - 1].y +
+          scaledStationHeight
+    );
   }
 
   /**
