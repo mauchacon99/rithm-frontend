@@ -65,7 +65,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Zoom level build enabled. */
   zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
 
-  /**Track zoomCount. */
+  /**Track zoomCount. This count determines the number of times to run a zoom function and whether to zoom in or out.*/
   zoomCount = 0;
 
   /** Option menu button cursor handler. */
