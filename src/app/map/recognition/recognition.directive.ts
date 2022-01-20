@@ -69,7 +69,8 @@ export class RecognitionDirective {
       title: 'Map Acknowledgement',
       message:
         "Through hard work and some serious learning and discovery, we've been able to achieve something amazing together. " +
-        'Thank you!\n\n• Adarsh Achar\n• Austin Bagley\n• Baili Wilkinson\n• Harrison King\n• Manoj Kumar\n• Tyler Hendrickson',
+        // eslint-disable-next-line max-len
+        'Thank you!\n\n• Adarsh Achar\n• Andersson Arellano\n• Austin Bagley\n• Baili Wilkinson\n• Harrison King\n• Manoj Kumar\n• Tyler Hendrickson',
       okButtonText: 'Kudos!',
     });
   }
