@@ -1,88 +1,91 @@
 <!-- Header widget -->
-<div class="w-full p-2">
-  <div class="m-2">
-    <div class="flex justify-between">
-      <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
-        {{ dataStationWidget.stationName }}
-      </h3>
-      <div *ngIf="dataStationWidget">
-        <button
-          *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
-          mat-stroked-button
-          color="accent"
-          data-testid="create-new-document"
-          id="create-new-document"
-        >
-          New Document <i class="fas fa-plus"></i>
-        </button>
-      </div>
-      <div
-        *ngIf="!isLoading; else loading"
-        class="hidden"
-        data-testid="show-docs"
-        id="show-docs"
-      ></div>
-    </div>
-  </div>
-  <div class="grid grid-cols-12 text-xs text-secondary-500 pt-2 px-2">
-    <p class="col-span-5 overline-font truncate">Document</p>
-    <p class="col-span-2 overline-font truncate">Assigned</p>
-    <p class="col-span-2 overline-font truncate">Priority</p>
-    <p class="col-span-3 overline-font truncate">Time in Station</p>
-  </div>
-  <div
-    *ngIf="dataStationWidget"
-    class="grid grid-cols-12 text-secondary-500 p-2 items-center"
-  >
-    <ng-container *ngFor="let document of dataStationWidget?.documents">
-      <div
-        class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
-      >
-        {{ document.name }}
-      </div>
-      <div
-        *ngIf="document.assignedUser"
-        class="col-span-2 h-[49px] border-solid border-b border-b-primary-100"
-      >
-        <div class="flex justify-center mt-2">
-          <app-user-avatar
-            [firstName]="document.assignedUser.firstName"
-            [lastName]="document.assignedUser.lastName"
-            [hideToolTip]="true"
+<div
+  *ngIf="!isLoading; else loading"
+  data-testid="show-docs"
+  id="show-docs"
+>
+  <div class="w-full p-2 min-h-[300px] h-full">
+    <div class="m-2">
+      <div class="flex justify-between">
+        <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
+          {{ dataStationWidget.stationName }}
+        </h3>
+        <div *ngIf="dataStationWidget">
+          <button
+            *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
+            mat-stroked-button
+            color="accent"
+            data-testid="create-new-document"
+            id="create-new-document"
           >
-          </app-user-avatar>
-        </div>
-        {{ document.assignedUser }}
-      </div>
-      <div
-        *ngIf="!document.assignedUser"
-        class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs"
-      >
-        None
-      </div>
-      <div
-        class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs justify-center"
-      >
-        <div class="flex justify-center">
-          <i class="fas fa-exclamation-triangle"></i>
-          <!--      {{ document.priority }}-->
+            New Document <i class="fas fa-plus"></i>
+          </button>
         </div>
       </div>
-      <div
-        class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
-      >
-        {{
+    </div>
+    <div class="grid grid-cols-12 text-xs text-secondary-500 pt-2 px-2">
+      <p class="col-span-5 overline-font truncate">Document</p>
+      <p class="col-span-2 overline-font truncate">Assigned</p>
+      <p class="col-span-2 overline-font truncate">Priority</p>
+      <p class="col-span-3 overline-font truncate">Time in Station</p>
+    </div>
+    <div
+      *ngIf="dataStationWidget"
+      class="grid grid-cols-12 text-secondary-500 p-2 items-center"
+    >
+      <ng-container *ngFor="let document of dataStationWidget.documents">
+        <div
+          class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+        >
+          {{ document.name }}
+        </div>
+        <div
+          *ngIf="document.assignedUser"
+          class="col-span-2 h-[49px] border-solid border-b border-b-primary-100"
+        >
+          <div class="flex justify-center mt-2">
+            <app-user-avatar
+              [firstName]="document.assignedUser.firstName"
+              [lastName]="document.assignedUser.lastName"
+              [hideToolTip]="true"
+            >
+            </app-user-avatar>
+          </div>
+        </div>
+        <div
+          *ngIf="!document.assignedUser"
+          class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+        >
+          None
+        </div>
+        <div
+          class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs justify-center"
+        >
+          <div class="flex justify-center">
+            <i class="fas fa-exclamation-triangle"></i>
+            <!--      {{ document.priority }}-->
+          </div>
+        </div>
+        <div
+          class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
+        >
+          {{
           getElapsedTime(document.flowedTimeUTC) === 'Unknown'
             ? ''
             : getElapsedTime(document.flowedTimeUTC)
-        }}
-      </div>
-      <div class="col-span-1 border-solid border-b border-b-primary-100 pb-2">
-        <button mat-icon-button>
-          <i class="fas fa-angle-double-right"></i>
-        </button>
-      </div>
-    </ng-container>
+          }}
+        </div>
+        <div class="col-span-1 border-solid border-b border-b-primary-100 pb-2">
+          <button
+            mat-icon-button
+            data-testid="show-document-widget"
+            id="show-document-widget"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>
 
