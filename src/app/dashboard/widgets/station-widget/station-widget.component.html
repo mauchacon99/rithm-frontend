@@ -1,9 +1,5 @@
 <!-- Header widget -->
-<div
-  *ngIf="!isLoading; else loading"
-  data-testid="show-docs"
-  id="show-docs"
->
+<div *ngIf="!isLoading; else loading" data-testid="show-docs" id="show-docs">
   <div class="w-full p-2 min-h-[300px] h-full">
     <div class="m-2">
       <div class="flex justify-between">
@@ -31,7 +27,7 @@
     </div>
     <div
       *ngIf="dataStationWidget"
-      class="grid grid-cols-12 text-secondary-500 p-2 items-center"
+      class="grid grid-cols-12 text-secondary-500 p-2 items-center overflow-y-scroll"
     >
       <ng-container *ngFor="let document of dataStationWidget.documents">
         <div
@@ -70,9 +66,9 @@
           class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
         >
           {{
-          getElapsedTime(document.flowedTimeUTC) === 'Unknown'
-            ? ''
-            : getElapsedTime(document.flowedTimeUTC)
+            getElapsedTime(document.flowedTimeUTC) === 'Unknown'
+              ? ''
+              : getElapsedTime(document.flowedTimeUTC)
           }}
         </div>
         <div class="col-span-1 border-solid border-b border-b-primary-100 pb-2">
