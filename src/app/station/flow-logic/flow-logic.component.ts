@@ -5,7 +5,7 @@ import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.compon
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs';
-import { DocumentService } from '../../core/document.service';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Component for the flow logic tab on a station.
