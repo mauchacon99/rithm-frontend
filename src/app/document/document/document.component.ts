@@ -96,6 +96,24 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((documentName) => {
         this.documentName = documentName.baseName;
       });
+
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer) => {
+        const answerFound = this.documentAnswer.find(
+          (da) => da.questionRithmId === answer.questionRithmId
+        );
+        if (answerFound === undefined) {
+          /** Answer doesn't exists then add it. */
+          answer.stationRithmId = this.documentInformation.stationRithmId;
+          answer.documentRithmId = this.documentInformation.documentRithmId;
+          this.documentAnswer.push(answer);
+        } else {
+          /** Answer exists then update its value. */
+          const answerIndex = this.documentAnswer.indexOf(answerFound);
+          this.documentAnswer[answerIndex].value = answer.value;
+        }
+      });
   }
 
   /**

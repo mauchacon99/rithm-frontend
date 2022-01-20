@@ -29,6 +29,7 @@
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Zip"
@@ -39,6 +40,7 @@
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Currency"
@@ -51,6 +53,7 @@
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Phone"
@@ -62,6 +65,7 @@
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
   </mat-form-field>
 </div>

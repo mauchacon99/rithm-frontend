@@ -11,7 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable component for all fields involving numbers.
@@ -48,7 +49,10 @@ export class NumberFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService
+  ) {}
 
   /**
    * Set up Formbuilder group.
@@ -147,5 +151,22 @@ export class NumberFieldComponent
             message: 'Number field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: this.numberFieldForm.controls[this.field.questionType].value,
+      type: this.field.questionType,
+      rithmId: '3j4k-3h2j-hj4j',
+      questionUpdated: false,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
   }
 }

@@ -10,7 +10,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable field for every select/multi select dropdown.
@@ -44,7 +45,10 @@ export class SelectFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService
+  ) {}
 
   /**
    * Set up FormBuilder group.
@@ -130,5 +134,31 @@ export class SelectFieldComponent
             message: 'Select field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    let selectResponse = '';
+    if (this.field.questionType === QuestionFieldType.Select) {
+      selectResponse = this.selectFieldForm.get(this.field.questionType)?.value;
+    } else {
+      selectResponse = this.selectFieldForm
+        .get(this.field.questionType)
+        ?.value.toString()
+        .replace(/,/g, '|');
+    }
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: selectResponse,
+      type: this.field.questionType,
+      rithmId: '3j4k-3h2j-hj4j',
+      questionUpdated: false,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
   }
 }

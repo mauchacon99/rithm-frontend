@@ -4,7 +4,15 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  delay,
+  map,
+  Observable,
+  of,
+  Subject,
+  throwError,
+} from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -37,7 +45,19 @@ export class DocumentService {
     appendedName: '',
   });
 
+  /** Document Answer to be updated. */
+  documentAnswer$ = new Subject<DocumentAnswer>();
+
   constructor(private http: HttpClient) {}
+
+  /**
+   * Update the DocumentAnswer subject.
+   *
+   * @param answer An answer to be updated in the documentTemplate.
+   */
+  updateAnswerSubject(answer: DocumentAnswer): void {
+    this.documentAnswer$.next(answer);
+  }
 
   /**
    * Gets a list of documents for a given station.

@@ -20,9 +20,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 
 /**
  * Reusable component for all fields involving text.
@@ -80,6 +81,7 @@ export class TextFieldComponent
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
+    private documentService: DocumentService,
     @Inject(NgZone) private ngZone: NgZone
   ) {}
 
@@ -181,15 +183,30 @@ export class TextFieldComponent
   }
 
   /**
-   * Emits an event to parent component to update field from form.
+   * Call the station service to to update field from the current form.
    *
    * @param field The field to emit.
    */
   updateFieldPrompt(field: Question): void {
-    if (this.isStation) {
-      field.prompt = this.textFieldForm.controls[this.field.questionType].value;
-      this.stationService.updateStationQuestionInTemplate(field);
-    }
+    field.prompt = this.textFieldForm.controls[this.field.questionType].value;
+    this.stationService.updateStationQuestionInTemplate(field);
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: this.textFieldForm.controls[this.field.questionType].value,
+      type: this.field.questionType,
+      rithmId: '3j4k-3h2j-hj4j',
+      questionUpdated: false,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
   }
 
   /**

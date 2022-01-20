@@ -93,7 +93,7 @@
       [required]="field.isRequired"
       [formControlName]="field.questionType"
       autocomplete="off"
-      (change)="updateFieldPrompt(field)"
+      (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     />
     <textarea
       *ngIf="
@@ -108,7 +108,7 @@
         field.isRequired || field.questionType === fieldTypeEnum.Instructions
       "
       [formControlName]="field.questionType"
-      (change)="updateFieldPrompt(field)"
+      (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     >
     </textarea>
   </mat-form-field>

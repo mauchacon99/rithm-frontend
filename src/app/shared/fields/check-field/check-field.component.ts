@@ -10,8 +10,10 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { first, Subject, takeUntil } from 'rxjs';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable component for every field involving a checkbox.
@@ -45,10 +47,17 @@ export class CheckFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
+  /** Checked Responses. */
+  checkedResponses: boolean[] = [];
+
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService,
+    private ngZone: NgZone
+  ) {}
 
   /**
    * Set up FormBuilder group.
@@ -58,7 +67,8 @@ export class CheckFieldComponent
     let fields: { [key: string]: unknown } = {};
 
     this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem${index}`] = [false];
+      fields[`checkItem-${index}`] = [false];
+      this.checkedResponses.push(false);
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -150,5 +160,28 @@ export class CheckFieldComponent
             message: 'Check field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   * @param event Whatever.
+   * @param index Whatever.
+   */
+  updateFieldAnswer(event: MatCheckboxChange, index: number): void {
+    this.checkedResponses[index] = event.checked;
+    const checkBoxesResponse = this.checkedResponses
+      .toString()
+      .replace(/,/g, '|');
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: checkBoxesResponse,
+      type: this.field.questionType,
+      rithmId: '3j4k-3h2j-hj4j',
+      questionUpdated: false,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
   }
 }
