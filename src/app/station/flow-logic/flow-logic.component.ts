@@ -5,6 +5,7 @@ import { RuleModalComponent } from 'src/app/station/rule-modal/rule-modal.compon
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { first } from 'rxjs';
+import { DocumentService } from '../../core/document.service';
 
 /**
  * Component for the flow logic tab on a station.
@@ -33,7 +34,8 @@ export class FlowLogicComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private documentService: DocumentService
   ) {}
 
   /**
@@ -63,7 +65,7 @@ export class FlowLogicComponent implements OnInit {
    * Get each station flow rules.
    */
   private getStationFlowLogicRule(): void {
-    this.stationService
+    this.documentService
       .getStationFlowLogicRule(this.rithmId)
       .pipe(first())
       .subscribe({

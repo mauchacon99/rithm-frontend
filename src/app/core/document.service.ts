@@ -17,6 +17,7 @@ import {
   DocumentAutoFlow,
   MoveDocument,
   StationWidgetData,
+  FlowLogicRule,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -419,6 +420,20 @@ export class DocumentService {
     const params = new HttpParams().set('stationRithmId', stationRithmId);
     return this.http.get<StationWidgetData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
+      { params }
+    );
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param stationRithmId The specific  station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http.get<FlowLogicRule>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
       { params }
     );
   }

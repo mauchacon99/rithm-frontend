@@ -19,6 +19,10 @@ import {
   MoveDocument,
   StationWidgetData,
   DocumentGenerationStatus,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  RuleType,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -629,6 +633,46 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
     req.flush(dataWidgetStation);
+    httpTestingController.verify();
+  });
+
+  it('should return the Station flow logic rule', () => {
+    const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
+
+    const expectStationFlowLogic: FlowLogicRule = {
+      stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+      destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+      flowRules: [
+        {
+          ruleType: RuleType.Or,
+          equations: [
+            {
+              leftOperand: {
+                type: OperandType.Field,
+                value: 'birthday',
+              },
+              operatorType: OperatorType.Before,
+              rightOperand: {
+                type: OperandType.Date,
+                value: '5/27/1982',
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    service
+      .getStationFlowLogicRule(stationRithmId)
+      .subscribe((stationFlowLogic) => {
+        expect(stationFlowLogic).toEqual(expectStationFlowLogic);
+      });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic?stationRithmId=${stationRithmId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toEqual(stationRithmId);
+    req.flush(expectStationFlowLogic);
     httpTestingController.verify();
   });
 });

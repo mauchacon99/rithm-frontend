@@ -22,6 +22,7 @@ import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { StationDocumentsModalModule } from 'src/app/shared/station-documents-modal/station-documents-modal.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     StationDocumentsModalModule,
     MatButtonModule,
     MatSidenavModule,
+    MatIconModule,
   ],
 })
 export class DashboardModule {}
