@@ -5,9 +5,9 @@
 <div class="absolute right-0 left-0 bottom-0 md:left-auto md:bottom-auto z-40">
   <mat-drawer-container
     [hasBackdrop]="drawerHasBackdrop"
-    [ngClass]="{ 'deleteDrawer left-0 right-0 bottom-0': deleteDrawer.opened }"
+    [ngClass]="{ 'mapElementDrawer left-0 right-0 bottom-0': mapElementDrawer.opened }"
   >
-    <mat-drawer #deleteDrawer mode="over" position="end" class="mapStationInfo">
+    <mat-drawer #mapElementDrawer mode="over" position="end" class="mapStationInfo">
       <app-connection-info-drawer
         *ngIf="drawerMode === 'connectionInfo'"
       ></app-connection-info-drawer>
@@ -19,7 +19,7 @@
     <mat-drawer-content>
       <div
         *ngIf="mapScale > zoomBuild && isAdmin"
-        [ngClass]="{ 'absolute left-0 right-0 bottom-0': deleteDrawer.opened }"
+        [ngClass]="{ 'absolute left-0 right-0 bottom-0': mapElementDrawer.opened }"
         class="h-12 flex justify-end items-center space-x-2.5 md:mx-2 mx-2 py-2"
       >
         <button

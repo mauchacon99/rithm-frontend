@@ -33,9 +33,9 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Is the user an admin? */
   isAdmin = false;
 
-  /** The component for the drawer that houses comments and history. */
-  @ViewChild('deleteDrawer', { static: true })
-  deleteDrawer!: MatDrawer;
+  /** The component for the drawer that will show the info for a map element. */
+  @ViewChild('mapElementDrawer', { static: true })
+  mapElementDrawer!: MatDrawer;
 
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -46,32 +46,32 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Map data request loading indicator. */
   mapDataLoading = true;
 
-  /** Station user has selected and opened the dropdown menu. */
+  /** User has selected and opened the dropdown menu on a station. */
   private openedMenuStation?: StationMapElement;
 
   /** Map scale. */
   mapScale = DEFAULT_SCALE;
 
-  /** Used to track map cursor point option button. */
+  /** Used to track the X coord of the cursor while interacting with option button. */
   menuX = 0;
 
-  /** Used to track map cursor point option button. */
+  /** Used to track the Y coord of the cursor while interacting with option button. */
   menuY = 0;
 
   /** The MatMenu displayed on option button click. */
   @ViewChild(MatMenuTrigger, { static: false })
   menu!: MatMenuTrigger;
 
-  /** Zoom level build enabled. */
+  /** Store the Zoom level that build mode can be enabled at. */
   zoomBuild = SCALE_RENDER_STATION_ELEMENTS;
 
   /**Track zoomCount. This count determines the number of times to run a zoom function and whether to zoom in or out.*/
   zoomCount = 0;
 
-  /** Option menu button cursor handler. */
+  /** Notes when no station option menu is open. */
   optionMenuNone = false;
 
-  /** Map mode variable form comparison in html. */
+  /** A variable that allows us to compare against the current Map mode in html. */
   mapMode = MapMode;
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
@@ -91,7 +91,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Station the map is in stationAdd or StationGroupAdd mode.
+   * Whether the map is in stationAdd or StationGroupAdd mode.
    *
    * @returns True if the map is in stationAdd or StationGroupAdd mode, false otherwise.
    */
@@ -103,7 +103,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Whether to show the backdrop for the comment and history drawers.
+   * Whether to show the backdrop for the drawer.
    *
    * @returns Whether to show the backdrop.
    */
@@ -112,9 +112,10 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Disable publish button until some changes in map/station.
+   * Disable publish button until there are some changes in map/station.
    *
    * @returns Returns true if no stations are updated and false if any station is updated.
+   * TODO: Am I crazy or is this backwards of how it should work?
    */
   get mapHasChanges(): boolean {
     return this.mapService.mapHasChanges;
@@ -127,6 +128,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService
   ) {
+    //Track map mode as it changes.
     this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (mapMode) => {
         this.currentMode = mapMode;
@@ -136,20 +138,24 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       },
     });
 
+    //Track when new map changes are made.
     this.mapService.mapDataReceived$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((received) => {
+        //Hide loading indicator once new map data has be received.
         if (received === true) {
           this.mapDataLoading = false;
         }
       });
 
+    //Track the map scale as it changes.
     this.mapService.mapScale$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((scale) => {
         this.mapScale = scale;
       });
 
+    //Track which, if any, station option button is clicked.
     this.mapService.stationButtonClick$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((clickRes) => {
@@ -195,7 +201,7 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentUser = this.userService.user;
     this.isAdmin = this.currentUser.role === 'admin' ? true : false;
-    this.sidenavDrawerService.setDrawer(this.deleteDrawer);
+    this.sidenavDrawerService.setDrawer(this.mapElementDrawer);
   }
 
   /**
