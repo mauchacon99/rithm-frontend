@@ -1934,7 +1934,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         (station) => station.rithmId === st
       );
       this.stations[stationIndex].selected = isSelected;
-      this.stations[stationIndex].disabled = !isSelected;
+      this.stations[stationIndex].disabled = isSelected;
     });
     if (isSelected) {
       //Enable/set disable status to false of adjacent station-groups and stations of a selected station-group.

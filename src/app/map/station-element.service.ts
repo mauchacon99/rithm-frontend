@@ -37,6 +37,8 @@ import {
   STATION_RADIUS,
   STATION_WIDTH,
   FONT_SIZE_MODIFIER,
+  STATION_BORDER_LINE_WIDTH_SELECTED,
+  STATION_BORDER_LINE_WIDTH,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -79,6 +81,7 @@ export class StationElementService {
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       station.disabled &&
+      !station.selected &&
       station.hoverItem !== StationElementHoverItem.None
     ) {
       this.drawStationToolTip(station, dragItem);
@@ -191,7 +194,8 @@ export class StationElementService {
       !station.dragging
         ? '#ebebeb'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.disabled
+          station.disabled &&
+          !station.selected
         ? '#ebebeb'
         : '#fff';
     ctx.strokeStyle =
@@ -202,22 +206,33 @@ export class StationElementService {
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
             station.selected) ||
           (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-            station.hoverItem === StationElementHoverItem.Station &&
+            station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled)
         ? '#1b4387'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.disabled
+          station.disabled &&
+          !station.selected
         ? '#ebebeb'
         : '#fff';
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (station.selected ||
+        (station.hoverItem !== StationElementHoverItem.None &&
+          !station.disabled))
+    ) {
+      ctx.lineWidth = STATION_BORDER_LINE_WIDTH_SELECTED;
+    } else {
+      ctx.lineWidth = STATION_BORDER_LINE_WIDTH;
+    }
     ctx.stroke();
     ctx.fill();
     ctx.restore();
   }
 
   /**
-   * Draws the station card on the map for a station.
+   * Draws the station tooltip on the map for a station.
    *
-   * @param station The station for which to draw the card.
+   * @param station The station for which to draw the tooltip.
    * @param dragItem Checks which item is being dragged on the map.
    */
   private drawStationToolTip(
@@ -246,7 +261,7 @@ export class StationElementService {
     ctx.shadowOffsetX = shadowEquation(3);
     ctx.shadowOffsetY = shadowEquation(3);
     if (
-      station.hoverItem === StationElementHoverItem.Station &&
+      station.hoverItem !== StationElementHoverItem.None &&
       dragItem === MapDragItem.Station &&
       station.dragging
     ) {

@@ -1275,9 +1275,7 @@ export class MapService {
           (station) => station.rithmId === st
         );
         this.stationElements[stationIndex].selected = isSelected ? true : false;
-        this.stationElements[stationIndex].disabled = !isSelected
-          ? true
-          : false;
+        this.stationElements[stationIndex].disabled = isSelected ? true : false;
       });
       this.updateChildStationGroup(subStationGroup);
     });
