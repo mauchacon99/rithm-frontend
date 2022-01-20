@@ -5,7 +5,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
  * Header for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-header-menu',
+  selector: 'app-header-menu[organizationName]',
   templateUrl: './header-menu.component.html',
   styleUrls: ['./header-menu.component.scss'],
 })
