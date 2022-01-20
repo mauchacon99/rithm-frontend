@@ -33,7 +33,7 @@ export class HeaderMenuComponent implements OnInit {
    *
    * @param organizationId String of user organization.
    */
-  getOrganizationInfo(organizationId: string): void {
+  private getOrganizationInfo(organizationId: string): void {
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
