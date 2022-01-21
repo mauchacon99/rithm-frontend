@@ -39,7 +39,7 @@ export class ExpansionMenuComponent implements OnInit {
     this.dataExpansionPanel = [
       {
         Role: RoleDashboardMenu.DashboardAdmin,
-        title: `${this.organizationName} Dashboard`,
+        title: `${this.organizationName} Dashboards`,
         panelOpenState: false,
       },
       {
