@@ -1,10 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HistoryDrawerComponent } from './history-drawer.component';
 import { DocumentService } from 'src/app/core/document.service';
-import { MockDocumentService } from 'src/mocks';
+import { MockDocumentService, MockErrorService } from 'src/mocks';
 import { UserAvatarModule } from '../user-avatar/user-avatar.module';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { MockComponent } from 'ng-mocks';
+import { throwError } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 
 describe('HistoryDrawerComponent', () => {
   let component: HistoryDrawerComponent;
@@ -12,11 +15,14 @@ describe('HistoryDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatSnackBarModule, UserAvatarModule],
-      declarations: [HistoryDrawerComponent],
+      imports: [MatSnackBarModule, UserAvatarModule],
+      declarations: [
+        HistoryDrawerComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: ErrorService, useClass: MockErrorService },
       ],
     }).compileComponents();
   });
@@ -39,5 +45,30 @@ describe('HistoryDrawerComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(getEventDocument).toHaveBeenCalledWith(component.documentRithmId);
+  });
+
+  it('should show error if events document fails', () => {
+    spyOn(TestBed.inject(DocumentService), 'getDocumentEvents').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.eventDocumentsError).toBeTrue();
+    const reviewError = fixture.debugElement.nativeElement.querySelector(
+      '#events-documents-error'
+    );
+    expect(reviewError).toBeTruthy();
+  });
+
+  it('should activate the history loading', () => {
+    const eventDocumentsLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#loading-indicator-history'
+      );
+    component.eventDocumentsLoading = true;
+    fixture.detectChanges();
+    expect(eventDocumentsLoading).toBeTruthy();
   });
 });

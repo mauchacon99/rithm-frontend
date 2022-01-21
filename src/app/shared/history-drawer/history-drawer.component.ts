@@ -19,6 +19,12 @@ export class HistoryDrawerComponent implements OnInit {
   /** Get events for documents. */
   eventDocuments: DocumentEvent[] = [];
 
+  /** The error if history fails . */
+  eventDocumentsError = false;
+
+  /** Loading history for documents. */
+  eventDocumentsLoading = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService
@@ -36,15 +42,19 @@ export class HistoryDrawerComponent implements OnInit {
   /**
    * Get events for the document history.
    */
-  getDocumentEvents(): void {
+  private getDocumentEvents(): void {
+    this.eventDocumentsLoading = true;
     this.documentService
       .getDocumentEvents(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (events) => {
+          this.eventDocumentsLoading = false;
           this.eventDocuments = events;
         },
         error: (error: unknown) => {
+          this.eventDocumentsError = true;
+          this.eventDocumentsLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

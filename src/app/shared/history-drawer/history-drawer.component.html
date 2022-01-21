@@ -4,81 +4,52 @@
       <p class="font-semibold text-center mt-1">Document History</p>
     </div>
   </div>
-  <div>
-    <div class="flex">
-      <div class="flex justify-center w-1/4">
-        <app-user-avatar
-          class="cursor-pointer"
-          [firstName]="'Natalia'"
-          [lastName]="'Romanov'"
-          [navProfile]="true"
-        ></app-user-avatar>
-      </div>
-      <div class="w-3/4">
-        <p class="font-semibold text-sm truncate">Natalia Romanov</p>
-        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
-      </div>
-    </div>
-    <div class="flex my-3">
-      <div class="flex justify-center w-1/4">
-        <div class="border-r-2 border-primary-100"></div>
-      </div>
-      <div class="w-3/4">
-        <p class="text-sm text-clip">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ut
-          illo deserunt, tempore unde quos, earum a maxime pariatur veniam qui
-          provident sapiente nostrum voluptatum. Vel, dicta necessitatibus.
-          Rerum, similique.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div class="flex">
-      <div class="flex justify-center w-1/4">
-        <app-user-avatar
-          class="cursor-pointer"
-          [firstName]="'Clint'"
-          [lastName]="'Barton'"
-          [navProfile]="true"
-        ></app-user-avatar>
-      </div>
-      <div class="w-3/4">
-        <p class="font-semibold text-sm truncate">Clint Barton</p>
-        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
-      </div>
-    </div>
-    <div class="flex my-3">
-      <div class="flex justify-center w-1/4">
-        <div class="border-r-2 border-primary-100 mr-1"></div>
-      </div>
-      <div class="w-3/4">
-        <p class="text-sm text-clip">Flowed to Station Name.</p>
+  <div *ngIf="!eventDocumentsLoading && !eventDocumentsError">
+    <div *ngFor="let history of eventDocuments">
+      <div>
+        <div class="flex">
+          <div
+            class="flex justify-center w-1/4"
+            *ngIf="history && history.user"
+          >
+            <app-user-avatar
+              class="cursor-pointer"
+              [firstName]="history.user.firstName"
+              [lastName]="history.user.lastName"
+              [navProfile]="true"
+            ></app-user-avatar>
+          </div>
+          <div class="w-3/4">
+            <p class="font-semibold text-sm truncate">
+              {{ history.user?.firstName }} {{ history.user?.lastName }}
+            </p>
+            <p class="font-semibold text-xs text-primary-100">
+              {{ history.date | date: 'MM/dd/yyyy' }}
+            </p>
+          </div>
+        </div>
+        <div class="flex my-3">
+          <div class="flex justify-center w-1/4">
+            <div class="border-r-2 border-primary-100"></div>
+          </div>
+          <div class="w-3/4">
+            <p class="text-sm text-clip">
+              {{ history.description }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div>
-    <div class="flex">
-      <div class="flex justify-center w-1/4">
-        <app-user-avatar
-          class="cursor-pointer"
-          [firstName]="'Rithm'"
-          [lastName]="'Automation'"
-          [navProfile]="true"
-        ></app-user-avatar>
-      </div>
-      <div class="w-3/4">
-        <p class="font-semibold text-sm truncate">Rithm Automation</p>
-        <p class="font-semibold text-xs text-primary-100">01/17/2022</p>
-      </div>
-    </div>
-    <div class="flex my-3">
-      <div class="flex justify-center w-1/4">
-        <div class="border-r-2 border-primary-100 mr-1"></div>
-      </div>
-      <div class="w-3/4">
-        <p class="text-sm text-clip">Field Name Updated.</p>
-      </div>
-    </div>
+  <div *ngIf="eventDocumentsLoading" class="mt-2">
+    <app-loading-indicator
+      id="loading-indicator-history"
+      [inlineText]="'Loading...'"
+    ></app-loading-indicator>
+  </div>
+  <div *ngIf="eventDocumentsError" id="events-documents-error">
+    <p class="text-left text-error-500 mt-1 ml-4">
+      Error: Unable to retrive events history.
+    </p>
   </div>
 </div>
