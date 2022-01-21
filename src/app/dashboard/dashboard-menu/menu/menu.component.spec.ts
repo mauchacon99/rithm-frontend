@@ -37,6 +37,12 @@ describe('MenuComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MenuComponent);
     component = fixture.componentInstance;
+    component.organizationInfo = {
+      name: 'strut',
+      mainContactPhoneNumber: '514145415',
+      mainContactEmail: 'strut@company.com',
+      timeZone: '',
+    };
     fixture.detectChanges();
   });
 
