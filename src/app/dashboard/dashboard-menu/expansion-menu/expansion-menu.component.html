@@ -1,10 +1,47 @@
-<mat-accordion>
-  <mat-expansion-panel hideToggle *ngFor="let data of dataExpansionPanel">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{data.title}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <p>This is the primary content of the panel.</p>
-  </mat-expansion-panel>
-</mat-accordion>
+<div class="w-11/12 m-auto">
+  <mat-accordion>
+    <mat-expansion-panel
+      hideToggle
+      *ngFor="let data of dataExpansionPanel"
+      (opened)="data.panelOpenState = true"
+      (closed)="data.panelOpenState = false"
+      class="mat-elevation-z0"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title class="relative">
+          <div class="p-3 float-left">
+            <i
+              class="fas fa-angle-down text-xl"
+              *ngIf="data.panelOpenState"
+            ></i>
+            <i
+              class="fas fa-angle-right text-xl"
+              *ngIf="!data.panelOpenState"
+            ></i>
+          </div>
+          <span class="flex items-center ml-1 h-full text-lg">{{
+            data.title
+          }}</span>
+          <div class="absolute right-0 h-full flex items-center justify-center">
+            <button
+              mat-icon-button
+              data-testid="button-more"
+              id="button-more"
+              (click)="$event.stopPropagation()"
+            >
+              <i class="fas fa-ellipsis-h text-2xl"></i>
+            </button>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item
+          *ngFor="let option of staticDataOptions"
+          class="color-hover"
+        >
+          {{ option }}
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

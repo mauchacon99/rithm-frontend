@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { first } from 'rxjs';
-import { ErrorService } from 'src/app/core/error.service';
-import { OrganizationService } from 'src/app/core/organization.service';
+import { Component, OnInit } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { UserService } from 'src/app/core/user.service';
+import { OrganizationService } from 'src/app/core/organization.service';
 import { OrganizationInfo } from 'src/models';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Main menu component for dashboard menu drawer.
@@ -13,7 +13,7 @@ import { OrganizationInfo } from 'src/models';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   /** Information about organization. */
   organizationInfo!: OrganizationInfo;
 
@@ -33,7 +33,7 @@ export class MenuComponent {
    *
    * @param organizationId String of user organization.
    */
-   getOrganizationInfo(organizationId: string): void {
+  private getOrganizationInfo(organizationId: string): void {
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())

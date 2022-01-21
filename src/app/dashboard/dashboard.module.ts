@@ -23,6 +23,7 @@ import { StationDocumentsModalModule } from 'src/app/shared/station-documents-mo
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     StationDocumentsModalModule,
     MatButtonModule,
     MatSidenavModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatListModule,
   ],
 })
 export class DashboardModule {}
