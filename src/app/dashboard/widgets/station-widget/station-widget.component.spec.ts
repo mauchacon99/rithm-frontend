@@ -198,4 +198,11 @@ describe('StationWidgetComponent', () => {
       expect(showDocs).toBeTruthy();
     });
   });
+
+  it('should return the time in a string', () => {
+    const time = component.getElapsedTime(
+      component.dataStationWidget.documents[0].flowedTimeUTC
+    );
+    expect(time).toBeTruthy();
+  });
 });

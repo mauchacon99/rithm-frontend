@@ -69,8 +69,19 @@ export class StationWidgetComponent implements OnInit {
    * @returns A string reading something like "4 days" or "32 minutes".
    */
   getElapsedTime(timeEntered: string): string {
-    return this.utcTimeConversion.getElapsedTimeText(
-      this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
-    );
+    let timeInStation = '';
+    if (timeEntered && timeEntered !== 'Unknown') {
+      timeInStation = this.utcTimeConversion.getElapsedTimeText(
+        this.utcTimeConversion.getMillisecondsElapsed(timeEntered)
+      );
+      if (timeInStation === '1 day') {
+        timeInStation = ' Yesterday';
+      } else {
+        timeInStation += ' ago';
+      }
+    } else {
+      timeInStation = 'None';
+    }
+    return timeInStation;
   }
 }
