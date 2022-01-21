@@ -16,6 +16,9 @@ import {
   STATION_PADDING,
   STATION_TOOLTIP_HEIGHT,
   STATION_RADIUS,
+  MAP_SELECTED,
+  MAP_DISABLED_STROKE,
+  MAP_DEFAULT_COLOR,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -125,20 +128,20 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected
-        ? '#1b4387'
+        stationGroup.selected
+        ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled
-        ? '#ebebeb'
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#1b4387'
-          : NODE_HOVER_COLOR
-        : CONNECTION_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? MAP_SELECTED
+              : NODE_HOVER_COLOR
+            : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (stationGroup.selected ||
-        stationGroup.hoverItem === StationGroupElementHoverItem.Boundary)
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary && !stationGroup.disabled))
     ) {
       ctx.lineWidth = CONNECTION_LINE_WIDTH_SELECTED;
     } else {
@@ -217,7 +220,7 @@ export class StationGroupElementService {
     ctx.stroke();
     ctx.fill();
     ctx.restore();
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = MAP_DEFAULT_COLOR;
     ctx.fillText(
       'Cannot group station-group',
       startingX + scaledStationPadding,
@@ -246,16 +249,22 @@ export class StationGroupElementService {
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Name
-        ? NODE_HOVER_COLOR
-        : BUTTON_DEFAULT_COLOR;
+      stationGroup.selected || ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        || stationGroup.hoverItem === StationGroupElementHoverItem.Name) && !stationGroup.disabled)
+        && this.mapService.mapMode$.value === MapMode.StationGroupAdd ?
+        MAP_SELECTED :
+        stationGroup.disabled && this.mapService.mapMode$.value === MapMode.StationGroupAdd ?
+          MAP_DISABLED_STROKE :
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            ? NODE_HOVER_COLOR
+            : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(
       stationGroup.title,
       stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-        STATION_GROUP_NAME_PADDING
+      STATION_GROUP_NAME_PADDING
     );
   }
 

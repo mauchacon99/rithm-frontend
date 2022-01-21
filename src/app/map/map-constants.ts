@@ -87,3 +87,9 @@ export const ICON_MID_HEIGHT = 92;
 export const ICON_FULL_HEIGHT = 102;
 export const ICON_RADIUS = 2;
 export const ICON_FOLD = 1;
+
+// Selected and disabled of map elements
+export const MAP_SELECTED = '#1b4387';
+export const MAP_DISABLED = '#f8f8f8';
+export const MAP_DISABLED_STROKE = '#b3b1b1';
+export const MAP_DEFAULT_COLOR = '#fff';
