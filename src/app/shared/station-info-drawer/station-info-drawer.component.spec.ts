@@ -303,7 +303,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
-    spyOnProperty(component,'isUserAdminOrOwner').and.returnValue(true);
+    spyOnProperty(component, 'isUserAdminOrOwner').and.returnValue(true);
 
     fixture.detectChanges();
 
@@ -336,7 +336,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
-    spyOnProperty(component,'isUserAdminOrOwner').and.returnValue(true);
+    spyOnProperty(component, 'isUserAdminOrOwner').and.returnValue(true);
     await component.createNewDocument();
     fixture.detectChanges();
     expect(component.docCreationLoading).toBe(true);
