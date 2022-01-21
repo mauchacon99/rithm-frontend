@@ -38,13 +38,13 @@ export class ExpansionMenuComponent implements OnInit {
   ngOnInit(): void {
     this.dataExpansionPanel = [
       {
-        Role: RoleDashboardMenu.DashboardAdmin,
+        Role: RoleDashboardMenu.DashboardOrganization,
         title: `${this.organizationName} Dashboards`,
         panelOpenState: false,
       },
       {
         Role: RoleDashboardMenu.DashboardPersonal,
-        title: 'Personal Dashboards personal',
+        title: 'Personal Dashboards',
         panelOpenState: false,
       },
     ];

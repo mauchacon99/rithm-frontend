@@ -1,3 +1,4 @@
+<div class="p-2">
   <mat-accordion class="w-full bg-black p-0 m-0">
     <mat-expansion-panel
       hideToggle
@@ -7,13 +8,17 @@
       class="mat-elevation-z0 p-0 m-0"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title class="flex justify-between items-center">
+        <mat-panel-title class="flex justify-between items-center p-3">
           <div class="flex items-center">
             <i
-              [ngClass]="data.panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
+              [ngClass]="
+                data.panelOpenState ? 'fa-angle-down' : 'fa-angle-right'
+              "
               class="fas text-xl"
             ></i>
-            <span class="ml-2 text-base truncate ">{{ data.title }}</span>
+            <div class="ml-3 w-[200px] md:w-[260px] overflow-hidden truncate">
+              <span class="text-base">{{ data.title }}</span>
+            </div>
           </div>
           <button
             mat-icon-button
@@ -35,3 +40,4 @@
       </mat-list>
     </mat-expansion-panel>
   </mat-accordion>
+</div>
