@@ -1,11 +1,11 @@
 <div class="p-2">
-  <mat-accordion class="w-full bg-black p-0 m-0">
+  <mat-accordion class="w-full bg-black">
     <mat-expansion-panel
       hideToggle
       *ngFor="let data of dataExpansionPanel"
       (opened)="data.panelOpenState = true"
       (closed)="data.panelOpenState = false"
-      class="mat-elevation-z0 p-0 m-0"
+      class="mat-elevation-z0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title class="flex justify-between items-center p-3">
