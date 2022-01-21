@@ -164,9 +164,9 @@ export class CheckFieldComponent
   /**
    * Allow the answer to be updated in the documentTemplate through a subject.
    *
-   * @param event Whatever.
-   * @param index Whatever.
-   * @param value Whatever.
+   * @param event Captures the event when the checkbox is clicked.
+   * @param index The possible array index of the clicked checkbox.
+   * @param value The text of the possible answer.
    */
   updateFieldAnswer(
     event: MatCheckboxChange,
