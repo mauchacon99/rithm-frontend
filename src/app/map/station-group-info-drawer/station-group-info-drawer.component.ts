@@ -4,7 +4,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MapService } from '../map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { FormBuilder } from '@angular/forms';
-import { MapMode } from 'src/models';
+import { MapMode, StationGroupInfoDrawerData } from 'src/models';
 
 /**
  * Component for station group info drawer.
@@ -21,11 +21,23 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /** Form field viewed in Build mode. */
   editMode = false;
 
-  /** Edit Mode. */
+  /** Station group name. */
+  stationGroupRithmId = '';
+
+  /** Station group name. */
   groupName = '';
+
+  /** Station group is chained or not. */
+  isChained = false;
 
   /** The current mode of the map. */
   currentMode = MapMode.View;
+
+  /** The drawer context for station group info. */
+  drawerContext = '';
+
+  /** Number of stations included in station group. */
+  numberOfStations = 0;
 
   /**
    * Whether the map is in any building mode.
@@ -50,6 +62,25 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
         throw new Error(`Map overlay subscription error: ${error}`);
       },
     });
+
+    this.sidenavDrawerService.drawerContext$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.drawerContext = data;
+      });
+
+    this.sidenavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const infoData = data as StationGroupInfoDrawerData;
+        if (infoData && this.drawerContext === 'stationGroupInfo') {
+          this.stationGroupRithmId = infoData.stationGroupRithmId;
+          this.groupName = infoData.stationGroupName;
+          this.numberOfStations = infoData.numberOfStations;
+          this.editMode = infoData.editMode;
+          this.isChained = infoData.isChained;
+        }
+      });
   }
 
   /**

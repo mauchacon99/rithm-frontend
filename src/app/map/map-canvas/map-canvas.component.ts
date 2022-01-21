@@ -22,6 +22,7 @@ import {
   StationInfoDrawerData,
   StationInformation,
   StationGroupElementHoverItem,
+  StationGroupInfoDrawerData,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -1885,8 +1886,20 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
           stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ) {
+          //set this variable to use the information from passed in station group.
+          const dataInformationDrawer: StationGroupInfoDrawerData = {
+            stationGroupRithmId: stationGroup.rithmId,
+            stationGroupName: stationGroup.title,
+            editMode: this.mapMode === MapMode.Build,
+            numberOfStations: stationGroup.stations.length,
+            stationGroupStatus: stationGroup.status,
+            isChained: false,
+          };
           //Open station group info drawer when clicked on station group boundary or name.
-          this.sidenavDrawerService.openDrawer('stationGroupInfo');
+          this.sidenavDrawerService.openDrawer(
+            'stationGroupInfo',
+            dataInformationDrawer
+          );
           break;
         }
       }

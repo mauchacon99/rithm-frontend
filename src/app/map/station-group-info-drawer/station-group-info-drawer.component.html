@@ -6,7 +6,7 @@
       </div>
       <div class="col-span-12 pt-2" *ngIf="!isBuilding">
         <p class="overline-font mb-1">Group Name</p>
-        <p>{{ 'groupName' }}</p>
+        <p>{{ groupName }}</p>
       </div>
       <div class="col-span-12 pt-2" *ngIf="isBuilding">
         <mat-form-field
@@ -35,8 +35,7 @@
       <button
         class="mat-focus-indicator priority mat-mini-fab mat-button-base circle-40-secondary"
       >
-        <!-- TODO: Add the dynamic station-group data below. -->
-        {{ '5' }}
+        {{ numberOfStations }}
       </button>
     </div>
   </div>
