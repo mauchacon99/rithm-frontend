@@ -146,6 +146,31 @@
       <ng-template matStepLabel>
         <p class="truncate ml-2">Done</p>
       </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm my-1">
+          {{ firstOperand }} <span class="font-bold">{{ operator }} </span>
+          {{ secondOperand }}
+        </p>
+      </div>
+      <div class="flex flex-row space-x-2 mt-5">
+        <button
+          mat-button
+          matStepperPrevious
+          class="w-1/12"
+          data-testid="back-step-4"
+          id="back-step-4"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          class="w-1/12 text-accent-500"
+          data-testid="done-step"
+          id="done-step"
+        >
+          Done
+        </button>
+      </div>
     </mat-step>
   </mat-stepper>
   <div mat-dialog-actions class="flex justify-end">
