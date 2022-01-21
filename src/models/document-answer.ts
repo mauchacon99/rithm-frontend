@@ -25,9 +25,6 @@ export interface DocumentAnswer {
   /** Type the answer. */
   type: QuestionFieldType;
 
-  /** Id to answer. */
-  rithmId: string;
-
   /** Question is updated or not. */
   questionUpdated: boolean;
 }

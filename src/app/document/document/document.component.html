@@ -36,6 +36,7 @@
           autocomplete="off"
           [formGroup]="documentForm"
           class="document-base-form"
+          (ngSubmit)="saveDocumentChanges()"
         >
           <app-station-info-header
             [stationInformation]="documentInformation"
@@ -104,11 +105,11 @@
                   >
                   <button
                     mat-stroked-button
+                    type="submit"
                     color="accent"
                     class="mx-2"
                     data-testid="document-save"
                     id="document-save"
-                    (click)="saveDocumentChanges()"
                   >
                     Save
                   </button>

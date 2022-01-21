@@ -48,7 +48,7 @@ export class CheckFieldComponent
   fieldTypeEnum = QuestionFieldType;
 
   /** Checked Responses. */
-  checkedResponses: boolean[] = [];
+  checkedResponses: string[] = [];
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
@@ -68,7 +68,6 @@ export class CheckFieldComponent
 
     this.field.possibleAnswers?.forEach((something, index) => {
       fields[`checkItem-${index}`] = [false];
-      this.checkedResponses.push(false);
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -167,9 +166,15 @@ export class CheckFieldComponent
    *
    * @param event Whatever.
    * @param index Whatever.
+   * @param value Whatever.
    */
-  updateFieldAnswer(event: MatCheckboxChange, index: number): void {
-    this.checkedResponses[index] = event.checked;
+  updateFieldAnswer(event: MatCheckboxChange, index: number, value: string): void {
+    if (event.checked){
+      this.checkedResponses.push(value);
+    } else {
+      const valueIndex =this.checkedResponses.indexOf(value);
+      this.checkedResponses.splice(valueIndex, 1);
+    }
     const checkBoxesResponse = this.checkedResponses
       .toString()
       .replace(/,/g, '|');
@@ -179,7 +184,6 @@ export class CheckFieldComponent
       stationRithmId: '',
       value: checkBoxesResponse,
       type: this.field.questionType,
-      rithmId: '3j4k-3h2j-hj4j',
       questionUpdated: false,
     };
     this.documentService.updateAnswerSubject(documentAnswer);

@@ -9,9 +9,7 @@
     >
       <mat-option
         *ngFor="let possibleAnswer of field?.possibleAnswers"
-        [value]="
-          possibleAnswer.rithmId ? possibleAnswer.rithmId : possibleAnswer.text
-        "
+        [value]="possibleAnswer.text"
       >
         {{ possibleAnswer.text }}
       </mat-option>

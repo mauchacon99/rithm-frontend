@@ -311,7 +311,6 @@ describe('DocumentService', () => {
         file: 'dev.txt',
         filename: 'dev',
         type: QuestionFieldType.Email,
-        rithmId: '789-321-456',
         questionUpdated: true,
       },
       {
@@ -322,7 +321,6 @@ describe('DocumentService', () => {
         file: 'dev2.txt',
         filename: 'dev2',
         type: QuestionFieldType.City,
-        rithmId: '789-321-456-789',
         questionUpdated: false,
       },
     ];

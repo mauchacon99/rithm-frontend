@@ -11,7 +11,7 @@
       [ngClass]="{ required: !checkFieldForm.valid }"
       *ngFor="let possibleAnswer of field.possibleAnswers; let i = index"
       formControlName="checkItem-{{ i }}"
-      (change)="updateFieldAnswer($event, i)"
+      (change)="updateFieldAnswer($event, i, possibleAnswer.text)"
     >
       {{ possibleAnswer.text }}
     </mat-checkbox>

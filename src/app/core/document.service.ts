@@ -165,21 +165,10 @@ export class DocumentService {
     documentRithmId: string,
     answerDocument: DocumentAnswer[]
   ): Observable<DocumentAnswer[]> {
-    if (!documentRithmId || !answerDocument) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot get the name of the document or its answers.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
       return this.http.post<DocumentAnswer[]>(
         `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
         answerDocument
       );
-    }
   }
 
   /**

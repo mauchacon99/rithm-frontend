@@ -156,7 +156,6 @@ export class SelectFieldComponent
       stationRithmId: '',
       value: selectResponse,
       type: this.field.questionType,
-      rithmId: '3j4k-3h2j-hj4j',
       questionUpdated: false,
     };
     this.documentService.updateAnswerSubject(documentAnswer);

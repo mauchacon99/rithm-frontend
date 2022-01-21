@@ -203,7 +203,6 @@ export class TextFieldComponent
       stationRithmId: '',
       value: this.textFieldForm.controls[this.field.questionType].value,
       type: this.field.questionType,
-      rithmId: '3j4k-3h2j-hj4j',
       questionUpdated: false,
     };
     this.documentService.updateAnswerSubject(documentAnswer);
