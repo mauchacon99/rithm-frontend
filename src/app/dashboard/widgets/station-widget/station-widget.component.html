@@ -1,8 +1,9 @@
-<div *ngIf="isLoading" class="h-full flex justify-center items-center flex-col">
-  <div id="loading-docs" class="h-full flex justify-center items-center flex-col">
-    <p class="py-2 truncate">Loading</p>
-    <app-loading-indicator></app-loading-indicator>
-  </div>
+<div *ngIf="isLoading"
+     id="loading-docs"
+     class="h-full flex justify-center items-center flex-col"
+>
+  <p class="py-2 truncate">Loading</p>
+  <app-loading-indicator></app-loading-indicator>
 </div>
 
 <div *ngIf="failedLoadWidget" class="h-full" id="card-error">
@@ -11,8 +12,14 @@
       <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
       <h3 class="text-error-500 truncate">ERROR</h3>
       <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button mat-stroked-button color="warn" (click)="getStationWidgetDocuments()"
-        (touchstart)="getStationWidgetDocuments()" id="try-again" data-testid="try-again">
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="getStationWidgetDocuments()"
+        (touchstart)="getStationWidgetDocuments()"
+        id="try-again"
+        data-testid="try-again"
+      >
         Try Again
       </button>
     </div>
@@ -29,8 +36,13 @@
       </p>
     </div>
     <div class="justify-self-end" *ngIf="dataStationWidget">
-      <button *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'" mat-stroked-button color="accent"
-        data-testid="create-new-document" id="create-new-document">
+      <button
+        *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
+        mat-stroked-button
+        color="accent"
+        data-testid="create-new-document"
+        id="create-new-document"
+      >
         New Document <i class="fas fa-plus"></i>
       </button>
     </div>
