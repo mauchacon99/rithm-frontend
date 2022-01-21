@@ -4,19 +4,17 @@
   box-shadow: 1px -2px 2px #e5e4e7;
 }
 
-.info-drawer {
-  ::ng-deep mat-drawer-container {
-    mat-drawer {
-      @apply w-72 mt-28;
+.info-drawer-document {
+  mat-drawer {
+    @apply w-72 mt-28;
 
-      position: fixed !important;
-      height: calc(100vh - 107px);
+    position: fixed !important;
+    height: calc(100vh - 107px);
 
-      .mat-tab-label {
-        @apply opacity-100 text-accent-500 text-sm;
+    .mat-tab-label {
+      @apply opacity-100 text-accent-500 text-sm;
 
-        min-width: 140px !important;
-      }
+      min-width: 140px !important;
     }
   }
 }
