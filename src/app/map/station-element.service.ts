@@ -191,30 +191,30 @@ export class StationElementService {
     ctx.closePath();
     ctx.fillStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-        (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
-        !station.dragging
+      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
+      !station.dragging
         ? '#ebebeb'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           station.disabled &&
           !station.selected
-          ? '#f8f8f8'
-          : '#fff';
+        ? '#f8f8f8'
+        : '#fff';
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-        dragItem === MapDragItem.Node &&
-        !station.dragging
+      dragItem === MapDragItem.Node &&
+      !station.dragging
         ? NODE_HOVER_COLOR
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.selected) ||
+            station.selected) ||
           (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
             station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled)
-          ? '#1b4387'
-          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-            station.disabled &&
-            !station.selected
-            ? '#ebebeb'
-            : '#fff';
+        ? '#1b4387'
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled &&
+          !station.selected
+        ? '#ebebeb'
+        : '#fff';
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (station.selected ||
@@ -235,9 +235,7 @@ export class StationElementService {
    *
    * @param station The station for which to draw the tooltip.
    */
-  private drawStationToolTip(
-    station: StationMapElement
-  ): void {
+  private drawStationToolTip(station: StationMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
@@ -435,12 +433,12 @@ export class StationElementService {
     );
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Badge &&
-        dragItem !== MapDragItem.Node &&
-        !station.dragging
+      dragItem !== MapDragItem.Node &&
+      !station.dragging
         ? BADGE_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#efefef'
-          : BADGE_DEFAULT_COLOR;
+        ? '#efefef'
+        : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
@@ -544,12 +542,12 @@ export class StationElementService {
     );
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Button &&
-        dragItem !== MapDragItem.Node &&
-        !station.dragging
+      dragItem !== MapDragItem.Node &&
+      !station.dragging
         ? BUTTON_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#efefef'
-          : buttonColor;
+        ? '#efefef'
+        : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -592,13 +590,13 @@ export class StationElementService {
     ctx.fillStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-        station.isAddingConnected
+      station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node &&
           this.mapService.mapMode$.value !== MapMode.StationGroupAdd
-          ? NODE_HOVER_COLOR
-          : NODE_DEFAULT_COLOR;
+        ? NODE_HOVER_COLOR
+        : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (
       cursor.x !== -1 &&
@@ -616,7 +614,7 @@ export class StationElementService {
     ctx.strokeStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-        station.isAddingConnected
+      station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : NODE_HOVER_COLOR;
     ctx.stroke();

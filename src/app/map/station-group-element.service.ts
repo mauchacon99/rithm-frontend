@@ -93,10 +93,13 @@ export class StationGroupElementService {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
       this.drawStationGroupName(stationGroup);
-      if (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.disabled && !stationGroup.selected &&
+      if (
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        stationGroup.disabled &&
+        !stationGroup.selected &&
         (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-          stationGroup.hoverItem === StationGroupElementHoverItem.Name)) {
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name)
+      ) {
         this.drawStationGroupToolTip(stationGroup);
       }
     }
@@ -122,16 +125,16 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.selected
+      stationGroup.selected
         ? '#1b4387'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled
-          ? '#ebebeb'
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-              ? '#1b4387'
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+        ? '#ebebeb'
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? '#1b4387'
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (stationGroup.selected ||
@@ -150,9 +153,7 @@ export class StationGroupElementService {
    *
    * @param stationGroup The station group for which to draw the tooltip.
    */
-  private drawStationGroupToolTip(
-    stationGroup: StationGroupMapElement,
-  ): void {
+  private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
@@ -160,7 +161,8 @@ export class StationGroupElementService {
 
     const startingX = stationGroup.boundaryPoints[0].x;
     const startingY =
-      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y - (65 * this.mapScale);
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
+      65 * this.mapScale;
 
     const scaledStationRadius = STATION_RADIUS * this.mapScale;
     const scaledStationHeight = STATION_TOOLTIP_HEIGHT * this.mapScale;
@@ -253,7 +255,7 @@ export class StationGroupElementService {
       stationGroup.title,
       stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-      STATION_GROUP_NAME_PADDING
+        STATION_GROUP_NAME_PADDING
     );
   }
 
