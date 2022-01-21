@@ -13,6 +13,9 @@ import {
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
   CONNECTION_LINE_WIDTH_SELECTED,
+  STATION_PADDING,
+  STATION_TOOLTIP_HEIGHT,
+  STATION_RADIUS,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -90,6 +93,12 @@ export class StationGroupElementService {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
       this.drawStationGroupName(stationGroup);
+      if (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        stationGroup.disabled && !stationGroup.selected &&
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name)) {
+        this.drawStationGroupToolTip(stationGroup);
+      }
     }
   }
 
@@ -113,16 +122,16 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected
+        stationGroup.selected
         ? '#1b4387'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled
-        ? '#ebebeb'
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#1b4387'
-          : NODE_HOVER_COLOR
-        : CONNECTION_DEFAULT_COLOR;
+          ? '#ebebeb'
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? '#1b4387'
+              : NODE_HOVER_COLOR
+            : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (stationGroup.selected ||
@@ -134,6 +143,91 @@ export class StationGroupElementService {
     }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Draws the station group tooltip on the map for a station group.
+   *
+   * @param stationGroup The station group for which to draw the tooltip.
+   */
+  private drawStationGroupToolTip(
+    stationGroup: StationGroupMapElement,
+  ): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the station card if context is not defined');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = stationGroup.boundaryPoints[0].x;
+    const startingY =
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y - (65 * this.mapScale);
+
+    const scaledStationRadius = STATION_RADIUS * this.mapScale;
+    const scaledStationHeight = STATION_TOOLTIP_HEIGHT * this.mapScale;
+    const scaledStationWidth = STATION_WIDTH * this.mapScale;
+    const scaledStationPadding = STATION_PADDING * this.mapScale;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledStationRadius, startingY);
+    ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX + scaledStationWidth,
+      startingY,
+      startingX + scaledStationWidth,
+      startingY + scaledStationRadius
+    );
+    // eslint-disable-next-line max-len
+    ctx.lineTo(
+      startingX + scaledStationWidth,
+      startingY + scaledStationHeight - scaledStationRadius
+    ); // line going to bottom right
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX + scaledStationWidth,
+      startingY + scaledStationHeight,
+      startingX + scaledStationWidth - scaledStationRadius,
+      startingY + scaledStationHeight
+    ); // bottom right curve to line going to bottom left
+    ctx.lineTo(
+      startingX + scaledStationRadius,
+      startingY + scaledStationHeight
+    ); // line going to bottom left
+    // eslint-disable-next-line max-len
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY + scaledStationHeight,
+      startingX,
+      startingY + scaledStationHeight - scaledStationRadius
+    ); // bottom left curve to line going to top left
+    ctx.lineTo(startingX, startingY + scaledStationRadius); // line going to top left
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY,
+      startingX + scaledStationRadius,
+      startingY
+    );
+    // top left curve to line going top right
+    ctx.closePath();
+    ctx.fillStyle = '#000000';
+    ctx.globalAlpha = 0.6;
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#fff';
+    ctx.fillText(
+      'Cannot group station-group',
+      startingX + scaledStationPadding,
+      startingY + 12 * this.mapScale + scaledStationPadding,
+      130 * this.mapScale
+    );
+    ctx.fillText(
+      'with current selection',
+      startingX + scaledStationPadding,
+      startingY + 32 * this.mapScale + scaledStationPadding,
+      135 * this.mapScale
+    );
   }
 
   /**
@@ -159,7 +253,7 @@ export class StationGroupElementService {
       stationGroup.title,
       stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-        STATION_GROUP_NAME_PADDING
+      STATION_GROUP_NAME_PADDING
     );
   }
 

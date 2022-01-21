@@ -116,15 +116,15 @@ export class StationMapElement {
       point.x >= startingX + scaledStationWidth - interactiveNodeRadius &&
       point.x <= startingX + scaledStationWidth + interactiveNodeRadius &&
       point.y >=
-        startingY +
-          scaledStationHeight -
-          scaledNodeYMargin -
-          interactiveNodeRadius &&
+      startingY +
+      scaledStationHeight -
+      scaledNodeYMargin -
+      interactiveNodeRadius &&
       point.y <=
-        startingY +
-          scaledStationHeight -
-          scaledNodeYMargin +
-          interactiveNodeRadius &&
+      startingY +
+      scaledStationHeight -
+      scaledNodeYMargin +
+      interactiveNodeRadius &&
       mode !== MapMode.View
     );
   }
@@ -148,18 +148,18 @@ export class StationMapElement {
 
     return (
       point.x >=
-        startingX +
-          scaledStationWidth -
-          scaledButtonMargin -
-          interactiveButtonRadius &&
+      startingX +
+      scaledStationWidth -
+      scaledButtonMargin -
+      interactiveButtonRadius &&
       point.x <=
-        startingX +
-          scaledStationWidth -
-          scaledButtonMargin +
-          interactiveButtonRadius &&
+      startingX +
+      scaledStationWidth -
+      scaledButtonMargin +
+      interactiveButtonRadius &&
       point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius &&
       point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius &&
-      mode !== MapMode.View
+      mode !== MapMode.View && mode !== MapMode.StationGroupAdd
     );
   }
 
@@ -181,17 +181,18 @@ export class StationMapElement {
 
     return (
       point.x >=
-        startingX +
-          scaledStationWidth -
-          scaledBadgeMargin -
-          interactiveBadgeRadius &&
+      startingX +
+      scaledStationWidth -
+      scaledBadgeMargin -
+      interactiveBadgeRadius &&
       point.x <=
-        startingX +
-          scaledStationWidth -
-          scaledBadgeMargin +
-          interactiveBadgeRadius &&
+      startingX +
+      scaledStationWidth -
+      scaledBadgeMargin +
+      interactiveBadgeRadius &&
       point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius &&
-      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius &&
+      mode !== MapMode.StationGroupAdd
     );
   }
 
@@ -236,7 +237,7 @@ export class StationMapElement {
     } else {
       throw new Error(
         'You seem to be trying mark a locally created station as deleted. ' +
-          'You should instead remove it from the array of stations.'
+        'You should instead remove it from the array of stations.'
       );
     }
   }
@@ -250,9 +251,9 @@ export class StationMapElement {
   isIdenticalTo(station: StationMapElement): boolean {
     return (
       JSON.stringify(this.previousStations) ===
-        JSON.stringify(station.previousStations) &&
+      JSON.stringify(station.previousStations) &&
       JSON.stringify(this.nextStations) ===
-        JSON.stringify(station.nextStations) &&
+      JSON.stringify(station.nextStations) &&
       JSON.stringify(this.mapPoint) === JSON.stringify(station.mapPoint) &&
       this.stationName === station.stationName &&
       this.notes === station.notes
