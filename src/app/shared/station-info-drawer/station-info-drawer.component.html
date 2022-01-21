@@ -124,7 +124,7 @@
     *ngIf="
       stationDocumentGenerationStatus === 'Manual' &&
       (mapMode === 0 || mapMode === undefined) &&
-      !locallyCreated
+      !locallyCreated && (isUserAdminOrOwner || isWorker)
     "
   >
     <div class="py-1" *ngIf="docCreationLoading; else createDocument">

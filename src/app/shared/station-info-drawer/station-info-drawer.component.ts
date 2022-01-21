@@ -495,11 +495,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .createNewDocument('', 0, this.stationRithmId)
         .pipe(first())
         .subscribe({
-          next: (documentId) => {
-            this.assignUserToDocument(
-              this.userService.user.rithmId,
-              documentId
-            );
+          next: () => {
             this.popupService.notify(
               'The document has been created successfully.'
             );
