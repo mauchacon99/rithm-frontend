@@ -44,7 +44,7 @@ export class ExpansionMenuComponent implements OnInit {
       },
       {
         Role: RoleDashboardMenu.DashboardPersonal,
-        title: 'Personal Dashboard',
+        title: 'Personal Dashboards',
         panelOpenState: false,
       },
     ];
