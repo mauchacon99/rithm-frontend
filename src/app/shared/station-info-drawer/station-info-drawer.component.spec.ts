@@ -239,14 +239,6 @@ describe('StationInfoDrawerComponent', () => {
       'notify'
     ).and.callThrough();
 
-    const userService = TestBed.inject(UserService);
-    const user = userService.user;
-
-    const assignUser = spyOn(
-      component,
-      'assignUserToDocument'
-    ).and.callThrough();
-
     component.createNewDocument();
     tick();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
@@ -258,7 +250,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(notifySpy).toHaveBeenCalledOnceWith(
       'The document has been created successfully.'
     );
-    expect(assignUser).toHaveBeenCalledWith(user.rithmId, documentId);
   }));
 
   it('should catch an error if creating the document fails', async () => {
@@ -313,7 +304,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
-
+    Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     fixture.detectChanges();
 
     const createDocumentSpy = spyOn(component, 'createNewDocument');
@@ -345,6 +336,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     await component.createNewDocument();
     fixture.detectChanges();
     expect(component.docCreationLoading).toBe(true);
