@@ -168,11 +168,15 @@ export class CheckFieldComponent
    * @param index Whatever.
    * @param value Whatever.
    */
-  updateFieldAnswer(event: MatCheckboxChange, index: number, value: string): void {
-    if (event.checked){
+  updateFieldAnswer(
+    event: MatCheckboxChange,
+    index: number,
+    value: string
+  ): void {
+    if (event.checked) {
       this.checkedResponses.push(value);
     } else {
-      const valueIndex =this.checkedResponses.indexOf(value);
+      const valueIndex = this.checkedResponses.indexOf(value);
       this.checkedResponses.splice(valueIndex, 1);
     }
     const checkBoxesResponse = this.checkedResponses

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo,
@@ -30,6 +30,18 @@ import {
 export class MockDocumentService {
   /** The Name of the Document as BehaviorSubject. */
   documentName$ = new BehaviorSubject<string>('');
+
+  /** Document Answer to be updated. */
+  documentAnswer$ = new Subject<DocumentAnswer>();
+
+  /**
+   * Update the DocumentAnswer subject.
+   *
+   * @param answer An answer to be updated in the documentTemplate.
+   */
+  updateAnswerSubject(answer: DocumentAnswer): void {
+    this.documentAnswer$.next(answer);
+  }
 
   /**
    * Gets a list of documents for a given station.

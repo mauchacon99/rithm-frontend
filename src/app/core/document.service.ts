@@ -165,10 +165,10 @@ export class DocumentService {
     documentRithmId: string,
     answerDocument: DocumentAnswer[]
   ): Observable<DocumentAnswer[]> {
-      return this.http.post<DocumentAnswer[]>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
-        answerDocument
-      );
+    return this.http.post<DocumentAnswer[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
+      answerDocument
+    );
   }
 
   /**
