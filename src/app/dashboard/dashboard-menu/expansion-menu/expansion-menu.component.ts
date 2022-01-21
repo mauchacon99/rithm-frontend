@@ -18,7 +18,7 @@ interface InterfaceExpansionPanel {
  * Expansion menu for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-expansion-menu',
+  selector: 'app-expansion-menu[organizationName]',
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
@@ -44,7 +44,7 @@ export class ExpansionMenuComponent implements OnInit {
       },
       {
         Role: RoleDashboardMenu.DashboardPersonal,
-        title: 'Personal Dashboards',
+        title: 'Personal Dashboards personal',
         panelOpenState: false,
       },
     ];
