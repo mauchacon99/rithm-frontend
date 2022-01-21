@@ -8,30 +8,22 @@
       class="mat-elevation-z0"
     >
       <mat-expansion-panel-header>
-        <mat-panel-title class="relative">
-          <div class="p-3 float-left">
+        <mat-panel-title class="flex justify-between items-center">
+          <div class="flex items-center">
             <i
-              class="fas fa-angle-down text-xl"
-              *ngIf="data.panelOpenState"
+              [ngClass]="data.panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
+              class="fas text-xl"
             ></i>
-            <i
-              class="fas fa-angle-right text-xl"
-              *ngIf="!data.panelOpenState"
-            ></i>
+            <span class="ml-2 text-base truncate ">{{ data.title }}</span>
           </div>
-          <span class="flex items-center ml-1 h-full text-lg">{{
-            data.title
-          }}</span>
-          <div class="absolute right-0 h-full flex items-center justify-center">
-            <button
-              mat-icon-button
-              data-testid="button-more"
-              id="button-more"
-              (click)="$event.stopPropagation()"
-            >
-              <i class="fas fa-ellipsis-h text-2xl"></i>
-            </button>
-          </div>
+          <button
+            mat-icon-button
+            data-testid="button-more"
+            id="button-more"
+            (click)="$event.stopPropagation()"
+          >
+            <i class="fas fa-ellipsis-h text-2xl"></i>
+          </button>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
