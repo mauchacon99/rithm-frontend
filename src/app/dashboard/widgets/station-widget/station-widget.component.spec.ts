@@ -85,6 +85,22 @@ describe('StationWidgetComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
+  it('should try request again  listing documents if fails', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+
+    const card =
+      fixture.debugElement.nativeElement.querySelector('#card-error');
+    expect(card).toBeTruthy();
+
+    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
+    const tryAgain =
+      fixture.debugElement.nativeElement.querySelector('#try-again');
+    expect(tryAgain).toBeTruthy();
+    tryAgain.click();
+    expect(methodCalled).toHaveBeenCalled();
+  });
+
   it('should show button if station is manual', () => {
     component.stationRithmId = stationRithmId;
     const dataWidgetStation: StationWidgetData = {
