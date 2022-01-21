@@ -195,30 +195,30 @@ export class StationElementService {
     ctx.closePath();
     ctx.fillStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-        (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
-        !station.dragging
+      (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
+      !station.dragging
         ? '#ebebeb'
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           station.disabled &&
           !station.selected
-          ? MAP_DISABLED
-          : MAP_DEFAULT_COLOR;
+        ? MAP_DISABLED
+        : MAP_DEFAULT_COLOR;
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
-        dragItem === MapDragItem.Node &&
-        !station.dragging
+      dragItem === MapDragItem.Node &&
+      !station.dragging
         ? NODE_HOVER_COLOR
         : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          station.selected) ||
+            station.selected) ||
           (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
             station.hoverItem !== StationElementHoverItem.None &&
             !station.disabled)
-          ? MAP_SELECTED
-          : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-            station.disabled &&
-            !station.selected
-            ? MAP_DISABLED_STROKE
-            : MAP_DEFAULT_COLOR;
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled &&
+          !station.selected
+        ? MAP_DISABLED_STROKE
+        : MAP_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (station.selected ||
@@ -332,8 +332,12 @@ export class StationElementService {
     const scaledStationPadding = STATION_PADDING * this.mapScale;
 
     ctx.textAlign = 'left';
-    ctx.fillStyle = (this.mapService.mapMode$.value === MapMode.StationGroupAdd
-      && station.disabled && !station.selected) ? '#b3b1b1' : 'black';
+    ctx.fillStyle =
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      station.disabled &&
+      !station.selected
+        ? '#b3b1b1'
+        : 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     //When a station has status set to updated, change the font style to reflect that.
     const isItalic =
@@ -438,12 +442,12 @@ export class StationElementService {
     );
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Badge &&
-        dragItem !== MapDragItem.Node &&
-        !station.dragging
+      dragItem !== MapDragItem.Node &&
+      !station.dragging
         ? BADGE_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#efefef'
-          : BADGE_DEFAULT_COLOR;
+        ? '#efefef'
+        : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
@@ -547,12 +551,12 @@ export class StationElementService {
     );
     ctx.fillStyle =
       station.hoverItem === StationElementHoverItem.Button &&
-        dragItem !== MapDragItem.Node &&
-        !station.dragging
+      dragItem !== MapDragItem.Node &&
+      !station.dragging
         ? BUTTON_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? '#efefef'
-          : buttonColor;
+        ? '#efefef'
+        : buttonColor;
     ctx.fill();
     ctx.closePath();
   }
@@ -595,13 +599,13 @@ export class StationElementService {
     ctx.fillStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-        station.isAddingConnected
+      station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
           dragItem !== MapDragItem.Node &&
           this.mapService.mapMode$.value !== MapMode.StationGroupAdd
-          ? NODE_HOVER_COLOR
-          : NODE_DEFAULT_COLOR;
+        ? NODE_HOVER_COLOR
+        : NODE_DEFAULT_COLOR;
     ctx.fill();
     if (
       cursor.x !== -1 &&
@@ -619,10 +623,11 @@ export class StationElementService {
     ctx.strokeStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
-        station.isAddingConnected
-        ? CONNECTION_DEFAULT_COLOR :
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd ? '#efefef'
-          : NODE_HOVER_COLOR;
+      station.isAddingConnected
+        ? CONNECTION_DEFAULT_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? '#efefef'
+        : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
   }

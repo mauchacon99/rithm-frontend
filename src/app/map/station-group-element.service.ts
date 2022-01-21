@@ -128,20 +128,21 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-        stationGroup.selected
+      stationGroup.selected
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled
-          ? MAP_DISABLED_STROKE
-          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-              ? MAP_SELECTED
-              : NODE_HOVER_COLOR
-            : CONNECTION_DEFAULT_COLOR;
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
+        : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (stationGroup.selected ||
-        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary && !stationGroup.disabled))
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          !stationGroup.disabled))
     ) {
       ctx.lineWidth = CONNECTION_LINE_WIDTH_SELECTED;
     } else {
@@ -249,22 +250,25 @@ export class StationGroupElementService {
     }
     // TODO: Update this to be more dynamic
     this.canvasContext.fillStyle =
-      stationGroup.selected || ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        || stationGroup.hoverItem === StationGroupElementHoverItem.Name) && !stationGroup.disabled)
-        && this.mapService.mapMode$.value === MapMode.StationGroupAdd ?
-        MAP_SELECTED :
-        stationGroup.disabled && this.mapService.mapMode$.value === MapMode.StationGroupAdd ?
-          MAP_DISABLED_STROKE :
-          stationGroup.hoverItem === StationGroupElementHoverItem.Name
-            ? NODE_HOVER_COLOR
-            : BUTTON_DEFAULT_COLOR;
+      stationGroup.selected ||
+      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+        !stationGroup.disabled &&
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ? MAP_SELECTED
+        : stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
+        ? NODE_HOVER_COLOR
+        : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
     this.canvasContext.fillText(
       stationGroup.title,
       stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-      STATION_GROUP_NAME_PADDING
+        STATION_GROUP_NAME_PADDING
     );
   }
 
