@@ -7,7 +7,12 @@
     [hasBackdrop]="drawerHasBackdrop"
     [ngClass]="{ 'deleteDrawer left-0 right-0 bottom-0': deleteDrawer.opened }"
   >
-    <mat-drawer #deleteDrawer mode="over" position="end" class="mapStationInfo">
+    <mat-drawer
+      #deleteDrawer
+      mode="over"
+      position="end"
+      class="mapStationInfo info-drawer"
+    >
       <app-connection-info-drawer
         *ngIf="drawerMode === 'connectionInfo'"
       ></app-connection-info-drawer>
