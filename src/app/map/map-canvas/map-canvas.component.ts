@@ -1198,6 +1198,23 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         //Put that station in the back of the stations array.
         this.stations.push(draggingStation[0]);
       }
+
+      //Loop through the station group matrix to check if there is a station group being interacted with.
+      this.stationGroups.forEach((stationGroup) => {
+        //Checks whether the station group boundary is being hovered over.
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          eventCanvasPoint,
+          this.context,
+          this.scale
+        );
+        //If the station group is boundary.
+        if (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary) {
+          stationGroup.dragging = true;
+          //Assigns GroupStation to the dragItem.
+          this.dragItem = MapDragItem.GroupStation;
+        }
+      });
     }
 
     //If user didn't click on a station, etc than they must have clicked on the map.
@@ -1387,6 +1404,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.storedConnectionLine = null;
         }
       }
+    }
+
+    //If GroupStation is assigned to the dragItem.
+    if (this.dragItem === MapDragItem.GroupStation) {
+      //Loop through the station group matrix to check if there is a station group with dragging in true.
+      this.stationGroups.forEach((groupStation) => {
+        if (groupStation.dragging) {
+          groupStation.dragging = false;
+        }
+      });
     }
 
     //Reset properties.
