@@ -20,13 +20,9 @@
         class="w-10 mr-2"
         alt="Logo Rithm"
       />
-      <p *ngIf="organizationName" class="font-semibold w-24 truncate">
-        {{ organizationName }}
+      <p *ngIf="organizationInfo" class="font-semibold w-24 truncate">
+        {{ organizationInfo.name }}
       </p>
     </div>
-
-    <button mat-icon-button>
-      <i class="fas fa-ellipsis-h text-lg"></i>
-    </button>
   </div>
 </div>
