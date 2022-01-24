@@ -1,7 +1,14 @@
 <div class="px-3">
-  <app-header-menu
-    [organizationName]="organizationInfo ? organizationInfo.name : ''"
-  ></app-header-menu>
-  <app-expansion-menu></app-expansion-menu>
-  <app-options-menu></app-options-menu>
+  <app-header-menu></app-header-menu>
 </div>
+<div class="p-2">
+  <mat-accordion>
+    <app-expansion-menu
+      [dashboardRole]="dashboardRole.DashboardOrganization"
+    ></app-expansion-menu>
+    <app-expansion-menu
+      [dashboardRole]="dashboardRole.DashboardPersonal"
+    ></app-expansion-menu>
+  </mat-accordion>
+</div>
+<app-options-menu></app-options-menu>

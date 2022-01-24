@@ -702,4 +702,38 @@ describe('DocumentService', () => {
       expect(response).toEqual(expectedEventsResponse);
     });
   });
+
+  it('should return array of events for the document history', () => {
+    const documentRithmId = documentId;
+    const expectedEventsResponse: DocumentEvent[] = [
+      {
+        date: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getDocumentEvents(documentRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history?documentRithmId=${documentRithmId}`
+    );
+    expect(req.request.params.get('documentRithmId')).toBe(
+      'E204F369-386F-4E41'
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedEventsResponse);
+    httpTestingController.verify();
+  });
 });
