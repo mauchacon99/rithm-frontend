@@ -11,6 +11,9 @@
   <app-document-info-drawer
     *ngIf="drawerMode === 'documentInfo'"
   ></app-document-info-drawer>
+  <app-history-drawer
+    *ngIf="drawerMode === 'history'"
+  ></app-history-drawer>
 </div>
 <div class="flex justify-center border-t border-solid border-secondary-50">
   <button mat-button color="accent" (click)="toggleDrawer(drawerMode)">
