@@ -156,7 +156,8 @@ export class StationGroupElementService {
     //Place so that it covers the line.
     this.canvasContext.fillText(
       stationGroup.title,
-      stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING * this.mapScale,
+      stationGroup.boundaryPoints[0].x +
+        STATION_GROUP_NAME_PADDING * this.mapScale,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
         STATION_GROUP_NAME_PADDING * this.mapScale
     );
@@ -281,11 +282,6 @@ export class StationGroupElementService {
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
     const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
     const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
-    // Get center average point of boundary
-    // const averageCenterPoint = {
-    //   x: minX + maxX / 2,
-    //   y: minY + maxY / 2
-    // };
 
     for (const point of updatedBoundaryPoints) {
       if (point.x === maxX) {

@@ -184,7 +184,7 @@ export class StationElementService {
       startingY,
       startingX + scaledStationRadius,
       startingY
-    );  // top left curve to line going top right
+    ); // top left curve to line going top right
     ctx.closePath();
     //The color of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.fillStyle =
@@ -257,7 +257,7 @@ export class StationElementService {
           secondLineArray.join(' ').length + word.length <= 12
         ) {
           secondLineArray.push(word);
-        //If a word is too long to fit on the second line.
+          //If a word is too long to fit on the second line.
         } else if (secondLineArray.join(' ').length + word.length >= 12) {
           //If a word is greater than 12 characters.
           if (word.length > 12) {
@@ -266,7 +266,7 @@ export class StationElementService {
               //Put part of the word on line one and part on line two.
               firstLineArray.push(word.substring(0, 10));
               secondLineArray.push(word.substring(10, 20));
-            // If there is already a word on line one.
+              // If there is already a word on line one.
             } else if (firstLineArray.length > 0) {
               //add part of word to line two.
               secondLineArray.push(word.substring(0, 10));
@@ -283,7 +283,7 @@ export class StationElementService {
               secondLineArray.push('...');
               break;
             }
-          //If there are multiple words in the name array.
+            //If there are multiple words in the name array.
           } else if (sn.length > 1) {
             //Add ellipsis.
             secondLineArray.push('...');
