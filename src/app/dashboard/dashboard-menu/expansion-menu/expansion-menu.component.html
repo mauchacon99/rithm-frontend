@@ -22,8 +22,8 @@
           </div>
           <button
             mat-icon-button
-            data-testid="button-more-test-{{i}}"
-            id="button-more-{{i}}"
+            [attr.data-test-id]="'button-more-test-' + i"
+            id="button-more-test-{{ i }}"
             (click)="$event.stopPropagation()"
           >
             <i class="fas fa-ellipsis-h text-lg"></i>
