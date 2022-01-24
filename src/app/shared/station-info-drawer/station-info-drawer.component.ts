@@ -495,10 +495,14 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .createNewDocument('', 0, this.stationRithmId)
         .pipe(first())
         .subscribe({
-          next: () => {
+          next: (documentId) => {
+            this.docCreationLoading = false;
             this.popupService.notify(
               'The document has been created successfully.'
             );
+            this.router.navigate([`/document/${documentId}`], {
+              queryParams: { documentId, stationId: this.stationRithmId },
+            });
           },
           error: (error: unknown) => {
             this.docCreationLoading = false;
