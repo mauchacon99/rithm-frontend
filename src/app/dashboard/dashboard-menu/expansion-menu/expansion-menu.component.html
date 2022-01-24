@@ -2,7 +2,7 @@
   <mat-accordion>
     <mat-expansion-panel
       hideToggle
-      *ngFor="let data of dataExpansionPanel"
+      *ngFor="let data of dataExpansionPanel; let i = index"
       (opened)="data.panelOpenState = true"
       (closed)="data.panelOpenState = false"
       class="mat-elevation-z0"
