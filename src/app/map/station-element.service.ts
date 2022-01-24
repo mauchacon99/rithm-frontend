@@ -500,6 +500,7 @@ export class StationElementService {
     const scaledNodeYMargin = NODE_Y_MARGIN * this.mapScale;
 
     ctx.beginPath();
+    //draw a circle.
     ctx.arc(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight - scaledNodeYMargin,
@@ -507,6 +508,7 @@ export class StationElementService {
       0,
       2 * Math.PI
     );
+    //Change fill color of node if hovering or if dragging.
     ctx.fillStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
@@ -517,6 +519,7 @@ export class StationElementService {
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
     ctx.fill();
+    //If dragging a connection, draw a line to cursor from the node.
     if (
       cursor.x !== -1 &&
       ((station.dragging &&
@@ -530,6 +533,7 @@ export class StationElementService {
       );
       ctx.lineTo(cursor.x, cursor.y);
     }
+    //Change stroke color of node if dragging.
     ctx.strokeStyle =
       ((dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
         station.dragging) ||
@@ -568,6 +572,7 @@ export class StationElementService {
 
     const iconColor = BUTTON_DEFAULT_COLOR;
 
+    //This is a complex shape with various lines and curves.
     ctx.beginPath(); //square with missing corner
     ctx.moveTo(
       startingX + scaledIconXMargin + scaledIconRadius,
