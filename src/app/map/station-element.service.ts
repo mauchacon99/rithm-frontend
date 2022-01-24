@@ -39,11 +39,17 @@ import {
   FONT_SIZE_MODIFIER,
   STATION_BORDER_LINE_WIDTH_SELECTED,
   STATION_BORDER_LINE_WIDTH,
-  STATION_TOOLTIP_HEIGHT,
+  TOOLTIP_HEIGHT,
   MAP_DISABLED,
   MAP_DISABLED_STROKE,
   MAP_SELECTED,
   MAP_DEFAULT_COLOR,
+  MAP_CONNECTION_HOVER_COLOR,
+  MAP_DISABLE_TEXT_COLOR,
+  MAP_DISABLE_BADGE_BUTTON_COLOR,
+  TOOLTIP_RADIUS,
+  TOOLTIP_WIDTH,
+  TOOLTIP_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -154,19 +160,16 @@ export class StationElementService {
     ctx.beginPath();
     ctx.moveTo(startingX + scaledStationRadius, startingY);
     ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX + scaledStationWidth,
       startingY,
       startingX + scaledStationWidth,
       startingY + scaledStationRadius
     );
-    // eslint-disable-next-line max-len
     ctx.lineTo(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight - scaledStationRadius
     ); // line going to bottom right
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight,
@@ -177,7 +180,6 @@ export class StationElementService {
       startingX + scaledStationRadius,
       startingY + scaledStationHeight
     ); // line going to bottom left
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX,
       startingY + scaledStationHeight,
@@ -197,7 +199,7 @@ export class StationElementService {
       station.hoverItem !== StationElementHoverItem.None &&
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
-        ? '#ebebeb'
+        ? MAP_CONNECTION_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           station.disabled &&
           !station.selected
@@ -241,59 +243,54 @@ export class StationElementService {
    */
   private drawStationToolTip(station: StationMapElement): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot draw the station card if context is not defined');
+      throw new Error('Cannot draw tooltip if context is not defined');
     }
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
-    const startingY =
-      station.canvasPoint.y - STATION_TOOLTIP_HEIGHT * this.mapScale;
+    const startingY = station.canvasPoint.y - TOOLTIP_HEIGHT * this.mapScale;
 
-    const scaledStationRadius = STATION_RADIUS * this.mapScale;
-    const scaledStationHeight = STATION_TOOLTIP_HEIGHT * this.mapScale;
-    const scaledStationWidth = STATION_WIDTH * this.mapScale;
-    const scaledStationPadding = STATION_PADDING * this.mapScale;
+    const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
+    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
 
     ctx.save();
 
     ctx.beginPath();
-    ctx.moveTo(startingX + scaledStationRadius, startingY);
-    ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
-    // eslint-disable-next-line max-len
+    ctx.moveTo(startingX + scaledTooltipRadius, startingY);
+    ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
     ctx.quadraticCurveTo(
-      startingX + scaledStationWidth,
+      startingX + scaledTooltipWidth,
       startingY,
-      startingX + scaledStationWidth,
-      startingY + scaledStationRadius
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipRadius
     );
-    // eslint-disable-next-line max-len
     ctx.lineTo(
-      startingX + scaledStationWidth,
-      startingY + scaledStationHeight - scaledStationRadius
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
     ); // line going to bottom right
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
-      startingX + scaledStationWidth,
-      startingY + scaledStationHeight,
-      startingX + scaledStationWidth - scaledStationRadius,
-      startingY + scaledStationHeight
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight,
+      startingX + scaledTooltipWidth - scaledTooltipRadius,
+      startingY + scaledTooltipHeight
     ); // bottom right curve to line going to bottom left
     ctx.lineTo(
-      startingX + scaledStationRadius,
-      startingY + scaledStationHeight
+      startingX + scaledTooltipRadius,
+      startingY + scaledTooltipHeight
     ); // line going to bottom left
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX,
-      startingY + scaledStationHeight,
+      startingY + scaledTooltipHeight,
       startingX,
-      startingY + scaledStationHeight - scaledStationRadius
+      startingY + scaledTooltipHeight - scaledTooltipRadius
     ); // bottom left curve to line going to top left
-    ctx.lineTo(startingX, startingY + scaledStationRadius); // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius); // line going to top left
     ctx.quadraticCurveTo(
       startingX,
       startingY,
-      startingX + scaledStationRadius,
+      startingX + scaledTooltipRadius,
       startingY
     );
     // top left curve to line going top right
@@ -304,16 +301,18 @@ export class StationElementService {
     ctx.fill();
     ctx.restore();
     ctx.fillStyle = MAP_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      'Cannot group station',
-      startingX + scaledStationPadding,
-      startingY + 12 * this.mapScale + scaledStationPadding,
+      'Cannot add station to',
+      startingX + scaledTooltipPadding,
+      startingY + 12 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
     ctx.fillText(
-      'with current selection',
-      startingX + scaledStationPadding,
-      startingY + 32 * this.mapScale + scaledStationPadding,
+      'current selection',
+      startingX + scaledTooltipPadding,
+      startingY + 32 * this.mapScale + scaledTooltipPadding,
       140 * this.mapScale
     );
   }
@@ -336,7 +335,7 @@ export class StationElementService {
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       station.disabled &&
       !station.selected
-        ? '#b3b1b1'
+        ? MAP_DISABLE_TEXT_COLOR
         : 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     //When a station has status set to updated, change the font style to reflect that.
@@ -446,7 +445,7 @@ export class StationElementService {
       !station.dragging
         ? BADGE_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? '#efefef'
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : BADGE_DEFAULT_COLOR;
     ctx.fill();
     const fontSize = Math.ceil(16 * this.mapScale);
@@ -555,7 +554,7 @@ export class StationElementService {
       !station.dragging
         ? BUTTON_HOVER_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? '#efefef'
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : buttonColor;
     ctx.fill();
     ctx.closePath();
@@ -626,7 +625,7 @@ export class StationElementService {
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? '#efefef'
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();

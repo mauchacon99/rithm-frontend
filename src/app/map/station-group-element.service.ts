@@ -13,12 +13,13 @@ import {
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
   CONNECTION_LINE_WIDTH_SELECTED,
-  STATION_PADDING,
-  STATION_TOOLTIP_HEIGHT,
-  STATION_RADIUS,
   MAP_SELECTED,
   MAP_DISABLED_STROKE,
   MAP_DEFAULT_COLOR,
+  TOOLTIP_RADIUS,
+  TOOLTIP_HEIGHT,
+  TOOLTIP_WIDTH,
+  TOOLTIP_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -159,7 +160,7 @@ export class StationGroupElementService {
    */
   private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
     if (!this.canvasContext) {
-      throw new Error('Cannot draw the station card if context is not defined');
+      throw new Error('Cannot draw the tooltip if context is not defined');
     }
     const ctx = this.canvasContext;
 
@@ -168,50 +169,50 @@ export class StationGroupElementService {
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
       65 * this.mapScale;
 
-    const scaledStationRadius = STATION_RADIUS * this.mapScale;
-    const scaledStationHeight = STATION_TOOLTIP_HEIGHT * this.mapScale;
-    const scaledStationWidth = STATION_WIDTH * this.mapScale;
-    const scaledStationPadding = STATION_PADDING * this.mapScale;
+    const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
+    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
 
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(startingX + scaledStationRadius, startingY);
-    ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
+    ctx.moveTo(startingX + scaledTooltipRadius, startingY);
+    ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
     // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
-      startingX + scaledStationWidth,
+      startingX + scaledTooltipWidth,
       startingY,
-      startingX + scaledStationWidth,
-      startingY + scaledStationRadius
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipRadius
     );
     // eslint-disable-next-line max-len
     ctx.lineTo(
-      startingX + scaledStationWidth,
-      startingY + scaledStationHeight - scaledStationRadius
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
     ); // line going to bottom right
     // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
-      startingX + scaledStationWidth,
-      startingY + scaledStationHeight,
-      startingX + scaledStationWidth - scaledStationRadius,
-      startingY + scaledStationHeight
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight,
+      startingX + scaledTooltipWidth - scaledTooltipRadius,
+      startingY + scaledTooltipHeight
     ); // bottom right curve to line going to bottom left
     ctx.lineTo(
-      startingX + scaledStationRadius,
-      startingY + scaledStationHeight
+      startingX + scaledTooltipRadius,
+      startingY + scaledTooltipHeight
     ); // line going to bottom left
     // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX,
-      startingY + scaledStationHeight,
+      startingY + scaledTooltipHeight,
       startingX,
-      startingY + scaledStationHeight - scaledStationRadius
+      startingY + scaledTooltipHeight - scaledTooltipRadius
     ); // bottom left curve to line going to top left
-    ctx.lineTo(startingX, startingY + scaledStationRadius); // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius); // line going to top left
     ctx.quadraticCurveTo(
       startingX,
       startingY,
-      startingX + scaledStationRadius,
+      startingX + scaledTooltipRadius,
       startingY
     );
     // top left curve to line going top right
@@ -222,17 +223,19 @@ export class StationGroupElementService {
     ctx.fill();
     ctx.restore();
     ctx.fillStyle = MAP_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
     ctx.fillText(
-      'Cannot group station-group',
-      startingX + scaledStationPadding,
-      startingY + 12 * this.mapScale + scaledStationPadding,
-      130 * this.mapScale
+      'Cannot add group to',
+      startingX + scaledTooltipPadding,
+      startingY + 12 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
     );
     ctx.fillText(
-      'with current selection',
-      startingX + scaledStationPadding,
-      startingY + 32 * this.mapScale + scaledStationPadding,
-      135 * this.mapScale
+      'current selection',
+      startingX + scaledTooltipPadding,
+      startingY + 32 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
     );
   }
 

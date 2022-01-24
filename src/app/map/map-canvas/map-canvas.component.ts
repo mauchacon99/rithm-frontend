@@ -1580,7 +1580,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           (stationGroup) =>
             stationGroup.hoverItem !== StationGroupElementHoverItem.None
         );
-        //If not hovering over a station or group.
+        //If not hovering over a station or group and the MapMode is not stationGroupAdd.
         if (
           !hoveringOverStation &&
           !hoveringOverStationGroup &&
@@ -1783,7 +1783,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the station is clickable.
           if (!station.disabled) {
-            //Toggle whether a station is selected to be added to the station group or not.
+            //If station is not disabled, should be able to select it and based on it's selection should disable other stations
+            //and station group as per the criteria.
             this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
@@ -1797,7 +1798,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     }
-    /* Check if click was on a connection line.
+    /* If mapMode is not StationGroupAdd, Check if click was on a connection line.
     This line placed after station for loop to not trigger
     a connection click while clicking a station. */
     if (this.mapMode !== MapMode.StationGroupAdd) {
@@ -1881,27 +1882,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           !stationGroup.disabled
         ) {
-          //Set status of station group to true or false depending upon current status
+          //Set status of station group to true or false depending upon current status also update status of
+          //other stations and station group as per the selection criteria.
           stationGroup.selected = !stationGroup.selected;
           if (stationGroup.selected) {
             this.mapService.setStationGroupStationStatus();
           }
           // To make sure it's not disabled and should allow user to undo previous action.
           stationGroup.disabled = false;
+          //Set current station group status and respective station's.
           this.stationGroupSelectStatus(stationGroup);
-          //Update parent station-group and respective stations status.
-          this.mapService.updateParentStationGroup(stationGroup.rithmId);
-          //Update descendent station-group and respective stations status.
-          this.mapService.updateChildStationGroup(stationGroup);
-          //Reset status of each station-group and station is nothing has been selected.
-          if (
-            !this.mapService.stationElements.some((st) => st.selected) &&
-            !this.mapService.stationGroupElements.some(
-              (stGroup) => stGroup.selected
-            )
-          ) {
-            this.mapService.resetSelectedStationGroupStationStatus();
-          }
+          //Set station group status of parent and child station group and respective stations.
+          this.mapService.setStationGroupStatus(stationGroup);
           this.drawElements();
           break;
         }
@@ -1923,12 +1915,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle Selected status for stations.
+   * Handle status of station group and respective stations based on incoming stationGroup selection.
    *
    * @param stationGroup The station group whose station status has to be updated.
    */
   private stationGroupSelectStatus(stationGroup: StationGroupMapElement): void {
     const isSelected = stationGroup.selected;
+    // Set stationGroup's selection status to all stations which belongs to same stationGroup.
     stationGroup.stations.map((st) => {
       const stationIndex = this.stations.findIndex(
         (station) => station.rithmId === st
@@ -1936,7 +1929,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations[stationIndex].selected = isSelected;
     });
     if (isSelected) {
-      //Enable/set disable status to false of adjacent station-groups and stations of a selected station-group.
+      // Set stationGroup's selection status to all station group which belongs to same stationGroup.
       this.stationGroups.forEach((stGroup) => {
         if (stGroup.subStationGroups.includes(stationGroup.rithmId)) {
           stGroup.subStationGroups.forEach((grp) => {
@@ -1945,6 +1938,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             );
             this.stationGroups[index].disabled = false;
           });
+          // Set stationGroup's selection status to all station which belongs to any sub stationGroup.
           stGroup.stations.map((st) => {
             const stationIndex = this.stations.findIndex(
               (station) => station.rithmId === st

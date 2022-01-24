@@ -1231,11 +1231,30 @@ export class MapService {
   }
 
   /**
+   * Set station group status of parent and child station group and respective stations.
+   *
+   * @param stationGroup The incoming station-group data.
+   */
+  setStationGroupStatus(stationGroup: StationGroupMapElement): void {
+    //Update parent station-group and respective stations status.
+    this.updateParentStationGroup(stationGroup.rithmId);
+    //Update descendent station-group and respective stations status.
+    this.updateChildStationGroup(stationGroup);
+    //Reset status of each station-group and station if nothing(station group or station) has been selected.
+    if (
+      !this.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+    }
+  }
+
+  /**
    * Update the selected status of all parent station-group and stations of incoming station-group id.
    *
    * @param stationGroupId The incoming station-group id.
    */
-  updateParentStationGroup(stationGroupId: string): void {
+  private updateParentStationGroup(stationGroupId: string): void {
     const rootStationGroup = this.stationGroupElements.find(
       (f) => f.rithmId === stationGroupId
     );
@@ -1258,11 +1277,11 @@ export class MapService {
    *
    * @param stationGroup The incoming station-group data.
    */
-  updateChildStationGroup(stationGroup: StationGroupMapElement): void {
+  private updateChildStationGroup(stationGroup: StationGroupMapElement): void {
     const isSelected = stationGroup.selected;
     stationGroup.subStationGroups.forEach((subStationGroupId) => {
       const subStationGroup = this.stationGroupElements.find(
-        (flowElement) => flowElement.rithmId === subStationGroupId
+        (group) => group.rithmId === subStationGroupId
       );
       if (!subStationGroup) {
         throw new Error(
@@ -1281,7 +1300,7 @@ export class MapService {
   }
 
   /**
-   * Set disable status to true before updating station-group and station status.
+   * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
    *
    */
   setStationGroupStationStatus(): void {
