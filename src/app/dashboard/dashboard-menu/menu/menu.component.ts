@@ -9,6 +9,6 @@ import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  /** Type role. */
+  /** Type role for menu in dashboard. */
   dashboardRole = RoleDashboardMenu;
 }
