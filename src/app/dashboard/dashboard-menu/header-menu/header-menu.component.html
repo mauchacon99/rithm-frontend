@@ -23,6 +23,15 @@
       <p *ngIf="organizationName" class="font-semibold w-24 truncate">
         {{ organizationName }}
       </p>
+      <div
+        *ngIf="!organizationName || organizationName === ''"
+        class="w-24 items-center py-2"
+      >
+        <app-loading-indicator
+          id="organizationName-loading"
+          [inlineText]="'Loading...'"
+        ></app-loading-indicator>
+      </div>
     </div>
 
     <button mat-icon-button>
