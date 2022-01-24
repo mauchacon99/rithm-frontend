@@ -29,6 +29,7 @@ export class StationGroupElementService {
   private mapScale = DEFAULT_SCALE;
 
   constructor(private mapService: MapService) {
+    //set this.mapScale to match the behavior subject in mapService.
     this.mapService.mapScale$.subscribe((scale) => (this.mapScale = scale));
   }
 
@@ -36,15 +37,19 @@ export class StationGroupElementService {
    * Draws all the station group boundaries on the map. Starts from the deepest station groups and works back to the root.
    */
   drawStationGroups(): void {
+    //If stationGroupElements doesn't have a length defined.
     if (!this.mapService.stationGroupElements.length) {
       return;
     }
+    //Note which station group is the read only root station group.
     const rootStationGroup = this.mapService.stationGroupElements.find(
       (stationGroup) => stationGroup.isReadOnlyRootStationGroup
     );
+    //If there isn't a root defined.
     if (!rootStationGroup) {
       throw new Error('Root station group could not be found');
     }
+    //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
   }
 
@@ -56,6 +61,7 @@ export class StationGroupElementService {
   private drawStationGroup(stationGroup: StationGroupMapElement): void {
     // If station group has a sub-station-group, draw that first
     stationGroup.subStationGroups.forEach((subStationGroupId) => {
+      //store the subStationGroup so we can recursively call this method for said station group.
       const subStationGroup = this.mapService.stationGroupElements.find(
         (stationGroupElement) =>
           stationGroupElement.rithmId === subStationGroupId
@@ -65,6 +71,7 @@ export class StationGroupElementService {
           `Couldn't find a sub-station-group for which an id exists: ${subStationGroupId}`
         );
       }
+      //If a subStationGroup was found recursively call this method to draw that first.
       this.drawStationGroup(subStationGroup);
     });
 
@@ -75,16 +82,18 @@ export class StationGroupElementService {
     // Determine the points within the station group.
     const pointsWithinStationGroup: Point[] = [];
     pointsWithinStationGroup.push(
+      //Fill array with the array returned.
       ...this.getStationPointsForStationGroup(stationGroup)
     );
     pointsWithinStationGroup.push(
+      //Fill array with the array returned.
       ...this.getSubStationGroupPointsForStationGroup(stationGroup)
     );
 
     // Determine the points for the boundary line
     stationGroup.boundaryPoints = this.getConvexHull(pointsWithinStationGroup);
 
-    // TODO: Render an empty station group.
+    //If there are boundary points set call methods needed to render the station group.
     if (stationGroup.boundaryPoints.length > 0) {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
@@ -100,14 +109,18 @@ export class StationGroupElementService {
   private drawStationGroupBoundaryLine(
     stationGroup: StationGroupMapElement
   ): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group boundary line if context is not defined'
       );
     }
+
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
@@ -125,29 +138,33 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to draw the name.
    */
   private drawStationGroupName(stationGroup: StationGroupMapElement): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group name if context is not defined'
       );
     }
-    // TODO: Update this to be more dynamic
+    // The name of the station group.
+    // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ? NODE_HOVER_COLOR
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
+    //Place so that it covers the line.
     this.canvasContext.fillText(
       stationGroup.title,
-      stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
+      stationGroup.boundaryPoints[0].x +
+        STATION_GROUP_NAME_PADDING * this.mapScale,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-        STATION_GROUP_NAME_PADDING
+        STATION_GROUP_NAME_PADDING * this.mapScale
     );
   }
 
   /**
-   * Set's the station group boundary path on the map for a station group.
+   * Sets the station group boundary path on the map for a station group.
    *
    * @param stationGroup The station group for which path needs to be set.
    */
@@ -156,13 +173,14 @@ export class StationGroupElementService {
   ): void {
     const path = new Path2D();
 
+    //draws a path based on the boundary points of the station group.
     path.moveTo(
       stationGroup.boundaryPoints[0].x,
       stationGroup.boundaryPoints[0].y
     );
     stationGroup.boundaryPoints = stationGroup.boundaryPoints.concat(
       stationGroup.boundaryPoints.splice(0, 1)
-    ); // Shift the first point to the back
+    ); // Shift the first point to the back so we can get all the points.
 
     for (const boundaryPoint of stationGroup.boundaryPoints) {
       path.lineTo(boundaryPoint.x, boundaryPoint.y);
@@ -179,6 +197,7 @@ export class StationGroupElementService {
   private getStationPointsForStationGroup(
     stationGroup: StationGroupMapElement
   ): Point[] {
+    //If a station group has no stations inside it.
     if (!stationGroup.stations.length) {
       return []; // Nothing to do here
     }
@@ -263,11 +282,6 @@ export class StationGroupElementService {
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
     const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
     const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
-    // Get center average point of boundary
-    // const averageCenterPoint = {
-    //   x: minX + maxX / 2,
-    //   y: minY + maxY / 2
-    // };
 
     for (const point of updatedBoundaryPoints) {
       if (point.x === maxX) {
