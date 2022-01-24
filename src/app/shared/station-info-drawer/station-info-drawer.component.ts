@@ -499,7 +499,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.popupService.notify(
               'The document has been created successfully.'
             );
-            // this.router.navigateByUrl(`/document/${documentId}?documentId=${documentId}&stationId=${this.stationRithmId}`);
+            this.router.navigateByUrl(`/document/${documentId}?documentId=${documentId}&stationId=${this.stationRithmId}`);
           },
           error: (error: unknown) => {
             this.docCreationLoading = false;

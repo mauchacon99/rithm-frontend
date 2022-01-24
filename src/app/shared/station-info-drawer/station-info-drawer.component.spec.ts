@@ -55,6 +55,7 @@ describe('StationInfoDrawerComponent', () => {
         MatRadioModule,
         RouterTestingModule.withRoutes([
           { path: 'document', component: MockComponent(DocumentComponent) },
+          { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
       ],
       providers: [
@@ -227,30 +228,19 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should create a document', fakeAsync(() => {
-    const documentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+  it('should create a document', async () => {
     const createDocumentSpy = spyOn(
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.callThrough();
 
-    const notifySpy = spyOn(
-      TestBed.inject(PopupService),
-      'notify'
-    ).and.callThrough();
-
-    component.createNewDocument();
-    tick();
+    await component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
       '',
       0,
       component.stationRithmId
     );
-    tick(1000);
-    expect(notifySpy).toHaveBeenCalledOnceWith(
-      'The document has been created successfully.'
-    );
-  }));
+  });
 
   it('should catch an error if creating the document fails', async () => {
     spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
