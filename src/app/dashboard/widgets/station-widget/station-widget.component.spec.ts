@@ -7,6 +7,7 @@ import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from '../../../shared/user-avatar/user-avatar.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -18,6 +19,7 @@ describe('StationWidgetComponent', () => {
       declarations: [
         StationWidgetComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(UserAvatarComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -83,6 +85,22 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should try request again  listing documents if fails', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+
+    const card =
+      fixture.debugElement.nativeElement.querySelector('#card-error');
+    expect(card).toBeTruthy();
+
+    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
+    const tryAgain =
+      fixture.debugElement.nativeElement.querySelector('#try-again');
+    expect(tryAgain).toBeTruthy();
+    tryAgain.click();
+    expect(methodCalled).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
@@ -195,5 +213,12 @@ describe('StationWidgetComponent', () => {
       expect(loadingIndicator).toBeNull();
       expect(showDocs).toBeTruthy();
     });
+  });
+
+  it('should return the time in a string', () => {
+    const time = component.getElapsedTime(
+      component.dataStationWidget.documents[0].flowedTimeUTC
+    );
+    expect(time).toBeTruthy();
   });
 });

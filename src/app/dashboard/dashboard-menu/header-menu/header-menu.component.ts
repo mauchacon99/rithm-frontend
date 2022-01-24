@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Header for dashboard menu drawer.
  */
 @Component({
-  selector: 'app-header-menu',
+  selector: 'app-header-menu[organizationName]',
   templateUrl: './header-menu.component.html',
   styleUrls: ['./header-menu.component.scss'],
 })
 export class HeaderMenuComponent {
+  /** Name of the organization. */
+  @Input() organizationName!: string;
+
   constructor(private sidenavDrawerService: SidenavDrawerService) {}
 
   /**
