@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first } from 'rxjs/operators';
 import { UserService } from 'src/app/core/user.service';
@@ -14,7 +14,7 @@ import { ErrorService } from 'src/app/core/error.service';
   templateUrl: './header-menu.component.html',
   styleUrls: ['./header-menu.component.scss'],
 })
-export class HeaderMenuComponent {
+export class HeaderMenuComponent implements OnInit {
   /** Information about organization. */
   organizationInfo!: OrganizationInfo;
 
