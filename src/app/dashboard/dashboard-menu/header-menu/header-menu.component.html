@@ -14,7 +14,7 @@
 
   <!-- Header information of the organization. -->
   <div class="flex justify-between items-end">
-    <div class="flex items-end">
+    <div class="flex items-end" *ngIf="!failedGetName" id="info-organization">
       <img
         src="assets/logo/black-icon-only.svg"
         class="w-10 mr-2"
@@ -24,5 +24,12 @@
         {{ organizationInfo.name }}
       </p>
     </div>
+    <p
+      *ngIf="failedGetName"
+      class="w-full text-error-500 truncate"
+      id="failed-info-organization"
+    >
+      Name of organization not obtained
+    </p>
   </div>
 </div>

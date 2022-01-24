@@ -18,6 +18,9 @@ export class HeaderMenuComponent implements OnInit {
   /** Information about organization. */
   organizationInfo!: OrganizationInfo;
 
+  /** Show error if fail get organization info.*/
+  failedGetName = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -50,9 +53,11 @@ export class HeaderMenuComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (organization) => {
+          this.failedGetName = false;
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
+          this.failedGetName = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

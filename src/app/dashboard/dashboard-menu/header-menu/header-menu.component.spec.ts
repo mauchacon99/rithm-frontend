@@ -83,4 +83,27 @@ describe('HeaderMenuComponent', () => {
     component.ngOnInit();
     expect(expectSpyService).toHaveBeenCalled();
   });
+
+  fit('should show error message when fail request get name', () => {
+    const OrganizationInfoShow =
+      fixture.debugElement.nativeElement.querySelector('#info-organization');
+    expect(OrganizationInfoShow).toBeTruthy();
+
+    const showErrorHidden = fixture.debugElement.nativeElement.querySelector(
+      '#failed-info-organization'
+    );
+    expect(showErrorHidden).toBeNull();
+
+    component.failedGetName = true;
+    fixture.detectChanges();
+
+    const OrganizationInfo =
+      fixture.debugElement.nativeElement.querySelector('#info-organization');
+    expect(OrganizationInfo).toBeNull();
+
+    const showError = fixture.debugElement.nativeElement.querySelector(
+      '#failed-info-organization'
+    );
+    expect(showError).toBeTruthy();
+  });
 });
