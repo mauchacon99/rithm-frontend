@@ -1,11 +1,10 @@
-<div *ngIf="isLoading" class="h-full flex justify-center items-center flex-col">
-  <div
-    id="loading-docs"
-    class="h-full flex justify-center items-center flex-col"
-  >
-    <p class="py-2 truncate">Loading</p>
-    <app-loading-indicator></app-loading-indicator>
-  </div>
+<div
+  *ngIf="isLoading"
+  id="loading-docs"
+  class="h-full flex justify-center items-center flex-col"
+>
+  <p class="py-2 truncate">Loading</p>
+  <app-loading-indicator></app-loading-indicator>
 </div>
 
 <div *ngIf="failedLoadWidget" class="h-full" id="card-error">
@@ -30,10 +29,9 @@
 
 <!-- station widget -->
 <div
-  class="m-2"
   *ngIf="!isLoading && !failedLoadWidget"
   id="show-docs"
-  class="h-full w-full"
+  class="m-2 h-full w-full"
 >
   <!-- Header widget -->
   <div class="w-full p-2 flex flex-col h-full">
