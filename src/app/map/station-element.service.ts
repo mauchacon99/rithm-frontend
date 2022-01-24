@@ -54,6 +54,7 @@ export class StationElementService {
   private canvasContext?: CanvasRenderingContext2D;
 
   constructor(private mapService: MapService) {
+    //set this.mapScale to match the behavior subject in mapService.
     this.mapService.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
     });
@@ -73,16 +74,22 @@ export class StationElementService {
     cursor: Point,
     dragItem: MapDragItem
   ): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
 
+    //Draw the card itself.
     this.drawStationCard(station, dragItem);
 
+    //Render items on the station depending on the zoom level.
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
+      //Depending on if a station is new or not, render the document badge or new badge.
       station.status === MapItemStatus.Created
         ? this.drawNewBadge(station)
         : this.drawDocumentBadge(station, dragItem);
+      //Render the stations name.
       this.drawStationName(station);
 
+      //If the mapMode is not view mode, render the connection node, station button, and note icon if applicable.
       if (
         mapMode === MapMode.Build ||
         mapMode === MapMode.StationAdd ||
@@ -90,6 +97,7 @@ export class StationElementService {
       ) {
         this.drawConnectionNode(station, dragItem, cursor);
         this.drawStationButton(station, dragItem);
+        //Only render a note icon if the station has notes.
         if (station.notes) {
           this.drawStationNoteIcon(station);
         }
@@ -110,6 +118,7 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot draw the station card if context is not defined');
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -139,19 +148,16 @@ export class StationElementService {
     ctx.beginPath();
     ctx.moveTo(startingX + scaledStationRadius, startingY);
     ctx.lineTo(startingX + scaledStationWidth - scaledStationRadius, startingY);
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX + scaledStationWidth,
       startingY,
       startingX + scaledStationWidth,
       startingY + scaledStationRadius
     );
-    // eslint-disable-next-line max-len
     ctx.lineTo(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight - scaledStationRadius
     ); // line going to bottom right
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX + scaledStationWidth,
       startingY + scaledStationHeight,
@@ -162,7 +168,6 @@ export class StationElementService {
       startingX + scaledStationRadius,
       startingY + scaledStationHeight
     ); // line going to bottom left
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX,
       startingY + scaledStationHeight,
@@ -204,6 +209,7 @@ export class StationElementService {
     if (!this.canvasContext) {
       throw new Error('Cannot reset the stroke if context is not defined');
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const scaledStationPadding = STATION_PADDING * this.mapScale;
@@ -295,6 +301,7 @@ export class StationElementService {
         'Cannot draw the document badge when canvas context is not set'
       );
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -342,6 +349,7 @@ export class StationElementService {
         'Cannot draw the document badge when canvas context is not set'
       );
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -378,6 +386,7 @@ export class StationElementService {
         'Cannot draw the station button when canvas context is not set'
       );
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -446,6 +455,7 @@ export class StationElementService {
         'Cannot draw the connection node when canvas context is not set'
       );
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
@@ -508,6 +518,7 @@ export class StationElementService {
         'Cannot draw the connection node when canvas context is not set'
       );
     }
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     const startingX = station.canvasPoint.x;
