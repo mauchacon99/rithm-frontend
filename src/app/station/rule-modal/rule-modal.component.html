@@ -30,7 +30,8 @@
           <mat-select [(value)]="firstOperand">
             <mat-option
               *ngFor="let question of questionStation"
-              [value]="question.value"
+              [value]="question.rithmId"
+              (click)="setOperatorList(question.questionType)"
             >
               {{ question.prompt }}
             </mat-option>
@@ -63,7 +64,7 @@
       </div>
     </mat-step>
     <!-- Step 2 -->
-    <mat-step color="primary" [completed]="operator !== ''">
+    <mat-step color="accent" [completed]="operator !== ''">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Type</p>
       </ng-template>
@@ -73,7 +74,14 @@
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
-          <mat-select [(value)]="operator"></mat-select>
+          <mat-select [(value)]="operator">
+            <mat-option
+              *ngFor="let option of operatorList"
+              [value]="option.value"
+            >
+              {{ option.text }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="flex flex-row space-x-2">
@@ -91,7 +99,7 @@
       </div>
     </mat-step>
     <!-- Step 3 -->
-    <mat-step color="primary" [completed]="secondOperand !== ''">
+    <mat-step color="accent" [completed]="secondOperand !== ''">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
@@ -116,7 +124,16 @@
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
-          <mat-select [(ngModel)]="secondOperand"></mat-select>
+          <mat-select [(ngModel)]="secondOperand">
+            <ng-container *ngFor="let question of questionStation">
+              <mat-option
+                *ngIf="question.rithmId !== firstOperand"
+                [value]="question.rithmId"
+              >
+                {{ question.prompt }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="flex flex-row space-x-2">
@@ -142,10 +159,35 @@
       </div>
     </mat-step>
     <!-- Step 4 -->
-    <mat-step color="primary" [completed]="false">
+    <mat-step color="accent" [completed]="false">
       <ng-template matStepLabel>
         <p class="truncate ml-2">Done</p>
       </ng-template>
+      <div class="flex flex-col">
+        <p class="text-sm my-1">
+          {{ firstOperand }} <span class="font-bold">{{ operator }} </span>
+          {{ secondOperand }}
+        </p>
+      </div>
+      <div class="flex flex-row space-x-2 mt-5">
+        <button
+          mat-button
+          matStepperPrevious
+          class="w-1/12"
+          data-testid="back-step-4"
+          id="back-step-4"
+        >
+          Back
+        </button>
+        <button
+          mat-button
+          class="w-1/12 text-accent-500"
+          data-testid="done-step"
+          id="done-step"
+        >
+          Done
+        </button>
+      </div>
     </mat-step>
   </mat-stepper>
   <div mat-dialog-actions class="flex justify-end">
