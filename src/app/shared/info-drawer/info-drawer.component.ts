@@ -25,7 +25,11 @@ export class InfoDrawerComponent implements OnDestroy {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
-        if (data === 'documentInfo' || data === 'stationInfo' || data === 'history') {
+        if (
+          data === 'documentInfo' ||
+          data === 'stationInfo' ||
+          data === 'history'
+        ) {
           this.drawerMode = data;
         }
       });
@@ -55,7 +59,11 @@ export class InfoDrawerComponent implements OnDestroy {
   async toggleDrawer(
     drawerItem: '' | 'stationInfo' | 'documentInfo' | 'history'
   ): Promise<void> {
-    if (drawerItem === 'documentInfo' || drawerItem === 'stationInfo'|| drawerItem === 'history') {
+    if (
+      drawerItem === 'documentInfo' ||
+      drawerItem === 'stationInfo' ||
+      drawerItem === 'history'
+    ) {
       await this.sidenavDrawerService.toggleDrawer(drawerItem);
     }
     this.drawerMode = '';
