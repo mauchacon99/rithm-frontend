@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { Question } from 'src/models';
+import { Question, QuestionFieldType, OperatorType } from 'src/models';
+
 /**
  * Reusable component for displaying the information to add a new rule.
  */
@@ -39,6 +40,90 @@ export class RuleModalComponent implements OnInit {
 
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
+
+  /** Text group for the operator options. */
+  textGroup = [
+    {
+      text: 'is',
+      value: OperatorType.EqualTo,
+    },
+    {
+      text: 'is not',
+      value: OperatorType.NotEqualTo,
+    },
+    {
+      text: 'contains',
+      value: OperatorType.Contains,
+    },
+  ];
+
+  /** Content group for the operator options. */
+  contentGroup = [
+    {
+      text: 'contains',
+      value: OperatorType.Contains,
+    },
+    {
+      text: 'does not contain',
+      value: OperatorType.NotContains,
+    },
+  ];
+
+  /** Number group for the operator options. */
+  numberGroup = [
+    {
+      text: 'is',
+      value: OperatorType.EqualTo,
+    },
+    {
+      text: 'is not',
+      value: OperatorType.NotEqualTo,
+    },
+    {
+      text: 'greater than',
+      value: OperatorType.GreaterThan,
+    },
+    {
+      text: 'less than',
+      value: OperatorType.LesserThan,
+    },
+  ];
+
+  /** Date group for the operator options. */
+  dateGroup = [
+    {
+      text: 'before',
+      value: OperatorType.Before,
+    },
+    {
+      text: 'after',
+      value: OperatorType.After,
+    },
+    {
+      text: 'on',
+      value: OperatorType.On,
+    },
+  ];
+
+  /** Select group for the operator options. */
+  selectGroup = [
+    {
+      text: 'is',
+      value: OperatorType.EqualTo,
+    },
+    {
+      text: 'is not',
+      value: OperatorType.NotEqualTo,
+    },
+  ];
+
+  /** The operatorList to be shown. */
+  operatorList: {
+    /** The operator selector text to show.*/
+    text: string;
+    /** The operator selector value.*/
+    value: OperatorType;
+  }[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -79,6 +164,11 @@ export class RuleModalComponent implements OnInit {
         next: (questions) => {
           this.questionStationLoading = false;
           this.questionStation = questions;
+          //Filter to show questions that are different to Instructions
+          this.questionStation = this.questionStation.filter(
+            (question: Question) =>
+              question.questionType !== QuestionFieldType.Instructions
+          );
         },
         error: (error: unknown) => {
           this.questionStationError = true;
@@ -89,5 +179,38 @@ export class RuleModalComponent implements OnInit {
           );
         },
       });
+  }
+
+  /**
+   * Set operator list for the comparison type.
+   *
+   * @param fieldType The field type to show the options of the corresponding operator list.
+   */
+  setOperatorList(fieldType: QuestionFieldType): void {
+    this.operatorList = [];
+    this.operator = '';
+    switch (fieldType) {
+      case QuestionFieldType.ShortText:
+      case QuestionFieldType.URL:
+      case QuestionFieldType.Email:
+      case QuestionFieldType.AddressLine:
+      case QuestionFieldType.Phone:
+      case QuestionFieldType.MultiSelect:
+        this.operatorList = this.textGroup;
+        break;
+      case QuestionFieldType.LongText:
+      case QuestionFieldType.CheckList:
+        this.operatorList = this.contentGroup;
+        break;
+      case QuestionFieldType.Number:
+      case QuestionFieldType.Currency:
+        this.operatorList = this.numberGroup;
+        break;
+      case QuestionFieldType.Date:
+        this.operatorList = this.dateGroup;
+        break;
+      case QuestionFieldType.Select:
+        this.operatorList = this.selectGroup;
+    }
   }
 }
