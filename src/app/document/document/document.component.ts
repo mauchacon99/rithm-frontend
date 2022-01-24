@@ -271,7 +271,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   saveDocumentChanges(): void {
     this.documentLoading = true;
-
     const requestArray = [
       // Update the document name.
       this.documentService.updateDocumentName(
