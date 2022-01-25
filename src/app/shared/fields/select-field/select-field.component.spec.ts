@@ -6,6 +6,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Question, QuestionFieldType } from 'src/models';
 
 import { SelectFieldComponent } from './select-field.component';
+import { MockDocumentService } from 'src/mocks';
+import { DocumentService } from 'src/app/core/document.service';
 
 const FIELD: Question = {
   rithmId: '3j4k-3h2j-hj4j',
@@ -53,7 +55,10 @@ describe('SelectFieldComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
       ],
-      providers: [{ provide: FormGroup, useValue: formBuilder }],
+      providers: [
+        { provide: FormGroup, useValue: formBuilder },
+        { provide: DocumentService, useValue: MockDocumentService },
+      ],
     }).compileComponents();
   });
 
