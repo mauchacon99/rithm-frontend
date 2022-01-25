@@ -27,6 +27,9 @@ export class StationWidgetComponent implements OnInit {
   /** Loading documents of station. */
   isLoading = false;
 
+  /** View detail document. */
+  isDocument = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -88,5 +91,15 @@ export class StationWidgetComponent implements OnInit {
       timeInStation = 'None';
     }
     return timeInStation;
+  }
+
+  /**
+   * View detail document.
+   *
+   * @param documentRithmId String of document rithmId.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  viewDocument(documentRithmId: string): void {
+    this.isDocument = !this.isDocument;
   }
 }
