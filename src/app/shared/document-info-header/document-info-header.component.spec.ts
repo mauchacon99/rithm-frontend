@@ -16,7 +16,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentName, DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -32,7 +31,6 @@ describe('DocumentInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatChipsModule,
-        RouterTestingModule,
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },

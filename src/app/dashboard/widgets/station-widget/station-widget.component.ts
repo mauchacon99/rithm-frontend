@@ -30,6 +30,9 @@ export class StationWidgetComponent implements OnInit {
   /** View detail document. */
   isDocument = false;
 
+  /** Document id selected for view. */
+  documentIdSelected = '';
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -100,6 +103,9 @@ export class StationWidgetComponent implements OnInit {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   viewDocument(documentRithmId: string): void {
+    documentRithmId
+      ? (this.documentIdSelected = documentRithmId)
+      : (this.documentIdSelected = '');
     this.isDocument = !this.isDocument;
   }
 }

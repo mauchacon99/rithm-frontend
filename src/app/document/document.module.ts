@@ -58,5 +58,8 @@ import { MatButtonModule } from '@angular/material/button';
     InfoDrawerModule,
     MatButtonModule,
   ],
+  exports:[
+    DocumentComponent
+  ]
 })
 export class DocumentModule {}

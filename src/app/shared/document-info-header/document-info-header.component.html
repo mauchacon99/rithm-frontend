@@ -1,23 +1,15 @@
-<section class="grid grid-cols-12 py-5 border-b border-secondary-400">
-  <div class="col-span-12">
+<section class="grid grid-cols-12 border-b border-secondary-400" [ngClass]="{ 'py-5': !isWidget }">
+  <div class="col-span-12" *ngIf="!isWidget">
     <h6 class="text-center">Document Information</h6>
   </div>
   <div class="col-span-12 flex justify-between" *ngIf="isStation">
     <div class="items-center flex">
       <p>Document Name:</p>
       <mat-chip-list aria-label="Document Fields Selection">
-        <div
-          *ngFor="let field of documentAppendedFields; let i = index"
-          class="mx-1"
-        >
+        <div *ngFor="let field of documentAppendedFields; let i = index" class="mx-1">
           <mat-chip *ngIf="field.questionRithmId">
             {{ field.prompt }}
-            <button
-              mat-icon-button
-              type="button"
-              class="mat-icon-6"
-              (click)="removeAppendedFieldFromDocumentName(i)"
-            >
+            <button mat-icon-button type="button" class="mat-icon-6" (click)="removeAppendedFieldFromDocumentName(i)">
               <i class="fas fa-times-circle text-lg text-primary-300"></i>
             </button>
           </mat-chip>
@@ -27,21 +19,9 @@
         </div>
       </mat-chip-list>
     </div>
-    <button
-      *ngIf="isStation"
-      type="button"
-      data-testid="document-info-drawer"
-      id="info-drawer-button-document"
-      mat-icon-button
-      matSuffix
-      class="icon icon-top"
-      (click)="toggleDrawer('documentInfo')"
-      [disabled]="isDrawerOpen"
-    >
-      <i
-        class="fas fa-info-circle text-2xl"
-        [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
-      ></i>
+    <button *ngIf="isStation" type="button" data-testid="document-info-drawer" id="info-drawer-button-document"
+      mat-icon-button matSuffix class="icon icon-top" (click)="toggleDrawer('documentInfo')" [disabled]="isDrawerOpen">
+      <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"></i>
     </button>
   </div>
 
@@ -49,29 +29,11 @@
     <div class="w-full" *ngIf="isDocumentNameEditable; else nonEditableDocName">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Document Name: </mat-label>
-        <input
-          id="name"
-          type="text"
-          matInput
-          matNativeControl
-          placeholder="Untitled document"
-          formControlName="name"
-          (keyup)="updateDocumentNameBS()"
-        />
-        <button
-          type="button"
-          data-testid="document-info-drawer"
-          mat-icon-button
-          matSuffix
-          class="icon icon-top"
-          (click)="toggleDrawer('documentInfo')"
-          id="info-drawer-button-document"
-          [disabled]="isDrawerOpen"
-        >
-          <i
-            class="fas fa-info-circle text-2xl"
-            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
-          ></i>
+        <input id="name" type="text" matInput matNativeControl placeholder="Untitled document" formControlName="name"
+          (keyup)="updateDocumentNameBS()" />
+        <button type="button" data-testid="document-info-drawer" mat-icon-button matSuffix class="icon icon-top"
+          (click)="toggleDrawer('documentInfo')" id="info-drawer-button-document" [disabled]="isDrawerOpen">
+          <i class="fas fa-info-circle text-2xl" [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"></i>
         </button>
       </mat-form-field>
       <p *ngIf="appendedDocumentName !== ''" class="pb-2 pl-4 overline-font">
@@ -79,16 +41,17 @@
       </p>
     </div>
     <ng-template #nonEditableDocName>
-      <div class="flex items-center justify-between w-full">
-        <p>Document Name: {{ documentName }} {{ appendedDocumentName }}</p>
-        <button
-          type="button"
-          data-testid="document-info-drawer"
-          mat-icon-button
-          matSuffix
-          class="icon icon-top"
-          (click)="toggleDrawer('documentInfo')"
-        >
+      <div class="flex items-center justify-between w-full" [ngClass]="{ 'py-2': isWidget }">
+        <div class="w-full">
+          <p [ngClass]="{ 'font-semibold ': isWidget }">
+            {{ !isWidget ? 'Document Name: ': '' }} {{ documentName }} {{ appendedDocumentName }}
+          </p>
+          <p [ngClass]="{ 'text-xs ': isWidget }" *ngIf="isWidget">
+            {{ stationNameDocument }}
+          </p>
+        </div>
+        <button *ngIf="!isWidget" type="button" data-testid="document-info-drawer" mat-icon-button matSuffix
+          class="icon icon-top" (click)="toggleDrawer('documentInfo')">
           <i class="fas fa-info-circle text-2xl text-primary-500"></i>
         </button>
       </div>
@@ -96,12 +59,10 @@
   </form>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
-    <div
-      *ngIf="
+    <div *ngIf="
         userType === userTypeEnum.Admin ||
         userType === userTypeEnum.StationOwner
-      "
-    >
+      ">
       <button mat-icon-button color="accent" type="button">
         <!-- TODO: Display if not locked -->
         <i class="fas fa-pen"></i>
