@@ -62,15 +62,22 @@ export class StationGroupMapElement {
     ctx: CanvasRenderingContext2D,
     scale: number
   ): void {
+    //Saves the current state of the canvas context.
     ctx.save();
+    //This will allow users to click in the area around group boundaries without having to click in the rendered space.
     ctx.lineWidth = 30;
+    //If there's a defined path.
     if (this.path) {
+      /* If cursor is hovering over a group boundary set hoverItem to that,
+      if cursor is over group name, set hoverItem to that,
+      otherwise set it to none. */
       this.hoverItem = ctx.isPointInStroke(this.path, point.x, point.y)
         ? StationGroupElementHoverItem.Boundary
         : this.isPointInStationGroupName(canvasPoint, scale)
         ? StationGroupElementHoverItem.Name
         : StationGroupElementHoverItem.None;
     }
+    //Restore the saved context state and undo the changes to it.
     ctx.restore();
   }
 
@@ -85,6 +92,7 @@ export class StationGroupMapElement {
     const scaledStationHeight = GROUP_NAME_HEIGHT * scale;
     const scaledStationWidth = this.title.length * GROUP_CHARACTER_SIZE * scale;
 
+    //Check if cursor is within a rectangle set around the station group name.
     return (
       point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
       point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
@@ -110,6 +118,7 @@ export class StationGroupMapElement {
    * Marks the status of the station group element as updated.
    */
   markAsUpdated(): void {
+    //Only mark as updated if the station group isn't already marked as created or deleted.
     if (
       this.status !== MapItemStatus.Created &&
       this.status !== MapItemStatus.Deleted
@@ -122,6 +131,7 @@ export class StationGroupMapElement {
    * Marks the status of the station group element as deleted.
    */
   markAsDeleted(): void {
+    //Only mark as deleted if the station group isn't already marked as created.
     if (this.status !== MapItemStatus.Created) {
       this.status = MapItemStatus.Deleted;
     } else {
