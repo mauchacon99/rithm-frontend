@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
-import { QuestionFieldType } from 'src/models';
+import { OperandType, QuestionFieldType } from 'src/models';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -208,5 +208,10 @@ describe('RuleModalComponent', () => {
     expect(buttonClose).toBeTruthy();
     buttonClose.click();
     expect(component.dialogRef.close).toHaveBeenCalled();
+ 
+  it('should set the first operand type when calling setOperatorList', () => {
+    expect(component.firstOperandType).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.Number);
+    expect(component.firstOperandType).toEqual(OperandType.Number);
   });
 });
