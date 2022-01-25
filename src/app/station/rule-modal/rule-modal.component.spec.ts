@@ -43,7 +43,7 @@ describe('RuleModalComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
       ],
@@ -199,5 +199,20 @@ describe('RuleModalComponent', () => {
     expect(component.firstOperandType).toBeUndefined();
     component.setOperatorList(QuestionFieldType.Number);
     expect(component.firstOperandType).toEqual(OperandType.Number);
+  });
+
+  it('should set the first field type when calling setOperatorList', () => {
+    expect(component.firstFieldType).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.LongText);
+    expect(component.firstFieldType).toEqual(QuestionFieldType.LongText);
+  });
+
+  it('should close the rule modal when close-modal-btn clicked', () => {
+    spyOn(component.dialogRef, 'close');
+    const buttonClose =
+      fixture.debugElement.nativeElement.querySelector('#close-modal-btn');
+    expect(buttonClose).toBeTruthy();
+    buttonClose.click();
+    expect(component.dialogRef.close).toHaveBeenCalled();
   });
 });

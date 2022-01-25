@@ -133,6 +133,9 @@ export class RuleModalComponent implements OnInit {
   /** The value of the first operand type. */
   firstOperandType!: OperandType;
 
+  /** The value of the first question field type. */
+  firstFieldType!: QuestionFieldType;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
@@ -197,6 +200,8 @@ export class RuleModalComponent implements OnInit {
   setOperatorList(fieldType: QuestionFieldType): void {
     this.operatorList = [];
     this.operator = '';
+    //Set first field type for options of the second operand
+    this.firstFieldType = fieldType;
     switch (fieldType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:

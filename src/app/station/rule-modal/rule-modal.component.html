@@ -127,7 +127,10 @@
           <mat-select [(ngModel)]="secondOperand">
             <ng-container *ngFor="let question of questionStation">
               <mat-option
-                *ngIf="question.rithmId !== firstOperand"
+                *ngIf="
+                  question.rithmId !== firstOperand &&
+                  question.questionType === firstFieldType
+                "
                 [value]="question.rithmId"
               >
                 {{ question.prompt }}
@@ -191,6 +194,13 @@
     </mat-step>
   </mat-stepper>
   <div mat-dialog-actions class="flex justify-end">
-    <button mat-button mat-dialog-close (click)="closeModal()">Close</button>
+    <button
+      mat-button
+      mat-dialog-close
+      id="close-modal-btn"
+      (click)="closeModal()"
+    >
+      Close
+    </button>
   </div>
 </div>
