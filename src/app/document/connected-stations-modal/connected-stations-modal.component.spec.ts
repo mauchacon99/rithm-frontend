@@ -14,13 +14,13 @@ import { MockErrorService } from 'src/mocks/mock-error-service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { of, throwError } from 'rxjs';
-import { MoveDocument, User } from 'src/models';
+import { MoveDocument } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockPopupService } from 'src/mocks';
+import { MockPopupService, MockUserService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StationService } from 'src/app/core/station.service';
@@ -61,6 +61,7 @@ describe('ConnectedStationsModalComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: dialogRefSpyObj },
       ],
@@ -219,25 +220,13 @@ describe('ConnectedStationsModalComponent', () => {
     expect(errorComponent).toBeTruthy();
   });
 
-  fit('should call the method that returns all stations.', () => {
-    const expectUser: User = {
-      firstName: 'Samus',
-      lastName: 'Aran',
-      email: 'ycantmetroidcrawl@metroid.com',
-      isEmailVerified: true,
-      createdDate: new Date().toISOString(),
-      rithmId: 'kj34k3jkj',
-      notificationSettings: null,
-      role: 'admin',
-      organization: '',
-    };
+  it('should call the method that returns all stations.', () => {
     const getAllStations = spyOn(
       TestBed.inject(StationService),
       'getAllStations'
     ).and.callThrough();
-    spyOnProperty(TestBed.inject(UserService), 'user').and.returnValue(
-      expectUser
-    );
+
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
     component.ngOnInit();
     expect(getAllStations).toHaveBeenCalled();
   });

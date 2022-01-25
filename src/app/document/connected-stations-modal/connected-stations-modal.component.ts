@@ -72,8 +72,16 @@ export class ConnectedStationsModalComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    const isAdmin = this.userService?.isAdmin;
-    isAdmin ? this.getAllStations() : this.getConnectedStations();
+    this.isAdmin ? this.getAllStations() : this.getConnectedStations();
+  }
+
+  /**
+   * Gets check if user is Admin.
+   *
+   * @returns User is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.userService.isAdmin;
   }
 
   /**
