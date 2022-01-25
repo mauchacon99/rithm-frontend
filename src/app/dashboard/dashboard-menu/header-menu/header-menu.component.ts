@@ -20,6 +20,7 @@ export class HeaderMenuComponent implements OnInit {
 
   /** Show error if fail get organization info.*/
   failedGetOrganization = false;
+
   /** Organization information loading inline. */
   isLoading = true;
 

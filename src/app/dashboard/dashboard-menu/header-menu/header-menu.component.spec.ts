@@ -90,6 +90,8 @@ describe('HeaderMenuComponent', () => {
   });
 
   it('should show name organization', () => {
+    component.isLoading = false;
+    fixture.detectChanges();
     const OrganizationInfo =
       fixture.debugElement.nativeElement.querySelector('#info-organization');
     expect(OrganizationInfo).toBeTruthy();
@@ -115,14 +117,13 @@ describe('HeaderMenuComponent', () => {
   });
 
   it('should show loading organization info while data is loading', () => {
-  const data = '123-123';
-  component['getOrganizationInfo'](data);
-  fixture.detectChanges();
-  expect(component.isLoading).toBeTrue();
-  const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-    '#organization-name-loading'
-  );
-  expect(loadingComponent).toBeTruthy();
+    const data = '123-123';
+    component['getOrganizationInfo'](data);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#organization-name-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
-
 });
