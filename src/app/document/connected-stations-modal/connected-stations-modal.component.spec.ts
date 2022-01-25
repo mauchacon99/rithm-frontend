@@ -230,4 +230,10 @@ describe('ConnectedStationsModalComponent', () => {
     component.ngOnInit();
     expect(getAllStations).toHaveBeenCalled();
   });
+
+  it('should test method get isAdmin', () => {
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    const valueExpected = component.isAdmin;
+    expect(valueExpected).toBe(true);
+  });
 });

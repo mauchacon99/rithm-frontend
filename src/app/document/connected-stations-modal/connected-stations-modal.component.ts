@@ -154,7 +154,7 @@ export class ConnectedStationsModalComponent implements OnInit {
         },
         error: (error: unknown) => {
           this.errorService.displayError(
-            'Failed to get connected stations for this document.',
+            'Failed to get all stations for this document.',
             error,
             false
           );
