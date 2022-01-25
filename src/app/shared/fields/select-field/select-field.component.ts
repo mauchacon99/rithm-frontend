@@ -55,7 +55,7 @@ export class SelectFieldComponent
    */
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []],
+      [this.field.questionType]: [this.fieldValue, []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -156,8 +156,59 @@ export class SelectFieldComponent
       stationRithmId: '',
       value: selectResponse,
       type: this.field.questionType,
-      questionUpdated: false,
+      questionUpdated: true,
     };
     this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string | string[] | undefined {
+    let fieldVal;
+    switch (this.field.questionType) {
+      case QuestionFieldType.State:
+        fieldVal = this.field.answer?.asString
+          ? this.field.answer?.asString
+          : '';
+        break;
+      case QuestionFieldType.Select:
+        /**if Finally there's an answer list to select */
+        if (
+          this.field.answer &&
+          this.field.answer?.asArray &&
+          this.field.answer?.asArray?.length > 0
+        ) {
+          const target = this.field.answer?.asArray.find(
+            (arrayItem) => arrayItem.isChecked === true
+          );
+          fieldVal = target ? target.value : '';
+        }
+        break;
+      case QuestionFieldType.MultiSelect:
+        /**if Finally there's an answer list to select */
+        if (
+          this.field.answer &&
+          this.field.answer?.asArray &&
+          this.field.answer?.asArray?.length > 0
+        ) {
+          // eslint-disable-next-line max-len
+          const targets = this.field.answer?.asArray
+            .filter((arrayItems) => arrayItems.isChecked === true)
+            .map((item) => {
+              return item.value;
+            });
+          if (targets) {
+            fieldVal = targets;
+          }
+        }
+        break;
+      default:
+        fieldVal = '';
+        break;
+    }
+    return fieldVal;
   }
 }

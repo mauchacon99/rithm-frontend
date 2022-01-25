@@ -1056,7 +1056,12 @@ export class MockDocumentService {
           answer: {
             questionRithmId: 'string',
             referAttribute: 'string',
-            asArray: [],
+            asArray: [
+              {
+                value: 'string',
+                isChecked: false,
+              }
+            ],
             asInt: 0,
             asDecimal: 0,
             asString: 'string',

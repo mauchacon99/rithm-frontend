@@ -90,7 +90,7 @@ export class TextFieldComponent
    */
   ngOnInit(): void {
     this.textFieldForm = this.fb.group({
-      [this.field.questionType]: [this.field.value ? this.field.value : '', []],
+      [this.field.questionType]: [this.fieldValue, []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -203,7 +203,7 @@ export class TextFieldComponent
       stationRithmId: '',
       value: this.textFieldForm.controls[this.field.questionType].value,
       type: this.field.questionType,
-      questionUpdated: false,
+      questionUpdated: true,
     };
     this.documentService.updateAnswerSubject(documentAnswer);
   }
@@ -215,5 +215,34 @@ export class TextFieldComponent
    */
   removeField(field: Question): void {
     this.removeOptionField.emit(field);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string {
+    let fieldVal = '';
+    if (this.isStation) {
+      fieldVal = this.field.value ? this.field.value : '';
+    } else {
+      switch (this.field.questionType) {
+        case QuestionFieldType.ShortText:
+        case QuestionFieldType.LongText:
+        case QuestionFieldType.URL:
+        case QuestionFieldType.Email:
+        case QuestionFieldType.City:
+        case QuestionFieldType.Number:
+          fieldVal = this.field.answer?.asString
+            ? this.field.answer?.asString
+            : '';
+          break;
+        default:
+          fieldVal = '';
+          break;
+      }
+    }
+    return fieldVal;
   }
 }

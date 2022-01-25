@@ -9,7 +9,14 @@ export interface QuestionAnswer {
   referAttribute: string;
 
   /** Whether the current question has multiple answers in it.*/
-  asArray?: [];
+  asArray?: [
+    {
+      /** The text value of the item.*/
+      value: string;
+      /** Whether the item is checked or not. */
+      isChecked: boolean;
+    }
+  ];
 
   /** Whether the current question has int answer.*/
   asInt?: number;

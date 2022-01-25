@@ -1,4 +1,11 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnInit,
+  NgZone,
+  Inject,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -9,6 +16,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { first } from 'rxjs';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
 import { QuestionFieldType, Question } from 'src/models';
 
@@ -47,7 +55,10 @@ export class DateFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    @Inject(NgZone) private ngZone: NgZone
+  ) {}
 
   /**
    * Set up FormBuilder group.
@@ -91,6 +102,10 @@ export class DateFieldComponent
     // TODO: check for memory leak
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.dateFieldForm.valueChanges.subscribe(fn);
+    this.ngZone.onStable.pipe(first()).subscribe(() => {
+      this.dateFieldForm.get('date')?.markAsTouched();
+      this.dateFieldForm.get('date')?.updateValueAndValidity();
+    });
   }
 
   /**

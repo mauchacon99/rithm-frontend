@@ -83,11 +83,32 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
+    <ng-template *ngIf="isStation; noStation">
+      <input
+        *ngIf="field.questionType !== fieldTypeEnum.Instructions"
+        matInput
+        type="{{ toolBar ? 'text' : field.questionType }}"
+        [required]="field.isRequired"
+        [formControlName]="field.questionType"
+        autocomplete="off"
+        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+      />
+      <textarea
+        *ngIf="field.questionType === fieldTypeEnum.Instructions"
+        matInput
+        rows="3"
+        spellcheck="true"
+        [required]="
+          field.isRequired || field.questionType === fieldTypeEnum.Instructions
+        "
+        [formControlName]="field.questionType"
+        (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
+      >
+      </textarea>
+    </ng-template>
+    <ng-template #noStation> </ng-template>
     <input
-      *ngIf="
-        (isStation && field.questionType === fieldTypeEnum.LongText) ||
-        field.questionType !== fieldTypeEnum.Instructions
-      "
+      *ngIf="field.questionType !== fieldTypeEnum.LongText"
       matInput
       type="{{ toolBar ? 'text' : field.questionType }}"
       [required]="field.isRequired"
@@ -96,17 +117,11 @@
       (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     />
     <textarea
-      *ngIf="
-        (!isStation && field.questionType === fieldTypeEnum.LongText) ||
-        field.questionType === fieldTypeEnum.Instructions
-      "
+      *ngIf="field.questionType === fieldTypeEnum.LongText"
       matInput
-      placeholder="{{ field?.prompt }}"
       rows="3"
       spellcheck="true"
-      [required]="
-        field.isRequired || field.questionType === fieldTypeEnum.Instructions
-      "
+      [required]="field.isRequired"
       [formControlName]="field.questionType"
       (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     >

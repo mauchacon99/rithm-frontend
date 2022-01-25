@@ -5,7 +5,6 @@
       *ngIf="field.questionType === fieldTypeEnum.Date"
       matInput
       [matDatepicker]="picker"
-      placeholder="{{ field.prompt }}"
       [required]="field.isRequired"
       formControlName="date"
     />

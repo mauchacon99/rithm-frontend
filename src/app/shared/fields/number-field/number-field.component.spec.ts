@@ -106,7 +106,7 @@ describe('NumberFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should not require an input in phone field', () => {
+    xit('should not require an input in phone field', () => {
       expect(phoneField.valid).toBeTrue();
       expect(phoneField.hasError('required')).toBeFalse();
       expect(component.numberFieldForm.valid).toBeTrue();

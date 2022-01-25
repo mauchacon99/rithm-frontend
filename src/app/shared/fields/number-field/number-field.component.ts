@@ -59,7 +59,7 @@ export class NumberFieldComponent
    */
   ngOnInit(): void {
     this.numberFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []],
+      [this.field.questionType]: [this.fieldValue, []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -164,8 +164,38 @@ export class NumberFieldComponent
       stationRithmId: '',
       value: this.numberFieldForm.controls[this.field.questionType].value,
       type: this.field.questionType,
-      questionUpdated: false,
+      questionUpdated: true,
     };
     this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string | number | undefined {
+    let fieldVal;
+    if (this.field.answer && this.field.answer?.referAttribute) {
+      switch (this.field.answer?.referAttribute) {
+        case 'asInt':
+          fieldVal = this.field.answer?.asInt ? this.field.answer?.asInt : 0;
+          break;
+        case 'asDecimal':
+          fieldVal = this.field.answer?.asDecimal
+            ? this.field.answer?.asDecimal
+            : 0;
+          break;
+        case 'asString':
+          fieldVal = this.field.answer?.asString
+            ? this.field.answer?.asString
+            : '';
+          break;
+        default:
+          fieldVal = undefined;
+          break;
+      }
+    }
+    return fieldVal;
   }
 }

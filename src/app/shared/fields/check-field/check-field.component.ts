@@ -67,7 +67,7 @@ export class CheckFieldComponent
     let fields: { [key: string]: unknown } = {};
 
     this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem-${index}`] = [false];
+      fields[`checkItem-${index}`] = [this.getCheckedItem(index)];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -188,8 +188,34 @@ export class CheckFieldComponent
       stationRithmId: '',
       value: checkBoxesResponse,
       type: this.field.questionType,
-      questionUpdated: false,
+      questionUpdated: true,
     };
     this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Returns true when the field is an Answer marked as true.
+   *
+   * @param checkboxIndex The current answer field index.
+   * @returns True/false to mark the checkbox as check/uncheck.
+   */
+  getCheckedItem(checkboxIndex: number): boolean {
+    let isChecked;
+    const checkboxText = this.field.possibleAnswers
+      ? this.field.possibleAnswers[checkboxIndex].text
+      : '';
+    if (
+      this.field.answer &&
+      this.field.answer?.asArray &&
+      this.field.answer?.asArray?.length > 0
+    ) {
+      const target = this.field.answer?.asArray.find(
+        (arrayItem) => arrayItem.value === checkboxText
+      );
+      isChecked = target ? target.isChecked : false;
+    } else {
+      isChecked = false;
+    }
+    return isChecked;
   }
 }
