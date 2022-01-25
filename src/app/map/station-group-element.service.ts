@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationGroupMapElement } from 'src/helpers';
-import { StationGroupElementHoverItem, Point } from 'src/models';
+import { StationGroupElementHoverItem, Point, MapMode } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   STATION_GROUP_PADDING,
@@ -12,6 +12,14 @@ import {
   STATION_GROUP_NAME_PADDING,
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
+  CONNECTION_LINE_WIDTH_SELECTED,
+  MAP_SELECTED,
+  MAP_DISABLED_STROKE,
+  MAP_DEFAULT_COLOR,
+  TOOLTIP_RADIUS,
+  TOOLTIP_HEIGHT,
+  TOOLTIP_WIDTH,
+  TOOLTIP_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -98,6 +106,15 @@ export class StationGroupElementService {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
       this.drawStationGroupName(stationGroup);
+      if (
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        stationGroup.disabled &&
+        !stationGroup.selected &&
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name)
+      ) {
+        this.drawStationGroupToolTip(stationGroup);
+      }
     }
   }
 
@@ -124,12 +141,116 @@ export class StationGroupElementService {
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? NODE_HOVER_COLOR
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      stationGroup.selected
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
-    ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (stationGroup.selected ||
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          !stationGroup.disabled))
+    ) {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH_SELECTED;
+    } else {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Draws the station group tooltip on the map for a station group.
+   *
+   * @param stationGroup The station group for which to draw the tooltip.
+   */
+  private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the tooltip if context is not defined');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = stationGroup.boundaryPoints[0].x;
+    const startingY =
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
+      65 * this.mapScale;
+
+    const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
+    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledTooltipRadius, startingY);
+    ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY,
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipRadius
+    );
+    // line going to bottom right
+    ctx.lineTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // bottom right curve to line going to bottom left
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight,
+      startingX + scaledTooltipWidth - scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // line going to bottom left
+    ctx.lineTo(
+      startingX + scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // bottom left curve to line going to top left
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY + scaledTooltipHeight,
+      startingX,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius);
+    // top left curve to line going top right
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY,
+      startingX + scaledTooltipRadius,
+      startingY
+    );
+    ctx.closePath();
+    ctx.fillStyle = '#000000';
+    ctx.globalAlpha = 0.6;
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = MAP_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
+    ctx.fillText(
+      'Cannot add group to',
+      startingX + scaledTooltipPadding,
+      startingY + 12 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
+    ctx.fillText(
+      'current selection',
+      startingX + scaledTooltipPadding,
+      startingY + 32 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
   }
 
   /**
@@ -148,7 +269,16 @@ export class StationGroupElementService {
     // The name of the station group.
     // Change color when hovered over.
     this.canvasContext.fillStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Name
+      stationGroup.selected ||
+      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+        !stationGroup.disabled &&
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ? MAP_SELECTED
+        : stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ? NODE_HOVER_COLOR
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);

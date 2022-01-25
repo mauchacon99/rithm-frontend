@@ -7,12 +7,12 @@
   class="h-full info-drawer-document"
 >
   <mat-drawer #detailDrawer mode="over" position="end">
-    <app-detail-drawer
-      *ngIf="drawerContext === 'comments' || drawerContext === 'history'"
-    ></app-detail-drawer>
+    <app-detail-drawer *ngIf="drawerContext === 'comments'"></app-detail-drawer>
     <app-info-drawer
       *ngIf="
-        drawerContext === 'stationInfo' || drawerContext === 'documentInfo'
+        drawerContext === 'stationInfo' ||
+        drawerContext === 'documentInfo' ||
+        drawerContext === 'history'
       "
     ></app-info-drawer>
   </mat-drawer>

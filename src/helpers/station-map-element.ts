@@ -112,6 +112,7 @@ export class StationMapElement {
     const interactiveNodeRadius = NODE_RADIUS * scale + 8;
     const scaledNodeYMargin = NODE_Y_MARGIN * scale;
 
+    //Check if cursor is within a box around the connection node as long as in build mode.
     return (
       point.x >= startingX + scaledStationWidth - interactiveNodeRadius &&
       point.x <= startingX + scaledStationWidth + interactiveNodeRadius &&
@@ -146,6 +147,7 @@ export class StationMapElement {
     const scaledButtonYMargin = BUTTON_Y_MARGIN * scale;
     const scaledButtonMargin = BADGE_MARGIN * scale;
 
+    //Check if cursor is within a box around the options button as long as in build mode.
     return (
       point.x >=
         startingX +
@@ -159,7 +161,8 @@ export class StationMapElement {
           interactiveButtonRadius &&
       point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius &&
       point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius &&
-      mode !== MapMode.View
+      mode !== MapMode.View &&
+      mode !== MapMode.StationGroupAdd
     );
   }
 
@@ -179,6 +182,7 @@ export class StationMapElement {
     const interactiveBadgeRadius = BADGE_RADIUS * scale;
     const scaledBadgeMargin = BADGE_MARGIN * scale;
 
+    //Check if cursor is within a box around the document badge as long as not in group add mode.
     return (
       point.x >=
         startingX +
@@ -191,7 +195,8 @@ export class StationMapElement {
           scaledBadgeMargin +
           interactiveBadgeRadius &&
       point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius &&
-      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius &&
+      mode !== MapMode.StationGroupAdd
     );
   }
 
@@ -207,6 +212,7 @@ export class StationMapElement {
     const scaledStationHeight = STATION_HEIGHT * scale;
     const scaledStationWidth = STATION_WIDTH * scale;
 
+    //Check if cursor is within the station card.
     return (
       point.x >= this.canvasPoint.x &&
       point.x <= this.canvasPoint.x + scaledStationWidth &&
@@ -219,6 +225,7 @@ export class StationMapElement {
    * Marks the status of the station element as updated.
    */
   markAsUpdated(): void {
+    //Only mark as updated if the station isn't already marked as created or deleted.
     if (
       this.status !== MapItemStatus.Created &&
       this.status !== MapItemStatus.Deleted
@@ -231,6 +238,7 @@ export class StationMapElement {
    * Marks the status of the station element as deleted.
    */
   markAsDeleted(): void {
+    //Only mark as deleted if the station group isn't already marked as created.
     if (this.status !== MapItemStatus.Created) {
       this.status = MapItemStatus.Deleted;
     } else {
@@ -245,7 +253,7 @@ export class StationMapElement {
    * Compares the modified station with stored station data.
    *
    * @param station The station to compare this station against.
-   * @returns Returns TRUE is data is same else FALSE.
+   * @returns Returns TRUE if data is same else FALSE.
    */
   isIdenticalTo(station: StationMapElement): boolean {
     return (
