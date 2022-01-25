@@ -55,6 +55,7 @@ describe('StationInfoDrawerComponent', () => {
         MatRadioModule,
         RouterTestingModule.withRoutes([
           { path: 'document', component: MockComponent(DocumentComponent) },
+          { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
       ],
       providers: [
@@ -227,39 +228,19 @@ describe('StationInfoDrawerComponent', () => {
     expect(valueExpected).toBeTrue();
   });
 
-  it('should create a document', fakeAsync(() => {
-    const documentId = '78DF8E53-549E-44CD-8056-A2CBA055F32F';
+  it('should create a document', async () => {
     const createDocumentSpy = spyOn(
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.callThrough();
 
-    const notifySpy = spyOn(
-      TestBed.inject(PopupService),
-      'notify'
-    ).and.callThrough();
-
-    const userService = TestBed.inject(UserService);
-    const user = userService.user;
-
-    const assignUser = spyOn(
-      component,
-      'assignUserToDocument'
-    ).and.callThrough();
-
-    component.createNewDocument();
-    tick();
+    await component.createNewDocument();
     expect(createDocumentSpy).toHaveBeenCalledOnceWith(
       '',
       0,
       component.stationRithmId
     );
-    tick(1000);
-    expect(notifySpy).toHaveBeenCalledOnceWith(
-      'The document has been created successfully.'
-    );
-    expect(assignUser).toHaveBeenCalledWith(user.rithmId, documentId);
-  }));
+  });
 
   it('should catch an error if creating the document fails', async () => {
     spyOn(TestBed.inject(DocumentService), 'createNewDocument').and.returnValue(
@@ -313,7 +294,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
-
+    Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     fixture.detectChanges();
 
     const createDocumentSpy = spyOn(component, 'createNewDocument');
@@ -345,6 +326,7 @@ describe('StationInfoDrawerComponent', () => {
   it('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
+    Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
     await component.createNewDocument();
     fixture.detectChanges();
     expect(component.docCreationLoading).toBe(true);
