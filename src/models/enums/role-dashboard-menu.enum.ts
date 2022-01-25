@@ -3,5 +3,5 @@ export enum RoleDashboardMenu {
   DashboardOrganization = 'DashboardOrganization',
 
   /** Dashboard personal. */
-  DashboardPersonal = 'DashboardPersonal',
+  DashboardPersonal = 'dashboardPersonal',
 }
