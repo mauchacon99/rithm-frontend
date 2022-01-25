@@ -208,7 +208,8 @@ describe('RuleModalComponent', () => {
     expect(buttonClose).toBeTruthy();
     buttonClose.click();
     expect(component.dialogRef.close).toHaveBeenCalled();
- 
+  });
+
   it('should set the first operand type when calling setOperatorList', () => {
     expect(component.firstOperandType).toBeUndefined();
     component.setOperatorList(QuestionFieldType.Number);
