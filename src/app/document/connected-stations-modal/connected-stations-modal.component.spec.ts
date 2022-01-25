@@ -20,8 +20,11 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.compon
 import { MockComponent } from 'ng-mocks';
 import { Router } from '@angular/router';
 import { PopupService } from 'src/app/core/popup.service';
-import { MockPopupService } from 'src/mocks';
+import { MockPopupService, MockUserService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { HttpClientModule } from '@angular/common/http';
+import { StationService } from 'src/app/core/station.service';
+import { UserService } from 'src/app/core/user.service';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -52,11 +55,13 @@ describe('ConnectedStationsModalComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
+        HttpClientModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: DocumentService, useClass: MockDocumentService },
+        { provide: UserService, useClass: MockUserService },
         { provide: PopupService, useClass: MockPopupService },
         { provide: MatDialogRef, useValue: dialogRefSpyObj },
       ],
@@ -213,5 +218,22 @@ describe('ConnectedStationsModalComponent', () => {
       '#move-document-error'
     );
     expect(errorComponent).toBeTruthy();
+  });
+
+  it('should call the method that returns all stations.', () => {
+    const getAllStations = spyOn(
+      TestBed.inject(StationService),
+      'getAllStations'
+    ).and.callThrough();
+
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    component.ngOnInit();
+    expect(getAllStations).toHaveBeenCalled();
+  });
+
+  it('should test method get isAdmin', () => {
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    const valueExpected = component.isAdmin;
+    expect(valueExpected).toBe(true);
   });
 });
