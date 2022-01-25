@@ -19,7 +19,7 @@
       [inlineText]="'Loading...'"
     ></app-loading-indicator>
   </div>
-  <div *ngIf="organizationInfo" class="flex justify-between items-end">
+  <div *ngIf="!nameOrganizationLoading" class="flex justify-between items-end">
     <div class="flex items-end">
       <img
         src="assets/logo/black-icon-only.svg"
