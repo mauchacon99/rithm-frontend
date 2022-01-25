@@ -84,7 +84,7 @@ describe('HeaderMenuComponent', () => {
     expect(expectSpyService).toHaveBeenCalled();
   });
 
-  fit('should show error message when fail request get name', () => {
+  it('should show error message when fail request get name', () => {
     const OrganizationInfoShow =
       fixture.debugElement.nativeElement.querySelector('#info-organization');
     expect(OrganizationInfoShow).toBeTruthy();
