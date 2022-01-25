@@ -24,12 +24,12 @@
         {{ organizationInfo.name }}
       </p>
     </div>
-    <p
-      *ngIf="failedGetOrganization"
-      class="w-full text-error-500 truncate"
-      id="failed-info-organization"
-    >
-      Name of organization not obtained
-    </p>
+    <div *ngIf="failedGetOrganization" id="failed-info-organization">
+      <p
+        class="w-full text-error-500 truncate"
+      >
+       Name of organization not obtained
+      </p>
+    </div>
   </div>
 </div>
