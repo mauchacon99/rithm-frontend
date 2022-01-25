@@ -53,7 +53,7 @@ export class HeaderMenuComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (organization) => {
-          this.failedGetName = false;
+          this.failedGetOrganization = false;
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
