@@ -10,7 +10,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable field for every select/multi select dropdown.
@@ -44,14 +45,20 @@ export class SelectFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService
+  ) {}
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
-      [this.field.questionType]: ['', []],
+      [this.field.questionType]: [
+        this.fieldValue !== undefined ? this.fieldValue : '',
+        [],
+      ],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -130,5 +137,81 @@ export class SelectFieldComponent
             message: 'Select field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    let selectResponse = '';
+    if (this.field.questionType === QuestionFieldType.Select) {
+      selectResponse = this.selectFieldForm.get(this.field.questionType)?.value;
+    } else {
+      selectResponse = this.selectFieldForm
+        .get(this.field.questionType)
+        ?.value.toString()
+        .replace(/,/g, '|');
+    }
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: selectResponse,
+      type: this.field.questionType,
+      questionUpdated: true,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string | string[] | undefined {
+    let fieldVal;
+    switch (this.field.questionType) {
+      case QuestionFieldType.State:
+        fieldVal = this.field.answer?.asString
+          ? this.field.answer?.asString
+          : '';
+        break;
+      case QuestionFieldType.Select:
+        /**if Finally there's an answer list to select */
+        if (
+          this.field.answer &&
+          this.field.answer?.asArray &&
+          this.field.answer?.asArray?.length > 0
+        ) {
+          const target = this.field.answer?.asArray.find(
+            (arrayItem) => arrayItem.isChecked === true
+          );
+          fieldVal = target ? target.value : '';
+        }
+        break;
+      case QuestionFieldType.MultiSelect:
+        /**if Finally there's an answer list to select */
+        if (
+          this.field.answer &&
+          this.field.answer?.asArray &&
+          this.field.answer?.asArray?.length > 0
+        ) {
+          // eslint-disable-next-line max-len
+          const targets = this.field.answer?.asArray
+            .filter((arrayItems) => arrayItems.isChecked === true)
+            .map((item) => {
+              return item.value;
+            });
+          if (targets) {
+            fieldVal = targets;
+          }
+        }
+        break;
+      default:
+        fieldVal = undefined;
+        break;
+    }
+    return fieldVal;
   }
 }
