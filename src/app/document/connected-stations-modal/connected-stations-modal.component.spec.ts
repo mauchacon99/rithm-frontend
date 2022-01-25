@@ -14,7 +14,7 @@ import { MockErrorService } from 'src/mocks/mock-error-service';
 import { DocumentService } from 'src/app/core/document.service';
 import { MockDocumentService } from 'src/mocks/mock-document-service';
 import { of, throwError } from 'rxjs';
-import { MoveDocument } from 'src/models';
+import { MoveDocument, User } from 'src/models';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from 'src/app/dashboard/dashboard/dashboard.component';
 import { MockComponent } from 'ng-mocks';
@@ -22,6 +22,9 @@ import { Router } from '@angular/router';
 import { PopupService } from 'src/app/core/popup.service';
 import { MockPopupService } from 'src/mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
+import { HttpClientModule } from '@angular/common/http';
+import { StationService } from 'src/app/core/station.service';
+import { UserService } from 'src/app/core/user.service';
 
 const DATA_TEST = {
   documentRithmId: 'E204F369-386F-4E41',
@@ -52,6 +55,7 @@ describe('ConnectedStationsModalComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
+        HttpClientModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: DATA_TEST },
@@ -213,5 +217,28 @@ describe('ConnectedStationsModalComponent', () => {
       '#move-document-error'
     );
     expect(errorComponent).toBeTruthy();
+  });
+
+  fit('should call the method that returns all stations.', () => {
+    const expectUser: User = {
+      firstName: 'Samus',
+      lastName: 'Aran',
+      email: 'ycantmetroidcrawl@metroid.com',
+      isEmailVerified: true,
+      createdDate: new Date().toISOString(),
+      rithmId: 'kj34k3jkj',
+      notificationSettings: null,
+      role: 'admin',
+      organization: '',
+    };
+    const getAllStations = spyOn(
+      TestBed.inject(StationService),
+      'getAllStations'
+    ).and.callThrough();
+    spyOnProperty(TestBed.inject(UserService), 'user').and.returnValue(
+      expectUser
+    );
+    component.ngOnInit();
+    expect(getAllStations).toHaveBeenCalled();
   });
 });
