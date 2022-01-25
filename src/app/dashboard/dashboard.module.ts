@@ -25,6 +25,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module'
     MatExpansionModule,
     MatListModule,
     UserAvatarModule,
+    MatMenuModule,
   ],
 })
 export class DashboardModule {}
