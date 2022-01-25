@@ -84,16 +84,19 @@ describe('HeaderMenuComponent', () => {
     expect(expectSpyService).toHaveBeenCalled();
   });
 
-  it('should show error message when fail request get name', () => {
-    const OrganizationInfoShow =
+  it('should show name organization', () => {
+    const OrganizationInfo =
       fixture.debugElement.nativeElement.querySelector('#info-organization');
-    expect(OrganizationInfoShow).toBeTruthy();
+    expect(OrganizationInfo).toBeTruthy();
 
-    const showErrorHidden = fixture.debugElement.nativeElement.querySelector(
+    const showError = fixture.debugElement.nativeElement.querySelector(
       '#failed-info-organization'
     );
-    expect(showErrorHidden).toBeNull();
+    expect(showError).toBeNull();
 
+  });
+
+  it('should show error message when fail request get name', () => {
     component.failedGetOrganization = true;
     fixture.detectChanges();
 
@@ -106,4 +109,6 @@ describe('HeaderMenuComponent', () => {
     );
     expect(showError).toBeTruthy();
   });
+
+
 });

@@ -24,7 +24,7 @@
         class="w-10 mr-2"
         alt="Logo Rithm"
       />
-      <div class="w-[200px] md:w-[260px]">
+      <div class="w-[215px] md:w-[270px]">
         <p *ngIf="organizationInfo" class="font-semibold truncate">
           {{ organizationInfo.name }}
         </p>
@@ -33,7 +33,7 @@
     <div
       *ngIf="failedGetOrganization"
       id="failed-info-organization"
-      class="w-full"
+      class="w-[260px] md:w-[320px]"
     >
       <p class="text-error-500 truncate">Name of organization not obtained</p>
     </div>
