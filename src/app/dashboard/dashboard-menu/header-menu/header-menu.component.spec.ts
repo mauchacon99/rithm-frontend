@@ -95,7 +95,7 @@ describe('HeaderMenuComponent', () => {
     fixture.detectChanges();
     expect(component.nameOrganizationLoading).toBeTrue();
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
-      '#organizationName-loading'
+      '#organization-name-loading'
     );
     expect(loadingComponent).toBeTruthy();
   });
