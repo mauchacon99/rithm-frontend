@@ -1187,6 +1187,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      //Loop through the station group matrix to check if there is a station group being interacted with.
+      for (const stationGroup of this.stationGroups) {
+        //Checks whether the station group boundary is being hovered over.
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          eventCanvasPoint,
+          this.context,
+          this.scale
+        );
+
+        //If hovering over the station group boundary or name.
+        if (stationGroup.hoverItem !== StationGroupElementHoverItem.None) {
+          stationGroup.dragging = true;
+          //Set the current dragItem to StationGroup
+          this.dragItem = MapDragItem.StationGroup;
+          break;
+        }
+      }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       //Find the station that is being dragged.
       if (this.stations.find((obj) => obj.dragging === true)) {
@@ -1388,6 +1407,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.storedConnectionLine = null;
         }
       }
+    }
+
+    //If dragging a Station Group.
+    if (this.dragItem === MapDragItem.StationGroup) {
+      //Loop through the station group array to check if there is a station group with dragging in true.
+      this.stationGroups.forEach((stationGroup) => {
+        if (stationGroup.dragging) {
+          stationGroup.dragging = false;
+        }
+      });
     }
 
     //Reset properties.
