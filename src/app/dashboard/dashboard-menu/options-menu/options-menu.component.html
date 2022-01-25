@@ -4,7 +4,7 @@
   (click)="openOptionsMenu($event)"
   mat-icon-button
   [attr.data-testid]="'button-more-' + dashboardRole"
-  id="button-more-{{ dashboardRole }}"
+  [id]="'button-more-' + dashboardRole"
 >
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
