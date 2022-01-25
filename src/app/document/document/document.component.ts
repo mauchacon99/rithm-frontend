@@ -137,10 +137,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!this.isWidget) {
       this.getParams();
     } else {
-      this.getDocumentStationData(
-        this.documentRithmIdWidget,
-        this.stationRithmIdWidget
-      );
+      this.documentId = this.documentRithmIdWidget;
+      this.stationId = this.stationRithmIdWidget;
+      this.getDocumentStationData();
     }
   }
 
