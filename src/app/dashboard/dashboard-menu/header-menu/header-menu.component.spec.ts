@@ -93,7 +93,6 @@ describe('HeaderMenuComponent', () => {
       '#failed-info-organization'
     );
     expect(showError).toBeNull();
-
   });
 
   it('should show error message when fail request get name', () => {
@@ -109,6 +108,4 @@ describe('HeaderMenuComponent', () => {
     );
     expect(showError).toBeTruthy();
   });
-
-
 });
