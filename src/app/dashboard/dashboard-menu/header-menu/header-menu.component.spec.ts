@@ -90,11 +90,13 @@ describe('HeaderMenuComponent', () => {
   });
 
   it('should show loading organization name while data is loading', () => {
-    component.organizationInfo.name = '';
+    const data = '123-123';
+    component['getOrganizationInfo'](data);
     fixture.detectChanges();
+    expect(component.nameOrganizationLoading).toBeTrue();
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#organizationName-loading'
     );
     expect(loadingComponent).toBeTruthy();
-});
+  });
 });

@@ -13,25 +13,22 @@
   </div>
 
   <!-- Header information of the organization. -->
-  <div class="flex justify-between items-end">
+  <div *ngIf="nameOrganizationLoading" class="items-center py-2">
+    <app-loading-indicator
+      id="organizationName-loading"
+      [inlineText]="'Loading...'"
+    ></app-loading-indicator>
+  </div>
+  <div *ngIf="organizationInfo" class="flex justify-between items-end">
     <div class="flex items-end">
       <img
         src="assets/logo/black-icon-only.svg"
         class="w-10 mr-2"
         alt="Logo Rithm"
       />
-      <p *ngIf="organizationInfo" class="font-semibold w-24 truncate">
+      <p *ngIf="organizationInfo.name" class="font-semibold w-24 truncate">
         {{ organizationInfo.name }}
       </p>
-      <div
-        *ngIf="!organizationName || organizationName === ''"
-        class="w-24 items-center py-2"
-      >
-        <app-loading-indicator
-          id="organizationName-loading"
-          [inlineText]="'Loading...'"
-        ></app-loading-indicator>
-      </div>
     </div>
   </div>
 </div>

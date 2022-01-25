@@ -18,6 +18,9 @@ export class HeaderMenuComponent implements OnInit {
   /** Information about organization. */
   organizationInfo!: OrganizationInfo;
 
+  /** Name organization loading inline. */
+  nameOrganizationLoading = true;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -45,14 +48,17 @@ export class HeaderMenuComponent implements OnInit {
    * @param organizationId String of user organization.
    */
   private getOrganizationInfo(organizationId: string): void {
+    this.nameOrganizationLoading = true;
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe({
         next: (organization) => {
+          this.nameOrganizationLoading = false;
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
+          this.nameOrganizationLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
