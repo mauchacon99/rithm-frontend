@@ -12,7 +12,7 @@ import { RoleDashboardMenu } from 'src/models';
 })
 export class OptionsMenuComponent {
   /**
-   * Dashboard type.
+   * Dashboard type from expansion-menu.
    */
   @Input() dashboardRole!: RoleDashboardMenu;
 
