@@ -301,7 +301,8 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  xit('should make request to save document answer', () => { /** FormData to be fixed here. */
+  xit('should make request to save document answer', () => {
+    /** FormData to be fixed here. */
     const expectedAnswers: DocumentAnswer[] = [
       {
         questionRithmId: 'Dev 1',
@@ -406,7 +407,7 @@ describe('DocumentService', () => {
             {
               value: 'string',
               isChecked: false,
-            }
+            },
           ],
           asInt: 0,
           asDecimal: 0,

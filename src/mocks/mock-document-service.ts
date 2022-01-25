@@ -1060,7 +1060,7 @@ export class MockDocumentService {
               {
                 value: 'string',
                 isChecked: false,
-              }
+              },
             ],
             asInt: 0,
             asDecimal: 0,
