@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ZOOM_VELOCITY } from 'src/app/map/map-constants';
-import { StationMapElement } from 'src/helpers';
+import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import {
   MapData,
   MapItemStatus,
@@ -27,6 +27,9 @@ export class MockMapService {
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
+
+  /** The station group elements displayed on the map. */
+  stationGroupElements: StationGroupMapElement[] = [];
 
   /** The station element displayed on the map. */
   station = new StationMapElement({
@@ -365,5 +368,22 @@ export class MockMapService {
       .map((connectedStation) => {
         connectedStation.isAddingConnected = false;
       });
+  }
+
+  /**
+   * Reset disable and true status to false when a station-group is deselected.
+   */
+  resetSelectedStationGroupStationStatus(): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.selected = false;
+      stationGroup.disabled = false;
+      stationGroup.stations.map((station) => {
+        const stationIndex = this.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        this.stationElements[stationIndex].selected = false;
+        this.stationElements[stationIndex].disabled = false;
+      });
+    });
   }
 }

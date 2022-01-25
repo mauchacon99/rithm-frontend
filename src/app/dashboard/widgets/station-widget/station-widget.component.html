@@ -27,9 +27,27 @@
   </div>
 </div>
 
+<!--Document detail-->
+<div class="h-full p-2" *ngIf="isDocument" id="document-detail">
+  <!--  header -->
+  <div class="flex justify-between items-center">
+    <button
+      mat-icon-button
+      (click)="viewDocument('')"
+      id="return-list-documents"
+      data-testid="return-list-documents"
+    >
+      <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
+    </button>
+    <button mat-icon-button id="expand-document" data-testid="expand-document">
+      <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
+    </button>
+  </div>
+</div>
+
 <!-- station widget -->
 <div
-  *ngIf="!isLoading && !failedLoadWidget"
+  *ngIf="!isLoading && !failedLoadWidget && !isDocument"
   id="show-docs"
   class="m-2 h-full w-full"
 >
@@ -110,6 +128,7 @@
             class="col-span-1 border-solid border-b border-b-primary-100 pb-2"
           >
             <button
+              (click)="viewDocument(document.rithmId)"
               mat-icon-button
               data-testid="show-document-widget"
               id="show-document-widget"
