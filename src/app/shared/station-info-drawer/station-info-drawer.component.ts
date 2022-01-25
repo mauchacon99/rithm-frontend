@@ -496,12 +496,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe({
           next: (documentId) => {
-            this.assignUserToDocument(
-              this.userService.user.rithmId,
-              documentId
-            );
             this.popupService.notify(
               'The document has been created successfully.'
+            );
+            this.router.navigateByUrl(
+              `/document/${documentId}?documentId=${documentId}&stationId=${this.stationRithmId}`
             );
           },
           error: (error: unknown) => {
