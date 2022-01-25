@@ -302,7 +302,6 @@ describe('DocumentService', () => {
   });
 
   it('should make request to save document answer', () => {
-    /** FormData to be fixed here. */
     const expectedAnswers: DocumentAnswer[] = [
       {
         questionRithmId: 'Dev 1',
