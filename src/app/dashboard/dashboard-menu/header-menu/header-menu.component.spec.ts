@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 
 import { HeaderMenuComponent } from './header-menu.component';
 import { throwError } from 'rxjs';
@@ -18,7 +20,10 @@ describe('HeaderMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeaderMenuComponent],
+      declarations: [
+        HeaderMenuComponent,
+        MockComponent(LoadingIndicatorComponent),
+      ],
       providers: [
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
         { provide: UserService, useClass: MockUserService },
@@ -82,5 +87,16 @@ describe('HeaderMenuComponent', () => {
 
     component.ngOnInit();
     expect(expectSpyService).toHaveBeenCalled();
+  });
+
+  it('should show loading organization info while data is loading', () => {
+    const data = '123-123';
+    component['getOrganizationInfo'](data);
+    fixture.detectChanges();
+    expect(component.isLoading).toBeTrue();
+    const loadingComponent = fixture.debugElement.nativeElement.querySelector(
+      '#organization-name-loading'
+    );
+    expect(loadingComponent).toBeTruthy();
   });
 });
