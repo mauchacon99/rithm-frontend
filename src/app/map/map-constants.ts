@@ -1,9 +1,12 @@
 import { Point } from 'src/models';
 
 // TODO: refine this file; this is polluting the global namespace a little
+// Default Cursor info
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
+
 export const FONT_SIZE_MODIFIER = 16;
+/** Used to distinguish what counts as a click or a drag. */
 export const TOUCH_EVENT_MARGIN = 5;
 
 // Scale
@@ -19,6 +22,9 @@ export const SCALE_RENDER_STATION_ELEMENTS =
   DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY, 100);
 export const SCALE_REDUCED_RENDER =
   SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
+
+// Zoom
+export const BUTTON_ZOOM_COUNT_INCREMENT = 50;
 
 // Pan
 export const MAX_PAN_VELOCITY = 25;
@@ -44,6 +50,8 @@ export const STATION_PADDING = 10;
 export const STATION_HEIGHT = 110;
 export const STATION_WIDTH = 160;
 export const STATION_RADIUS = 10;
+export const STATION_BORDER_LINE_WIDTH = 2;
+export const STATION_BORDER_LINE_WIDTH_SELECTED = 5;
 
 // Station badge
 export const BADGE_RADIUS = 15;
@@ -53,11 +61,13 @@ export const BADGE_HOVER_COLOR = '#7D8593';
 
 // Connection
 export const CONNECTION_LINE_WIDTH = 2;
+export const CONNECTION_LINE_WIDTH_SELECTED = 3;
 export const CONNECTION_LINE_WIDTH_ZOOM_OUT = 1;
 export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
 export const CONNECTION_NODE_OFFSET = 80;
 export const CONNECTION_HEIGHT_REDUCER = 5;
+/** Used to distinguish what counts as a click or a drag. */
 export const MOUSE_MOVEMENT_OVER_CONNECTION = 5;
 
 // Connection node
@@ -83,3 +93,18 @@ export const ICON_MID_HEIGHT = 92;
 export const ICON_FULL_HEIGHT = 102;
 export const ICON_RADIUS = 2;
 export const ICON_FOLD = 1;
+
+// Tooltip
+export const TOOLTIP_RADIUS = 10;
+export const TOOLTIP_HEIGHT = 55;
+export const TOOLTIP_WIDTH = 160;
+export const TOOLTIP_PADDING = 10;
+
+// Selected and disabled of map elements
+export const MAP_SELECTED = '#1b4387';
+export const MAP_DISABLED = '#f8f8f8';
+export const MAP_DISABLED_STROKE = '#b3b1b1';
+export const MAP_DEFAULT_COLOR = '#fff';
+export const MAP_CONNECTION_HOVER_COLOR = '#ebebeb';
+export const MAP_DISABLE_TEXT_COLOR = '#b3b1b1';
+export const MAP_DISABLE_BADGE_BUTTON_COLOR = '#efefef';
