@@ -4,12 +4,15 @@ import {
   ConnectedModalData,
   ConnectedStationInfo,
   MoveDocument,
+  Station,
 } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
+import { StationService } from 'src/app/core/station.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Component for connected stations.
@@ -47,6 +50,9 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** Enable error message if move document request fails. */
   moveDocumentError = false;
 
+  /** The list of stations. */
+  stations: Station[] = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
     private documentService: DocumentService,
@@ -54,7 +60,9 @@ export class ConnectedStationsModalComponent implements OnInit {
     private popupService: PopupService,
     private matDialogRef: MatDialogRef<void>,
     private router: Router,
-    public dialogRef: MatDialogRef<ConnectedStationsModalComponent>
+    public dialogRef: MatDialogRef<ConnectedStationsModalComponent>,
+    private stationService: StationService,
+    private userService: UserService
   ) {
     this.documentRithmId = data.documentRithmId;
     this.stationRithmId = data.stationRithmId;
@@ -64,7 +72,16 @@ export class ConnectedStationsModalComponent implements OnInit {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.getConnectedStations();
+    this.isAdmin ? this.getAllStations() : this.getConnectedStations();
+  }
+
+  /**
+   * Gets check if user is Admin.
+   *
+   * @returns User is admin or not.
+   */
+  get isAdmin(): boolean {
+    return this.userService.isAdmin;
   }
 
   /**
@@ -119,6 +136,27 @@ export class ConnectedStationsModalComponent implements OnInit {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = stations;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Failed to get all stations for this document.',
+            error,
+            false
           );
         },
       });
