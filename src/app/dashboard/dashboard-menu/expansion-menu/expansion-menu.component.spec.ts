@@ -4,6 +4,8 @@ import { MatListModule } from '@angular/material/list';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ExpansionMenuComponent } from './expansion-menu.component';
+import { MockComponent } from 'ng-mocks';
+import { OptionsMenuComponent } from '../options-menu/options-menu.component';
 
 describe('ExpansionMenuComponent', () => {
   let component: ExpansionMenuComponent;
@@ -11,7 +13,10 @@ describe('ExpansionMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ExpansionMenuComponent],
+      declarations: [
+        ExpansionMenuComponent,
+        MockComponent(OptionsMenuComponent),
+      ],
       imports: [MatExpansionModule, MatListModule, BrowserAnimationsModule],
     }).compileComponents();
   });
