@@ -19,7 +19,7 @@ export class HeaderMenuComponent implements OnInit {
   organizationInfo!: OrganizationInfo;
 
   /** Organization information loading inline. */
-  isLoading  = true;
+  isLoading = true;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
