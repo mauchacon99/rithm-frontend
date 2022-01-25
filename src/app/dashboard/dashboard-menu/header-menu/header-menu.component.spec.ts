@@ -94,7 +94,7 @@ describe('HeaderMenuComponent', () => {
     );
     expect(showErrorHidden).toBeNull();
 
-    component.failedGetName = true;
+    component.failedGetOrganization = true;
     fixture.detectChanges();
 
     const OrganizationInfo =
