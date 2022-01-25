@@ -57,7 +57,7 @@ import { DocumentModule } from 'src/app/document/document.module';
     MatExpansionModule,
     MatListModule,
     UserAvatarModule,
-    DocumentModule
+    DocumentModule,
   ],
 })
 export class DashboardModule {}

@@ -80,7 +80,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Disable document input element in station edit mode.
    */
   ngOnInit(): void {
-    console.log(this.documentInformation);
     this.isStation
       ? this.documentNameForm.disable()
       : this.documentNameForm.enable();
