@@ -9,8 +9,10 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
+import { DocumentService } from 'src/app/core/document.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 
 /**
  * Reusable component for every date field.
@@ -47,14 +49,20 @@ export class DateFieldComponent
   /** Helper class for field validation. */
   fieldValidation = new DocumentFieldValidation();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService,
+    readonly adapter: DateAdapter<Date>
+  ) {
+    this.adapter.setLocale('en-EN');
+  }
 
   /**
    * Set up FormBuilder group.
    */
   ngOnInit(): void {
     this.dateFieldForm = this.fb.group({
-      date: ['', []],
+      date: [this.fieldValue, []],
     });
 
     if (this.field.isRequired) {
@@ -125,5 +133,37 @@ export class DateFieldComponent
             message: 'Date field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    const pickedDate = new Date(this.dateFieldForm.controls['date'].value)
+      .toISOString()
+      .slice(0, 10);
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: pickedDate,
+      type: this.field.questionType,
+      questionUpdated: true,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string {
+    let fieldVal = '';
+    if (this.field.answer && this.field.answer?.asDate?.length) {
+      fieldVal = this.field.answer?.asDate;
+    }
+    return fieldVal;
   }
 }
