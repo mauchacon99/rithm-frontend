@@ -89,11 +89,11 @@ describe('HeaderMenuComponent', () => {
     expect(expectSpyService).toHaveBeenCalled();
   });
 
-  it('should show loading organization name while data is loading', () => {
+  it('should show loading organization info while data is loading', () => {
     const data = '123-123';
     component['getOrganizationInfo'](data);
     fixture.detectChanges();
-    expect(component.nameOrganizationLoading).toBeTrue();
+    expect(component.isLoading).toBeTrue();
     const loadingComponent = fixture.debugElement.nativeElement.querySelector(
       '#organization-name-loading'
     );
