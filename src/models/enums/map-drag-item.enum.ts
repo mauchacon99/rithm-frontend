@@ -17,6 +17,6 @@ export enum MapDragItem {
   /** A connection line is being dragged. */
   Connection,
 
-  /** A group station is begin dragged.  */
-  GroupStation,
+  /** A station group is being dragged.  */
+  StationGroup,
 }
