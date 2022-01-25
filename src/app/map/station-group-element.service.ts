@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationGroupMapElement } from 'src/helpers';
-import { StationGroupElementHoverItem, Point } from 'src/models';
+import { StationGroupElementHoverItem, Point, MapMode } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   STATION_GROUP_PADDING,
@@ -12,6 +12,14 @@ import {
   STATION_GROUP_NAME_PADDING,
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
+  CONNECTION_LINE_WIDTH_SELECTED,
+  MAP_SELECTED,
+  MAP_DISABLED_STROKE,
+  MAP_DEFAULT_COLOR,
+  TOOLTIP_RADIUS,
+  TOOLTIP_HEIGHT,
+  TOOLTIP_WIDTH,
+  TOOLTIP_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -29,6 +37,7 @@ export class StationGroupElementService {
   private mapScale = DEFAULT_SCALE;
 
   constructor(private mapService: MapService) {
+    //set this.mapScale to match the behavior subject in mapService.
     this.mapService.mapScale$.subscribe((scale) => (this.mapScale = scale));
   }
 
@@ -36,15 +45,19 @@ export class StationGroupElementService {
    * Draws all the station group boundaries on the map. Starts from the deepest station groups and works back to the root.
    */
   drawStationGroups(): void {
+    //If stationGroupElements doesn't have a length defined.
     if (!this.mapService.stationGroupElements.length) {
       return;
     }
+    //Note which station group is the read only root station group.
     const rootStationGroup = this.mapService.stationGroupElements.find(
       (stationGroup) => stationGroup.isReadOnlyRootStationGroup
     );
+    //If there isn't a root defined.
     if (!rootStationGroup) {
       throw new Error('Root station group could not be found');
     }
+    //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
   }
 
@@ -56,6 +69,7 @@ export class StationGroupElementService {
   private drawStationGroup(stationGroup: StationGroupMapElement): void {
     // If station group has a sub-station-group, draw that first
     stationGroup.subStationGroups.forEach((subStationGroupId) => {
+      //store the subStationGroup so we can recursively call this method for said station group.
       const subStationGroup = this.mapService.stationGroupElements.find(
         (stationGroupElement) =>
           stationGroupElement.rithmId === subStationGroupId
@@ -65,6 +79,7 @@ export class StationGroupElementService {
           `Couldn't find a sub-station-group for which an id exists: ${subStationGroupId}`
         );
       }
+      //If a subStationGroup was found recursively call this method to draw that first.
       this.drawStationGroup(subStationGroup);
     });
 
@@ -75,20 +90,31 @@ export class StationGroupElementService {
     // Determine the points within the station group.
     const pointsWithinStationGroup: Point[] = [];
     pointsWithinStationGroup.push(
+      //Fill array with the array returned.
       ...this.getStationPointsForStationGroup(stationGroup)
     );
     pointsWithinStationGroup.push(
+      //Fill array with the array returned.
       ...this.getSubStationGroupPointsForStationGroup(stationGroup)
     );
 
     // Determine the points for the boundary line
     stationGroup.boundaryPoints = this.getConvexHull(pointsWithinStationGroup);
 
-    // TODO: Render an empty station group.
+    //If there are boundary points set call methods needed to render the station group.
     if (stationGroup.boundaryPoints.length > 0) {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
       this.drawStationGroupName(stationGroup);
+      if (
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+        stationGroup.disabled &&
+        !stationGroup.selected &&
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name)
+      ) {
+        this.drawStationGroupToolTip(stationGroup);
+      }
     }
   }
 
@@ -100,23 +126,131 @@ export class StationGroupElementService {
   private drawStationGroupBoundaryLine(
     stationGroup: StationGroupMapElement
   ): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group boundary line if context is not defined'
       );
     }
+
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
+    //Draw the path object on stationGroup.
     ctx.setLineDash([7, 7]);
     ctx.beginPath();
     ctx.strokeStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? NODE_HOVER_COLOR
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      stationGroup.selected
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          stationGroup.disabled
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+          ? MAP_SELECTED
+          : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
-    ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (stationGroup.selected ||
+        (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
+          !stationGroup.disabled))
+    ) {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH_SELECTED;
+    } else {
+      ctx.lineWidth = CONNECTION_LINE_WIDTH;
+    }
     ctx.stroke(stationGroup.path);
     ctx.setLineDash([]);
+  }
+
+  /**
+   * Draws the station group tooltip on the map for a station group.
+   *
+   * @param stationGroup The station group for which to draw the tooltip.
+   */
+  private drawStationGroupToolTip(stationGroup: StationGroupMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw the tooltip if context is not defined');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = stationGroup.boundaryPoints[0].x;
+    const startingY =
+      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y -
+      65 * this.mapScale;
+
+    const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
+    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledTooltipRadius, startingY);
+    ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY,
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipRadius
+    );
+    // line going to bottom right
+    ctx.lineTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // bottom right curve to line going to bottom left
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight,
+      startingX + scaledTooltipWidth - scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // line going to bottom left
+    ctx.lineTo(
+      startingX + scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // bottom left curve to line going to top left
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY + scaledTooltipHeight,
+      startingX,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius);
+    // top left curve to line going top right
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY,
+      startingX + scaledTooltipRadius,
+      startingY
+    );
+    ctx.closePath();
+    ctx.fillStyle = '#000000';
+    ctx.globalAlpha = 0.6;
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = MAP_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
+    ctx.fillText(
+      'Cannot add group to',
+      startingX + scaledTooltipPadding,
+      startingY + 12 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
+    ctx.fillText(
+      'current selection',
+      startingX + scaledTooltipPadding,
+      startingY + 32 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
   }
 
   /**
@@ -125,29 +259,42 @@ export class StationGroupElementService {
    * @param stationGroup The station group for which to draw the name.
    */
   private drawStationGroupName(stationGroup: StationGroupMapElement): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error(
         'Cannot draw station group name if context is not defined'
       );
     }
-    // TODO: Update this to be more dynamic
+    // The name of the station group.
+    // Change color when hovered over.
     this.canvasContext.fillStyle =
-      stationGroup.hoverItem === StationGroupElementHoverItem.Name
+      stationGroup.selected ||
+      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+        !stationGroup.disabled &&
+        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ? MAP_SELECTED
+        : stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLED_STROKE
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ? NODE_HOVER_COLOR
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
+    //Place so that it covers the line.
     this.canvasContext.fillText(
       stationGroup.title,
-      stationGroup.boundaryPoints[0].x + STATION_GROUP_NAME_PADDING,
+      stationGroup.boundaryPoints[0].x +
+        STATION_GROUP_NAME_PADDING * this.mapScale,
       stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-        STATION_GROUP_NAME_PADDING
+        STATION_GROUP_NAME_PADDING * this.mapScale
     );
   }
 
   /**
-   * Set's the station group boundary path on the map for a station group.
+   * Sets the station group boundary path on the map for a station group.
    *
    * @param stationGroup The station group for which path needs to be set.
    */
@@ -156,13 +303,14 @@ export class StationGroupElementService {
   ): void {
     const path = new Path2D();
 
+    //draws a path based on the boundary points of the station group.
     path.moveTo(
       stationGroup.boundaryPoints[0].x,
       stationGroup.boundaryPoints[0].y
     );
     stationGroup.boundaryPoints = stationGroup.boundaryPoints.concat(
       stationGroup.boundaryPoints.splice(0, 1)
-    ); // Shift the first point to the back
+    ); // Shift the first point to the back so we can get all the points.
 
     for (const boundaryPoint of stationGroup.boundaryPoints) {
       path.lineTo(boundaryPoint.x, boundaryPoint.y);
@@ -179,6 +327,7 @@ export class StationGroupElementService {
   private getStationPointsForStationGroup(
     stationGroup: StationGroupMapElement
   ): Point[] {
+    //If a station group has no stations inside it.
     if (!stationGroup.stations.length) {
       return []; // Nothing to do here
     }
@@ -263,11 +412,6 @@ export class StationGroupElementService {
     const maxX = Math.max(...updatedBoundaryPoints.map((point) => point.x));
     const minY = Math.min(...updatedBoundaryPoints.map((point) => point.y));
     const maxY = Math.max(...updatedBoundaryPoints.map((point) => point.y));
-    // Get center average point of boundary
-    // const averageCenterPoint = {
-    //   x: minX + maxX / 2,
-    //   y: minY + maxY / 2
-    // };
 
     for (const point of updatedBoundaryPoints) {
       if (point.x === maxX) {

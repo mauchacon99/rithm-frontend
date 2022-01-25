@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -446,34 +446,10 @@ export class DocumentService {
    * @returns Returns an array of events for the document history.
    */
   getDocumentEvents(documentRithmId: string): Observable<DocumentEvent[]> {
-    if (!documentRithmId) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot get information about the event.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      const eventDocument: DocumentEvent[] = [
-        {
-          date: '2022-01-18T22:13:05.871Z',
-          description: 'Event Document #1',
-          user: {
-            rithmId: '123',
-            firstName: 'Testy',
-            lastName: 'Test',
-            email: 'test@test.com',
-            isEmailVerified: true,
-            notificationSettings: null,
-            createdDate: '1/2/34',
-            role: null,
-            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
-          },
-        },
-      ];
-      return of(eventDocument).pipe(delay(1000));
-    }
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentEvent[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history`,
+      { params }
+    );
   }
 }
