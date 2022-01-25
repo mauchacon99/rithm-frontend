@@ -19,7 +19,7 @@ export class HeaderMenuComponent implements OnInit {
   organizationInfo!: OrganizationInfo;
 
   /** Show error if fail get organization info.*/
-  failedGetName = false;
+  failedGetOrganization = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
