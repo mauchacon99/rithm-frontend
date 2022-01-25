@@ -39,9 +39,8 @@
         {{ '5' }}
       </button>
     </div>
-    <div class="w-full py-2">
+    <div class="w-full py-2" *ngIf="isBuilding">
       <button
-        *ngIf="isBuilding"
         mat-stroked-button
         id="delete-stationGroup-button"
         color="warn"
