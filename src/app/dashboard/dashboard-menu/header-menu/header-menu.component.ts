@@ -20,6 +20,8 @@ export class HeaderMenuComponent implements OnInit {
 
   /** Show error if fail get organization info.*/
   failedGetOrganization = false;
+  /** Organization information loading inline. */
+  isLoading = true;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -48,15 +50,18 @@ export class HeaderMenuComponent implements OnInit {
    * @param organizationId String of user organization.
    */
   private getOrganizationInfo(organizationId: string): void {
+    this.isLoading = true;
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe({
         next: (organization) => {
+          this.isLoading = false;
           this.failedGetOrganization = false;
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.failedGetOrganization = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
