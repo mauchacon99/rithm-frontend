@@ -266,34 +266,39 @@ export class StationElementService {
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipRadius
     );
+    // line going to bottom right
     ctx.lineTo(
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipHeight - scaledTooltipRadius
-    ); // line going to bottom right
+    );
+    // bottom right curve to line going to bottom left
     ctx.quadraticCurveTo(
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipHeight,
       startingX + scaledTooltipWidth - scaledTooltipRadius,
       startingY + scaledTooltipHeight
-    ); // bottom right curve to line going to bottom left
+    );
+    // line going to bottom left
     ctx.lineTo(
       startingX + scaledTooltipRadius,
       startingY + scaledTooltipHeight
-    ); // line going to bottom left
+    );
+    // bottom left curve to line going to top left
     ctx.quadraticCurveTo(
       startingX,
       startingY + scaledTooltipHeight,
       startingX,
       startingY + scaledTooltipHeight - scaledTooltipRadius
-    ); // bottom left curve to line going to top left
-    ctx.lineTo(startingX, startingY + scaledTooltipRadius); // line going to top left
+    );
+    // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius);
+    // top left curve to line going top right
     ctx.quadraticCurveTo(
       startingX,
       startingY,
       startingX + scaledTooltipRadius,
       startingY
     );
-    // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle = '#000000';
     ctx.globalAlpha = 0.6;

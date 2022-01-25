@@ -178,44 +178,45 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.moveTo(startingX + scaledTooltipRadius, startingY);
     ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
-    // eslint-disable-next-line max-len
     ctx.quadraticCurveTo(
       startingX + scaledTooltipWidth,
       startingY,
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipRadius
     );
-    // eslint-disable-next-line max-len
+    // line going to bottom right
     ctx.lineTo(
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipHeight - scaledTooltipRadius
-    ); // line going to bottom right
-    // eslint-disable-next-line max-len
+    );
+    // bottom right curve to line going to bottom left
     ctx.quadraticCurveTo(
       startingX + scaledTooltipWidth,
       startingY + scaledTooltipHeight,
       startingX + scaledTooltipWidth - scaledTooltipRadius,
       startingY + scaledTooltipHeight
-    ); // bottom right curve to line going to bottom left
+    );
+    // line going to bottom left
     ctx.lineTo(
       startingX + scaledTooltipRadius,
       startingY + scaledTooltipHeight
-    ); // line going to bottom left
-    // eslint-disable-next-line max-len
+    );
+    // bottom left curve to line going to top left
     ctx.quadraticCurveTo(
       startingX,
       startingY + scaledTooltipHeight,
       startingX,
       startingY + scaledTooltipHeight - scaledTooltipRadius
-    ); // bottom left curve to line going to top left
-    ctx.lineTo(startingX, startingY + scaledTooltipRadius); // line going to top left
+    );
+    // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius);
+    // top left curve to line going top right
     ctx.quadraticCurveTo(
       startingX,
       startingY,
       startingX + scaledTooltipRadius,
       startingY
     );
-    // top left curve to line going top right
     ctx.closePath();
     ctx.fillStyle = '#000000';
     ctx.globalAlpha = 0.6;

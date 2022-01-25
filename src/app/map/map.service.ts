@@ -1301,7 +1301,6 @@ export class MapService {
 
   /**
    * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
-   *
    */
   setStationGroupStationStatus(): void {
     this.stationGroupElements.map((stationGroup) => {
@@ -1319,7 +1318,6 @@ export class MapService {
 
   /**
    * Reset disable and true status to false when a station-group is deselected.
-   *
    */
   resetSelectedStationGroupStationStatus(): void {
     this.stationGroupElements.map((stationGroup) => {
