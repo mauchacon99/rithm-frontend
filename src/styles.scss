@@ -2,13 +2,13 @@
 // For more information: https://material.angular.io/guide/theming
 // Plus imports for other components in your app.
 
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 // Import all helpers
-@import './scss/helpers/index';
+@import "./scss/helpers/index";
 
 // Rithm light Theme
-@import './scss/themes/index';
+@import "./scss/themes/index";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -46,14 +46,14 @@ $rithm-theme: mat.define-light-theme(
 // Apply Rithm light theme
 @include mat.all-component-themes($rithm-light);
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 /// Import Tools from tools file
 /// Contains global styles for circles and typography
 /// This import needs to stay after the tailwind imports.
-@import './scss/tools/index';
+@import "./scss/tools/index";
 
 // Global Styles Below
 /// Global page Styles
@@ -89,7 +89,7 @@ body {
 }
 
 .textured-bg {
-  background-image: url('./assets/images/patterns/dust_scratches.png');
+  background-image: url("./assets/images/patterns/dust_scratches.png");
   background-repeat: repeat;
 }
 
@@ -105,21 +105,23 @@ a {
 }
 
 .scrollbar {
+  /** stylelint-disable-next-line */
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
-
+  /** stylelint-disable-next-line */
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
+  /** stylelint-disable-next-line */
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: transparent;
   }
 
   &:hover {
+    /** stylelint-disable-next-line */
     &::-webkit-scrollbar-thumb {
       border-radius: 5px;
       @apply bg-gradient-to-b from-primary-50 to-primary-100;
