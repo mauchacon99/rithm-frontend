@@ -50,6 +50,8 @@ export const STATION_PADDING = 10;
 export const STATION_HEIGHT = 110;
 export const STATION_WIDTH = 160;
 export const STATION_RADIUS = 10;
+export const STATION_BORDER_LINE_WIDTH = 2;
+export const STATION_BORDER_LINE_WIDTH_SELECTED = 5;
 
 // Station badge
 export const BADGE_RADIUS = 15;
@@ -59,6 +61,7 @@ export const BADGE_HOVER_COLOR = '#7D8593';
 
 // Connection
 export const CONNECTION_LINE_WIDTH = 2;
+export const CONNECTION_LINE_WIDTH_SELECTED = 3;
 export const CONNECTION_LINE_WIDTH_ZOOM_OUT = 1;
 export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
@@ -90,3 +93,18 @@ export const ICON_MID_HEIGHT = 92;
 export const ICON_FULL_HEIGHT = 102;
 export const ICON_RADIUS = 2;
 export const ICON_FOLD = 1;
+
+// Tooltip
+export const TOOLTIP_RADIUS = 10;
+export const TOOLTIP_HEIGHT = 55;
+export const TOOLTIP_WIDTH = 160;
+export const TOOLTIP_PADDING = 10;
+
+// Selected and disabled of map elements
+export const MAP_SELECTED = '#1b4387';
+export const MAP_DISABLED = '#f8f8f8';
+export const MAP_DISABLED_STROKE = '#b3b1b1';
+export const MAP_DEFAULT_COLOR = '#fff';
+export const MAP_CONNECTION_HOVER_COLOR = '#ebebeb';
+export const MAP_DISABLE_TEXT_COLOR = '#b3b1b1';
+export const MAP_DISABLE_BADGE_BUTTON_COLOR = '#efefef';
