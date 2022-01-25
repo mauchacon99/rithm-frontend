@@ -506,6 +506,10 @@ describe('DocumentComponent', () => {
     );
     const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
     component.ngOnInit();
+    const templateDocument = fixture.debugElement.nativeElement.querySelector(
+      '#document-info-template'
+    );
+    expect(templateDocument).toBeFalsy();
     expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
