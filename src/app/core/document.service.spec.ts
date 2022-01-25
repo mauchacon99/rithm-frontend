@@ -301,7 +301,7 @@ describe('DocumentService', () => {
     httpTestingController.verify();
   });
 
-  xit('should make request to save document answer', () => {
+  it('should make request to save document answer', () => {
     /** FormData to be fixed here. */
     const expectedAnswers: DocumentAnswer[] = [
       {
@@ -326,6 +326,30 @@ describe('DocumentService', () => {
       },
     ];
 
+    const formData = new FormData();
+    expectedAnswers.forEach((element, index) => {
+      formData.append(
+        `answers[${index}].questionRithmId`,
+        element.questionRithmId
+      );
+      formData.append(
+        `answers[${index}].documentRithmId`,
+        element.documentRithmId
+      );
+      formData.append(
+        `answers[${index}].stationRithmId`,
+        element.stationRithmId
+      );
+      formData.append(
+        `answers[${index}].value`,
+        element.type !== QuestionFieldType.Phone
+          ? element.value
+          : element.value.replace(/\s/g, '')
+      );
+      formData.append(`answers[${index}].type`, element.type);
+      formData.append(`answers[${index}].questionUpdated`, 'true');
+    });
+
     service
       .saveDocumentAnswer(documentId, expectedAnswers)
       .subscribe((response) => {
@@ -337,7 +361,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(expectedAnswers);
+    expect(req.request.body).toEqual(formData);
 
     req.flush(expectedAnswers);
     httpTestingController.verify();

@@ -7,6 +7,9 @@
       [matDatepicker]="picker"
       [required]="field.isRequired"
       formControlName="date"
+      (click)="picker.open()"
+      (dateChange)="updateFieldAnswer()"
+      readonly
     />
     <mat-datepicker-toggle matPrefix class="icon" [for]="picker">
       <i matDatepickerToggleIcon class="fas fa-calendar-day"></i>

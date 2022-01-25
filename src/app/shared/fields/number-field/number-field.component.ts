@@ -59,7 +59,10 @@ export class NumberFieldComponent
    */
   ngOnInit(): void {
     this.numberFieldForm = this.fb.group({
-      [this.field.questionType]: [this.fieldValue, []],
+      [this.field.questionType]: [
+        this.fieldValue !== undefined ? this.fieldValue : '',
+        [],
+      ],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -184,11 +187,11 @@ export class NumberFieldComponent
         case 'asDecimal':
           fieldVal = this.field.answer?.asDecimal
             ? this.field.answer?.asDecimal
-            : 0;
+            : 0.0;
           break;
         case 'asString':
           fieldVal = this.field.answer?.asString
-            ? this.field.answer?.asString
+            ? this.field.answer?.asString.replace(/[)]/g, ') ')
             : '';
           break;
         default:

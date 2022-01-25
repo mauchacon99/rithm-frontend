@@ -55,7 +55,10 @@ export class SelectFieldComponent
    */
   ngOnInit(): void {
     this.selectFieldForm = this.fb.group({
-      [this.field.questionType]: [this.fieldValue, []],
+      [this.field.questionType]: [
+        this.fieldValue !== undefined ? this.fieldValue : '',
+        [],
+      ],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -206,7 +209,7 @@ export class SelectFieldComponent
         }
         break;
       default:
-        fieldVal = '';
+        fieldVal = undefined;
         break;
     }
     return fieldVal;

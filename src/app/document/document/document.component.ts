@@ -44,6 +44,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Document Id. */
   private documentId = '';
 
+  /** Station Id. */
+  private stationId = '';
+
   /** Whether the request to get the document info is currently underway. */
   documentLoading = true;
 
@@ -150,8 +153,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.handleInvalidParams();
         } else {
           this.documentId = params.documentId;
-          this.getDocumentStationData(params.documentId, params.stationId);
-          this.getConnectedStations(params.documentId, params.stationId);
+          this.stationId = params.stationId;
+          this.getDocumentStationData();
+          this.getConnectedStations();
         }
       },
       error: (error: unknown) => {
@@ -187,14 +191,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Get data about the document and station the document is in.
-   *
-   * @param documentId The id of the document for which to get data.
-   * @param stationId The id of the station that the document is in.
    */
-  private getDocumentStationData(documentId: string, stationId: string): void {
+  private getDocumentStationData(): void {
     this.documentLoading = true;
     this.documentService
-      .getDocumentInfo(documentId, stationId)
+      .getDocumentInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (document) => {
@@ -216,14 +217,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Retrieves a list of the connected stations for the given document.
-   *
-   * @param documentId The id of the document for which to retrieve previous stations.
-   * @param stationId The id of the station for which to retrieve forward stations.
    */
-  private getConnectedStations(documentId: string, stationId: string): void {
+  private getConnectedStations(): void {
     this.connectedStationsLoading = true;
     this.documentService
-      .getConnectedStationInfo(documentId, stationId)
+      .getConnectedStationInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
@@ -288,9 +286,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     forkJoin(requestArray)
       .pipe(first())
       .subscribe({
-        next: (data) => {
-          this.documentAnswer = data[1] as DocumentAnswer[];
-          this.documentLoading = false;
+        next: () => {
+          this.getDocumentStationData();
         },
         error: (error: unknown) => {
           this.documentLoading = false;
