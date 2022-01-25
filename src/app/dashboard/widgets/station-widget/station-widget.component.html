@@ -28,7 +28,7 @@
 </div>
 
 <!--Document detail-->
-<div class="h-full p-2" *ngIf="isDocument">
+<div class="h-full p-2" *ngIf="isDocument" id="document-detail">
   <!--  header -->
   <div class="flex justify-between items-center">
     <button
@@ -39,11 +39,7 @@
     >
       <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
     </button>
-    <button
-      mat-icon-button
-      id="expand-document"
-      data-testid="expand-document"
-    >
+    <button mat-icon-button id="expand-document" data-testid="expand-document">
       <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
     </button>
   </div>
