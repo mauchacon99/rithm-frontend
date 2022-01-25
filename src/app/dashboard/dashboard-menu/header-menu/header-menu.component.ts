@@ -57,7 +57,7 @@ export class HeaderMenuComponent implements OnInit {
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
-          this.failedGetName = true;
+          this.failedGetOrganization = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
