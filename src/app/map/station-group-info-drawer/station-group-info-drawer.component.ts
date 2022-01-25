@@ -40,6 +40,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /** Number of stations included in station group. */
   numberOfStations = 0;
 
+  /** Number of sub groups included in station group. */
+  numberOfSubgroups = 0;
+
   /**
    * Whether the map is in build mode.
    *
@@ -80,6 +83,7 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
           this.stationGroupRithmId = infoData.stationGroupRithmId;
           this.groupName = infoData.stationGroupName;
           this.numberOfStations = infoData.numberOfStations;
+          this.numberOfSubgroups = infoData.numberOfSubgroups;
           this.editMode = infoData.editMode;
           this.isChained = infoData.isChained;
         }
