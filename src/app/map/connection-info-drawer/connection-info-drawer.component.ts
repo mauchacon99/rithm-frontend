@@ -48,33 +48,44 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
     private mapService: MapService,
     private popupService: PopupService
   ) {
+    //Subscribe to the drawerContext so we can open the correct drawer type.
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         this.drawerContext = data;
       });
 
+    //Subscribe to the drawerData so we can update what is displayed in the drawer.
     this.sidenavDrawerService.drawerData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
+        //Set up the const to reference.
         const connection = data as ConnectionMapElement;
+        //If connection is defined and drawerContext is correct context.
         if (connection && this.drawerContext === 'connectionInfo') {
+          //Set an array containing the starting and ending station in the connection.
           this.connectedStations = this.mapService.stationElements.filter(
             (e) =>
               e.rithmId === connection.startStationRithmId ||
               e.rithmId === connection.endStationRithmId
           );
+          //Sort the array so that we can correctly reference the starting vs the ending stations.
           this.connectedStations.sort((a) =>
             a.rithmId === connection.startStationRithmId ? -1 : 1
           );
+          //Get the name of the starting station.
           this.connectionStartStationName =
             this.connectedStations[0].stationName;
+          //Get the name of the ending station.
           this.connectionEndStationName = this.connectedStations[1].stationName;
+          //Get the id of the starting station.
           this.connectionStartStationId = this.connectedStations[0].rithmId;
+          //Get the id of the ending station.
           this.connectionEndStationId = this.connectedStations[1].rithmId;
         }
       });
 
+    //Subscribe to the mapMode so that we can track it.
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mapMode) => {
@@ -100,20 +111,24 @@ export class ConnectionInfoDrawerComponent implements OnDestroy {
   }
 
   /**
-   * Removes the connections from a station, and removes that station from the connections of previous and next stations.
-   *
+   * Remove this connection line, and remove it from the nextStations
+   * array of the starting station and previousStations array of the ending station.
    */
   async removeConnectionLine(): Promise<void> {
+    //Open a popup and store the user response as a boolean.
     const confirm = await this.popupService.confirm({
       title: 'Remove Connection Line',
       message: `Remove connection line from ${this.connectionStartStationName} to ${this.connectionEndStationName}?`,
       okButtonText: 'Remove',
     });
+    //If user confirms.
     if (confirm) {
+      //Remove the line using the method in map.service.
       this.mapService.removeConnectionLine(
         this.connectionStartStationId,
         this.connectionEndStationId
       );
+      //Close the drawer.
       this.sidenavDrawerService.toggleDrawer('connectionInfo');
     }
   }
