@@ -6,7 +6,12 @@ import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { Question, QuestionFieldType, OperatorType } from 'src/models';
+import {
+  Question,
+  QuestionFieldType,
+  OperatorType,
+  OperandType,
+} from 'src/models';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -125,6 +130,9 @@ export class RuleModalComponent implements OnInit {
     value: OperatorType;
   }[] = [];
 
+  /** The value of the first operand type. */
+  firstOperandType!: OperandType;
+
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
@@ -182,7 +190,7 @@ export class RuleModalComponent implements OnInit {
   }
 
   /**
-   * Set operator list for the comparison type.
+   * Set operator list for the comparison type and set first operand type.
    *
    * @param fieldType The field type to show the options of the corresponding operator list.
    */
@@ -197,20 +205,28 @@ export class RuleModalComponent implements OnInit {
       case QuestionFieldType.Phone:
       case QuestionFieldType.MultiSelect:
         this.operatorList = this.textGroup;
+        this.firstOperandType =
+          fieldType !== QuestionFieldType.Phone
+            ? OperandType.String
+            : OperandType.Number;
         break;
       case QuestionFieldType.LongText:
       case QuestionFieldType.CheckList:
         this.operatorList = this.contentGroup;
+        this.firstOperandType = OperandType.String;
         break;
       case QuestionFieldType.Number:
       case QuestionFieldType.Currency:
         this.operatorList = this.numberGroup;
+        this.firstOperandType = OperandType.Number;
         break;
       case QuestionFieldType.Date:
         this.operatorList = this.dateGroup;
+        this.firstOperandType = OperandType.Date;
         break;
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
+        this.firstOperandType = OperandType.String;
     }
   }
 }
