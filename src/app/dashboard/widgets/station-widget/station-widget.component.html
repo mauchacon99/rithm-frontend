@@ -1,8 +1,4 @@
-<div
-  *ngIf="isLoading"
-  id="loading-docs"
-  class="h-full flex justify-center items-center flex-col"
->
+<div *ngIf="isLoading" id="loading-docs" class="h-full flex justify-center items-center flex-col">
   <p class="py-2 truncate">Loading</p>
   <app-loading-indicator></app-loading-indicator>
 </div>
@@ -13,14 +9,8 @@
       <i class="fas fa-exclamation-triangle text-error-500 text-3xl"></i>
       <h3 class="text-error-500 truncate">ERROR</h3>
       <p class="text-sm truncate mb-5">Unable to retrieve station data</p>
-      <button
-        mat-stroked-button
-        color="warn"
-        (click)="getStationWidgetDocuments()"
-        (touchstart)="getStationWidgetDocuments()"
-        id="try-again"
-        data-testid="try-again"
-      >
+      <button mat-stroked-button color="warn" (click)="getStationWidgetDocuments()"
+        (touchstart)="getStationWidgetDocuments()" id="try-again" data-testid="try-again">
         Try Again
       </button>
     </div>
@@ -31,12 +21,7 @@
 <div class="h-full p-2" *ngIf="isDocument" id="document-detail">
   <!--  header -->
   <div class="flex justify-between items-center">
-    <button
-      mat-icon-button
-      (click)="viewDocument('')"
-      id="return-list-documents"
-      data-testid="return-list-documents"
-    >
+    <button mat-icon-button (click)="viewDocument('')" id="return-list-documents" data-testid="return-list-documents">
       <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
     </button>
     <button mat-icon-button id="expand-document" data-testid="expand-document">
@@ -46,11 +31,7 @@
 </div>
 
 <!-- station widget -->
-<div
-  *ngIf="!isLoading && !failedLoadWidget && !isDocument"
-  id="show-docs"
-  class="m-2 h-full w-full"
->
+<div *ngIf="!isLoading && !failedLoadWidget && !isDocument" id="show-docs" class="m-2 h-full w-full">
   <!-- Header widget -->
   <div class="w-full p-2 flex flex-col h-full">
     <!--    Header Container-->
@@ -60,13 +41,8 @@
           {{ dataStationWidget.stationName }}
         </h3>
         <div *ngIf="dataStationWidget">
-          <button
-            *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'"
-            mat-stroked-button
-            color="accent"
-            data-testid="create-new-document"
-            id="create-new-document"
-          >
+          <button *ngIf="dataStationWidget.documentGeneratorStatus === 'Manual'" mat-stroked-button color="accent"
+            data-testid="create-new-document" id="create-new-document">
             New Document <i class="fas fa-plus"></i>
           </button>
         </div>
@@ -82,57 +58,35 @@
       </p>
     </div>
     <!--    Row Container-->
-    <div class="flex-grow overflow-auto">
-      <div
-        *ngIf="dataStationWidget"
-        class="grid grid-cols-12 text-secondary-500 items-center"
-      >
+    <div class="flex-grow overflow-auto scrollbar">
+      <div *ngIf="dataStationWidget" class="grid grid-cols-12 text-secondary-500 items-center">
         <ng-container *ngFor="let document of dataStationWidget.documents">
-          <div
-            class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
-          >
+          <div class="col-span-5 py-4 border-solid border-b border-b-primary-100 text-xs truncate">
             {{ document.name }}
           </div>
-          <div
-            *ngIf="document.assignedUser"
-            class="col-span-2 h-[49px] border-solid border-b border-b-primary-100"
-          >
+          <div *ngIf="document.assignedUser" class="col-span-2 h-[49px] border-solid border-b border-b-primary-100">
             <div class="flex justify-center mt-2">
-              <app-user-avatar
-                [firstName]="document.assignedUser.firstName"
-                [lastName]="document.assignedUser.lastName"
-              >
+              <app-user-avatar [firstName]="document.assignedUser.firstName"
+                [lastName]="document.assignedUser.lastName">
               </app-user-avatar>
             </div>
           </div>
-          <div
-            *ngIf="!document.assignedUser"
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
-          >
+          <div *ngIf="!document.assignedUser"
+            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate">
             None
           </div>
-          <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs justify-center"
-          >
+          <div class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs justify-center">
             <div class="flex justify-center">
               <i class="fas fa-exclamation-triangle"></i>
               <!--      {{ document.priority }}-->
             </div>
           </div>
-          <div
-            class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate"
-          >
+          <div class="col-span-2 py-4 border-solid border-b border-b-primary-100 text-xs truncate">
             {{ getElapsedTime(document.flowedTimeUTC) }}
           </div>
-          <div
-            class="col-span-1 border-solid border-b border-b-primary-100 pb-2"
-          >
-            <button
-              (click)="viewDocument(document.rithmId)"
-              mat-icon-button
-              data-testid="show-document-widget"
-              id="show-document-widget"
-            >
+          <div class="col-span-1 border-solid border-b border-b-primary-100 pb-2">
+            <button (click)="viewDocument(document.rithmId)" mat-icon-button data-testid="show-document-widget"
+              id="show-document-widget">
               <i class="fas fa-angle-double-right"></i>
             </button>
           </div>
