@@ -28,6 +28,9 @@ export class MockMapService {
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
+  /** Informs the map when station group elements have changed. */
+  stationGroupElementsChanged$ = new BehaviorSubject(false);
+
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
 

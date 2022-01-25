@@ -102,4 +102,16 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+  /**
+   * Set the changes made to the current station group.
+   */
+  setStationGroupChanges(): void {
+    const index = this.mapService.stationGroupElements.findIndex(
+      (stGroup) => stGroup.rithmId === this.stationGroupRithmId
+    );
+    this.mapService.stationGroupElements[index].title = this.groupName;
+    this.mapService.stationGroupElements[index].markAsUpdated();
+    this.mapService.stationGroupElementsChanged$.next(true);
+  }
 }
