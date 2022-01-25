@@ -1187,7 +1187,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
-      //Loop through the station group matrix to check if there is a station group being interacted with.
+      // Loop through the station group array to check if there is a station group being interacted with.
       for (const stationGroup of this.stationGroups) {
         //Checks whether the station group boundary is being hovered over.
         stationGroup.checkElementHover(
@@ -1565,8 +1565,17 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      //If dragging a station group.
+    } else if (this.dragItem === MapDragItem.StationGroup) {
+      // Loop through the station group array to check if there is a station group being dragged.
+      for (const stationGroup of this.stationGroups) {
+        if (stationGroup.dragging) {
+          break;
+        }
+      }
+
       /* This is where we check to see if a station, group or connection line is being hovered,
-    and nothing is currently being dragged. */
+      and nothing is currently being dragged. */
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {

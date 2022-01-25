@@ -71,9 +71,13 @@ export class ConnectionMapElement {
    * @param ctx The rendering context for the canvas.
    */
   checkElementHover(point: Point, ctx: CanvasRenderingContext2D): void {
+    //Saves the current state of the canvas context.
     ctx.save();
+    //This will allow users to click in the area around connection line without having to click in the rendered space.
     ctx.lineWidth = 30;
+    //Set to true if cursor is on/near the connection line.
     this.hovering = ctx.isPointInStroke(this.path, point.x, point.y);
+    //Restore the saved context state and undo the changes to it.
     ctx.restore();
   }
 
@@ -112,10 +116,11 @@ export class ConnectionMapElement {
    * @returns Connection line between stations.
    */
   getConnectionLine(startPoint: Point, endPoint: Point, scale: number): Path2D {
+    //We're going to store this connection line in a path to be used later.
     const path = new Path2D();
     path.moveTo(startPoint.x, startPoint.y);
 
-    // add path
+    // If starting station is to the left of ending station on the canvas, make a normal connection line.
     if (startPoint.x - STATION_WIDTH * 1.5 * scale < endPoint.x) {
       const [controlPoint1, controlPoint2] =
         this.getConnectionLineControlPoints(startPoint, endPoint, scale);
@@ -127,9 +132,12 @@ export class ConnectionMapElement {
         endPoint.x,
         endPoint.y
       );
+      // If it is not to the left, the line will have to curve around the station so it doesn't go behind it.
     } else {
-      //Using trig to get points.
+      //Store the data needed to establish the initial curve around the starting station.
       const startArc: Point =
+        //Is the ending station below the starting station?
+        //draw the line going above or below the starting station accordingly.
         startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
         (startPoint.y <= endPoint.y &&
           startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
@@ -156,7 +164,10 @@ export class ConnectionMapElement {
                   (STATION_HEIGHT / 3) * scale * Math.sin(0.5 * Math.PI)
               ),
             };
+      //Store the data needed to establish the final curve around the ending station.
       const endArc: Point =
+        //Is the ending station below the starting station?
+        //Draw the line going above or below the starting station accordingly.
         startPoint.y <= endPoint.y
           ? {
               x: Math.floor(
@@ -181,6 +192,7 @@ export class ConnectionMapElement {
               ),
             };
 
+      //draw the starting arc.
       startPoint.y >= endPoint.y + STATION_HEIGHT * scale ||
       (startPoint.y <= endPoint.y &&
         startPoint.y >= endPoint.y - STATION_HEIGHT * scale)
@@ -200,6 +212,8 @@ export class ConnectionMapElement {
             0.5 * Math.PI,
             false
           );
+
+      //draw the bezier curve between where startArc ends and endArc begins.
       path.bezierCurveTo(
         startArc.x - STATION_WIDTH * scale,
         startArc.y,
@@ -208,6 +222,7 @@ export class ConnectionMapElement {
         endArc.x,
         endArc.y
       );
+      //draw the ending arc.
       startPoint.y <= endPoint.y
         ? path.arc(
             endPoint.x,
@@ -228,6 +243,7 @@ export class ConnectionMapElement {
     }
 
     // add arrow
+    // TODO: make the arrow solid.
     const controlPoints = this.getConnectionLineControlPoints(
       startPoint,
       endPoint,
@@ -235,6 +251,7 @@ export class ConnectionMapElement {
     );
     const ex = endPoint.x;
     const ey = endPoint.y;
+    // Needed to know how to angle the arrow.
     const norm =
       startPoint.x - STATION_WIDTH * 1.5 * scale > endPoint.x
         ? this.getNormalizedVectorPoint(
@@ -243,6 +260,7 @@ export class ConnectionMapElement {
           )
         : this.getNormalizedVectorPoint(controlPoints[1], endPoint);
     const arrowWidth = CONNECTION_ARROW_LENGTH / 2;
+    // x and y will be set for each side of the arrow and used to draw the lines of the arrow.
     let x, y;
     x = (arrowWidth * norm.x + CONNECTION_ARROW_LENGTH * -norm.y) * scale;
     y = (arrowWidth * norm.y + CONNECTION_ARROW_LENGTH * norm.x) * scale;
@@ -257,6 +275,7 @@ export class ConnectionMapElement {
 
   /**
    * Gets the control points for the connection line between two stations.
+   * These are used in the bezier curve.
    *
    * @param startPoint The start point for the connection line.
    * @param endPoint The end point for the connection line.
