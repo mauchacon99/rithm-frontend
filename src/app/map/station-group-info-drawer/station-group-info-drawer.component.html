@@ -38,6 +38,14 @@
         {{ numberOfStations }}
       </button>
     </div>
+    <div class="w-full py-2">
+      <p class="overline-font mb-1">Sub groups</p>
+      <button
+        class="mat-focus-indicator priority mat-mini-fab mat-button-base circle-40-secondary"
+      >
+        {{ numberOfSubgroups }}
+      </button>
+    </div>
     <div class="w-full py-2" *ngIf="isBuilding">
       <button
         mat-stroked-button
