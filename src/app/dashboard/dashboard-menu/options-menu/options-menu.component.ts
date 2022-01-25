@@ -26,7 +26,7 @@ export class OptionsMenuComponent {
   /**
    * Opens the option menu on the dashboard menu.
    *
-   * @param event The click.
+   * @param event The click event.
    */
   openOptionsMenu(event: MouseEvent): void {
     this.optionsMenuTrigger.openMenu();
