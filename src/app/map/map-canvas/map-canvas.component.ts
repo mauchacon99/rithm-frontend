@@ -1913,6 +1913,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroupName: stationGroup.title,
             editMode: this.mapMode === MapMode.Build,
             numberOfStations: stationGroup.stations.length,
+            numberOfSubgroups: stationGroup.subStationGroups.length,
             stationGroupStatus: stationGroup.status,
             isChained: false,
           };
