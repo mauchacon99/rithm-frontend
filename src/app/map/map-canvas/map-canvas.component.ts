@@ -22,6 +22,7 @@ import {
   StationInfoDrawerData,
   StationInformation,
   StationGroupElementHoverItem,
+  StationGroupInfoDrawerData,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -1186,6 +1187,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      //Loop through the station group matrix to check if there is a station group being interacted with.
+      for (const stationGroup of this.stationGroups) {
+        //Checks whether the station group boundary is being hovered over.
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          eventCanvasPoint,
+          this.context,
+          this.scale
+        );
+
+        //If hovering over the station group boundary or name.
+        if (stationGroup.hoverItem !== StationGroupElementHoverItem.None) {
+          stationGroup.dragging = true;
+          //Set the current dragItem to StationGroup
+          this.dragItem = MapDragItem.StationGroup;
+          break;
+        }
+      }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       //Find the station that is being dragged.
       if (this.stations.find((obj) => obj.dragging === true)) {
@@ -1389,6 +1409,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    //If dragging a Station Group.
+    if (this.dragItem === MapDragItem.StationGroup) {
+      //Loop through the station group array to check if there is a station group with dragging in true.
+      this.stationGroups.forEach((stationGroup) => {
+        if (stationGroup.dragging) {
+          stationGroup.dragging = false;
+        }
+      });
+    }
+
     //Reset properties.
     this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
@@ -1580,8 +1610,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           (stationGroup) =>
             stationGroup.hoverItem !== StationGroupElementHoverItem.None
         );
-        //If not hovering over a station or group.
-        if (!hoveringOverStation && !hoveringOverStationGroup) {
+        //If not hovering over a station or group and the MapMode is not stationGroupAdd.
+        if (
+          !hoveringOverStation &&
+          !hoveringOverStationGroup &&
+          this.mapMode !== MapMode.StationGroupAdd
+        ) {
           /*Set all connections hoverActive status to false.
           This ensures only one connection line can be hovered at a time. */
           this.connections.map((con) => {
@@ -1779,8 +1813,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         if (this.mapMode === MapMode.StationGroupAdd) {
           //If the station is clickable.
           if (!station.disabled) {
-            //Toggle whether a station is selected to be added to the station group or not.
+            //If station is not disabled, should be able to select it and based on it's selection should disable other stations
+            //and station group as per the criteria.
+            this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
+            this.mapService.setSelectedStation(station);
+            this.drawElements();
           }
           return;
         } else {
@@ -1790,10 +1828,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
     }
-    /* Check if click was on a connection line.
+    /* If mapMode is not StationGroupAdd, Check if click was on a connection line.
     This line placed after station for loop to not trigger
     a connection click while clicking a station. */
-    this.checkConnectionClick(contextPoint);
+    if (this.mapMode !== MapMode.StationGroupAdd) {
+      this.checkConnectionClick(contextPoint);
+    }
 
     //Check if click was on a station group boundary.
     this.checkStationGroupClick(contextPoint, point);
@@ -1872,8 +1912,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           !stationGroup.disabled
         ) {
-          //Set status of station group to true or false depending upon current status
+          //Set status of station group to true or false depending upon current status also update status of
+          //other stations and station group as per the selection criteria.
           stationGroup.selected = !stationGroup.selected;
+          if (stationGroup.selected) {
+            this.mapService.setStationGroupStationStatus();
+          }
+          // To make sure it's not disabled and should allow user to undo previous action.
+          stationGroup.disabled = false;
+          //Set current station group status and respective station's.
+          this.stationGroupSelectStatus(stationGroup);
+          //Set station group status of parent and child station group and respective stations.
+          this.mapService.setStationGroupStatus(stationGroup);
+          this.drawElements();
           break;
         }
       } else if (
@@ -1885,11 +1936,60 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
           stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ) {
+          //Set this variable to use the information from passed in station group.
+          const dataInformationDrawer: StationGroupInfoDrawerData = {
+            stationGroupRithmId: stationGroup.rithmId,
+            stationGroupName: stationGroup.title,
+            editMode: this.mapMode === MapMode.Build,
+            numberOfStations: stationGroup.stations.length,
+            numberOfSubgroups: stationGroup.subStationGroups.length,
+            stationGroupStatus: stationGroup.status,
+            isChained: false,
+          };
           //Open station group info drawer when clicked on station group boundary or name.
-          this.sidenavDrawerService.openDrawer('stationGroupInfo');
+          this.sidenavDrawerService.openDrawer(
+            'stationGroupInfo',
+            dataInformationDrawer
+          );
           break;
         }
       }
+    }
+  }
+
+  /**
+   * Handle status of station group and respective stations based on incoming stationGroup selection.
+   *
+   * @param stationGroup The station group whose station status has to be updated.
+   */
+  private stationGroupSelectStatus(stationGroup: StationGroupMapElement): void {
+    const isSelected = stationGroup.selected;
+    // Set stationGroup's selection status to all stations which belongs to same stationGroup.
+    stationGroup.stations.map((st) => {
+      const stationIndex = this.stations.findIndex(
+        (station) => station.rithmId === st
+      );
+      this.stations[stationIndex].selected = isSelected;
+    });
+    if (isSelected) {
+      // Set stationGroup's selection status to all station group which belongs to same stationGroup.
+      this.stationGroups.forEach((stGroup) => {
+        if (stGroup.subStationGroups.includes(stationGroup.rithmId)) {
+          stGroup.subStationGroups.forEach((grp) => {
+            const index = this.stationGroups.findIndex(
+              (stGrp) => stGrp.rithmId === grp
+            );
+            this.stationGroups[index].disabled = false;
+          });
+          // Set stationGroup's selection status to all station which belongs to any sub stationGroup.
+          stGroup.stations.map((st) => {
+            const stationIndex = this.stations.findIndex(
+              (station) => station.rithmId === st
+            );
+            this.stations[stationIndex].disabled = false;
+          });
+        }
+      });
     }
   }
 

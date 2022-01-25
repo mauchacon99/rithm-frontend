@@ -159,7 +159,8 @@ export class StationMapElement {
           interactiveButtonRadius &&
       point.y >= startingY + scaledButtonYMargin - interactiveButtonRadius &&
       point.y <= startingY + scaledButtonYMargin + interactiveButtonRadius &&
-      mode !== MapMode.View
+      mode !== MapMode.View &&
+      mode !== MapMode.StationGroupAdd
     );
   }
 
@@ -191,7 +192,8 @@ export class StationMapElement {
           scaledBadgeMargin +
           interactiveBadgeRadius &&
       point.y >= startingY + scaledBadgeMargin - interactiveBadgeRadius &&
-      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius
+      point.y <= startingY + scaledBadgeMargin + interactiveBadgeRadius &&
+      mode !== MapMode.StationGroupAdd
     );
   }
 

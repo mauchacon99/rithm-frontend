@@ -221,4 +221,49 @@ describe('StationWidgetComponent', () => {
     );
     expect(time).toBeTruthy();
   });
+
+  describe('Display detail of the document', () => {
+    it('should show detail of the document', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnDisplayDocument =
+        fixture.debugElement.nativeElement.querySelector(
+          '#show-document-widget'
+        );
+      btnDisplayDocument.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeTruthy();
+      expect(showDocs).toBeNull();
+      expect(spyMethod).toHaveBeenCalledWith(
+        component.dataStationWidget.documents[0].rithmId
+      );
+    });
+
+    it('should return of list the documents', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isDocument = true;
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnReturnDocuments =
+        fixture.debugElement.nativeElement.querySelector(
+          '#return-list-documents'
+        );
+      btnReturnDocuments.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeNull();
+      expect(showDocs).toBeTruthy();
+      expect(spyMethod).toHaveBeenCalledWith('');
+    });
+  });
 });

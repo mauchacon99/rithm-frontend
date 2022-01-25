@@ -24,6 +24,7 @@ export class ConnectionElementService {
   private mapScale = DEFAULT_SCALE;
 
   constructor(private mapService: MapService) {
+    //set this.mapScale to match the behavior subject in mapService.
     this.mapService.mapScale$.subscribe((scale) => {
       this.mapScale = scale;
     });
@@ -35,15 +36,18 @@ export class ConnectionElementService {
    * @param connection The connection to draw.
    */
   drawConnection(connection: ConnectionMapElement): void {
+    //Point the canvasContext to the global one in mapService.
     this.canvasContext = this.mapService.canvasContext;
     if (!this.canvasContext) {
       throw new Error('Cannot draw connection if context is not defined');
     }
 
+    //We use ctx instead of this.canvasContext for the sake of brevity and readability.
     const ctx = this.canvasContext;
 
     ctx.beginPath();
     ctx.moveTo(connection.startPoint.x, connection.startPoint.y);
+    //Styling dependent on a scale and hover state.
     ctx.lineWidth =
       this.mapScale > SCALE_REDUCED_RENDER
         ? CONNECTION_LINE_WIDTH
@@ -51,6 +55,7 @@ export class ConnectionElementService {
     ctx.strokeStyle = connection.hovering
       ? NODE_HOVER_COLOR
       : CONNECTION_DEFAULT_COLOR;
+    //use the path information in connection to draw the connection line.
     ctx.stroke(connection.path);
   }
 }
