@@ -66,11 +66,22 @@ describe('MapToolbarComponent', () => {
   });
 
   it('should toggle mapMode add station group', () => {
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService),
+      'resetSelectedStationGroupStationStatus'
+    );
     component.addStationGroup();
     expect(component.stationGroupAddActive).toBeTrue();
     expect(component.mapMode).toEqual(MapMode.StationGroupAdd);
     component.addStationGroup();
+    const selectStation = service.stationElements.some((st) => st.selected);
+    const selectStationGroup = service.stationGroupElements.some(
+      (st) => st.selected
+    );
     expect(component.stationGroupAddActive).toBeFalse();
+    expect(selectStation).toBeFalse();
+    expect(selectStationGroup).toBeFalse();
     expect(component.mapMode).toEqual(MapMode.Build);
+    expect(mapServiceSpy).toHaveBeenCalledTimes(0);
   });
 });
