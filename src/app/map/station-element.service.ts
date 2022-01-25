@@ -37,6 +37,19 @@ import {
   STATION_RADIUS,
   STATION_WIDTH,
   FONT_SIZE_MODIFIER,
+  STATION_BORDER_LINE_WIDTH_SELECTED,
+  STATION_BORDER_LINE_WIDTH,
+  TOOLTIP_HEIGHT,
+  MAP_DISABLED,
+  MAP_DISABLED_STROKE,
+  MAP_SELECTED,
+  MAP_DEFAULT_COLOR,
+  MAP_CONNECTION_HOVER_COLOR,
+  MAP_DISABLE_TEXT_COLOR,
+  MAP_DISABLE_BADGE_BUTTON_COLOR,
+  TOOLTIP_RADIUS,
+  TOOLTIP_WIDTH,
+  TOOLTIP_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -79,6 +92,14 @@ export class StationElementService {
 
     //Draw the card itself.
     this.drawStationCard(station, dragItem);
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      station.disabled &&
+      !station.selected &&
+      station.hoverItem !== StationElementHoverItem.None
+    ) {
+      this.drawStationToolTip(station);
+    }
 
     //Render items on the station depending on the zoom level.
     if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
@@ -191,19 +212,129 @@ export class StationElementService {
       station.hoverItem !== StationElementHoverItem.None &&
       (dragItem === MapDragItem.Node || dragItem === MapDragItem.Connection) &&
       !station.dragging
-        ? '#ebebeb'
-        : '#fff';
+        ? MAP_CONNECTION_HOVER_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled &&
+          !station.selected
+        ? MAP_DISABLED
+        : MAP_DEFAULT_COLOR;
     //The outline of the station is different if it is being hovered over while a connection node is being dragged.
     ctx.strokeStyle =
       station.hoverItem !== StationElementHoverItem.None &&
       dragItem === MapDragItem.Node &&
       !station.dragging
         ? NODE_HOVER_COLOR
-        : '#fff';
+        : (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.selected) ||
+          (this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+            station.hoverItem !== StationElementHoverItem.None &&
+            !station.disabled)
+        ? MAP_SELECTED
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+          station.disabled &&
+          !station.selected
+        ? MAP_DISABLED_STROKE
+        : MAP_DEFAULT_COLOR;
+    if (
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      (station.selected ||
+        (station.hoverItem !== StationElementHoverItem.None &&
+          !station.disabled))
+    ) {
+      ctx.lineWidth = STATION_BORDER_LINE_WIDTH_SELECTED * this.mapScale;
+    } else {
+      ctx.lineWidth = STATION_BORDER_LINE_WIDTH * this.mapScale;
+    }
+    ctx.stroke();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /**
+   * Draws the station tooltip on the map for a station.
+   *
+   * @param station The station for which to draw the tooltip.
+   */
+  private drawStationToolTip(station: StationMapElement): void {
+    if (!this.canvasContext) {
+      throw new Error('Cannot draw tooltip if context is not defined');
+    }
+    const ctx = this.canvasContext;
+
+    const startingX = station.canvasPoint.x;
+    const startingY = station.canvasPoint.y - TOOLTIP_HEIGHT * this.mapScale;
+
+    const scaledTooltipRadius = TOOLTIP_RADIUS * this.mapScale;
+    const scaledTooltipHeight = TOOLTIP_HEIGHT * this.mapScale;
+    const scaledTooltipWidth = TOOLTIP_WIDTH * this.mapScale;
+    const scaledTooltipPadding = TOOLTIP_PADDING * this.mapScale;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(startingX + scaledTooltipRadius, startingY);
+    ctx.lineTo(startingX + scaledTooltipWidth - scaledTooltipRadius, startingY);
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY,
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipRadius
+    );
+    // line going to bottom right
+    ctx.lineTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // bottom right curve to line going to bottom left
+    ctx.quadraticCurveTo(
+      startingX + scaledTooltipWidth,
+      startingY + scaledTooltipHeight,
+      startingX + scaledTooltipWidth - scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // line going to bottom left
+    ctx.lineTo(
+      startingX + scaledTooltipRadius,
+      startingY + scaledTooltipHeight
+    );
+    // bottom left curve to line going to top left
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY + scaledTooltipHeight,
+      startingX,
+      startingY + scaledTooltipHeight - scaledTooltipRadius
+    );
+    // line going to top left
+    ctx.lineTo(startingX, startingY + scaledTooltipRadius);
+    // top left curve to line going top right
+    ctx.quadraticCurveTo(
+      startingX,
+      startingY,
+      startingX + scaledTooltipRadius,
+      startingY
+    );
+    ctx.closePath();
+    ctx.fillStyle = '#000000';
+    ctx.globalAlpha = 0.6;
     ctx.stroke();
     ctx.fill();
     //After the station card is drawn, restore the context to its previously saved state.
     ctx.restore();
+    ctx.fillStyle = MAP_DEFAULT_COLOR;
+    const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
+    ctx.font = `normal ${fontSize}px Montserrat`;
+    ctx.fillText(
+      'Cannot add station to',
+      startingX + scaledTooltipPadding,
+      startingY + 12 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
+    ctx.fillText(
+      'current selection',
+      startingX + scaledTooltipPadding,
+      startingY + 32 * this.mapScale + scaledTooltipPadding,
+      140 * this.mapScale
+    );
   }
 
   /**
@@ -222,7 +353,12 @@ export class StationElementService {
 
     //Set the styling for the text.
     ctx.textAlign = 'left';
-    ctx.fillStyle = 'black';
+    ctx.fillStyle =
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      station.disabled &&
+      !station.selected
+        ? MAP_DISABLE_TEXT_COLOR
+        : 'black';
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     //When a station has status set to updated, change the font style to reflect that.
     const isItalic =
@@ -351,12 +487,14 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BADGE_HOVER_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : BADGE_DEFAULT_COLOR;
     ctx.fill();
     //Set the style of the font.
     const fontSize = Math.ceil(16 * this.mapScale);
     ctx.font = `600 ${fontSize}px Montserrat`;
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = MAP_DEFAULT_COLOR;
     ctx.textAlign = 'center';
     //Display the number of documents in the station.
     ctx.fillText(
@@ -465,6 +603,8 @@ export class StationElementService {
       dragItem !== MapDragItem.Node &&
       !station.dragging
         ? BUTTON_HOVER_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : buttonColor;
     ctx.fill();
     ctx.closePath();
@@ -515,7 +655,8 @@ export class StationElementService {
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
         : station.hoverItem === StationElementHoverItem.Node &&
-          dragItem !== MapDragItem.Node
+          dragItem !== MapDragItem.Node &&
+          this.mapService.mapMode$.value !== MapMode.StationGroupAdd
         ? NODE_HOVER_COLOR
         : NODE_DEFAULT_COLOR;
     ctx.fill();
@@ -539,6 +680,8 @@ export class StationElementService {
         station.dragging) ||
       station.isAddingConnected
         ? CONNECTION_DEFAULT_COLOR
+        : this.mapService.mapMode$.value === MapMode.StationGroupAdd
+        ? MAP_DISABLE_BADGE_BUTTON_COLOR
         : NODE_HOVER_COLOR;
     ctx.stroke();
     ctx.closePath();
