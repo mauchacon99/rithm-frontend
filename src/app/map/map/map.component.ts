@@ -16,6 +16,7 @@ export class MapComponent {
     private mapService: MapService,
     private errorService: ErrorService
   ) {
+    //Subscribe to getMapData so that we can update the map with the data.
     this.mapService
       .getMapData()
       .pipe(first())
@@ -26,6 +27,7 @@ export class MapComponent {
             error,
             true
           );
+          //Note that the data from the backend has been received.
           this.mapService.mapDataReceived$.next(true);
         },
       });

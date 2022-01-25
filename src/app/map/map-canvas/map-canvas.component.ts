@@ -1886,7 +1886,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
           stationGroup.hoverItem === StationGroupElementHoverItem.Name
         ) {
-          //set this variable to use the information from passed in station group.
+          //Set this variable to use the information from passed in station group.
           const dataInformationDrawer: StationGroupInfoDrawerData = {
             stationGroupRithmId: stationGroup.rithmId,
             stationGroupName: stationGroup.title,
