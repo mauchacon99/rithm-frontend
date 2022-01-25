@@ -92,9 +92,9 @@ describe('HeaderMenuComponent', () => {
   it('should show name organization', () => {
     component.isLoading = false;
     fixture.detectChanges();
-    const OrganizationInfo =
+    const organizationInfo =
       fixture.debugElement.nativeElement.querySelector('#info-organization');
-    expect(OrganizationInfo).toBeTruthy();
+    expect(organizationInfo).toBeTruthy();
 
     const showError = fixture.debugElement.nativeElement.querySelector(
       '#failed-info-organization'
@@ -106,9 +106,9 @@ describe('HeaderMenuComponent', () => {
     component.failedGetOrganization = true;
     fixture.detectChanges();
 
-    const OrganizationInfo =
+    const organizationInfo =
       fixture.debugElement.nativeElement.querySelector('#info-organization');
-    expect(OrganizationInfo).toBeNull();
+    expect(organizationInfo).toBeNull();
 
     const showError = fixture.debugElement.nativeElement.querySelector(
       '#failed-info-organization'
