@@ -18,13 +18,14 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   /** Subject for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  /** Form field viewed in Build mode. */
+  /** A boolean to note if drawer is viewed in Build mode. */
   editMode = false;
 
   /** Station group name. */
   stationGroupRithmId = '';
 
   /** Station group name. */
+  /** The name of the group which can be edited while in build mode. */
   groupName = '';
 
   /** Station group is chained or not. */
@@ -43,9 +44,9 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
   numberOfSubgroups = 0;
 
   /**
-   * Whether the map is in any building mode.
+   * Whether the map is in build mode.
    *
-   * @returns True if the map is in any building mode, false otherwise.
+   * @returns True if the map is in build mode, false otherwise.
    */
   get isBuilding(): boolean {
     return this.currentMode === MapMode.Build;
@@ -57,8 +58,10 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     private fb: FormBuilder,
     private popupService: PopupService
   ) {
+    //Subscribe to the mapMode on the mapService.
     this.mapService.mapMode$.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (mapMode) => {
+        //set this.currentMode to the subscribed mapMode.
         this.currentMode = mapMode;
       },
       error: (error: unknown) => {

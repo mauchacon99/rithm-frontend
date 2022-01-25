@@ -1229,4 +1229,139 @@ export class MapService {
       (station) => station.status !== MapItemStatus.Normal
     );
   }
+
+  /**
+   * Set station group status of parent and child station group and respective stations.
+   *
+   * @param stationGroup The incoming station-group data.
+   */
+  setStationGroupStatus(stationGroup: StationGroupMapElement): void {
+    //Update parent station-group and respective stations status.
+    this.updateParentStationGroup(stationGroup.rithmId);
+    //Update descendent station-group and respective stations status.
+    this.updateChildStationGroup(stationGroup);
+    //Reset status of each station-group and station if nothing(station group or station) has been selected.
+    if (
+      !this.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+    }
+  }
+
+  /**
+   * Update the selected status of all parent station-group and stations of incoming station-group id.
+   *
+   * @param stationGroupId The incoming station-group id.
+   */
+  private updateParentStationGroup(stationGroupId: string): void {
+    const rootStationGroup = this.stationGroupElements.find(
+      (f) => f.rithmId === stationGroupId
+    );
+    if (rootStationGroup?.isReadOnlyRootStationGroup) {
+      return;
+    }
+    this.stationGroupElements.forEach((stationGroup) => {
+      if (
+        stationGroup.subStationGroups.includes(stationGroupId) &&
+        !stationGroup.isReadOnlyRootStationGroup
+      ) {
+        stationGroup.disabled = false;
+        this.updateParentStationGroup(stationGroup.rithmId);
+      }
+    });
+  }
+
+  /**
+   * Update the selected status of all descendent station-group and stations of incoming station-group.
+   *
+   * @param stationGroup The incoming station-group data.
+   */
+  private updateChildStationGroup(stationGroup: StationGroupMapElement): void {
+    const isSelected = stationGroup.selected;
+    stationGroup.subStationGroups.forEach((subStationGroupId) => {
+      const subStationGroup = this.stationGroupElements.find(
+        (group) => group.rithmId === subStationGroupId
+      );
+      if (!subStationGroup) {
+        throw new Error(
+          `Couldn't find a sub-flow for which an id exists: ${subStationGroupId}`
+        );
+      }
+      subStationGroup.selected = isSelected ? true : false;
+      subStationGroup.stations.map((st) => {
+        const stationIndex = this.stationElements.findIndex(
+          (station) => station.rithmId === st
+        );
+        this.stationElements[stationIndex].selected = isSelected ? true : false;
+      });
+      this.updateChildStationGroup(subStationGroup);
+    });
+  }
+
+  /**
+   * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
+   */
+  setStationGroupStationStatus(): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.disabled = true;
+      stationGroup.stations.map((station) => {
+        const stationIndex = this.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        if (!this.stationElements[stationIndex].selected) {
+          this.stationElements[stationIndex].disabled = true;
+        }
+      });
+    });
+  }
+
+  /**
+   * Reset disable and true status to false when a station-group is deselected.
+   */
+  resetSelectedStationGroupStationStatus(): void {
+    this.stationGroupElements.map((stationGroup) => {
+      stationGroup.selected = false;
+      stationGroup.disabled = false;
+      stationGroup.stations.map((station) => {
+        const stationIndex = this.stationElements.findIndex(
+          (st) => st.rithmId === station
+        );
+        this.stationElements[stationIndex].selected = false;
+        this.stationElements[stationIndex].disabled = false;
+      });
+    });
+  }
+
+  /**
+   * Based on incoming station selection, update the status of related stations and station group.
+   *
+   * @param station The incoming station.
+   */
+  setSelectedStation(station: StationMapElement): void {
+    this.stationGroupElements.map((stationGroup) => {
+      if (stationGroup.stations.includes(station.rithmId)) {
+        stationGroup.stations.map((st) => {
+          const stationIndex = this.stationElements.findIndex(
+            (sta) => sta.rithmId === st
+          );
+          this.stationElements[stationIndex].disabled = false;
+        });
+        stationGroup.disabled = false;
+        stationGroup.subStationGroups.forEach((subStationGroupId) => {
+          const stationGroupIndex = this.stationGroupElements.findIndex(
+            (group) => group.rithmId === subStationGroupId
+          );
+          this.stationGroupElements[stationGroupIndex].disabled = false;
+        });
+        return;
+      }
+    });
+    if (
+      !this.stationElements.some((st) => st.selected) &&
+      !this.stationGroupElements.some((stGroup) => stGroup.selected)
+    ) {
+      this.resetSelectedStationGroupStationStatus();
+    }
+  }
 }

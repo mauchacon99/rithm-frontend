@@ -1,1 +1,40 @@
-<p>expansion-menu works!</p>
+<mat-expansion-panel
+  hideToggle
+  (opened)="panelOpenState = true"
+  (closed)="panelOpenState = false"
+  class="mat-elevation-z0"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title class="flex justify-between items-center p-3">
+      <div class="flex items-center">
+        <i
+          [ngClass]="panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
+          class="fas text-lg"
+        ></i>
+        <div class="ml-3 w-[200px] md:w-[260px] truncate">
+          <span class="text-base">{{
+            dashboardRole === roleDashboardMenu.DashboardOrganization
+              ? 'Organization Dashboard'
+              : 'Personal Dashboard'
+          }}</span>
+        </div>
+      </div>
+      <button
+        mat-icon-button
+        [attr.data-testid]="'button-more-' + dashboardRole"
+        id="button-more-{{ dashboardRole }}"
+        (click)="$event.stopPropagation()"
+      >
+        <i class="fas fa-ellipsis-h text-lg"></i>
+      </button>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-list>
+    <mat-list-item
+      *ngFor="let option of staticDataOptions"
+      class="color-hover cursor-pointer"
+    >
+      {{ option }}
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>
