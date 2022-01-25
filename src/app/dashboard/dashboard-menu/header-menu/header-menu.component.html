@@ -1,11 +1,28 @@
-<div class="flex justify-end my-4">
-  <button
-    data-testid="close-menu-dashboard"
-    id="close-menu-dashboard"
-    mat-icon-button
-    (click)="toggleMenu('menuDashboard')"
-    class="text-secondary-500"
-  >
-    <i class="fas fa-times"></i>
-  </button>
+<div class="my-4">
+  <!-- Button close menu. -->
+  <div class="flex justify-end">
+    <button
+      data-testid="close-menu-dashboard"
+      id="close-menu-dashboard"
+      mat-icon-button
+      (click)="toggleMenu('menuDashboard')"
+      class="text-secondary-500"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Header information of the organization. -->
+  <div class="flex justify-between items-end">
+    <div class="flex items-end">
+      <img
+        src="assets/logo/black-icon-only.svg"
+        class="w-10 mr-2"
+        alt="Logo Rithm"
+      />
+      <p *ngIf="organizationInfo" class="font-semibold w-24 truncate">
+        {{ organizationInfo.name }}
+      </p>
+    </div>
+  </div>
 </div>

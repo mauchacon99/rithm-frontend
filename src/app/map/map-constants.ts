@@ -1,9 +1,12 @@
 import { Point } from 'src/models';
 
 // TODO: refine this file; this is polluting the global namespace a little
+// Default Cursor info
 export const DEFAULT_CANVAS_POINT: Point = { x: 0, y: 0 };
 export const DEFAULT_MOUSE_POINT: Point = { x: -1, y: -1 };
+
 export const FONT_SIZE_MODIFIER = 16;
+/** Used to distinguish what counts as a click or a drag. */
 export const TOUCH_EVENT_MARGIN = 5;
 
 // Scale
@@ -19,6 +22,9 @@ export const SCALE_RENDER_STATION_ELEMENTS =
   DEFAULT_SCALE * Math.pow(ZOOM_VELOCITY, 100);
 export const SCALE_REDUCED_RENDER =
   SCALE_RENDER_STATION_ELEMENTS / Math.pow(ZOOM_VELOCITY, 40);
+
+// Zoom
+export const BUTTON_ZOOM_COUNT_INCREMENT = 50;
 
 // Pan
 export const MAX_PAN_VELOCITY = 25;
@@ -61,6 +67,7 @@ export const CONNECTION_ARROW_LENGTH = 6;
 export const CONNECTION_DEFAULT_COLOR = '#7a8699';
 export const CONNECTION_NODE_OFFSET = 80;
 export const CONNECTION_HEIGHT_REDUCER = 5;
+/** Used to distinguish what counts as a click or a drag. */
 export const MOUSE_MOVEMENT_OVER_CONNECTION = 5;
 
 // Connection node

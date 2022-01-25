@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MenuComponent } from './menu.component';
 import { MockComponent } from 'ng-mocks';
 import { HeaderMenuComponent } from '../header-menu/header-menu.component';
 import { OptionsMenuComponent } from '../options-menu/options-menu.component';
 import { ExpansionMenuComponent } from '../expansion-menu/expansion-menu.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('MenuComponent', () => {
   let component: MenuComponent;
@@ -18,6 +18,7 @@ describe('MenuComponent', () => {
         MockComponent(OptionsMenuComponent),
         MockComponent(ExpansionMenuComponent),
       ],
+      imports: [MatExpansionModule],
     }).compileComponents();
   });
 
