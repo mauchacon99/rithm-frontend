@@ -13,6 +13,9 @@ export interface StationGroupInfoDrawerData {
   /** Number of stations included in station group. */
   numberOfStations: number;
 
+  /** Number of sub groups included in station group. */
+  numberOfSubgroups: number;
+
   /** Mode Edit. */
   editMode: boolean;
 
