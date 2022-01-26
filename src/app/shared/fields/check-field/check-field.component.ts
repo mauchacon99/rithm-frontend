@@ -10,7 +10,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { first, Subject, takeUntil } from 'rxjs';
 import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 import { DocumentService } from 'src/app/core/document.service';
@@ -66,8 +65,8 @@ export class CheckFieldComponent
     // eslint-disable-next-line prefer-const
     let fields: { [key: string]: unknown } = {};
 
-    this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem-${index}`] = [this.getCheckedItem(index)];
+    this.field.possibleAnswers?.forEach((answer, index) => {
+      fields[`${answer.text}`] = [this.getCheckedItem(index)];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -163,25 +162,17 @@ export class CheckFieldComponent
 
   /**
    * Allow the answer to be updated in the documentTemplate through a subject.
-   *
-   * @param event Captures the event when the checkbox is clicked.
-   * @param index The possible array index of the clicked checkbox.
-   * @param value The text of the possible answer.
    */
-  updateFieldAnswer(
-    event: MatCheckboxChange,
-    index: number,
-    value: string
-  ): void {
-    if (event.checked) {
-      this.checkedResponses.push(value);
-    } else {
-      const valueIndex = this.checkedResponses.indexOf(value);
-      this.checkedResponses.splice(valueIndex, 1);
-    }
-    const checkBoxesResponse = this.checkedResponses
-      .toString()
-      .replace(/,/g, '|');
+  updateFieldAnswer(): void {
+    const itemsChecked: string[] = [];
+    Object.keys(this.checkFieldForm.controls).forEach((checkItem) => {
+      if (this.checkFieldForm.controls[`${checkItem}`].value) {
+        itemsChecked.push(checkItem);
+      }
+    });
+
+    const checkBoxesResponse = itemsChecked.toString().replace(/,/g, '|');
+
     const documentAnswer: DocumentAnswer = {
       questionRithmId: this.field.rithmId,
       documentRithmId: '',
