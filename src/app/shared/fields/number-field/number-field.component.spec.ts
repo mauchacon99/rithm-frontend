@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaskModule } from 'ngx-mask';
+import { DocumentService } from 'src/app/core/document.service';
+import { MockDocumentService } from 'src/mocks';
 import { Question, QuestionFieldType } from 'src/models';
 
 import { NumberFieldComponent } from './number-field.component';
@@ -57,7 +59,10 @@ describe('NumberFieldComponent', () => {
         NoopAnimationsModule,
         NgxMaskModule.forRoot(),
       ],
-      providers: [{ provide: FormBuilder, useValue: formBuilder }],
+      providers: [
+        { provide: FormBuilder, useValue: formBuilder },
+        { provide: DocumentService, useValue: MockDocumentService },
+      ],
     }).compileComponents();
   });
 
