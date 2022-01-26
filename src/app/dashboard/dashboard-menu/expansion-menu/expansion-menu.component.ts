@@ -1,5 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
+import { DashboardData } from 'src/models';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -9,9 +13,9 @@ import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
   templateUrl: './expansion-menu.component.html',
   styleUrls: ['./expansion-menu.component.scss'],
 })
-export class ExpansionMenuComponent {
-  /** Static data for options. */
-  staticDataOptions: string[] = ['General', 'General#2'];
+export class ExpansionMenuComponent implements OnInit {
+  /** Dashboards list. */
+  dashboardsList: DashboardData[] = [];
 
   /** Status expanded, this save the state the panel for show icon expanded. */
   panelOpenState = false;
@@ -21,4 +25,29 @@ export class ExpansionMenuComponent {
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
+
+  constructor(
+    private dashboardService: DashboardService,
+    private errorService: ErrorService
+  ) {}
+
+  /** Init live cycle component. */
+  ngOnInit(): void {
+    const petitionDashboard$ =
+      this.dashboardRole === this.roleDashboardMenu.DashboardOrganization
+        ? this.dashboardService.getDashboardOrganization()
+        : this.dashboardService.getDashboardPersonal();
+
+    petitionDashboard$.pipe(first()).subscribe({
+      next: (dashboards) => {
+        this.dashboardsList = dashboards;
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+  }
 }

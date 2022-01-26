@@ -23,11 +23,13 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item
-      *ngFor="let option of staticDataOptions"
+    <div
+      *ngFor="let dashboard of dashboardsList; let i = index"
       class="color-hover cursor-pointer"
     >
-      {{ option }}
-    </mat-list-item>
+      <mat-list-item id="dashboard-item-{{ i }}">
+        {{ dashboard.name }}
+      </mat-list-item>
+    </div>
   </mat-list>
 </mat-expansion-panel>
