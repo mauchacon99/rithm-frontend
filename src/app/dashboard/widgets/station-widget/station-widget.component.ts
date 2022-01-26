@@ -34,8 +34,8 @@ export class StationWidgetComponent implements OnInit {
   /** Document id selected for view. */
   documentIdSelected = '';
 
-  /** Update list of document when create new document. */
-  reloadListDocument = false;
+  /** Update document list when a new document is created. */
+  reloadDocumentList = false;
 
   constructor(
     private documentService: DocumentService,
@@ -109,9 +109,9 @@ export class StationWidgetComponent implements OnInit {
   viewDocument(documentRithmId: string): void {
     this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
-    if (this.reloadListDocument) {
+    if (this.reloadDocumentList) {
       this.getStationWidgetDocuments();
-      this.reloadListDocument = false;
+      this.reloadDocumentList = false;
     }
   }
 
@@ -127,7 +127,7 @@ export class StationWidgetComponent implements OnInit {
         next: (documentRithmId) => {
           this.documentIdSelected = documentRithmId;
           this.isDocument = true;
-          this.reloadListDocument = true;
+          this.reloadDocumentList = true;
           this.popupService.notify(
             'The document has been created successfully.'
           );
