@@ -1567,6 +1567,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //If dragging a station group.
     } else if (this.dragItem === MapDragItem.StationGroup) {
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       // Set dragging on stations in the station group.
       this.setDraggingStationGroup();
 
@@ -2077,8 +2078,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * Set dragging on stations in the station group.
    */
   setDraggingStationGroup(): void {
-    // Recursive function for the station set dragged in a station group.
-    const setDraggingStation = (stationGroup: StationGroupMapElement) => {
+    // Recursive function used to set dragging to true for each station and subgroup in a station group.
+    const setDraggingOnContents = (stationGroup: StationGroupMapElement) => {
       // Loop through the station in station group array.
       stationGroup.stations.forEach((stationIdFromGroup) => {
         // Find index of the current station in stations array.
@@ -2102,18 +2103,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           // If you find the index of the current sub station group.
           if (subStationGroupIndex !== -1) {
             this.stationGroups[subStationGroupIndex].dragging = true;
-            // Calling setDraggingStation for the current substationGroup.
-            setDraggingStation(this.stationGroups[subStationGroupIndex]);
+            /* Call setDraggingOnContents() for the current substationGroup.
+            This allows us to also set dragging on any stations or subgroups within it. */
+            setDraggingOnContents(this.stationGroups[subStationGroupIndex]);
           }
         });
       }
     };
 
-    this.mapCanvas.nativeElement.style.cursor = 'grabbing';
     // Loop through the station group array to check if there is a station group being dragged.
     for (const stationGroup of this.stationGroups) {
       if (stationGroup.dragging) {
-        setDraggingStation(stationGroup);
+        setDraggingOnContents(stationGroup);
         break;
       }
     }
