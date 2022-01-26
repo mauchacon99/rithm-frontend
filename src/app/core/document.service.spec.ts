@@ -19,6 +19,11 @@ import {
   MoveDocument,
   StationWidgetData,
   DocumentGenerationStatus,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  RuleType,
+  DocumentEvent,
 } from 'src/models';
 import { DocumentService } from './document.service';
 
@@ -306,7 +311,6 @@ describe('DocumentService', () => {
         file: 'dev.txt',
         filename: 'dev',
         type: QuestionFieldType.Email,
-        rithmId: '789-321-456',
         questionUpdated: true,
       },
       {
@@ -317,10 +321,33 @@ describe('DocumentService', () => {
         file: 'dev2.txt',
         filename: 'dev2',
         type: QuestionFieldType.City,
-        rithmId: '789-321-456-789',
         questionUpdated: false,
       },
     ];
+
+    const formData = new FormData();
+    expectedAnswers.forEach((element, index) => {
+      formData.append(
+        `answers[${index}].questionRithmId`,
+        element.questionRithmId
+      );
+      formData.append(
+        `answers[${index}].documentRithmId`,
+        element.documentRithmId
+      );
+      formData.append(
+        `answers[${index}].stationRithmId`,
+        element.stationRithmId
+      );
+      formData.append(
+        `answers[${index}].value`,
+        element.type !== QuestionFieldType.Phone
+          ? element.value
+          : element.value.replace(/\s/g, '')
+      );
+      formData.append(`answers[${index}].type`, element.type);
+      formData.append(`answers[${index}].questionUpdated`, 'true');
+    });
 
     service
       .saveDocumentAnswer(documentId, expectedAnswers)
@@ -333,7 +360,7 @@ describe('DocumentService', () => {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentId}`
     );
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(expectedAnswers);
+    expect(req.request.body).toEqual(formData);
 
     req.flush(expectedAnswers);
     httpTestingController.verify();
@@ -399,7 +426,12 @@ describe('DocumentService', () => {
         answer: {
           questionRithmId: 'string',
           referAttribute: 'string',
-          asArray: [],
+          asArray: [
+            {
+              value: 'string',
+              isChecked: false,
+            },
+          ],
           asInt: 0,
           asDecimal: 0,
           asString: 'string',
@@ -629,6 +661,106 @@ describe('DocumentService', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('stationRithmId')).toBe(stationId);
     req.flush(dataWidgetStation);
+    httpTestingController.verify();
+  });
+
+  it('should return the Station flow logic rule', () => {
+    const stationRithmId = '3813442c-82c6-4035-893a-86fa9deca7c3';
+
+    const expectStationFlowLogic: FlowLogicRule[] = [
+      {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    service
+      .getStationFlowLogicRule(stationRithmId)
+      .subscribe((stationFlowLogic) => {
+        expect(stationFlowLogic).toEqual(expectStationFlowLogic);
+      });
+    // eslint-disable-next-line max-len
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic?stationRithmId=${stationRithmId}`
+    );
+    expect(req.request.params.get('stationRithmId')).toEqual(stationRithmId);
+    req.flush(expectStationFlowLogic);
+    httpTestingController.verify();
+  });
+
+  it('should return events for document', () => {
+    const documentRithmId = documentId;
+    const expectedEventsResponse: DocumentEvent[] = [
+      {
+        date: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getDocumentEvents(documentRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
+  });
+
+  it('should return array of events for the document history', () => {
+    const documentRithmId = documentId;
+    const expectedEventsResponse: DocumentEvent[] = [
+      {
+        date: '2022-01-18T22:13:05.871Z',
+        description: 'Event Document #1',
+        user: {
+          rithmId: '123',
+          firstName: 'Testy',
+          lastName: 'Test',
+          email: 'test@test.com',
+          isEmailVerified: true,
+          notificationSettings: null,
+          createdDate: '1/2/34',
+          role: null,
+          organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+        },
+      },
+    ];
+    service.getDocumentEvents(documentRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedEventsResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history?documentRithmId=${documentRithmId}`
+    );
+    expect(req.request.params.get('documentRithmId')).toBe(
+      'E204F369-386F-4E41'
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedEventsResponse);
     httpTestingController.verify();
   });
 });

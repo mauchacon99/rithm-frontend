@@ -12,7 +12,7 @@ export enum OperatorType {
   GreaterOrEqual = '>=',
 
   /** Lesser Or Equal Field. */
-  LesserOrEqual = '<',
+  LesserOrEqual = '<=',
 
   /** Equal To Field. */
   EqualTo = '==',
@@ -26,6 +26,12 @@ export enum OperatorType {
   /** After Field. */
   After = 'after',
 
-  /** Contains field. */
+  /** Contains Field. */
   Contains = 'contains',
+
+  /** Does Not Contain Field. */
+  NotContains = 'not contains',
+
+  /** Date Field On. */
+  On = 'on',
 }

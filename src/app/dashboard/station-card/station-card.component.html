@@ -2,6 +2,10 @@
   <div class="grid grid-cols-2 gap-1">
     <h6 class="col-span-2 text-accent-500 font-medium">
       {{ station?.stationName }}
+      <!-- Provisional link to make the navigation a bit easiest -->
+      <a class="text-secondary-400" (click)="goToStation()">
+        <i class="fas fa-link fa-sm"></i>
+      </a>
     </h6>
     <div>
       <p class="overline-font">worker roster</p>

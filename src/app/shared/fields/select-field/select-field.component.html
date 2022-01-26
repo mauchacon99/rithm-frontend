@@ -5,10 +5,11 @@
       [multiple]="field.questionType === fieldTypeEnum.MultiSelect"
       [required]="field.isRequired"
       [formControlName]="this.field.questionType"
+      (selectionChange)="updateFieldAnswer()"
     >
       <mat-option
         *ngFor="let possibleAnswer of field?.possibleAnswers"
-        [value]="possibleAnswer"
+        [value]="possibleAnswer.text"
       >
         {{ possibleAnswer.text }}
       </mat-option>

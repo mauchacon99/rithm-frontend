@@ -1,26 +1,61 @@
-<div class="grid grid-cols-1 p-4 w-72 overflow-y-auto drawer-content-h-map">
-  <div class="w-full py-2">
-    <div class="col-span-12 mb-3">
-      <h6 class="text-center">Station Group Information</h6>
+<div class="p-4 w-72 overflow-y-auto drawer-content-h-map">
+  <div class="grid grid-cols-1">
+    <div class="w-full py-2">
+      <div class="col-span-12">
+        <h6 class="text-center">Station Group Information</h6>
+      </div>
+      <div class="col-span-12 pt-2" *ngIf="!isBuilding">
+        <p class="overline-font mb-1">Group Name</p>
+        <p>{{ groupName }}</p>
+      </div>
+      <div class="col-span-12 pt-2" *ngIf="isBuilding">
+        <mat-form-field
+          appearance="outline"
+          class="col-span-12 sm:col-span-8 p-0"
+        >
+          <mat-label>Group Name</mat-label>
+          <input
+            matInput
+            type="text"
+            id="group"
+            data-testId="group-name-field"
+            [(ngModel)]="groupName"
+          />
+        </mat-form-field>
+      </div>
     </div>
-    <div class="col-span-12 pt-2" *ngIf="!isBuilding">
-      <p class="overline-font">Group Name</p>
-      <p>{{ 'groupName' }}</p>
+    <div class="w-full py-2">
+      <p class="overline-font mb-1">group settings</p>
+      <div class="flex flex-row justify-between items-center text-xs">
+        Chained <mat-slide-toggle></mat-slide-toggle>
+      </div>
     </div>
-    <div class="col-span-12 pt-2" *ngIf="isBuilding">
-      <mat-form-field
-        appearance="outline"
-        class="col-span-12 sm:col-span-8 p-0"
+    <div class="w-full py-2">
+      <p class="overline-font mb-1">stations</p>
+      <button
+        class="mat-focus-indicator priority mat-mini-fab mat-button-base circle-40-secondary"
       >
-        <mat-label>Group Name</mat-label>
-        <input
-          matInput
-          type="text"
-          id="group"
-          data-testId="group-name-field"
-          [(ngModel)]="groupName"
-        />
-      </mat-form-field>
+        {{ numberOfStations }}
+      </button>
+    </div>
+    <div class="w-full py-2">
+      <p class="overline-font mb-1">Sub groups</p>
+      <button
+        class="mat-focus-indicator priority mat-mini-fab mat-button-base circle-40-secondary"
+      >
+        {{ numberOfSubgroups }}
+      </button>
+    </div>
+    <div class="w-full py-2" *ngIf="isBuilding">
+      <button
+        mat-stroked-button
+        id="delete-stationGroup-button"
+        data-testId="delete-stationGroup-button"
+        color="warn"
+        class="priority"
+      >
+        Delete Station Group
+      </button>
     </div>
   </div>
 </div>

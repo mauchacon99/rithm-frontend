@@ -46,6 +46,7 @@ $rithm-theme: mat.define-light-theme(
 // Apply Rithm light theme
 @include mat.all-component-themes($rithm-light);
 
+// Tailwind Imports
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -101,5 +102,31 @@ a {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.scrollbar {
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  /* stylelint-disable-next-line */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: transparent;
+  }
+
+  &:hover {
+    /* stylelint-disable-next-line */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+
+      @apply bg-gradient-to-b from-primary-50 to-primary-100;
+    }
   }
 }

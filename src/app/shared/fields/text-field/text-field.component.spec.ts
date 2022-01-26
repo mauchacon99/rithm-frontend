@@ -7,7 +7,8 @@ import { Question, QuestionFieldType } from 'src/models';
 
 import { TextFieldComponent } from './text-field.component';
 import { StationService } from 'src/app/core/station.service';
-import { MockStationService } from 'src/mocks';
+import { MockDocumentService, MockStationService } from 'src/mocks';
+import { DocumentService } from 'src/app/core/document.service';
 
 const FIELDS: Question[] = [
   {
@@ -65,6 +66,7 @@ describe('TextFieldComponent', () => {
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
         { provide: StationService, useClass: MockStationService },
+        { provide: DocumentService, useValue: MockDocumentService },
       ],
     }).compileComponents();
   });

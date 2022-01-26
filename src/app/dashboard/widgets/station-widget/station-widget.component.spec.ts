@@ -7,6 +7,8 @@ import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { DocumentComponent } from 'src/app/document/document/document.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -18,6 +20,8 @@ describe('StationWidgetComponent', () => {
       declarations: [
         StationWidgetComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(UserAvatarComponent),
+        MockComponent(DocumentComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -30,6 +34,26 @@ describe('StationWidgetComponent', () => {
     fixture = TestBed.createComponent(StationWidgetComponent);
     component = fixture.componentInstance;
     component.stationRithmId = stationRithmId;
+    component.dataStationWidget = {
+      stationName: 'Station Name',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-',
+          name: 'Document Name',
+          priority: 0,
+          lastUpdatedUTC: '2022-01-17T15:03:26.371Z',
+          flowedTimeUTC: '2022-01-17T15:03:26.371Z',
+          assignedUser: {
+            rithmId: 'string',
+            firstName: 'string',
+            lastName: 'string',
+            email: 'string',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
     fixture.detectChanges();
   });
 
@@ -63,6 +87,22 @@ describe('StationWidgetComponent', () => {
     component.stationRithmId = stationRithmId;
     component.ngOnInit();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should try request again  listing documents if fails', () => {
+    component.failedLoadWidget = true;
+    fixture.detectChanges();
+
+    const card =
+      fixture.debugElement.nativeElement.querySelector('#card-error');
+    expect(card).toBeTruthy();
+
+    const methodCalled = spyOn(component, 'getStationWidgetDocuments');
+    const tryAgain =
+      fixture.debugElement.nativeElement.querySelector('#try-again');
+    expect(tryAgain).toBeTruthy();
+    tryAgain.click();
+    expect(methodCalled).toHaveBeenCalled();
   });
 
   it('should show button if station is manual', () => {
@@ -174,6 +214,62 @@ describe('StationWidgetComponent', () => {
       expect(loadingDocs).toBeNull();
       expect(loadingIndicator).toBeNull();
       expect(showDocs).toBeTruthy();
+    });
+  });
+
+  it('should return the time in a string', () => {
+    const time = component.getElapsedTime(
+      component.dataStationWidget.documents[0].flowedTimeUTC
+    );
+    expect(time).toBeTruthy();
+  });
+
+  describe('Display detail of the document', () => {
+    it('should show detail of the document', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnDisplayDocument =
+        fixture.debugElement.nativeElement.querySelector(
+          '#show-document-widget'
+        );
+      btnDisplayDocument.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeTruthy();
+      expect(showDocs).toBeNull();
+      expect(component.documentIdSelected).toBe(
+        component.dataStationWidget.documents[0].rithmId
+      );
+      expect(spyMethod).toHaveBeenCalledWith(
+        component.dataStationWidget.documents[0].rithmId
+      );
+    });
+
+    it('should return of list the documents', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isDocument = true;
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnReturnDocuments =
+        fixture.debugElement.nativeElement.querySelector(
+          '#return-list-documents'
+        );
+      btnReturnDocuments.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeNull();
+      expect(showDocs).toBeTruthy();
+      expect(component.documentIdSelected).toBe('');
+      expect(spyMethod).toHaveBeenCalledWith('');
     });
   });
 });

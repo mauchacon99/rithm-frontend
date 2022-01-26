@@ -4,7 +4,14 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  delay,
+  map,
+  Observable,
+  Subject,
+  throwError,
+} from 'rxjs';
 import {
   StationDocuments,
   ForwardPreviousStationsDocument,
@@ -17,6 +24,9 @@ import {
   DocumentAutoFlow,
   MoveDocument,
   StationWidgetData,
+  FlowLogicRule,
+  DocumentEvent,
+  QuestionFieldType,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 
@@ -35,7 +45,19 @@ export class DocumentService {
     appendedName: '',
   });
 
+  /** Document Answer to be updated. */
+  documentAnswer$ = new Subject<DocumentAnswer>();
+
   constructor(private http: HttpClient) {}
+
+  /**
+   * Update the DocumentAnswer subject.
+   *
+   * @param answer An answer to be updated in the documentTemplate.
+   */
+  updateAnswerSubject(answer: DocumentAnswer): void {
+    this.documentAnswer$.next(answer);
+  }
 
   /**
    * Gets a list of documents for a given station.
@@ -136,28 +158,40 @@ export class DocumentService {
    * Save the document answers.
    *
    * @param documentRithmId The specific document id.
-   * @param answerDocument The answers so document.
+   * @param documentAnswers The answers so document.
    * @returns The document answers.
    */
   saveDocumentAnswer(
     documentRithmId: string,
-    answerDocument: DocumentAnswer[]
+    documentAnswers: DocumentAnswer[]
   ): Observable<DocumentAnswer[]> {
-    if (!documentRithmId || !answerDocument) {
-      return throwError(
-        () =>
-          new HttpErrorResponse({
-            error: {
-              error: 'Cannot get the name of the document or its answers.',
-            },
-          })
-      ).pipe(delay(1000));
-    } else {
-      return this.http.post<DocumentAnswer[]>(
-        `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
-        answerDocument
+    const formData = new FormData();
+    documentAnswers.forEach((element, index) => {
+      formData.append(
+        `answers[${index}].questionRithmId`,
+        element.questionRithmId
       );
-    }
+      formData.append(
+        `answers[${index}].documentRithmId`,
+        element.documentRithmId
+      );
+      formData.append(
+        `answers[${index}].stationRithmId`,
+        element.stationRithmId
+      );
+      formData.append(
+        `answers[${index}].value`,
+        element.type !== QuestionFieldType.Phone
+          ? element.value
+          : element.value.replace(/\s/g, '')
+      );
+      formData.append(`answers[${index}].type`, element.type);
+      formData.append(`answers[${index}].questionUpdated`, 'true');
+    });
+    return this.http.post<DocumentAnswer[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/answers?documentRithmId=${documentRithmId}`,
+      formData
+    );
   }
 
   /**
@@ -419,6 +453,34 @@ export class DocumentService {
     const params = new HttpParams().set('stationRithmId', stationRithmId);
     return this.http.get<StationWidgetData>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/documents-at-station`,
+      { params }
+    );
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param stationRithmId The specific  station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule[]> {
+    const params = new HttpParams().set('stationRithmId', stationRithmId);
+    return this.http.get<FlowLogicRule[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/flow-logic`,
+      { params }
+    );
+  }
+
+  /**
+   * Get events for the document history.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns an array of events for the document history.
+   */
+  getDocumentEvents(documentRithmId: string): Observable<DocumentEvent[]> {
+    const params = new HttpParams().set('documentRithmId', documentRithmId);
+    return this.http.get<DocumentEvent[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/history`,
       { params }
     );
   }

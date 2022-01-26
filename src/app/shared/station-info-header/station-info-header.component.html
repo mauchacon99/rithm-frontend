@@ -14,8 +14,13 @@
         matSuffix
         class="icon icon-top"
         (click)="toggleDrawer('stationInfo')"
+        [disabled]="isDrawerOpen"
+        type="button"
       >
-        <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+        <i
+          class="fas fa-info-circle text-2xl"
+          [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+        ></i>
       </button>
     </div>
     <form [formGroup]="stationNameForm" *ngIf="stationEditMode">

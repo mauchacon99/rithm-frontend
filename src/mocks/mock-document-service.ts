@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo,
@@ -16,6 +16,11 @@ import {
   MoveDocument,
   StationWidgetData,
   DocumentGenerationStatus,
+  FlowLogicRule,
+  OperandType,
+  OperatorType,
+  RuleType,
+  DocumentEvent,
 } from 'src/models';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -25,6 +30,18 @@ import {
 export class MockDocumentService {
   /** The Name of the Document as BehaviorSubject. */
   documentName$ = new BehaviorSubject<string>('');
+
+  /** Document Answer to be updated. */
+  documentAnswer$ = new Subject<DocumentAnswer>();
+
+  /**
+   * Update the DocumentAnswer subject.
+   *
+   * @param answer An answer to be updated in the documentTemplate.
+   */
+  updateAnswerSubject(answer: DocumentAnswer): void {
+    this.documentAnswer$.next(answer);
+  }
 
   /**
    * Gets a list of documents for a given station.
@@ -898,7 +915,6 @@ export class MockDocumentService {
           file: 'dev.txt',
           filename: 'dev',
           type: QuestionFieldType.Email,
-          rithmId: '789-321-456',
           questionUpdated: true,
         },
         {
@@ -909,7 +925,6 @@ export class MockDocumentService {
           file: 'dev2.txt',
           filename: 'dev2',
           type: QuestionFieldType.City,
-          rithmId: '789-321-456-789',
           questionUpdated: false,
         },
       ];
@@ -1041,7 +1056,12 @@ export class MockDocumentService {
           answer: {
             questionRithmId: 'string',
             referAttribute: 'string',
-            asArray: [],
+            asArray: [
+              {
+                value: 'string',
+                isChecked: false,
+              },
+            ],
             asInt: 0,
             asDecimal: 0,
             asString: 'string',
@@ -1240,5 +1260,86 @@ export class MockDocumentService {
       ],
     };
     return of(dataWidgetStation).pipe(delay(1000));
+  }
+
+  /**
+   * Get each station flow rules.
+   *
+   * @param stationRithmId The specific  station id.
+   * @returns Station flow logic rule.
+   */
+  getStationFlowLogicRule(stationRithmId: string): Observable<FlowLogicRule> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'The id of the Station cannot be empty.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const stationFlowLogic: FlowLogicRule = {
+        stationRithmId: '3813442c-82c6-4035-893a-86fa9deca7c3',
+        destinationStationRithmId: '73d47261-1932-4fcf-82bd-159eb1a7243f',
+        flowRules: [
+          {
+            ruleType: RuleType.Or,
+            equations: [
+              {
+                leftOperand: {
+                  type: OperandType.Field,
+                  value: 'birthday',
+                },
+                operatorType: OperatorType.Before,
+                rightOperand: {
+                  type: OperandType.Date,
+                  value: '5/27/1982',
+                },
+              },
+            ],
+          },
+        ],
+      };
+      return of(stationFlowLogic).pipe(delay(1000));
+    }
+  }
+
+  /**
+   * Get events for the document history.
+   *
+   * @param documentRithmId The Specific ID of document.
+   * @returns Returns an array of events for the document history.
+   */
+  getDocumentEvents(documentRithmId: string): Observable<DocumentEvent[]> {
+    if (!documentRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot get information about the event.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const eventDocument: DocumentEvent[] = [
+        {
+          date: '2022-01-18T22:13:05.871Z',
+          description: 'Event Document #1',
+          user: {
+            rithmId: '123',
+            firstName: 'Testy',
+            lastName: 'Test',
+            email: 'test@test.com',
+            isEmailVerified: true,
+            notificationSettings: null,
+            createdDate: '1/2/34',
+            role: null,
+            organization: 'kdjfkd-kjdkfjd-jkjdfkdjk',
+          },
+        },
+      ];
+      return of(eventDocument).pipe(delay(1000));
+    }
   }
 }

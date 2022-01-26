@@ -16,10 +16,10 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
   styleUrls: ['./map-toolbar.component.scss'],
 })
 export class MapToolbarComponent implements OnInit, OnDestroy {
-  /** The users of the organization. */
+  /** The users of the current organization. */
   users: User[] = [];
 
-  /** Whether the organization is being loaded. */
+  /** Whether the organization information is being loaded. */
   isLoading = true;
 
   /** The organization information object. */
@@ -32,7 +32,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   /**
-   * Whether the map is in any building mode.
+   * Whether the map is in build, stationAdd, or stationGroupAdd mode.
    *
    * @returns True if the map is in any building mode, false otherwise.
    */
@@ -68,21 +68,25 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private errorService: ErrorService,
     private mapService: MapService
   ) {
+    //Subscribe to mapMode in mapService.
     this.mapService.mapMode$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((mode) => {
+        //Get local mapMode to match the mode from mapService.
         this.mapMode = mode;
       });
   }
 
   /**
-   * Gets the first page of users on load.
+   * Gets an organization's information to display on the toolbar on load.
    */
   ngOnInit(): void {
+    //Get the information needed to display an organization's name.
     this.getOrganizationInfo();
   }
 
   /**
+   * Method called when a user clicks the add group button.
    * Sets the map to add station group mode in preparation for a station group to be selected.
    */
   addStationGroup(): void {
@@ -91,11 +95,20 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this.mapService.matMenuStatus$.next(true);
     } else {
       this.mapService.mapMode$.next(MapMode.Build);
+      if (
+        this.mapService.stationElements.some((station) => station.selected) ||
+        this.mapService.stationGroupElements.some(
+          (stationGroup) => stationGroup.selected
+        )
+      ) {
+        this.mapService.resetSelectedStationGroupStationStatus();
+      }
     }
     // TODO: Implement add station group.
   }
 
   /**
+   * Method called when a user clicks the add station button.
    * Sets the map to add station mode in preparation for a station to be selected.
    */
   addStation(): void {
@@ -119,17 +132,22 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   // search(): void {}
 
   /**
-   * Gets organization information.
+   * Gets an organization's information so that can be used for display.
    */
   getOrganizationInfo(): void {
+    //get the id of the organization the signed-in user belongs to.
     const organizationId: string = this.userService.user?.organization;
+    //Subscribe to the organization service.
     this.organizationService
       .getOrganizationInfo(organizationId)
       .pipe(first())
       .subscribe({
         next: (organization) => {
+          //Note that information has been received.
           this.isLoading = false;
+          //If there is a defined organization.
           if (organization) {
+            //Set this.orgInfo to the org.
             this.orgInfo = organization;
           }
         },
@@ -143,7 +161,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
                   'The user does not have rights to access the map.';
             }
           }
+          //Set isLoading to false after error.
           this.isLoading = false;
+          //Display error for user.
           this.errorService.displayError(errorMessage, error);
         },
       });

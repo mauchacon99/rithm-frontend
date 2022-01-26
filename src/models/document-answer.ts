@@ -8,10 +8,10 @@ export interface DocumentAnswer {
   readonly questionRithmId: string;
 
   /** The id the document. */
-  readonly documentRithmId: string;
+  documentRithmId: string;
 
   /** The id station. */
-  readonly stationRithmId: string;
+  stationRithmId: string;
 
   /** Value the answer to question. */
   value: string;
@@ -24,9 +24,6 @@ export interface DocumentAnswer {
 
   /** Type the answer. */
   type: QuestionFieldType;
-
-  /** Id to answer. */
-  rithmId: string;
 
   /** Question is updated or not. */
   questionUpdated: boolean;
