@@ -26,7 +26,6 @@ describe('HistoryDrawerComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
-
       ],
     }).compileComponents();
   });
@@ -43,7 +42,7 @@ describe('HistoryDrawerComponent', () => {
   });
 
   it('should call the method that returns events of document', () => {
-    sideNavService.drawerData$.next({documentRithmId:documentRithmId});
+    sideNavService.drawerData$.next({ documentRithmId: documentRithmId });
     const getEventDocument = spyOn(
       TestBed.inject(DocumentService),
       'getDocumentEvents'
@@ -78,8 +77,7 @@ describe('HistoryDrawerComponent', () => {
   });
 
   it('should test SideNavService', () => {
-    sideNavService.drawerData$.next({documentRithmId:documentRithmId});
+    sideNavService.drawerData$.next({ documentRithmId: documentRithmId });
     expect(component.documentRithmId).toBe(documentRithmId);
   });
-
 });

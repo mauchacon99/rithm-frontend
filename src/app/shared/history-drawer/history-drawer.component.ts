@@ -72,5 +72,4 @@ export class HistoryDrawerComponent implements OnInit {
         },
       });
   }
-
 }
