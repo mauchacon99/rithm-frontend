@@ -18,6 +18,9 @@ export class HeaderMenuComponent implements OnInit {
   /** Information about organization. */
   organizationInfo!: OrganizationInfo;
 
+  /** Show error if fail get organization info.*/
+  failedGetOrganization = false;
+
   /** Organization information loading inline. */
   isLoading = true;
 
@@ -55,10 +58,12 @@ export class HeaderMenuComponent implements OnInit {
       .subscribe({
         next: (organization) => {
           this.isLoading = false;
+          this.failedGetOrganization = false;
           this.organizationInfo = organization;
         },
         error: (error: unknown) => {
           this.isLoading = false;
+          this.failedGetOrganization = true;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
