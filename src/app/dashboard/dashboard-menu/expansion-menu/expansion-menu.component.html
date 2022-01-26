@@ -5,7 +5,11 @@
   class="mat-elevation-z0"
 >
   <mat-expansion-panel-header>
-    <mat-panel-title class="flex justify-between items-center p-3">
+    <mat-panel-title
+      class="flex justify-between items-center p-3"
+      [attr.data-testid]="'expansion-menu-' + dashboardRole"
+      [id]="'expansion-menu-' + dashboardRole"
+    >
       <div class="flex items-center">
         <i
           [ngClass]="panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
@@ -28,8 +32,8 @@
       class="color-hover cursor-pointer"
     >
       <mat-list-item
-        [attr.data-testid]="'dashboard-item-' + i"
-        id="dashboard-item-{{ i }}"
+        [attr.data-testid]="dashboardRole + '-item-' + i"
+        [id]="dashboardRole + '-item-' + i"
       >
         {{ dashboard.name }}
       </mat-list-item>
