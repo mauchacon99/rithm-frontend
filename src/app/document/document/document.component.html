@@ -66,13 +66,14 @@
             [documentInformation]="documentInformation"
           ></app-document-info-header>
           <app-document-template
-            class="flex flex-col pb-7"
+            class="flex flex-col"
+            [ngClass]="{ 'pb-7': !isWidget }"
             [stationInstructions]="documentInformation.instructions"
             [documentFields]="documentInformation.questions"
             formControlName="documentTemplateForm"
           >
           </app-document-template>
-          <div class="pb-5 px-px">
+          <div class="pb-5 px-px" *ngIf="!isWidget">
             <mat-accordion>
               <mat-expansion-panel [(expanded)]="accordionFieldAllExpanded">
                 <mat-expansion-panel-header class="text-base">
