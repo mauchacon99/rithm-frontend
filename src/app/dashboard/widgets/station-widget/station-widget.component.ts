@@ -109,7 +109,7 @@ export class StationWidgetComponent implements OnInit {
   viewDocument(documentRithmId: string): void {
     this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
-    if (this.reloadListDocument){
+    if (this.reloadListDocument) {
       this.getStationWidgetDocuments();
       this.reloadListDocument = false;
     }
