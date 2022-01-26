@@ -1,5 +1,5 @@
 import { DashboardItem } from 'src/models';
-   /** interface to list widget information on dasboard */
+/** interface to list widget information on dasboard */
 export interface DashboardWidgetList {
   /** Specific dashboard id.*/
   rithmId: string;
