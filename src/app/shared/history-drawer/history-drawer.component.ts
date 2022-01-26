@@ -27,6 +27,7 @@ export class HistoryDrawerComponent implements OnInit {
   /** Loading history for documents. */
   eventDocumentsLoading = false;
 
+  /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
   constructor(
