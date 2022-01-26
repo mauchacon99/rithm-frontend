@@ -8,6 +8,7 @@ import { RosterModule } from 'src/app/shared/roster/roster.module';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [StationInfoDrawerComponent],
@@ -20,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
     MatRadioModule,
     MatButtonModule,
     MatInputModule,
+    MatTabsModule
   ],
   exports: [StationInfoDrawerComponent],
 })
