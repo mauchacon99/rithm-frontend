@@ -4,7 +4,7 @@ export interface DashboardWidgetList {
   /** Specific rithm id.*/
   rithmId: string;
 
-  /** Name widget list.*/
+  /** Name dashboard list.*/
   name: string;
 
   /** List for widgets in the dashbaord. */
