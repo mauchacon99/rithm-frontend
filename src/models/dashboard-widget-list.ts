@@ -7,6 +7,6 @@ export interface DashboardWidgetList {
   /** Name widget list.*/
   name: string;
 
-  /** Use interface exist. */
+  /** List for widgets in the dashbaord. */
   widgets: DashboardItem[];
 }
