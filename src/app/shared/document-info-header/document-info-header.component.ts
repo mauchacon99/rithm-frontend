@@ -18,7 +18,7 @@ import { UserService } from 'src/app/core/user.service';
  * Reusable component for the document information header.
  */
 @Component({
-  selector: 'app-document-info-header[documentInformation][isWidget]',
+  selector: 'app-document-info-header[documentInformation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
   providers: [],
