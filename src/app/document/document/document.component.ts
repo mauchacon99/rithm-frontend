@@ -21,6 +21,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
+import { Input } from '@angular/core';
 
 /**
  * Main component for viewing a document.
@@ -31,6 +32,15 @@ import { Subject, forkJoin } from 'rxjs';
   styleUrls: ['./document.component.scss'],
 })
 export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
+  /** The Document how widget. */
+  @Input() isWidget = false;
+
+  /** Id for station in widget. */
+  @Input() stationRithmIdWidget!: string;
+
+  /** Id for document id widget. */
+  @Input() documentRithmIdWidget!: string;
+
   /** Document form. */
   documentForm: FormGroup;
 
@@ -124,7 +134,13 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   ngOnInit(): void {
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
-    this.getParams();
+    if (!this.isWidget) {
+      this.getParams();
+    } else {
+      this.documentId = this.documentRithmIdWidget;
+      this.stationId = this.stationRithmIdWidget;
+      this.getDocumentStationData();
+    }
   }
 
   /**

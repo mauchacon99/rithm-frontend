@@ -13,7 +13,6 @@ import { StationService } from 'src/app/core/station.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { UserService } from 'src/app/core/user.service';
-import { ActivatedRoute } from '@angular/router';
 
 /**
  * Reusable component for the document information header.
@@ -36,6 +35,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     | DocumentStationInformation
     | StationInformation;
 
+  /** The Document how widget. */
+  @Input() isWidget = false;
+
   /** Enum for all types of a user. */
   userTypeEnum = UserType;
 
@@ -51,9 +53,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   /**Current document name */
   documentName = '';
 
-  /** Id the document actually. */
-  documentRithmId = '';
-
   /** Fields appended to the document name. */
   appendedDocumentName = '';
 
@@ -63,8 +62,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private userService: UserService,
-    private route: ActivatedRoute
+    private userService: UserService
   ) {
     this.documentNameForm = this.fb.group({
       name: [''],
@@ -82,7 +80,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    * Disable document input element in station edit mode.
    */
   ngOnInit(): void {
-    this.getParams();
     this.isStation
       ? this.documentNameForm.disable()
       : this.documentNameForm.enable();
@@ -91,7 +88,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     } else {
       this.getAppendedFieldsOnDocumentName(this.stationRithmId);
     }
-    this.getStatusDocumentEditable();
+    if (!this.isWidget) {
+      this.getStatusDocumentEditable();
+    }
   }
 
   /**
@@ -101,25 +100,6 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    */
   get isDrawerOpen(): boolean {
     return this.sidenavDrawerService.isDrawerOpen;
-  }
-
-  /**
-   * Attempts to retrieve the document info from the query params in the URL and make the requests.
-   */
-  private getParams(): void {
-    this.route.params.pipe(first()).subscribe({
-      next: (params) => {
-        if (params.docName) {
-          this.documentRithmId = params.docName;
-        }
-      },
-      error: (error: unknown) => {
-        this.errorService.displayError(
-          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-          error
-        );
-      },
-    });
   }
 
   /**
@@ -140,6 +120,28 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     return 'rithmId' in this.documentInformation
       ? this.documentInformation.rithmId
       : this.documentInformation.stationRithmId;
+  }
+
+  /**
+   * The id of the document.
+   *
+   * @returns The id of the document.
+   */
+  get documentRithmId(): string {
+    return 'documentRithmId' in this.documentInformation
+      ? this.documentInformation.documentRithmId
+      : '';
+  }
+
+  /**
+   * The name for station show in document how widget.
+   *
+   * @returns The name of station.
+   */
+  get stationNameDocument(): string {
+    return 'stationName' in this.documentInformation
+      ? this.documentInformation.stationName
+      : '';
   }
 
   /**
