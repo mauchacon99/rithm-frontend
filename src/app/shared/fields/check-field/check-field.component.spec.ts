@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { DocumentService } from 'src/app/core/document.service';
+import { MockDocumentService } from 'src/mocks';
 import { Question, QuestionFieldType } from 'src/models';
 
 import { CheckFieldComponent } from './check-field.component';
@@ -46,7 +48,10 @@ describe('CheckFieldComponent', () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
       ],
-      providers: [{ provide: FormGroup, useValue: formBuilder }],
+      providers: [
+        { provide: FormGroup, useValue: formBuilder },
+        { provide: DocumentService, useValue: MockDocumentService },
+      ],
     }).compileComponents();
   });
 

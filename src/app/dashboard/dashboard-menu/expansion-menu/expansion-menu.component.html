@@ -19,14 +19,7 @@
           }}</span>
         </div>
       </div>
-      <button
-        mat-icon-button
-        [attr.data-testid]="'button-more-' + dashboardRole"
-        id="button-more-{{ dashboardRole }}"
-        (click)="$event.stopPropagation()"
-      >
-        <i class="fas fa-ellipsis-h text-lg"></i>
-      </button>
+      <app-options-menu [dashboardRole]="dashboardRole"></app-options-menu>
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>

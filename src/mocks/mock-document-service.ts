@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   ConnectedStationInfo,
@@ -30,6 +30,18 @@ import {
 export class MockDocumentService {
   /** The Name of the Document as BehaviorSubject. */
   documentName$ = new BehaviorSubject<string>('');
+
+  /** Document Answer to be updated. */
+  documentAnswer$ = new Subject<DocumentAnswer>();
+
+  /**
+   * Update the DocumentAnswer subject.
+   *
+   * @param answer An answer to be updated in the documentTemplate.
+   */
+  updateAnswerSubject(answer: DocumentAnswer): void {
+    this.documentAnswer$.next(answer);
+  }
 
   /**
    * Gets a list of documents for a given station.
@@ -903,7 +915,6 @@ export class MockDocumentService {
           file: 'dev.txt',
           filename: 'dev',
           type: QuestionFieldType.Email,
-          rithmId: '789-321-456',
           questionUpdated: true,
         },
         {
@@ -914,7 +925,6 @@ export class MockDocumentService {
           file: 'dev2.txt',
           filename: 'dev2',
           type: QuestionFieldType.City,
-          rithmId: '789-321-456-789',
           questionUpdated: false,
         },
       ];
@@ -1046,7 +1056,12 @@ export class MockDocumentService {
           answer: {
             questionRithmId: 'string',
             referAttribute: 'string',
-            asArray: [],
+            asArray: [
+              {
+                value: 'string',
+                isChecked: false,
+              },
+            ],
             asInt: 0,
             asDecimal: 0,
             asString: 'string',
