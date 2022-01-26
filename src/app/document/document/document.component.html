@@ -32,10 +32,17 @@
       ></app-connected-station-pane>
       <!-- Center column -->
       <div
-        class="col-span-12 bg-white h-full pb-12 relative"
-        [ngClass]="{ 'lg:col-span-8 px-5': !isWidget }"
+        class="col-span-12 bg-white h-full relative"
+        [ngClass]="{
+          'lg:col-span-8 px-5': !isWidget,
+          'pb-12': !documentLoading
+        }"
       >
-        <div class="loading" *ngIf="documentLoading">
+        <div
+          class="h-full flex justify-center items-center"
+          *ngIf="documentLoading"
+          [ngClass]="{ loading: !isWidget }"
+        >
           <app-loading-indicator
             class="flex-grow m-auto"
           ></app-loading-indicator>
