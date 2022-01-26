@@ -13,7 +13,6 @@
             *ngIf="history && history.user"
           >
             <app-user-avatar
-              class="cursor-pointer"
               [firstName]="history.user.firstName"
               [lastName]="history.user.lastName"
               [navProfile]="true"
@@ -23,10 +22,10 @@
             *ngIf="history && !history.user"
             class="flex justify-center w-1/4"
           >
-            <div id="avatar-rithm" class="circle-40-primary cursor-pointer">
+            <div id="avatar-rithm" class="flex justify-center circle-40-primary">
               <img
                 src="assets/logo/white-icon-only.svg"
-                class="mx-2 my-2 w-5"
+                class="w-5"
                 alt="Logo Rithm"
               />
             </div>
