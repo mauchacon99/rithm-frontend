@@ -5,6 +5,8 @@ import {
   ViewChild,
   AfterViewChecked,
   ChangeDetectorRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -40,6 +42,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Id for document id widget. */
   @Input() documentRithmIdWidget!: string;
+
+  /** Return to list of the documents only with isWidget. */
+  @Output() returnDocumentsWidget: EventEmitter<unknown> = new EventEmitter();
 
   /** Document form. */
   documentForm: FormGroup;
@@ -261,14 +266,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   async cancelDocument(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message:
-        'Your changes will be lost and you will return to the dashboard.',
+      message: `Your changes will be lost and you will return to the ${
+        this.isWidget ? 'documents list' : 'dashboard'
+      }.`,
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
     });
     if (response) {
-      this.router.navigateByUrl('dashboard');
+      this.isWidget
+        ? this.returnDocumentsWidget.emit()
+        : this.router.navigateByUrl('dashboard');
     }
   }
 
