@@ -45,7 +45,7 @@ export class OptionsMenuComponent {
   }
 
   /**
-   * Generates new default dashboard.
+   * Generates a new default dashboard.
    */
   generateNewDashboard(): void {
     this.dashboardService
