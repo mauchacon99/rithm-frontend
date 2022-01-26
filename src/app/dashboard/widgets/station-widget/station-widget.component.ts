@@ -4,6 +4,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for Station widget.
@@ -36,7 +37,8 @@ export class StationWidgetComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private popupService: PopupService
   ) {}
 
   /**
@@ -104,5 +106,29 @@ export class StationWidgetComponent implements OnInit {
   viewDocument(documentRithmId: string): void {
     this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
+  }
+
+  /**
+   * Create a new document.
+   *
+   */
+  createDocument(): void {
+    this.documentService
+      .createNewDocument('', 0, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.popupService.notify(
+            'The document has been created successfully.'
+          );
+          this.getStationWidgetDocuments();
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

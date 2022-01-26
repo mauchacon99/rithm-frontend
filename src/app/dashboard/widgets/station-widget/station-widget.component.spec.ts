@@ -2,13 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockPopupService,
+} from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -26,6 +31,7 @@ describe('StationWidgetComponent', () => {
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -181,6 +187,46 @@ describe('StationWidgetComponent', () => {
       '#create-new-document'
     );
     expect(button).toBeFalsy();
+  });
+
+  it('should call method createDocument()', () => {
+    component.stationRithmId = stationRithmId;
+    const dataWidgetStation: StationWidgetData = {
+      stationName: 'Dev1',
+      documentGeneratorStatus: DocumentGenerationStatus.Manual,
+      documents: [
+        {
+          rithmId: '123-123-123',
+          name: 'Granola',
+          priority: 1,
+          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
+          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
+          assignedUser: {
+            rithmId: '123-123-123',
+            firstName: 'Pedro',
+            lastName: 'Jeria',
+            email: 'pablo@mundo.com',
+            isAssigned: true,
+          },
+        },
+      ],
+    };
+
+    spyOn(
+      TestBed.inject(DocumentService),
+      'getStationWidgetDocuments'
+    ).and.returnValue(of(dataWidgetStation));
+
+    spyOn(component, 'createDocument').and.callThrough();
+
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    const buttonNewDocument = fixture.debugElement.nativeElement.querySelector(
+      '#create-new-document'
+    );
+    buttonNewDocument.click();
+    expect(component.createDocument).toHaveBeenCalled();
   });
 
   describe('Loading documents', () => {
