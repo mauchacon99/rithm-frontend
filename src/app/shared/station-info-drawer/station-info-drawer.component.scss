@@ -20,6 +20,7 @@
     color: map-get($error-palette, 300);
   }
 }
+
 ::ng-deep .mat-tab-header {
   .mat-tab-label {
     min-width: 33% !important;
@@ -31,6 +32,7 @@
     @apply opacity-100 text-accent-500;
   }
 }
+
 ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
   @apply opacity-100 bg-accent-500;
 }
