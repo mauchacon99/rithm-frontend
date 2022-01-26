@@ -1,5 +1,8 @@
-<section class="grid grid-cols-12 py-5 border-b border-secondary-400">
-  <div class="col-span-12">
+<section
+  class="grid grid-cols-12 border-b border-secondary-400"
+  [ngClass]="{ 'py-5': !isWidget }"
+>
+  <div class="col-span-12" *ngIf="!isWidget">
     <h6 class="text-center">Document Information</h6>
   </div>
   <div class="col-span-12 flex justify-between" *ngIf="isStation">
@@ -79,9 +82,21 @@
       </p>
     </div>
     <ng-template #nonEditableDocName>
-      <div class="flex items-center justify-between w-full">
-        <p>Document Name: {{ documentName }} {{ appendedDocumentName }}</p>
+      <div
+        class="flex items-center justify-between w-full"
+        [ngClass]="{ 'py-2': isWidget }"
+      >
+        <div class="w-full">
+          <p [ngClass]="{ 'font-semibold ': isWidget }">
+            {{ !isWidget ? 'Document Name: ' : '' }} {{ documentName }}
+            {{ appendedDocumentName }}
+          </p>
+          <p [ngClass]="{ 'text-xs ': isWidget }" *ngIf="isWidget">
+            {{ stationNameDocument }}
+          </p>
+        </div>
         <button
+          *ngIf="!isWidget"
           type="button"
           data-testid="document-info-drawer"
           mat-icon-button

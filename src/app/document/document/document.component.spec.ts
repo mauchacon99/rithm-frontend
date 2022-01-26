@@ -24,7 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('DocumentComponent', () => {
@@ -478,6 +478,39 @@ describe('DocumentComponent', () => {
     button.click();
 
     expect(spyMethod).toHaveBeenCalled();
+  });
+
+  it('should call method for show data in document how widget', () => {
+    component.stationRithmIdWidget = '123-654-789';
+    component.documentRithmIdWidget = '321-654-987';
+    component.isWidget = true;
+    const spyMethod = spyOn(
+      TestBed.inject(DocumentService),
+      'getDocumentInfo'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyMethod).toHaveBeenCalledOnceWith(
+      component.documentRithmIdWidget,
+      component.stationRithmIdWidget
+    );
+  });
+
+  it('should catch error the method and redirect to dashboard component', () => {
+    component.stationRithmIdWidget = '123-654-789';
+    component.documentRithmIdWidget = '321-654-987';
+    component.isWidget = true;
+    spyOn(TestBed.inject(DocumentService), 'getDocumentInfo').and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
+    component.ngOnInit();
+    const templateDocument = fixture.debugElement.nativeElement.querySelector(
+      '#document-info-template'
+    );
+    expect(templateDocument).toBeFalsy();
+    expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
   });
 
   describe('navigateRouterTesting', () => {

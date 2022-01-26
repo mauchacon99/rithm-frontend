@@ -16,7 +16,6 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentName, DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -32,7 +31,6 @@ describe('DocumentInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatChipsModule,
-        RouterTestingModule,
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -51,7 +49,7 @@ describe('DocumentInfoHeaderComponent', () => {
     component.documentInformation = {
       documentName: 'Metroid Dread',
       documentPriority: 5,
-      documentRithmId: 'E204F369-386F-4E41',
+      documentRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211',
       currentAssignedUser: 'NS',
       flowedTimeUTC: '1943827200000',
       lastUpdatedUTC: '1943827200000',
@@ -84,7 +82,6 @@ describe('DocumentInfoHeaderComponent', () => {
     const isStation = false;
     const stationRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C';
     const documentRithmId = 'ED6148C9-ABB7-408E-A210-9242B2735B1C-23211';
-    component.documentRithmId = documentRithmId;
     const expectedData = {
       stationRithmId: stationRithmId,
       isStation: isStation,
@@ -228,5 +225,14 @@ describe('DocumentInfoHeaderComponent', () => {
       '#info-drawer-button-document'
     );
     expect(infoButton.disabled).toBeFalsy();
+  });
+
+  it('should call and return document id if show document component', () => {
+    const spyDocument = spyOnProperty(
+      component,
+      'documentRithmId'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyDocument).toHaveBeenCalled();
   });
 });
