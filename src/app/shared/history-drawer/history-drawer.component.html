@@ -19,12 +19,27 @@
               [navProfile]="true"
             ></app-user-avatar>
           </div>
+          <div
+            *ngIf="history && !history.user"
+            class="flex justify-center w-1/4"
+          >
+            <div id="avatar-rithm" class="circle-40-primary cursor-pointer">
+              <img
+                src="assets/logo/white-icon-only.svg"
+                class="mx-2 my-2 w-5"
+                alt="Logo Rithm"
+              />
+            </div>
+          </div>
           <div class="w-3/4">
             <p class="font-semibold text-sm truncate">
-              {{ history.user?.firstName }} {{ history.user?.lastName }}
+              {{ history.user?.firstName ? history.user?.firstName : 'Rithm' }}
+              {{
+                history.user?.lastName ? history.user?.lastName : 'Automation'
+              }}
             </p>
             <p class="font-semibold text-xs text-primary-100">
-              {{ history.date | date: 'MM/dd/yyyy' }}
+              {{ history.eventTimeUTC | date: 'MM/dd/yyyy' }}
             </p>
           </div>
         </div>

@@ -8,11 +8,13 @@ import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/load
 import { MockComponent } from 'ng-mocks';
 import { throwError } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('HistoryDrawerComponent', () => {
   let component: HistoryDrawerComponent;
   let fixture: ComponentFixture<HistoryDrawerComponent>;
-
+  let sideNavService: SidenavDrawerService;
+  const documentRithmId = 'E204F369-386F-4E41';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatSnackBarModule, UserAvatarModule],
@@ -23,6 +25,8 @@ describe('HistoryDrawerComponent', () => {
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
+
       ],
     }).compileComponents();
   });
@@ -30,6 +34,7 @@ describe('HistoryDrawerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HistoryDrawerComponent);
     component = fixture.componentInstance;
+    sideNavService = TestBed.inject(SidenavDrawerService);
     fixture.detectChanges();
   });
 
@@ -38,7 +43,7 @@ describe('HistoryDrawerComponent', () => {
   });
 
   it('should call the method that returns events of document', () => {
-    component.documentRithmId = 'E204F369-386F-4E41';
+    sideNavService.drawerData$.next({documentRithmId:documentRithmId});
     const getEventDocument = spyOn(
       TestBed.inject(DocumentService),
       'getDocumentEvents'
@@ -63,12 +68,18 @@ describe('HistoryDrawerComponent', () => {
   });
 
   it('should activate the history loading', () => {
+    component.eventDocumentsLoading = true;
+    fixture.detectChanges();
     const eventDocumentsLoading =
       fixture.debugElement.nativeElement.querySelector(
         '#loading-indicator-history'
       );
-    component.eventDocumentsLoading = true;
-    fixture.detectChanges();
     expect(eventDocumentsLoading).toBeTruthy();
   });
+
+  it('should test SideNavService', () => {
+    sideNavService.drawerData$.next({documentRithmId:documentRithmId});
+    expect(component.documentRithmId).toBe(documentRithmId);
+  });
+
 });
