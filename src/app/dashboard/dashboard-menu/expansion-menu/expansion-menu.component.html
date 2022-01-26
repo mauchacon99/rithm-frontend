@@ -27,7 +27,10 @@
       *ngFor="let dashboard of dashboardsList; let i = index"
       class="color-hover cursor-pointer"
     >
-      <mat-list-item id="dashboard-item-{{ i }}">
+      <mat-list-item
+        [attr.data-testid]="'dashboard-item-' + i"
+        id="dashboard-item-{{ i }}"
+      >
         {{ dashboard.name }}
       </mat-list-item>
     </div>
