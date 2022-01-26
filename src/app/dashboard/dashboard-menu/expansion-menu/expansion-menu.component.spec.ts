@@ -8,7 +8,7 @@ import { MockComponent } from 'ng-mocks';
 import { OptionsMenuComponent } from '../options-menu/options-menu.component';
 import { ErrorService } from 'src/app/core/error.service';
 import { MockDashboardService, MockErrorService } from 'src/mocks';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { RoleDashboardMenu } from 'src/models';
 import { throwError } from 'rxjs';
 
