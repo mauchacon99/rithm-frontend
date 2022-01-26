@@ -21,7 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatRadioModule,
     MatButtonModule,
     MatInputModule,
-    MatTabsModule
+    MatTabsModule,
   ],
   exports: [StationInfoDrawerComponent],
 })

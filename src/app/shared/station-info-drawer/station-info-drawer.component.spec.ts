@@ -58,7 +58,7 @@ describe('StationInfoDrawerComponent', () => {
           { path: 'document', component: MockComponent(DocumentComponent) },
           { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
-        MatTabsModule
+        MatTabsModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

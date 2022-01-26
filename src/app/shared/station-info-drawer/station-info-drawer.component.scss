@@ -24,14 +24,13 @@
   .mat-tab-label {
     min-width: 33% !important;
   }
-  .mat-tab-label:hover{
+  .mat-tab-label:hover {
     @apply opacity-100 text-accent-500;
   }
-  .mat-tab-label.mat-tab-label-active{
+  .mat-tab-label.mat-tab-label-active {
     @apply opacity-100 text-accent-500;
   }
 }
-::ng-deep .mat-tab-group.mat-primary .mat-ink-bar{
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
   @apply opacity-100 bg-accent-500;
 }
-
