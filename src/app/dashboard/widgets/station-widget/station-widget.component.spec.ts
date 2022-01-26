@@ -242,6 +242,7 @@ describe('StationWidgetComponent', () => {
 
       expect(documentDetail).toBeTruthy();
       expect(showDocs).toBeNull();
+      expect(component.documentIdSelected).toBe(component.dataStationWidget.documents[0].rithmId);
       expect(spyMethod).toHaveBeenCalledWith(
         component.dataStationWidget.documents[0].rithmId
       );
@@ -265,6 +266,7 @@ describe('StationWidgetComponent', () => {
 
       expect(documentDetail).toBeNull();
       expect(showDocs).toBeTruthy();
+      expect(component.documentIdSelected).toBe('');
       expect(spyMethod).toHaveBeenCalledWith('');
     });
   });

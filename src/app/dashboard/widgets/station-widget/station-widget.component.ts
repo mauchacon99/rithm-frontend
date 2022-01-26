@@ -101,11 +101,8 @@ export class StationWidgetComponent implements OnInit {
    *
    * @param documentRithmId String of document rithmId.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   viewDocument(documentRithmId: string): void {
-    documentRithmId
-      ? (this.documentIdSelected = documentRithmId)
-      : (this.documentIdSelected = '');
+    this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
   }
 }

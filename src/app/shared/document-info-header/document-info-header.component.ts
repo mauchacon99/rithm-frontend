@@ -88,7 +88,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
     } else {
       this.getAppendedFieldsOnDocumentName(this.stationRithmId);
     }
-    this.getStatusDocumentEditable();
+    if (!this.isWidget) {
+      this.getStatusDocumentEditable();
+    }
   }
 
   /**
