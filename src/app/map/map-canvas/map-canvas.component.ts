@@ -1559,7 +1559,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       // Set dragging on stations in the station group.
       this.setDraggingStationGroup();
-      // Move all stations in station group.
+      // Move all stations in the station group.
       this.moveStation(eventCanvasPoint, moveAmountX, moveAmountY);
 
       /* This is where we check to see if a station, group or connection line is being hovered,
