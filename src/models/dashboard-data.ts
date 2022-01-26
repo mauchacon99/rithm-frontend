@@ -7,6 +7,6 @@ export interface DashboardData {
   /** Name of the current dashboard. */
   name: string;
 
-  /** List for widgets in the dashbaord. */
+  /** List for widgets in the dashboard. */
   widgets: DashboardItem[];
 }
