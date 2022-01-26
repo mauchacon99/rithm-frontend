@@ -27,29 +27,11 @@
   </div>
 </div>
 
-<!--Document detail-->
-<div class="h-full p-2" *ngIf="isDocument" id="document-detail">
-  <!--  header -->
-  <div class="flex justify-between items-center">
-    <button
-      mat-icon-button
-      (click)="viewDocument('')"
-      id="return-list-documents"
-      data-testid="return-list-documents"
-    >
-      <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
-    </button>
-    <button mat-icon-button id="expand-document" data-testid="expand-document">
-      <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
-    </button>
-  </div>
-</div>
-
 <!-- station widget -->
 <div
   *ngIf="!isLoading && !failedLoadWidget && !isDocument"
   id="show-docs"
-  class="m-2 h-full w-full"
+  class="h-full w-full"
 >
   <!-- Header widget -->
   <div class="w-full p-2 flex flex-col h-full">
@@ -73,7 +55,7 @@
       </div>
     </div>
     <!--    Column Headers-->
-    <div class="grid grid-cols-12 text-xs text-secondary-500 p-2">
+    <div class="grid grid-cols-12 text-xs text-secondary-500 py-2">
       <p class="col-span-5 overline-font truncate">Document</p>
       <p class="col-span-2 overline-font truncate">Assigned</p>
       <p class="col-span-2 overline-font truncate text-center">Priority</p>
@@ -82,7 +64,7 @@
       </p>
     </div>
     <!--    Row Container-->
-    <div class="flex-grow overflow-auto">
+    <div class="flex-grow overflow-auto scrollbar">
       <div
         *ngIf="dataStationWidget"
         class="grid grid-cols-12 text-secondary-500 items-center"
@@ -139,5 +121,31 @@
         </ng-container>
       </div>
     </div>
+  </div>
+</div>
+
+<!--Document detail-->
+<div class="h-full p-2 overflow-auto" *ngIf="isDocument" id="document-detail">
+  <!--  Header -->
+  <div class="flex justify-between items-center">
+    <button
+      mat-icon-button
+      (click)="viewDocument('')"
+      id="return-list-documents"
+      data-testid="return-list-documents"
+    >
+      <i class="fas text-secondary-500 fa-arrow-left text-lg"></i>
+    </button>
+    <button mat-icon-button id="expand-document" data-testid="expand-document">
+      <i class="fas text-secondary-500 fa-expand-arrows-alt text-lg"></i>
+    </button>
+  </div>
+  <!--  Document component -->
+  <div class="container-document">
+    <app-document
+      [isWidget]="true"
+      [documentRithmIdWidget]="documentIdSelected"
+      [stationRithmIdWidget]="stationRithmId"
+    ></app-document>
   </div>
 </div>
