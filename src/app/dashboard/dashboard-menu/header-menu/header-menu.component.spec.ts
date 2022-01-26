@@ -89,6 +89,33 @@ describe('HeaderMenuComponent', () => {
     expect(expectSpyService).toHaveBeenCalled();
   });
 
+  it('should show name organization', () => {
+    component.isLoading = false;
+    fixture.detectChanges();
+    const organizationInfo =
+      fixture.debugElement.nativeElement.querySelector('#info-organization');
+    expect(organizationInfo).toBeTruthy();
+
+    const showError = fixture.debugElement.nativeElement.querySelector(
+      '#failed-info-organization'
+    );
+    expect(showError).toBeNull();
+  });
+
+  it('should show error message when fail request get name', () => {
+    component.failedGetOrganization = true;
+    fixture.detectChanges();
+
+    const organizationInfo =
+      fixture.debugElement.nativeElement.querySelector('#info-organization');
+    expect(organizationInfo).toBeNull();
+
+    const showError = fixture.debugElement.nativeElement.querySelector(
+      '#failed-info-organization'
+    );
+    expect(showError).toBeTruthy();
+  });
+
   it('should show loading organization info while data is loading', () => {
     const data = '123-123';
     component['getOrganizationInfo'](data);
