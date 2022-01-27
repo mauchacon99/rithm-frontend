@@ -67,6 +67,12 @@ export class MapService {
   /** An array that stores a backup of stationGroupElements when buildMap is called. */
   storedStationGroupElements: StationGroupMapElement[] = [];
 
+  /**
+   * A pending stationGroup built out of selected stations and groups.
+   * Will be added to stationGroupElements array when user completes the new group.
+   */
+  pendingStationGroup?: StationGroupMapElement;
+
   /** Data for connection line paths between stations. */
   connectionElements: ConnectionMapElement[] = [];
 
@@ -383,6 +389,72 @@ export class MapService {
     });
     //Note a change in map data.
     this.mapDataReceived$.next(true);
+  }
+
+  /**
+   * Updates pendingStationGroup with the current selected stations and groups.
+   */
+  updatePendingStationGroup(): void {
+    //Set up a station group using non-nested selected stations and sub-groups.
+    const newGroup = new StationGroupMapElement({
+      rithmId: uuidv4(),
+      title: 'Untitled Group',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Created,
+      isReadOnlyRootStationGroup: false,
+    });
+
+    //Get the root group.
+    const root = this.stationGroupElements.find(
+      (group) => group.isReadOnlyRootStationGroup
+    );
+
+    //If there is a root element defined.
+    if (root) {
+      //Find all selected stations within root stationGroup.
+      root.stations.forEach((stationIdFromGroup) => {
+        // Find index of the current station in stationElements array.
+        const stationIndex = this.stationElements.findIndex(
+          (station) => stationIdFromGroup === station.rithmId
+        );
+        // If you find the index of the current station.
+        if (stationIndex !== -1) {
+          if (this.stationElements[stationIndex].selected) {
+            newGroup.stations.push(this.stationElements[stationIndex].rithmId);
+          }
+        }
+      });
+
+      //Find all selected groups within root stationGroup.
+      root.subStationGroups.forEach((stationGroupIdFromGroup) => {
+        // Find index of the current subGroup in stationGroupElements array.
+        const groupIndex = this.stationGroupElements.findIndex(
+          (group) => stationGroupIdFromGroup === group.rithmId
+        );
+        // If you find the index of the current group.
+        if (groupIndex !== -1) {
+          if (this.stationGroupElements[groupIndex].selected) {
+            newGroup.subStationGroups.push(
+              this.stationGroupElements[groupIndex].rithmId
+            );
+          }
+        }
+      });
+
+      //If there are stations or groups selected within the root, return.
+      if (
+        newGroup.stations.length > 0 ||
+        newGroup.subStationGroups.length > 0
+      ) {
+        this.pendingStationGroup = newGroup;
+        return;
+
+        //If cant find any selected within root, go on to next group and  check that one.
+      } else {
+        //Loop through children groups.
+      }
+    }
   }
 
   /**

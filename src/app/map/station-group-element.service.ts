@@ -59,6 +59,18 @@ export class StationGroupElementService {
     }
     //Draw a specific station group.
     this.drawStationGroup(rootStationGroup);
+
+    //If there is a pending stationGroup defined.
+    if (this.mapService.pendingStationGroup) {
+      //If there are stations and groups selected in the the pending stationGroup.
+      if (
+        this.mapService.pendingStationGroup.stations.length > 0 ||
+        this.mapService.pendingStationGroup.subStationGroups.length > 0
+      ) {
+        //Draw the pending group.
+        this.drawStationGroup(this.mapService.pendingStationGroup);
+      }
+    }
   }
 
   /**

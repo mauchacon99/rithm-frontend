@@ -203,6 +203,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.stationElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
+        /* This sets this.stations as a reference to this.mapService.stationElements
+        so that you can edit this.stations and have that affect the latter. */
         this.stations = this.mapService.stationElements;
         this.drawElements();
       });
@@ -211,6 +213,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.mapService.stationGroupElementsChanged$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
+        /* This sets this.stationGroups as a reference to this.mapService.stationGroupElements
+        so that you can edit this.stations and have that affect the latter. */
         this.stationGroups = this.mapService.stationGroupElements;
         this.drawElements();
       });
@@ -883,6 +887,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //Update station and connection positions.
       this.mapService.updateStationCanvasPoints();
+
+      //Update pending station group with selected stations and groups.
+      this.mapService.updatePendingStationGroup();
 
       // Draw the station groups
       this.stationGroupElementService.drawStationGroups();
