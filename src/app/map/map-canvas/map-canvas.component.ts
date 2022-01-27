@@ -215,18 +215,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     /* This subscribe sets this.currentMousePoint when the behavior subject changes.
-    If this.dragItem is set to node or station:
+    If this.dragItem is set to node or station or stationGroup:
     checks to see if the mouse is on the edge of the screen, or in other words, outside the pan bounding box,
     it then sets this.nextPanVelocity to the velocity set during that check and then activates auto pan if appropriate.
 
-    Simply put: if a station or node is dragged to the edge of the screen, the map should start panning.*/
+    Simply put: if a station or node or stationGroup is dragged to the edge of the screen, the map should start panning.*/
     this.mapService.currentMousePoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
         this.currentMousePoint = point;
         if (
           this.dragItem === MapDragItem.Node ||
-          this.dragItem === MapDragItem.Station
+          this.dragItem === MapDragItem.Station ||
+          this.dragItem === MapDragItem.StationGroup
         ) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(
             this.currentMousePoint
@@ -1150,8 +1151,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       ? (this.currentCanvasPoint.y -= yMove)
       : 0;
 
-    //If dragging a station, need to offset the station's mapPoint too so that it doesn't get left behind while panning.
-    if (this.dragItem === MapDragItem.Station) {
+    //If dragging a station or station group, need to offset the stations' mapPoints too so that they don't get left behind while panning.
+    if (
+      this.dragItem === MapDragItem.Station ||
+      this.dragItem === MapDragItem.StationGroup
+    ) {
       for (const station of this.stations) {
         if (station.dragging) {
           station.mapPoint.x -= xMove;
@@ -1587,22 +1591,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //If dragging a station.
     } else if (this.dragItem === MapDragItem.Station) {
-      //Loop through stations to find the station that is being dragged.
-      for (const station of this.stations) {
-        if (station.dragging) {
-          //set mousePoint to the tracked cursor position.
-          this.mapService.currentMousePoint$.next(eventCanvasPoint);
-          //Set cursor style.
-          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-
-          //Adjust the station's mapPoint by tracked movement, adjusted for scale.
-          station.mapPoint.x -= moveAmountX / this.scale;
-          station.mapPoint.y -= moveAmountY / this.scale;
-
-          //Set the cursor tracking to current position.
-          this.lastTouchCoords[0] = eventCanvasPoint;
-        }
-      }
+      //Set cursor style.
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+      // Move station.
+      this.moveStation(eventCanvasPoint, moveAmountX, moveAmountY);
 
       //If dragging a node.
     } else if (this.dragItem === MapDragItem.Node) {
@@ -1667,6 +1659,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       // Set dragging on stations in the station group.
       this.setDraggingStationGroup();
+      // Move all stations in the station group.
+      this.moveStation(eventCanvasPoint, moveAmountX, moveAmountY);
 
       /* This is where we check to see if a station, group or connection line is being hovered,
       and nothing is currently being dragged. */
@@ -2213,6 +2207,34 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (stationGroup.dragging) {
         setDraggingOnContents(stationGroup);
         break;
+      }
+    }
+  }
+
+  /**
+   * Move the stations when they are dragging..
+   *
+   * @param eventCanvasPoint The cursor position.
+   * @param moveAmountX Amount of movement in the X-coordinate.
+   * @param moveAmountY Amount of movement in the Y-coordinate.
+   */
+  moveStation(
+    eventCanvasPoint: Point,
+    moveAmountX: number,
+    moveAmountY: number
+  ): void {
+    //Loop through stations to find the station that is being dragged.
+    for (const station of this.stations) {
+      if (station.dragging) {
+        //set mousePoint to the tracked cursor position.
+        this.mapService.currentMousePoint$.next(eventCanvasPoint);
+
+        //Adjust the station's mapPoint by tracked movement, adjusted for scale.
+        station.mapPoint.x -= moveAmountX / this.scale;
+        station.mapPoint.y -= moveAmountY / this.scale;
+
+        //Set the cursor tracking to current position.
+        this.lastTouchCoords[0] = eventCanvasPoint;
       }
     }
   }
