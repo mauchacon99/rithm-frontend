@@ -40,6 +40,7 @@ import {
   MAX_PAN_VELOCITY,
   MOUSE_MOVEMENT_OVER_CONNECTION,
   TOUCH_EVENT_MARGIN,
+  BOUNDARY_MARGIN,
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -145,6 +146,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   /** Storing broken connection line. Used when moving a connection line.*/
   private storedConnectionLine: ConnectionMapElement | null = null;
 
+  /** The top-left boundary box coords. */
+  private minBoundaryCoords: Point = { x: 0, y: 0 };
+
+  /** The bottom-right boundary box coords. */
+  private maxBoundaryCoords: Point = { x: 0, y: 0 };
+
   /**Adding boundary box inner padding for top-left and bottom-right. */
   readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
 
@@ -200,6 +207,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    //This subscribe sets this.stationGroups when the behavior subject in mapService changes, then redraws the map.
+    this.mapService.stationGroupElementsChanged$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationGroups = this.mapService.stationGroupElements;
+        this.drawElements();
+      });
+
     //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
@@ -208,18 +223,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       });
 
     /* This subscribe sets this.currentMousePoint when the behavior subject changes.
-    If this.dragItem is set to node or station:
+    If this.dragItem is set to node or station or stationGroup:
     checks to see if the mouse is on the edge of the screen, or in other words, outside the pan bounding box,
     it then sets this.nextPanVelocity to the velocity set during that check and then activates auto pan if appropriate.
 
-    Simply put: if a station or node is dragged to the edge of the screen, the map should start panning.*/
+    Simply put: if a station or node or stationGroup is dragged to the edge of the screen, the map should start panning.*/
     this.mapService.currentMousePoint$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((point) => {
         this.currentMousePoint = point;
         if (
           this.dragItem === MapDragItem.Node ||
-          this.dragItem === MapDragItem.Station
+          this.dragItem === MapDragItem.Station ||
+          this.dragItem === MapDragItem.StationGroup
         ) {
           const velocity = this.getOutsideBoundingBoxPanVelocity(
             this.currentMousePoint
@@ -626,6 +642,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contextMenu(event: MouseEvent): void {
     // TODO: Handle behavior when mouse is right clicked
+    //If dragging a Station Group.
+    /* This is to avoid that when dragging a group of stations and
+      pressing the right mouse button the stations of the station group disappear. */
+    if (this.dragItem === MapDragItem.StationGroup) {
+      // Call eventEndLogic method.
+      this.eventEndLogic(event);
+    }
   }
 
   /**
@@ -1039,10 +1062,86 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
 
-    const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
-    const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
+    this.minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
+    this.maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
 
-    this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
+    this.mapBoundaryService.drawBox(
+      this.minBoundaryCoords,
+      this.maxBoundaryCoords
+    );
+  }
+
+  /**
+   * Doesn't allow panning if a user attempts to pan the map in a direction they aren't allowed to.
+   *
+   * @param moveDirection The direction the user is attempting to move to map.
+   * @param isXAxis Check if axis of movement is the X axis.
+   * @returns True, if movement is allowed in given direction.
+   */
+  private panningAllowed(moveDirection: number, isXAxis: boolean): boolean {
+    //Store the dimensions of the canvas.
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+
+    //Track if viewport extends beyond the edges of the boundary box.
+    let outsideLeftEdge = false;
+    let outsideTopEdge = false;
+    let outsideRightEdge = false;
+    let outsideBottomEdge = false;
+
+    //If the boundary box has been defined.
+    if (
+      this.minBoundaryCoords !== { x: 0, y: 0 } &&
+      this.maxBoundaryCoords !== { x: 0, y: 0 }
+    ) {
+      //Mark that the user is outside a given boundary edge if those coordinates are above 0.
+      if (this.minBoundaryCoords.x - BOUNDARY_MARGIN / this.scale > 0) {
+        outsideLeftEdge = true;
+      }
+      if (this.minBoundaryCoords.y - BOUNDARY_MARGIN / this.scale > 0) {
+        outsideTopEdge = true;
+      }
+      if (
+        this.maxBoundaryCoords.x -
+          canvasRect.width +
+          BOUNDARY_MARGIN / this.scale <
+        0
+      ) {
+        outsideRightEdge = true;
+      }
+      if (
+        this.maxBoundaryCoords.y -
+          canvasRect.height +
+          BOUNDARY_MARGIN / this.scale <
+        0
+      ) {
+        outsideBottomEdge = true;
+      }
+    }
+
+    //Allow movement based on the axis being checked.
+    if (isXAxis) {
+      //If user is attempting to move left and is already outside the left edge.
+      if (moveDirection < 0) {
+        return !outsideLeftEdge;
+      }
+      //If user is attempting to move right and is already outside the right edge.
+      if (moveDirection > 0) {
+        return !outsideRightEdge;
+      }
+      //If user is not outside any edges.
+      return true;
+    } else {
+      //If user is attempting to move up and is already outside the top edge.
+      if (moveDirection < 0) {
+        return !outsideTopEdge;
+      }
+      //If user is attempting to move down and is already outside the bottom edge.
+      if (moveDirection > 0) {
+        return !outsideBottomEdge;
+      }
+      //If user is not outside any edges.
+      return true;
+    }
   }
 
   /**
@@ -1059,11 +1158,19 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const xMove = panVelocity.x;
     const yMove = panVelocity.y;
 
-    this.currentCanvasPoint.x -= xMove;
-    this.currentCanvasPoint.y -= yMove;
+    //Only pan if allowed to move in that direction.
+    this.panningAllowed(-xMove, true)
+      ? (this.currentCanvasPoint.x -= xMove)
+      : 0;
+    this.panningAllowed(-yMove, false)
+      ? (this.currentCanvasPoint.y -= yMove)
+      : 0;
 
-    //If dragging a station, need to offset the station's mapPoint too so that it doesn't get left behind while panning.
-    if (this.dragItem === MapDragItem.Station) {
+    //If dragging a station or station group, need to offset the stations' mapPoints too so that they don't get left behind while panning.
+    if (
+      this.dragItem === MapDragItem.Station ||
+      this.dragItem === MapDragItem.StationGroup
+    ) {
       for (const station of this.stations) {
         if (station.dragging) {
           station.mapPoint.x -= xMove;
@@ -1461,9 +1568,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.dragItem === MapDragItem.Map) {
       //Set cursor style
       this.mapCanvas.nativeElement.style.cursor = 'move';
-      //Adjust the currentCanvasPoint by tracked movement, adjusted for scale.
-      this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.currentCanvasPoint.y += moveAmountY / this.scale;
+
+      /* Check if panning is allowed in a given direction.
+      If a user attempts to pan beyond the boundary box this will be false. */
+      //If allowed, adjust the currentCanvasPoint.x by tracked movement, adjusted for scale.
+      this.panningAllowed(moveAmountX, true)
+        ? (this.currentCanvasPoint.x += moveAmountX / this.scale)
+        : this.currentCanvasPoint.x;
+      //If allowed, adjust the currentCanvasPoint.y by tracked movement, adjusted for scale.
+      this.panningAllowed(moveAmountY, false)
+        ? (this.currentCanvasPoint.y += moveAmountY / this.scale)
+        : this.currentCanvasPoint.y;
+
       //Set the cursor tracking to current position.
       this.lastTouchCoords[0] = eventCanvasPoint;
       //Prepare for a fast drag by setting nextPanVelocity to -moveAmount.
@@ -1490,22 +1606,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
       //If dragging a station.
     } else if (this.dragItem === MapDragItem.Station) {
-      //Loop through stations to find the station that is being dragged.
-      for (const station of this.stations) {
-        if (station.dragging) {
-          //set mousePoint to the tracked cursor position.
-          this.mapService.currentMousePoint$.next(eventCanvasPoint);
-          //Set cursor style.
-          this.mapCanvas.nativeElement.style.cursor = 'grabbing';
-
-          //Adjust the station's mapPoint by tracked movement, adjusted for scale.
-          station.mapPoint.x -= moveAmountX / this.scale;
-          station.mapPoint.y -= moveAmountY / this.scale;
-
-          //Set the cursor tracking to current position.
-          this.lastTouchCoords[0] = eventCanvasPoint;
-        }
-      }
+      //Set cursor style.
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+      // Move station.
+      this.moveStation(eventCanvasPoint, moveAmountX, moveAmountY);
 
       //If dragging a node.
     } else if (this.dragItem === MapDragItem.Node) {
@@ -1570,6 +1674,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.mapCanvas.nativeElement.style.cursor = 'grabbing';
       // Set dragging on stations in the station group.
       this.setDraggingStationGroup();
+      // Move all stations in the station group.
+      this.moveStation(eventCanvasPoint, moveAmountX, moveAmountY);
 
       /* This is where we check to see if a station, group or connection line is being hovered,
       and nothing is currently being dragged. */
@@ -2116,6 +2222,34 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       if (stationGroup.dragging) {
         setDraggingOnContents(stationGroup);
         break;
+      }
+    }
+  }
+
+  /**
+   * Move the stations when they are dragging..
+   *
+   * @param eventCanvasPoint The cursor position.
+   * @param moveAmountX Amount of movement in the X-coordinate.
+   * @param moveAmountY Amount of movement in the Y-coordinate.
+   */
+  moveStation(
+    eventCanvasPoint: Point,
+    moveAmountX: number,
+    moveAmountY: number
+  ): void {
+    //Loop through stations to find the station that is being dragged.
+    for (const station of this.stations) {
+      if (station.dragging) {
+        //set mousePoint to the tracked cursor position.
+        this.mapService.currentMousePoint$.next(eventCanvasPoint);
+
+        //Adjust the station's mapPoint by tracked movement, adjusted for scale.
+        station.mapPoint.x -= moveAmountX / this.scale;
+        station.mapPoint.y -= moveAmountY / this.scale;
+
+        //Set the cursor tracking to current position.
+        this.lastTouchCoords[0] = eventCanvasPoint;
       }
     }
   }
