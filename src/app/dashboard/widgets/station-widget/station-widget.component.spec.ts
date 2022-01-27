@@ -188,45 +188,30 @@ describe('StationWidgetComponent', () => {
     );
     expect(button).toBeFalsy();
   });
-
-  it('should call method createDocument()', () => {
-    component.stationRithmId = stationRithmId;
-    const dataWidgetStation: StationWidgetData = {
-      stationName: 'Dev1',
-      documentGeneratorStatus: DocumentGenerationStatus.Manual,
-      documents: [
-        {
-          rithmId: '123-123-123',
-          name: 'Granola',
-          priority: 1,
-          flowedTimeUTC: '2022-01-13T16:43:57.901Z',
-          lastUpdatedUTC: '2022-01-13T16:43:57.901Z',
-          assignedUser: {
-            rithmId: '123-123-123',
-            firstName: 'Pedro',
-            lastName: 'Jeria',
-            email: 'pablo@mundo.com',
-            isAssigned: true,
-          },
-        },
-      ],
-    };
-
-    spyOn(
-      TestBed.inject(DocumentService),
-      'getStationWidgetDocuments'
-    ).and.returnValue(of(dataWidgetStation));
-
-    spyOn(component, 'createDocument').and.callThrough();
-
-    component.ngOnInit();
+  it('should create new document on widget', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.isLoading = false;
     fixture.detectChanges();
-
+    const spyMethodComponent = spyOn(
+      component,
+      'createNewDocument'
+    ).and.callThrough();
+    const spyMethodService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
     const buttonNewDocument = fixture.debugElement.nativeElement.querySelector(
       '#create-new-document'
     );
     buttonNewDocument.click();
-    expect(component.createDocument).toHaveBeenCalled();
+    expect(spyMethodComponent).toHaveBeenCalled();
+    expect(component.documentIdSelected).toBe(expectDocumentRithmId);
+    expect(component.isDocument).toBeTrue();
+    expect(spyMethodService).toHaveBeenCalledWith(
+      '',
+      0,
+      component.stationRithmId
+    );
   });
 
   describe('Loading documents', () => {

@@ -117,16 +117,14 @@ export class StationWidgetComponent implements OnInit {
 
   /**
    * Create a new document.
-   *
    */
-  createDocument(): void {
+   createNewDocument(): void {
     this.documentService
       .createNewDocument('', 0, this.stationRithmId)
       .pipe(first())
       .subscribe({
         next: (documentRithmId) => {
-          this.documentIdSelected = documentRithmId;
-          this.isDocument = true;
+          this.viewDocument(documentRithmId);
           this.reloadDocumentList = true;
           this.popupService.notify(
             'The document has been created successfully.'
