@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -8,6 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
+  DashboardData,
+  WidgetType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -100,5 +102,33 @@ export class DashboardService {
     return this.http.get<DashboardItem[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
     );
+  }
+
+  /**
+   * Update dashboard personal.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateDashboard(dashboardData: DashboardData): Observable<DashboardData> {
+    const newDashboarData: DashboardData = {
+      rithmId: dashboardData.rithmId,
+      name: 'new name',
+      widgets: [
+        {
+          cols: 1,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 1,
+          maxItemRows: 2,
+          minItemCols: 1,
+          maxItemCols: 2,
+        },
+      ],
+    };
+    return of(newDashboarData).pipe(delay(1000));
   }
 }

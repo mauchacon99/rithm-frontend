@@ -8,6 +8,7 @@ import {
   Document,
   DashboardItem,
   WidgetType,
+  DashboardData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -272,5 +273,31 @@ describe('DashboardService', () => {
 
     req.flush(widgetsExpected);
     httpTestingController.verify();
+  });
+
+  it('should return new data for dashboard when update dashboard', () => {
+    const dashboardData: DashboardData = {
+      rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+      name: 'name',
+      widgets: [
+        {
+          cols: 1,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 1,
+          maxItemRows: 2,
+          minItemCols: 1,
+          maxItemCols: 2,
+        },
+      ],
+    };
+
+    service.updateDashboard(dashboardData).subscribe((response) => {
+      dashboardData.name = 'new name';
+      expect(response).toEqual(dashboardData);
+    });
   });
 });
