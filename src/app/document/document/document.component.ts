@@ -18,12 +18,13 @@ import {
   DocumentAnswer,
   DocumentStationInformation,
   ConnectedStationInfo,
-  DocumentAutoFlow,
-} from 'src/models';
+  DocumentAutoFlow, User
+} from "src/models";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
 import { Input } from '@angular/core';
+import { UserService } from "src/app/core/user.service";
 
 /**
  * Main component for viewing a document.
@@ -42,6 +43,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Id for document id widget. */
   @Input() documentRithmIdWidget!: string;
+
+  /** The current signed in user. */
+  currentUser!: User;
 
   /** Return to list of the documents only with isWidget. */
   @Output() returnDocumentsWidget: EventEmitter<unknown> = new EventEmitter();
@@ -96,6 +100,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private userService: UserService,
     private popupService: PopupService,
     private readonly changeDetectorR: ChangeDetectorRef
   ) {
@@ -138,6 +143,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.currentUser = this.userService.user;
+    console.log(this.currentUser)
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
     if (!this.isWidget) {
       this.getParams();
