@@ -139,13 +139,32 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call service from generateNewDashboard', () => {
+  it('should call service from generateNewOrganizationDashboard', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'generateNewDashboard'
+      'generateNewOrganizationDashboard'
     ).and.callThrough();
 
     component.generateNewOrganizationDashboard();
     expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show an error message when calling generateNewOrganizationDashboard', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewOrganizationDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.generateNewOrganizationDashboard();
+    expect(spyError).toHaveBeenCalled();
   });
 });

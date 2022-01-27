@@ -1,9 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OptionsMenuComponent } from './options-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { MockDashboardService, MockPopupService } from 'src/mocks';
-import { PopupService } from 'src/app/core/popup.service';
 
 describe('OptionsMenuComponent', () => {
   let component: OptionsMenuComponent;
@@ -13,10 +10,6 @@ describe('OptionsMenuComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [OptionsMenuComponent],
       imports: [MatMenuModule],
-      providers: [
-        { provide: DashboardService, useClass: MockDashboardService },
-        { provide: PopupService, useClass: MockPopupService },
-      ],
     }).compileComponents();
   });
 

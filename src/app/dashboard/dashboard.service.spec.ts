@@ -8,6 +8,7 @@ import {
   Document,
   DashboardItem,
   WidgetType,
+  DashboardData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -274,10 +275,27 @@ describe('DashboardService', () => {
     httpTestingController.verify();
   });
 
-  it('should return a new dashboard', () => {
-    service.generateNewDashboard().subscribe((response) => {
-      expect(response).toBeTruthy();
-      expect(response.rithmId).toEqual('102030405060708090100');
+  it('should return a new organization dashboard', () => {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(newDashboard);
     });
   });
 });
