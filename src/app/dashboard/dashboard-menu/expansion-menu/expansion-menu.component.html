@@ -27,16 +27,29 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <div
-      *ngFor="let dashboard of dashboardsList; let i = index"
-      class="color-hover cursor-pointer"
-    >
-      <mat-list-item
-        [attr.data-testid]="dashboardRole + '-item-' + i"
-        [id]="dashboardRole + '-item-' + i"
+    <div *ngIf="isLoading" id="loading-dashboards-list">
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+    <div *ngIf="showError" id="error-dashboard-list">
+      <p class="text-error-500">Error: failed to obtain dashboards</p>
+    </div>
+    <div *ngIf="dashboardsList.length === 0" id="empty-dashboards-list">
+      <p>No dashboard for listing</p>
+    </div>
+    <div *ngIf="!isLoading && !showError && dashboardsList.length > 0">
+      <div
+        *ngFor="let dashboard of dashboardsList; let i = index"
+        class="color-hover cursor-pointer"
       >
-        {{ dashboard.name }}
-      </mat-list-item>
+        <mat-list-item
+          [attr.data-testid]="dashboardRole + '-item-' + i"
+          [id]="dashboardRole + '-item-' + i"
+        >
+          {{ dashboard.name }}
+        </mat-list-item>
+      </div>
     </div>
   </mat-list>
 </mat-expansion-panel>

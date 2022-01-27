@@ -26,6 +26,12 @@ export class ExpansionMenuComponent implements OnInit {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
+  /** Loading for list menu. */
+  isLoading = false;
+
+  /** Show error in list the dashboard. */
+  showError = false;
+
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService
@@ -33,6 +39,8 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Init live cycle component. */
   ngOnInit(): void {
+    this.showError = false;
+    this.isLoading = true;
     const petitionDashboard$ =
       this.dashboardRole === this.roleDashboardMenu.OrganizationDashboard
         ? this.dashboardService.getOrganizationDashboard()
@@ -40,9 +48,13 @@ export class ExpansionMenuComponent implements OnInit {
 
     petitionDashboard$.pipe(first()).subscribe({
       next: (dashboards) => {
+        this.showError = false;
+        this.isLoading = false;
         this.dashboardsList = dashboards;
       },
       error: (error: unknown) => {
+        this.showError = true;
+        this.isLoading = false;
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error
