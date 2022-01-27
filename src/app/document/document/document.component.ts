@@ -18,13 +18,14 @@ import {
   DocumentAnswer,
   DocumentStationInformation,
   ConnectedStationInfo,
-  DocumentAutoFlow, User
-} from "src/models";
+  DocumentAutoFlow,
+  User,
+} from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
 import { Input } from '@angular/core';
-import { UserService } from "src/app/core/user.service";
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Main component for viewing a document.
@@ -44,7 +45,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Id for document id widget. */
   @Input() documentRithmIdWidget!: string;
 
-  /** The current signed in user. */
+  /** Logged in user. */
   currentUser!: User;
 
   /** Return to list of the documents only with isWidget. */
@@ -144,7 +145,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   ngOnInit(): void {
     this.currentUser = this.userService.user;
-    console.log(this.currentUser)
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
     if (!this.isWidget) {
       this.getParams();
@@ -214,7 +214,10 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
-    this.router.navigateByUrl('dashboard');
+    // If is widget return to the documents list
+    this.isWidget
+      ? this.returnDocumentsWidget.emit()
+      : this.router.navigateByUrl('dashboard');
   }
 
   /**
@@ -281,9 +284,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       important: true,
     });
     if (response) {
-      this.isWidget
-        ? this.returnDocumentsWidget.emit()
-        : this.router.navigateByUrl('dashboard');
+      this.navigateBack();
     }
   }
 
@@ -363,7 +364,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.router.navigateByUrl('dashboard');
+          this.navigateBack();
         },
         error: (error: unknown) => {
           this.documentLoading = false;

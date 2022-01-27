@@ -117,13 +117,13 @@
                     </button>
                   </span>
                   <span class="mr-3"
-                    ><button
-                      mat-stroked-button
-                      color="accent"
-                      (click)="cancelDocument()"
-                      data-testid="document-cancel"
-                      id="document-cancel"
-                    >
+                  ><button
+                    mat-stroked-button
+                    color="accent"
+                    (click)="cancelDocument()"
+                    data-testid="document-cancel"
+                    id="document-cancel"
+                  >
                       Cancel
                     </button></span
                   >
@@ -134,7 +134,7 @@
                     class="mx-2"
                     data-testid="document-save"
                     id="document-save"
-                    [disabled]="!documentForm.valid"
+                    [disabled]="!documentForm.valid || (isWidget && currentUser.role !== 'admin' && currentUser.role !== 'worker')"
                   >
                     Save
                   </button>
@@ -144,7 +144,7 @@
                   color="accent"
                   data-testid="document-flow"
                   id="document-flow"
-                  [disabled]="!documentForm.valid"
+                  [disabled]="!documentForm.valid || (isWidget && currentUser.role !== 'admin' && currentUser.role !== 'worker')"
                   (click)="autoFlowDocument()"
                 >
                   Flow
