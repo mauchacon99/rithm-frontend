@@ -141,8 +141,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.setDrawer(this.detailDrawer);
     if (!this.isWidget) {
+      this.sidenavDrawerService.setDrawer(this.detailDrawer);
       this.getParams();
     } else {
       this.documentId = this.documentRithmIdWidget;

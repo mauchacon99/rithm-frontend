@@ -130,6 +130,9 @@ export class RuleModalComponent implements OnInit {
     value: OperatorType;
   }[] = [];
 
+  /** The value of the first question field type. */
+  firstFieldType!: QuestionFieldType;
+
   /** The value of the first operand type. */
   firstOperandType!: OperandType;
 
@@ -197,6 +200,8 @@ export class RuleModalComponent implements OnInit {
   setOperatorList(fieldType: QuestionFieldType): void {
     this.operatorList = [];
     this.operator = '';
+    //Set first field type for options of the second operand
+    this.firstFieldType = fieldType;
     switch (fieldType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:

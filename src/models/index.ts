@@ -49,3 +49,4 @@ export * from './widget-document';
 export * from './station-widget-data';
 export * from './document-event';
 export * from './station-group-info-drawer-data';
+export * from './dashboard-data';
