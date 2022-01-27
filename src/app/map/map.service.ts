@@ -52,6 +52,9 @@ export class MapService {
   /** Informs the map when station elements have changed. */
   stationElementsChanged$ = new BehaviorSubject(false);
 
+  /** Informs the map when station group elements have changed. */
+  stationGroupElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -1224,9 +1227,14 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    //If there are still stations with status not normal, return true.
-    return this.stationElements.some(
-      (station) => station.status !== MapItemStatus.Normal
+    //If there are still stations or station group with status not normal, return true.
+    return (
+      this.stationElements.some(
+        (station) => station.status !== MapItemStatus.Normal
+      ) ||
+      this.stationGroupElements.some(
+        (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+      )
     );
   }
 
