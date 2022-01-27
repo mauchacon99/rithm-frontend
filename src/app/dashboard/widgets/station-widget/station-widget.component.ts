@@ -118,7 +118,7 @@ export class StationWidgetComponent implements OnInit {
   /**
    * Create a new document.
    */
-   createNewDocument(): void {
+  createNewDocument(): void {
     this.documentService
       .createNewDocument('', 0, this.stationRithmId)
       .pipe(first())
