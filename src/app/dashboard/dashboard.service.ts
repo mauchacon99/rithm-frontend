@@ -110,9 +110,11 @@ export class DashboardService {
    * @param dashboardUpdate Dashboard update.
    * @returns Personal dashboard data observable.
    */
-   updatePersonalDashboard(dashboardUpdate: DashboardData): Observable<DashboardData> {
+  updatePersonalDashboard(
+    dashboardUpdate: DashboardData
+  ): Observable<DashboardData> {
     return of(dashboardUpdate).pipe(delay(1000));
-   }
+  }
 
   /**
    * Get all  the organization's dashboards.

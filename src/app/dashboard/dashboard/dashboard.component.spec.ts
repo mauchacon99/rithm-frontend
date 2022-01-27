@@ -138,4 +138,15 @@ describe('DashboardComponent', () => {
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should return updated dashboard', () => {
+    component.viewNewDashboard = true;
+    const unassignSpy = spyOn(
+      TestBed.inject(DashboardService),
+      'updatePersonalDashboard'
+    ).and.callThrough();
+
+    component['updatePersonalDashboard']();
+    expect(unassignSpy).toHaveBeenCalled();
+  });
 });
