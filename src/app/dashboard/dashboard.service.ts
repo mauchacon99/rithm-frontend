@@ -121,7 +121,7 @@ export class DashboardService {
    *
    * @returns Returns a list of dashboards.
    */
-   getOrganizationDashboard(): Observable<DashboardData[]> {
+  getOrganizationDashboard(): Observable<DashboardData[]> {
     const OrganizationDashboards: DashboardData[] = [
       {
         rithmId: '123654-789654-7852',

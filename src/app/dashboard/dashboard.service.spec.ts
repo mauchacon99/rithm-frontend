@@ -298,8 +298,7 @@ describe('DashboardService', () => {
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
     });
-});
-
+  });
 
   it('should returns organization dashboard', () => {
     const organizationDashboards: DashboardData[] = [

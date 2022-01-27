@@ -140,7 +140,7 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  fit('should call the service updateOrganizationDashboard ', () => {
+  it('should call the service updateOrganizationDashboard ', () => {
     const dashboardData: DashboardData = {
       rithmId: '',
       name: 'new name',
