@@ -207,6 +207,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    //This subscribe sets this.stationGroups when the behavior subject in mapService changes, then redraws the map.
+    this.mapService.stationGroupElementsChanged$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationGroups = this.mapService.stationGroupElements;
+        this.drawElements();
+      });
+
     //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
