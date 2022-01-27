@@ -8,6 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
+  DashboardData,
+  WidgetType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -100,5 +102,33 @@ export class DashboardService {
     return this.http.get<DashboardItem[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
     );
+  }
+
+  /**
+   * Update dashboard name.
+   *
+   * @returns Dashboard data observable.
+   */
+   updateDashboardName(): Observable<DashboardData> {
+    const dashboardData: DashboardData =
+      {
+        rithmId: '123-131-132',
+        name: 'New Dashboard',
+        widgets: [
+          {
+            cols: 4,
+            rows: 1,
+            x: 0,
+            y: 0,
+            widgetType: WidgetType.Station,
+            data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+            minItemCols: 4,
+            minItemRows: 4,
+            maxItemCols: 12,
+            maxItemRows: 12,
+          },
+        ]
+      };
+
   }
 }
