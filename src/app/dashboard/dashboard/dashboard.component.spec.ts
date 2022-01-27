@@ -138,4 +138,14 @@ describe('DashboardComponent', () => {
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should call service from generateNewDashboard', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewDashboard'
+    ).and.callThrough();
+
+    component.generateNewDashboard();
+    expect(spyService).toHaveBeenCalled();
+  });
 });

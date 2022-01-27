@@ -29,14 +29,4 @@ describe('OptionsMenuComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should call service from generateNewDashboard', () => {
-    const spyService = spyOn(
-      TestBed.inject(DashboardService),
-      'generateNewDashboard'
-    ).and.callThrough();
-
-    component.generateNewDashboard();
-    expect(spyService).toHaveBeenCalled();
-  });
 });

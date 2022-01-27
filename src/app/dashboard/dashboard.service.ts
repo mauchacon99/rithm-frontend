@@ -110,27 +110,25 @@ export class DashboardService {
    *
    * @returns Returns a new default dashboard.
    */
-  generateNewDashboard(): Observable<DashboardData[]> {
-    const newDashboard: DashboardData[] = [
-      {
-        rithmId: '102030405060708090100',
-        name: 'New Dashboard',
-        widgets: [
-          {
-            cols: 4,
-            rows: 1,
-            x: 0,
-            y: 0,
-            widgetType: WidgetType.Station,
-            data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-            minItemCols: 4,
-            minItemRows: 4,
-            maxItemCols: 12,
-            maxItemRows: 12,
-          },
-        ],
-      },
-    ];
+  generateNewDashboard(): Observable<DashboardData> {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
 
     return of(newDashboard).pipe(delay(1000));
   }

@@ -276,9 +276,8 @@ describe('DashboardService', () => {
 
   it('should return a new dashboard', () => {
     service.generateNewDashboard().subscribe((response) => {
-      expect(Array.isArray(response)).toBeTrue();
-      expect(response[0]).toBeTruthy();
-      expect(response[0].rithmId).toEqual('102030405060708090100');
+      expect(response).toBeTruthy();
+      expect(response.rithmId).toEqual('102030405060708090100');
     });
   });
 });
