@@ -230,7 +230,7 @@ export class MockDashboardService {
    *
    * @returns Returns a new default dashboard.
    */
-  generateNewDashboard(): Observable<DashboardData> {
+  generateNewOrganizationDashboard(): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
