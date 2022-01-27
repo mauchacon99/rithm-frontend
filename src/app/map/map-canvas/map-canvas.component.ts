@@ -1063,8 +1063,11 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.currentCanvasPoint.x -= xMove;
     this.currentCanvasPoint.y -= yMove;
 
-    //If dragging a station, need to offset the station's mapPoint too so that it doesn't get left behind while panning.
-    if (this.dragItem === MapDragItem.Station) {
+    //If dragging a station or station group, need to offset the stations' mapPoints too so that they don't get left behind while panning.
+    if (
+      this.dragItem === MapDragItem.Station ||
+      this.dragItem === MapDragItem.StationGroup
+    ) {
       for (const station of this.stations) {
         if (station.dragging) {
           station.mapPoint.x -= xMove;
