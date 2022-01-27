@@ -226,36 +226,6 @@ export class MockDashboardService {
   }
 
   /**
-   * Update organization dashboard`s.
-   *
-   * @returns The updated  data for this dashboard.
-   * @param dashboardData Dashboard data for update.
-   */
-  updateOrganizationDashboard(
-    dashboardData: DashboardData
-  ): Observable<DashboardData> {
-    const newDashboarData: DashboardData = {
-      rithmId: dashboardData.rithmId,
-      name: 'new name',
-      widgets: [
-        {
-          cols: 1,
-          rows: 2,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Document,
-          data: 'string',
-          minItemRows: 1,
-          maxItemRows: 2,
-          minItemCols: 1,
-          maxItemCols: 2,
-        },
-      ],
-    };
-    return of(newDashboarData).pipe(delay(1000));
-  }
-
-  /**
    * Get all the organization's dashboards.
    *
    * @returns Returns a list of dashboards.
@@ -349,5 +319,17 @@ export class MockDashboardService {
     ];
 
     return of(personalDashboards).pipe(delay(1000));
+  }
+
+  /**
+   * Update organization dashboard`s.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
   }
 }
