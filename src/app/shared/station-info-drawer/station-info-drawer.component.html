@@ -13,7 +13,7 @@
     <ng-template matTabContent>
       <div class="grid grid-cols-1">
         <div class="w-full py-2">
-         <!-- Station Name -->
+          <!-- Station Name -->
           <div class="flex px-4 py-2 border-b-2 border-b-secondary-100">
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Station Name</mat-label>
@@ -46,7 +46,9 @@
         </div>
 
         <!-- Last Updated -->
-        <div class="flex justify-between w-full px-4 py-4 border-b-2 border-b-secondary-100">
+        <div
+          class="flex justify-between w-full px-4 py-4 border-b-2 border-b-secondary-100"
+        >
           <h6>Last Updated</h6>
           <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
             <app-loading-indicator
@@ -62,7 +64,9 @@
         </div>
 
         <!-- Chained Flow -->
-        <div class="flex justify-between w-full px-4 py-4 border-b-2 border-b-secondary-100">
+        <div
+          class="flex justify-between w-full px-4 py-4 border-b-2 border-b-secondary-100"
+        >
           <h6>Chained Flow</h6>
           <div>
             <i class="fas fa-check text-accent-500"></i>

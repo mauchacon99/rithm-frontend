@@ -60,7 +60,7 @@ describe('StationInfoDrawerComponent', () => {
           { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
         MatTabsModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

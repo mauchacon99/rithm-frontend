@@ -23,7 +23,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatButtonModule,
     MatInputModule,
     MatTabsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   exports: [StationInfoDrawerComponent],
 })
