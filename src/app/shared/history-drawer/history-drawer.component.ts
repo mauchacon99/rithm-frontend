@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { first, takeUntil } from 'rxjs/operators';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { DocumentEvent } from 'src/models';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
+import { DocumentEvent, DocumentStationInformation } from 'src/models';
 
 /**
  * Component for the history pane of a document/station.
@@ -19,11 +21,26 @@ export class HistoryDrawerComponent implements OnInit {
   /** Get events for documents. */
   eventDocuments: DocumentEvent[] = [];
 
+  /** The error if history fails . */
+  eventDocumentsError = false;
+
+  /** Loading history for documents. */
+  eventDocumentsLoading = false;
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
   constructor(
     private documentService: DocumentService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private sideNavDrawerService: SidenavDrawerService
   ) {
-    this.documentRithmId = 'E204F369-386F-4E41';
+    this.sideNavDrawerService.drawerData$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const dataDrawer = data as DocumentStationInformation;
+        this.documentRithmId = dataDrawer.documentRithmId;
+      });
   }
 
   /**
@@ -36,15 +53,19 @@ export class HistoryDrawerComponent implements OnInit {
   /**
    * Get events for the document history.
    */
-  getDocumentEvents(): void {
+  private getDocumentEvents(): void {
+    this.eventDocumentsLoading = true;
     this.documentService
       .getDocumentEvents(this.documentRithmId)
       .pipe(first())
       .subscribe({
         next: (events) => {
+          this.eventDocumentsLoading = false;
           this.eventDocuments = events;
         },
         error: (error: unknown) => {
+          this.eventDocumentsError = true;
+          this.eventDocumentsLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
