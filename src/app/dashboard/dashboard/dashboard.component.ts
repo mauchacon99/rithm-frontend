@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Generates a new default dashboard.
    */
-  generateNewDashboard(): void {
+  generateNewOrganizationDashboard(): void {
     this.dashboardService
       .generateNewDashboard()
       .pipe(first())
