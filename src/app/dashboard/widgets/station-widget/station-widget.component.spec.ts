@@ -200,9 +200,16 @@ describe('StationWidgetComponent', () => {
       TestBed.inject(DocumentService),
       'createNewDocument'
     ).and.returnValue(of(expectDocumentRithmId));
+
+    const notifyMethodService = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+
     const buttonNewDocument = fixture.debugElement.nativeElement.querySelector(
       '#create-new-document'
     );
+    expect(buttonNewDocument).toBeTruthy();
     buttonNewDocument.click();
     expect(spyMethodComponent).toHaveBeenCalled();
     expect(component.documentIdSelected).toBe(expectDocumentRithmId);
@@ -212,6 +219,7 @@ describe('StationWidgetComponent', () => {
       0,
       component.stationRithmId
     );
+    expect(notifyMethodService).toHaveBeenCalled();
   });
 
   describe('Loading documents', () => {
