@@ -176,7 +176,7 @@ export class DashboardComponent implements OnInit {
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
