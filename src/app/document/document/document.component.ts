@@ -278,9 +278,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       cancelButtonText: 'Close',
       important: true,
     });
-    if (response) {
-      this.navigateBack();
-    }
+    if (response) this.navigateBack();
   }
 
   /**
