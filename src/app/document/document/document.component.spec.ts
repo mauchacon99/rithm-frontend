@@ -538,6 +538,4 @@ describe('DocumentComponent', () => {
       component.autoFlowDocument();
     });
   });
-
-
 });
