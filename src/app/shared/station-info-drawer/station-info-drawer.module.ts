@@ -9,6 +9,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [StationInfoDrawerComponent],
@@ -22,6 +23,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatButtonModule,
     MatInputModule,
     MatTabsModule,
+    MatSlideToggleModule
   ],
   exports: [StationInfoDrawerComponent],
 })

@@ -33,6 +33,7 @@ import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { DocumentComponent } from 'src/app/document/document/document.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -59,6 +60,7 @@ describe('StationInfoDrawerComponent', () => {
           { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
         MatTabsModule,
+        MatSlideToggleModule
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
