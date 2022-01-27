@@ -1,4 +1,4 @@
-<div class="modal-container">
+<div class="modal-container" [formGroup]="ruleModalForm">
   <!-- Modal header -->
   <div class="flex justify-center items-center h-full">
     <h4 class="text-center">New Rule</h4>
@@ -31,7 +31,10 @@
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="setOperatorList(question.questionType)"
+              (click)="
+                setOperatorList(question.questionType);
+                firstOperandText = question.prompt
+              "
             >
               {{ question.prompt }}
             </mat-option>
@@ -78,6 +81,7 @@
             <mat-option
               *ngFor="let option of operatorList"
               [value]="option.value"
+              (click)="operatorText = option.text"
             >
               {{ option.text }}
             </mat-option>
@@ -109,22 +113,30 @@
         </p>
       </div>
       <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Custom Value</mat-label>
-          <div matPrefix class="icon">
-            <i class="fas fa-font"></i>
-          </div>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="secondOperand"
-            autocomplete="off"
-          />
-        </mat-form-field>
+        <app-text-field
+          *ngIf="firstOperandType === operandType.String"
+          [field]="secondOperandField"
+          formControlName="textFieldForm"
+          [labelTag]="secondOperandField.prompt"
+          [isStation]="false"
+        ></app-text-field>
+        <app-number-field
+          *ngIf="firstOperandType === operandType.Number"
+          [field]="secondOperandField"
+          formControlName="numberFieldForm"
+        ></app-number-field>
+        <app-date-field
+          *ngIf="firstOperandType === operandType.Date"
+          [field]="secondOperandField"
+          formControlName="dateFieldForm"
+        ></app-date-field>
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
-          <mat-select [(ngModel)]="secondOperand">
+          <mat-select
+            [(ngModel)]="secondOperand"
+            [ngModelOptions]="{ standalone: true }"
+          >
             <ng-container *ngFor="let question of questionStation">
               <mat-option
                 *ngIf="
@@ -132,6 +144,7 @@
                   question.questionType === firstFieldType
                 "
                 [value]="question.rithmId"
+                (click)="secondOperandText = question.prompt"
               >
                 {{ question.prompt }}
               </mat-option>
@@ -168,8 +181,9 @@
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm my-1">
-          {{ firstOperand }} <span class="font-bold">{{ operator }} </span>
-          {{ secondOperand }}
+          {{ firstOperandText }}
+          <span class="font-bold">{{ operatorText }} </span>
+          {{ secondOperandText }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">

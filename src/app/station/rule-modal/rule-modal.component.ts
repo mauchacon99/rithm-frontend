@@ -12,6 +12,7 @@ import {
   OperatorType,
   OperandType,
 } from 'src/models';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -134,19 +135,43 @@ export class RuleModalComponent implements OnInit {
   firstFieldType!: QuestionFieldType;
 
   /** The value of the first operand type. */
-  firstOperandType!: OperandType;
+  firstOperandType: OperandType | null = null;
+
+  /** The first operand of text to show. */
+  firstOperandText = '';
+
+  /** The operator text to show. */
+  operatorText = '';
+
+  /** The second operand of text to show. */
+  secondOperandText = '';
+
+  /** The second operand of field. */
+  secondOperandField!: Question;
+
+  /** The operand type for the field. */
+  operandType = OperandType;
+
+  /** Rule Modal Form.*/
+  ruleModalForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public rithmId: string,
     breakpointObserver: BreakpointObserver,
     private stationService: StationService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private fb: FormBuilder
   ) {
     this.stationRithmId = rithmId;
     this.stepperOrientation$ = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+    this.ruleModalForm = this.fb.group({
+      textFieldForm: this.fb.control(''),
+      numberFieldForm: this.fb.control(''),
+      dateFieldForm: this.fb.control(''),
+    });
   }
 
   /**
@@ -154,6 +179,17 @@ export class RuleModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getStationQuestions();
+
+    this.secondOperandField = {
+      questionType: QuestionFieldType.ShortText,
+      rithmId: Math.random().toString(36).slice(2),
+      prompt: 'Custom Value',
+      isReadOnly: false,
+      isRequired: false,
+      isPrivate: false,
+      value: '',
+      children: [],
+    };
   }
 
   /**
@@ -202,6 +238,7 @@ export class RuleModalComponent implements OnInit {
     this.operator = '';
     //Set first field type for options of the second operand
     this.firstFieldType = fieldType;
+    this.secondOperandField.questionType = fieldType;
     switch (fieldType) {
       case QuestionFieldType.ShortText:
       case QuestionFieldType.URL:
