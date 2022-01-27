@@ -275,8 +275,8 @@ describe('DashboardService', () => {
     httpTestingController.verify();
   });
 
-  it('should return dashboard for organization', () => {
-    const dashboardsOrganization: DashboardData[] = [
+  it('should returns organization dashboard', () => {
+    const organizationDashboards: DashboardData[] = [
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
@@ -315,13 +315,13 @@ describe('DashboardService', () => {
       },
     ];
 
-    service.getDashboardOrganization().subscribe((response) => {
-      expect(response).toEqual(dashboardsOrganization);
+    service.getOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(organizationDashboards);
     });
   });
 
-  it('should return dashboards how user', () => {
-    const dashboardsPersonal: DashboardData[] = [
+  it('should returns user`s customized dashboards', () => {
+    const personalDashboards: DashboardData[] = [
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
@@ -360,8 +360,8 @@ describe('DashboardService', () => {
       },
     ];
 
-    service.getDashboardPersonal().subscribe((response) => {
-      expect(response).toEqual(dashboardsPersonal);
+    service.getPersonalDashboard().subscribe((response) => {
+      expect(response).toEqual(personalDashboards);
     });
   });
 });

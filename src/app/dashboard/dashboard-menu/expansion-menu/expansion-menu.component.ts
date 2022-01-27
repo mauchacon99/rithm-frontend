@@ -34,9 +34,9 @@ export class ExpansionMenuComponent implements OnInit {
   /** Init live cycle component. */
   ngOnInit(): void {
     const petitionDashboard$ =
-      this.dashboardRole === this.roleDashboardMenu.DashboardOrganization
-        ? this.dashboardService.getDashboardOrganization()
-        : this.dashboardService.getDashboardPersonal();
+      this.dashboardRole === this.roleDashboardMenu.OrganizationDashboard
+        ? this.dashboardService.getOrganizationDashboard()
+        : this.dashboardService.getPersonalDashboard();
 
     petitionDashboard$.pipe(first()).subscribe({
       next: (dashboards) => {

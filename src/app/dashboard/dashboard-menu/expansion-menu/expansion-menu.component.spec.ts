@@ -40,21 +40,21 @@ describe('ExpansionMenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return dashboards for organization', () => {
-    component.dashboardRole = RoleDashboardMenu.DashboardOrganization;
+  it('should returns the organization`s dashboard list', () => {
+    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'getDashboardOrganization'
+      'getOrganizationDashboard'
     ).and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith();
   });
 
-  it('should catch error if petition return dashboard for organization is fail', () => {
-    component.dashboardRole = RoleDashboardMenu.DashboardOrganization;
+  it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
+    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
     spyOn(
       TestBed.inject(DashboardService),
-      'getDashboardOrganization'
+      'getOrganizationDashboard'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
@@ -68,21 +68,21 @@ describe('ExpansionMenuComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should return dashboards how user', () => {
-    component.dashboardRole = RoleDashboardMenu.DashboardPersonal;
+  it('should returns user`s customized dashboards', () => {
+    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'getDashboardPersonal'
+      'getPersonalDashboard'
     ).and.callThrough();
     component.ngOnInit();
     expect(spyService).toHaveBeenCalledOnceWith();
   });
 
-  it('should catch error if petition return dashboard how user is fail', () => {
-    component.dashboardRole = RoleDashboardMenu.DashboardPersonal;
+  it('should catch an error if the request to get user`s customized dashboard fails', () => {
+    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
     spyOn(
       TestBed.inject(DashboardService),
-      'getDashboardPersonal'
+      'getPersonalDashboard'
     ).and.returnValue(
       throwError(() => {
         throw new Error();

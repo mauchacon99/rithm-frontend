@@ -105,11 +105,11 @@ export class DashboardService {
   }
 
   /**
-   * Get all dashboards for organization.
+   * Get all  the organization's dashboards.
    *
-   * @returns Returns the list of dashboards.
+   * @returns Returns a list of dashboards.
    */
-  getDashboardOrganization(): Observable<DashboardData[]> {
+  getOrganizationDashboard(): Observable<DashboardData[]> {
     const OrganizationDashboards: DashboardData[] = [
       {
         rithmId: '123654-789654-7852',
@@ -155,9 +155,9 @@ export class DashboardService {
   /**
    * Get all dashboards how user.
    *
-   * @returns Returns the list of dashboards.
+   * @returns Returns list of dashboards.
    */
-  getDashboardPersonal(): Observable<DashboardData[]> {
+  getPersonalDashboard(): Observable<DashboardData[]> {
     const personalDashboards: DashboardData[] = [
       {
         rithmId: '123654-789654-7852-789',
