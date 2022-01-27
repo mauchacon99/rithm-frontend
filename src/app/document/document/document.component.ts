@@ -45,9 +45,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   /** Id for document id widget. */
   @Input() documentRithmIdWidget!: string;
 
-  /** Logged in user. */
-  currentUser!: User;
-
   /** Return to list of the documents only with isWidget. */
   @Output() returnDocumentsWidget: EventEmitter<unknown> = new EventEmitter();
 
@@ -144,7 +141,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.currentUser = this.userService.user;
     this.sidenavDrawerService.setDrawer(this.detailDrawer);
     if (!this.isWidget) {
       this.getParams();
@@ -374,5 +370,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         },
       });
+  }
+
+  /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.user.role === 'admin';
   }
 }

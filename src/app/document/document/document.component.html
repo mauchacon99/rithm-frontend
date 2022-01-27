@@ -134,7 +134,10 @@
                     class="mx-2"
                     data-testid="document-save"
                     id="document-save"
-                    [disabled]="!documentForm.valid || (isWidget && currentUser.role !== 'admin' && currentUser.role !== 'worker')"
+                    [disabled]="
+                      !documentForm.valid ||
+                      (isWidget && !isUserAdminOrOwner)
+                    "
                   >
                     Save
                   </button>
@@ -144,7 +147,10 @@
                   color="accent"
                   data-testid="document-flow"
                   id="document-flow"
-                  [disabled]="!documentForm.valid || (isWidget && currentUser.role !== 'admin' && currentUser.role !== 'worker')"
+                  [disabled]="
+                    !documentForm.valid ||
+                    (isWidget && !isUserAdminOrOwner)
+                  "
                   (click)="autoFlowDocument()"
                 >
                   Flow
