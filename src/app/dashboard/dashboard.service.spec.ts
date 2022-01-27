@@ -276,22 +276,22 @@ describe('DashboardService', () => {
   });
   it('should return updated dashboard', () => {
     const updateDashboard: DashboardData = {
-      "rithmId": "",
-      "name": "new dashboard",
-      "widgets": [
+      rithmId: '',
+      name: 'new dashboard',
+      widgets: [
         {
-          "cols": 0,
-          "rows": 0,
-          "x": 0,
-          "y": 0,
-          "widgetType": WidgetType.Document,
-          "data": "string",
-          "minItemRows": 0,
-          "maxItemRows": 0,
-          "minItemCols": 0,
-          "maxItemCols": 0
-        }
-      ]
+          cols: 0,
+          rows: 0,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          maxItemCols: 0,
+        },
+      ],
     };
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);

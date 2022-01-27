@@ -8,12 +8,8 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
-<<<<<<< HEAD
-  DashboardData
-=======
   WidgetType,
   DashboardData,
->>>>>>> dev
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -116,9 +112,10 @@ export class DashboardService {
    */
    updatePersonalDashboard(dashboardUpdate: DashboardData): Observable<DashboardData> {
     return of(dashboardUpdate).pipe(delay(1000));
-   };
+   }
 
-  /* Get all  the organization's dashboards.
+  /**
+   * Get all  the organization's dashboards.
    *
    * @returns Returns a list of dashboards.
    */
