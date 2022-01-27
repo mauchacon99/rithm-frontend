@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
    */
   generateNewOrganizationDashboard(): void {
     this.dashboardService
-      .generateNewDashboard()
+      .generateNewOrganizationDashboard()
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
