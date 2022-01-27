@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -8,10 +8,9 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
-  DashboardData,
   WidgetType,
+  DashboardData,
 } from 'src/models';
-import { delay } from 'rxjs/operators';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
 
@@ -103,6 +102,102 @@ export class DashboardService {
     return this.http.get<DashboardItem[]>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
     );
+  }
+
+  /**
+   * Get all  the organization's dashboards.
+   *
+   * @returns Returns a list of dashboards.
+   */
+  getOrganizationDashboard(): Observable<DashboardData[]> {
+    const OrganizationDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    return of(OrganizationDashboards).pipe(delay(1000));
+  }
+
+  /**
+   * Get all dashboards how user.
+   *
+   * @returns Returns list of dashboards.
+   */
+  getPersonalDashboard(): Observable<DashboardData[]> {
+    const personalDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    return of(personalDashboards).pipe(delay(1000));
   }
 
   /**
