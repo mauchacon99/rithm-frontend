@@ -19,7 +19,6 @@ import {
   DocumentStationInformation,
   ConnectedStationInfo,
   DocumentAutoFlow,
-  User,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
