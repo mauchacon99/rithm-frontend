@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { DocumentService } from 'src/app/core/document.service';
@@ -14,7 +14,7 @@ import { DocumentEvent, DocumentStationInformation } from 'src/models';
   templateUrl: './history-drawer.component.html',
   styleUrls: ['./history-drawer.component.scss'],
 })
-export class HistoryDrawerComponent implements OnInit {
+export class HistoryDrawerComponent implements OnInit, OnDestroy {
   /** The value of document ID. */
   documentRithmId = '';
 
@@ -48,6 +48,14 @@ export class HistoryDrawerComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocumentEvents();
+  }
+
+  /**
+   * Cleanup method.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /**
