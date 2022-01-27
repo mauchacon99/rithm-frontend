@@ -20,9 +20,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { first } from 'rxjs';
+import { DocumentService } from 'src/app/core/document.service';
 import { StationService } from 'src/app/core/station.service';
 import { DocumentFieldValidation } from 'src/helpers/document-field-validation';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
 
 /**
  * Reusable component for all fields involving text.
@@ -80,6 +81,7 @@ export class TextFieldComponent
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,
+    private documentService: DocumentService,
     @Inject(NgZone) private ngZone: NgZone
   ) {}
 
@@ -88,7 +90,7 @@ export class TextFieldComponent
    */
   ngOnInit(): void {
     this.textFieldForm = this.fb.group({
-      [this.field.questionType]: [this.field.value ? this.field.value : '', []],
+      [this.field.questionType]: [this.fieldValue, []],
     });
 
     //Logic to determine if a field should be required, and the validators to give it.
@@ -181,15 +183,29 @@ export class TextFieldComponent
   }
 
   /**
-   * Emits an event to parent component to update field from form.
+   * Call the station service to to update field from the current form.
    *
    * @param field The field to emit.
    */
   updateFieldPrompt(field: Question): void {
-    if (this.isStation) {
-      field.prompt = this.textFieldForm.controls[this.field.questionType].value;
-      this.stationService.updateStationQuestionInTemplate(field);
-    }
+    field.prompt = this.textFieldForm.controls[this.field.questionType].value;
+    this.stationService.updateStationQuestionInTemplate(field);
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   *
+   */
+  updateFieldAnswer(): void {
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: this.textFieldForm.controls[this.field.questionType].value,
+      type: this.field.questionType,
+      questionUpdated: true,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
   }
 
   /**
@@ -199,5 +215,34 @@ export class TextFieldComponent
    */
   removeField(field: Question): void {
     this.removeOptionField.emit(field);
+  }
+
+  /**
+   * Gets the input/textArea value.
+   *
+   * @returns A string value.
+   */
+  get fieldValue(): string {
+    let fieldVal = '';
+    if (this.isStation) {
+      fieldVal = this.field.value ? this.field.value : '';
+    } else {
+      switch (this.field.questionType) {
+        case QuestionFieldType.ShortText:
+        case QuestionFieldType.LongText:
+        case QuestionFieldType.URL:
+        case QuestionFieldType.Email:
+        case QuestionFieldType.City:
+        case QuestionFieldType.Number:
+          fieldVal = this.field.answer?.asString
+            ? this.field.answer?.asString
+            : '';
+          break;
+        default:
+          fieldVal = '';
+          break;
+      }
+    }
+    return fieldVal;
   }
 }

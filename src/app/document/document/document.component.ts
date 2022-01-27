@@ -21,6 +21,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
+import { Input } from '@angular/core';
 
 /**
  * Main component for viewing a document.
@@ -31,6 +32,15 @@ import { Subject, forkJoin } from 'rxjs';
   styleUrls: ['./document.component.scss'],
 })
 export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
+  /** The Document how widget. */
+  @Input() isWidget = false;
+
+  /** Id for station in widget. */
+  @Input() stationRithmIdWidget!: string;
+
+  /** Id for document id widget. */
+  @Input() documentRithmIdWidget!: string;
+
   /** Document form. */
   documentForm: FormGroup;
 
@@ -43,6 +53,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Document Id. */
   private documentId = '';
+
+  /** Station Id. */
+  private stationId = '';
 
   /** Whether the request to get the document info is currently underway. */
   documentLoading = true;
@@ -96,14 +109,38 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((documentName) => {
         this.documentName = documentName.baseName;
       });
+
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer) => {
+        const answerFound = this.documentAnswer.find(
+          (da) => da.questionRithmId === answer.questionRithmId
+        );
+        if (answerFound === undefined) {
+          /** Answer doesn't exists then add it. */
+          answer.stationRithmId = this.documentInformation.stationRithmId;
+          answer.documentRithmId = this.documentInformation.documentRithmId;
+          this.documentAnswer.push(answer);
+        } else {
+          /** Answer exists then update its value. */
+          const answerIndex = this.documentAnswer.indexOf(answerFound);
+          this.documentAnswer[answerIndex].value = answer.value;
+        }
+      });
   }
 
   /**
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
-    this.sidenavDrawerService.setDrawer(this.detailDrawer);
-    this.getParams();
+    if (!this.isWidget) {
+      this.sidenavDrawerService.setDrawer(this.detailDrawer);
+      this.getParams();
+    } else {
+      this.documentId = this.documentRithmIdWidget;
+      this.stationId = this.stationRithmIdWidget;
+      this.getDocumentStationData();
+    }
   }
 
   /**
@@ -132,8 +169,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.handleInvalidParams();
         } else {
           this.documentId = params.documentId;
-          this.getDocumentStationData(params.documentId, params.stationId);
-          this.getConnectedStations(params.documentId, params.stationId);
+          this.stationId = params.stationId;
+          this.getDocumentStationData();
+          this.getConnectedStations();
         }
       },
       error: (error: unknown) => {
@@ -169,14 +207,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Get data about the document and station the document is in.
-   *
-   * @param documentId The id of the document for which to get data.
-   * @param stationId The id of the station that the document is in.
    */
-  private getDocumentStationData(documentId: string, stationId: string): void {
+  private getDocumentStationData(): void {
     this.documentLoading = true;
     this.documentService
-      .getDocumentInfo(documentId, stationId)
+      .getDocumentInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (document) => {
@@ -198,14 +233,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Retrieves a list of the connected stations for the given document.
-   *
-   * @param documentId The id of the document for which to retrieve previous stations.
-   * @param stationId The id of the station for which to retrieve forward stations.
    */
-  private getConnectedStations(documentId: string, stationId: string): void {
+  private getConnectedStations(): void {
     this.connectedStationsLoading = true;
     this.documentService
-      .getConnectedStationInfo(documentId, stationId)
+      .getConnectedStationInfo(this.documentId, this.stationId)
       .pipe(first())
       .subscribe({
         next: (connectedStations) => {
@@ -253,7 +285,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   saveDocumentChanges(): void {
     this.documentLoading = true;
-
     const requestArray = [
       // Update the document name.
       this.documentService.updateDocumentName(
@@ -271,9 +302,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     forkJoin(requestArray)
       .pipe(first())
       .subscribe({
-        next: (data) => {
-          this.documentAnswer = data[1] as DocumentAnswer[];
-          this.documentLoading = false;
+        next: () => {
+          this.getDocumentStationData();
         },
         error: (error: unknown) => {
           this.documentLoading = false;

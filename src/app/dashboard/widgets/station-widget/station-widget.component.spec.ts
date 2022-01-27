@@ -7,7 +7,8 @@ import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
-import { UserAvatarComponent } from '../../../shared/user-avatar/user-avatar.component';
+import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
+import { DocumentComponent } from 'src/app/document/document/document.component';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -20,6 +21,7 @@ describe('StationWidgetComponent', () => {
         StationWidgetComponent,
         MockComponent(LoadingIndicatorComponent),
         MockComponent(UserAvatarComponent),
+        MockComponent(DocumentComponent),
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -220,5 +222,54 @@ describe('StationWidgetComponent', () => {
       component.dataStationWidget.documents[0].flowedTimeUTC
     );
     expect(time).toBeTruthy();
+  });
+
+  describe('Display detail of the document', () => {
+    it('should show detail of the document', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnDisplayDocument =
+        fixture.debugElement.nativeElement.querySelector(
+          '#show-document-widget'
+        );
+      btnDisplayDocument.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeTruthy();
+      expect(showDocs).toBeNull();
+      expect(component.documentIdSelected).toBe(
+        component.dataStationWidget.documents[0].rithmId
+      );
+      expect(spyMethod).toHaveBeenCalledWith(
+        component.dataStationWidget.documents[0].rithmId
+      );
+    });
+
+    it('should return of list the documents', () => {
+      const spyMethod = spyOn(component, 'viewDocument').and.callThrough();
+      component.isDocument = true;
+      component.isLoading = false;
+      fixture.detectChanges();
+      const btnReturnDocuments =
+        fixture.debugElement.nativeElement.querySelector(
+          '#return-list-documents'
+        );
+      btnReturnDocuments.click();
+      fixture.detectChanges();
+      const documentDetail =
+        fixture.debugElement.nativeElement.querySelector('#document-detail');
+      const showDocs =
+        fixture.debugElement.nativeElement.querySelector('#show-docs');
+
+      expect(documentDetail).toBeNull();
+      expect(showDocs).toBeTruthy();
+      expect(component.documentIdSelected).toBe('');
+      expect(spyMethod).toHaveBeenCalledWith('');
+    });
   });
 });

@@ -11,7 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { first, Subject, takeUntil } from 'rxjs';
-import { QuestionFieldType, Question } from 'src/models';
+import { QuestionFieldType, Question, DocumentAnswer } from 'src/models';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable component for every field involving a checkbox.
@@ -45,10 +46,17 @@ export class CheckFieldComponent
   /** The field type of the input. */
   fieldTypeEnum = QuestionFieldType;
 
+  /** Checked Responses. */
+  checkedResponses: string[] = [];
+
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private ngZone: NgZone) {}
+  constructor(
+    private fb: FormBuilder,
+    private documentService: DocumentService,
+    private ngZone: NgZone
+  ) {}
 
   /**
    * Set up FormBuilder group.
@@ -57,8 +65,8 @@ export class CheckFieldComponent
     // eslint-disable-next-line prefer-const
     let fields: { [key: string]: unknown } = {};
 
-    this.field.possibleAnswers?.forEach((something, index) => {
-      fields[`checkItem${index}`] = [false];
+    this.field.possibleAnswers?.forEach((answer, index) => {
+      fields[`${answer.text}`] = [this.getCheckedItem(index)];
     });
 
     this.checkFieldForm = this.fb.group(fields);
@@ -150,5 +158,55 @@ export class CheckFieldComponent
             message: 'Check field form is invalid',
           },
         };
+  }
+
+  /**
+   * Allow the answer to be updated in the documentTemplate through a subject.
+   */
+  updateFieldAnswer(): void {
+    const itemsChecked: string[] = [];
+    Object.keys(this.checkFieldForm.controls).forEach((checkItem) => {
+      if (this.checkFieldForm.controls[`${checkItem}`].value) {
+        itemsChecked.push(checkItem);
+      }
+    });
+
+    const checkBoxesResponse = itemsChecked.toString().replace(/,/g, '|');
+
+    const documentAnswer: DocumentAnswer = {
+      questionRithmId: this.field.rithmId,
+      documentRithmId: '',
+      stationRithmId: '',
+      value: checkBoxesResponse,
+      type: this.field.questionType,
+      questionUpdated: true,
+    };
+    this.documentService.updateAnswerSubject(documentAnswer);
+  }
+
+  /**
+   * Returns true when the field is an Answer marked as true.
+   *
+   * @param checkboxIndex The current answer field index.
+   * @returns True/false to mark the checkbox as check/uncheck.
+   */
+  getCheckedItem(checkboxIndex: number): boolean {
+    let isChecked;
+    const checkboxText = this.field.possibleAnswers
+      ? this.field.possibleAnswers[checkboxIndex].text
+      : '';
+    if (
+      this.field.answer &&
+      this.field.answer?.asArray &&
+      this.field.answer?.asArray?.length > 0
+    ) {
+      const target = this.field.answer?.asArray.find(
+        (arrayItem) => arrayItem.value === checkboxText
+      );
+      isChecked = target ? target.isChecked : false;
+    } else {
+      isChecked = false;
+    }
+    return isChecked;
   }
 }

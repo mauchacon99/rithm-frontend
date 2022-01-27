@@ -27,6 +27,12 @@ export class StationWidgetComponent implements OnInit {
   /** Loading documents of station. */
   isLoading = false;
 
+  /** View detail document. */
+  isDocument = false;
+
+  /** Document id selected for view. */
+  documentIdSelected = '';
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -88,5 +94,15 @@ export class StationWidgetComponent implements OnInit {
       timeInStation = 'None';
     }
     return timeInStation;
+  }
+
+  /**
+   * View detail document.
+   *
+   * @param documentRithmId String of document rithmId.
+   */
+  viewDocument(documentRithmId: string): void {
+    this.documentIdSelected = documentRithmId;
+    this.isDocument = !this.isDocument;
   }
 }

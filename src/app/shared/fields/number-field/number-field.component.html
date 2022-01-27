@@ -24,21 +24,21 @@
       [allowNegativeNumbers]="true"
       thousandSeparator=","
       matInput
-      placeholder="{{ field?.prompt }}"
       type="text"
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Zip"
       mask="00000"
       matInput
-      placeholder="{{ field?.prompt }}"
       type="text"
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Currency"
@@ -46,22 +46,22 @@
       mask="separator.2"
       thousandSeparator=","
       matInput
-      placeholder="{{ field?.prompt }}"
       type="text"
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
     <input
       *ngIf="field.questionType === fieldTypeEnum.Phone"
       mask="(000) 000-0000"
       [dropSpecialCharacters]="false"
       matInput
-      placeholder="{{ field?.prompt }}"
       type="tel"
       [required]="field.isRequired"
       inputmode="numeric"
       [formControlName]="this.field.questionType"
+      (change)="updateFieldAnswer()"
     />
   </mat-form-field>
 </div>

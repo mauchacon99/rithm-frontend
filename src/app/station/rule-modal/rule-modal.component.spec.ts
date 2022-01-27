@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
-import { QuestionFieldType } from 'src/models';
+import { OperandType, QuestionFieldType } from 'src/models';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -43,7 +43,7 @@ describe('RuleModalComponent', () => {
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },
-        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
       ],
@@ -193,5 +193,26 @@ describe('RuleModalComponent', () => {
     expect(component.operatorList).toHaveSize(0);
     component.setOperatorList(QuestionFieldType.ShortText);
     expect(component.operatorList.length > 0).toBeTrue();
+  });
+
+  it('should set the first field type when calling setOperatorList', () => {
+    expect(component.firstFieldType).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.LongText);
+    expect(component.firstFieldType).toEqual(QuestionFieldType.LongText);
+  });
+
+  it('should close the rule modal when close-modal-btn clicked', () => {
+    spyOn(component.dialogRef, 'close');
+    const buttonClose =
+      fixture.debugElement.nativeElement.querySelector('#close-modal-btn');
+    expect(buttonClose).toBeTruthy();
+    buttonClose.click();
+    expect(component.dialogRef.close).toHaveBeenCalled();
+  });
+
+  it('should set the first operand type when calling setOperatorList', () => {
+    expect(component.firstOperandType).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.Number);
+    expect(component.firstOperandType).toEqual(OperandType.Number);
   });
 });

@@ -10,7 +10,8 @@
     <mat-checkbox
       [ngClass]="{ required: !checkFieldForm.valid }"
       *ngFor="let possibleAnswer of field.possibleAnswers; let i = index"
-      formControlName="checkItem{{ i }}"
+      formControlName="{{ possibleAnswer.text }}"
+      (change)="updateFieldAnswer()"
     >
       {{ possibleAnswer.text }}
     </mat-checkbox>

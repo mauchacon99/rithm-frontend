@@ -1195,6 +1195,25 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      // Loop through the station group array to check if there is a station group being interacted with.
+      for (const stationGroup of this.stationGroups) {
+        //Checks whether the station group boundary is being hovered over.
+        stationGroup.checkElementHover(
+          eventContextPoint,
+          eventCanvasPoint,
+          this.context,
+          this.scale
+        );
+
+        //If hovering over the station group boundary or name.
+        if (stationGroup.hoverItem !== StationGroupElementHoverItem.None) {
+          stationGroup.dragging = true;
+          //Set the current dragItem to StationGroup
+          this.dragItem = MapDragItem.StationGroup;
+          break;
+        }
+      }
+
       //This ensures that when dragging a station or node connection, it will always display above other stations.
       //Find the station that is being dragged.
       if (this.stations.find((obj) => obj.dragging === true)) {
@@ -1398,6 +1417,16 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       }
     }
 
+    //If dragging a Station Group.
+    if (this.dragItem === MapDragItem.StationGroup) {
+      //Loop through the station group array to check if there is a station group with dragging in true.
+      this.stationGroups.forEach((stationGroup) => {
+        if (stationGroup.dragging) {
+          stationGroup.dragging = false;
+        }
+      });
+    }
+
     //Reset properties.
     this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
     this.dragItem = MapDragItem.Default;
@@ -1544,8 +1573,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         }
       }
 
+      //If dragging a station group.
+    } else if (this.dragItem === MapDragItem.StationGroup) {
+      this.mapCanvas.nativeElement.style.cursor = 'grabbing';
+      // Set dragging on stations in the station group.
+      this.setDraggingStationGroup();
+
       /* This is where we check to see if a station, group or connection line is being hovered,
-    and nothing is currently being dragged. */
+      and nothing is currently being dragged. */
     } else {
       // Only trigger when station elements are visible.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
@@ -1921,6 +1956,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             stationGroupName: stationGroup.title,
             editMode: this.mapMode === MapMode.Build,
             numberOfStations: stationGroup.stations.length,
+            numberOfSubgroups: stationGroup.subStationGroups.length,
             stationGroupStatus: stationGroup.status,
             isChained: false,
           };
@@ -2044,5 +2080,51 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.openDrawer('stationInfo', dataInformationDrawer);
     //update station name.
     this.stationService.updatedStationNameText(station.stationName);
+  }
+
+  /**
+   * Set dragging on stations in the station group.
+   */
+  setDraggingStationGroup(): void {
+    // Recursive function used to set dragging to true for each station and subgroup in a station group.
+    const setDraggingOnContents = (stationGroup: StationGroupMapElement) => {
+      // Loop through the station in station group array.
+      stationGroup.stations.forEach((stationIdFromGroup) => {
+        // Find index of the current station in stations array.
+        const stationIndex = this.stations.findIndex(
+          (station) => stationIdFromGroup === station.rithmId
+        );
+        // If you find the index of the current station.
+        if (stationIndex !== -1) {
+          this.stations[stationIndex].dragging = true;
+        }
+      });
+
+      // If there are subgroups of stations.
+      if (stationGroup.subStationGroups.length > 0) {
+        // Loop through the subStationGroup  in station Group.
+        stationGroup.subStationGroups.forEach((stationGroupId) => {
+          // Find index of the current sub station group in station groups array.
+          const subStationGroupIndex = this.stationGroups.findIndex(
+            (subStationGroup) => subStationGroup.rithmId === stationGroupId
+          );
+          // If you find the index of the current sub station group.
+          if (subStationGroupIndex !== -1) {
+            this.stationGroups[subStationGroupIndex].dragging = true;
+            /* Call setDraggingOnContents() for the current substationGroup.
+            This allows us to also set dragging on any stations or subgroups within it. */
+            setDraggingOnContents(this.stationGroups[subStationGroupIndex]);
+          }
+        });
+      }
+    };
+
+    // Loop through the station group array to check if there is a station group being dragged.
+    for (const stationGroup of this.stationGroups) {
+      if (stationGroup.dragging) {
+        setDraggingOnContents(stationGroup);
+        break;
+      }
+    }
   }
 }
