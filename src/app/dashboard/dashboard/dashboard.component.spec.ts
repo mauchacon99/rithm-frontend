@@ -145,7 +145,7 @@ describe('DashboardComponent', () => {
       'generateNewDashboard'
     ).and.callThrough();
 
-    component.generateNewDashboard();
+    component.generateNewOrganizationDashboard();
     expect(spyService).toHaveBeenCalled();
   });
 });
