@@ -8,6 +8,7 @@ import {
   MapItemStatus,
   MapMode,
   Point,
+  StationGroupMapData,
   StationMapData,
 } from 'src/models';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +28,19 @@ export class MockMapService {
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
+
+  /** The station group elements displayed on the map. */
+  stationGroupMapData: StationGroupMapData[] = [
+    {
+      rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+      title: 'Rithm Group',
+      organizationRithmId: '',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: false,
+    },
+  ];
 
   /** Informs the map when station group elements have changed. */
   stationGroupElementsChanged$ = new BehaviorSubject(false);
@@ -92,6 +106,9 @@ export class MockMapService {
   constructor() {
     this.station.isAddingConnected = true;
     this.stationElements.push(this.station);
+    this.stationGroupElements = this.stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
   }
 
   /**
@@ -200,7 +217,7 @@ export class MockMapService {
    * @param coords The coordinates where the station will be placed.
    */
   // eslint-disable-next-line
-  createNewStation(coords: Point): void {}
+  createNewStation(coords: Point): void { }
 
   /**
    * Updates station status to delete.
@@ -208,19 +225,19 @@ export class MockMapService {
    * @param station The station for which status has to be set to delete.
    */
   // eslint-disable-next-line
-  deleteStation(station: StationMapElement): void {}
+  deleteStation(station: StationMapElement): void { }
 
   /**
    * Enters build mode for the map.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buildMap(): void {}
+  buildMap(): void { }
 
   /**
    * Cancels local map changes and returns to view mode.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cancelMapChanges(): void {}
+  cancelMapChanges(): void { }
 
   /**
    * Publishes local map changes to the server.
@@ -255,7 +272,7 @@ export class MockMapService {
     zoomingIn: boolean,
     zoomOrigin = this.getCanvasCenterPoint(),
     zoomAmount = ZOOM_VELOCITY
-  ): void {}
+  ): void { }
   /* eslint-enable */
 
   /**
