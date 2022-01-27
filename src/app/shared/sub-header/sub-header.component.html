@@ -24,6 +24,7 @@
       id="history-button"
       mat-icon-button
       (click)="toggleDrawer('history')"
+      [disabled]="!itemInfo"
     >
       <i
         class="fas fa-history text-white group-hover:text-accent-100 text-lg"

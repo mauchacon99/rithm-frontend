@@ -40,6 +40,7 @@ import {
   MAX_PAN_VELOCITY,
   MOUSE_MOVEMENT_OVER_CONNECTION,
   TOUCH_EVENT_MARGIN,
+  BOUNDARY_MARGIN,
 } from '../map-constants';
 import { MapService } from '../map.service';
 import { StationElementService } from '../station-element.service';
@@ -144,6 +145,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
 
   /** Storing broken connection line. Used when moving a connection line.*/
   private storedConnectionLine: ConnectionMapElement | null = null;
+
+  /** The top-left boundary box coords. */
+  private minBoundaryCoords: Point = { x: 0, y: 0 };
+
+  /** The bottom-right boundary box coords. */
+  private maxBoundaryCoords: Point = { x: 0, y: 0 };
 
   /**Adding boundary box inner padding for top-left and bottom-right. */
   readonly boundaryPadding = { topLeft: 50, rightBottom: 100 };
@@ -1048,10 +1055,86 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       (screenDimension * this.scale) / 2 -
       this.boundaryPadding.rightBottom;
 
-    const minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
-    const maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
+    this.minBoundaryCoords = { x: leftBoundaryEdge, y: topBoundaryEdge };
+    this.maxBoundaryCoords = { x: rightBoundaryEdge, y: bottomBoundaryEdge };
 
-    this.mapBoundaryService.drawBox(minBoundaryCoords, maxBoundaryCoords);
+    this.mapBoundaryService.drawBox(
+      this.minBoundaryCoords,
+      this.maxBoundaryCoords
+    );
+  }
+
+  /**
+   * Doesn't allow panning if a user attempts to pan the map in a direction they aren't allowed to.
+   *
+   * @param moveDirection The direction the user is attempting to move to map.
+   * @param isXAxis Check if axis of movement is the X axis.
+   * @returns True, if movement is allowed in given direction.
+   */
+  private panningAllowed(moveDirection: number, isXAxis: boolean): boolean {
+    //Store the dimensions of the canvas.
+    const canvasRect = this.mapCanvas.nativeElement.getBoundingClientRect();
+
+    //Track if viewport extends beyond the edges of the boundary box.
+    let outsideLeftEdge = false;
+    let outsideTopEdge = false;
+    let outsideRightEdge = false;
+    let outsideBottomEdge = false;
+
+    //If the boundary box has been defined.
+    if (
+      this.minBoundaryCoords !== { x: 0, y: 0 } &&
+      this.maxBoundaryCoords !== { x: 0, y: 0 }
+    ) {
+      //Mark that the user is outside a given boundary edge if those coordinates are above 0.
+      if (this.minBoundaryCoords.x - BOUNDARY_MARGIN / this.scale > 0) {
+        outsideLeftEdge = true;
+      }
+      if (this.minBoundaryCoords.y - BOUNDARY_MARGIN / this.scale > 0) {
+        outsideTopEdge = true;
+      }
+      if (
+        this.maxBoundaryCoords.x -
+          canvasRect.width +
+          BOUNDARY_MARGIN / this.scale <
+        0
+      ) {
+        outsideRightEdge = true;
+      }
+      if (
+        this.maxBoundaryCoords.y -
+          canvasRect.height +
+          BOUNDARY_MARGIN / this.scale <
+        0
+      ) {
+        outsideBottomEdge = true;
+      }
+    }
+
+    //Allow movement based on the axis being checked.
+    if (isXAxis) {
+      //If user is attempting to move left and is already outside the left edge.
+      if (moveDirection < 0) {
+        return !outsideLeftEdge;
+      }
+      //If user is attempting to move right and is already outside the right edge.
+      if (moveDirection > 0) {
+        return !outsideRightEdge;
+      }
+      //If user is not outside any edges.
+      return true;
+    } else {
+      //If user is attempting to move up and is already outside the top edge.
+      if (moveDirection < 0) {
+        return !outsideTopEdge;
+      }
+      //If user is attempting to move down and is already outside the bottom edge.
+      if (moveDirection > 0) {
+        return !outsideBottomEdge;
+      }
+      //If user is not outside any edges.
+      return true;
+    }
   }
 
   /**
@@ -1068,8 +1151,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     const xMove = panVelocity.x;
     const yMove = panVelocity.y;
 
-    this.currentCanvasPoint.x -= xMove;
-    this.currentCanvasPoint.y -= yMove;
+    //Only pan if allowed to move in that direction.
+    this.panningAllowed(-xMove, true)
+      ? (this.currentCanvasPoint.x -= xMove)
+      : 0;
+    this.panningAllowed(-yMove, false)
+      ? (this.currentCanvasPoint.y -= yMove)
+      : 0;
 
     //If dragging a station or station group, need to offset the stations' mapPoints too so that they don't get left behind while panning.
     if (
@@ -1473,9 +1561,18 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     if (this.dragItem === MapDragItem.Map) {
       //Set cursor style
       this.mapCanvas.nativeElement.style.cursor = 'move';
-      //Adjust the currentCanvasPoint by tracked movement, adjusted for scale.
-      this.currentCanvasPoint.x += moveAmountX / this.scale;
-      this.currentCanvasPoint.y += moveAmountY / this.scale;
+
+      /* Check if panning is allowed in a given direction.
+      If a user attempts to pan beyond the boundary box this will be false. */
+      //If allowed, adjust the currentCanvasPoint.x by tracked movement, adjusted for scale.
+      this.panningAllowed(moveAmountX, true)
+        ? (this.currentCanvasPoint.x += moveAmountX / this.scale)
+        : this.currentCanvasPoint.x;
+      //If allowed, adjust the currentCanvasPoint.y by tracked movement, adjusted for scale.
+      this.panningAllowed(moveAmountY, false)
+        ? (this.currentCanvasPoint.y += moveAmountY / this.scale)
+        : this.currentCanvasPoint.y;
+
       //Set the cursor tracking to current position.
       this.lastTouchCoords[0] = eventCanvasPoint;
       //Prepare for a fast drag by setting nextPanVelocity to -moveAmount.
