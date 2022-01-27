@@ -295,8 +295,7 @@ describe('DashboardService', () => {
       ],
     };
 
-    service.updateDashboard(dashboardData).subscribe((response) => {
-      dashboardData.name = 'new name';
+    service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
     });
   });

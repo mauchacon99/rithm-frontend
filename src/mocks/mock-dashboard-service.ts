@@ -226,12 +226,14 @@ export class MockDashboardService {
   }
 
   /**
-   * Update dashboard personal.
+   * Update organization dashboard`s.
    *
    * @returns The updated  data for this dashboard.
    * @param dashboardData Dashboard data for update.
    */
-  updateDashboard(dashboardData: DashboardData): Observable<DashboardData> {
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
     const newDashboarData: DashboardData = {
       rithmId: dashboardData.rithmId,
       name: 'new name',

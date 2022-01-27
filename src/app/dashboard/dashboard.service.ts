@@ -9,7 +9,6 @@ import {
   Document,
   DashboardItem,
   DashboardData,
-  WidgetType,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
@@ -105,30 +104,14 @@ export class DashboardService {
   }
 
   /**
-   * Update dashboard personal.
+   * Update organization dashboard`s.
    *
    * @returns The updated  data for this dashboard.
    * @param dashboardData Dashboard data for update.
    */
-  updateDashboard(dashboardData: DashboardData): Observable<DashboardData> {
-    const newDashboarData: DashboardData = {
-      rithmId: dashboardData.rithmId,
-      name: 'new name',
-      widgets: [
-        {
-          cols: 1,
-          rows: 2,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Document,
-          data: 'string',
-          minItemRows: 1,
-          maxItemRows: 2,
-          minItemCols: 1,
-          maxItemCols: 2,
-        },
-      ],
-    };
-    return of(newDashboarData).pipe(delay(1000));
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
   }
 }
