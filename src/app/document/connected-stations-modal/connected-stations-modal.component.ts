@@ -41,10 +41,10 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The selected Station for move document. */
   selectedStation = '';
 
-  /* Load if exists error in the stations */
+  /* Load if exists error in the stations. */
   connectedError = false;
 
-  /* Loading in modal the list of connected stations */
+  /* Loading in modal the list of connected stations or the list of all stations. */
   connectedStationLoading = false;
 
   /** Enable error message if move document request fails. */
@@ -112,6 +112,30 @@ export class ConnectedStationsModalComponent implements OnInit {
   }
 
   /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.connectedStationLoading = true;
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = stations;
+          this.connectedStationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.connectedStationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this document.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
    * Move the document from a station to another.
    */
   moveDocument(): void {
@@ -136,27 +160,6 @@ export class ConnectedStationsModalComponent implements OnInit {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
-          );
-        },
-      });
-  }
-
-  /**
-   * Get the list of all stations.
-   */
-  private getAllStations(): void {
-    this.stationService
-      .getAllStations()
-      .pipe(first())
-      .subscribe({
-        next: (stations) => {
-          this.stations = stations;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Failed to get all stations for this document.',
-            error,
-            false
           );
         },
       });
