@@ -78,6 +78,9 @@ export class TextFieldComponent
   /** Whether the instance comes from station or document. */
   @Input() isStation = true;
 
+  /** Whether Field belongs to another component beside station to be displayed as an inputText instead a textarea. */
+  @Input() isInput = false;
+
   constructor(
     private fb: FormBuilder,
     private stationService: StationService,

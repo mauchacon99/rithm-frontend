@@ -117,7 +117,7 @@
       (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     />
     <textarea
-      *ngIf="field.questionType === fieldTypeEnum.LongText"
+      *ngIf="field.questionType === fieldTypeEnum.LongText && !isInput"
       matInput
       rows="3"
       spellcheck="true"
@@ -126,5 +126,14 @@
       (change)="isStation ? updateFieldPrompt(field) : updateFieldAnswer()"
     >
     </textarea>
+    <input
+      *ngIf="field.questionType === fieldTypeEnum.LongText && isInput"
+      matInput
+      type="{{ toolBar ? 'text' : field.questionType }}"
+      [required]="field.isRequired"
+      [formControlName]="field.questionType"
+      autocomplete="off"
+      (change)="updateFieldAnswer()"
+    />
   </mat-form-field>
 </div>

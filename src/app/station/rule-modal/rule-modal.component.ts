@@ -1,9 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { first, map, takeUntil } from 'rxjs/operators';
 import { StationService } from 'src/app/core/station.service';
 import { ErrorService } from 'src/app/core/error.service';
 import {
@@ -11,8 +18,12 @@ import {
   QuestionFieldType,
   OperatorType,
   OperandType,
+  DocumentAnswer,
 } from 'src/models';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
+import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
+import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -21,31 +32,53 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   selector: 'app-rule-modal',
   templateUrl: './rule-modal.component.html',
   styleUrls: ['./rule-modal.component.scss'],
+  providers: [],
 })
-export class RuleModalComponent implements OnInit {
+export class RuleModalComponent implements OnInit, AfterViewChecked {
   /** Station Rithm id. */
   stationRithmId = '';
 
   /** Orientation for stepper. */
   stepperOrientation$: Observable<StepperOrientation>;
 
-  /** The value of the first operand. */
-  firstOperand = '';
-
   /** Get current and previous Questions for Stations. */
   questionStation: Question[] = [];
-
-  /** The value of the operator. */
-  operator = '';
 
   /** The error if question stations fails . */
   questionStationError = false;
 
-  /** The value of the second operand. */
-  secondOperand = '';
-
   /** Loading in current and previous questions for stations. */
   questionStationLoading = false;
+
+  /** The component text-field to be updated for step 3. */
+  @ViewChild('textField', { static: false })
+  textField!: TextFieldComponent;
+
+  /** The component number-field to be updated for step 3. */
+  @ViewChild('numberField', { static: false })
+  numberField!: NumberFieldComponent;
+
+  /** The component date-field to be updated for step 3. */
+  @ViewChild('dateField', { static: false })
+  dateField!: DateFieldComponent;
+
+  /** Observable for when the component is destroyed. */
+  private destroyed$ = new Subject<void>();
+
+  /** The value of the first operand. */
+  firstOperand = '';
+
+  /** The value of the first question field type. */
+  firstFieldType!: QuestionFieldType;
+
+  /** The value of the first operand type. */
+  firstOperandType!: OperandType;
+
+  /** The first operand of text to show. */
+  firstOperandText = '';
+
+  /** The value of the operator. */
+  operator = '';
 
   /** Text group for the operator options. */
   textGroup = [
@@ -131,29 +164,29 @@ export class RuleModalComponent implements OnInit {
     value: OperatorType;
   }[] = [];
 
-  /** The value of the first question field type. */
-  firstFieldType!: QuestionFieldType;
-
-  /** The value of the first operand type. */
-  firstOperandType: OperandType | null = null;
-
-  /** The first operand of text to show. */
-  firstOperandText = '';
-
   /** The operator text to show. */
   operatorText = '';
+
+  /** The operand type for the field. */
+  operandType = OperandType;
+
+  /** The value of the second operand. */
+  secondOperand = '';
 
   /** The second operand of text to show. */
   secondOperandText = '';
 
   /** The second operand of field. */
-  secondOperandField!: Question;
-
-  /** The operand type for the field. */
-  operandType = OperandType;
-
-  /** Rule Modal Form.*/
-  ruleModalForm: FormGroup;
+  secondOperandField: Question = {
+    questionType: QuestionFieldType.ShortText,
+    rithmId: Math.random().toString(36).slice(2),
+    prompt: 'Custom Value',
+    isReadOnly: false,
+    isRequired: false,
+    isPrivate: false,
+    value: '',
+    children: [],
+  };
 
   constructor(
     public dialogRef: MatDialogRef<RuleModalComponent>,
@@ -161,17 +194,27 @@ export class RuleModalComponent implements OnInit {
     breakpointObserver: BreakpointObserver,
     private stationService: StationService,
     private errorService: ErrorService,
-    private fb: FormBuilder
+    private readonly changeDetectorR: ChangeDetectorRef,
+    private documentService: DocumentService
   ) {
     this.stationRithmId = rithmId;
     this.stepperOrientation$ = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
-    this.ruleModalForm = this.fb.group({
-      textFieldForm: this.fb.control(''),
-      numberFieldForm: this.fb.control(''),
-      dateFieldForm: this.fb.control(''),
-    });
+
+    //Gets from documentAnswer the value to be set to the second operand
+    this.documentService.documentAnswer$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((answer: DocumentAnswer) => {
+        if (answer.value !== '') {
+          this.secondOperand = '';
+          this.secondOperandField.value = answer.value;
+          this.secondOperandText = answer.value;
+        } else {
+          this.secondOperandField.value = '';
+          this.secondOperandText = '';
+        }
+      });
   }
 
   /**
@@ -179,24 +222,13 @@ export class RuleModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getStationQuestions();
-
-    this.secondOperandField = {
-      questionType: QuestionFieldType.ShortText,
-      rithmId: Math.random().toString(36).slice(2),
-      prompt: 'Custom Value',
-      isReadOnly: false,
-      isRequired: false,
-      isPrivate: false,
-      value: '',
-      children: [],
-    };
   }
 
   /**
-   * Close rule Modal.
+   * Checks after the component views and child views.
    */
-  closeModal(): void {
-    this.dialogRef.close();
+  ngAfterViewChecked(): void {
+    this.changeDetectorR.detectChanges();
   }
 
   /**
@@ -229,15 +261,32 @@ export class RuleModalComponent implements OnInit {
   }
 
   /**
+   * Get the list of questions for the second operand.
+   *
+   * @returns Questions for the second operand options.
+   */
+  get secondOperandQuestionList(): Question[] {
+    const secondOperandQuestions: Question[] = this.questionStation.filter(
+      (question: Question) =>
+        question.rithmId !== this.firstOperand &&
+        question.questionType === this.firstFieldType
+    );
+    return secondOperandQuestions;
+  }
+
+  /**
    * Set operator list for the comparison type and set first operand type.
    *
    * @param fieldType The field type to show the options of the corresponding operator list.
+   * @param text The text to be shown for the first operand.
    */
-  setOperatorList(fieldType: QuestionFieldType): void {
+  setOperatorList(fieldType: QuestionFieldType, text: string): void {
     this.operatorList = [];
     this.operator = '';
     //Set first field type for options of the second operand
     this.firstFieldType = fieldType;
+    //Set first operand of text to show. */
+    this.firstOperandText = text;
     this.secondOperandField.questionType = fieldType;
     switch (fieldType) {
       case QuestionFieldType.ShortText:
@@ -269,6 +318,40 @@ export class RuleModalComponent implements OnInit {
       case QuestionFieldType.Select:
         this.operatorList = this.selectGroup;
         this.firstOperandType = OperandType.String;
+        break;
     }
+    this.refreshComponentField();
+  }
+
+  /**
+   * Refresh component field when a first operand is selected.
+   */
+  refreshComponentField(): void {
+    switch (this.firstOperandType) {
+      case OperandType.String:
+        this.textField?.ngOnInit();
+        break;
+      case OperandType.Number:
+        this.numberField?.ngOnInit();
+        break;
+      case OperandType.Date:
+        this.dateField?.ngOnInit();
+        break;
+    }
+  }
+
+  /**
+   * Close rule Modal.
+   */
+  closeModal(): void {
+    this.dialogRef.close();
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -11,17 +11,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
 import { StationService } from 'src/app/core/station.service';
-import { MockErrorService, MockStationService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockStationService,
+} from 'src/mocks';
 import { ErrorService } from 'src/app/core/error.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
-import { OperandType, QuestionFieldType } from 'src/models';
+import { OperandType, Question, QuestionFieldType } from 'src/models';
 import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
+import { DocumentService } from 'src/app/core/document.service';
 
 describe('RuleModalComponent', () => {
   let component: RuleModalComponent;
@@ -53,6 +58,7 @@ describe('RuleModalComponent', () => {
         { provide: MatDialogRef, useValue: { close } },
         { provide: MAT_DIALOG_DATA, useValue: DIALOG_TEST_DATA },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: DocumentService, useClass: MockDocumentService },
       ],
     }).compileComponents();
   });
@@ -198,13 +204,13 @@ describe('RuleModalComponent', () => {
 
   it('should set the operator list as operator options when adding the field type question', () => {
     expect(component.operatorList).toHaveSize(0);
-    component.setOperatorList(QuestionFieldType.ShortText);
+    component.setOperatorList(QuestionFieldType.ShortText, 'Fieldset #1');
     expect(component.operatorList.length > 0).toBeTrue();
   });
 
   it('should set the first field type when calling setOperatorList', () => {
     expect(component.firstFieldType).toBeUndefined();
-    component.setOperatorList(QuestionFieldType.LongText);
+    component.setOperatorList(QuestionFieldType.LongText, 'Fieldset #1');
     expect(component.firstFieldType).toEqual(QuestionFieldType.LongText);
   });
 
@@ -217,9 +223,48 @@ describe('RuleModalComponent', () => {
     expect(component.dialogRef.close).toHaveBeenCalled();
   });
 
-  it('should set the first operand type when calling setOperatorList', () => {
-    expect(component.firstOperandType).toBeNull();
-    component.setOperatorList(QuestionFieldType.Number);
+  it('should set the first operand type and first operand text when calling setOperatorList', () => {
+    expect(component.firstOperandType).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.Number, 'Fieldset #1');
     expect(component.firstOperandType).toEqual(OperandType.Number);
+    expect(component.firstOperandText).toBe('Fieldset #1');
+  });
+
+  it('should call to refresh component field', () => {
+    const spyMethod = spyOn(component, 'refreshComponentField');
+    expect(component.textField).toBeUndefined();
+    component.setOperatorList(QuestionFieldType.Select, 'Fieldset #1');
+    fixture.detectChanges();
+    expect(spyMethod).toHaveBeenCalled();
+    expect(component.textField).toBeDefined();
+  });
+
+  it('should return a the list of questions for the second operand', () => {
+    const expectedResponse: Question[] = [
+      {
+        prompt: 'Fake question 1',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.ShortText,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+      {
+        prompt: 'Fake question 2',
+        rithmId: '3j4k-3h2j-hj4j',
+        questionType: QuestionFieldType.Number,
+        isReadOnly: false,
+        isRequired: true,
+        isPrivate: false,
+        children: [],
+      },
+    ];
+    component.questionStation = expectedResponse;
+    spyOnProperty(component, 'secondOperandQuestionList').and.returnValue(
+      expectedResponse
+    );
+    const valueExpected = component.secondOperandQuestionList;
+    expect(valueExpected).toBe(expectedResponse);
   });
 });
