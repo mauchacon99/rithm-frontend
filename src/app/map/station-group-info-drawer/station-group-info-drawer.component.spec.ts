@@ -10,6 +10,7 @@ import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StationGroupInfoDrawerComponent } from './station-group-info-drawer.component';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 describe('StationGroupInfoDrawerComponent', () => {
   let component: StationGroupInfoDrawerComponent;
@@ -33,6 +34,7 @@ describe('StationGroupInfoDrawerComponent', () => {
         { provide: PopupService, useClass: MockPopupService },
         { provide: MapService, useClass: MockMapService },
         { provide: FormBuilder, useValue: formBuilder },
+        { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
     }).compileComponents();
     service = TestBed.inject(MapService);
@@ -60,5 +62,28 @@ describe('StationGroupInfoDrawerComponent', () => {
     service.stationGroupElementsChanged$.subscribe((res) =>
       expect(res).toBe(true)
     );
+  });
+
+  it('should open a confirmation pop up on click of delete station group button and delete on confirmation', async () => {
+    const spy = spyOn(TestBed.inject(SidenavDrawerService), 'toggleDrawer');
+    const mapServiceSpy = spyOn(
+      TestBed.inject(MapService),
+      'removeStationGroup'
+    );
+    const dataToConfirmPopup = {
+      title: 'Remove Station Group',
+      message: 'Are you sure you want to delete this station group?',
+      okButtonText: 'Remove',
+    };
+    const popUpConfirmSpy = spyOn(
+      TestBed.inject(PopupService),
+      'confirm'
+    ).and.callThrough();
+    await component.removeStationGroup();
+    expect(popUpConfirmSpy).toHaveBeenCalledOnceWith(dataToConfirmPopup);
+    expect(mapServiceSpy).toHaveBeenCalledOnceWith(
+      component.stationGroupRithmId
+    );
+    expect(spy).toHaveBeenCalledOnceWith('stationGroupInfo');
   });
 });

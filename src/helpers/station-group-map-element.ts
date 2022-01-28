@@ -93,16 +93,19 @@ export class StationGroupMapElement {
     const scaledStationWidth = this.title.length * GROUP_CHARACTER_SIZE * scale;
 
     //Check if cursor is within a rectangle set around the station group name.
-    return (
-      point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
-      point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
-      point.y >=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y -
-          STATION_GROUP_NAME_PADDING &&
-      point.y <=
-        this.boundaryPoints[this.boundaryPoints.length - 1].y +
-          scaledStationHeight
-    );
+    if (this.boundaryPoints.length > 0) {
+      return (
+        point.x >= this.boundaryPoints[0].x - STATION_GROUP_NAME_PADDING &&
+        point.x <= this.boundaryPoints[0].x + scaledStationWidth &&
+        point.y >=
+          this.boundaryPoints[this.boundaryPoints.length - 1].y -
+            STATION_GROUP_NAME_PADDING &&
+        point.y <=
+          this.boundaryPoints[this.boundaryPoints.length - 1].y +
+            scaledStationHeight
+      );
+    }
+    return false;
   }
 
   /**

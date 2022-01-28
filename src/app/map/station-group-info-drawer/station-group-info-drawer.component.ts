@@ -118,4 +118,23 @@ export class StationGroupInfoDrawerComponent implements OnDestroy {
     this.mapService.stationGroupElements[index].markAsUpdated();
     this.mapService.stationGroupElementsChanged$.next(true);
   }
+
+  /**
+   * Remove the current station group.
+   */
+  async removeStationGroup(): Promise<void> {
+    //Open a popup and store the user response as a boolean.
+    const confirm = await this.popupService.confirm({
+      title: 'Remove Station Group',
+      message: `Are you sure you want to delete this station group?`,
+      okButtonText: 'Remove',
+    });
+    //If user confirms.
+    if (confirm) {
+      //Remove the station group using the method in map.service.
+      this.mapService.removeStationGroup(this.stationGroupRithmId);
+      //Close the drawer.
+      this.sidenavDrawerService.toggleDrawer('stationGroupInfo');
+    }
+  }
 }
