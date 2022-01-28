@@ -228,30 +228,12 @@ export class MockDashboardService {
   /**
    * Update personal dashboard.
    *
-   * @param dashboardUpdate Dashboard update.
+   * @param dashboardData Dashboard update.
    * @returns Personal dashboard data observable.
    */
   updatePersonalDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    const dashboardData: DashboardData = {
-      rithmId: '123-131-132',
-      name: 'New Dashboard',
-      widgets: [
-        {
-          cols: 4,
-          rows: 1,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Station,
-          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-          minItemCols: 4,
-          minItemRows: 4,
-          maxItemCols: 12,
-          maxItemRows: 12,
-        },
-      ],
-    };
     return of(dashboardData).pipe(delay(1000));
   }
 
