@@ -25,7 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatTabsModule,
     MatSlideToggleModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   exports: [StationInfoDrawerComponent],
 })

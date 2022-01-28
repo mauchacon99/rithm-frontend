@@ -62,7 +62,7 @@ describe('StationInfoDrawerComponent', () => {
         ]),
         MatTabsModule,
         MatSlideToggleModule,
-        MatTooltipModule
+        MatTooltipModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },
