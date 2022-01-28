@@ -5,6 +5,7 @@ import { UserAvatarModule } from '../user-avatar/user-avatar.module';
 import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.module';
 import { RosterManagementModalModule } from '../roster-management-modal/roster-management-modal.module';
 import { RosterModalModule } from '../roster-modal/roster-modal.module';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [RosterComponent],
@@ -14,6 +15,7 @@ import { RosterModalModule } from '../roster-modal/roster-modal.module';
     LoadingIndicatorModule,
     RosterManagementModalModule,
     RosterModalModule,
+    MatBadgeModule,
   ],
   exports: [RosterComponent],
 })

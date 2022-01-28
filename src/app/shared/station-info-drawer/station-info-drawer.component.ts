@@ -19,6 +19,8 @@ import { PopupService } from 'src/app/core/popup.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 /**
  * Component for info station.
@@ -35,6 +37,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /** Whether the request to get the station info is currently underway. */
   stationLoading = true;
+
+  /** Whether the worker roster us public or not. */
+  isPublic = false;
+
+  /** Whether the station allow to add external users to the roster. */
+  allowExternal = false;
 
   /** Loading in last updated section. */
   lastUpdatedLoading = false;
@@ -94,6 +102,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
+  /** Display the ownerRoster length. */
+  ownersRosterLength = 0;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -104,7 +115,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     private popupService: PopupService,
     private router: Router,
     private mapService: MapService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private dialog: MatDialog
   ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
@@ -164,6 +176,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  //LOCAL GETTERS & SETTERS
+
   /**
    * Whether the station is locally created on the map.
    *
@@ -174,161 +188,37 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get station document generation status.
-   */
-  getStationDocumentGenerationStatus(): void {
-    this.docGenLoading = true;
-    this.stationService
-      .getStationDocumentGenerationStatus(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (status: DocumentGenerationStatus) => {
-          this.docGenLoading = false;
-          if (status) {
-            this.stationDocumentGenerationStatus = status;
-          }
-        },
-        // eslint-disable-next-line
-        error: (error: any) => {
-          this.docGenLoading = false;
-          this.showDocumentGenerationError = true;
-          if (error?.status === 400) {
-            this.sidenavDrawerService.closeDrawer();
-          } else {
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          }
-        },
-      });
-  }
-
-  /**
-   * Update station document generation status.
+   * Is the current user an owner or an admin for this station.
    *
-   * @param stationId The id of the station return status document.
-   * @param statusNew The new status set in station document.
+   * @returns Validate if user is owner or admin of current station.
    */
-  updateStationDocumentGenerationStatus(
-    stationId: string,
-    statusNew: DocumentGenerationStatus
-  ): void {
-    this.docGenLoading = true;
-    this.stationService
-      .updateStationDocumentGenerationStatus(stationId, statusNew)
-      .pipe(first())
-      .subscribe({
-        next: (status) => {
-          this.docGenLoading = false;
-          if (status) {
-            this.stationDocumentGenerationStatus = status;
-          }
-        },
-        // eslint-disable-next-line
-        error: (error: any) => {
-          this.docGenLoading = false;
-          if (error?.status === 400) {
-            this.sidenavDrawerService.closeDrawer();
-            // return;
-          } else {
-            this.errorService.displayError(
-              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-              error
-            );
-          }
-        },
-      });
-  }
-
-  /**
-   * Get the last updated date for a specific station.
-   */
-  getLastUpdated(): void {
-    this.stationLoading = true;
-    this.lastUpdatedLoading = true;
-    this.stationService
-      .getLastUpdated(this.stationRithmId)
-      .pipe(first())
-      .subscribe({
-        next: (updatedDate) => {
-          if (updatedDate && updatedDate !== 'Unknown') {
-            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
-              this.utcTimeConversion.getMillisecondsElapsed(updatedDate)
-            );
-            this.colorMessage = 'text-accent-500';
-            if (this.lastUpdatedDate === '1 day') {
-              this.lastUpdatedDate = ' Yesterday';
-            } else {
-              this.lastUpdatedDate += ' ago';
-            }
-          } else {
-            this.colorMessage = 'text-error-500';
-            this.lastUpdatedDate = 'Unable to retrieve time';
-          }
-          this.lastUpdatedLoading = false;
-        },
-        error: (error: unknown) => {
-          this.colorMessage = 'text-error-500';
-          this.lastUpdatedLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-          this.lastUpdatedDate = 'Unable to retrieve time';
-          this.colorMessage = 'text-error-500';
-        },
-      });
-  }
-
-  /**
-   * This will delete the current station.
-   */
-  async deleteStation(): Promise<void> {
-    const response = await this.popupService.confirm({
-      title: 'Are you sure?',
-      message:
-        'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
-      okButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
-      important: true,
-    });
-    if (response) {
-      if (this.openedFromMap) {
-        this.mapService.removeAllStationConnections(this.stationRithmId);
-        this.mapService.deleteStation(this.stationRithmId);
-        this.sidenavDrawerService.closeDrawer();
-      } else {
-        this.stationService
-          .deleteStation(this.stationRithmId)
-          .pipe(first())
-          .subscribe({
-            next: () => {
-              this.popupService.notify('The station has been deleted.');
-              this.router.navigateByUrl('dashboard');
-            },
-            error: (error: unknown) => {
-              this.errorService.displayError(
-                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-                error
-              );
-            },
-          });
-      }
+  get isUserAdminOrOwner(): boolean {
+    if (!this.stationInformation) {
+      throw new Error(
+        `The stationInformation is undefined when checking if user is admin or owner.`
+      );
     }
-  }
-
-  /**
-   * Update status the station.
-   *
-   * @param statusNew New status the station update.
-   */
-  updateStatusStation(statusNew: MatRadioChange): void {
-    this.updateStationDocumentGenerationStatus(
-      this.stationRithmId,
-      statusNew.value
+    return (
+      this.userService.isStationOwner(this.stationInformation) ||
+      this.userService.isAdmin
     );
   }
+
+  /**
+   * Is the current user a worker on the station.
+   *
+   * @returns A boolean if user is worker on current station.
+   */
+  get isWorker(): boolean {
+    if (!this.stationInformation) {
+      throw new Error(
+        `The stationInformation is undefined when checking if user is a worker.`
+      );
+    }
+    return this.userService.isWorker(this.stationInformation);
+  }
+
+  // GETTERS: Methods to make get request
 
   /**
    * Get data about the station the document is in.
@@ -383,100 +273,77 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Refresh the Info drawer after modal is close.
-   *
-   * @param event Result from closing roster management modal.
+   * Get the last updated date for a specific station.
    */
-  refreshInfoDrawer(event: boolean): void {
-    if (event === true) {
-      this.getStationInfo();
-    }
-  }
-
-  /**
-   * Handle required information for a locally created station.
-   */
-  newStationInit(): void {
-    this.stationDocumentGenerationStatus = DocumentGenerationStatus.None;
-    this.lastUpdatedDate = 'Publish Map changes to see last updated.';
-  }
-
-  /**
-   * Navigate to station edit page upon confirmation in Map build mode and without any confirmation in Map view mode.
-   *
-   */
-  async goToStation(): Promise<void> {
-    let confirmNavigation = false;
-    if (this.editMode) {
-      const confirm = await this.popupService.confirm({
-        title: 'Local Changes Not Saved',
-        message: `Leave without publishing any changes made to the map?`,
-        okButtonText: 'Proceed',
+  getLastUpdated(): void {
+    this.stationLoading = true;
+    this.lastUpdatedLoading = true;
+    this.stationService
+      .getLastUpdated(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (updatedDate) => {
+          if (updatedDate && updatedDate !== 'Unknown') {
+            this.lastUpdatedDate = this.utcTimeConversion.getElapsedTimeText(
+              this.utcTimeConversion.getMillisecondsElapsed(updatedDate)
+            );
+            this.colorMessage = 'text-accent-500';
+            if (this.lastUpdatedDate === '1 day') {
+              this.lastUpdatedDate = ' Yesterday';
+            } else {
+              this.lastUpdatedDate += ' ago';
+            }
+          } else {
+            this.colorMessage = 'text-error-500';
+            this.lastUpdatedDate = 'Unable to retrieve time';
+          }
+          this.lastUpdatedLoading = false;
+        },
+        error: (error: unknown) => {
+          this.colorMessage = 'text-error-500';
+          this.lastUpdatedLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+          this.lastUpdatedDate = 'Unable to retrieve time';
+          this.colorMessage = 'text-error-500';
+        },
       });
-      confirmNavigation = confirm;
-    }
-    if (confirmNavigation || !this.editMode) {
-      this.router.navigate([`/station/${this.stationRithmId}`]);
-    }
   }
 
   /**
-   * Reporting if the name or notes on a station changed.
+   * Get station document generation status.
    */
-  reportNewStationMapChange(): void {
-    if (this.stationNotes === undefined) {
-      throw new Error('Station notes not found');
-    }
-    const openStation = this.mapService.stationElements.find(
-      (station) => this.stationRithmId === station.rithmId
-    );
-    if (openStation === undefined) {
-      throw new Error('Station was not found.');
-    }
-    openStation.stationName = this.stationName;
-    openStation.notes = this.stationNotes;
-    openStation.markAsUpdated();
-    this.mapService.stationElementsChanged$.next(true);
+  getStationDocumentGenerationStatus(): void {
+    this.docGenLoading = true;
+    this.stationService
+      .getStationDocumentGenerationStatus(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (status: DocumentGenerationStatus) => {
+          this.docGenLoading = false;
+          if (status) {
+            this.stationDocumentGenerationStatus = status;
+          }
+        },
+        // eslint-disable-next-line
+        error: (error: any) => {
+          this.docGenLoading = false;
+          this.showDocumentGenerationError = true;
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
+        },
+      });
   }
 
-  /**
-   * Completes all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  /**
-   * Is the current user an owner or an admin for this station.
-   *
-   * @returns Validate if user is owner or admin of current station.
-   */
-  get isUserAdminOrOwner(): boolean {
-    if (!this.stationInformation) {
-      throw new Error(
-        `The stationInformation is undefined when checking if user is admin or owner.`
-      );
-    }
-    return (
-      this.userService.isStationOwner(this.stationInformation) ||
-      this.userService.isAdmin
-    );
-  }
-
-  /**
-   * Is the current user a worker on the station.
-   *
-   * @returns A boolean if user is worker on current station.
-   */
-  get isWorker(): boolean {
-    if (!this.stationInformation) {
-      throw new Error(
-        `The stationInformation is undefined when checking if user is a worker.`
-      );
-    }
-    return this.userService.isWorker(this.stationInformation);
-  }
+  //SETTERS: methods to save/update
 
   /**
    * Open a modal to create a new document.
@@ -542,5 +409,181 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Handle required information for a locally created station.
+   */
+  newStationInit(): void {
+    this.stationDocumentGenerationStatus = DocumentGenerationStatus.None;
+    this.lastUpdatedDate = 'Publish Map changes to see last updated.';
+  }
+
+  /**
+   * Update station document generation status.
+   *
+   * @param stationId The id of the station return status document.
+   * @param statusNew The new status set in station document.
+   */
+  updateStationDocumentGenerationStatus(
+    stationId: string,
+    statusNew: DocumentGenerationStatus
+  ): void {
+    this.docGenLoading = true;
+    this.stationService
+      .updateStationDocumentGenerationStatus(stationId, statusNew)
+      .pipe(first())
+      .subscribe({
+        next: (status) => {
+          this.docGenLoading = false;
+          if (status) {
+            this.stationDocumentGenerationStatus = status;
+          }
+        },
+        // eslint-disable-next-line
+        error: (error: any) => {
+          this.docGenLoading = false;
+          if (error?.status === 400) {
+            this.sidenavDrawerService.closeDrawer();
+            // return;
+          } else {
+            this.errorService.displayError(
+              "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+              error
+            );
+          }
+        },
+      });
+  }
+
+  /**
+   * Update status the station.
+   *
+   * @param statusNew New status the station update.
+   */
+  updateStatusStation(statusNew: MatRadioChange): void {
+    this.updateStationDocumentGenerationStatus(
+      this.stationRithmId,
+      statusNew.value
+    );
+  }
+
+  //HELPER AND ADDITIONALS methods to redirect/navigate/openModals/report and others
+
+  /**
+   * Navigate to station edit page upon confirmation in Map build mode and without any confirmation in Map view mode.
+   *
+   */
+  async goToStation(): Promise<void> {
+    let confirmNavigation = false;
+    if (this.editMode) {
+      const confirm = await this.popupService.confirm({
+        title: 'Local Changes Not Saved',
+        message: `Leave without publishing any changes made to the map?`,
+        okButtonText: 'Proceed',
+      });
+      confirmNavigation = confirm;
+    }
+    if (confirmNavigation || !this.editMode) {
+      this.router.navigate([`/station/${this.stationRithmId}`]);
+    }
+  }
+
+  /**
+   * Reporting if the name or notes on a station changed.
+   */
+  reportNewStationMapChange(): void {
+    if (this.stationNotes === undefined) {
+      throw new Error('Station notes not found');
+    }
+    const openStation = this.mapService.stationElements.find(
+      (station) => this.stationRithmId === station.rithmId
+    );
+    if (openStation === undefined) {
+      throw new Error('Station was not found.');
+    }
+    openStation.stationName = this.stationName;
+    openStation.notes = this.stationNotes;
+    openStation.markAsUpdated();
+    this.mapService.stationElementsChanged$.next(true);
+  }
+
+  /**
+   * Opens a modal with roster management.
+   */
+  openManagementRosterModal(): void {
+    const dialog = this.dialog.open(RosterManagementModalComponent, {
+      panelClass: ['w-5/6', 'sm:w-4/5'],
+      maxWidth: '1024px',
+      disableClose: true,
+      data: {
+        stationId: this.stationRithmId,
+        type: 'workers',
+      },
+    });
+    dialog
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        this.refreshInfoDrawer(true);
+      });
+  }
+
+  //CLOSING: Methods to refresh/close/destroy components
+
+  /**
+   * Refresh the Info drawer after modal is close.
+   *
+   * @param event Result from closing roster management modal.
+   */
+  refreshInfoDrawer(event: boolean): void {
+    if (event === true) {
+      this.getStationInfo();
+    }
+  }
+
+  /**
+   * This will delete the current station.
+   */
+  async deleteStation(): Promise<void> {
+    const response = await this.popupService.confirm({
+      title: 'Are you sure?',
+      message:
+        'The station will be deleted for everyone and any documents not moved to another station beforehand will be deleted.',
+      okButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      important: true,
+    });
+    if (response) {
+      if (this.openedFromMap) {
+        this.mapService.removeAllStationConnections(this.stationRithmId);
+        this.mapService.deleteStation(this.stationRithmId);
+        this.sidenavDrawerService.closeDrawer();
+      } else {
+        this.stationService
+          .deleteStation(this.stationRithmId)
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.popupService.notify('The station has been deleted.');
+              this.router.navigateByUrl('dashboard');
+            },
+            error: (error: unknown) => {
+              this.errorService.displayError(
+                "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+                error
+              );
+            },
+          });
+      }
+    }
+  }
+
+  /**
+   * Completes all subscriptions.
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -1,0 +1,6 @@
+/// Used as the User Avatar and on the Worker Roster Modal
+/// 32px circle in our secondary color.
+.circle-32-secondary {
+  @apply rounded-full h-8 w-8 text-center text-base font-semibold leading-8 text-white bg-secondary-500 border border-secondary-50 hover:bg-secondary-700;
+  border-width: 2.5px;
+}

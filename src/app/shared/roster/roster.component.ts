@@ -30,6 +30,12 @@ export class RosterComponent implements OnInit {
   /** Determines if this is a roster being viewed in edit mode. */
   @Input() editMode?: boolean;
 
+  /** Determines if this is a roster being viewed in the drawer. */
+  @Input() fromDrawer = false;
+
+  /** Emit the roster member length to be displayed as text.*/
+  @Output() rosterMemberLength = new EventEmitter<number>();
+
   /** Whether the request is underway. */
   loadingRoster = false;
 
@@ -97,9 +103,16 @@ export class RosterComponent implements OnInit {
         if (data) {
           this.rosterMembers = data;
           this.slices =
-            this.rosterMembers.length > 3 ? 2 : this.rosterMembers.length;
+            this.rosterMembers.length > 3 && !this.fromDrawer
+              ? 2
+              : this.rosterMembers.length > 3 && this.fromDrawer
+              ? 3
+              : this.rosterMembers.length;
         }
         this.loadingRoster = false;
+        if (this.fromDrawer) {
+          this.rosterMemberLength.emit(this.rosterMembers.length);
+        }
       },
       error: (error: unknown) => {
         this.loadingRoster = false;

@@ -38,42 +38,6 @@
           </div>
         </div>
         <div class="w-full py-2">
-          <p class="overline-font">station owners</p>
-          <div
-            class="py-2 text-secondary-500 text-xs"
-            *ngIf="locallyCreated; else showOwnerRoster"
-          >
-            {{ publishStationMessage }}station owners.
-          </div>
-          <ng-template #showOwnerRoster>
-            <app-roster
-              (modalClosed)="refreshInfoDrawer($event)"
-              [stationId]="stationRithmId"
-              [isWorker]="false"
-              [editMode]="editMode || isUserAdminOrOwner"
-            >
-            </app-roster>
-          </ng-template>
-        </div>
-        <div class="w-full py-2">
-          <p class="overline-font">worker roster</p>
-          <div
-            class="py-2 text-secondary-500 text-xs"
-            *ngIf="locallyCreated; else showWorkerRoster"
-          >
-            {{ publishStationMessage }}roster members
-          </div>
-          <ng-template #showWorkerRoster>
-            <app-roster
-              (modalClosed)="refreshInfoDrawer($event)"
-              [stationId]="stationRithmId"
-              [isWorker]="true"
-              [editMode]="editMode || isUserAdminOrOwner"
-            >
-            </app-roster>
-          </ng-template>
-        </div>
-        <div class="w-full py-2">
           <p class="overline-font">station priority</p>
           <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
             {{ publishStationMessage }}station priority.
@@ -218,6 +182,77 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="grid grid-cols-1 px-2">
+        <section class="flex w-full py-5">
+          <div class="flex w-full flex-col">
+            <h6>Station Owners</h6>
+            <p class="overline-font">{{ ownersRosterLength }} members</p>
+          </div>
+          <div
+            class="py-2 text-secondary-500 text-xs"
+            *ngIf="locallyCreated; else showOwnerRoster"
+          >
+            {{ publishStationMessage }}station owners.
+          </div>
+          <ng-template #showOwnerRoster>
+            <div class="flex w-full justify-center">
+              <app-roster
+                (modalClosed)="refreshInfoDrawer($event)"
+                [stationId]="stationRithmId"
+                [isWorker]="false"
+                [editMode]="editMode || isUserAdminOrOwner"
+                [fromDrawer]="true"
+                (rosterMemberLength)="ownersRosterLength = $event"
+              >
+              </app-roster>
+            </div>
+          </ng-template>
+        </section>
+        <section
+          class="flex flex-col w-full py-5 border-t border-secondary-200 border-solid"
+        >
+          <h6 class="pb-3">Station Owners</h6>
+          <section class="flex justify-between items-center pb-4">
+            <div>
+              <p class="text-secondary-300 pr-2 inline-block">Make Public</p>
+              <i
+                class="fas fa-question-circle fa-2x1 text-secondary-300"
+                matTooltip="Info about Make Public"
+              ></i>
+            </div>
+            <div class="pr-2">
+              <mat-slide-toggle color="accent" [(ngModel)]="isPublic">
+              </mat-slide-toggle>
+            </div>
+          </section>
+          <section class="flex justify-between items-center pb-4">
+            <div>
+              <p class="text-secondary-300 pr-2 inline-block">External</p>
+              <i
+                class="fas fa-question-circle fa-2x1 text-secondary-300"
+                matTooltip="Info about External"
+              ></i>
+            </div>
+            <div class="pr-2">
+              <mat-slide-toggle color="accent" [(ngModel)]="allowExternal">
+              </mat-slide-toggle>
+            </div>
+          </section>
+          <section class="flex justify-between items-center">
+            <div>
+              <p class="text-secondary-300 pr-2 inline-block">Custom Roster</p>
+            </div>
+            <div
+              class="pr-2 cursor-pointer"
+              (click)="openManagementRosterModal()"
+            >
+              <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
+            </div>
+          </section>
+        </section>
+      </div>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

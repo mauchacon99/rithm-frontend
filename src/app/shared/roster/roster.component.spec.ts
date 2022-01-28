@@ -7,6 +7,7 @@ import { MockStationService, MockErrorService } from 'src/mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { RosterComponent } from './roster.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 describe('RosterComponent', () => {
   let component: RosterComponent;
@@ -20,7 +21,7 @@ describe('RosterComponent', () => {
         MockComponent(UserAvatarComponent),
         MockComponent(LoadingIndicatorComponent),
       ],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, MatBadgeModule],
       providers: [
         { provide: StationService, useClass: MockStationService },
         { provide: ErrorService, useClass: MockErrorService },

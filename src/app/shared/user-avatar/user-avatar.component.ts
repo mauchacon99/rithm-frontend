@@ -30,6 +30,9 @@ export class UserAvatarComponent {
   /** Whether the cursor is hover then change badge content if is enabled. */
   badgeHover = false;
 
+  /** Whether is displayed from the drawer. */
+  @Input() isDrawer = false;
+
   /**
    * The first + last initials for the user.
    *
