@@ -172,6 +172,7 @@ export class DashboardComponent implements OnInit {
    * Update personal dashboard.
    */
   private updatePersonalDashboard(): void {
+    /** Data temporary.  */
     let dashboardData: DashboardData = {
       rithmId: '123-131-132',
       name: 'New Dashboard',
