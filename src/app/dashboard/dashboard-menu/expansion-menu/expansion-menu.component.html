@@ -5,7 +5,11 @@
   class="mat-elevation-z0"
 >
   <mat-expansion-panel-header>
-    <mat-panel-title class="flex justify-between items-center p-3">
+    <mat-panel-title
+      class="flex justify-between items-center p-3"
+      [attr.data-testid]="'expansion-menu-' + dashboardRole"
+      [id]="'expansion-menu-' + dashboardRole"
+    >
       <div class="flex items-center">
         <i
           [ngClass]="panelOpenState ? 'fa-angle-down' : 'fa-angle-right'"
@@ -13,7 +17,7 @@
         ></i>
         <div class="ml-3 w-[200px] md:w-[260px] truncate">
           <span class="text-base">{{
-            dashboardRole === roleDashboardMenu.DashboardOrganization
+            dashboardRole === roleDashboardMenu.OrganizationDashboard
               ? 'Organization Dashboard'
               : 'Personal Dashboard'
           }}</span>
@@ -23,11 +27,16 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
-    <mat-list-item
-      *ngFor="let option of staticDataOptions"
+    <div
+      *ngFor="let dashboard of dashboardsList; let i = index"
       class="color-hover cursor-pointer"
     >
-      {{ option }}
-    </mat-list-item>
+      <mat-list-item
+        [attr.data-testid]="dashboardRole + '-item-' + i"
+        [id]="dashboardRole + '-item-' + i"
+      >
+        {{ dashboard.name }}
+      </mat-list-item>
+    </div>
   </mat-list>
 </mat-expansion-panel>

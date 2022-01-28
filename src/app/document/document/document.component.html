@@ -18,7 +18,7 @@
     ></app-info-drawer>
   </mat-drawer>
 
-  <mat-drawer-content>
+  <mat-drawer-content [ngClass]="{ scrollbar: isWidget }">
     <div
       class="textured-bg grid grid-cols-12 min-h-full"
       [ngClass]="{ 'mt-12': !isWidget }"

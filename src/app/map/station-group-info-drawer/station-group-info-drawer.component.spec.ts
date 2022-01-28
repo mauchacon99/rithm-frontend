@@ -15,6 +15,7 @@ describe('StationGroupInfoDrawerComponent', () => {
   let component: StationGroupInfoDrawerComponent;
   let fixture: ComponentFixture<StationGroupInfoDrawerComponent>;
   const formBuilder = new FormBuilder();
+  let service: MapService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -34,6 +35,7 @@ describe('StationGroupInfoDrawerComponent', () => {
         { provide: FormBuilder, useValue: formBuilder },
       ],
     }).compileComponents();
+    service = TestBed.inject(MapService);
   });
 
   beforeEach(() => {
@@ -44,5 +46,19 @@ describe('StationGroupInfoDrawerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set the changes made to the current station group', () => {
+    component.stationGroupRithmId = 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989';
+    const index = service.stationGroupElements.findIndex(
+      (stGroup) => stGroup.rithmId === component.stationGroupRithmId
+    );
+    component.setStationGroupChanges();
+    expect(service.stationGroupElements[index].title).toEqual(
+      component.groupName
+    );
+    service.stationGroupElementsChanged$.subscribe((res) =>
+      expect(res).toBe(true)
+    );
   });
 });

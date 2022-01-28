@@ -207,6 +207,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.drawElements();
       });
 
+    //This subscribe sets this.stationGroups when the behavior subject in mapService changes, then redraws the map.
+    this.mapService.stationGroupElementsChanged$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.stationGroups = this.mapService.stationGroupElements;
+        this.drawElements();
+      });
+
     //This subscribe sets this.zoomCount when the behavior subject in mapService changes.
     this.mapService.zoomCount$
       .pipe(takeUntil(this.destroyed$))
@@ -634,6 +642,13 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contextMenu(event: MouseEvent): void {
     // TODO: Handle behavior when mouse is right clicked
+    //If dragging a Station Group.
+    /* This is to avoid that when dragging a group of stations and
+      pressing the right mouse button the stations of the station group disappear. */
+    if (this.dragItem === MapDragItem.StationGroup) {
+      // Call eventEndLogic method.
+      this.eventEndLogic(event);
+    }
   }
 
   /**

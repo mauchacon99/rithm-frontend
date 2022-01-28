@@ -20,6 +20,7 @@
             id="group"
             data-testId="group-name-field"
             [(ngModel)]="groupName"
+            (ngModelChange)="setStationGroupChanges()"
           />
         </mat-form-field>
       </div>
@@ -27,7 +28,13 @@
     <div class="w-full py-2">
       <p class="overline-font mb-1">group settings</p>
       <div class="flex flex-row justify-between items-center text-xs">
-        Chained <mat-slide-toggle></mat-slide-toggle>
+        Chained
+        <mat-slide-toggle
+          [checked]="isChained"
+          (change)="isChained = !isChained"
+          [disabled]="!isBuilding"
+        >
+        </mat-slide-toggle>
       </div>
     </div>
     <div class="w-full py-2">

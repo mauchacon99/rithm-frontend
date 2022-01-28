@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapMode, Point, User } from 'src/models';
+import { MapItemStatus, MapMode, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -296,6 +296,19 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
             this.popupService.notify('Map data published successfully.');
           },
           error: (error: unknown) => {
+            //Reset title of station group if API fails.
+            const updatedStationGroups =
+              this.mapService.stationGroupElements.filter(
+                (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+              );
+            updatedStationGroups.forEach((stGroup) => {
+              const index =
+                this.mapService.storedStationGroupElements.findIndex(
+                  (group) => group.rithmId === stGroup.rithmId
+                );
+              stGroup.title =
+                this.mapService.storedStationGroupElements[index].title;
+            });
             //Hide loading indicator.
             this.mapDataLoading = false;
             this.errorService.displayError(

@@ -8,6 +8,7 @@ import {
   Document,
   DashboardItem,
   WidgetType,
+  DashboardData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -272,5 +273,95 @@ describe('DashboardService', () => {
 
     req.flush(widgetsExpected);
     httpTestingController.verify();
+  });
+
+  it('should returns organization dashboard', () => {
+    const organizationDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(organizationDashboards);
+    });
+  });
+
+  it('should returns user`s customized dashboards', () => {
+    const personalDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getPersonalDashboard().subscribe((response) => {
+      expect(response).toEqual(personalDashboards);
+    });
   });
 });
