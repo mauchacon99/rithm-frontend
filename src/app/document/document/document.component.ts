@@ -45,7 +45,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() documentRithmIdWidget!: string;
 
   /** Return to list of the documents only with isWidget. */
-  @Output() returnDocumentsWidget: EventEmitter<unknown> = new EventEmitter();
+  @Output() returnDocumentsWidget: EventEmitter<boolean> = new EventEmitter();
 
   /** Document form. */
   documentForm: FormGroup;
@@ -203,15 +203,17 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Navigates the user back to the dashboard page.
+   *
+   * @param isReloadDocumentsWidget Boolean, when is true, reload the documents list in widget.
    */
-  private navigateBack(): void {
+  private navigateBack(isReloadDocumentsWidget = false): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
     // If is widget return to the documents list
     this.isWidget
-      ? this.returnDocumentsWidget.emit()
+      ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
       : this.router.navigateByUrl('dashboard');
   }
 
@@ -357,7 +359,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.navigateBack();
+          this.navigateBack(true);
         },
         error: (error: unknown) => {
           this.documentLoading = false;

@@ -144,7 +144,7 @@
   <div class="container-document">
     <app-document
       [isWidget]="true"
-      (returnDocumentsWidget)="viewDocument('')"
+      (returnDocumentsWidget)="viewDocument('', $event)"
       [documentRithmIdWidget]="documentIdSelected"
       [stationRithmIdWidget]="stationRithmId"
     ></app-document>

@@ -100,9 +100,11 @@ export class StationWidgetComponent implements OnInit {
    * View detail document.
    *
    * @param documentRithmId String of document rithmId.
+   * @param reloadDocuments Boolean when is true, reload the documents.
    */
-  viewDocument(documentRithmId: string): void {
+  viewDocument(documentRithmId: string, reloadDocuments = false): void {
     this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
+    if (reloadDocuments) this.getStationWidgetDocuments();
   }
 }
