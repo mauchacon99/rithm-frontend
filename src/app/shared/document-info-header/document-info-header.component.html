@@ -82,7 +82,7 @@
       </p>
     </div>
     <ng-template #nonEditableDocName>
-      <div
+      <div *ngIf="!isWidget"
         class="flex items-center justify-between w-full"
         [ngClass]="{ 'py-2': isWidget }"
       >
@@ -107,7 +107,36 @@
           <i class="fas fa-info-circle text-2xl text-primary-500"></i>
         </button>
       </div>
+
     </ng-template>
+    <section *ngIf="isWidget">
+      <div class="py-2">
+        <p class="font-semibold">
+          {{ documentName }}
+        </p>
+
+        <p class="text-xs">
+          {{ stationNameDocument }}
+        </p>
+      </div>
+
+      <div class="flex justify-between p-1">
+        <div>
+          <p class="text-xs text-justify">ASSIGNED</p>
+          <app-user-avatar [firstName]='documentName' [lastName]='appendedDocumentName'></app-user-avatar>
+
+        </div>
+
+        <a [routerLink]="['/document/'+documentRithmId]" [queryParams]="{documentId: documentRithmId,stationId: stationRithmId }">
+        <button
+        mat-button
+        data-testid="return-document-button"
+      >
+      <i class="fas fa-external-link-alt p-4"></i>
+      </button>
+      </a>
+      </div>
+    </section>
   </form>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
