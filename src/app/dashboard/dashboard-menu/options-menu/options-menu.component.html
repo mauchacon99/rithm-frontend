@@ -1,6 +1,10 @@
 <button
   mat-button
-  [matMenuTriggerFor]="optionType === optionDashboardMenu.OptionDashboardList ? menuList : menuDashboard"
+  [matMenuTriggerFor]="
+    optionType === optionDashboardMenu.OptionDashboardList
+      ? menuList
+      : menuDashboard
+  "
   (click)="openOptionsMenu($event)"
   mat-icon-button
   [attr.data-testid]="'button-more-' + dashboardRole"
@@ -19,4 +23,3 @@
   <button mat-menu-item><i class="fas fa-user-plus"></i> Add Member</button>
   <button mat-menu-item><i class="fas fa-trash"></i> Delete Dashboard</button>
 </mat-menu>
-
