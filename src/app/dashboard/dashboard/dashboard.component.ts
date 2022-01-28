@@ -185,9 +185,9 @@ export class DashboardComponent implements OnInit {
   /**
    * Generates a new dashboard to user.
    */
-  generateNewDashboardUser(): void {
+  generateNewPersonalDashboard(): void {
     this.dashboardService
-      .generateNewDashboardUser()
+      .generateNewPersonalDashboard()
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {

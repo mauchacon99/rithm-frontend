@@ -384,7 +384,7 @@ describe('DashboardService', () => {
         },
       ],
     };
-    service.generateNewDashboardUser().subscribe((newDashboard) => {
+    service.generateNewPersonalDashboard().subscribe((newDashboard) => {
       expect(newDashboard).toEqual(expectDashboard);
     });
   });

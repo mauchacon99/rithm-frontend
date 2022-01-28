@@ -142,17 +142,17 @@ describe('DashboardComponent', () => {
   it('should call service from generateNewDashboardUser', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
-      'generateNewDashboardUser'
+      'generateNewPersonalDashboard'
     ).and.callThrough();
 
-    component.generateNewDashboardUser();
+    component.generateNewPersonalDashboard();
     expect(spyService).toHaveBeenCalled();
   });
 
   it('should show an error message when calling generateNewDashboardUser', () => {
     spyOn(
       TestBed.inject(DashboardService),
-      'generateNewDashboardUser'
+      'generateNewPersonalDashboard'
     ).and.returnValue(
       throwError(() => {
         throw new Error();
@@ -164,7 +164,7 @@ describe('DashboardComponent', () => {
       'displayError'
     ).and.callThrough();
 
-    component.generateNewDashboardUser();
+    component.generateNewPersonalDashboard();
     expect(spyError).toHaveBeenCalled();
   });
 });
