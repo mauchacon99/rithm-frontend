@@ -94,6 +94,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
+  /** The drawer context for stationInfo. */
+  isChained = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,

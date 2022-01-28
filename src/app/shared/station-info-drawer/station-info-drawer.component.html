@@ -31,18 +31,29 @@
 
         <!-- Priority -->
         <div
-          class="flex justify-between w-full px-4 py-2 border-b-2 border-b-secondary-100"
+          class="flex justify-between items-center w-full px-4 py-2 border-b-2 border-b-secondary-100"
         >
-          <h6>Priority</h6>
-          <div class="text-xs text-secondary-500 py-2" *ngIf="locallyCreated">
+          <h6 class="w-11/12">Priority</h6>
+          <div class="text-xs text-secondary-500" *ngIf="locallyCreated">
             {{ publishStationMessage }}station priority.
           </div>
-          <button
-            *ngIf="!locallyCreated"
-            class="mat-focus-indicator priority mat-mini-fab mat-button-base mat-warn"
-          >
-            {{ stationPriority }}
-          </button>
+          <div class="flex justify-end items-center">
+            <button
+              *ngIf="!locallyCreated"
+              class="priority mat-mini-fab mat-button-base mat-warn"
+              data-testid="priority-field"
+              id="priority-field"
+            >
+              {{ stationPriority }}
+            </button>
+            <button
+              mat-icon-button
+              id="priority-detail-btn"
+              data-testid="priority-detail-btn"
+            >
+              <i class="fas fa-chevron-right text-secondary-500 fa-lg"></i>
+            </button>
+          </div>
         </div>
 
         <!-- Last Updated -->
@@ -50,16 +61,13 @@
           class="flex justify-between w-full px-4 py-4 border-b-2 border-b-secondary-100"
         >
           <h6>Last Updated</h6>
-          <div class="w-24 items-center py-2" *ngIf="lastUpdatedLoading">
+          <div class="flex items-center text-xs" *ngIf="!lastUpdatedLoading">
+            <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
+          </div>
+          <div class="items-center" *ngIf="lastUpdatedLoading">
             <app-loading-indicator
               [inlineText]="'Loading...'"
             ></app-loading-indicator>
-          </div>
-          <div
-            class="col-span-8 md:col-span-4 text-left text-xs py-2"
-            *ngIf="!lastUpdatedLoading"
-          >
-            <span class="{{ colorMessage }}">{{ lastUpdatedDate }} </span>
           </div>
         </div>
 
@@ -69,7 +77,10 @@
         >
           <h6>Chained Flow</h6>
           <div>
-            <i class="fas fa-check text-accent-500"></i>
+            <i
+              class="fas fa-check"
+              [ngClass]="isChained ? 'text-accent-500' : 'text-secondary-500'"
+            ></i>
           </div>
         </div>
 
@@ -77,13 +88,16 @@
         <div class="w-full px-4 py-4 border-b-2 border-b-secondary-100">
           <div class="flex flex-row gap-2">
             <h6>Button Settings</h6>
-            <div><i class="fas fa-question-circle text-secondary-300"></i></div>
+            <div>
+              <i class="fas fa-question-circle text-secondary-300"></i>
+            </div>
           </div>
           <div>
             <mat-form-field appearance="outline" class="w-full">
               <input
                 matInput
                 type="text"
+                placeholder="Button Name"
                 id="button-name"
                 data-testid="button-name"
               />
@@ -91,7 +105,7 @@
           </div>
           <div class="flex justify-between">
             <div>
-              <p class="text-sm text-secondary-300">
+              <p class="w-5/6 text-sm text-secondary-300">
                 Users can flow document to previous station
               </p>
             </div>
@@ -118,9 +132,10 @@
         <div class="w-full py-2 px-2">
           <button
             mat-stroked-button
-            id="delete-station-button"
             color="warn"
             class="priority"
+            id="delete-station-button"
+            data-testid="delete-station-button"
             (click)="deleteStation()"
           >
             Delete Station
