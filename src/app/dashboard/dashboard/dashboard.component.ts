@@ -7,7 +7,7 @@ import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardData, DashboardItem, Station, WidgetType } from 'src/models';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
 /**
