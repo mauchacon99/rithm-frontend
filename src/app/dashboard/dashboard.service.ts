@@ -111,7 +111,7 @@ export class DashboardService {
    * @returns Personal dashboard data observable.
    */
   updatePersonalDashboard(
-    dashboardUpdate: DashboardData
+    dashboardData: DashboardData
   ): Observable<DashboardData> {
     return of(dashboardUpdate).pipe(delay(1000));
   }
