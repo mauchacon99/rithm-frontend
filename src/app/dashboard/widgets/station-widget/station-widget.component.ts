@@ -119,6 +119,7 @@ export class StationWidgetComponent implements OnInit {
    * Create a new document.
    */
   createNewDocument(): void {
+    this.isLoading = true;
     this.documentService
       .createNewDocument('', 0, this.stationRithmId)
       .pipe(first())
@@ -126,11 +127,13 @@ export class StationWidgetComponent implements OnInit {
         next: (documentRithmId) => {
           this.viewDocument(documentRithmId);
           this.reloadDocumentList = true;
+          this.isLoading = false;
           this.popupService.notify(
             'The document has been created successfully.'
           );
         },
         error: (error: unknown) => {
+          this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

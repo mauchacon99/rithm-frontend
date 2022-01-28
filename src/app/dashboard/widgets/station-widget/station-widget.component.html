@@ -126,7 +126,11 @@
 </div>
 
 <!--Document detail-->
-<div class="h-full p-2 overflow-auto" *ngIf="isDocument" id="document-detail">
+<div
+  class="h-full p-2 overflow-auto"
+  *ngIf="isDocument && !isLoading"
+  id="document-detail"
+>
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
