@@ -24,6 +24,7 @@ import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.
 import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
 import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 import { DocumentService } from 'src/app/core/document.service';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 /**
  * Reusable component for displaying the information to add a new rule.
@@ -207,7 +208,6 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((answer: DocumentAnswer) => {
         if (answer.value !== '') {
-          this.secondOperand = '';
           this.secondOperandField.value = answer.value;
           this.secondOperandText = answer.value;
         } else {
@@ -337,6 +337,21 @@ export class RuleModalComponent implements OnInit, AfterViewChecked {
       case OperandType.Date:
         this.dateField?.ngOnInit();
         break;
+    }
+  }
+
+  /**
+   * Change and listen to each step selection.
+   *
+   * @param event The stepper selection event for all steps.
+   */
+  selectionChangeStep(event: StepperSelectionEvent): void {
+    // Logic when it returns to step 1 and the previous step is greater than the current step.
+    if (event.selectedIndex === 0 && event.previouslySelectedIndex > 0) {
+      this.firstOperand = '';
+      this.secondOperand = '';
+      this.secondOperandField.value = '';
+      this.operator = '';
     }
   }
 
