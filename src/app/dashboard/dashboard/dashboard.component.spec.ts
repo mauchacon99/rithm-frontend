@@ -138,4 +138,33 @@ describe('DashboardComponent', () => {
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should call service from generateNewDashboardUser', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewDashboardUser'
+    ).and.callThrough();
+
+    component.generateNewDashboardUser();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show an error message when calling generateNewDashboardUser', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewDashboardUser'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.generateNewDashboardUser();
+    expect(spyError).toHaveBeenCalled();
+  });
 });

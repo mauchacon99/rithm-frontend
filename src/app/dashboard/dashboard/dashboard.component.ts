@@ -6,7 +6,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardItem, Station } from 'src/models';
+import { DashboardData, DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
@@ -25,6 +25,9 @@ export class DashboardComponent implements OnInit {
 
   /** Show the dashboard menu. */
   drawerContext = 'menuDashboard';
+
+  /** New dashboard to user. */
+  newDashboardUser!: DashboardData;
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
@@ -115,7 +118,7 @@ export class DashboardComponent implements OnInit {
     if (user) {
       this.splitService.initSdk(user.rithmId);
     }
-
+    this.generateNewDashboardUser();
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
@@ -176,5 +179,26 @@ export class DashboardComponent implements OnInit {
     //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /**
+   * Generates a new dashboard to user.
+   */
+  generateNewDashboardUser(): void {
+    this.dashboardService
+      .generateNewDashboardUser()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          console.log(newDashboard);
+          this.newDashboardUser = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

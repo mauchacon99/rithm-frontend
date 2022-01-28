@@ -9,6 +9,7 @@ import {
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
@@ -319,5 +320,33 @@ export class MockDashboardService {
     ];
 
     return of(personalDashboards).pipe(delay(1000));
+  }
+
+  /**
+   * Generates a new dashboard to user.
+   *
+   * @returns Returns a new default dashboard.
+   */
+  generateNewDashboardUser(): Observable<DashboardData> {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    return of(newDashboard).pipe(delay(1000));
   }
 }
