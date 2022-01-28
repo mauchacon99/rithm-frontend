@@ -41,6 +41,9 @@ export class DashboardComponent implements OnInit {
   /** Load indicator in dashboard. */
   dashboardLoading = false;
 
+  /** Edit mode toggle. */
+  editMode = false;
+
   /** Config grid. */
   options: GridsterConfig = {
     gridType: 'verticalFixed',
@@ -141,6 +144,15 @@ export class DashboardComponent implements OnInit {
    */
   toggleMenu(drawerItem: 'menuDashboard'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
+   * Toggles the editMode to allow editing.
+   *
+   * @returns The opposite value of editMode.
+   */
+  toggleEditMode(): boolean {
+    return !this.editMode;
   }
 
   /**
