@@ -1,6 +1,6 @@
 <button
   mat-button
-  [matMenuTriggerFor]="menu"
+  [matMenuTriggerFor]="optionType === optionDashboardMenu.OptionDashboardList ? menuList : menuDashboard"
   (click)="openOptionsMenu($event)"
   mat-icon-button
   [attr.data-testid]="'button-more-' + dashboardRole"
@@ -8,8 +8,15 @@
 >
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
-<mat-menu #menu="matMenu">
+<mat-menu #menuList="matMenu">
   <button mat-menu-item><i class="fas fa-users"></i> Manage Members</button>
   <button mat-menu-item><i class="fas fa-user-plus"></i> Add Member</button>
   <button mat-menu-item><i class="fas fa-plus"></i> New Dashboard</button>
 </mat-menu>
+
+<mat-menu #menuDashboard="matMenu">
+  <button mat-menu-item><i class="fas fa-users"></i> Manage Members</button>
+  <button mat-menu-item><i class="fas fa-user-plus"></i> Add Member</button>
+  <button mat-menu-item><i class="fas fa-trash"></i> Delete Dashboard</button>
+</mat-menu>
+

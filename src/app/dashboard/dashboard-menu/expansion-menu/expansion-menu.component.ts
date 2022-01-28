@@ -3,7 +3,7 @@ import { RoleDashboardMenu } from 'src/models/enums/role-dashboard-menu.enum';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
-import { DashboardData } from 'src/models';
+import { DashboardData, OptionDashboardMenu } from 'src/models';
 
 /**
  * Expansion menu for dashboard menu drawer.
@@ -25,6 +25,9 @@ export class ExpansionMenuComponent implements OnInit {
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
+
+  /** Option type.*/
+  optionType = OptionDashboardMenu;
 
   constructor(
     private dashboardService: DashboardService,

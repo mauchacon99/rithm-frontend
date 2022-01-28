@@ -23,7 +23,7 @@
           }}</span>
         </div>
       </div>
-      <app-options-menu [dashboardRole]="dashboardRole"></app-options-menu>
+      <app-options-menu [dashboardRole]="dashboardRole" [optionType]="optionType.OptionDashboardList"></app-options-menu>
     </mat-panel-title>
   </mat-expansion-panel-header>
   <mat-list>
@@ -37,7 +37,7 @@
       >
       <div class="w-full flex justify-between">
         {{ dashboard.name }}
-        <app-options-menu [dashboardRole]="dashboardRole"></app-options-menu>
+        <app-options-menu [dashboardRole]="dashboardRole" [optionType]="optionType.OptionDashboard" ></app-options-menu>
       </div>
       </mat-list-item>
     </div>
