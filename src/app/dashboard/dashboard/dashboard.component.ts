@@ -4,9 +4,9 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardItem, Station } from 'src/models';
+import { DashboardData, DashboardItem, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
@@ -34,6 +34,9 @@ export class DashboardComponent implements OnInit {
 
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
+
+  /** New dashboard. */
+  newDashboard?: DashboardData;
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
@@ -173,8 +176,28 @@ export class DashboardComponent implements OnInit {
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /**
+   * Generates a new default dashboard.
+   */
+  generateNewOrganizationDashboard(): void {
+    this.dashboardService
+      .generateNewOrganizationDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.newDashboard = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
