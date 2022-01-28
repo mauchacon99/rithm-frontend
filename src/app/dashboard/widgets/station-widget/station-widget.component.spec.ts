@@ -2,13 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
-import { MockDocumentService, MockErrorService } from 'src/mocks';
+import {
+  MockDocumentService,
+  MockErrorService,
+  MockPopupService,
+} from 'src/mocks';
 import { DocumentGenerationStatus, StationWidgetData } from 'src/models';
 import { StationWidgetComponent } from './station-widget.component';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { UserAvatarComponent } from 'src/app/shared/user-avatar/user-avatar.component';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { PopupService } from 'src/app/core/popup.service';
 
 describe('StationWidgetComponent', () => {
   let component: StationWidgetComponent;
@@ -26,6 +31,7 @@ describe('StationWidgetComponent', () => {
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
+        { provide: PopupService, useClass: MockPopupService },
       ],
     }).compileComponents();
   });
@@ -181,6 +187,39 @@ describe('StationWidgetComponent', () => {
       '#create-new-document'
     );
     expect(button).toBeFalsy();
+  });
+  it('should create new document on widget', () => {
+    const expectDocumentRithmId = '22671B47-D338-4D8F-A8D2-59AC48196FF1';
+    component.isLoading = false;
+    fixture.detectChanges();
+    const spyMethodComponent = spyOn(
+      component,
+      'createNewDocument'
+    ).and.callThrough();
+    const spyMethodService = spyOn(
+      TestBed.inject(DocumentService),
+      'createNewDocument'
+    ).and.returnValue(of(expectDocumentRithmId));
+
+    const notifyMethodService = spyOn(
+      TestBed.inject(PopupService),
+      'notify'
+    ).and.callThrough();
+
+    const buttonNewDocument = fixture.debugElement.nativeElement.querySelector(
+      '#create-new-document'
+    );
+    expect(buttonNewDocument).toBeTruthy();
+    buttonNewDocument.click();
+    expect(spyMethodComponent).toHaveBeenCalled();
+    expect(component.documentIdSelected).toBe(expectDocumentRithmId);
+    expect(component.isDocument).toBeTrue();
+    expect(spyMethodService).toHaveBeenCalledWith(
+      '',
+      0,
+      component.stationRithmId
+    );
+    expect(notifyMethodService).toHaveBeenCalled();
   });
 
   describe('Loading documents', () => {
