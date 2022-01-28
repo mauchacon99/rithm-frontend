@@ -39,17 +39,17 @@
       <p>No dashboard for listing</p>
     </div>
     <div *ngIf="!isLoading && !showError && dashboardsList.length > 0">
-      <div
+      <mat-selection-list [multiple]="false"
         *ngFor="let dashboard of dashboardsList; let i = index"
-        class="color-hover cursor-pointer"
       >
-        <mat-list-item
+        <mat-list-option
+          class="color-hover cursor-pointer"
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
         >
           {{ dashboard.name }}
-        </mat-list-item>
-      </div>
+        </mat-list-option>
+      </mat-selection-list>
     </div>
   </mat-list>
 </mat-expansion-panel>
