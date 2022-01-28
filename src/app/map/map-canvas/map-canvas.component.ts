@@ -280,7 +280,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.stations = this.mapService.stationElements.filter(
           (e) => e.status !== MapItemStatus.Deleted
         );
-        this.stationGroups = this.mapService.stationGroupElements;
+        //Any station group status set to deleted should not be rendered.
+        this.stationGroups = this.mapService.stationGroupElements.filter(
+          (e) => e.status !== MapItemStatus.Deleted
+        );
         this.connections = this.mapService.connectionElements;
 
         //If this is the first time the component is being initialized, center the map without animation.
