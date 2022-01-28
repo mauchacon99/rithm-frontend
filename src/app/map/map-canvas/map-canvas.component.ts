@@ -1300,7 +1300,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.scale
         );
 
-        //If hovering over the station group boundary or name.
+        //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
         if (
           stationGroup.hoverItem !== StationGroupElementHoverItem.None &&
           this.dragItem !== MapDragItem.Node &&
