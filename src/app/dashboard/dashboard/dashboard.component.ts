@@ -175,7 +175,7 @@ export class DashboardComponent implements OnInit {
     /** Data temporary.  */
     let dashboardData: DashboardData = {
       rithmId: '123-131-132',
-      name: 'New Dashboard',
+      name: 'Untitled Dashboard',
       widgets: [
         {
           cols: 4,
