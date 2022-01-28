@@ -35,21 +35,21 @@
     <div *ngIf="showError" id="error-dashboard-list">
       <p class="text-error-500">Error: failed to obtain dashboards</p>
     </div>
-    <div *ngIf="dashboardsList.length === 0" id="empty-dashboards-list">
+    <div *ngIf="!dashboardsList.length" id="empty-dashboards-list">
       <p>No dashboard for listing</p>
     </div>
-    <div *ngIf="!isLoading && !showError && dashboardsList.length > 0">
-      <mat-selection-list [multiple]="false"
+    <div *ngIf="!isLoading && !showError && dashboardsList.length">
+      <div
         *ngFor="let dashboard of dashboardsList; let i = index"
+        class="color-hover cursor-pointer"
       >
-        <mat-list-option
-          class="color-hover cursor-pointer"
+        <mat-list-item
           [attr.data-testid]="dashboardRole + '-item-' + i"
           [id]="dashboardRole + '-item-' + i"
         >
           {{ dashboard.name }}
-        </mat-list-option>
-      </mat-selection-list>
+        </mat-list-item>
+      </div>
     </div>
   </mat-list>
 </mat-expansion-panel>
