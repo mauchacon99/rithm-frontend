@@ -22,6 +22,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject, forkJoin } from 'rxjs';
 import { Input } from '@angular/core';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Main component for viewing a document.
@@ -92,7 +93,8 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
-    private readonly changeDetectorR: ChangeDetectorRef
+    private readonly changeDetectorR: ChangeDetectorRef,
+    private userService: UserService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control(''),
@@ -157,6 +159,15 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   get drawerHasBackdrop(): boolean {
     return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
   }
 
   /**
@@ -348,7 +359,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.router.navigateByUrl('dashboard');
+          if (this.isUserAdmin) {
+            this.router.navigateByUrl('map');
+          } else {
+            this.router.navigateByUrl('dashboard');
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;

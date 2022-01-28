@@ -12,6 +12,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -26,6 +27,7 @@ import { Router } from '@angular/router';
 import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
 import { forkJoin, of, throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UserService } from 'src/app/core/user.service';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -59,6 +61,7 @@ describe('DocumentComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
