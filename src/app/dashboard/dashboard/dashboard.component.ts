@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
     if (user) {
       this.splitService.initSdk(user.rithmId);
     }
-    this.generateNewDashboardUser();
+
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
@@ -190,7 +190,6 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
-          console.log(newDashboard);
           this.newDashboardUser = newDashboard;
         },
         error: (error: unknown) => {
