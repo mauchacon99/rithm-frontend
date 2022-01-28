@@ -277,7 +277,7 @@ describe('DashboardService', () => {
   it('should return updated dashboard', () => {
     const updateDashboard: DashboardData = {
       rithmId: '',
-      name: 'new dashboard',
+      name: 'Untitled Dashboard',
       widgets: [
         {
           cols: 0,
