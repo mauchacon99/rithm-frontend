@@ -40,3 +40,13 @@
     @apply opacity-100 bg-accent-500;
   }
 }
+
+.mat-station-name {
+  ::ng-deep .mat-form-field-wrapper {
+    margin: 0 !important;
+  }
+}
+
+.circle-30-error {
+  @apply rounded-full h-7 w-7 text-center text-lg font-semibold leading-7 text-white bg-error-500 hover:bg-error-700;
+}
