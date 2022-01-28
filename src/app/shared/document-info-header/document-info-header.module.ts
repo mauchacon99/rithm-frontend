@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     UserAvatarModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [DocumentInfoHeaderComponent],
 })
