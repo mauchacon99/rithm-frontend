@@ -6,7 +6,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, DashboardItem, Station } from 'src/models';
+import { DashboardData, Station } from 'src/models';
 import { DashboardService } from '../dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
@@ -26,17 +26,18 @@ export class DashboardComponent implements OnInit {
   /** Show the dashboard menu. */
   drawerContext = 'menuDashboard';
 
-  /** New dashboard to user. */
-  newDashboardUser!: DashboardData;
-
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
   stations: Station[] = [];
 
   viewNewDashboard = false;
 
-  /** Widgets for dashboard. */
-  widgetsOfDashboard: DashboardItem[] = [];
+  /** Dashboard data, default dashboard general. */
+  dashboardData: DashboardData = {
+    rithmId: '',
+    name: 'General',
+    widgets: [],
+  };
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
@@ -157,7 +158,7 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.widgetsOfDashboard = widgets;
+          this.dashboardData.widgets = widgets;
           this.dashboardLoading = false;
         },
         error: (error: unknown) => {
@@ -190,7 +191,7 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
-          this.newDashboardUser = newDashboard;
+          this.dashboardData = newDashboard;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
