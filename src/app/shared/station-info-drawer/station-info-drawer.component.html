@@ -108,33 +108,6 @@
             <mat-slide-toggle class="px-2"></mat-slide-toggle>
           </div>
         </section>
-        <div
-          class="w-full py-2 text-center"
-          *ngIf="
-            stationDocumentGenerationStatus === 'Manual' &&
-            (mapMode === 0 || mapMode === undefined) &&
-            !locallyCreated &&
-            (isUserAdminOrOwner || isWorker)
-          "
-        >
-          <div class="py-1" *ngIf="docCreationLoading; else createDocument">
-            <app-loading-indicator
-              id="loading-indicator-status"
-              [inlineText]="'Loading...'"
-            ></app-loading-indicator>
-          </div>
-          <ng-template #createDocument>
-            <button
-              data-testid="new-document"
-              id="new-document"
-              mat-stroked-button
-              color="accent"
-              (click)="createNewDocument()"
-            >
-              New Document
-            </button>
-          </ng-template>
-        </div>
         <div *ngIf="mapMode === mapModeEnum.Build">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Notes</mat-label>
