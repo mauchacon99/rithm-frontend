@@ -20,7 +20,7 @@ export class OptionsMenuComponent {
   roleDashboardMenu = RoleDashboardMenu;
 
   /** Show option. */
-  @Input() optionType!: OptionDashboardMenu;
+  @Input() menuDashboardOptionType!: OptionDashboardMenu;
 
   /** Validate type of option.*/
   optionDashboardMenu = OptionDashboardMenu;

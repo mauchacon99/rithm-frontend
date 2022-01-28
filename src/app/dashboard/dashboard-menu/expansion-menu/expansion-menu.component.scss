@@ -1,19 +1,22 @@
-.mat-expansion-panel-header {
-  padding: 0;
-}
+.menu-expansion{
+  .mat-expansion-panel-header {
+    padding: 0;
+  }
 
-.mat-expansion-panel-header:hover {
-  background-color: #bbc7db !important;
-}
+  .mat-expansion-panel-header:hover {
+    background-color: #bbc7db !important;
+  }
 
-.color-hover:hover {
-  background-color: #bbc7db;
-}
+  .color-hover:hover {
+    background-color: #bbc7db;
+  }
 
-::ng-deep .mat-expansion-panel-body {
-  padding: 0 !important;
-}
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 !important;
+  }
 
-::ng-deep .mat-list-item-content {
-  padding: 0 10px !important;
+  ::ng-deep .mat-list-item-content {
+    padding: 0 10px !important;
+  }
+
 }

@@ -26,8 +26,8 @@ export class ExpansionMenuComponent implements OnInit {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
-  /** Option type.*/
-  optionType = OptionDashboardMenu;
+  /** Menu dashboard type.*/
+  menuDashboardOptionType = OptionDashboardMenu;
 
   constructor(
     private dashboardService: DashboardService,
