@@ -58,11 +58,24 @@
 
           <div class="flex justify-between">
             <div>
-              <input type="text">
+              <mat-form-field appearance="outline" class="col-span-4 p-0">
+                <input matInput type="text" />
+              </mat-form-field>
             </div>
-            <div>
-              <button mat-button class="bg-white text-secondary-500 drop-shadow-md font-semibold">Cancel</button>
-              <button mat-button class="bg-accent-900 text-secondary-50 drop-shadow-md">Save</button>
+            <div class="justify-around">
+              <button
+                mat-button
+                class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                style="margin: 1em"
+              >
+                Cancel
+              </button>
+              <button
+                mat-button
+                class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              >
+                Save
+              </button>
             </div>
           </div>
           <div

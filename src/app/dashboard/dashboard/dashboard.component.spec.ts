@@ -26,6 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
+import { MatInputModule } from '@angular/material/input';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -51,7 +52,12 @@ describe('DashboardComponent', () => {
         { provide: DashboardService, useClass: MockDashboardService },
         { provide: SidenavDrawerService, useClass: SidenavDrawerService },
       ],
-      imports: [MatSidenavModule, NoopAnimationsModule, GridsterModule],
+      imports: [
+        MatSidenavModule,
+        NoopAnimationsModule,
+        GridsterModule,
+        MatInputModule,
+      ],
     }).compileComponents();
   });
 
