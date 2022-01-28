@@ -642,13 +642,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contextMenu(event: MouseEvent): void {
     // TODO: Handle behavior when mouse is right clicked
-    //If dragging a Station Group.
-    /* This is to avoid that when dragging a group of stations and
-      pressing the right mouse button the stations of the station group disappear. */
-    if (this.dragItem === MapDragItem.StationGroup) {
-      // Call eventEndLogic method.
-      this.eventEndLogic(event);
-    }
+    /* This is to avoid that when dragging a station group or
+    stations or nodes and pressing the right mouse button the stations disappear. */
+    this.eventEndLogic(event);
   }
 
   /**
@@ -1305,7 +1301,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         );
 
         //If hovering over the station group boundary or name.
-        if (stationGroup.hoverItem !== StationGroupElementHoverItem.None) {
+        if (
+          stationGroup.hoverItem !== StationGroupElementHoverItem.None &&
+          this.dragItem !== MapDragItem.Node
+        ) {
           stationGroup.dragging = true;
           //Set the current dragItem to StationGroup
           this.dragItem = MapDragItem.StationGroup;
