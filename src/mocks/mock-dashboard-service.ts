@@ -232,7 +232,7 @@ export class MockDashboardService {
    * @returns Personal dashboard data observable.
    */
   updatePersonalDashboard(
-    dashboardUpdate: DashboardData
+    dashboardData: DashboardData
   ): Observable<DashboardData> {
         const dashboardData: DashboardData = {
       rithmId: '123-131-132',
