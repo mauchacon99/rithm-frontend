@@ -1380,31 +1380,31 @@ export class MapService {
    */
   removeStationGroup(stationGroupId: string): void {
     //Find the station group from this.stationGroupElements array.
-    const stationGroup = this.stationGroupElements.find(
+    const removedGroup = this.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );
-    if (!stationGroup) {
+    if (!removedGroup) {
       throw new Error('Station group was not found.');
     }
     this.stationGroupElements.forEach((group) => {
       if (
         //Find parent station group of incoming station group.
-        group.subStationGroups.includes(stationGroup.rithmId)
+        group.subStationGroups.includes(removedGroup.rithmId)
       ) {
-        //Move all sub station groups of incoming station group to it's parent.
+        //Move all sub station groups of deleted station group to it's parent.
         group.subStationGroups = group.subStationGroups.concat(
-          stationGroup.subStationGroups
+          removedGroup.subStationGroups
         );
-        //Move all stations of incoming station group to it's parent.
-        group.stations = group.stations.concat(stationGroup.stations);
-        //Mark parent station group of incoming station group as updated.
+        //Move all stations of deleted station group to it's parent.
+        group.stations = group.stations.concat(removedGroup.stations);
+        //Mark parent station group of deleted station group as updated.
         group.markAsUpdated();
         //Remove all stations of deleting station group.
-        stationGroup.stations = [];
+        removedGroup.stations = [];
         //Remove all sub station groups of deleting station group.
-        stationGroup.subStationGroups = [];
-        //Mark incoming station group as deleted.
-        stationGroup.markAsDeleted();
+        removedGroup.subStationGroups = [];
+        //Mark removedGroup as deleted.
+        removedGroup.markAsDeleted();
         //Note a change in map data.
         this.mapDataReceived$.next(true);
       }
