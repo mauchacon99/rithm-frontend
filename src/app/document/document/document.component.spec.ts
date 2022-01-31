@@ -509,9 +509,13 @@ describe('DocumentComponent', () => {
   });
 
   describe('Document when isWidget is true', () => {
+    
+    const stationRithmIdWidget = '123-654-789';
+    const documentRithmIdWidget = '321-654-987';
+
     it('should call method for show data in document how widget', () => {
-      component.stationRithmIdWidget = '123-654-789';
-      component.documentRithmIdWidget = '321-654-987';
+      component.stationRithmIdWidget = stationRithmIdWidget;
+      component.documentRithmIdWidget = documentRithmIdWidget;
       component.isWidget = true;
       const spyMethod = spyOn(
         TestBed.inject(DocumentService),
@@ -525,8 +529,8 @@ describe('DocumentComponent', () => {
     });
 
     it('should catch error the method and redirect to dashboard component', () => {
-      component.stationRithmIdWidget = '123-654-789';
-      component.documentRithmIdWidget = '321-654-987';
+      component.stationRithmIdWidget = stationRithmIdWidget;
+      component.documentRithmIdWidget = documentRithmIdWidget;
       component.isWidget = true;
       spyOn(TestBed.inject(DocumentService), 'getDocumentInfo').and.returnValue(
         throwError(() => {

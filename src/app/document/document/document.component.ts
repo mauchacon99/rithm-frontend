@@ -380,6 +380,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     const ownerDocument = this.documentInformation.stationOwners?.find(
       (owner) => this.userService.user.rithmId === owner.rithmId
     );
-    return !!ownerDocument || this.userService.user.role === 'admin';
+    return !!ownerDocument || this.userService.isAdmin;
   }
 }
