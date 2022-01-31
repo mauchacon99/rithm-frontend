@@ -139,7 +139,7 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should return updated dashboard', () => {
+  it('should call service to update a personal dashboard', () => {
     component.viewNewDashboard = true;
     const updatePersonalDashboardSpy = spyOn(
       TestBed.inject(DashboardService),
