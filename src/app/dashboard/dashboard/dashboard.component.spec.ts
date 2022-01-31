@@ -140,6 +140,17 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('should call service to update a personal dashboard', () => {
+    component.viewNewDashboard = true;
+    const updatePersonalDashboardSpy = spyOn(
+      TestBed.inject(DashboardService),
+      'updatePersonalDashboard'
+    ).and.callThrough();
+
+    component['updatePersonalDashboard']();
+    expect(updatePersonalDashboardSpy).toHaveBeenCalled();
+  });
+
   it('should call service from generateNewOrganizationDashboard', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
