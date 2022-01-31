@@ -6,8 +6,8 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, DashboardItem, Station } from 'src/models';
-import { DashboardService } from '../dashboard.service';
+import { DashboardData, DashboardItem, Station, WidgetType } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
 /**
@@ -132,7 +132,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getDashboardWidgets();
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
@@ -163,6 +163,65 @@ export class DashboardComponent implements OnInit {
         error: (error: unknown) => {
           this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update personal dashboard.
+   */
+  updatePersonalDashboard(): void {
+    /** Data temporary.  */
+    let dashboardData: DashboardData = {
+      rithmId: '123-131-132',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    this.dashboardService
+      .updatePersonalDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        next: (dashboardUpdate) => {
+          dashboardData = dashboardUpdate;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update dashboard name.
+   *
+   * @param dashboardData The dashboard data for update name.
+   */
+  updateOrganizationDashboard(dashboardData: DashboardData): void {
+    this.dashboardService
+      .updateOrganizationDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error

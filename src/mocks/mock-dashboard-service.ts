@@ -226,6 +226,18 @@ export class MockDashboardService {
   }
 
   /**
+   * Update personal dashboard.
+   *
+   * @param dashboardData Dashboard update.
+   * @returns Personal dashboard data observable.
+   */
+  updatePersonalDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
+
+  /**
    * Get all the organization's dashboards.
    *
    * @returns Returns a list of dashboards.
@@ -347,5 +359,17 @@ export class MockDashboardService {
     };
 
     return of(newDashboard).pipe(delay(1000));
+  }
+
+  /**
+   * Update organization dashboard`s.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
   }
 }

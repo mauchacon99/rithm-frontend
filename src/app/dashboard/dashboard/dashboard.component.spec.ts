@@ -26,6 +26,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
+import { DashboardData, WidgetType } from 'src/models';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -139,6 +140,17 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('should call service to update a personal dashboard', () => {
+    component.viewNewDashboard = true;
+    const updatePersonalDashboardSpy = spyOn(
+      TestBed.inject(DashboardService),
+      'updatePersonalDashboard'
+    ).and.callThrough();
+
+    component['updatePersonalDashboard']();
+    expect(updatePersonalDashboardSpy).toHaveBeenCalled();
+  });
+
   it('should call service from generateNewOrganizationDashboard', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -166,5 +178,34 @@ describe('DashboardComponent', () => {
 
     component.generateNewOrganizationDashboard();
     expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call the service updateOrganizationDashboard ', () => {
+    const dashboardData: DashboardData = {
+      rithmId: '',
+      name: 'new name',
+      widgets: [
+        {
+          cols: 1,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 1,
+          maxItemRows: 2,
+          minItemCols: 1,
+          maxItemCols: 2,
+        },
+      ],
+    };
+
+    const methodService = spyOn(
+      TestBed.inject(DashboardService),
+      'updateOrganizationDashboard'
+    ).and.callThrough();
+
+    component.updateOrganizationDashboard(dashboardData);
+    expect(methodService).toHaveBeenCalledWith(dashboardData);
   });
 });
