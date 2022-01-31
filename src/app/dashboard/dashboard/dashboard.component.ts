@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
   /** Widgets for dashboard. */
   widgetsOfDashboard: DashboardItem[] = [];
 
+  /** New dashboard. */
+  newDashboard?: DashboardData;
+
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
 
@@ -192,8 +195,28 @@ export class DashboardComponent implements OnInit {
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /**
+   * Generates a new default dashboard.
+   */
+  generateNewOrganizationDashboard(): void {
+    this.dashboardService
+      .generateNewOrganizationDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.newDashboard = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
