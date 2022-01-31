@@ -20,7 +20,7 @@ import {
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PopupService } from 'src/app/core/popup.service';
-import { Subject, forkJoin } from 'rxjs';
+import { Subject, forkJoin, Observable } from 'rxjs';
 import { Input } from '@angular/core';
 import { UserService } from 'src/app/core/user.service';
 
@@ -373,5 +373,39 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         },
       });
+    const fjResponse = this.autoFlowForkJoin(requestArray);
+    if (fjResponse) {
+      this.documentLoading = false;
+      if (this.isUserAdmin) {
+        this.router.navigateByUrl('map');
+      } else {
+        this.router.navigateByUrl('dashboard');
+      }
+    }
+  }
+
+  /**
+   * AutoFlow ForkJoin.
+   *
+   * @param arrayRequest The array of request to be run.
+   * @returns The response after running the forkJoin.
+   */
+  autoFlowForkJoin(arrayRequest: Observable<unknown>[]): boolean {
+    const _forkJoin$ = forkJoin(arrayRequest);
+    let returnedData = false;
+    _forkJoin$.pipe(first()).subscribe({
+      next: () => {
+        returnedData = true;
+      },
+      error: (error: unknown) => {
+        this.documentLoading = false;
+        returnedData = false;
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
+    return returnedData;
   }
 }

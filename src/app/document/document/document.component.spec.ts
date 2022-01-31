@@ -25,9 +25,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
-import { forkJoin, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
+import { MapComponent } from 'src/app/map/map/map.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -49,6 +50,7 @@ describe('DocumentComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([
+          { path: 'Map', component: MockComponent(MapComponent) },
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
         MatSidenavModule,
@@ -525,19 +527,32 @@ describe('DocumentComponent', () => {
       routerNavigateSpy = spyOn(router, 'navigateByUrl');
     });
 
-    // TODO: spec has no expectations being called
-    xit('should redirect to dashboard if petitions are successfully', () => {
-      forkJoin([of(), of()]).subscribe(() => {
-        expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
-      });
-      component.autoFlowDocument();
+    it('should redirect to map if forkJoin run successfully and user is an admin', async () => {
+      spyOn(component, 'autoFlowForkJoin').and.returnValue(true);
+      Object.defineProperty(component, 'isUserAdmin', { value: true });
+      fixture.detectChanges();
+      await component.autoFlowDocument();
+      const fjResponse = component.autoFlowForkJoin([of(), of(), of()]);
+      expect(fjResponse).toBeTrue();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
     });
-    // TODO: spec has no expectations being called
-    xit('should not redirect if some petition is wrong', () => {
-      forkJoin([of(Error()), of()]).subscribe(() => {
-        expect(routerNavigateSpy).not.toHaveBeenCalled();
-      });
-      component.autoFlowDocument();
+
+    it('should redirect to dashboard if forkJoin run successfully and user is not an admin', async () => {
+      spyOn(component, 'autoFlowForkJoin').and.returnValue(true);
+      Object.defineProperty(component, 'isUserAdmin', { value: false });
+      fixture.detectChanges();
+      await component.autoFlowDocument();
+      const fjResponse = component.autoFlowForkJoin([of(), of(), of()]);
+      expect(fjResponse).toBeTrue();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
+    });
+
+    it('should not redirect if some petition is wrong', async () => {
+      spyOn(component, 'autoFlowForkJoin').and.returnValue(false);
+      await component.autoFlowDocument();
+      const fjResponse = component.autoFlowForkJoin([of(Error()), of(), of()]);
+      expect(fjResponse).toBeFalse();
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
     });
   });
 });
