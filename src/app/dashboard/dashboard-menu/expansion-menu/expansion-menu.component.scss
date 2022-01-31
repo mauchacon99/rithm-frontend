@@ -1,5 +1,4 @@
-.expansion-dashboards{
-
+.expansion-dashboards {
   .mat-expansion-panel-header {
     padding: 0;
   }
@@ -13,7 +12,7 @@
   }
 }
 
-.list-options{
+.list-options {
   &::ng-deep .mat-list-item-content {
     padding: 0 10px !important;
   }

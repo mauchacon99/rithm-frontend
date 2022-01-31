@@ -29,24 +29,42 @@
       ></app-options-menu>
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <mat-list>
-    <div
-      *ngFor="let dashboard of dashboardsList; let i = index"
-      class="color-hover cursor-pointer list-options"
-    >
-      <mat-list-item
-        [attr.data-testid]="dashboardRole + '-item-' + i"
-        [id]="dashboardRole + '-item-' + i"
-      >
 
-        <div class="w-full flex justify-between items-center ml-5">
-          {{ dashboard.name }}
-          <app-options-menu
-            [dashboardRole]="dashboardRole"
-            [menuDashboardOptionType]="menuDashboardOptionType.OptionDashboard"
-          ></app-options-menu>
-        </div>
-      </mat-list-item>
+  <mat-list>
+    <div *ngIf="isLoading" id="loading-dashboards-list">
+      <app-loading-indicator
+        [inlineText]="'Loading...'"
+      ></app-loading-indicator>
+    </div>
+
+    <div *ngIf="showError" id="error-dashboard-list">
+      <p class="text-error-500">Error: failed to obtain dashboards</p>
+    </div>
+
+    <div *ngIf="!dashboardsList.length" id="empty-dashboards-list">
+      <p>No dashboard for listing</p>
+    </div>
+
+    <div *ngIf="!isLoading && !showError && dashboardsList.length">
+      <div
+        *ngFor="let dashboard of dashboardsList; let i = index"
+        class="color-hover cursor-pointer list-options"
+      >
+        <mat-list-item
+          [attr.data-testid]="dashboardRole + '-item-' + i"
+          [id]="dashboardRole + '-item-' + i"
+        >
+          <div class="w-full flex justify-between items-center ml-5">
+            {{ dashboard.name }}
+            <app-options-menu
+              [dashboardRole]="dashboardRole"
+              [menuDashboardOptionType]="
+                menuDashboardOptionType.OptionDashboard
+              "
+            ></app-options-menu>
+          </div>
+        </mat-list-item>
+      </div>
     </div>
   </mat-list>
 </mat-expansion-panel>
