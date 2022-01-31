@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   dashboardLoading = false;
 
   /** Edit mode toggle. */
-  editMode = false;
+  editMode = true;
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -151,11 +151,9 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Toggles the editMode to allow editing.
-   *
-   * @returns The opposite value of editMode.
    */
-  toggleEditMode(): boolean {
-    return !this.editMode;
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
   }
 
   /**

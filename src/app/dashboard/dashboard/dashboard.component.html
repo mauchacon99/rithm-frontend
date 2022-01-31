@@ -44,22 +44,27 @@
           ></app-loading-indicator>
         </div>
         <div class="mx-5" *ngIf="!dashboardLoading">
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center" *ngIf="!editMode">
             <h2 class="my-2 font-semibold truncate">General</h2>
             <button
               mat-icon-button
               id="menu-edit-button"
               data-testid="menu-edit-button"
               class="py-3 text-secondary-500"
+              (click)="toggleEditMode()"
             >
               <i class="fas fa-cog text-lg"></i>
             </button>
           </div>
-
-          <div class="flex justify-between">
+          <!--Editable dashboard name interface.-->
+          <div
+            class="flex justify-between border-solid border-b border-b-primary-100"
+            *ngIf="editMode"
+          >
             <div>
-              <mat-form-field appearance="outline" class="col-span-4 p-0">
-                <input matInput type="text" />
+              <mat-form-field appearance="outline" class="w-72">
+                <input matInput type="text" placeholder="General" />
+                <!--                TODO: Update placeholder to dashboard name variable-->
               </mat-form-field>
             </div>
             <div class="justify-around">
@@ -67,6 +72,7 @@
                 mat-button
                 class="bg-white text-secondary-500 drop-shadow-md font-semibold"
                 style="margin: 1em"
+                (click)="toggleEditMode()"
               >
                 Cancel
               </button>
