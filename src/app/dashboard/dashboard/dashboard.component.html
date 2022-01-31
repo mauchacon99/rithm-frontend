@@ -44,7 +44,7 @@
           ></app-loading-indicator>
         </div>
         <div class="mx-5" *ngIf="!dashboardLoading && dashboardData">
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center" *ngIf="!editMode">
             <h2 class="my-2 font-semibold truncate">
               {{ dashboardData.name }}
             </h2>
@@ -60,7 +60,7 @@
           </div>
           <!--Editable dashboard name interface.-->
           <div
-            class="flex justify-between border-solid border-b border-b-primary-100"
+            class="md:flex justify-between sm:inline-block border-solid border-b border-b-primary-100"
             *ngIf="editMode"
           >
             <div>
