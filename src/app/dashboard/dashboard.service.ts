@@ -105,6 +105,18 @@ export class DashboardService {
   }
 
   /**
+   * Update personal dashboard.
+   *
+   * @param dashboardData Dashboard update.
+   * @returns Personal dashboard data observable.
+   */
+  updatePersonalDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
+
+  /**
    * Get all  the organization's dashboards.
    *
    * @returns Returns a list of dashboards.
