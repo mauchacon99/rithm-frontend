@@ -267,4 +267,34 @@ describe('RuleModalComponent', () => {
     const valueExpected = component.secondOperandQuestionList;
     expect(valueExpected).toBe(expectedResponse);
   });
+
+  it('should call to selectionChangeStep and empty operands and operator', () => {
+    component.firstOperand = 'value-1';
+    component.operator = 'is not';
+    component.secondOperand = 'value-2';
+
+    const btnNextInStep1 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-1');
+    const btnNextInStep2 =
+      fixture.debugElement.nativeElement.querySelector('#next-step-2');
+    const btnBackInStep2 =
+      fixture.debugElement.nativeElement.querySelector('#back-step-2');
+
+    expect(component.firstOperand).not.toBe('');
+    expect(component.operator).not.toBe('');
+    expect(component.secondOperand).not.toBe('');
+
+    btnNextInStep1.click();
+    fixture.detectChanges();
+
+    btnNextInStep2.click();
+    fixture.detectChanges();
+
+    btnBackInStep2.click();
+    fixture.detectChanges();
+
+    expect(component.firstOperand).toBe('');
+    expect(component.operator).toBe('');
+    expect(component.secondOperand).toBe('');
+  });
 });
