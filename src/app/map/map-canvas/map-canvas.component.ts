@@ -280,7 +280,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.stations = this.mapService.stationElements.filter(
           (e) => e.status !== MapItemStatus.Deleted
         );
-        this.stationGroups = this.mapService.stationGroupElements;
+        //Any station group status set to deleted should not be rendered.
+        this.stationGroups = this.mapService.stationGroupElements.filter(
+          (e) => e.status !== MapItemStatus.Deleted
+        );
         this.connections = this.mapService.connectionElements;
 
         //If this is the first time the component is being initialized, center the map without animation.
@@ -642,13 +645,9 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contextMenu(event: MouseEvent): void {
     // TODO: Handle behavior when mouse is right clicked
-    //If dragging a Station Group.
-    /* This is to avoid that when dragging a group of stations and
-      pressing the right mouse button the stations of the station group disappear. */
-    if (this.dragItem === MapDragItem.StationGroup) {
-      // Call eventEndLogic method.
-      this.eventEndLogic(event);
-    }
+    /* This is to avoid that when dragging a station group or
+    stations or nodes and pressing the right mouse button the stations disappear. */
+    this.eventEndLogic(event);
   }
 
   /**
@@ -1304,8 +1303,12 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.scale
         );
 
-        //If hovering over the station group boundary or name.
-        if (stationGroup.hoverItem !== StationGroupElementHoverItem.None) {
+        //If hovering over the station group boundary or name and MapDragItem should not be Node and Station.
+        if (
+          stationGroup.hoverItem !== StationGroupElementHoverItem.None &&
+          this.dragItem !== MapDragItem.Node &&
+          this.dragItem !== MapDragItem.Station
+        ) {
           stationGroup.dragging = true;
           //Set the current dragItem to StationGroup
           this.dragItem = MapDragItem.StationGroup;

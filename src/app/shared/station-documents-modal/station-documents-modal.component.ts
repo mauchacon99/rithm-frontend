@@ -5,6 +5,7 @@ import { ErrorService } from 'src/app/core/error.service';
 import { Document, StationDocumentsModalData, UserType } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UserService } from 'src/app/core/user.service';
 import { Router } from '@angular/router';
 
 /**
@@ -44,7 +45,8 @@ export class StationDocumentsModalComponent implements OnInit {
     private errorService: ErrorService,
     private utcTimeConversion: UtcTimeConversion,
     private dialogRef: MatDialogRef<StationDocumentsModalComponent>,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
     this.stationRithmId = this.modalData.stationId;
   }
@@ -54,6 +56,15 @@ export class StationDocumentsModalComponent implements OnInit {
    */
   ngOnInit(): void {
     this.getDocuments(1);
+  }
+
+  /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
   }
 
   /**
@@ -94,7 +105,7 @@ export class StationDocumentsModalComponent implements OnInit {
    * @param rithmId The rithmId property of the document we will link to.
    */
   checkDocPermission(rithmId: string): void {
-    if (this.userType !== UserType.None) {
+    if (this.userType !== UserType.None || this.isUserAdmin) {
       //this.router.navigateByUrl(`/document/${rithmId}`);
       this.router.navigate([`/document/${rithmId}`], {
         queryParams: { documentId: rithmId, stationId: this.stationRithmId },
