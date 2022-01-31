@@ -16,6 +16,8 @@ import { ErrorService } from 'src/app/core/error.service';
 import { DocumentService } from 'src/app/core/document.service';
 import { DocumentName, DocumentNameField } from 'src/models';
 import { UserService } from 'src/app/core/user.service';
+import { UserAvatarModule } from '../user-avatar/user-avatar.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DocumentInfoHeaderComponent', () => {
   let component: DocumentInfoHeaderComponent;
@@ -31,6 +33,8 @@ describe('DocumentInfoHeaderComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatChipsModule,
+        UserAvatarModule,
+        RouterTestingModule,
       ],
       providers: [
         { provide: DocumentService, useClass: MockDocumentService },
@@ -234,5 +238,14 @@ describe('DocumentInfoHeaderComponent', () => {
     ).and.callThrough();
     component.ngOnInit();
     expect(spyDocument).toHaveBeenCalled();
+  });
+
+  it('should show document the current assigned worker and button to go to document in full screen mode', () => {
+    component.isWidget = true;
+    fixture.detectChanges();
+    const section = fixture.debugElement.nativeElement.querySelector(
+      '#section-current-worker'
+    );
+    expect(section).toBeTruthy();
   });
 });

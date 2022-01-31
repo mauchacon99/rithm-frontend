@@ -109,7 +109,7 @@
         </button>
       </div>
     </ng-template>
-    <section *ngIf="isWidget">
+    <section *ngIf="isWidget" id="section-current-worker">
       <div class="py-2">
         <p class="font-semibold">
           {{ documentName }}
@@ -122,22 +122,15 @@
 
       <div class="flex justify-between p-1">
         <div>
-          <p class="text-xs text-justify">ASSIGNED</p>
-          <app-user-avatar
-            [firstName]="documentName"
-            [lastName]="appendedDocumentName"
-          ></app-user-avatar>
+          <small class="text-secondary-900 assigment"> ASSIGNED </small>
+          <div class="px-4">
+            <app-user-avatar [firstName]="'Name user'" [lastName]="'lastName'">
+            </app-user-avatar>
+          </div>
         </div>
-
-        <a
-          [routerLink]="['/document/' + documentRithmId]"
-          [queryParams]="{
-            documentId: documentRithmId,
-            stationId: stationRithmId
-          }"
-        >
+        <a class="text-secondary-700" (click)="goToDocument()">
           <button mat-button data-testid="return-document-button">
-            <i class="fas fa-external-link-alt p-4"></i>
+            <i class="fas fa-external-link-alt p-5"></i>
           </button>
         </a>
       </div>
