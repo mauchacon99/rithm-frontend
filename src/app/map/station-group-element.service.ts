@@ -20,7 +20,6 @@ import {
   TOOLTIP_WIDTH,
   TOOLTIP_PADDING,
   STATION_GROUP_NAME_TRANSLATE,
-  GROUP_NAME_HEIGHT,
   STATION_GROUP_NAME_MAX_ANGLE_ROTATE,
   SLOPE_RANGE_NOT_ALLOWED,
 } from './map-constants';
@@ -321,11 +320,17 @@ export class StationGroupElementService {
       -5,
       this.canvasContext.measureText(stationGroup.title).width +
         STATION_GROUP_PADDING,
-      GROUP_NAME_HEIGHT * this.mapScale
+      //This dynamically sets the hight of the rectangle based on the hight of the text.
+      this.canvasContext.measureText(stationGroup.title)
+        .fontBoundingBoxDescent + 6
     );
 
     // Paint the station group name.
-    this.canvasContext.fillText(stationGroup.title, 5, 0);
+    this.canvasContext.fillText(
+      stationGroup.title,
+      5,
+      this.canvasContext.measureText(stationGroup.title).fontBoundingBoxDescent
+    );
 
     // Reset translate and rotate.
     this.canvasContext.rotate(-rotateAngleStationGroupName);
