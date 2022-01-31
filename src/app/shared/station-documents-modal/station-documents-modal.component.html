@@ -30,7 +30,9 @@
       <div
         *ngFor="let document of documents"
         (click)="checkDocPermission(document.documentRithmId)"
-        [ngClass]="{ 'cursor-pointer': userType !== userTypeEnum.None }"
+        [ngClass]="{
+          'cursor-pointer': userType !== userTypeEnum.None || isUserAdmin
+        }"
         class="grid grid-cols-12 xl:grid-cols-10 mb-4 rounded-l-full hover:bg-secondary-50 transition ease-linear duration-200"
       >
         <div
