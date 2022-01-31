@@ -97,6 +97,11 @@ describe('DashboardComponent', () => {
 
   it('should show error message when request for station widgets', () => {
     component.viewNewDashboard = true;
+    component.dashboardData = {
+      widgets: [],
+      name: 'General',
+      rithmId: '',
+    };
     spyOn(
       TestBed.inject(DashboardService),
       'getDashboardWidgets'
@@ -139,7 +144,7 @@ describe('DashboardComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call service from generateNewDashboardUser', () => {
+  it('should call service from generateNewPersonalDashboard', () => {
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'generateNewPersonalDashboard'
@@ -149,7 +154,7 @@ describe('DashboardComponent', () => {
     expect(spyService).toHaveBeenCalled();
   });
 
-  it('should show an error message when calling generateNewDashboardUser', () => {
+  it('should show an error message when calling generateNewPersonalDashboard', () => {
     spyOn(
       TestBed.inject(DashboardService),
       'generateNewPersonalDashboard'
@@ -165,6 +170,35 @@ describe('DashboardComponent', () => {
     ).and.callThrough();
 
     component.generateNewPersonalDashboard();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call service from generateNewOrganizationDashboard', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewOrganizationDashboard'
+    ).and.callThrough();
+
+    component.generateNewOrganizationDashboard();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show an error message when calling generateNewOrganizationDashboard', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewOrganizationDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.generateNewOrganizationDashboard();
     expect(spyError).toHaveBeenCalled();
   });
 });

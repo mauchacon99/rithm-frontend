@@ -33,11 +33,7 @@ export class DashboardComponent implements OnInit {
   viewNewDashboard = false;
 
   /** Dashboard data, default dashboard general. */
-  dashboardData: DashboardData = {
-    rithmId: '',
-    name: 'General',
-    widgets: [],
-  };
+  dashboardData!: DashboardData;
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
@@ -158,7 +154,11 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.dashboardData.widgets = widgets;
+          this.dashboardData = {
+            rithmId: '',
+            name: 'General',
+            widgets,
+          };
           this.dashboardLoading = false;
         },
         error: (error: unknown) => {
@@ -177,17 +177,37 @@ export class DashboardComponent implements OnInit {
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
   /**
-   * Generates a new dashboard to user.
+   * Generates a new dashboard personal.
    */
   generateNewPersonalDashboard(): void {
     this.dashboardService
       .generateNewPersonalDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.dashboardData = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Generates a new default dashboard.
+   */
+  generateNewOrganizationDashboard(): void {
+    this.dashboardService
+      .generateNewOrganizationDashboard()
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
