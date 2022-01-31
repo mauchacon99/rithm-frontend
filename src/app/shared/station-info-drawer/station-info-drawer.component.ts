@@ -16,9 +16,9 @@ import {
   StationInformation,
 } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
-import { MatRadioChange } from '@angular/material/radio';
 import { MapService } from 'src/app/map/map.service';
 import { DocumentService } from 'src/app/core/document.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 /**
  * Component for info station.
@@ -94,8 +94,11 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
-  /** */
-  isChecked = false;
+  /** Document Status: None | Manual. */
+  options = [
+    { id: 'None', label: 'None', disabled: false },
+    { id: 'Manual', label: 'Manual', disabled: false },
+  ];
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -326,10 +329,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param statusNew New status the station update.
    */
-  updateStatusStation(statusNew: MatRadioChange): void {
+  updateStatusStation(statusNew: MatSlideToggleChange): void {
+    if (statusNew.checked) {
+      this.options
+        .filter((opt) => opt.id !== statusNew.source._elementRef.nativeElement.id)
+        .forEach((opt) => (opt.disabled = true));
+    } else {
+      this.options.forEach((opt) => (opt.disabled = false));
+    }
     this.updateStationDocumentGenerationStatus(
       this.stationRithmId,
-      statusNew.value
+      statusNew.source._elementRef.nativeElement.id
     );
   }
 
