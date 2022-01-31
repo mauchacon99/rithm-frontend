@@ -205,7 +205,7 @@ export class DashboardService {
    *
    * @returns Returns a new default dashboard.
    */
-   generateNewOrganizationDashboard(): Observable<DashboardData> {
+  generateNewOrganizationDashboard(): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',

@@ -387,7 +387,7 @@ describe('DashboardService', () => {
 
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
-
+    });
   });
 
   it('should return a new organization dashboard', () => {
@@ -413,5 +413,4 @@ describe('DashboardService', () => {
       expect(response).toEqual(newDashboard);
     });
   });
-
 });
