@@ -122,6 +122,7 @@ export class MockStationService {
         name: 'Example Station',
         rithmId: '3j4k-3h2j-hj4j',
         instructions: 'Do as I instruct',
+        allowAllOrgWorkers: false,
       },
     ];
     return of(mockStationData).pipe(delay(1000));

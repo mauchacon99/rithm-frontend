@@ -10,4 +10,7 @@ export interface Station {
 
   /** Instructions for working in the station. */
   instructions: string;
+
+  /** Allows members of the organization to be part of the list of workers of the current station. */
+  allowAllOrgWorkers: boolean;
 }
