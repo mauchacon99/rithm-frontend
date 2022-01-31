@@ -303,8 +303,14 @@ export class StationGroupElementService {
 
     // Moves the point on the line.
     const newPoint = this.movePointOnLine(
-      stationGroup.boundaryPoints[newPosition],
-      stationGroup.boundaryPoints[newPosition - 1],
+      {
+        x: stationGroup.boundaryPoints[newPosition].x,
+        y: stationGroup.boundaryPoints[newPosition].y,
+      },
+      {
+        x: stationGroup.boundaryPoints[newPosition - 1].x,
+        y: stationGroup.boundaryPoints[newPosition - 1].y,
+      },
       STATION_GROUP_NAME_TRANSLATE * this.mapScale
     );
 
