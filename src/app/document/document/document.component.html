@@ -35,7 +35,7 @@
         class="col-span-12 bg-white h-full relative"
         [ngClass]="{
           'lg:col-span-8 px-5': !isWidget,
-          'pb-12': !documentLoading
+          'pb-12': !documentLoading && !isWidget
         }"
       >
         <div
@@ -98,13 +98,17 @@
               </mat-expansion-panel>
             </mat-accordion>
           </div>
-          <div class="w-full fixed z-10 bottom-0 left-0">
-            <div class="grid grid-cols-12">
+          <div [ngClass]="{ 'w-full fixed z-10 bottom-0 left-0': !isWidget }">
+            <div [ngClass]="{ 'grid grid-cols-12': !isWidget }">
               <div
-                class="lg:col-start-3 col-span-12 lg:col-span-8 flex bg-white px-5 py-2 footer"
+                class="flex"
+                [ngClass]="{
+                  'lg:col-start-3 col-span-12 lg:col-span-8 bg-white px-5 py-2 footer':
+                    !isWidget
+                }"
               >
                 <div class="flex-grow">
-                  <span class="mr-3 inline-block lg:hidden">
+                  <span *ngIf="!isWidget" class="mr-3 inline-block lg:hidden">
                     <button mat-icon-button color="primary">
                       <i
                         class="fas fa-exclamation-circle text-3xl text-primary-500"
@@ -130,7 +134,9 @@
                     class="mx-2"
                     data-testid="document-save"
                     id="document-save"
-                    [disabled]="!documentForm.valid"
+                    [disabled]="
+                      !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                    "
                   >
                     Save
                   </button>
@@ -140,13 +146,15 @@
                   color="accent"
                   data-testid="document-flow"
                   id="document-flow"
-                  [disabled]="!documentForm.valid"
+                  [disabled]="
+                    !documentForm.valid || (isWidget && !isUserAdminOrOwner)
+                  "
                   (click)="autoFlowDocument()"
                 >
                   Flow
                 </button>
               </div>
-              <div class="relative hidden lg:block">
+              <div *ngIf="!isWidget" class="relative hidden lg:block">
                 <svg class="absolute top-5" xmlns="http://www.w3.org/2000/svg">
                   <g
                     id="escalation_line"
