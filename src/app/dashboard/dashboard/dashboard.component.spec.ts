@@ -17,7 +17,7 @@ import {
 import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -98,6 +98,11 @@ describe('DashboardComponent', () => {
 
   it('should show error message when request for station widgets', () => {
     component.viewNewDashboard = true;
+    component.dashboardData = {
+      widgets: [],
+      name: 'General',
+      rithmId: '',
+    };
     spyOn(
       TestBed.inject(DashboardService),
       'getDashboardWidgets'
@@ -138,6 +143,35 @@ describe('DashboardComponent', () => {
     const menuBtn = fixture.debugElement.query(By.css('#menu-button'));
     menuBtn.triggerEventHandler('click', null);
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call service from generateNewPersonalDashboard', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewPersonalDashboard'
+    ).and.callThrough();
+
+    component.generateNewPersonalDashboard();
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should show an error message when calling generateNewPersonalDashboard', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'generateNewPersonalDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+
+    component.generateNewPersonalDashboard();
+    expect(spyError).toHaveBeenCalled();
   });
 
   it('should call service to update a personal dashboard', () => {
