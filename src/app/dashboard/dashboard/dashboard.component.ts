@@ -6,7 +6,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, DashboardItem, Station } from 'src/models';
+import { DashboardData, Station, WidgetType } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
@@ -32,11 +32,8 @@ export class DashboardComponent implements OnInit {
 
   viewNewDashboard = false;
 
-  /** Widgets for dashboard. */
-  widgetsOfDashboard: DashboardItem[] = [];
-
-  /** New dashboard. */
-  newDashboard?: DashboardData;
+  /** Dashboard data, default dashboard general. */
+  dashboardData!: DashboardData;
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
@@ -157,12 +154,56 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.widgetsOfDashboard = widgets;
+          this.dashboardData = {
+            rithmId: '',
+            name: 'General',
+            widgets,
+          };
           this.dashboardLoading = false;
         },
         error: (error: unknown) => {
           this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update personal dashboard.
+   */
+  updatePersonalDashboard(): void {
+    /** Data temporary.  */
+    let dashboardData: DashboardData = {
+      rithmId: '123-131-132',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    this.dashboardService
+      .updatePersonalDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        next: (dashboardUpdate) => {
+          dashboardData = dashboardUpdate;
+        },
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -201,6 +242,26 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * Generates a new dashboard personal.
+   */
+  generateNewPersonalDashboard(): void {
+    this.dashboardService
+      .generateNewPersonalDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.dashboardData = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Generates a new default dashboard.
    */
   generateNewOrganizationDashboard(): void {
@@ -209,7 +270,7 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
-          this.newDashboard = newDashboard;
+          this.dashboardData = newDashboard;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
