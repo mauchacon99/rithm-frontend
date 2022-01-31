@@ -2,7 +2,7 @@
   hideToggle
   (opened)="panelOpenState = true"
   (closed)="panelOpenState = false"
-  class="mat-elevation-z0"
+  class="mat-elevation-z0 expansion-dashboards"
 >
   <mat-expansion-panel-header>
     <mat-panel-title
@@ -32,12 +32,13 @@
   <mat-list>
     <div
       *ngFor="let dashboard of dashboardsList; let i = index"
-      class="color-hover cursor-pointer"
+      class="color-hover cursor-pointer list-options"
     >
       <mat-list-item
         [attr.data-testid]="dashboardRole + '-item-' + i"
         [id]="dashboardRole + '-item-' + i"
       >
+
         <div class="w-full flex justify-between items-center ml-5">
           {{ dashboard.name }}
           <app-options-menu

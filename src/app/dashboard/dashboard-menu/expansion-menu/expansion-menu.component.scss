@@ -1,4 +1,5 @@
-.menu-expansion{
+.expansion-dashboards{
+
   .mat-expansion-panel-header {
     padding: 0;
   }
@@ -7,16 +8,17 @@
     background-color: #bbc7db !important;
   }
 
-  .color-hover:hover {
-    background-color: #bbc7db;
-  }
-
-  ::ng-deep .mat-expansion-panel-body {
+  &::ng-deep .mat-expansion-panel-body {
     padding: 0 !important;
   }
+}
 
-  ::ng-deep .mat-list-item-content {
+.list-options{
+  &::ng-deep .mat-list-item-content {
     padding: 0 10px !important;
   }
+}
 
+.color-hover:hover {
+  background-color: #bbc7db;
 }
