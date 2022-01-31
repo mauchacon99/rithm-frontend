@@ -141,7 +141,7 @@ describe('DashboardComponent', () => {
 
   it('should return updated dashboard', () => {
     component.viewNewDashboard = true;
-    const unassignSpy = spyOn(
+    const updatePersonalDashboardSpy = spyOn(
       TestBed.inject(DashboardService),
       'updatePersonalDashboard'
     ).and.callThrough();
