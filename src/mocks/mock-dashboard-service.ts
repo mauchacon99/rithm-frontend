@@ -377,4 +377,16 @@ export class MockDashboardService {
 
     return of(newDashboard).pipe(delay(1000));
   }
+
+  /**
+   * Update organization dashboard`s.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
 }

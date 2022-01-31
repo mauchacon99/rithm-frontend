@@ -173,6 +173,25 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * Update dashboard name.
+   *
+   * @param dashboardData The dashboard data for update name.
+   */
+  updateOrganizationDashboard(dashboardData: DashboardData): void {
+    this.dashboardService
+      .updateOrganizationDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Needed to resize a mobile browser when the scrollbar hides.
    */
   @HostListener('window:resize', ['$event'])
