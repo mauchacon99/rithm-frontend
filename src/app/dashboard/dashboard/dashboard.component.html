@@ -43,9 +43,11 @@
             id="loading-dashboard-widgets"
           ></app-loading-indicator>
         </div>
-        <div class="mx-5" *ngIf="!dashboardLoading">
-          <div class="flex justify-between items-center" *ngIf="!editMode">
-            <h2 class="my-2 font-semibold truncate">General</h2>
+        <div class="mx-5" *ngIf="!dashboardLoading && dashboardData">
+          <div class="flex justify-between items-center">
+            <h2 class="my-2 font-semibold truncate">
+              {{ dashboardData.name }}
+            </h2>
             <button
               mat-icon-button
               id="menu-edit-button"
@@ -63,8 +65,11 @@
           >
             <div>
               <mat-form-field appearance="outline" class="w-72">
-                <input matInput type="text" placeholder="General" />
-                <!--                TODO: Update placeholder to dashboard name variable-->
+                <input
+                  matInput
+                  type="text"
+                  placeholder="{{ dashboardData.name }}"
+                />
               </mat-form-field>
             </div>
             <div class="justify-around">
@@ -99,7 +104,7 @@
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
-              *ngFor="let item of widgetsOfDashboard"
+              *ngFor="let item of dashboardData.widgets"
             >
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
