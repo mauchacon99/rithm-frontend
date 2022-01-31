@@ -22,6 +22,7 @@ import {
   STATION_GROUP_NAME_TRANSLATE,
   STATION_GROUP_NAME_MAX_ANGLE_ROTATE,
   SLOPE_RANGE_NOT_ALLOWED,
+  SCALE_RENDER_STATION_ELEMENTS,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -107,7 +108,11 @@ export class StationGroupElementService {
     if (stationGroup.boundaryPoints.length > 0) {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
-      this.drawStationGroupName(stationGroup);
+      // Render station group name depending on the zoom level.
+      if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
+        this.drawStationGroupName(stationGroup);
+      }
+
       if (
         this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
         stationGroup.disabled &&
