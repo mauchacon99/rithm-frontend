@@ -2,7 +2,6 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { StationRosterMember } from 'src/models';
-import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -42,9 +41,6 @@ export class RosterComponent implements OnInit {
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
 
-  /** Emit the close modal. */
-  @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   constructor(
     private dialog: MatDialog,
     private stationService: StationService,
@@ -66,27 +62,6 @@ export class RosterComponent implements OnInit {
       minWidth: '325px',
       data: { stationId: this.stationId, isWorker: this.isWorker },
     });
-  }
-
-  /**
-   * Opens a modal with roster management.
-   */
-  openManagementRosterModal(): void {
-    const dialog = this.dialog.open(RosterManagementModalComponent, {
-      panelClass: ['w-5/6', 'sm:w-4/5'],
-      maxWidth: '1024px',
-      disableClose: true,
-      data: {
-        stationId: this.stationId,
-        type: this.isWorker ? 'workers' : 'owners',
-      },
-    });
-    dialog
-      .afterClosed()
-      .pipe(first())
-      .subscribe((result) => {
-        this.modalClosed.emit(result);
-      });
   }
 
   /**

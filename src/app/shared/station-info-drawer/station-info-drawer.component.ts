@@ -105,6 +105,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** Display the ownerRoster length. */
   ownersRosterLength = 0;
 
+  /** The selected tab index/init. */
+  selectedTabIndex = 0;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -510,15 +513,17 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
 
   /**
    * Opens a modal with roster management.
+   *
+   * @param isOwner Whether the modal is for owners or workes.
    */
-  openManagementRosterModal(): void {
+   openManagementRosterModal(isOwner: boolean): void {
     const dialog = this.dialog.open(RosterManagementModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',
       disableClose: true,
       data: {
         stationId: this.stationRithmId,
-        type: 'workers',
+        type: isOwner ? 'owners' : 'workers',
       },
     });
     dialog
@@ -526,6 +531,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(() => {
         this.refreshInfoDrawer(true);
+        this.selectedTabIndex = 2;
       });
   }
 

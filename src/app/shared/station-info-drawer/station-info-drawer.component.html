@@ -5,7 +5,7 @@
   <app-loading-indicator id="loading-drawer-component"></app-loading-indicator>
 </div>
 
-<mat-tab-group class="tabs-station" *ngIf="!stationLoading">
+<mat-tab-group class="tabs-station" *ngIf="!stationLoading" [selectedIndex]="selectedTabIndex">
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-cog fa-lg"></i>
@@ -186,7 +186,7 @@
     <ng-template matTabContent>
       <div class="grid grid-cols-1 px-2">
         <section class="flex w-full py-5">
-          <div class="flex w-full flex-col">
+          <div class="flex w-full flex-col justify-center">
             <h6>Station Owners</h6>
             <p class="overline-font">{{ ownersRosterLength }} members</p>
           </div>
@@ -197,9 +197,8 @@
             {{ publishStationMessage }}station owners.
           </div>
           <ng-template #showOwnerRoster>
-            <div class="flex w-full justify-center">
+            <div class="flex w-full justify-between items-center pl-4">
               <app-roster
-                (modalClosed)="refreshInfoDrawer($event)"
                 [stationId]="stationRithmId"
                 [isWorker]="false"
                 [editMode]="editMode || isUserAdminOrOwner"
@@ -207,13 +206,19 @@
                 (rosterMemberLength)="ownersRosterLength = $event"
               >
               </app-roster>
+              <div
+              class="cursor-pointer pr-2"
+              (click)="openManagementRosterModal(true)"
+            >
+              <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
+            </div>
             </div>
           </ng-template>
         </section>
         <section
           class="flex flex-col w-full py-5 border-t border-secondary-200 border-solid"
         >
-          <h6 class="pb-3">Station Owners</h6>
+          <h6 class="pb-3">Station Roster</h6>
           <section class="flex justify-between items-center pb-4">
             <div>
               <p class="text-secondary-300 pr-2 inline-block">Make Public</p>
@@ -246,7 +251,7 @@
             </div>
             <div
               class="pr-2 cursor-pointer"
-              (click)="openManagementRosterModal()"
+              (click)="openManagementRosterModal(false)"
             >
               <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
             </div>

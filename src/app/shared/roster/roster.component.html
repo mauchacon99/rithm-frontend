@@ -1,7 +1,7 @@
 <ng-container *ngIf="!loadingRoster; else loadingIndicator">
   <div
     *ngFor="let member of rosterMembers | slice: 0:slices"
-    (click)="fromDrawer ? openManagementRosterModal() : openRosterModal()"
+    (click)="openRosterModal()"
     class="float-left my-1 mx-px first:ml-0"
   >
     <app-user-avatar
@@ -10,14 +10,6 @@
       [isDrawer]="fromDrawer"
     ></app-user-avatar>
   </div>
-  <div
-    *ngIf="fromDrawer && rosterMembers.length > 3"
-    [matBadge]="'+' + (rosterMembers.length - 3)"
-    matBadgeSize="small"
-    matBadgePosition="after"
-    matBadgeColor="accent"
-    class="mt-2"
-  ></div>
   <p
     *ngIf="!editMode && rosterMembers.length === 0"
     class="overline-font py-2 text-secondary-300"
