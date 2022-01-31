@@ -7,7 +7,7 @@ import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardData, DashboardItem, Station } from 'src/models';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
 /**
@@ -163,6 +163,25 @@ export class DashboardComponent implements OnInit {
         error: (error: unknown) => {
           this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update dashboard name.
+   *
+   * @param dashboardData The dashboard data for update name.
+   */
+  updateOrganizationDashboard(dashboardData: DashboardData): void {
+    this.dashboardService
+      .updateOrganizationDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
