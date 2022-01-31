@@ -516,7 +516,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    *
    * @param isOwner Whether the modal is for owners or workes.
    */
-   openManagementRosterModal(isOwner: boolean): void {
+  openManagementRosterModal(isOwner: boolean): void {
     const dialog = this.dialog.open(RosterManagementModalComponent, {
       panelClass: ['w-5/6', 'sm:w-4/5'],
       maxWidth: '1024px',

@@ -5,7 +5,11 @@
   <app-loading-indicator id="loading-drawer-component"></app-loading-indicator>
 </div>
 
-<mat-tab-group class="tabs-station" *ngIf="!stationLoading" [selectedIndex]="selectedTabIndex">
+<mat-tab-group
+  class="tabs-station"
+  *ngIf="!stationLoading"
+  [selectedIndex]="selectedTabIndex"
+>
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-cog fa-lg"></i>
@@ -207,11 +211,11 @@
               >
               </app-roster>
               <div
-              class="cursor-pointer pr-2"
-              (click)="openManagementRosterModal(true)"
-            >
-              <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
-            </div>
+                class="cursor-pointer pr-2"
+                (click)="openManagementRosterModal(true)"
+              >
+                <i class="fas fa-chevron-right text-accent-800 fa-lg"></i>
+              </div>
             </div>
           </ng-template>
         </section>
