@@ -359,15 +359,19 @@ describe('MapService', () => {
     const removedGroup = service.stationGroupElements.find(
       (group) => group.rithmId === stationGroupId
     );
-    const parentGroup = service.stationGroupElements.find(
-      (group) => group.subStationGroups.includes(<string>removedGroup?.rithmId)
+    const parentGroup = service.stationGroupElements.find((group) =>
+      group.subStationGroups.includes(<string>removedGroup?.rithmId)
     );
-    expect(parentGroup?.subStationGroups).toEqual(parentGroup?.subStationGroups.concat(<string[]>removedGroup?.subStationGroups));
-    expect(parentGroup?.stations).toEqual(parentGroup?.stations.concat(<string[]>removedGroup?.stations));
+    expect(parentGroup?.subStationGroups).toEqual(
+      parentGroup?.subStationGroups.concat(
+        <string[]>removedGroup?.subStationGroups
+      )
+    );
+    expect(parentGroup?.stations).toEqual(
+      parentGroup?.stations.concat(<string[]>removedGroup?.stations)
+    );
     expect(removedGroup?.subStationGroups.length).toEqual(0);
     expect(removedGroup?.stations.length).toEqual(0);
-    service.mapDataReceived$.subscribe((res) =>
-      expect(res).toBe(true)
-    );
+    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
 });
