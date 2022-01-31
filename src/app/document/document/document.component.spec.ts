@@ -509,7 +509,6 @@ describe('DocumentComponent', () => {
   });
 
   describe('Document when isWidget is true', () => {
-    
     const stationRithmIdWidget = '123-654-789';
     const documentRithmIdWidget = '321-654-987';
 
