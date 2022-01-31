@@ -75,7 +75,7 @@
       <div class="flex flex-col md:w-5/12 justify-start">
         <p class="text-sm mt-1">
           Select the comparasion value for field type:
-          <b>{{ firstFieldType | titlecase }}</b>
+          <span class="font-semibold">{{ firstFieldType | titlecase }}</span>
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
@@ -193,7 +193,7 @@
       <div class="flex flex-col">
         <p class="text-sm my-1">
           {{ firstOperandText }}
-          <span class="font-bold">{{ operatorText }} </span>
+          <span class="font-semibold">{{ operatorText }} </span>
           {{ secondOperandText }}
         </p>
       </div>
