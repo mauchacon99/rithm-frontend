@@ -5,6 +5,8 @@ import {
   ViewChild,
   AfterViewChecked,
   ChangeDetectorRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { first, takeUntil } from 'rxjs/operators';
@@ -41,6 +43,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Id for document id widget. */
   @Input() documentRithmIdWidget!: string;
+
+  /** Return to list of the documents only with isWidget. */
+  @Output() returnDocumentsWidget: EventEmitter<boolean> = new EventEmitter();
 
   /** Document form. */
   documentForm: FormGroup;
@@ -171,6 +176,18 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.isAdmin;
+  }
+
+  /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
@@ -207,13 +224,18 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Navigates the user back to the dashboard page.
+   *
+   * @param isReloadDocumentsWidget Boolean, when is true, reload the documents list in widget.
    */
-  private navigateBack(): void {
+  private navigateBack(isReloadDocumentsWidget = false): void {
     // TODO: [RIT-691] Check which page user came from. If exists and within Rithm, navigate there
     // const previousPage = this.location.getState();
 
     // If no previous page, go to dashboard
-    this.router.navigateByUrl('dashboard');
+    // If is widget return to the documents list
+    this.isWidget
+      ? this.returnDocumentsWidget.emit(isReloadDocumentsWidget)
+      : this.router.navigateByUrl('dashboard');
   }
 
   /**
@@ -272,15 +294,14 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
   async cancelDocument(): Promise<void> {
     const response = await this.popupService.confirm({
       title: 'Are you sure?',
-      message:
-        'Your changes will be lost and you will return to the dashboard.',
+      message: `Your changes will be lost and you will return to the ${
+        this.isWidget ? 'documents list' : 'dashboard'
+      }.`,
       okButtonText: 'Confirm',
       cancelButtonText: 'Close',
       important: true,
     });
-    if (response) {
-      this.router.navigateByUrl('dashboard');
-    }
+    if (response) this.navigateBack();
   }
 
   /**
@@ -354,25 +375,6 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.documentService.autoFlowDocument(documentAutoFlow),
     ];
 
-    forkJoin(requestArray)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.documentLoading = false;
-          if (this.isUserAdmin) {
-            this.router.navigateByUrl('map');
-          } else {
-            this.router.navigateByUrl('dashboard');
-          }
-        },
-        error: (error: unknown) => {
-          this.documentLoading = false;
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
     const fjResponse = this.autoFlowForkJoin(requestArray);
     if (fjResponse) {
       this.documentLoading = false;
