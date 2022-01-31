@@ -4,10 +4,10 @@ import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
-import { SidenavDrawerService } from '../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardItem, Station } from 'src/models';
-import { DashboardService } from '../dashboard.service';
+import { DashboardData, Station, WidgetType } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
 /**
@@ -32,8 +32,8 @@ export class DashboardComponent implements OnInit {
 
   viewNewDashboard = false;
 
-  /** Widgets for dashboard. */
-  widgetsOfDashboard: DashboardItem[] = [];
+  /** Dashboard data, default dashboard general. */
+  dashboardData!: DashboardData;
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
@@ -129,7 +129,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getDashboardWidgets();
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
@@ -154,7 +154,11 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.widgetsOfDashboard = widgets;
+          this.dashboardData = {
+            rithmId: '',
+            name: 'General',
+            widgets,
+          };
           this.dashboardLoading = false;
         },
         error: (error: unknown) => {
@@ -169,12 +173,111 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * Update personal dashboard.
+   */
+  updatePersonalDashboard(): void {
+    /** Data temporary.  */
+    let dashboardData: DashboardData = {
+      rithmId: '123-131-132',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    this.dashboardService
+      .updatePersonalDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        next: (dashboardUpdate) => {
+          dashboardData = dashboardUpdate;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update dashboard name.
+   *
+   * @param dashboardData The dashboard data for update name.
+   */
+  updateOrganizationDashboard(dashboardData: DashboardData): void {
+    this.dashboardService
+      .updateOrganizationDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Needed to resize a mobile browser when the scrollbar hides.
    */
   @HostListener('window:resize', ['$event'])
   windowResize(): void {
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
+  }
+
+  /**
+   * Generates a new dashboard personal.
+   */
+  generateNewPersonalDashboard(): void {
+    this.dashboardService
+      .generateNewPersonalDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.dashboardData = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Generates a new default dashboard.
+   */
+  generateNewOrganizationDashboard(): void {
+    this.dashboardService
+      .generateNewOrganizationDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.dashboardData = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }
