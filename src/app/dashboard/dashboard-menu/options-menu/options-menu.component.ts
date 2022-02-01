@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { OptionDashboardMenu, RoleDashboardMenu } from 'src/models';
+import { RoleDashboardMenu } from 'src/models';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -20,10 +20,7 @@ export class OptionsMenuComponent {
   roleDashboardMenu = RoleDashboardMenu;
 
   /** Show option. */
-  @Input() menuDashboardOptionType!: OptionDashboardMenu;
-
-  /** Validate type of option.*/
-  optionDashboardMenu = OptionDashboardMenu;
+  @Input() isDashboardListOptions!: boolean;
 
   /** Allows functionality of MatMenu to toggle the menu open. */
   @ViewChild(MatMenuTrigger)

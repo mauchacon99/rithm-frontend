@@ -4,7 +4,7 @@
   }
 
   .mat-expansion-panel-header:hover {
-    background-color: #bbc7db !important;
+    @apply bg-accent-100;
   }
 
   &::ng-deep .mat-expansion-panel-body {
@@ -19,5 +19,5 @@
 }
 
 .color-hover:hover {
-  background-color: #bbc7db;
+  @apply bg-accent-100;
 }

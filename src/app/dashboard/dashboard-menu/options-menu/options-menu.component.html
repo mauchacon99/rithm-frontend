@@ -1,10 +1,6 @@
 <button
   mat-button
-  [matMenuTriggerFor]="
-    menuDashboardOptionType === optionDashboardMenu.OptionDashboardList
-      ? menuList
-      : menuDashboard
-  "
+  [matMenuTriggerFor]="isDashboardListOptions ? menuList : menuDashboard"
   (click)="openOptionsMenu($event)"
   mat-icon-button
   [attr.data-testid]="'button-more-' + dashboardRole"

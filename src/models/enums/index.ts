@@ -15,4 +15,3 @@ export * from './operand-type.enum';
 export * from './operator-type.enum';
 export * from './rule-type.enum';
 export * from './role-dashboard-menu.enum';
-export * from './option-dashboard-menu.enum';
