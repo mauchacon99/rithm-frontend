@@ -23,6 +23,7 @@ import {
   StationInformation,
   StationGroupElementHoverItem,
   StationGroupInfoDrawerData,
+  MatMenuOption,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -524,6 +525,28 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
     //When browser isn't compatible with pointer events, we use mouse events instead.
     if (!window.PointerEvent) {
       this.singleInputMoveLogic(event);
+    }
+  }
+
+  /**
+   * Handles input when a user presses a right click. Used for initiating click.
+   * --DEPRECIATED-- Maintained for backwards compatibility.
+   *
+   * @param event The MouseEvent event that was triggered.
+   */
+  @HostListener('document:contextmenu', ['$event'])
+  contextmenu(event: MouseEvent): void {
+    event.preventDefault();
+    //for canvas element area.
+    const canvas = this.mapCanvas.nativeElement;
+    if (event.target === canvas) {
+      //set mousePoint to the tracked cursor position.
+      this.mapService.currentMousePoint$.next(event);
+      //On right clicked opening the option menu for the add new station.
+      this.mapService.stationButtonClick$.next({
+        click: MatMenuOption.NewStation,
+        data: [],
+      });
     }
   }
 
@@ -1902,7 +1925,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.currentMousePoint$.next(point);
         //Note which station was clicked so we can open the option menu for the correct station.
         this.mapService.stationButtonClick$.next({
-          click: true,
+          click: MatMenuOption.OptionButton,
           data: station,
         });
         return;
