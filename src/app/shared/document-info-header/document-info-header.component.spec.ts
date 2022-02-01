@@ -248,4 +248,14 @@ describe('DocumentInfoHeaderComponent', () => {
     );
     expect(section).toBeTruthy();
   });
+
+  fit('should redirect to document page', () => {
+    spyOnProperty(component,'stationRithmId').and.returnValue('123-123-123');
+    spyOnProperty(component,'documentRithmId').and.returnValue('321-321-321');
+    const methodCalled = spyOnProperty(
+      component,
+      'goToDocument');
+      component.goToDocument();
+    expect(methodCalled).toHaveBeenCalled();
+  });
 });
