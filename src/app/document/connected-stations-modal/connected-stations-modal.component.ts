@@ -29,8 +29,8 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
-  /** The list of previous and following stations in the document. */
-  connectedStations: ConnectedStationInfo[] = [];
+  /** The list of previous and following stations or the list of all stations. */
+  stations: ConnectedStationInfo[] | Station[] = [];
 
   /** The Document rithmId. */
   documentRithmId = '';
@@ -49,9 +49,6 @@ export class ConnectedStationsModalComponent implements OnInit {
 
   /** Enable error message if move document request fails. */
   moveDocumentError = false;
-
-  /** The list of stations. */
-  stations: Station[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
@@ -95,7 +92,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .subscribe({
         next: (connectedStations) => {
           this.connectedStationLoading = false;
-          this.connectedStations = connectedStations.nextStations.concat(
+          this.stations = connectedStations.nextStations.concat(
             connectedStations.previousStations
           );
         },
