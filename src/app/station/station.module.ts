@@ -29,6 +29,8 @@ import { StationInfoHeaderModule } from '../shared/station-info-header/station-i
 import { DocumentInfoHeaderModule } from '../shared/document-info-header/document-info-header.module';
 import { PreviousFieldsModule } from '../shared/previous-fields/previous-fields.module';
 import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
+import { NumberFieldModule } from '../shared/fields/number-field/number-field.module';
+import { DateFieldModule } from '../shared/fields/date-field/date-field.module';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { InfoDrawerModule } from '../shared/info-drawer/info-drawer.module';
     DocumentInfoHeaderModule,
     PreviousFieldsModule,
     InfoDrawerModule,
+    NumberFieldModule,
+    DateFieldModule,
   ],
 })
 export class StationModule {}
