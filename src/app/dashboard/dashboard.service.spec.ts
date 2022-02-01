@@ -317,6 +317,24 @@ describe('DashboardService', () => {
           },
         ],
       },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
     ];
 
     service.getOrganizationDashboard().subscribe((response) => {
@@ -333,7 +351,7 @@ describe('DashboardService', () => {
   });
 
   it('should returns user`s customized dashboards', () => {
-    const personalDashboards: DashboardData[] = [
+    const expectedResponse: DashboardData[] = [
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
@@ -373,8 +391,16 @@ describe('DashboardService', () => {
     ];
 
     service.getPersonalDashboard().subscribe((response) => {
-      expect(response).toEqual(personalDashboards);
+      expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 
   it('should return a new dashboard personal', () => {
