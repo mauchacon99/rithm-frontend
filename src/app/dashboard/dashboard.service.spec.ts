@@ -479,7 +479,7 @@ describe('DashboardService', () => {
       ],
     };
     service
-      .updateCompanyDashboardName(expectDashboard)
+      .updateOrganizationDashboard(expectDashboard)
       .subscribe((newDashboard) => {
         expect(newDashboard).toEqual(expectDashboard);
       });
