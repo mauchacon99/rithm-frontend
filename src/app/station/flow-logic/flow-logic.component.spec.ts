@@ -21,11 +21,14 @@ import { ErrorService } from 'src/app/core/error.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { MockComponent } from 'ng-mocks';
 import { DocumentService } from 'src/app/core/document.service';
 import { of, throwError } from 'rxjs';
+import { TextFieldComponent } from 'src/app/shared/fields/text-field/text-field.component';
+import { NumberFieldComponent } from 'src/app/shared/fields/number-field/number-field.component';
+import { DateFieldComponent } from 'src/app/shared/fields/date-field/date-field.component';
 
 describe('FlowLogicComponent', () => {
   let component: FlowLogicComponent;
@@ -48,11 +51,15 @@ describe('FlowLogicComponent', () => {
         MatSnackBarModule,
         MatInputModule,
         FormsModule,
+        ReactiveFormsModule,
       ],
       declarations: [
         FlowLogicComponent,
         RuleModalComponent,
         MockComponent(LoadingIndicatorComponent),
+        MockComponent(TextFieldComponent),
+        MockComponent(NumberFieldComponent),
+        MockComponent(DateFieldComponent),
       ],
       providers: [
         { provide: StationService, useClass: MockStationService },

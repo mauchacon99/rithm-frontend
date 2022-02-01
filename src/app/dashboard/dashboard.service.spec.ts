@@ -387,6 +387,30 @@ describe('DashboardService', () => {
     });
   });
 
+  it('should return a new dashboard personal', () => {
+    const expectDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewPersonalDashboard().subscribe((newDashboard) => {
+      expect(newDashboard).toEqual(expectDashboard);
+    });
+  });
+
   it('should return new data for dashboard when update dashboard', () => {
     const dashboardData: DashboardData = {
       rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
