@@ -48,6 +48,9 @@ export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
 export const GROUP_NAME_HEIGHT = 20;
 export const GROUP_CHARACTER_SIZE = 10;
+export const STATION_GROUP_NAME_TRANSLATE = 40;
+export const STATION_GROUP_NAME_MAX_ANGLE_ROTATE = -Math.PI / 10;
+export const SLOPE_RANGE_NOT_ALLOWED = 0.00005;
 
 // Station
 export const STATION_PADDING = 10;
