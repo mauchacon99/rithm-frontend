@@ -84,8 +84,19 @@ describe('StationGroupElementService', () => {
       { x: 863.4990049870379, y: 57.48470586388896 },
       { x: 296.64472347020927, y: 436.11710239829574 },
     ];
+    const titleWidth = 77.92393493652344;
     const positionExpect = 7;
-    const position = service.positionStraightestLine(points);
+    const position = service.positionStraightestLine(points, titleWidth);
     expect(position).toEqual(positionExpect);
+  });
+
+  it('should return the distance between two points', () => {
+    const pointStart: Point = { x: 10.1, y: -5.1 };
+    const pointEnd: Point = { x: 29.0, y: -1.1 };
+    const distanceExpect = 19.32;
+    const distance = Number(
+      service.distanceBetweenTwoPoints(pointStart, pointEnd).toFixed(2)
+    );
+    expect(distance).toEqual(distanceExpect);
   });
 });
