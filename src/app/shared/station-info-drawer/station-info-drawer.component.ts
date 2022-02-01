@@ -103,7 +103,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   drawerContext = '';
 
   /** Display the ownerRoster length. */
-  ownersRosterLength = 0;
+  ownersRosterLength: number | null = 0;
 
   /** The selected tab index/init. */
   selectedTabIndex = 0;
@@ -530,6 +530,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(first())
       .subscribe(() => {
+        this.ownersRosterLength = null;
         this.refreshInfoDrawer(true);
         this.selectedTabIndex = 2;
       });
