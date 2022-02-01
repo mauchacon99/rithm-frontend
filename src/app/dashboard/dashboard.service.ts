@@ -279,4 +279,19 @@ export class DashboardService {
   ): Observable<DashboardData> {
     return of(dashboardData).pipe(delay(1000));
   }
+
+  /**
+   * Update name the Company Dashboard name.
+   *
+   * @param dashboardData The specific id of document.
+   * @returns The new dashboard.
+   */
+  updateCompanyDashboardName(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      dashboardData
+    );
+  }
 }
