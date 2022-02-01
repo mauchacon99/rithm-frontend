@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
     displayGrid: 'onDrag&Resize',
     pushItems: true,
     draggable: {
-      enabled: this.editMode,
+      enabled: true,
       start: () => {
         /** Do something. */
       },
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
       },
     },
     resizable: {
-      enabled: this.editMode,
+      enabled: true,
       start: () => {
         /** Do something. */
       },
