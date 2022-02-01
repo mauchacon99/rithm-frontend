@@ -213,7 +213,7 @@ export class DashboardService {
   }
 
   /**
-   * Generates a new dashboard.
+   * Generates a new dashboard personal.
    *
    * @returns Returns a new default dashboard.
    */

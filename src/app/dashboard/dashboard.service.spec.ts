@@ -407,6 +407,8 @@ describe('DashboardService', () => {
       ],
     };
 
+    const expectBody = { name: expectedResponse.name };
+
     service.generateNewPersonalDashboard().subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
@@ -416,6 +418,7 @@ describe('DashboardService', () => {
     );
 
     expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectBody);
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
