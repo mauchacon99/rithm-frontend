@@ -298,7 +298,7 @@ describe('DashboardService', () => {
     });
   });
   it('should returns organization dashboard', () => {
-    const organizationDashboards: DashboardData[] = [
+    const expectedResponse: DashboardData[] = [
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
@@ -317,13 +317,30 @@ describe('DashboardService', () => {
           },
         ],
       },
+    ];
+
+    service.getOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(expectedResponse);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should returns user`s customized dashboards', () => {
+    const personalDashboards: DashboardData[] = [
       {
-        rithmId: '123654-789654-7852',
-        name: 'Organization 2',
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
         widgets: [
           {
             cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
             maxItemRows: 0,
             minItemCols: 0,
@@ -335,15 +352,6 @@ describe('DashboardService', () => {
           },
         ],
       },
-    ];
-
-    service.getOrganizationDashboard().subscribe((response) => {
-      expect(response).toEqual(organizationDashboards);
-    });
-  });
-
-  it('should returns user`s customized dashboards', () => {
-    const expectedResponse: DashboardData[] = [
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
@@ -363,17 +371,10 @@ describe('DashboardService', () => {
         ],
       },
     ];
+
     service.getPersonalDashboard().subscribe((response) => {
-      expect(response).toEqual(expectedResponse);
+      expect(response).toEqual(personalDashboards);
     });
-
-    const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
-    );
-
-    expect(req.request.method).toEqual('GET');
-    req.flush(expectedResponse);
-    httpTestingController.verify();
   });
 
   it('should return a new dashboard personal', () => {

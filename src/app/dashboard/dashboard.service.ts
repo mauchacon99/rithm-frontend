@@ -122,14 +122,25 @@ export class DashboardService {
    * @returns Returns a list of dashboards.
    */
   getOrganizationDashboard(): Observable<DashboardData[]> {
-    const OrganizationDashboards: DashboardData[] = [
+    return this.http.get<DashboardData[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+  }
+
+  /**
+   * Get all dashboards how user.
+   *
+   * @returns Returns list of dashboards.
+   */
+  getPersonalDashboard(): Observable<DashboardData[]> {
+    const personalDashboards: DashboardData[] = [
       {
-        rithmId: '123654-789654-7852',
-        name: 'Organization 1',
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
         widgets: [
           {
             cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
             maxItemCols: 0,
             maxItemRows: 0,
             minItemCols: 0,
@@ -142,12 +153,12 @@ export class DashboardService {
         ],
       },
       {
-        rithmId: '123654-789654-7852',
-        name: 'Organization 2',
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
         widgets: [
           {
             cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
             maxItemCols: 0,
             maxItemRows: 0,
             minItemCols: 0,
@@ -161,18 +172,7 @@ export class DashboardService {
       },
     ];
 
-    return of(OrganizationDashboards).pipe(delay(1000));
-  }
-
-  /**
-   * Get all dashboards how user.
-   *
-   * @returns Returns list of dashboards.
-   */
-  getPersonalDashboard(): Observable<DashboardData[]> {
-    return this.http.get<DashboardData[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
-    );
+    return of(personalDashboards).pipe(delay(1000));
   }
 
   /**
