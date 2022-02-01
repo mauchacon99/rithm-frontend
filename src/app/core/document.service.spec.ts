@@ -452,7 +452,7 @@ describe('DocumentService', () => {
 
     const req = httpTestingController.expectOne(
       // eslint-disable-next-line max-len
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
