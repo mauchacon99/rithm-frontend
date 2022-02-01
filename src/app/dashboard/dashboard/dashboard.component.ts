@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   /** Load indicator in dashboard. */
   dashboardLoading = false;
 
-  /** Edit mode toggle. */
+  /** Edit mode toggle for widgets and dashboard name. */
   editMode = false;
 
   /** Config grid. */
