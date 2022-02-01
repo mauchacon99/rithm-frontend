@@ -1444,4 +1444,42 @@ export class MapService {
       this.resetSelectedStationGroupStationStatus();
     }
   }
+
+  /**
+   * Delete the station group and find it's parent to move all it's stations and sub groups to parent station group.
+   *
+   * @param stationGroupId The incoming station group Id to be deleted.
+   */
+  removeStationGroup(stationGroupId: string): void {
+    //Find the station group from this.stationGroupElements array.
+    const removedGroup = this.stationGroupElements.find(
+      (group) => group.rithmId === stationGroupId
+    );
+    if (!removedGroup) {
+      throw new Error('Station group was not found.');
+    }
+    this.stationGroupElements.forEach((group) => {
+      if (
+        //Find parent station group of incoming station group.
+        group.subStationGroups.includes(removedGroup.rithmId)
+      ) {
+        //Move all sub station groups of deleted station group to it's parent.
+        group.subStationGroups = group.subStationGroups.concat(
+          removedGroup.subStationGroups
+        );
+        //Move all stations of deleted station group to it's parent.
+        group.stations = group.stations.concat(removedGroup.stations);
+        //Mark parent station group of deleted station group as updated.
+        group.markAsUpdated();
+        //Remove all stations of deleting station group.
+        removedGroup.stations = [];
+        //Remove all sub station groups of deleting station group.
+        removedGroup.subStationGroups = [];
+        //Mark removedGroup as deleted.
+        removedGroup.markAsDeleted();
+        //Note a change in map data.
+        this.mapDataReceived$.next(true);
+      }
+    });
+  }
 }

@@ -3,10 +3,10 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MapData, MapItemStatus } from 'src/models';
+import { MapData, MapItemStatus, StationGroupMapData } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { MapService } from './map.service';
-import { StationMapElement } from 'src/helpers';
+import { StationGroupMapElement, StationMapElement } from 'src/helpers';
 import { v4 as uuidv4 } from 'uuid';
 
 const MICROSERVICE_PATH_STATION = '/stationservice/api/station';
@@ -328,5 +328,50 @@ describe('MapService', () => {
 
     req.flush(postData);
     httpTestingController.verify();
+  });
+
+  it('should Delete the station group and find parent to move all stations and sub groups', () => {
+    const stationGroupMapData: StationGroupMapData[] = [
+      {
+        rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+        title: 'Rithm Group',
+        organizationRithmId: '',
+        stations: [],
+        subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+      {
+        rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+        title: ' Sub RithmGroup',
+        organizationRithmId: '',
+        stations: [],
+        subStationGroups: [],
+        status: MapItemStatus.Normal,
+        isReadOnlyRootStationGroup: false,
+      },
+    ];
+    service.stationGroupElements = stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
+    const stationGroupId = 'ED6155C9-ABB7-458E-A250-9542B2535B1C';
+    service.removeStationGroup(stationGroupId);
+    const removedGroup = service.stationGroupElements.find(
+      (group) => group.rithmId === stationGroupId
+    );
+    const parentGroup = service.stationGroupElements.find((group) =>
+      group.subStationGroups.includes(<string>removedGroup?.rithmId)
+    );
+    expect(parentGroup?.subStationGroups).toEqual(
+      parentGroup?.subStationGroups.concat(
+        <string[]>removedGroup?.subStationGroups
+      )
+    );
+    expect(parentGroup?.stations).toEqual(
+      parentGroup?.stations.concat(<string[]>removedGroup?.stations)
+    );
+    expect(removedGroup?.subStationGroups.length).toEqual(0);
+    expect(removedGroup?.stations.length).toEqual(0);
+    service.mapDataReceived$.subscribe((res) => expect(res).toBe(true));
   });
 });
