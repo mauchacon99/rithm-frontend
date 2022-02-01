@@ -160,6 +160,17 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Is the current user an owner or an admin for this station.
+   *
+   * @returns Validate if user is owner or admin of current station.
+   */
+  get currentAssignedUserDocument(): string {
+    return 'currentAssignedUser' in this.documentInformation
+      ? this.documentInformation.currentAssignedUser
+      : '';
+  }
+
+  /**
    * Toggles the open state of the drawer for document info.
    *
    * @param drawerItem The drawer item to toggle.
