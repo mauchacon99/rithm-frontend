@@ -17,7 +17,6 @@
         mat-stroked-button
         color="warn"
         (click)="getStationWidgetDocuments()"
-        (touchstart)="getStationWidgetDocuments()"
         id="try-again"
         data-testid="try-again"
       >
@@ -149,6 +148,7 @@
   <div class="container-document">
     <app-document
       [isWidget]="true"
+      (returnDocumentsWidget)="viewDocument('', $event)"
       [documentRithmIdWidget]="documentIdSelected"
       [stationRithmIdWidget]="stationRithmId"
     ></app-document>

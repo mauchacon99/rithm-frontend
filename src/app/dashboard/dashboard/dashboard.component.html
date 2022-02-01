@@ -43,9 +43,11 @@
             id="loading-dashboard-widgets"
           ></app-loading-indicator>
         </div>
-        <div class="mx-5" *ngIf="!dashboardLoading">
+        <div class="mx-5" *ngIf="!dashboardLoading && dashboardData">
           <div class="flex justify-between items-center">
-            <h2 class="my-2 font-semibold truncate">General</h2>
+            <h2 class="my-2 font-semibold truncate">
+              {{ dashboardData.name }}
+            </h2>
             <button
               mat-icon-button
               id="menu-edit-button"
@@ -71,7 +73,7 @@
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
-              *ngFor="let item of widgetsOfDashboard"
+              *ngFor="let item of dashboardData.widgets"
             >
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"
