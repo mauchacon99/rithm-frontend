@@ -97,9 +97,9 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private userService: UserService,
     private popupService: PopupService,
-    private readonly changeDetectorR: ChangeDetectorRef
+    private readonly changeDetectorR: ChangeDetectorRef,
+    private userService: UserService
   ) {
     this.documentForm = this.fb.group({
       documentTemplateForm: this.fb.control(''),
@@ -164,6 +164,27 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   get drawerHasBackdrop(): boolean {
     return this.sidenavDrawerService.drawerHasBackdrop;
+  }
+
+  /**
+   * Is the current user an admin.
+   *
+   * @returns Validate if user is admin.
+   */
+  get isUserAdmin(): boolean {
+    return this.userService.isAdmin;
+  }
+
+  /**
+   * Is the current user an owner or an admin for this document.
+   *
+   * @returns Validate if user is owner or admin of current document.
+   */
+  get isUserAdminOrOwner(): boolean {
+    const ownerDocument = this.documentInformation.stationOwners?.find(
+      (owner) => this.userService.user.rithmId === owner.rithmId
+    );
+    return !!ownerDocument || this.userService.isAdmin;
   }
 
   /**
@@ -359,7 +380,11 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.navigateBack(true);
+          if (this.isUserAdmin) {
+            this.router.navigateByUrl('map');
+          } else {
+            this.router.navigateByUrl('dashboard');
+          }
         },
         error: (error: unknown) => {
           this.documentLoading = false;
@@ -369,17 +394,5 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         },
       });
-  }
-
-  /**
-   * Is the current user an owner or an admin for this document.
-   *
-   * @returns Validate if user is owner or admin of current document.
-   */
-  get isUserAdminOrOwner(): boolean {
-    const ownerDocument = this.documentInformation.stationOwners?.find(
-      (owner) => this.userService.user.rithmId === owner.rithmId
-    );
-    return !!ownerDocument || this.userService.isAdmin;
   }
 }
