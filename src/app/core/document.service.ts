@@ -294,7 +294,7 @@ export class DocumentService {
       .set('getPrivate', getPrivate);
 
     return this.http.get<Question[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions`,
       { params }
     );
   }
