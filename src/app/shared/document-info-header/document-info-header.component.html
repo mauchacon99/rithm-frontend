@@ -127,7 +127,11 @@
     </div>
   </div>
 </section>
-<section *ngIf="isWidget" id="section-current-worker">
+<section
+  *ngIf="isWidget"
+  id="section-current-worker"
+  class="border-b border-secondary-400"
+>
   <div class="py-2">
     <p class="font-semibold">
       {{ documentName }}
