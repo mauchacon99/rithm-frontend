@@ -109,32 +109,6 @@
         </button>
       </div>
     </ng-template>
-    <section *ngIf="isWidget" id="section-current-worker">
-      <div class="py-2">
-        <p class="font-semibold">
-          {{ documentName }}
-        </p>
-
-        <p class="text-xs">
-          {{ stationNameDocument }}
-        </p>
-      </div>
-
-      <div class="flex justify-between p-1">
-        <div>
-          <small class="text-secondary-900 assigment"> ASSIGNED </small>
-          <div class="px-4">
-            <app-user-avatar [firstName]="'Name user'" [lastName]="'lastName'">
-            </app-user-avatar>
-          </div>
-        </div>
-        <a class="text-secondary-700" (click)="goToDocument()">
-          <button mat-button data-testid="return-document-button">
-            <i class="fas fa-external-link-alt p-5"></i>
-          </button>
-        </a>
-      </div>
-    </section>
   </form>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
@@ -151,5 +125,45 @@
         <!-- <i class="fas fa-lock"></i> -->
       </button>
     </div>
+  </div>
+</section>
+<section *ngIf="isWidget" id="section-current-worker">
+  <div class="py-2">
+    <p class="font-semibold">
+      {{ documentName }}
+    </p>
+
+    <p class="text-xs">
+      {{ stationNameDocument }}
+    </p>
+  </div>
+
+  <div
+    [ngClass]="
+      currentAssignedUserDocument !== null
+        ? 'flex justify-between p-1'
+        : 'flex justify-end '
+    "
+  >
+    <div *ngIf="currentAssignedUserDocument !== null">
+      <small
+        class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
+      >
+        ASSIGNED
+      </small>
+      <div class="px-4">
+        <app-user-avatar [firstName]="'Name user'" [lastName]="'lastName'">
+        </app-user-avatar>
+      </div>
+    </div>
+
+    <button
+      mat-button
+      data-testid="return-document-button"
+      class="text-secondary-700"
+      (click)="goToDocument()"
+    >
+      <i class="fas fa-external-link-alt p-5"></i>
+    </button>
   </div>
 </section>

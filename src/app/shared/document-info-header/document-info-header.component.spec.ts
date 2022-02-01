@@ -24,7 +24,6 @@ describe('DocumentInfoHeaderComponent', () => {
   let fixture: ComponentFixture<DocumentInfoHeaderComponent>;
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentInfoHeaderComponent],
@@ -247,5 +246,11 @@ describe('DocumentInfoHeaderComponent', () => {
       '#section-current-worker'
     );
     expect(section).toBeTruthy();
+  });
+
+  it('should redirect to document page', () => {
+    const navigateSpy = spyOn(component, 'goToDocument');
+    component.goToDocument();
+    expect(navigateSpy).toHaveBeenCalledWith();
   });
 });
