@@ -295,7 +295,9 @@ export class StationGroupElementService {
 
     // Calculates the position of the first straightest line.
     const newPosition = this.positionStraightestLine(
-      stationGroup.boundaryPoints
+      stationGroup.boundaryPoints,
+      this.canvasContext.measureText(stationGroup.title).width +
+        STATION_GROUP_PADDING
     );
 
     // Calculation of the angle of rotation of station group name.
@@ -640,24 +642,73 @@ export class StationGroupElementService {
    * Position of the points that make the first straight line.
    *
    * @param points A Array the points.
+   * @param titleWidth The Width station Group Name.
    * @returns The position of the points that make the first straight line.
    */
-  positionStraightestLine(points: Point[]): number {
+  positionStraightestLine(points: Point[], titleWidth: number): number {
     let newPosition = points.length - 1;
+    // Array of The best positions to place the name.
+    const memoryPosition: {
+      /** The position in array points. */
+      position: number;
+      /** The slope line. */
+      slope: number;
+      /** The distance between the position and the next position. */
+      distance: number;
+    }[] = [];
 
     for (let i = points.length - 1; i > 1; i--) {
       // Calculate the slope between two points.
       const m = this.slopeLine(points[i], points[i - 1]);
+      const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
       // If the slope is equal a Pi than continue with next point.
-      if (m === Math.PI) continue;
+      if (m === Math.PI) {
+        break;
+      }
       // Calculation of the angle of rotation.
       const rotateAngleStationGroupName = Math.atan(m);
       // If the angle of rotation is greater than the maximum angle of rotation.
       if (rotateAngleStationGroupName > STATION_GROUP_NAME_MAX_ANGLE_ROTATE) {
-        newPosition = i;
+        memoryPosition.push({
+          position: i,
+          slope: m,
+          distance: distance,
+        });
+      }
+    }
+    // The first position is assigned.
+    newPosition = memoryPosition[0].position;
+    let slopeBetter = Math.abs(memoryPosition[0].slope);
+    for (let i = 0; i < memoryPosition.length; i++) {
+      //If the slope is 0 and the distance is greater than the station group name.
+      if (
+        memoryPosition[i].slope === 0 &&
+        memoryPosition[i].distance >= titleWidth
+      ) {
+        newPosition = memoryPosition[i].position;
         break;
+        // If the slope is less than the best slope 0 and the distance is greater than the station group name.
+      } else if (
+        Math.abs(memoryPosition[i].slope) < slopeBetter &&
+        memoryPosition[i].distance >= titleWidth
+      ) {
+        newPosition = memoryPosition[i].position;
+        slopeBetter = memoryPosition[i].slope;
       }
     }
     return newPosition;
+  }
+
+  /**
+   * The distance between two points.
+   *
+   * @param pointStart The start point of the line.
+   * @param pointEnd The end point of the line.
+   * @returns The distance between two points.
+   */
+  distanceBetweenTwoPoints(pointStart: Point, pointEnd: Point): number {
+    const xDistance = pointEnd.y - pointStart.y;
+    const yDistance = pointEnd.x - pointStart.x;
+    return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
   }
 }
