@@ -151,51 +151,74 @@
           </div>
         </div>
       </div>
-      <section
-        *ngFor="let data of options"
-        class="flex justify-between items-center w-full py-2 px-4"
-      >
-        <p class="text-secondary-300 inline-block">{{ data.label }}</p>
-        <mat-slide-toggle
-          class="pr-1"
-          [id]="data.id"
-          [disabled]="data.disabled"
-          (change)="updateStatusStation($event)"
-        >
-        </mat-slide-toggle>
+      <section class="px-2">
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">None</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="loading-indicator-status"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateStatusStation('None', $event)"
+            [checked]="stationDocumentGenerationStatus === 'None'"
+            [disabled]="docCreationLoading"
+          >
+          </mat-slide-toggle>
+        </section>
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">Manual</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="loading-indicator-status"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateStatusStation('Manual', $event)"
+            [checked]="stationDocumentGenerationStatus === 'Manual'"
+            [disabled]="docCreationLoading"
+          >
+          </mat-slide-toggle>
+        </section>
       </section>
-      <section class="flex justify-between items-center w-full py-3 px-4">
+      <section class="flex justify-between items-center w-full py-3 px-2">
         <p class="text-secondary-300 inline-block">Schedule</p>
         <i class="fas fa-chevron-right"></i>
       </section>
+      <section
+        class="text-center w-full py-3"
+        *ngIf="
+          stationDocumentGenerationStatus === 'Manual' &&
+          (mapMode === 0 || mapMode === undefined) &&
+          !locallyCreated &&
+          (isUserAdminOrOwner || isWorker)
+        "
+      >
+        <div class="py-1" *ngIf="docCreationLoading; else createDocument">
+          <app-loading-indicator
+            id="loading-indicator-status"
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
+        </div>
+        <ng-template #createDocument>
+          <button
+            data-testid="new-document"
+            id="new-document"
+            mat-stroked-button
+            color="accent"
+            (click)="createNewDocument()"
+          >
+            New Document
+          </button>
+        </ng-template>
+      </section>
     </ng-template>
-    <div
-      class="w-full py-2"
-      *ngIf="
-        stationDocumentGenerationStatus === 'Manual' &&
-        (mapMode === 0 || mapMode === undefined) &&
-        !locallyCreated &&
-        (isUserAdminOrOwner || isWorker)
-      "
-    >
-      <div class="py-1" *ngIf="docCreationLoading; else createDocument">
-        <app-loading-indicator
-          id="loading-indicator-status"
-          [inlineText]="'Loading...'"
-        ></app-loading-indicator>
-      </div>
-      <ng-template #createDocument>
-        <button
-          data-testid="new-document"
-          id="new-document"
-          mat-stroked-button
-          color="accent"
-          (click)="createNewDocument()"
-        >
-          New Document
-        </button>
-      </ng-template>
-    </div>
   </mat-tab>
 
   <mat-tab>

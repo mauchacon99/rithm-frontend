@@ -94,12 +94,6 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
-  /** Document Status: None | Manual. */
-  options = [
-    { id: 'None', label: 'None', disabled: false },
-    { id: 'Manual', label: 'Manual', disabled: false },
-  ];
-
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -327,20 +321,20 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Update status the station.
    *
+   * @param Status New status the station update.
    * @param statusNew New status the station update.
    */
-  updateStatusStation(statusNew: MatSlideToggleChange): void {
-    if (statusNew.checked) {
-      this.options
-        .filter((opt) => opt.id !== statusNew.source._elementRef.nativeElement.id)
-        .forEach((opt) => (opt.disabled = true));
-    } else {
-      this.options.forEach((opt) => (opt.disabled = false));
-    }
-    this.updateStationDocumentGenerationStatus(
-      this.stationRithmId,
-      statusNew.source._elementRef.nativeElement.id
-    );
+  updateStatusStation(Status: string, statusNew: MatSlideToggleChange): void {
+    const Value =
+      Status === 'None' && statusNew.checked === true
+        ? DocumentGenerationStatus.None
+        : Status === 'None' && statusNew.checked === false
+        ? DocumentGenerationStatus.Manual
+        : Status === 'Manual' && statusNew.checked === true
+        ? DocumentGenerationStatus.Manual
+        : DocumentGenerationStatus.None;
+
+    this.updateStationDocumentGenerationStatus(this.stationRithmId, Value);
   }
 
   /**
