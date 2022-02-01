@@ -59,35 +59,52 @@
             </button>
           </div>
           <!--Edit dashboard name.-->
-          <div
-            class="md:flex justify-between sm:inline-block border-solid border-b border-b-primary-100"
-            *ngIf="editMode"
-          >
-            <div>
-              <mat-form-field appearance="outline" class="w-72">
-                <input
-                  matInput
-                  type="text"
-                  placeholder="{{ dashboardData.name }}"
-                />
-              </mat-form-field>
+          <div *ngIf="editMode">
+            <div
+              class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
+            >
+              <div>
+                <mat-form-field
+                  appearance="outline"
+                  class="lg:w-72 w-full input-wrapper"
+                >
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="{{ dashboardData.name }}"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="justify-around">
+                <button
+                  mat-button
+                  id="save-button"
+                  data-testid="save-button"
+                  class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                  style="margin: 1em"
+                  (click)="toggleEditMode()"
+                >
+                  Cancel
+                </button>
+                <button
+                  mat-button
+                  id="cancel-button"
+                  data-testid="cancel-button"
+                  class="bg-accent-800 text-secondary-50 drop-shadow-md"
+                >
+                  Save
+                </button>
+              </div>
             </div>
-            <div class="justify-around">
-              <button
-                mat-button
-                class="bg-white text-secondary-500 drop-shadow-md font-semibold"
-                style="margin: 1em"
-                (click)="toggleEditMode()"
-              >
-                Cancel
-              </button>
-              <button
-                mat-button
-                class="bg-accent-800 text-secondary-50 drop-shadow-md"
-              >
-                Save
-              </button>
-            </div>
+            <button
+              mat-button
+              id="add-widget-button"
+              data-testid="add-widget-button"
+              class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              style="margin-top: 1em"
+            >
+              <i class="fas fa-plus"></i> Add Widget
+            </button>
           </div>
           <div
             class="col-span-full text-error-500 text-center my-4"
