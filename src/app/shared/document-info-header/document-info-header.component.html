@@ -127,7 +127,7 @@
     </div>
   </div>
 </section>
-<section *ngIf="isWidget" id="section-current-worker">
+<section *ngIf="isWidget" id="section-current-worker" class="border-b border-secondary-400">
   <div class="py-2">
     <p class="font-semibold">
       {{ documentName }}
@@ -145,7 +145,7 @@
         : 'flex justify-end '
     "
   >
-    <div *ngIf="currentAssignedUserDocument !== null">
+    <div *ngIf="currentAssignedUserDocument !== ''">
       <small
         class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
       >
