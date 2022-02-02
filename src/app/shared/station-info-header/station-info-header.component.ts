@@ -10,15 +10,13 @@ import {
   StationInfoDrawerData,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { Subject, first } from 'rxjs';
-import { SplitService } from 'src/app/core/split.service';
-import { ErrorService } from 'src/app/core/error.service';
+import { Subject } from 'rxjs';
 
 /**
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header[stationInformation][stationEditMode]',
+  selector: 'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })
@@ -42,15 +40,13 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   nameField!: Question;
 
   /** Part of the new station ui. */
-  viewNewStation = false;
+  @Input() viewNewStation = false;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService,
-    private splitService: SplitService,
-    private errorService: ErrorService
+    private sidenavDrawerService: SidenavDrawerService
   ) {
     this.type =
       this.userService.user.role === 'admin'
@@ -64,7 +60,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Set this.info. */
   ngOnInit(): void {
-    this.getTreatment();
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
@@ -75,23 +70,6 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       children: [],
     };
     this.stationNameForm.controls['name'].setValue(this.stationName);
-  }
-
-  /**
-   * Get station document split.
-   */
-   private getTreatment(): void {
-    const orgRithmId = this.userService.user.organization;
-    this.splitService.initSdk(orgRithmId);
-    this.splitService.sdkReady$.pipe(first()).subscribe({
-      next: () => {
-        const treatment = this.splitService.getStationDocumentTreatment();
-        treatment === 'on' ? this.viewNewStation = true : this.viewNewStation = false;
-      },
-      error: (error: unknown) => {
-        this.errorService.logError(error);
-      }
-    });
   }
 
   /**

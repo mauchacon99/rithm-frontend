@@ -44,6 +44,7 @@
             <app-station-info-header
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
+              [viewNewStation]="viewNewStation"
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
@@ -56,6 +57,7 @@
                   <app-document-info-header
                     #documentNameFields
                     [documentInformation]="stationInformation"
+                    [viewNewStation]="viewNewStation"
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
                   <div class="mt-2">
@@ -212,6 +214,7 @@
           <app-station-info-header
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
+              [viewNewStation]="viewNewStation"
               #stationInfoHeader
             ></app-station-info-header>
             <!-- Tabs -->
@@ -222,7 +225,13 @@
                   <span data-testid="document-tab">Document</span>
                 </ng-template>
                 <ng-template matTabContent>
-                  Tab content
+                  <!-- Document info header -->
+                  <app-document-info-header
+                    #documentNameFields
+                    [documentInformation]="stationInformation"
+                    [viewNewStation]="viewNewStation"
+                    *ngIf="!stationLoading"
+                  ></app-document-info-header>
                 </ng-template>
               </mat-tab>
               <!-- Flow Logic Tab -->
