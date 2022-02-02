@@ -236,4 +236,14 @@ describe('ConnectedStationsModalComponent', () => {
     const valueExpected = component.isAdmin;
     expect(valueExpected).toBe(true);
   });
+
+  it('should activate the connected-stations-loading when calling getAllStations', () => {
+    spyOnProperty(component, 'isAdmin').and.returnValue(true);
+    const connectedStationLoading =
+      fixture.debugElement.nativeElement.querySelector(
+        '#connected-stations-loading'
+      );
+    component.ngOnInit();
+    expect(connectedStationLoading).toBeTruthy();
+  });
 });
