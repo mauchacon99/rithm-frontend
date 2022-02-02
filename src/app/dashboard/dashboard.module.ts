@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { MyStationsComponent } from './my-stations/my-stations.component';
 import { PreviouslyStartedDocumentsComponent } from './previously-started-documents/previously-started-documents.component';
 import { PriorityQueueComponent } from './priority-queue/priority-queue.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { GridsterModule } from 'angular-gridster2';
 import { StationWidgetComponent } from './widgets/station-widget/station-widget.component';
@@ -60,7 +60,6 @@ import { MatMenuModule } from '@angular/material/menu';
     UserAvatarModule,
     DocumentModule,
     MatMenuModule,
-    FormsModule,
   ],
 })
 export class DashboardModule {}
