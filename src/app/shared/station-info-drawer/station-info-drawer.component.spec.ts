@@ -370,7 +370,7 @@ describe('StationInfoDrawerComponent', () => {
       TestBed.inject(StationService),
       'getAllowExternalWorkers'
     ).and.callThrough();
-    component.getAllowExternalWorkers();
+    component['getAllowExternalWorkers']();
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
 });

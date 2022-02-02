@@ -597,7 +597,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /**
    * Get the allow external workers for the station roster.
    */
-  getAllowExternalWorkers(): void {
+  private getAllowExternalWorkers(): void {
     this.stationService
       .getAllowExternalWorkers(this.stationRithmId)
       .pipe(first())
