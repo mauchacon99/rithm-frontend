@@ -10,4 +10,7 @@ export interface Station {
 
   /** Instructions for working in the station. */
   instructions: string;
+
+  /** Whether to allow external workers be part of the station owner/worker roster. */
+  allowExternalWorkers: boolean;
 }
