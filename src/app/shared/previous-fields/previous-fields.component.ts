@@ -13,6 +13,9 @@ import { Question } from 'src/models';
 import { PopupService } from 'src/app/core/popup.service';
 import { Subject } from 'rxjs';
 import { DocumentService } from 'src/app/core/document.service';
+import { QuestionFieldType } from 'src/models/enums/question-field-type.enum';
+import { MatDialog } from '@angular/material/dialog';
+import { AnswersModalComponent } from './answers-modal/answers-modal.component';
 
 /**
  * Component for station private/all fields in extension panel.
@@ -54,7 +57,8 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
     private stationService: StationService,
     private errorService: ErrorService,
     private popupService: PopupService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private dialog: MatDialog
   ) {}
 
   /**
@@ -74,6 +78,39 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
     } else {
       this.getDocumentPreviousQuestions();
     }
+  }
+
+  /**
+   * Whether the field is a selectable answer type or not.
+   *
+   * @param fieldType Current iterated question field type.
+   * @returns If the current type belongs to a selectable Answer question type.
+   */
+  isSelectableAnswerType(fieldType: QuestionFieldType): boolean {
+    return (
+      fieldType === QuestionFieldType.Select ||
+      fieldType === QuestionFieldType.MultiSelect ||
+      fieldType === QuestionFieldType.CheckList
+    );
+  }
+
+  /**
+   * Get the possible selected answers to be displayed.
+   *
+   * @param question The question to get its current selected answers.
+   * @returns An string for all of the selected answers.
+   */
+  returnSelectableAnswers(question: Question): string | null {
+    let selectedAnswers: string | null = '';
+    if (question.answer && question.answer.asArray?.length) {
+      question.answer.asArray?.forEach((selected) => {
+        selectedAnswers += selected.isChecked ? selected.value + ' | ' : '';
+      });
+    }
+    selectedAnswers = selectedAnswers.length
+      ? selectedAnswers.slice(0, -2)
+      : null;
+    return selectedAnswers;
   }
 
   /**
@@ -166,11 +203,16 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
    * @param previousQuestion The Question of the document.
    */
   openModalPreviousQuestions(previousQuestion: Question): void {
-    this.popupService.confirm({
-      title: `${previousQuestion.prompt}`,
-      message: `${previousQuestion.answer?.value}`,
-      okButtonText: 'Ok',
-      cancelButtonText: 'Cancel',
+    this.dialog.open(AnswersModalComponent, {
+      data: {
+        title: `${previousQuestion.prompt}`,
+        isSelectableType: this.isSelectableAnswerType(
+          previousQuestion.questionType
+        ),
+        information: previousQuestion,
+      },
+      width: '500px',
+      maxWidth: '1200px',
     });
   }
 }

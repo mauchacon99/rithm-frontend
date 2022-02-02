@@ -182,7 +182,10 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
         next: (documentName) => {
           this.documentNameForm.controls.name.setValue(documentName.baseName);
           this.documentName = documentName.baseName;
-          this.appendedDocumentName = documentName.appendedName;
+          this.appendedDocumentName = this.formatAppendedName(
+            documentName.appendedName
+          );
+          documentName.appendedName = this.appendedDocumentName;
           this.documentService.updateDocumentNameBS(documentName);
         },
         error: (error: unknown) => {
@@ -192,6 +195,38 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Give a properly format to the appendedName.
+   *
+   * @param appendedName Unformatted appendedName.
+   * @returns Formatted appendedName.
+   */
+  private formatAppendedName(appendedName: string): string {
+    const formatted: string[] = [];
+    const separatedChips: string[] = appendedName.split('/');
+    //Separate each chip added to appended name
+    separatedChips.forEach((element) => {
+      //verify each element is in a readable format and added to the final form
+      if (!element.includes('|') && !element.includes(':')) {
+        formatted.push(element);
+      } else {
+        // if an element contain rithmsId or it is not readable then it will be splitted till become readable
+        const items: string[] = [];
+        if (element.includes('|')) {
+          const barItems = element.split('|');
+          barItems.forEach((item) => {
+            items.push(item.split(':')[1]);
+          });
+          formatted.push(items.toString().replace(/(,)/g, ' | '));
+        } else {
+          formatted.push(element.split(':')[1]);
+        }
+      }
+    });
+    //finally we rebuilt the string to make it readable again.
+    return formatted.toString().replace(/(,)/g, ' / ');
   }
 
   /**
