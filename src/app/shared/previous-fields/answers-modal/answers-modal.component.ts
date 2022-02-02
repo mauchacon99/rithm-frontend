@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { QuestionFieldType } from 'src/models';
 import { Question } from 'src/models/question';
 
 /**
@@ -57,8 +58,10 @@ export class AnswersModalComponent implements OnInit {
         });
       }
     } else {
-      if (this.question.answer?.value) {
-        this.stringMessage = this.question.answer?.value;
+      if (this.question.questionType !== QuestionFieldType.AddressLine) {
+        if (this.question.answer?.value) {
+          this.stringMessage = this.question.answer?.value;
+        }
       }
     }
   }

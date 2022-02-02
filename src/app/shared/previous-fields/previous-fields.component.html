@@ -36,25 +36,34 @@
             <h6 class="truncate font-semibold">{{ previousField.prompt }}</h6>
             <p
               class="truncate"
+              [ngClass]="{
+                'italic text-secondary-300':
+                  !previousField.answer?.value?.length
+              }"
               *ngIf="
                 !isSelectableAnswerType(previousField.questionType);
                 else isSelectableType
               "
             >
-              {{ previousField.answer?.value }}
+              {{
+                previousField.answer?.value?.length
+                  ? previousField.answer?.value
+                  : 'No answer'
+              }}
             </p>
             <ng-template #isSelectableType>
               <p
-                *ngIf="returnSelectableAnswers(previousField)"
                 class="truncate"
+                [ngClass]="{
+                  'italic text-secondary-300':
+                    !returnSelectableAnswers(previousField)
+                }"
               >
-                {{ returnSelectableAnswers(previousField) }}
-              </p>
-              <p
-                *ngIf="!returnSelectableAnswers(previousField)"
-                class="truncate italic text-secondary-300"
-              >
-                No answer
+                {{
+                  returnSelectableAnswers(previousField)
+                    ? returnSelectableAnswers(previousField)
+                    : 'No answer'
+                }}
               </p>
             </ng-template>
           </article>

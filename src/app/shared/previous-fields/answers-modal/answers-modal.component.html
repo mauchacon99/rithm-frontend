@@ -9,7 +9,7 @@
   class="py-4 whitespace-pre-wrap overflow-y-hidden"
 >
   <div *ngIf="!messageType">
-    <p>{{ stringMessage }}</p>
+    <p *ngIf="stringMessage.length">{{ stringMessage }}</p>
   </div>
   <div *ngIf="messageType">
     <figure *ngFor="let item of listMessage" class="py-2">

@@ -38,6 +38,9 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
   /** Comes from station or not. */
   @Input() isStation = true;
 
+  /** The question that will be moved to the template area. */
+  @Output() private movingQuestion = new EventEmitter<Question>();
+
   /** The list of station private/all questions. */
   questions: Question[] = [];
 
@@ -46,9 +49,6 @@ export class PreviousFieldsComponent implements OnInit, OnDestroy {
 
   /** Whether questions is loading. */
   isLoading = false;
-
-  /** The question that will be moved to the template area. */
-  @Output() private movingQuestion = new EventEmitter<Question>();
 
   /** Observable for when the component is destroyed. */
   private destroyed$ = new Subject<void>();
