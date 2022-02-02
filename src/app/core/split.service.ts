@@ -14,13 +14,13 @@ export class SplitService {
   /**
    * Initialize the split.io service.
    *
-   * @param userId User id of logged in user.
+   * @param orgId Organization id of logged in user.
    */
-  public initSdk(userId: string): void {
+  public initSdk(orgId: string): void {
     const splitSDK: SplitIO.ISDK = SplitFactory({
       core: {
         authorizationKey: 'o2auojf6jvntjdciqc356q300cepl3t26la0',
-        key: userId,
+        key: orgId,
       },
     });
 
