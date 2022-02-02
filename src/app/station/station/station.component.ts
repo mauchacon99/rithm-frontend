@@ -24,6 +24,8 @@ import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
 import { PossibleAnswer } from '../../../models/possible-answer';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Main component for viewing a station.
@@ -87,6 +89,8 @@ export class StationComponent
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
+    private splitService: SplitService,
+    private userService: UserService,
     @Inject(ChangeDetectorRef) private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
@@ -193,6 +197,8 @@ export class StationComponent
   ngAfterContentChecked(): void {
     this.ref.detectChanges();
   }
+
+
 
   /**
    * Generate a random rithmId to added fields.
