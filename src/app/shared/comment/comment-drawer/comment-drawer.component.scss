@@ -1,3 +1,11 @@
 .comment-h {
   height: calc(100vh - 248px);
 }
+
+.tabs-comments {
+  ::ng-deep .mat-tab-header {
+    .mat-tab-label {
+      min-width: 50% !important;
+    }
+  }
+}
