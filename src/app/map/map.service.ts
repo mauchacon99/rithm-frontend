@@ -52,6 +52,9 @@ export class MapService {
   /** Informs the map when station elements have changed. */
   stationElementsChanged$ = new BehaviorSubject(false);
 
+  /** Informs the map when station group elements have changed. */
+  stationGroupElementsChanged$ = new BehaviorSubject(false);
+
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
 
@@ -1224,9 +1227,14 @@ export class MapService {
         updatedStation.status = MapItemStatus.Normal;
       }
     }
-    //If there are still stations with status not normal, return true.
-    return this.stationElements.some(
-      (station) => station.status !== MapItemStatus.Normal
+    //If there are still stations or station group with status not normal, return true.
+    return (
+      this.stationElements.some(
+        (station) => station.status !== MapItemStatus.Normal
+      ) ||
+      this.stationGroupElements.some(
+        (stationGroup) => stationGroup.status !== MapItemStatus.Normal
+      )
     );
   }
 
@@ -1363,5 +1371,43 @@ export class MapService {
     ) {
       this.resetSelectedStationGroupStationStatus();
     }
+  }
+
+  /**
+   * Delete the station group and find it's parent to move all it's stations and sub groups to parent station group.
+   *
+   * @param stationGroupId The incoming station group Id to be deleted.
+   */
+  removeStationGroup(stationGroupId: string): void {
+    //Find the station group from this.stationGroupElements array.
+    const removedGroup = this.stationGroupElements.find(
+      (group) => group.rithmId === stationGroupId
+    );
+    if (!removedGroup) {
+      throw new Error('Station group was not found.');
+    }
+    this.stationGroupElements.forEach((group) => {
+      if (
+        //Find parent station group of incoming station group.
+        group.subStationGroups.includes(removedGroup.rithmId)
+      ) {
+        //Move all sub station groups of deleted station group to it's parent.
+        group.subStationGroups = group.subStationGroups.concat(
+          removedGroup.subStationGroups
+        );
+        //Move all stations of deleted station group to it's parent.
+        group.stations = group.stations.concat(removedGroup.stations);
+        //Mark parent station group of deleted station group as updated.
+        group.markAsUpdated();
+        //Remove all stations of deleting station group.
+        removedGroup.stations = [];
+        //Remove all sub station groups of deleting station group.
+        removedGroup.subStationGroups = [];
+        //Mark removedGroup as deleted.
+        removedGroup.markAsDeleted();
+        //Note a change in map data.
+        this.mapDataReceived$.next(true);
+      }
+    });
   }
 }

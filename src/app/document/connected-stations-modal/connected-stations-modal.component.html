@@ -22,10 +22,7 @@
   <mat-form-field class="w-4/5" appearance="outline">
     <mat-label> {{ label }} </mat-label>
     <mat-select [(value)]="selectedStation">
-      <mat-option
-        *ngFor="let station of connectedStations"
-        [value]="station.rithmId"
-      >
+      <mat-option *ngFor="let station of stations" [value]="station.rithmId">
         {{ station.name }}
       </mat-option>
     </mat-select>

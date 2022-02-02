@@ -9,7 +9,6 @@ import {
   CONNECTION_LINE_WIDTH,
   BUTTON_DEFAULT_COLOR,
   DEFAULT_SCALE,
-  STATION_GROUP_NAME_PADDING,
   FONT_SIZE_MODIFIER,
   NODE_HOVER_COLOR,
   CONNECTION_LINE_WIDTH_SELECTED,
@@ -20,6 +19,10 @@ import {
   TOOLTIP_HEIGHT,
   TOOLTIP_WIDTH,
   TOOLTIP_PADDING,
+  STATION_GROUP_NAME_TRANSLATE,
+  STATION_GROUP_NAME_MAX_ANGLE_ROTATE,
+  SLOPE_RANGE_NOT_ALLOWED,
+  SCALE_RENDER_STATION_ELEMENTS,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -105,7 +108,11 @@ export class StationGroupElementService {
     if (stationGroup.boundaryPoints.length > 0) {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
-      this.drawStationGroupName(stationGroup);
+      // Render station group name depending on the zoom level.
+      if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
+        this.drawStationGroupName(stationGroup);
+      }
+
       if (
         this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
         stationGroup.disabled &&
@@ -266,6 +273,8 @@ export class StationGroupElementService {
         'Cannot draw station group name if context is not defined'
       );
     }
+    // Save canvas, it is used to avoid having to rotate the context again.
+    this.canvasContext.save();
     // The name of the station group.
     // Change color when hovered over.
     this.canvasContext.fillStyle =
@@ -283,14 +292,64 @@ export class StationGroupElementService {
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
-    //Place so that it covers the line.
+
+    // Calculates the position of the first straightest line.
+    const newPosition = this.positionStraightestLine(
+      stationGroup.boundaryPoints,
+      this.canvasContext.measureText(stationGroup.title).width +
+        STATION_GROUP_PADDING
+    );
+
+    // Calculation of the angle of rotation of station group name.
+    const rotateAngleStationGroupName = Math.atan(
+      this.slopeLine(
+        stationGroup.boundaryPoints[newPosition],
+        stationGroup.boundaryPoints[newPosition - 1]
+      )
+    );
+
+    // Moves the point on the line.
+    const newPoint = this.movePointOnLine(
+      {
+        x: stationGroup.boundaryPoints[newPosition].x,
+        y: stationGroup.boundaryPoints[newPosition].y,
+      },
+      {
+        x: stationGroup.boundaryPoints[newPosition - 1].x,
+        y: stationGroup.boundaryPoints[newPosition - 1].y,
+      },
+      STATION_GROUP_NAME_TRANSLATE * this.mapScale
+    );
+
+    // translate the canvas to the new point.
+    this.canvasContext.translate(newPoint.x, newPoint.y);
+
+    // Rotate station group name.
+    this.canvasContext.rotate(rotateAngleStationGroupName);
+
+    // Delete the line under the station group name.
+    this.canvasContext.clearRect(
+      -5,
+      -5,
+      this.canvasContext.measureText(stationGroup.title).width +
+        STATION_GROUP_PADDING,
+      //This dynamically sets the hight of the rectangle based on the hight of the text.
+      this.canvasContext.measureText(stationGroup.title)
+        .fontBoundingBoxDescent + 6
+    );
+
+    // Paint the station group name.
     this.canvasContext.fillText(
       stationGroup.title,
-      stationGroup.boundaryPoints[0].x +
-        STATION_GROUP_NAME_PADDING * this.mapScale,
-      stationGroup.boundaryPoints[stationGroup.boundaryPoints.length - 1].y +
-        STATION_GROUP_NAME_PADDING * this.mapScale
+      5,
+      this.canvasContext.measureText(stationGroup.title).fontBoundingBoxDescent
     );
+
+    // Reset translate and rotate.
+    this.canvasContext.rotate(-rotateAngleStationGroupName);
+    this.canvasContext.translate(-newPoint.x, -newPoint.y);
+    // Restore Canvas.
+    this.canvasContext.restore();
   }
 
   /**
@@ -459,7 +518,6 @@ export class StationGroupElementService {
     // graphics convention. This doesn't affect the correctness of the result.
 
     // TODO: Refactor this; some duplicated code and vague variable names
-
     const upperHull: Point[] = [];
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
@@ -523,5 +581,134 @@ export class StationGroupElementService {
     } else {
       return 0;
     }
+  }
+
+  /**
+   * Calculate the slope between two points.
+   *
+   * @param pointStart The start point of the line.
+   * @param pointEnd The end point of the line.
+   * @returns The slope of a line.
+   */
+  slopeLine(pointStart: Point, pointEnd: Point): number {
+    // If the denominator approximates 0 then return pi to deal with the error.
+    if (
+      pointEnd.x - pointStart.x > -SLOPE_RANGE_NOT_ALLOWED &&
+      pointEnd.x - pointStart.x < SLOPE_RANGE_NOT_ALLOWED
+    )
+      return Math.PI;
+
+    return (pointEnd.y - pointStart.y) / (pointEnd.x - pointStart.x);
+  }
+
+  /**
+   * Move a point on the line.
+   *
+   * @param pointStart The start point of the line.
+   * @param pointEnd The end point of the line.
+   * @param displacement The Amount of displacement.
+   * @param coordinate The coordinate to move, if true the coordinate is X else the coordinate is Y.
+   * @returns The new Point on line.
+   */
+  movePointOnLine(
+    pointStart: Point,
+    pointEnd: Point,
+    displacement: number,
+    coordinate = true
+  ): Point {
+    const newPoint = pointStart;
+
+    // Calculate the slope between two points.
+    const m = this.slopeLine(pointStart, pointEnd);
+    // If the slope is 0.
+    if (m === Math.PI) return newPoint;
+
+    // If true the coordinate is X else the coordinate is Y
+    if (coordinate) {
+      // x-coordinate displacement.
+      newPoint.x += displacement;
+      // The point-slope equation evaluating X.
+      newPoint.y = m * (newPoint.x - pointEnd.x) + pointEnd.y;
+    } else {
+      // Y-coordinate displacement.
+      newPoint.y += displacement;
+      // The point-slope equation evaluating Y.
+      newPoint.x = (newPoint.y - pointEnd.y) / m + pointEnd.x;
+    }
+    return newPoint;
+  }
+
+  /**
+   * Position of the points that make the first straight line.
+   *
+   * @param points A Array the points.
+   * @param titleWidth The Width station Group Name.
+   * @returns The position of the points that make the first straight line.
+   */
+  positionStraightestLine(points: Point[], titleWidth: number): number {
+    let newPosition = points.length - 1;
+    // Array of The best positions to place the name.
+    const memoryPosition: {
+      /** The position in array points. */
+      position: number;
+      /** The slope line. */
+      slope: number;
+      /** The distance between the position and the next position. */
+      distance: number;
+    }[] = [];
+
+    for (let i = points.length - 1; i > 1; i--) {
+      // Calculate the slope between two points.
+      const m = this.slopeLine(points[i], points[i - 1]);
+      const distance = this.distanceBetweenTwoPoints(points[i], points[i - 1]);
+      // If the slope is equal a Pi than continue with next point.
+      if (m === Math.PI) {
+        break;
+      }
+      // Calculation of the angle of rotation.
+      const rotateAngleStationGroupName = Math.atan(m);
+      // If the angle of rotation is greater than the maximum angle of rotation.
+      if (rotateAngleStationGroupName > STATION_GROUP_NAME_MAX_ANGLE_ROTATE) {
+        memoryPosition.push({
+          position: i,
+          slope: m,
+          distance: distance,
+        });
+      }
+    }
+    // The first position is assigned.
+    newPosition = memoryPosition[0].position;
+    let slopeBetter = Math.abs(memoryPosition[0].slope);
+    for (let i = 0; i < memoryPosition.length; i++) {
+      //If the slope is 0 and the distance is greater than the station group name.
+      if (
+        memoryPosition[i].slope === 0 &&
+        memoryPosition[i].distance >= titleWidth
+      ) {
+        newPosition = memoryPosition[i].position;
+        break;
+        // If the slope is less than the best slope 0 and the distance is greater than the station group name.
+      } else if (
+        Math.abs(memoryPosition[i].slope) < slopeBetter &&
+        memoryPosition[i].distance >= titleWidth
+      ) {
+        newPosition = memoryPosition[i].position;
+        slopeBetter = memoryPosition[i].slope;
+      }
+    }
+    return newPosition;
+  }
+
+  /**
+   * The distance between two points.
+   *
+   * @param pointStart The start point of the line.
+   * @param pointEnd The end point of the line.
+   * @returns The distance between two points.
+   */
+  distanceBetweenTwoPoints(pointStart: Point, pointEnd: Point): number {
+    const xDistance = pointEnd.y - pointStart.y;
+    const yDistance = pointEnd.x - pointStart.x;
+    return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
   }
 }

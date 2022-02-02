@@ -5,7 +5,7 @@ import { User } from './user';
  */
 export interface DocumentEvent {
   /** Date of event the document. */
-  date: string;
+  eventTimeUTC: string;
 
   /** Description for event the document. */
   description: string;

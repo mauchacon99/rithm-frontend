@@ -17,7 +17,6 @@
         mat-stroked-button
         color="warn"
         (click)="getStationWidgetDocuments()"
-        (touchstart)="getStationWidgetDocuments()"
         id="try-again"
         data-testid="try-again"
       >
@@ -48,6 +47,7 @@
             color="accent"
             data-testid="create-new-document"
             id="create-new-document"
+            (click)="createNewDocument()"
           >
             New Document <i class="fas fa-plus"></i>
           </button>
@@ -125,7 +125,11 @@
 </div>
 
 <!--Document detail-->
-<div class="h-full p-2 overflow-auto" *ngIf="isDocument" id="document-detail">
+<div
+  class="h-full p-2 overflow-auto"
+  *ngIf="isDocument && !isLoading"
+  id="document-detail"
+>
   <!--  Header -->
   <div class="flex justify-between items-center">
     <button
@@ -144,6 +148,7 @@
   <div class="container-document">
     <app-document
       [isWidget]="true"
+      (returnDocumentsWidget)="viewDocument('', $event)"
       [documentRithmIdWidget]="documentIdSelected"
       [stationRithmIdWidget]="stationRithmId"
     ></app-document>

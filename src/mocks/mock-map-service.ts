@@ -8,6 +8,7 @@ import {
   MapItemStatus,
   MapMode,
   Point,
+  StationGroupMapData,
   StationMapData,
 } from 'src/models';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +28,31 @@ export class MockMapService {
 
   /** The station elements displayed on the map. */
   stationElements: StationMapElement[] = [];
+
+  /** The station group elements displayed on the map. */
+  stationGroupMapData: StationGroupMapData[] = [
+    {
+      rithmId: 'CCAEBE24-AF01-48AB-A7BB-279CC25B0989',
+      title: 'Rithm Group',
+      organizationRithmId: '',
+      stations: [],
+      subStationGroups: ['ED6155C9-ABB7-458E-A250-9542B2535B1C'],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: false,
+    },
+    {
+      rithmId: 'ED6155C9-ABB7-458E-A250-9542B2535B1C',
+      title: ' Sub RithmGroup',
+      organizationRithmId: '',
+      stations: [],
+      subStationGroups: [],
+      status: MapItemStatus.Normal,
+      isReadOnlyRootStationGroup: false,
+    },
+  ];
+
+  /** Informs the map when station group elements have changed. */
+  stationGroupElementsChanged$ = new BehaviorSubject(false);
 
   /** The station group elements displayed on the map. */
   stationGroupElements: StationGroupMapElement[] = [];
@@ -89,6 +115,9 @@ export class MockMapService {
   constructor() {
     this.station.isAddingConnected = true;
     this.stationElements.push(this.station);
+    this.stationGroupElements = this.stationGroupMapData.map(
+      (e) => new StationGroupMapElement(e)
+    );
   }
 
   /**
@@ -384,6 +413,44 @@ export class MockMapService {
         this.stationElements[stationIndex].selected = false;
         this.stationElements[stationIndex].disabled = false;
       });
+    });
+  }
+
+  /**
+   * Delete the station group and find it's parent to move all it's stations and sub groups to parent station group.
+   *
+   * @param stationGroupId The incoming station group Id to be deleted.
+   */
+  removeStationGroup(stationGroupId: string): void {
+    //Find the station group from this.stationGroupElements array.
+    const stationGroup = this.stationGroupElements.find(
+      (group) => group.rithmId === stationGroupId
+    );
+    if (!stationGroup) {
+      throw new Error('Station group was not found.');
+    }
+    this.stationGroupElements.forEach((group) => {
+      if (
+        //Find parent station group of incoming station group.
+        group.subStationGroups.includes(stationGroup.rithmId)
+      ) {
+        //Move all sub station groups of incoming station group to it's parent.
+        group.subStationGroups = group.subStationGroups.concat(
+          stationGroup.subStationGroups
+        );
+        //Move all stations of incoming station group to it's parent.
+        group.stations = group.stations.concat(stationGroup.stations);
+        //Mark parent station group of incoming station group as updated.
+        group.markAsUpdated();
+        //Remove all stations of deleting station group.
+        stationGroup.stations = [];
+        //Remove all sub station groups of deleting station group.
+        stationGroup.subStationGroups = [];
+        //Mark incoming station group as deleted.
+        stationGroup.markAsDeleted();
+        //Note a change in map data.
+        this.mapDataReceived$.next(true);
+      }
     });
   }
 }

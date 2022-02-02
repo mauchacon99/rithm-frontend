@@ -4,7 +4,11 @@
     <h4 class="text-center">New Rule</h4>
   </div>
   <!-- Stepper for new rule -->
-  <mat-stepper [linear]="true" [orientation]="(stepperOrientation$ | async)!">
+  <mat-stepper
+    [linear]="true"
+    (selectionChange)="selectionChangeStep($event)"
+    [orientation]="(stepperOrientation$ | async)!"
+  >
     <ng-template matStepperIcon="edit">
       <i class="fas fa-check"></i>
     </ng-template>
@@ -31,7 +35,7 @@
             <mat-option
               *ngFor="let question of questionStation"
               [value]="question.rithmId"
-              (click)="setOperatorList(question.questionType)"
+              (click)="setOperatorList(question.questionType, question.prompt)"
             >
               {{ question.prompt }}
             </mat-option>
@@ -70,14 +74,19 @@
       </ng-template>
       <div class="flex flex-col md:w-5/12 justify-start">
         <p class="text-sm mt-1">
-          Select the comparasion value for field type: <b>Short Text</b>
+          Select the comparasion value for field type:
+          <span class="font-semibold">{{ firstFieldType | titlecase }}</span>
         </p>
         <mat-form-field appearance="outline" class="mt-2">
           <mat-label>Comparison Type</mat-label>
-          <mat-select [(value)]="operator">
+          <mat-select
+            [(ngModel)]="operator"
+            [ngModelOptions]="{ standalone: true }"
+          >
             <mat-option
               *ngFor="let option of operatorList"
               [value]="option.value"
+              (click)="operatorText = option.text"
             >
               {{ option.text }}
             </mat-option>
@@ -85,7 +94,15 @@
         </mat-form-field>
       </div>
       <div class="flex flex-row space-x-2">
-        <button mat-button matStepperPrevious class="w-1/12">Back</button>
+        <button
+          mat-button
+          matStepperPrevious
+          data-testid="back-step-2"
+          id="back-step-2"
+          class="w-1/12"
+        >
+          Back
+        </button>
         <button
           mat-button
           matStepperNext
@@ -99,7 +116,10 @@
       </div>
     </mat-step>
     <!-- Step 3 -->
-    <mat-step color="accent" [completed]="secondOperand !== ''">
+    <mat-step
+      color="accent"
+      [completed]="secondOperand !== '' || secondOperandField.value !== ''"
+    >
       <ng-template matStepLabel>
         <p class="truncate ml-2">Comparison Value</p>
       </ng-template>
@@ -109,30 +129,45 @@
         </p>
       </div>
       <div class="flex flex-col md:flex-row md:w-3/5 justify-start mt-2">
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Custom Value</mat-label>
-          <div matPrefix class="icon">
-            <i class="fas fa-font"></i>
-          </div>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="secondOperand"
-            autocomplete="off"
-          />
-        </mat-form-field>
+        <div (focusin)="secondOperand = ''" [ngSwitch]="firstOperandType">
+          <app-text-field
+            *ngSwitchCase="operandType.String"
+            #textField
+            [field]="secondOperandField"
+            [labelTag]="secondOperandField.prompt"
+            [isStation]="false"
+            [isInput]="true"
+          >
+          </app-text-field>
+          <app-number-field
+            *ngSwitchCase="operandType.Number"
+            #numberField
+            [field]="secondOperandField"
+          >
+          </app-number-field>
+          <app-date-field
+            *ngSwitchCase="operandType.Date"
+            #dateField
+            [field]="secondOperandField"
+          >
+          </app-date-field>
+        </div>
         <span class="md:py-5 md:px-2 self-center md:self-auto"> OR </span>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>Previous field</mat-label>
-          <mat-select [(ngModel)]="secondOperand">
-            <ng-container *ngFor="let question of questionStation">
-              <mat-option
-                *ngIf="question.rithmId !== firstOperand"
-                [value]="question.rithmId"
-              >
-                {{ question.prompt }}
-              </mat-option>
-            </ng-container>
+          <mat-select
+            [disabled]="!secondOperandQuestionList.length"
+            [(ngModel)]="secondOperand"
+            (focus)="refreshComponentField()"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option
+              *ngFor="let question of secondOperandQuestionList"
+              [value]="question.rithmId"
+              (click)="secondOperandText = question.prompt"
+            >
+              {{ question.prompt }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -152,7 +187,7 @@
           class="w-1/12 text-accent-500"
           data-testid="next-step-3"
           id="next-step-3"
-          [disabled]="secondOperand === ''"
+          [disabled]="secondOperand === '' && secondOperandField.value === ''"
         >
           Next
         </button>
@@ -165,8 +200,9 @@
       </ng-template>
       <div class="flex flex-col">
         <p class="text-sm my-1">
-          {{ firstOperand }} <span class="font-bold">{{ operator }} </span>
-          {{ secondOperand }}
+          {{ firstOperandText }}
+          <span class="font-semibold">{{ operatorText }} </span>
+          {{ secondOperandText }}
         </p>
       </div>
       <div class="flex flex-row space-x-2 mt-5">
@@ -191,6 +227,14 @@
     </mat-step>
   </mat-stepper>
   <div mat-dialog-actions class="flex justify-end">
-    <button mat-button mat-dialog-close (click)="closeModal()">Close</button>
+    <button
+      mat-button
+      mat-dialog-close
+      data-testid="close-modal-btn"
+      id="close-modal-btn"
+      (click)="closeModal()"
+    >
+      Close
+    </button>
   </div>
 </div>

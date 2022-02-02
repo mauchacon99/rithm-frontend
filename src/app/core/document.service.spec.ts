@@ -452,7 +452,7 @@ describe('DocumentService', () => {
 
     const req = httpTestingController.expectOne(
       // eslint-disable-next-line max-len
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/previous-questions?documentRithmId=${documentId}&stationRithmId=${stationId}&getPrivate=${getPrivate}`
     );
     expect(req.request.method).toEqual('GET');
     expect(req.request.params.get('documentRithmId')).toBe(documentId);
@@ -710,7 +710,7 @@ describe('DocumentService', () => {
     const documentRithmId = documentId;
     const expectedEventsResponse: DocumentEvent[] = [
       {
-        date: '2022-01-18T22:13:05.871Z',
+        eventTimeUTC: '2022-01-18T22:13:05.871Z',
         description: 'Event Document #1',
         user: {
           rithmId: '123',
@@ -734,7 +734,7 @@ describe('DocumentService', () => {
     const documentRithmId = documentId;
     const expectedEventsResponse: DocumentEvent[] = [
       {
-        date: '2022-01-18T22:13:05.871Z',
+        eventTimeUTC: '2022-01-18T22:13:05.871Z',
         description: 'Event Document #1',
         user: {
           rithmId: '123',

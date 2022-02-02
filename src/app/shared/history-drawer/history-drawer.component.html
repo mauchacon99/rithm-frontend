@@ -1,8 +1,74 @@
-<div class="h-full w-full flex justify-center items-center absolute"></div>
 <div class="grid grid-cols-1">
-  <div class="w-full py-2">
+  <div class="w-full py-2 mb-4">
     <div class="col-span-12">
-      <p class="font-semibold text-center mt-1">Document History</p>
+      <h6 class="text-center">Document History</h6>
     </div>
+  </div>
+  <div *ngIf="!eventDocumentsLoading && !eventDocumentsError">
+    <div *ngFor="let history of eventDocuments">
+      <div>
+        <div class="flex">
+          <div
+            class="flex justify-center w-1/4"
+            *ngIf="history && history.user"
+          >
+            <app-user-avatar
+              [firstName]="history.user.firstName"
+              [lastName]="history.user.lastName"
+              [navProfile]="true"
+            ></app-user-avatar>
+          </div>
+          <div
+            *ngIf="history && !history.user"
+            class="flex justify-center w-1/4"
+          >
+            <div
+              id="avatar-rithm"
+              class="flex justify-center circle-40-primary"
+            >
+              <img
+                src="assets/logo/white-icon-only.svg"
+                class="w-5"
+                alt="Logo Rithm"
+              />
+            </div>
+          </div>
+          <div class="w-3/4">
+            <p class="font-semibold text-sm truncate">
+              <span *ngIf="history.user; else noUser">
+                {{ history.user?.firstName }} {{ history.user?.lastName }}
+              </span>
+              <ng-template #noUser>
+                <span>Rithm Automation</span>
+              </ng-template>
+            </p>
+            <p class="font-semibold text-xs text-primary-100">
+              {{ history.eventTimeUTC | date: 'MM/dd/yyyy' }}
+            </p>
+          </div>
+        </div>
+        <div class="flex my-3">
+          <div class="flex justify-center w-1/4">
+            <div class="border-r-2 border-primary-100"></div>
+          </div>
+          <div class="w-3/4">
+            <p class="text-sm text-clip">
+              {{ history.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="eventDocumentsLoading" class="mt-2">
+    <app-loading-indicator
+      id="loading-indicator-history"
+      [inlineText]="'Loading...'"
+    ></app-loading-indicator>
+  </div>
+  <div *ngIf="eventDocumentsError" id="events-documents-error">
+    <p class="text-left text-error-500 mt-1 ml-4">
+      Error: Unable to retrive events history.
+    </p>
   </div>
 </div>

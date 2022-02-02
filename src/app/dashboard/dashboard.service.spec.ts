@@ -8,6 +8,7 @@ import {
   Document,
   DashboardItem,
   WidgetType,
+  DashboardData,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -272,5 +273,190 @@ describe('DashboardService', () => {
 
     req.flush(widgetsExpected);
     httpTestingController.verify();
+  });
+  it('should return updated dashboard', () => {
+    const updateDashboard: DashboardData = {
+      rithmId: '',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 0,
+          rows: 0,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          maxItemCols: 0,
+        },
+      ],
+    };
+    service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
+      expect(response).toEqual(updateDashboard);
+    });
+  });
+  it('should returns organization dashboard', () => {
+    const organizationDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852',
+        name: 'Organization 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(organizationDashboards);
+    });
+  });
+
+  it('should returns user`s customized dashboards', () => {
+    const personalDashboards: DashboardData[] = [
+      {
+        rithmId: '123654-789654-7852-789',
+        name: 'Personal 1',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+      {
+        rithmId: '123654-789654-7852-963',
+        name: 'Personal 2',
+        widgets: [
+          {
+            cols: 4,
+            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
+            maxItemCols: 0,
+            maxItemRows: 0,
+            minItemCols: 0,
+            minItemRows: 0,
+            rows: 2,
+            widgetType: WidgetType.Station,
+            x: 0,
+            y: 0,
+          },
+        ],
+      },
+    ];
+
+    service.getPersonalDashboard().subscribe((response) => {
+      expect(response).toEqual(personalDashboards);
+    });
+  });
+
+  it('should return a new dashboard personal', () => {
+    const expectDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewPersonalDashboard().subscribe((newDashboard) => {
+      expect(newDashboard).toEqual(expectDashboard);
+    });
+  });
+
+  it('should return new data for dashboard when update dashboard', () => {
+    const dashboardData: DashboardData = {
+      rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
+      name: 'name',
+      widgets: [
+        {
+          cols: 1,
+          rows: 2,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Document,
+          data: 'string',
+          minItemRows: 1,
+          maxItemRows: 2,
+          minItemCols: 1,
+          maxItemCols: 2,
+        },
+      ],
+    };
+
+    service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
+      expect(response).toEqual(dashboardData);
+    });
+  });
+
+  it('should return a new organization dashboard', () => {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service.generateNewOrganizationDashboard().subscribe((response) => {
+      expect(response).toEqual(newDashboard);
+    });
   });
 });

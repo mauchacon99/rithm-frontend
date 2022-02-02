@@ -4,6 +4,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationWidgetData } from 'src/models';
 import { UtcTimeConversion } from 'src/helpers';
+import { PopupService } from 'src/app/core/popup.service';
 
 /**
  * Component for Station widget.
@@ -33,10 +34,14 @@ export class StationWidgetComponent implements OnInit {
   /** Document id selected for view. */
   documentIdSelected = '';
 
+  /** Update document list when a new document is created. */
+  reloadDocumentList = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
-    private utcTimeConversion: UtcTimeConversion
+    private utcTimeConversion: UtcTimeConversion,
+    private popupService: PopupService
   ) {}
 
   /**
@@ -100,9 +105,41 @@ export class StationWidgetComponent implements OnInit {
    * View detail document.
    *
    * @param documentRithmId String of document rithmId.
+   * @param reloadDocuments Boolean when is true, reload the documents.
    */
-  viewDocument(documentRithmId: string): void {
+  viewDocument(documentRithmId: string, reloadDocuments = false): void {
     this.documentIdSelected = documentRithmId;
     this.isDocument = !this.isDocument;
+    if (this.reloadDocumentList || reloadDocuments) {
+      this.getStationWidgetDocuments();
+      this.reloadDocumentList = false;
+    }
+  }
+
+  /**
+   * Create a new document.
+   */
+  createNewDocument(): void {
+    this.isLoading = true;
+    this.documentService
+      .createNewDocument('', 0, this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (documentRithmId) => {
+          this.viewDocument(documentRithmId);
+          this.reloadDocumentList = true;
+          this.isLoading = false;
+          this.popupService.notify(
+            'The document has been created successfully.'
+          );
+        },
+        error: (error: unknown) => {
+          this.isLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
   }
 }

@@ -32,6 +32,7 @@ import { DocumentService } from 'src/app/core/document.service';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { DocumentComponent } from 'src/app/document/document/document.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -57,6 +58,7 @@ describe('StationInfoDrawerComponent', () => {
           { path: 'document', component: MockComponent(DocumentComponent) },
           { path: 'document/:id', component: MockComponent(DocumentComponent) },
         ]),
+        MatTabsModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

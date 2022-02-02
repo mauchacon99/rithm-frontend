@@ -38,12 +38,19 @@ export const PAN_DECAY_RATE = 0.9;
  */
 export const CENTER_ZOOM_BUFFER = 10;
 
+// Boundary Box
+// The margin where a user can pan past a boundary line.
+export const BOUNDARY_MARGIN = 50;
+
 // Station Group
 export const STATION_GROUP_PADDING = 20;
 export const STATION_GROUP_POINT_RADIUS = 15;
 export const STATION_GROUP_NAME_PADDING = 6;
 export const GROUP_NAME_HEIGHT = 20;
 export const GROUP_CHARACTER_SIZE = 10;
+export const STATION_GROUP_NAME_TRANSLATE = 40;
+export const STATION_GROUP_NAME_MAX_ANGLE_ROTATE = -Math.PI / 3;
+export const SLOPE_RANGE_NOT_ALLOWED = 0.00005;
 
 // Station
 export const STATION_PADDING = 10;

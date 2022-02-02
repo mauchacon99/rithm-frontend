@@ -22,6 +22,12 @@
   @apply rounded-full h-10 w-10 text-center text-base font-semibold leading-10 text-white bg-secondary-500 border border-secondary-200 hover:bg-secondary-700;
 }
 
+/// Used as the Rithm Avatar and on the History Drawer
+/// 40px circle in our primary color.
+.circle-40-primary {
+  @apply rounded-full h-10 w-10 text-center text-base font-semibold leading-10 text-white bg-primary-500 border border-primary-200 hover:bg-primary-700;
+}
+
 /// Badges in the accent color, commonly used on the user avatar/profile icon.
 .badge-accent {
   @apply rounded-full h-4 w-4 text-center leading-4 text-white bg-accent-500;
