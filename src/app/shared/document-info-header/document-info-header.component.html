@@ -50,7 +50,10 @@
     </div>
 
     <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">
-      <div class="w-full" *ngIf="isDocumentNameEditable; else nonEditableDocName">
+      <div
+        class="w-full"
+        *ngIf="isDocumentNameEditable; else nonEditableDocName"
+      >
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Document Name: </mat-label>
           <input
@@ -128,6 +131,4 @@
     </div>
   </section>
 </ng-container>
-<ng-template #newDocumentHeader>
-  New document Header goes here :)
-</ng-template>
+<ng-template #newDocumentHeader> New document Header goes here :) </ng-template>

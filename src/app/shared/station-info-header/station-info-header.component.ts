@@ -16,7 +16,8 @@ import { Subject } from 'rxjs';
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
+  selector:
+    'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })

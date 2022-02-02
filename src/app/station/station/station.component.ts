@@ -211,11 +211,13 @@ export class StationComponent
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getStationDocumentTreatment();
-        treatment === 'on' ? this.viewNewStation = true : this.viewNewStation = false;
+        treatment === 'on'
+          ? (this.viewNewStation = true)
+          : (this.viewNewStation = false);
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
-      }
+      },
     });
   }
 

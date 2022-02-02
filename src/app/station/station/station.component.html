@@ -61,7 +61,10 @@
                     *ngIf="!stationLoading"
                   ></app-document-info-header>
                   <div class="mt-2">
-                    <mat-form-field class="w-full long-text" appearance="outline">
+                    <mat-form-field
+                      class="w-full long-text"
+                      appearance="outline"
+                    >
                       <mat-label>General Instructions</mat-label>
                       <div matPrefix class="icon">
                         <i class="fas fa-paragraph"></i>
@@ -105,7 +108,9 @@
                             [stationId]="stationInformation.rithmId"
                             [isPrivate]="false"
                             [isStation]="true"
-                            (movingQuestion)="movePreviousFieldToTemplate($event)"
+                            (movingQuestion)="
+                              movePreviousFieldToTemplate($event)
+                            "
                           >
                           </app-previous-fields>
                         </ng-template>
@@ -128,7 +133,9 @@
                             [stationId]="stationInformation.rithmId"
                             [isPrivate]="true"
                             [isStation]="true"
-                            (movingQuestion)="movePreviousFieldToTemplate($event)"
+                            (movingQuestion)="
+                              movePreviousFieldToTemplate($event)
+                            "
                           >
                           </app-previous-fields>
                         </ng-template>
@@ -198,9 +205,7 @@
     <ng-template #newStation>
       <div class="textured-bg grid grid-cols-12 min-h-full pt-12">
         <!-- left column -->
-        <div class="hidden lg:inline-block col-span-2">
-          left column
-        </div>
+        <div class="hidden lg:inline-block col-span-2">left column</div>
         <!-- center column -->
         <div class="col-span-12 lg:col-span-8 bg-white h-full px-5">
           <form
@@ -210,8 +215,8 @@
             class="station-base-form"
             (ngSubmit)="saveStationInformation()"
           >
-          <!-- Station Info Header -->
-          <app-station-info-header
+            <!-- Station Info Header -->
+            <app-station-info-header
               [stationInformation]="stationInformation"
               [stationEditMode]="true"
               [viewNewStation]="viewNewStation"
@@ -250,9 +255,7 @@
           </form>
         </div>
         <!-- right column -->
-        <div class="hidden lg:inline-block col-span-2">
-          right column
-        </div>
+        <div class="hidden lg:inline-block col-span-2">right column</div>
       </div>
     </ng-template>
   </mat-drawer-content>
