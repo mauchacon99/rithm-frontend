@@ -7,6 +7,7 @@ import {
   DocumentStationInformation,
   StationInfoDrawerData,
   StationInformation,
+  StationRosterMember,
 } from 'src/models';
 import { StationInfoHeaderComponent } from './station-info-header.component';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
@@ -80,11 +81,19 @@ describe('StationInfoHeaderComponent', () => {
     questions: [],
     priority: 2,
   };
+  const user: StationRosterMember = {
+    rithmId: '123132132',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@demo.com',
+    isWorker: true,
+    isOwner: false,
+  };
   const documentStationInformation: DocumentStationInformation = {
     documentName: 'Metroid Dread',
     documentPriority: 5,
     documentRithmId: 'E204F369-386F-4E41',
-    currentAssignedUser: 'NS',
+    currentAssignedUser: user,
     flowedTimeUTC: '1943827200000',
     lastUpdatedUTC: '1943827200000',
     stationRithmId: 'ED6148C9-ABB7-408E-A210-9242B2735B1C',
@@ -98,7 +107,6 @@ describe('StationInfoHeaderComponent', () => {
   };
   const formBuilder = new FormBuilder();
   let formGroup: FormGroup;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StationInfoHeaderComponent],
