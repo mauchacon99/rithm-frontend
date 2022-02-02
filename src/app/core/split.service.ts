@@ -39,4 +39,13 @@ export class SplitService {
   public getDashboardTreatment(): string {
     return this.splitClient.getTreatment('dashboard_split');
   }
+
+  /**
+   * Get the station document split.
+   *
+   * @returns Split treatment.
+   */
+  public getStationDocumentTreatment(): string {
+    return this.splitClient.getTreatment('Station-Document-Widgets');
+  }
 }
