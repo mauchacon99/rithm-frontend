@@ -1,11 +1,23 @@
-mat-expansion-panel-header {
-  padding: 0;
+.expansion-dashboards {
+  .mat-expansion-panel-header {
+    padding: 0;
+  }
+
+  .mat-expansion-panel-header:hover {
+    @apply bg-accent-100;
+  }
+
+  &::ng-deep .mat-expansion-panel-body {
+    padding: 0 !important;
+  }
 }
 
-mat-expansion-panel-header:hover {
-  background-color: #bbc7db !important;
+.list-options {
+  &::ng-deep .mat-list-item-content {
+    padding: 0 10px !important;
+  }
 }
 
 .color-hover:hover {
-  background-color: #bbc7db;
+  @apply bg-accent-100;
 }

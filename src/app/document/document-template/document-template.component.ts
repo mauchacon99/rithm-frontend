@@ -42,6 +42,9 @@ export class DocumentTemplateComponent
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
+  /** The Document how widget. */
+  @Input() isWidget = false;
+
   constructor(private fb: FormBuilder) {
     this.documentTemplateForm = this.fb.group({
       documentFieldForm: this.fb.control(''),

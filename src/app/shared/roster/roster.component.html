@@ -7,6 +7,7 @@
     <app-user-avatar
       [firstName]="member.firstName"
       [lastName]="member.lastName"
+      [isDrawer]="fromDrawer"
     ></app-user-avatar>
   </div>
   <p
@@ -21,19 +22,6 @@
     (click)="openRosterModal()"
   >
     +{{ rosterMembers.length - 2 }}
-  </div>
-  <!-- The custom add/remove user icon. -->
-  <div
-    *ngIf="editMode"
-    class="float-left my-1 mx-px first:ml-0 circle-30-secondary icon cursor-pointer"
-    (click)="openManagementRosterModal()"
-  >
-    <i class="fas fa-plus plus"></i>
-    <i class="fas fa-slash fa-flip-horizontal slash"></i>
-    <i class="fas fa-minus minus"></i>
-    <div *ngIf="rosterMembers.length > 3" class="badge-accent mat-elevation-z4">
-      +{{ rosterMembers.length - 2 }}
-    </div>
   </div>
 </ng-container>
 <ng-template #loadingIndicator class="loading">
