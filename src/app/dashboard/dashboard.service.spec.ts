@@ -467,6 +467,7 @@ describe('DashboardService', () => {
     );
 
     expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(dashboardData);
     req.flush(dashboardData);
     httpTestingController.verify();
   });
