@@ -450,6 +450,13 @@ describe('DashboardService', () => {
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    req.flush(dashboardData);
+    httpTestingController.verify();
   });
 
   it('should return a new organization dashboard', () => {
