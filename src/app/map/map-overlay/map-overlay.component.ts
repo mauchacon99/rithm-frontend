@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { ErrorService } from 'src/app/core/error.service';
-import { MapItemStatus, MapMode, Point, User } from 'src/models';
+import { MapItemStatus, MapMode, MatMenuOption, Point, User } from 'src/models';
 import { MapService } from 'src/app/map/map.service';
 import { PopupService } from 'src/app/core/popup.service';
 import { StationMapElement } from 'src/helpers';
@@ -74,6 +74,12 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
 
   /** A variable that allows us to compare against the current Map mode in html. */
   mapMode = MapMode;
+
+  /** The current click mode of the mat menu option. */
+  clickMode = MatMenuOption.None;
+
+  /** A variable that allows us to compare against the current mat menu list items in html. */
+  matMenulist = MatMenuOption;
 
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
@@ -161,16 +167,21 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((clickRes) => {
         //If a button was clicked and the map is in build mode.
+        this.clickMode = <MatMenuOption>clickRes.click;
         if (
-          clickRes.click &&
+          clickRes.click === MatMenuOption.OptionButton &&
           this.mapService.mapMode$.value === MapMode.Build
         ) {
           //Open where the mouse currently is.
           this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
           //Set openedMenuStation.
           this.openedMenuStation = clickRes.data as StationMapElement;
-          //Reset stationButtonClick.
-          this.mapService.stationButtonClick$.next({ click: false, data: {} });
+        } else if (
+          clickRes.click === MatMenuOption.NewStation &&
+          this.mapService.mapMode$.value === MapMode.Build
+        ) {
+          //On right clicked open the option menu for the new station.
+          this.optionMenuTrigger(this.mapService.currentMousePoint$.value);
         }
       });
 
@@ -393,8 +404,15 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     //Note that an option menu is now open.
     this.optionMenuNone = false;
     //Tells menu where to open up.
-    this.menuX = point.x - 15;
-    this.menuY = point.y + 63;
+    // for station button option menu list.
+    if (this.clickMode === MatMenuOption.OptionButton) {
+      this.menuX = point.x - 15;
+      this.menuY = point.y + 63;
+    } else {
+      // for add new station on right click.
+      this.menuX = point.x;
+      this.menuY = point.y - 65;
+    }
     //Run methods to see if menu should be opened or closed.
     this.menu.closeMenu();
     this.menu.openMenu();
@@ -414,6 +432,11 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.menu.closeMenu();
     //Reset property where station where menu should be opened was stored.
     this.openedMenuStation = undefined;
+    //Reset stationButtonClick.
+    this.mapService.stationButtonClick$.next({
+      click: MatMenuOption.None,
+      data: {},
+    });
   }
 
   /**
