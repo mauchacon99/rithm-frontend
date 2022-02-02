@@ -165,8 +165,13 @@
           stationDocumentGenerationStatus === 'Manual' &&
           (mapMode === 0 || mapMode === undefined) &&
           !locallyCreated &&
+<<<<<<< HEAD
           (isUserAdminOrOwner || isWorker) &&
           !openedFromMap
+=======
+          (isUserAdminOrOwner || isWorker)
+          && !openedFromMap
+>>>>>>> 310bd570c255ac9130410aec4e937777f72d3a0a
         "
       >
         <div class="py-1" *ngIf="docCreationLoading; else createDocument">
