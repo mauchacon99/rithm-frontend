@@ -6,6 +6,7 @@ import {
   StationInformation,
   DocumentNameField,
   DocumentName,
+  StationRosterMember,
 } from 'src/models';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { first, Subject, takeUntil } from 'rxjs';
@@ -164,10 +165,18 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
    *
    * @returns Validate if user is owner or admin of current station.
    */
-  get currentAssignedUserDocument(): string {
+  get currentAssignedUserDocument(): StationRosterMember {
+    const user: StationRosterMember = {
+      rithmId: '',
+      firstName: '',
+      lastName: ' ',
+      email: '',
+      isWorker: true,
+      isOwner: false,
+    };
     return 'currentAssignedUser' in this.documentInformation
       ? this.documentInformation.currentAssignedUser
-      : '';
+      : user;
   }
 
   /**
