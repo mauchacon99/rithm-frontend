@@ -12,6 +12,7 @@ import {
   MockDocumentService,
   MockErrorService,
   MockPopupService,
+  MockUserService,
 } from 'src/mocks';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -24,8 +25,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
-import { forkJoin, of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UserService } from 'src/app/core/user.service';
+import { MapComponent } from 'src/app/map/map/map.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -47,6 +50,7 @@ describe('DocumentComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([
+          { path: 'Map', component: MockComponent(MapComponent) },
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
         MatSidenavModule,
@@ -56,9 +60,11 @@ describe('DocumentComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
+        { provide: UserService, useClass: MockUserService },
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
@@ -480,39 +486,6 @@ describe('DocumentComponent', () => {
     expect(spyMethod).toHaveBeenCalled();
   });
 
-  it('should call method for show data in document how widget', () => {
-    component.stationRithmIdWidget = '123-654-789';
-    component.documentRithmIdWidget = '321-654-987';
-    component.isWidget = true;
-    const spyMethod = spyOn(
-      TestBed.inject(DocumentService),
-      'getDocumentInfo'
-    ).and.callThrough();
-    component.ngOnInit();
-    expect(spyMethod).toHaveBeenCalledOnceWith(
-      component.documentRithmIdWidget,
-      component.stationRithmIdWidget
-    );
-  });
-
-  it('should catch error the method and redirect to dashboard component', () => {
-    component.stationRithmIdWidget = '123-654-789';
-    component.documentRithmIdWidget = '321-654-987';
-    component.isWidget = true;
-    spyOn(TestBed.inject(DocumentService), 'getDocumentInfo').and.returnValue(
-      throwError(() => {
-        throw new Error();
-      })
-    );
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
-    component.ngOnInit();
-    const templateDocument = fixture.debugElement.nativeElement.querySelector(
-      '#document-info-template'
-    );
-    expect(templateDocument).toBeFalsy();
-    expect(routerSpy).toHaveBeenCalledOnceWith('dashboard');
-  });
-
   describe('navigateRouterTesting', () => {
     let router: Router;
     let routerNavigateSpy: jasmine.Spy;
@@ -522,19 +495,114 @@ describe('DocumentComponent', () => {
       routerNavigateSpy = spyOn(router, 'navigateByUrl');
     });
 
-    // TODO: spec has no expectations being called
-    xit('should redirect to dashboard if petitions are successfully', () => {
-      forkJoin([of(), of()]).subscribe(() => {
-        expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
-      });
+    xit('should redirect to map if forkJoin run successfully and user is an admin', () => {
+      //testing postponed
       component.autoFlowDocument();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
     });
-    // TODO: spec has no expectations being called
-    xit('should not redirect if some petition is wrong', () => {
-      forkJoin([of(Error()), of()]).subscribe(() => {
-        expect(routerNavigateSpy).not.toHaveBeenCalled();
-      });
+
+    xit('should redirect to dashboard if forkJoin run successfully and user is not an admin', () => {
+      //testing postponed
       component.autoFlowDocument();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
+    });
+
+    xit('should not redirect if some petition is wrong', () => {
+      //testing postponed
+      component.autoFlowDocument();
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Document when isWidget is true', () => {
+    const stationRithmIdWidget = '123-654-789';
+    const documentRithmIdWidget = '321-654-987';
+
+    it('should call method for show data in document how widget', () => {
+      component.stationRithmIdWidget = stationRithmIdWidget;
+      component.documentRithmIdWidget = documentRithmIdWidget;
+      component.isWidget = true;
+      const spyMethod = spyOn(
+        TestBed.inject(DocumentService),
+        'getDocumentInfo'
+      ).and.callThrough();
+      component.ngOnInit();
+      expect(spyMethod).toHaveBeenCalledOnceWith(
+        component.documentRithmIdWidget,
+        component.stationRithmIdWidget
+      );
+    });
+
+    it('should catch error the method and redirect to dashboard component', () => {
+      component.stationRithmIdWidget = stationRithmIdWidget;
+      component.documentRithmIdWidget = documentRithmIdWidget;
+      component.isWidget = true;
+      spyOn(TestBed.inject(DocumentService), 'getDocumentInfo').and.returnValue(
+        throwError(() => {
+          throw new Error();
+        })
+      );
+      component.ngOnInit();
+      const templateDocument = fixture.debugElement.nativeElement.querySelector(
+        '#document-info-template'
+      );
+      expect(templateDocument).toBeFalsy();
+    });
+
+    it('should return document list in widget when click in cancel button', async () => {
+      const expectSpyMethod = spyOn(component.returnDocumentsWidget, 'emit');
+      spyOn(TestBed.inject(PopupService), 'confirm').and.returnValue(
+        Promise.resolve(true)
+      );
+      component.isWidget = true;
+      fixture.detectChanges();
+      await component.cancelDocument();
+      expect(expectSpyMethod).toHaveBeenCalled();
+    });
+
+    it('Should disable buttons save and flow when is not admin or owner worker', () => {
+      component.documentInformation.stationOwners = [
+        {
+          email: 'rithmadmin@inpivota.com',
+          firstName: 'admin',
+          isAssigned: false,
+          lastName: 'user',
+          rithmId: 'B5702D6F-0C35-4EB2-9062-C895E22EAEEF',
+        },
+      ];
+      component.isWidget = true;
+      component.documentLoading = false;
+      fixture.detectChanges();
+      const btnFlow =
+        fixture.elementRef.nativeElement.querySelector('#document-flow');
+      const btnSave =
+        fixture.elementRef.nativeElement.querySelector('#document-save');
+      expect(btnFlow.disabled).toBeTrue();
+      expect(btnSave.disabled).toBeTrue();
+      expect(component.isUserAdminOrOwner).toBeFalse();
+    });
+
+    it('Should disable buttons save and flow when is not admin or owner worker', () => {
+      const userRithmId = TestBed.inject(UserService).user.rithmId;
+      component.documentInformation.stationOwners = [
+        {
+          email: 'rithmadmin@inpivota.com',
+          firstName: 'admin',
+          isAssigned: false,
+          lastName: 'user',
+          rithmId: userRithmId,
+        },
+      ];
+      component.isWidget = true;
+      component.documentLoading = false;
+      fixture.detectChanges();
+      const btnFlow =
+        fixture.elementRef.nativeElement.querySelector('#document-flow');
+      const btnSave =
+        fixture.elementRef.nativeElement.querySelector('#document-save');
+      expect(btnFlow.disabled).toBeFalse();
+      expect(btnSave.disabled).toBeFalse();
+      expect(component.isUserAdminOrOwner).toBeTrue();
     });
   });
 });

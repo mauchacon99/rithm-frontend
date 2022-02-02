@@ -105,51 +105,26 @@ export class DashboardService {
   }
 
   /**
+   * Update personal dashboard.
+   *
+   * @param dashboardData Dashboard update.
+   * @returns Personal dashboard data observable.
+   */
+  updatePersonalDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
+  }
+
+  /**
    * Get all  the organization's dashboards.
    *
    * @returns Returns a list of dashboards.
    */
   getOrganizationDashboard(): Observable<DashboardData[]> {
-    const OrganizationDashboards: DashboardData[] = [
-      {
-        rithmId: '123654-789654-7852',
-        name: 'Organization 1',
-        widgets: [
-          {
-            cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
-            maxItemCols: 0,
-            maxItemRows: 0,
-            minItemCols: 0,
-            minItemRows: 0,
-            rows: 2,
-            widgetType: WidgetType.Station,
-            x: 0,
-            y: 0,
-          },
-        ],
-      },
-      {
-        rithmId: '123654-789654-7852',
-        name: 'Organization 2',
-        widgets: [
-          {
-            cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-2"}',
-            maxItemCols: 0,
-            maxItemRows: 0,
-            minItemCols: 0,
-            minItemRows: 0,
-            rows: 2,
-            widgetType: WidgetType.Station,
-            x: 0,
-            y: 0,
-          },
-        ],
-      },
-    ];
-
-    return of(OrganizationDashboards).pipe(delay(1000));
+    return this.http.get<DashboardData[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
   }
 
   /**
@@ -158,46 +133,37 @@ export class DashboardService {
    * @returns Returns list of dashboards.
    */
   getPersonalDashboard(): Observable<DashboardData[]> {
-    const personalDashboards: DashboardData[] = [
-      {
-        rithmId: '123654-789654-7852-789',
-        name: 'Personal 1',
-        widgets: [
-          {
-            cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-3"}',
-            maxItemCols: 0,
-            maxItemRows: 0,
-            minItemCols: 0,
-            minItemRows: 0,
-            rows: 2,
-            widgetType: WidgetType.Station,
-            x: 0,
-            y: 0,
-          },
-        ],
-      },
-      {
-        rithmId: '123654-789654-7852-963',
-        name: 'Personal 2',
-        widgets: [
-          {
-            cols: 4,
-            data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1-4"}',
-            maxItemCols: 0,
-            maxItemRows: 0,
-            minItemCols: 0,
-            minItemRows: 0,
-            rows: 2,
-            widgetType: WidgetType.Station,
-            x: 0,
-            y: 0,
-          },
-        ],
-      },
-    ];
+    return this.http.get<DashboardData[]>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
+    );
+  }
 
-    return of(personalDashboards).pipe(delay(1000));
+  /**
+   * Generates a new dashboard personal.
+   *
+   * @returns Returns a new default dashboard.
+   */
+  generateNewPersonalDashboard(): Observable<DashboardData> {
+    const newDashboard: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    return of(newDashboard).pipe(delay(1000));
   }
 
   /**
@@ -226,5 +192,17 @@ export class DashboardService {
     };
 
     return of(newDashboard).pipe(delay(1000));
+  }
+
+  /**
+   * Update organization dashboard`s.
+   *
+   * @returns The updated  data for this dashboard.
+   * @param dashboardData Dashboard data for update.
+   */
+  updateOrganizationDashboard(
+    dashboardData: DashboardData
+  ): Observable<DashboardData> {
+    return of(dashboardData).pipe(delay(1000));
   }
 }

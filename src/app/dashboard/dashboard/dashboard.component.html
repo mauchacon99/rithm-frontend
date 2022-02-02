@@ -43,19 +43,69 @@
             id="loading-dashboard-widgets"
           ></app-loading-indicator>
         </div>
-        <div class="mx-5" *ngIf="!dashboardLoading">
-          <div class="flex justify-between items-center">
-            <h2 class="my-2 font-semibold truncate">General</h2>
+        <div class="mx-5" *ngIf="!dashboardLoading && dashboardData">
+          <div class="flex justify-between items-center" *ngIf="!editMode">
+            <h2 class="my-2 font-semibold truncate">
+              {{ dashboardData.name }}
+            </h2>
             <button
               mat-icon-button
               id="menu-edit-button"
               data-testid="menu-edit-button"
               class="py-3 text-secondary-500"
+              (click)="toggleEditMode()"
             >
               <i class="fas fa-cog text-lg"></i>
             </button>
           </div>
-
+          <!--Edit dashboard name.-->
+          <div *ngIf="editMode">
+            <div
+              class="md:flex justify-between inline-block w-full border-solid border-b border-b-primary-100"
+            >
+              <div>
+                <mat-form-field
+                  appearance="outline"
+                  class="lg:w-72 w-full input-wrapper"
+                >
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Untitled Dashboard"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="justify-around">
+                <button
+                  mat-button
+                  id="save-button"
+                  data-testid="save-button"
+                  class="bg-white text-secondary-500 drop-shadow-md font-semibold"
+                  style="margin: 1em"
+                  (click)="toggleEditMode()"
+                >
+                  Cancel
+                </button>
+                <button
+                  mat-button
+                  id="cancel-button"
+                  data-testid="cancel-button"
+                  class="bg-accent-800 text-secondary-50 drop-shadow-md"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+            <button
+              mat-button
+              id="add-widget-button"
+              data-testid="add-widget-button"
+              class="bg-accent-800 text-secondary-50 drop-shadow-md"
+              style="margin-top: 1em"
+            >
+              <i class="fas fa-plus"></i> Add Widget
+            </button>
+          </div>
           <div
             class="col-span-full text-error-500 text-center my-4"
             id="error-loading-widgets"
@@ -71,7 +121,7 @@
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
-              *ngFor="let item of widgetsOfDashboard"
+              *ngFor="let item of dashboardData.widgets"
             >
               <app-station-widget
                 *ngIf="item.widgetType === 'station'"

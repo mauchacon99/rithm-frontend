@@ -35,6 +35,7 @@ import { DocumentComponent } from 'src/app/document/document/document.component'
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
@@ -63,6 +64,7 @@ describe('StationInfoDrawerComponent', () => {
         MatTabsModule,
         MatSlideToggleModule,
         MatTooltipModule,
+        MatDialogModule,
       ],
       providers: [
         { provide: UserService, useClass: MockUserService },

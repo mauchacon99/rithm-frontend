@@ -6,8 +6,8 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, DashboardItem, Station } from 'src/models';
-import { DashboardService } from '../dashboard.service';
+import { DashboardData, Station } from 'src/models';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 
 /**
@@ -32,17 +32,17 @@ export class DashboardComponent implements OnInit {
 
   viewNewDashboard = false;
 
-  /** Widgets for dashboard. */
-  widgetsOfDashboard: DashboardItem[] = [];
-
-  /** New dashboard. */
-  newDashboard?: DashboardData;
+  /** Dashboard data, default dashboard general. */
+  dashboardData!: DashboardData;
 
   /** Error Loading loading widget. */
   errorLoadingWidgets = false;
 
   /** Load indicator in dashboard. */
   dashboardLoading = false;
+
+  /** Edit mode toggle for widgets and dashboard name. */
+  editMode = false;
 
   /** Config grid. */
   options: GridsterConfig = {
@@ -132,7 +132,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getDashboardWidgets();
-    //Sets height using a css variable. this allows us to avoid using vh. Mobile friendly.
+    //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
@@ -147,6 +147,13 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * Toggles the editMode to allow editing.
+   */
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
+  }
+
+  /**
    * Gets widgets for dashboard.
    */
   private getDashboardWidgets(): void {
@@ -157,12 +164,55 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (widgets) => {
-          this.widgetsOfDashboard = widgets;
+          this.dashboardData = {
+            rithmId: '',
+            name: 'General',
+            widgets,
+          };
           this.dashboardLoading = false;
         },
         error: (error: unknown) => {
           this.errorLoadingWidgets = true;
           this.dashboardLoading = false;
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update personal dashboard.
+   */
+  updatePersonalDashboard(): void {
+    this.dashboardService
+      .updatePersonalDashboard(this.dashboardData)
+      .pipe(first())
+      .subscribe({
+        next: (dashboardUpdate) => {
+          this.dashboardData = dashboardUpdate;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update dashboard name.
+   *
+   * @param dashboardData The dashboard data for update name.
+   */
+  updateOrganizationDashboard(dashboardData: DashboardData): void {
+    this.dashboardService
+      .updateOrganizationDashboard(dashboardData)
+      .pipe(first())
+      .subscribe({
+        error: (error: unknown) => {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
@@ -182,6 +232,26 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * Generates a new dashboard personal.
+   */
+  generateNewPersonalDashboard(): void {
+    this.dashboardService
+      .generateNewPersonalDashboard()
+      .pipe(first())
+      .subscribe({
+        next: (newDashboard) => {
+          this.dashboardData = newDashboard;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
    * Generates a new default dashboard.
    */
   generateNewOrganizationDashboard(): void {
@@ -190,7 +260,7 @@ export class DashboardComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (newDashboard) => {
-          this.newDashboard = newDashboard;
+          this.dashboardData = newDashboard;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

@@ -19,6 +19,9 @@ export class OptionsMenuComponent {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
+  /** Show option. */
+  @Input() isDashboardListOptions!: boolean;
+
   /** Allows functionality of MatMenu to toggle the menu open. */
   @ViewChild(MatMenuTrigger)
   private optionsMenuTrigger!: MatMenuTrigger;
