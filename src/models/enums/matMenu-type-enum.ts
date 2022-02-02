@@ -1,13 +1,13 @@
 /**
- * All of the various modes/states of the map.
+ * For mat menu list used to initialize in different views.
  */
 export enum MatMenuOption {
-  /** The map is only allowed to be viewed without changes. */
+  /** To default mode of the mat menu list. */
   None,
 
-  /** The map is in the process of being modified. */
+  /** For station option button on map. */
   OptionButton,
 
-  /** The map is waiting for a location to be selected for a new station. */
+  /** For map to add new station on map. */
   NewStation,
 }
