@@ -125,5 +125,4 @@ describe('MapOverlayComponent', () => {
     expect(component.searchText).toEqual('');
     expect(component.filteredStations.length).toEqual(0);
   });
-
 });

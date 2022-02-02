@@ -569,5 +569,4 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
     this.searchText = '';
     this.filteredStations = [];
   }
-
 }
