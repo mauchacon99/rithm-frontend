@@ -51,6 +51,12 @@
           >
             New Document <i class="fas fa-plus"></i>
           </button>
+          <div
+            *ngIf="displayDocumentError"
+            class="text-error-500 text-xs p-0.5"
+          >
+            Something went wrong!
+          </div>
         </div>
       </div>
     </div>

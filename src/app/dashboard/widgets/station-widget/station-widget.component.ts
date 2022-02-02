@@ -37,6 +37,9 @@ export class StationWidgetComponent implements OnInit {
   /** Update document list when a new document is created. */
   reloadDocumentList = false;
 
+  /** Variable to show if error message should be displayed. */
+  displayDocumentError = false;
+
   constructor(
     private documentService: DocumentService,
     private errorService: ErrorService,
@@ -134,6 +137,7 @@ export class StationWidgetComponent implements OnInit {
           );
         },
         error: (error: unknown) => {
+          this.displayDocumentError = true;
           this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
