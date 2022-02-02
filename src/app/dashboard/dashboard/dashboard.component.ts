@@ -186,32 +186,12 @@ export class DashboardComponent implements OnInit {
    * Update personal dashboard.
    */
   updatePersonalDashboard(): void {
-    /** Data temporary.  */
-    let dashboardData: DashboardData = {
-      rithmId: '123-131-132',
-      name: 'Untitled Dashboard',
-      widgets: [
-        {
-          cols: 4,
-          rows: 1,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Station,
-          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-          minItemCols: 4,
-          minItemRows: 4,
-          maxItemCols: 12,
-          maxItemRows: 12,
-        },
-      ],
-    };
-
     this.dashboardService
-      .updatePersonalDashboard(dashboardData)
+      .updatePersonalDashboard(this.dashboardData)
       .pipe(first())
       .subscribe({
         next: (dashboardUpdate) => {
-          dashboardData = dashboardUpdate;
+          this.dashboardData = dashboardUpdate;
         },
         error: (error: unknown) => {
           this.errorService.displayError(

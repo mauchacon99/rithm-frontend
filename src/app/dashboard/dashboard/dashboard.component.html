@@ -69,6 +69,7 @@
                   class="lg:w-72 w-full input-wrapper"
                 >
                   <input
+                    [(ngModel)]="dashboardData.name"
                     matInput
                     type="text"
                     placeholder="{{ dashboardData.name }}"
@@ -90,6 +91,7 @@
                   mat-button
                   id="cancel-button"
                   data-testid="cancel-button"
+                  (click)="updatePersonalDashboard()"
                   class="bg-accent-800 text-secondary-50 drop-shadow-md"
                 >
                   Save
