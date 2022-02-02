@@ -81,6 +81,9 @@ export class StationComponent
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
 
+  /** View new station. */
+  viewNewStation = false;
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -188,6 +191,7 @@ export class StationComponent
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
@@ -198,7 +202,22 @@ export class StationComponent
     this.ref.detectChanges();
   }
 
-
+  /**
+   * Get station document split.
+   */
+  private getTreatment(): void {
+    const orgRithmId = this.userService.user.organization;
+    this.splitService.initSdk(orgRithmId);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        const treatment = this.splitService.getStationDocumentTreatment();
+        treatment === 'on' ? this.viewNewStation = true : this.viewNewStation = false;
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      }
+    });
+  }
 
   /**
    * Generate a random rithmId to added fields.
