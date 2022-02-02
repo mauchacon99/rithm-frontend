@@ -25,9 +25,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PopupService } from 'src/app/core/popup.service';
 import { Router } from '@angular/router';
 import { DocumentAutoFlow, QuestionFieldType } from 'src/models';
-import { forkJoin, of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserService } from 'src/app/core/user.service';
+import { MapComponent } from 'src/app/map/map/map.component';
 
 describe('DocumentComponent', () => {
   let component: DocumentComponent;
@@ -49,6 +50,7 @@ describe('DocumentComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([
+          { path: 'Map', component: MockComponent(MapComponent) },
           { path: 'dashboard', component: MockComponent(DashboardComponent) },
         ]),
         MatSidenavModule,
@@ -62,6 +64,7 @@ describe('DocumentComponent', () => {
         { provide: DocumentService, useClass: MockDocumentService },
         { provide: ErrorService, useClass: MockErrorService },
         { provide: PopupService, useClass: MockPopupService },
+        { provide: UserService, useClass: MockUserService },
       ],
     }).compileComponents();
   });
@@ -492,19 +495,22 @@ describe('DocumentComponent', () => {
       routerNavigateSpy = spyOn(router, 'navigateByUrl');
     });
 
-    // TODO: spec has no expectations being called
-    xit('should redirect to dashboard if petitions are successfully', () => {
-      forkJoin([of(), of()]).subscribe(() => {
-        expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
-      });
+    xit('should redirect to map if forkJoin run successfully and user is an admin', () => {
+      //testing postponed
       component.autoFlowDocument();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('map');
     });
-    // TODO: spec has no expectations being called
-    xit('should not redirect if some petition is wrong', () => {
-      forkJoin([of(Error()), of()]).subscribe(() => {
-        expect(routerNavigateSpy).not.toHaveBeenCalled();
-      });
+
+    xit('should redirect to dashboard if forkJoin run successfully and user is not an admin', () => {
+      //testing postponed
       component.autoFlowDocument();
+      expect(routerNavigateSpy).toHaveBeenCalledOnceWith('dashboard');
+    });
+
+    xit('should not redirect if some petition is wrong', () => {
+      //testing postponed
+      component.autoFlowDocument();
+      expect(routerNavigateSpy).not.toHaveBeenCalled();
     });
   });
 
