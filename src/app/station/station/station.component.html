@@ -202,6 +202,19 @@
         <!-- center column -->
         <div class="col-span-12 lg:col-span-8 bg-white h-full px-5">
           center column
+          <form
+            *ngIf="!stationLoading"
+            [formGroup]="stationForm"
+            autocomplete="off"
+            class="station-base-form"
+            (ngSubmit)="saveStationInformation()"
+          >
+          <app-station-info-header
+              [stationInformation]="stationInformation"
+              [stationEditMode]="true"
+              #stationInfoHeader
+            ></app-station-info-header>
+          </form>
         </div>
         <!-- right column -->
         <div class="hidden lg:inline-block col-span-2">

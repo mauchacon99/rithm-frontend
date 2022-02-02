@@ -10,7 +10,9 @@ import {
   StationInfoDrawerData,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { Subject } from 'rxjs';
+import { Subject, first } from 'rxjs';
+import { SplitService } from 'src/app/core/split.service';
+import { ErrorService } from 'src/app/core/error.service';
 
 /**
  * Reusable component for the station information header.
@@ -39,11 +41,16 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
   /** Field to change station name. */
   nameField!: Question;
 
+  /** Part of the new station ui. */
+  viewNewStation = false;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private stationService: StationService,
-    private sidenavDrawerService: SidenavDrawerService
+    private sidenavDrawerService: SidenavDrawerService,
+    private splitService: SplitService,
+    private errorService: ErrorService
   ) {
     this.type =
       this.userService.user.role === 'admin'
@@ -57,6 +64,7 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Set this.info. */
   ngOnInit(): void {
+    this.getTreatment();
     this.nameField = {
       rithmId: '3j4k-3h2j-hj4j',
       prompt: this.stationName,
@@ -67,6 +75,23 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       children: [],
     };
     this.stationNameForm.controls['name'].setValue(this.stationName);
+  }
+
+  /**
+   * Get station document split.
+   */
+   private getTreatment(): void {
+    const orgRithmId = this.userService.user.organization;
+    this.splitService.initSdk(orgRithmId);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        const treatment = this.splitService.getStationDocumentTreatment();
+        treatment === 'on' ? this.viewNewStation = true : this.viewNewStation = false;
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      }
+    });
   }
 
   /**
