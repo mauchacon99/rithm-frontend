@@ -296,6 +296,14 @@ describe('DashboardService', () => {
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(updateDashboard);
+    req.flush(updateDashboard);
+    httpTestingController.verify();
   });
   it('should returns organization dashboard', () => {
     const expectedResponse: DashboardData[] = [

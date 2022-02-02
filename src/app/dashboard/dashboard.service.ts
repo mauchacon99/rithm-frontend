@@ -113,7 +113,10 @@ export class DashboardService {
   updatePersonalDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    return of(dashboardData).pipe(delay(1000));
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`,
+      dashboardData
+    );
   }
 
   /**
