@@ -9,25 +9,26 @@
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
 <mat-menu #menuList="matMenu">
-  <button mat-menu-item>
-    <i class="fas fa-users"></i><span class="p-4">Manage Members</span>
+  <button
+    mat-menu-item
+    *ngIf="dashboardRole === roleDashboardMenu.OrganizationDashboard"
+  >
+    <i class="fas fa-users"></i>
+    <span class="p-4">Manage Members</span>
   </button>
   <button mat-menu-item>
-    <i class="fas fa-user-plus"></i><span class="p-4">Add Member</span>
-  </button>
-  <button mat-menu-item>
-    <i class="fas fa-plus"></i><span class="p-4">New Dashboard</span>
+    <i class="fas fa-plus"></i>
+    <span class="p-4">New Dashboard</span>
   </button>
 </mat-menu>
 
 <mat-menu #menuDashboard="matMenu">
   <button mat-menu-item>
-    <i class="fas fa-users"></i><span class="p-4">Manage Members</span>
+    <i class="fas fa-users"></i>
+    <span class="p-4">Manage Members</span>
   </button>
   <button mat-menu-item>
-    <i class="fas fa-user-plus"></i><span class="p-4">Add Member</span>
-  </button>
-  <button mat-menu-item>
-    <i class="fas fa-trash"></i><span class="p-4">Delete Dashboard</span>
+    <i class="fas fa-trash"></i>
+    <span class="p-4">Delete Dashboard</span>
   </button>
 </mat-menu>
