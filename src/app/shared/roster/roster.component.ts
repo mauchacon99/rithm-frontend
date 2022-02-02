@@ -2,7 +2,6 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { RosterModalComponent } from 'src/app/shared/roster-modal/roster-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { StationRosterMember } from 'src/models';
-import { RosterManagementModalComponent } from '../roster-management-modal/roster-management-modal.component';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { StationService } from 'src/app/core/station.service';
@@ -30,14 +29,17 @@ export class RosterComponent implements OnInit {
   /** Determines if this is a roster being viewed in edit mode. */
   @Input() editMode?: boolean;
 
+  /** Determines if this is a roster being viewed in the drawer. */
+  @Input() fromDrawer = false;
+
+  /** Emit the roster member length to be displayed as text.*/
+  @Output() rosterMemberLength = new EventEmitter<number>();
+
   /** Whether the request is underway. */
   loadingRoster = false;
 
   /** Set the number of roster members to show when more than 3 members.  */
   slices = 2;
-
-  /** Emit the close modal. */
-  @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private dialog: MatDialog,
@@ -63,27 +65,6 @@ export class RosterComponent implements OnInit {
   }
 
   /**
-   * Opens a modal with roster management.
-   */
-  openManagementRosterModal(): void {
-    const dialog = this.dialog.open(RosterManagementModalComponent, {
-      panelClass: ['w-5/6', 'sm:w-4/5'],
-      maxWidth: '1024px',
-      disableClose: true,
-      data: {
-        stationId: this.stationId,
-        type: this.isWorker ? 'workers' : 'owners',
-      },
-    });
-    dialog
-      .afterClosed()
-      .pipe(first())
-      .subscribe((result) => {
-        this.modalClosed.emit(result);
-      });
-  }
-
-  /**
    * Get Users Roster for a given Station.
    */
   private getStationUsersRoster(): void {
@@ -97,9 +78,16 @@ export class RosterComponent implements OnInit {
         if (data) {
           this.rosterMembers = data;
           this.slices =
-            this.rosterMembers.length > 3 ? 2 : this.rosterMembers.length;
+            this.rosterMembers.length > 3 && !this.fromDrawer
+              ? 2
+              : this.rosterMembers.length > 3 && this.fromDrawer
+              ? 3
+              : this.rosterMembers.length;
         }
         this.loadingRoster = false;
+        if (this.fromDrawer) {
+          this.rosterMemberLength.emit(this.rosterMembers.length);
+        }
       },
       error: (error: unknown) => {
         this.loadingRoster = false;
