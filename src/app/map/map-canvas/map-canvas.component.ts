@@ -23,6 +23,7 @@ import {
   StationInformation,
   StationGroupElementHoverItem,
   StationGroupInfoDrawerData,
+  MatMenuOption,
 } from 'src/models';
 import { ConnectionElementService } from '../connection-element.service';
 import { MapBoundaryService } from '../map-boundary.service';
@@ -637,17 +638,14 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles user input when a mouse button is right clicked. Used for bringing up the right click menu.
+   * It's necessary to listen for contextmenu so we can prevent it's default behavior.
+   * This shouldn't be used for anything else. Instead use endEventLogic to handle a right click.
    *
-   * @param event The contextmenu event that was triggered.
+   * @param event The MouseEvent event that was triggered.
    */
-  @HostListener('contextmenu', ['$event'])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  contextMenu(event: MouseEvent): void {
-    // TODO: Handle behavior when mouse is right clicked
-    /* This is to avoid that when dragging a station group or
-    stations or nodes and pressing the right mouse button the stations disappear. */
-    this.eventEndLogic(event);
+  @HostListener('document:contextmenu', ['$event'])
+  contextmenu(event: MouseEvent): void {
+    event.preventDefault();
   }
 
   /**
@@ -1380,6 +1378,26 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stations.forEach((station) => {
         station.dragging = false;
       });
+
+      //Handle right click.
+      if (event instanceof MouseEvent && event.button === 2) {
+        //for canvas element area.
+        const canvas = this.mapCanvas.nativeElement;
+        if (event.target === canvas) {
+          //set mousePoint to the tracked cursor position.
+          this.mapService.currentMousePoint$.next(event);
+          //On right clicked opening the option menu for the add new station.
+          this.mapService.stationButtonClick$.next({
+            click: MatMenuOption.NewStation,
+            data: [],
+          });
+        }
+        //Resetting the current mouse point to -1, -1. This tells our code we're no longer tracking the mouse point.
+        this.mapService.currentMousePoint$.next(DEFAULT_MOUSE_POINT);
+        //Don't run any of the rest of the method's code.
+        return;
+      }
+
       //If the scale of the map is big enough to display station elements.
       if (this.scale >= SCALE_RENDER_STATION_ELEMENTS) {
         //Trigger the logic that takes place after a simulated 'click'.
@@ -1902,7 +1920,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
         this.mapService.currentMousePoint$.next(point);
         //Note which station was clicked so we can open the option menu for the correct station.
         this.mapService.stationButtonClick$.next({
-          click: true,
+          click: MatMenuOption.OptionButton,
           data: station,
         });
         return;
