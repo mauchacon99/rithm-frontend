@@ -405,56 +405,47 @@ export class MapService {
       isReadOnlyRootStationGroup: false,
     });
 
-    //Get the root group.
-    const root = this.stationGroupElements.find(
-      (group) => group.isReadOnlyRootStationGroup
+    //All stations currently selected.
+    const selectedStations = this.stationElements.filter(
+      (station) => station.selected
     );
 
-    //If there is a root element defined.
-    if (root) {
-      //Find all selected stations within root stationGroup.
-      root.stations.forEach((stationIdFromGroup) => {
-        // Find index of the current station in stationElements array.
-        const stationIndex = this.stationElements.findIndex(
-          (station) => stationIdFromGroup === station.rithmId
-        );
-        // If you find the index of the current station.
-        if (stationIndex !== -1) {
-          if (this.stationElements[stationIndex].selected) {
-            newGroup.stations.push(this.stationElements[stationIndex].rithmId);
-          }
-        }
+    //All groups currently selected.
+    const selectedGroups = this.stationGroupElements.filter(
+      (group) => group.selected
+    );
+
+    //Filter the selected stations to only contain stations outside the selected groups.
+    const outsideStations = selectedStations.filter((station) => {
+      //Find index of group that contains station.
+      const groupIndex = selectedGroups.findIndex((group) => {
+        return group.stations.includes(station.rithmId);
       });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
 
-      //Find all selected groups within root stationGroup.
-      root.subStationGroups.forEach((stationGroupIdFromGroup) => {
-        // Find index of the current subGroup in stationGroupElements array.
-        const groupIndex = this.stationGroupElements.findIndex(
-          (group) => stationGroupIdFromGroup === group.rithmId
-        );
-        // If you find the index of the current group.
-        if (groupIndex !== -1) {
-          if (this.stationGroupElements[groupIndex].selected) {
-            newGroup.subStationGroups.push(
-              this.stationGroupElements[groupIndex].rithmId
-            );
-          }
-        }
+    //Filter the selected groups so that only parent groups are in the array.
+    const parentGroups = selectedGroups.filter((group) => {
+      const groupIndex = selectedGroups.findIndex((otherGroup) => {
+        return otherGroup.subStationGroups.includes(group.rithmId);
       });
+      //if index is -1 return true.
+      return groupIndex === -1;
+    });
 
-      //If there are stations or groups selected within the root, return.
-      if (
-        newGroup.stations.length > 0 ||
-        newGroup.subStationGroups.length > 0
-      ) {
-        this.pendingStationGroup = newGroup;
-        return;
+    //Get the rithmIds of the outsideStations.
+    const outsideStationIds = outsideStations.map((station) => station.rithmId);
 
-        //If cant find any selected within root, go on to next group and  check that one.
-      } else {
-        //Loop through children groups.
-      }
-    }
+    //Get the rithmIds of the parentGroups.
+    const parentGroupIds = parentGroups.map((group) => group.rithmId);
+
+    //Add the station and group ids to the newGroup.
+    newGroup.stations = [...outsideStationIds];
+    newGroup.subStationGroups = [...parentGroupIds];
+
+    //Set pendingStationGroup to the newGroup.
+    this.pendingStationGroup = newGroup;
   }
 
   /**
@@ -1411,6 +1402,8 @@ export class MapService {
         this.stationElements[stationIndex].disabled = false;
       });
     });
+    //Remove the pending station group boundary.
+    this.updatePendingStationGroup();
   }
 
   /**

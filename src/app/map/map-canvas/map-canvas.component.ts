@@ -894,9 +894,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       //Update station and connection positions.
       this.mapService.updateStationCanvasPoints();
 
-      //Update pending station group with selected stations and groups.
-      this.mapService.updatePendingStationGroup();
-
       // Draw the station groups
       this.stationGroupElementService.drawStationGroups();
 
@@ -1940,6 +1937,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
             this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
+            //Draw the boundary for the pending stationGroup.
+            this.mapService.updatePendingStationGroup();
             this.drawElements();
           }
           return;
@@ -2046,6 +2045,8 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           this.stationGroupSelectStatus(stationGroup);
           //Set station group status of parent and child station group and respective stations.
           this.mapService.setStationGroupStatus(stationGroup);
+          //Draw the boundary for the pending stationGroup.
+          this.mapService.updatePendingStationGroup();
           this.drawElements();
           break;
         }
