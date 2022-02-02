@@ -10,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from '../shared/loading-indicator/loading-indicator.module';
 import { PaginationModule } from '../shared/pagination/pagination.module';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [AdminComponent, OrganizationManagementComponent],
@@ -23,7 +22,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     ReactiveFormsModule,
     LoadingIndicatorModule,
     PaginationModule,
-    MatSlideToggleModule,
   ],
 })
 export class AdminModule {}
