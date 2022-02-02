@@ -213,7 +213,10 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
    * @param status New status the station update.
    * @param statusNew New status the station update.
    */
-  updateGenerationStatus(status: string, statusNew: MatSlideToggleChange): void {
+  updateGenerationStatus(
+    status: string,
+    statusNew: MatSlideToggleChange
+  ): void {
     const value =
       status === 'None' && statusNew.checked
         ? DocumentGenerationStatus.None
