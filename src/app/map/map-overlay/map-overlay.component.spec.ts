@@ -15,6 +15,8 @@ import { UserService } from 'src/app/core/user.service';
 import { MockComponent } from 'ng-mocks';
 import { LoadingIndicatorComponent } from 'src/app/shared/loading-indicator/loading-indicator.component';
 import { ConnectionInfoDrawerComponent } from '../connection-info-drawer/connection-info-drawer.component';
+import { StationMapElement } from 'src/helpers';
+import { MapItemStatus } from 'src/models';
 
 describe('MapOverlayComponent', () => {
   let component: MapOverlayComponent;
@@ -87,4 +89,41 @@ describe('MapOverlayComponent', () => {
       fixture.debugElement.nativeElement.querySelector('#centerButton');
     expect(centerButton.disabled).toBeTruthy();
   });
+
+  it('should display station or group name when a station is selected', () => {
+    const station = new StationMapElement({
+      rithmId: '',
+      stationName: 'Untitled Station',
+      mapPoint: {
+        x: 12,
+        y: 15,
+      },
+      noOfDocuments: 0,
+      previousStations: [],
+      nextStations: [],
+      status: MapItemStatus.Created,
+      notes: '',
+    });
+    const result = component.displayStationName(station);
+    expect(result).toEqual(station.stationName);
+  });
+
+  it('should return 0 stations when search text is empty', () => {
+    component.searchText = '';
+    component.searchStations();
+    expect(component.filteredStations.length).toEqual(0);
+  });
+
+  it('should return filtered stations when search text is not empty', () => {
+    component.searchText = 'Untitled';
+    component.searchStations();
+    expect(component.filteredStations.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should clear search box text', () => {
+    component.clearSearchText();
+    expect(component.searchText).toEqual('');
+    expect(component.filteredStations.length).toEqual(0);
+  });
+
 });

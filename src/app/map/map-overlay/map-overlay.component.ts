@@ -537,4 +537,14 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
           }
         ));
   }
+
+  /**
+   * Clear search box text on click of close icon.
+   *
+   */
+  clearSearchText(): void {
+    this.searchText = '';
+    this.filteredStations = [];
+  }
+
 }
