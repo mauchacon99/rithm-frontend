@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
-      this.splitService.initSdk(user.rithmId);
+      this.splitService.initSdk(user.organization);
     }
 
     this.splitService.sdkReady$.pipe(first()).subscribe({
