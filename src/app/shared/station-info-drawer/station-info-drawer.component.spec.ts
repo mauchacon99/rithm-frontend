@@ -364,4 +364,13 @@ describe('StationInfoDrawerComponent', () => {
       },
     });
   });
+
+  it('should get the allow external workers for the station roster', () => {
+    const getDataFieldsDocument = spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.callThrough();
+    component.getAllowExternalWorkers();
+    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
+  });
 });
