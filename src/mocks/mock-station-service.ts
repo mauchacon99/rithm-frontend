@@ -123,6 +123,7 @@ export class MockStationService {
         rithmId: '3j4k-3h2j-hj4j',
         instructions: 'Do as I instruct',
         allowAllOrgWorkers: false,
+        allowExternalWorkers: true,
       },
     ];
     return of(mockStationData).pipe(delay(1000));
