@@ -465,17 +465,37 @@ describe('DashboardService', () => {
   });
 
   it('should return a new organization dashboard', () => {
-    const data = { name: 'Untitled Dashboard' };
+    const expectedResponse: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+
+    const expectBody = { name: expectedResponse.name };
     service.generateNewOrganizationDashboard().subscribe((response) => {
-      expect(response.name).toEqual(data.name);
+      expect(response).toEqual(expectedResponse);
     });
 
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
     );
+
     expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(data);
-    req.flush(data);
+    expect(req.request.body).toEqual(expectBody);
+    req.flush(expectedResponse);
     httpTestingController.verify();
   });
 });
