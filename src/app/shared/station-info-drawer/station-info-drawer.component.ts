@@ -208,6 +208,22 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether to show the create document button or not.
+   *
+   * @returns True/show False/hide.
+   */
+  get displayCreateDocumentButton(): boolean {
+    return (
+      this.stationDocumentGenerationStatus ===
+        DocumentGenerationStatus.Manual &&
+      (this.mapMode === 0 || this.mapMode === undefined) &&
+      !this.locallyCreated &&
+      (this.isUserAdminOrOwner || this.isWorker) &&
+      !this.openedFromMap
+    );
+  }
+
+  /**
    * Update status the station.
    *
    * @param status New status the station update.
