@@ -19,10 +19,10 @@ import {
   TOOLTIP_HEIGHT,
   TOOLTIP_WIDTH,
   TOOLTIP_PADDING,
-  STATION_GROUP_NAME_TRANSLATE,
   STATION_GROUP_NAME_MAX_ANGLE_ROTATE,
   SLOPE_RANGE_NOT_ALLOWED,
   SCALE_RENDER_STATION_ELEMENTS,
+  STATION_GROUP_NAME_PADDING,
 } from './map-constants';
 import { MapService } from './map.service';
 
@@ -109,7 +109,9 @@ export class StationGroupElementService {
       this.setStationGroupBoundaryPath(stationGroup);
       this.drawStationGroupBoundaryLine(stationGroup);
       // Render station group name depending on the zoom level.
-      if (this.mapScale >= SCALE_RENDER_STATION_ELEMENTS) {
+      if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
+        // eslint-disable-next-line no-console
+        console.log(this.mapScale);
         this.drawStationGroupName(stationGroup);
       }
 
@@ -149,16 +151,16 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected
+        stationGroup.selected
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
           stationGroup.disabled
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
-        ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
-          ? MAP_SELECTED
-          : NODE_HOVER_COLOR
-        : CONNECTION_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+            ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
+              ? MAP_SELECTED
+              : NODE_HOVER_COLOR
+            : CONNECTION_DEFAULT_COLOR;
     if (
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
       (stationGroup.selected ||
@@ -273,23 +275,22 @@ export class StationGroupElementService {
         'Cannot draw station group name if context is not defined'
       );
     }
-    // Save canvas, it is used to avoid having to rotate the context again.
-    this.canvasContext.save();
+
     // The name of the station group.
     // Change color when hovered over.
     this.canvasContext.fillStyle =
       stationGroup.selected ||
-      ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
-        stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
-        !stationGroup.disabled &&
-        this.mapService.mapMode$.value === MapMode.StationGroupAdd)
+        ((stationGroup.hoverItem === StationGroupElementHoverItem.Boundary ||
+          stationGroup.hoverItem === StationGroupElementHoverItem.Name) &&
+          !stationGroup.disabled &&
+          this.mapService.mapMode$.value === MapMode.StationGroupAdd)
         ? MAP_SELECTED
         : stationGroup.disabled &&
           this.mapService.mapMode$.value === MapMode.StationGroupAdd
-        ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Name
-        ? NODE_HOVER_COLOR
-        : BUTTON_DEFAULT_COLOR;
+          ? MAP_DISABLED_STROKE
+          : stationGroup.hoverItem === StationGroupElementHoverItem.Name
+            ? NODE_HOVER_COLOR
+            : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
 
@@ -297,59 +298,86 @@ export class StationGroupElementService {
     const newPosition = this.positionStraightestLine(
       stationGroup.boundaryPoints,
       this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING
+      STATION_GROUP_PADDING
     );
 
-    // Calculation of the angle of rotation of station group name.
-    const rotateAngleStationGroupName = Math.atan(
-      this.slopeLine(
-        stationGroup.boundaryPoints[newPosition],
-        stationGroup.boundaryPoints[newPosition - 1]
-      )
+    const newTitle = this.splitStationGroupName(
+      stationGroup.title,
+      newPosition,
+      stationGroup.boundaryPoints
     );
-
-    // Moves the point on the line.
-    const newPoint = this.movePointOnLine(
-      {
-        x: stationGroup.boundaryPoints[newPosition].x,
-        y: stationGroup.boundaryPoints[newPosition].y,
-      },
-      {
-        x: stationGroup.boundaryPoints[newPosition - 1].x,
-        y: stationGroup.boundaryPoints[newPosition - 1].y,
-      },
-      STATION_GROUP_NAME_TRANSLATE * this.mapScale
-    );
-
-    // translate the canvas to the new point.
-    this.canvasContext.translate(newPoint.x, newPoint.y);
-
-    // Rotate station group name.
-    this.canvasContext.rotate(rotateAngleStationGroupName);
 
     // Delete the line under the station group name.
-    this.canvasContext.clearRect(
-      -5,
-      -5,
-      this.canvasContext.measureText(stationGroup.title).width +
-        STATION_GROUP_PADDING,
-      //This dynamically sets the hight of the rectangle based on the hight of the text.
-      this.canvasContext.measureText(stationGroup.title)
-        .fontBoundingBoxDescent + 6
-    );
+    newTitle.forEach((title, index) => {
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[newPosition - index],
+        stationGroup.boundaryPoints[newPosition - index - 1],
+        false
+      );
+    });
 
     // Paint the station group name.
-    this.canvasContext.fillText(
-      stationGroup.title,
-      5,
-      this.canvasContext.measureText(stationGroup.title).fontBoundingBoxDescent
-    );
+    newTitle.forEach((title, index) => {
+      this.paintOrDeleteLineStationGroupName(
+        title,
+        stationGroup.boundaryPoints[newPosition - index],
+        stationGroup.boundaryPoints[newPosition - index - 1],
+        true
+      );
+    });
+    // Save canvas, it is used to avoid having to rotate the context again.
+    /*   this.canvasContext.save();
+      // Calculation of the angle of rotation of station group name.
+      const rotateAngleStationGroupName = Math.atan(
+        this.slopeLine(
+          stationGroup.boundaryPoints[newPosition],
+          stationGroup.boundaryPoints[newPosition - 1]
+        )
+      );
 
-    // Reset translate and rotate.
-    this.canvasContext.rotate(-rotateAngleStationGroupName);
-    this.canvasContext.translate(-newPoint.x, -newPoint.y);
-    // Restore Canvas.
-    this.canvasContext.restore();
+      // Moves the point on the line.
+      const newPoint = this.movePointOnLine(
+        {
+          x: stationGroup.boundaryPoints[newPosition].x,
+          y: stationGroup.boundaryPoints[newPosition].y,
+        },
+        {
+          x: stationGroup.boundaryPoints[newPosition - 1].x,
+          y: stationGroup.boundaryPoints[newPosition - 1].y,
+        },
+        STATION_GROUP_NAME_TRANSLATE * this.mapScale
+      );
+
+      // translate the canvas to the new point.
+      this.canvasContext.translate(newPoint.x, newPoint.y);
+
+      // Rotate station group name.
+      this.canvasContext.rotate(rotateAngleStationGroupName);
+
+      // Delete the line under the station group name.
+      this.canvasContext.clearRect(
+        -5,
+        -5,
+        this.canvasContext.measureText(stationGroup.title).width +
+        STATION_GROUP_PADDING,
+        //This dynamically sets the hight of the rectangle based on the hight of the text.
+        this.canvasContext.measureText(stationGroup.title)
+          .fontBoundingBoxDescent + 6
+      );
+
+      // Paint the station group name.
+      this.canvasContext.fillText(
+        stationGroup.title,
+        5,
+        this.canvasContext.measureText(stationGroup.title).fontBoundingBoxDescent
+      );
+
+      // Reset translate and rotate.
+      this.canvasContext.rotate(-rotateAngleStationGroupName);
+      this.canvasContext.translate(-newPoint.x, -newPoint.y);
+      // Restore Canvas.
+      this.canvasContext.restore(); */
   }
 
   /**
@@ -710,5 +738,120 @@ export class StationGroupElementService {
     const xDistance = pointEnd.y - pointStart.y;
     const yDistance = pointEnd.x - pointStart.x;
     return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+  }
+
+  /**
+   * T.
+   *
+   * @param title T.
+   * @param position T.
+   * @param points T.
+   * @returns The new title.
+   */
+  splitStationGroupName(title: string, position: number, points: Point[]): string[] {
+    //Point the canvasContext to the global one in mapService.
+    this.canvasContext = this.mapService.canvasContext;
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot draw station group boundary line if context is not defined'
+      );
+    }
+    let distanceLine = this.distanceBetweenTwoPoints(
+      points[position],
+      points[position - 1]
+    );
+    const newTitle: string[] = [];
+    let titleAux = "";
+    let newPosition = position;
+    for (let i = 0; i < title.length; i++) {
+      const titleWidth = this.canvasContext.measureText(titleAux).width +
+        this.canvasContext.measureText(title[i]).width;
+      if (titleWidth >= distanceLine) {
+        newTitle.push(titleAux);
+        titleAux = title[i];
+        newPosition = (newPosition - 1 > 0) ? newPosition - 1 : points.length - 1;
+        // eslint-disable-next-line no-console
+        console.log(newPosition);
+        distanceLine = this.distanceBetweenTwoPoints(
+          points[newPosition],
+          points[(newPosition - 1 > 0) ? newPosition - 1 : points.length - 1]
+        );
+      } else {
+        titleAux = titleAux.concat(title[i]);
+      }
+    }
+    newTitle.push(titleAux);
+
+    return newTitle;
+  }
+
+  /**
+   * Paint or delete the line under the station group name.
+   *
+   * @param title The station group name.
+   * @param pointStart The start point of the line.
+   * @param pointEnd The end point of the line.
+   * @param paintOrDelete If true, paint the name, if not, delete the line under the name.
+   */
+  paintOrDeleteLineStationGroupName(title: string, pointStart: Point, pointEnd: Point, paintOrDelete = true): void {
+    //Point the canvasContext to the global one in mapService.
+    this.canvasContext = this.mapService.canvasContext;
+    if (!this.canvasContext) {
+      throw new Error(
+        'Cannot draw station group boundary line if context is not defined'
+      );
+    }
+
+    const m = this.slopeLine(pointStart, pointEnd);
+    // Calculation of the angle of rotation of station group name.
+    const rotateAngleStationGroupName = (m === Math.PI)
+      ? Math.PI / 2
+      : Math.atan(m);
+
+    // Moves the point on the line.
+    const newPoint = this.movePointOnLine(
+      {
+        x: pointStart.x,
+        y: pointStart.y,
+      },
+      {
+        x: pointEnd.x,
+        y: pointEnd.y,
+      },
+      0
+    );
+
+    this.canvasContext.save();
+
+    // translate the canvas to the new point.
+    this.canvasContext.translate(newPoint.x, newPoint.y);
+
+    // Rotate station group name.
+    this.canvasContext.rotate(rotateAngleStationGroupName);
+
+    if (paintOrDelete) {
+      // Paint the station group name.
+      this.canvasContext.fillText(
+        title,
+        5,
+        this.canvasContext.measureText(title).fontBoundingBoxDescent
+      );
+    } else {
+      // Delete the line under the station group name.
+      this.canvasContext.clearRect(
+        -5,
+        -5,
+        this.canvasContext.measureText(title).width + STATION_GROUP_NAME_PADDING + 5,
+        //This dynamically sets the hight of the rectangle based on the hight of the text.
+        this.canvasContext.measureText(title)
+          .fontBoundingBoxDescent + 6
+      );
+    }
+
+    // Reset translate and rotate.
+    this.canvasContext.rotate(-rotateAngleStationGroupName);
+    this.canvasContext.translate(-newPoint.x, -newPoint.y);
+    // Restore Canvas.
+    this.canvasContext.restore();
   }
 }
