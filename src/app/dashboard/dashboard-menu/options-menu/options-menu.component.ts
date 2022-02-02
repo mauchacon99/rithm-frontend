@@ -1,6 +1,10 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { Router } from '@angular/router';
+import { first } from 'rxjs';
+import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
+import { DashboardService } from '../../dashboard.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -26,6 +30,12 @@ export class OptionsMenuComponent {
   @ViewChild(MatMenuTrigger)
   private optionsMenuTrigger!: MatMenuTrigger;
 
+  constructor(
+    private dashboardService: DashboardService,
+    private errorService: ErrorService,
+    private router: Router
+  ) { }
+
   /**
    * Opens the option menu on the dashboard menu.
    *
@@ -34,5 +44,28 @@ export class OptionsMenuComponent {
   openOptionsMenu(event: MouseEvent): void {
     this.optionsMenuTrigger.openMenu();
     event.stopPropagation();
+  }
+
+  /**
+   * Generate a new dashboard.
+   *
+   * @param dashboardType The type of dashboard.
+   */
+  generateNewDashboard(dashboardType: RoleDashboardMenu): void {
+    const generateDashboard$ =
+      dashboardType === RoleDashboardMenu.PersonalDashboard
+        ? this.dashboardService.generateNewPersonalDashboard()
+        : this.dashboardService.generateNewOrganizationDashboard();
+    generateDashboard$.pipe(first()).subscribe({
+      next: (newDashboard) => {
+        this.router.navigateByUrl(`/dashboard/${newDashboard.rithmId}`);
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 }

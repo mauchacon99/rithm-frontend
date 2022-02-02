@@ -9,6 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { DashboardData, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * Main component for the dashboard screens.
@@ -96,7 +97,8 @@ export class DashboardComponent implements OnInit {
     private splitService: SplitService,
     private errorService: ErrorService,
     private sidenavDrawerService: SidenavDrawerService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private route: ActivatedRoute
   ) {
     // TODO: remove when admin users can access stations through map
     if (this.isAdmin) {
@@ -232,42 +234,23 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Generates a new dashboard personal.
+   * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
-  generateNewPersonalDashboard(): void {
-    this.dashboardService
-      .generateNewPersonalDashboard()
-      .pipe(first())
-      .subscribe({
-        next: (newDashboard) => {
-          this.dashboardData = newDashboard;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
-  }
-
-  /**
-   * Generates a new default dashboard.
-   */
-  generateNewOrganizationDashboard(): void {
-    this.dashboardService
-      .generateNewOrganizationDashboard()
-      .pipe(first())
-      .subscribe({
-        next: (newDashboard) => {
-          this.dashboardData = newDashboard;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
-            error
-          );
-        },
-      });
+   private getParams(): void {
+    this.route.params.pipe(first()).subscribe({
+      next: (params) => {
+        if (!params.dashboardId) {
+          // TODO: if no route params get the first company dashboard
+        } else {
+          // TODO: load dashboard by route params dashboardId
+        }
+      },
+      error: (error: unknown) => {
+        this.errorService.displayError(
+          "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+          error
+        );
+      },
+    });
   }
 }

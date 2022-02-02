@@ -6,9 +6,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   imports: [
     RouterModule.forChild([
       {
-        path: '',
+        path: ':dashboardId',
         component: DashboardComponent,
-        pathMatch: 'full',
+        pathMatch: 'prefix',
       },
     ]),
   ],
