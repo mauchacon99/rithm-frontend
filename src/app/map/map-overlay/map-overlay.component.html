@@ -44,6 +44,29 @@
         >
           Build
         </button>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Station Name</mat-label>
+          <input
+            type="text"
+            matInput
+            [matAutocomplete]="auto"
+            [(ngModel)]="searchText"
+            (ngModelChange)="searchStations()"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayStationName"
+          >
+            <mat-option
+              *ngFor="let option of filteredStations"
+              [value]="option"
+            >
+              {{ option.stationName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
         <button
           mat-raised-button
           color="basic"
