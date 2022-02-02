@@ -156,7 +156,7 @@
           <p class="text-secondary-300 inline-block">None</p>
           <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
             <app-loading-indicator
-              id="loading-indicator-status"
+              id="none-status-loading"
               [inlineText]="'Loading...'"
             ></app-loading-indicator>
           </div>
@@ -173,7 +173,7 @@
           <p class="text-secondary-300 inline-block">Manual</p>
           <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
             <app-loading-indicator
-              id="loading-indicator-status"
+              id="manual-status-loading"
               [inlineText]="'Loading...'"
             ></app-loading-indicator>
           </div>
@@ -202,7 +202,7 @@
       >
         <div class="py-1" *ngIf="docCreationLoading; else createDocument">
           <app-loading-indicator
-            id="loading-indicator-status"
+            id="creating-document-loading"
             [inlineText]="'Loading...'"
           ></app-loading-indicator>
         </div>
