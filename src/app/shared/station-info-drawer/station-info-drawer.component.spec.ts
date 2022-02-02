@@ -37,7 +37,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 
-xdescribe('StationInfoDrawerComponent', () => {
+describe('StationInfoDrawerComponent', () => {
   let component: StationInfoDrawerComponent;
   let fixture: ComponentFixture<StationInfoDrawerComponent>;
   const formBuilder = new FormBuilder();
@@ -172,7 +172,7 @@ xdescribe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should show loading-indicators while get data the status station document', () => {
+  xit('should show loading-indicators while get data the status station document', () => {
     component.stationLoading = false;
     component.getStationDocumentGenerationStatus();
     spyOn(TestBed.inject(UserService), 'isStationOwner').and.returnValue(true);
@@ -185,7 +185,7 @@ xdescribe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  it('should show loading-indicators while update data the status station document', () => {
+  xit('should show loading-indicators while update data the status station document', () => {
     component.stationLoading = false;
     const newStatus = DocumentGenerationStatus.Manual;
     component.updateStationDocumentGenerationStatus(
@@ -299,7 +299,7 @@ xdescribe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  it('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
+  xit('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
@@ -331,7 +331,7 @@ xdescribe('StationInfoDrawerComponent', () => {
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
-  it('should show loading-indicators while creating a new document is underway', async () => {
+  xit('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
     Object.defineProperty(component, 'isUserAdminOrOwner', { value: true });
