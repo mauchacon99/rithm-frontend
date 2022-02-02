@@ -29,8 +29,8 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The Label Select of modal. */
   label = 'Select Station';
 
-  /** The list of previous and following stations in the document. */
-  connectedStations: ConnectedStationInfo[] = [];
+  /** The list of previous and following stations or the list of all stations. */
+  stations: ConnectedStationInfo[] | Station[] = [];
 
   /** The Document rithmId. */
   documentRithmId = '';
@@ -41,17 +41,14 @@ export class ConnectedStationsModalComponent implements OnInit {
   /** The selected Station for move document. */
   selectedStation = '';
 
-  /* Load if exists error in the stations */
+  /* Load if exists error in the stations. */
   connectedError = false;
 
-  /* Loading in modal the list of connected stations */
+  /* Loading in modal the list of connected stations or the list of all stations. */
   connectedStationLoading = false;
 
   /** Enable error message if move document request fails. */
   moveDocumentError = false;
-
-  /** The list of stations. */
-  stations: Station[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: ConnectedModalData,
@@ -95,7 +92,7 @@ export class ConnectedStationsModalComponent implements OnInit {
       .subscribe({
         next: (connectedStations) => {
           this.connectedStationLoading = false;
-          this.connectedStations = connectedStations.nextStations.concat(
+          this.stations = connectedStations.nextStations.concat(
             connectedStations.previousStations
           );
         },
@@ -104,6 +101,30 @@ export class ConnectedStationsModalComponent implements OnInit {
           this.connectedStationLoading = false;
           this.errorService.displayError(
             'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        },
+      });
+  }
+
+  /**
+   * Get the list of all stations.
+   */
+  private getAllStations(): void {
+    this.connectedStationLoading = true;
+    this.stationService
+      .getAllStations()
+      .pipe(first())
+      .subscribe({
+        next: (stations) => {
+          this.stations = stations;
+          this.connectedStationLoading = false;
+        },
+        error: (error: unknown) => {
+          this.connectedStationLoading = false;
+          this.errorService.displayError(
+            'Failed to get all stations for this document.',
             error,
             false
           );
@@ -136,27 +157,6 @@ export class ConnectedStationsModalComponent implements OnInit {
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
-          );
-        },
-      });
-  }
-
-  /**
-   * Get the list of all stations.
-   */
-  private getAllStations(): void {
-    this.stationService
-      .getAllStations()
-      .pipe(first())
-      .subscribe({
-        next: (stations) => {
-          this.stations = stations;
-        },
-        error: (error: unknown) => {
-          this.errorService.displayError(
-            'Failed to get all stations for this document.',
-            error,
-            false
           );
         },
       });
