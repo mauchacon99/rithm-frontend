@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
-   private getParams(): void {
+  private getParams(): void {
     this.route.params.pipe(first()).subscribe({
       next: (params) => {
         if (!params.dashboardId) {

@@ -34,7 +34,7 @@ export class OptionsMenuComponent {
     private dashboardService: DashboardService,
     private errorService: ErrorService,
     private router: Router
-  ) { }
+  ) {}
 
   /**
    * Opens the option menu on the dashboard menu.
