@@ -398,7 +398,7 @@ export class MapService {
     //Set up a station group using non-nested selected stations and sub-groups.
     const newGroup = new StationGroupMapElement({
       rithmId: uuidv4(),
-      title: 'Untitled Group',
+      title: 'Pending',
       stations: [],
       subStationGroups: [],
       status: MapItemStatus.Created,
