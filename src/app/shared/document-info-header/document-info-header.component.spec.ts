@@ -269,7 +269,7 @@ describe('DocumentInfoHeaderComponent', () => {
     expect(button).toBeTruthy();
 
     const navigateSpy = spyOn(component, 'goToDocument');
-    component.goToDocument();
+    button.click();
     expect(navigateSpy).toHaveBeenCalledWith();
   });
 });
