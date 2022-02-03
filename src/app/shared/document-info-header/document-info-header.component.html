@@ -155,19 +155,22 @@
 
   <div
     [ngClass]="
-      currentAssignedUserDocument !== ''
+      currentAssignedUserDocument !== null
         ? 'flex justify-between p-1'
         : 'flex justify-end '
     "
   >
-    <div *ngIf="currentAssignedUserDocument !== ''">
+    <div *ngIf="currentAssignedUserDocument?.rithmId !== null">
       <small
         class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
       >
         ASSIGNED
       </small>
       <div class="px-4">
-        <app-user-avatar [firstName]="'Name user'" [lastName]="'lastName'">
+        <app-user-avatar
+          [firstName]="currentAssignedUserDocument.firstName"
+          [lastName]="currentAssignedUserDocument.lastName"
+        >
         </app-user-avatar>
       </div>
     </div>

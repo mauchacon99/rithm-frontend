@@ -14,7 +14,7 @@ export interface DocumentStationInformation {
   documentPriority: number;
 
   /** The first and last name of the user who is assigned. */
-  currentAssignedUser: string;
+  currentAssignedUser: StationRosterMember;
 
   /** The time at which this document was most recently flowed as an ISO string date. */
   flowedTimeUTC: string;
