@@ -2,6 +2,9 @@
  * Represents all the states an item can have on the map.
  */
 export enum MapItemStatus {
+  /** The item on the map is pending creation. Should not be published as is. */
+  Pending,
+
   /** The item on the map has been newly created and has yet to be published. */
   Created,
 
