@@ -59,7 +59,10 @@ export class OptionsMenuComponent {
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
         this.router.navigate([`/dashboard/${newDashboard.rithmId}`], {
-          queryParams: { dashboardId: newDashboard.rithmId, type: dashboardType },
+          queryParams: {
+            dashboardId: newDashboard.rithmId,
+            type: dashboardType,
+          },
         });
       },
       error: (error: unknown) => {
