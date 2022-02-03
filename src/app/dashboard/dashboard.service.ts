@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -112,7 +112,10 @@ export class DashboardService {
   updatePersonalDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    return of(dashboardData).pipe(delay(1000));
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`,
+      dashboardData
+    );
   }
 
   /**
