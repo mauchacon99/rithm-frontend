@@ -142,11 +142,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Initialize split on page load.
    */
-  ngOnInit(): void {
-    this.split();
-    if (this.viewNewDashboard) {
-      this.getParams();
-    }
+  async ngOnInit(): Promise<void> {
+    await this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
@@ -164,6 +161,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: () => {
         const treatment = this.splitService.getDashboardTreatment();
         this.viewNewDashboard = treatment === 'on';
+        if (this.viewNewDashboard) {
+          this.getParams();
+        }
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
