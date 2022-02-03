@@ -48,6 +48,9 @@ export interface StationMapElement extends StationMapData {
 
   /** The path used for the options button on the station (in build mode). */
   buttonPath: Path2D;
+
+  /** Whether the station drawer is opened or not. */
+  drawerOpened: boolean;
 }
 
 /**
@@ -66,6 +69,7 @@ export class StationMapElement {
     this.isAddingConnected = false;
     this.disabled = false;
     this.selected = false;
+    this.drawerOpened = false;
     Object.assign(this, stationMapData);
   }
 

@@ -134,6 +134,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
         const dataDrawer = data as StationInfoDrawerData;
         if (this.drawerContext === 'stationInfo') {
           if (dataDrawer) {
+            if (this.mapService.stationElements.some(e => e.drawerOpened)) {
+              const openedStations = this.mapService.stationElements.filter(e => e.drawerOpened);
+              openedStations.forEach(station => {
+                station.drawerOpened = false;
+              });
+            }
             this.editMode = dataDrawer.editMode;
             this.stationRithmId = dataDrawer.stationRithmId;
             this.stationName = dataDrawer.stationName;
@@ -141,6 +147,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             this.stationStatus = dataDrawer.stationStatus;
             this.openedFromMap = dataDrawer.openedFromMap;
             this.stationNotes = dataDrawer.notes;
+            const currentStationIndex = this.mapService.stationElements.findIndex(e => e.rithmId === this.stationRithmId);
+            this.mapService.stationElements[currentStationIndex].drawerOpened = true;
+            this.mapService.mapDataReceived$.next(true);
             if (
               this.openedFromMap &&
               this.stationStatus !== MapItemStatus.Created
