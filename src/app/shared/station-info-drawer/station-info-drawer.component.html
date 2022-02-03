@@ -151,7 +151,15 @@
             View Station
           </button>
         </div>
-        <div class="w-full py-2 px-2 text-center">
+        <div
+          class="w-full py-2 px-2 text-center"
+          *ngIf="
+            locallyCreated ||
+            (openedFromMap && editMode && isUserAdminOrOwner) ||
+            (!openedFromMap && editMode) ||
+            (!openedFromMap && isUserAdminOrOwner)
+          "
+        >
           <button
             mat-stroked-button
             color="warn"
