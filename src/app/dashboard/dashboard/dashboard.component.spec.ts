@@ -18,7 +18,6 @@ import { UserService } from 'src/app/core/user.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { SplitService } from 'src/app/core/split.service';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-// import { throwError } from 'rxjs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from '../dashboard-menu/menu/menu.component';
@@ -29,31 +28,10 @@ import { GridsterModule } from 'angular-gridster2';
 import { DashboardData, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-
-  const expectDashboardData: DashboardData = {
-    rithmId: '102030405060708090100',
-    name: 'Untitled Dashboard',
-    widgets: [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ],
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
