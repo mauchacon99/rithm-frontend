@@ -373,4 +373,22 @@ describe('StationInfoDrawerComponent', () => {
     component['getAllowExternalWorkers']();
     expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
   });
+
+  it('should catch an error if getting the allow external workers fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAllowExternalWorkers']();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
