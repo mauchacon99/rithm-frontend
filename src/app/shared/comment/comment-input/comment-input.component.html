@@ -1,5 +1,5 @@
 <form [formGroup]="commentForm" (ngSubmit)="addComment()">
-  <mat-form-field appearance="outline" class="pb-14 md:pb-0 m-3 md:m-2">
+  <mat-form-field appearance="outline" class="pb-14 md:pb-0 p-3 md:p-2 w-full">
     <mat-label>Add a comment</mat-label>
     <input
       matInput
@@ -8,15 +8,17 @@
       formControlName="comment"
       autocomplete="off"
     />
+    <button
+      type="submit"
+      id="commentPostButton"
+      mat-icon-button
+      matSuffix
+      color="accent"
+      [disabled]="!commentForm.valid"
+      class="text-xl -top-1"
+      data-testid="send-comment"
+    >
+      <i class="fas fa-paper-plane text-2x1 text-accent-500"></i>
+    </button>
   </mat-form-field>
-  <button
-    type="submit"
-    id="commentPostButton"
-    mat-icon-button
-    color="accent"
-    [disabled]="!commentForm.valid"
-    class="text-xl -top-1"
-  >
-    <i class="fas fa-paper-plane"></i>
-  </button>
 </form>
