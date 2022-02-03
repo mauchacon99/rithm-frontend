@@ -364,4 +364,35 @@ describe('StationInfoDrawerComponent', () => {
       },
     });
   });
+
+  it('should update the field allowAllOrgWorkers in station', () => {
+    const spyMethod = spyOn(
+      TestBed.inject(StationService),
+      'updateAllowAllOrgWorkers'
+    ).and.callThrough();
+
+    const allowAllOrgWorkers = true;
+
+    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+
+    expect(spyMethod).toHaveBeenCalledOnceWith(stationId, allowAllOrgWorkers);
+  });
+
+  it('should update the field allowAllOrgWorkers in station', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'updateAllowAllOrgWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const allowAllOrgWorkers = true;
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.updateAllOrgWorkersStation(allowAllOrgWorkers);
+    expect(spyError).toHaveBeenCalled();
+  });
 });

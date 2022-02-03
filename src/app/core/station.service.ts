@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -514,5 +514,33 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
       { params }
     );
+  }
+
+  /**
+   * Update AllowAllOrgWorkers information.
+   *
+   * @returns The field AllowAllOrgWorkers updated.
+   * @param stationRithmId The station id that will be update.
+   * @param allowAllOrgWorkers The value that will be update.
+   */
+  updateAllowAllOrgWorkers(
+    stationRithmId: string,
+    allowAllOrgWorkers: boolean
+  ): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'cannot update field related all org workers',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse = {
+        data: allowAllOrgWorkers,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
   }
 }
