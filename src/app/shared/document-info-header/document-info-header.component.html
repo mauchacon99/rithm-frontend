@@ -1,7 +1,4 @@
-<section
-  class="grid grid-cols-12 border-b border-secondary-400"
-  [ngClass]="{ 'py-5': !isWidget }"
->
+<section class="grid grid-cols-12" [ngClass]="{ 'py-5': !isWidget }">
   <div class="col-span-12" *ngIf="!isWidget">
     <h6 class="text-center">Document Information</h6>
   </div>
@@ -155,12 +152,12 @@
 
   <div
     [ngClass]="
-      currentAssignedUserDocument !== null
+      currentAssignedUserDocument
         ? 'flex justify-between p-1'
         : 'flex justify-end '
     "
   >
-    <div *ngIf="currentAssignedUserDocument?.rithmId !== null">
+    <div *ngIf="currentAssignedUserDocument?.rithmId">
       <small
         class="text-secondary-900 font-semibold text-[0.6rem] tracking-[1.5px]"
       >
@@ -178,6 +175,7 @@
     <button
       mat-button
       data-testid="return-document-button"
+      id="return-document-button"
       class="text-secondary-700"
       (click)="goToDocument()"
     >

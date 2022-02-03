@@ -290,7 +290,7 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Navigate the user to the document page. */
   goToDocument(): void {
-    this.router.navigate([`/document/${this.documentRithmId}`], {
+    this.router.navigate(['/document/', this.documentRithmId], {
       queryParams: {
         documentId: this.documentRithmId,
         stationId: this.stationRithmId,
