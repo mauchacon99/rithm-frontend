@@ -527,8 +527,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    * Sets the map to add station mode in preparation for a station to be selected.
    */
   addStation(): void {
-      this.mapService.mapMode$.next(MapMode.StationAdd);
-      this.mapService.matMenuStatus$.next(true);
+    this.mapService.mapMode$.next(MapMode.StationAdd);
+    this.mapService.matMenuStatus$.next(true);
   }
 
   /**

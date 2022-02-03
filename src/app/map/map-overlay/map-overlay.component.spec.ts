@@ -95,6 +95,5 @@ describe('MapOverlayComponent', () => {
     component.addStation();
     expect(service.mapMode$.value).toBe(MapMode.StationAdd);
     expect(service.matMenuStatus$.value).toBe(false);
-
   });
 });
