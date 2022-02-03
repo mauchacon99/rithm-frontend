@@ -8,7 +8,6 @@ import {
   StationRosterMember,
   Document,
   DashboardItem,
-  WidgetType,
   DashboardData,
 } from 'src/models';
 
@@ -156,26 +155,10 @@ export class DashboardService {
    * @returns Returns a new default dashboard.
    */
   generateNewOrganizationDashboard(): Observable<DashboardData> {
-    const newDashboard: DashboardData = {
-      rithmId: '102030405060708090100',
-      name: 'Untitled Dashboard',
-      widgets: [
-        {
-          cols: 4,
-          rows: 1,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Station,
-          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-          minItemCols: 4,
-          minItemRows: 4,
-          maxItemCols: 12,
-          maxItemRows: 12,
-        },
-      ],
-    };
-
-    return of(newDashboard).pipe(delay(1000));
+    return this.http.post<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      { name: 'Untitled Dashboard' }
+    );
   }
 
   /**
@@ -187,6 +170,9 @@ export class DashboardService {
   updateOrganizationDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    return of(dashboardData).pipe(delay(1000));
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      dashboardData
+    );
   }
 }
