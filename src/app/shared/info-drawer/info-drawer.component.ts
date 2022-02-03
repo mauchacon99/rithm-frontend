@@ -22,8 +22,10 @@ export class InfoDrawerComponent implements OnDestroy {
 
   openedFromMap = false;
 
-  constructor(private sidenavDrawerService: SidenavDrawerService,
-    private mapService: MapService,) {
+  constructor(
+    private sidenavDrawerService: SidenavDrawerService,
+    private mapService: MapService
+  ) {
     this.sidenavDrawerService.drawerContext$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
@@ -66,10 +68,15 @@ export class InfoDrawerComponent implements OnDestroy {
       drawerItem === 'stationInfo' ||
       drawerItem === 'history'
     ) {
-      if (drawerItem === 'stationInfo' && this.sidenavDrawerService.isDrawerOpen) {
-        if (this.mapService.stationElements.some(e => e.drawerOpened)) {
-          const openedStations = this.mapService.stationElements.filter(e => e.drawerOpened);
-          openedStations.forEach(station => {
+      if (
+        drawerItem === 'stationInfo' &&
+        this.sidenavDrawerService.isDrawerOpen
+      ) {
+        if (this.mapService.stationElements.some((e) => e.drawerOpened)) {
+          const openedStations = this.mapService.stationElements.filter(
+            (e) => e.drawerOpened
+          );
+          openedStations.forEach((station) => {
             station.drawerOpened = false;
           });
           this.mapService.mapDataReceived$.next(true);

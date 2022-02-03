@@ -16,9 +16,7 @@ describe('InfoDrawerComponent', () => {
         InfoDrawerComponent,
         MockComponent(StationInfoDrawerComponent),
       ],
-      providers: [
-        { provide: MapService, useClass: MockMapService },
-      ]
+      providers: [{ provide: MapService, useClass: MockMapService }],
     }).compileComponents();
   });
 
