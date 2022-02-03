@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -514,5 +514,19 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
       { params }
     );
+  }
+
+  /**
+   * Update the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers updated to be assigned to station documents.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
   }
 }

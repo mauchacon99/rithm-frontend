@@ -593,4 +593,24 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+  /**
+   * Update the allow external workers for the station roster.
+   */
+  private updateAllowExternalWorkers(): void {
+    this.stationService
+      .updateAllowExternalWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allowExternal) => {
+          this.allowExternal = allowExternal;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
 }

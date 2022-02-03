@@ -856,4 +856,17 @@ export class MockStationService {
       return of(mockQuestions).pipe(delay(1000));
     }
   }
+
+  /**
+   * Update the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers updated to be assigned to station documents.
+   */
+  updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
+  }
 }
