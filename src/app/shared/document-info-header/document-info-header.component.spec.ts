@@ -261,6 +261,13 @@ describe('DocumentInfoHeaderComponent', () => {
   });
 
   it('should redirect to document page', () => {
+    component.isWidget = true;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector(
+      '#return-document-button'
+    );
+    expect(button).toBeTruthy();
+
     const navigateSpy = spyOn(component, 'goToDocument');
     component.goToDocument();
     expect(navigateSpy).toHaveBeenCalledWith();

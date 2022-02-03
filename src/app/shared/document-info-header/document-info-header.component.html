@@ -1,4 +1,8 @@
-<section class="grid grid-cols-12" [ngClass]="{ 'py-5': !isWidget }">
+<section
+  *ngIf="!isWidget"
+  class="grid border-b border-secondary-400 grid-cols-12"
+  [ngClass]="{ 'py-5': !isWidget }"
+>
   <div class="col-span-12" *ngIf="!isWidget">
     <h6 class="text-center">Document Information</h6>
   </div>
@@ -87,7 +91,6 @@
     </div>
     <ng-template #nonEditableDocName>
       <div
-        *ngIf="!isWidget"
         class="flex items-center justify-between col-span-12"
         [ngClass]="{ 'py-2': isWidget }"
       >
