@@ -133,6 +133,7 @@ export class StationWidgetComponent implements OnInit {
           this.viewDocument(documentRithmId);
           this.reloadDocumentList = true;
           this.isLoading = false;
+          this.displayDocumentError = false;
           this.popupService.notify(
             'The document has been created successfully.'
           );
