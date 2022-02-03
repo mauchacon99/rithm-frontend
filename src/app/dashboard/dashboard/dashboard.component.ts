@@ -239,8 +239,9 @@ export class DashboardComponent implements OnInit {
   private getParams(): void {
     this.route.params.pipe(first()).subscribe({
       next: (params) => {
-        if (!params.dashboardId) {
+        if (!params.dashboardId || !params.type) {
           // TODO: if no route params get the first company dashboard
+          // You don't have any dashboards, create one to get started.
         } else {
           // TODO: load dashboard by route params dashboardId
         }

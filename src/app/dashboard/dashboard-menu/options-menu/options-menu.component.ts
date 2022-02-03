@@ -58,7 +58,9 @@ export class OptionsMenuComponent {
         : this.dashboardService.generateNewOrganizationDashboard();
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
-        this.router.navigateByUrl(`/dashboard/${newDashboard.rithmId}`);
+        this.router.navigate([`/dashboard/${newDashboard.rithmId}`], {
+          queryParams: { dashboardId: newDashboard.rithmId, type: dashboardType },
+        });
       },
       error: (error: unknown) => {
         this.errorService.displayError(
