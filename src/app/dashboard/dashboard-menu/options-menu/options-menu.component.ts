@@ -5,7 +5,7 @@ import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
-import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
+import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -74,6 +74,7 @@ export class OptionsMenuComponent {
         ]);
       },
       error: (error: unknown) => {
+        this.dashboardService.toggleLoadingNewDashboard(false);
         this.isGenerateNewDashboard = false;
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",

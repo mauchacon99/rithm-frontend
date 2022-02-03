@@ -110,15 +110,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.sidenavDrawerService.drawerHasBackdrop;
   }
 
-  /**
-   * Whether the drawer is open.
-   *
-   * @returns True if the drawer is open, false otherwise.
-   */
-  get isDrawerOpen(): boolean {
-    return this.sidenavDrawerService.isDrawerOpen;
-  }
-
   constructor(
     private stationService: StationService,
     private userService: UserService,
@@ -178,6 +169,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Whether the drawer is open.
+   *
+   * @returns True if the drawer is open, false otherwise.
+   */
+  get isDrawerOpen(): boolean {
+    return this.sidenavDrawerService.isDrawerOpen;
+  }
+
+  /**
    * Opens side nav on the dashboard.
    *
    * @param drawerItem The information that will be displayed in the side drawer.
@@ -199,7 +199,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param dashboardRithmId String of rithmId of dashboard.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private getDashboardWidgets(dashboardRithmId: string): void {
+  private getDashboardByRithmId(dashboardRithmId: string): void {
     this.errorLoadingWidgets = false;
     this.isLoading = true;
     this.dashboardService
@@ -289,11 +289,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (
             params.typeDashboard === this.roleDashboardMenu.PersonalDashboard ||
             params.typeDashboard ===
-              this.roleDashboardMenu.OrganizationDashboard
+            this.roleDashboardMenu.OrganizationDashboard
           ) {
             this.split();
             this.dashboardRole = params.typeDashboard;
-            this.getDashboardWidgets(params.dashboardId);
+            this.getDashboardByRithmId(params.dashboardId);
           } else {
             this.router.navigate(['/', 'dashboard']);
           }
@@ -329,7 +329,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.errorLoadingWidgets = false;
-          this.isCreateNewDashboard = false;
         },
         error: (error: unknown) => {
           this.errorLoadingWidgets = true;
