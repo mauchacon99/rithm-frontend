@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ErrorService } from 'src/app/core/error.service';
 import { RoleDashboardMenu } from 'src/models';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from 'src/app/dashboard/dashboard.service';
+import { SidenavDrawerService } from '../../../core/sidenav-drawer.service';
 
 /**
  * Options menu for dashboard menu drawer.
@@ -33,7 +34,8 @@ export class OptionsMenuComponent {
   constructor(
     private dashboardService: DashboardService,
     private errorService: ErrorService,
-    private router: Router
+    private router: Router,
+    private sidenavDrawerService: SidenavDrawerService
   ) {}
 
   /**
@@ -48,22 +50,23 @@ export class OptionsMenuComponent {
 
   /**
    * Generate a new dashboard.
-   *
-   * @param dashboardType The type of dashboard.
    */
-  generateNewDashboard(dashboardType: RoleDashboardMenu): void {
+  generateNewDashboard(): void {
+    this.sidenavDrawerService.toggleDrawer('menuDashboard');
+    this.dashboardService.toggleLoadingNewDashboard(true);
     const generateDashboard$ =
-      dashboardType === RoleDashboardMenu.PersonalDashboard
+      this.dashboardRole === this.roleDashboardMenu.PersonalDashboard
         ? this.dashboardService.generateNewPersonalDashboard()
         : this.dashboardService.generateNewOrganizationDashboard();
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
-        this.router.navigate([`/dashboard/${newDashboard.rithmId}`], {
-          queryParams: {
-            dashboardId: newDashboard.rithmId,
-            type: dashboardType,
-          },
-        });
+        this.dashboardService.toggleLoadingNewDashboard(false);
+        this.router.navigate([
+          '/',
+          'dashboard',
+          newDashboard.rithmId,
+          this.dashboardRole,
+        ]);
       },
       error: (error: unknown) => {
         this.errorService.displayError(

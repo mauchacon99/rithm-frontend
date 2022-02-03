@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from "rxjs";
 import {
   WorkerDashboardHeader,
   DashboardStationData,
@@ -16,6 +16,19 @@ import { Document } from 'src/models';
  * Mocks methods of the `DashboardService`.
  */
 export class MockDashboardService {
+
+  /** Loading dashboard when generate new dashboard. */
+  isLoadingDashboard$ = new Subject<boolean>();
+
+  /**
+   * Toggle emit to loading dashboard.
+   *
+   * @param status Boolean true to loading and false not loading.
+   */
+  toggleLoadingNewDashboard(status: boolean): void {
+    this.isLoadingDashboard$.next(status);
+  }
+
   /**
    * Gets info needed for dashboard header.
    *

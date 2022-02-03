@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { delay, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
@@ -21,6 +21,9 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
+  /** Loading dashboard when generate new dashboard. */
+  isLoadingDashboard$ = new Subject<boolean>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -32,6 +35,15 @@ export class DashboardService {
     return this.http.get<WorkerDashboardHeader>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
     );
+  }
+
+  /**
+   * Toggle emit to loading dashboard.
+   *
+   * @param status Boolean true to loading and false not loading.
+   */
+  toggleLoadingNewDashboard(status: boolean): void {
+    this.isLoadingDashboard$.next(status);
   }
 
   /**
