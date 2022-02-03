@@ -1,0 +1,34 @@
+//Search css styles
+::ng-deep.mat-form-field-wrapper {
+  padding: 0;
+
+  .mat-form-field-underline {
+    display: none;
+  }
+}
+
+::ng-deep.mat-form-field-appearance-fill {
+  .mat-form-field-flex {
+    padding: 4px 22px 4px 26px !important;
+    background-color: #fff;
+    border: 1px solid #bfbfbf;
+  }
+
+  .mat-form-field-infix {
+    padding: 0;
+    border-top: 0.35rem;
+  }
+}
+
+::ng-deep.mat-option {
+  line-height: 21px !important;
+  height: 40px !important;
+}
+
+.station {
+  background-image: url('../../../assets/images/station.png');
+}
+
+.group {
+  background-image: url('../../../assets/images/station.png');
+}

@@ -84,12 +84,6 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
   /** Whether the called info-drawer is documentInfo type or stationInfo. */
   drawerMode: '' | 'stationInfo' | 'connectionInfo' | 'stationGroupInfo' = '';
 
-  /** List of filtered stations based on search text. */
-  filteredStations: StationMapElement[] = [];
-
-  /** Search text. */
-  searchText = '';
-
   /**
    * Whether the map is in any building mode.
    *
@@ -535,38 +529,5 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
    */
   toggleDrawer(drawerItem: 'stationGroupInfo'): void {
     this.sidenavDrawerService.toggleDrawer(drawerItem);
-  }
-
-  /**
-   * Display station or group name when it's selected.
-   *
-   * @param displayItem The selected item.
-   * @returns Returns station or group name.
-   */
-  displayStationName(displayItem: StationMapElement): string {
-    return displayItem?.stationName;
-  }
-
-  /**
-   * Search for the stations based on search text.
-   *
-   */
-  searchStations(): void {
-    this.searchText === '' || this.searchText.length === 0
-      ? (this.filteredStations = [])
-      : (this.filteredStations = this.mapService.stationElements.filter(
-          (item) => {
-            return item.stationName.toLowerCase().includes(this.searchText);
-          }
-        ));
-  }
-
-  /**
-   * Clear search box text on click of close icon.
-   *
-   */
-  clearSearchText(): void {
-    this.searchText = '';
-    this.filteredStations = [];
   }
 }

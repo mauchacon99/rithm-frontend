@@ -1,1 +1,32 @@
-<p>map-search works!</p>
+<div class="bg-white relative">
+  <i class="fas fa-search absolute left-2 top-2.5 z-40 text-secondary-300"></i>
+  <i
+    class="fas fa-times absolute right-2 top-2.5 z-40 cursor-pointer text-secondary-300"
+    (click)="clearSearchText()"
+  ></i>
+  <mat-form-field class="example-full-width text-sm" appearance="fill">
+    <input
+      type="text"
+      matInput
+      [matAutocomplete]="auto"
+      [(ngModel)]="searchText"
+      (ngModelChange)="searchStations()"
+      placeholder="Search"
+      [disabled]="isLoading"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayStationName"
+    >
+      <mat-option
+        class="text-sm"
+        *ngFor="let option of filteredStations"
+        [value]="option"
+        ><span
+          class="station bg-contain bg-no-repeat w-4 h-4 inline-block align-middle"
+        ></span>
+        {{ option.stationName }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
