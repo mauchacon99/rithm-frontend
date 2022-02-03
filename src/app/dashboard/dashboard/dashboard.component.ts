@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--dashboardvh', `${vh}px`);
   }
 
-  /** Split. */
+  /** Split Service. */
   private split(): void {
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
