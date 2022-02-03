@@ -7,6 +7,7 @@ import {
   MapData,
   MapItemStatus,
   EnvironmentName,
+  MatMenuOption,
 } from 'src/models';
 import {
   ABOVE_MAX,
@@ -109,7 +110,10 @@ export class MapService {
    * Note if, and which station option button was clicked.
    * This is required so that the option menu pulls down on the right station.
    */
-  stationButtonClick$ = new BehaviorSubject({ click: false, data: {} });
+  stationButtonClick$ = new BehaviorSubject({
+    click: MatMenuOption.None,
+    data: {},
+  });
 
   /** Check if clicked outside of the option menu in canvas area. This closes the option menu. */
   matMenuStatus$ = new BehaviorSubject(false);
