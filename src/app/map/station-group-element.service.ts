@@ -110,8 +110,6 @@ export class StationGroupElementService {
       this.drawStationGroupBoundaryLine(stationGroup);
       // Render station group name depending on the zoom level.
       if (this.mapScale > SCALE_RENDER_STATION_ELEMENTS) {
-        // eslint-disable-next-line no-console
-        console.log(this.mapScale);
         this.drawStationGroupName(stationGroup);
       }
 
