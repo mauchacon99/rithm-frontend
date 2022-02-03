@@ -378,7 +378,7 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyMethod).toHaveBeenCalledOnceWith(stationId, allowAllOrgWorkers);
   });
 
-  it('should update the field allowAllOrgWorkers in station', () => {
+  it('should catch error when update the field allowAllOrgWorkers', () => {
     spyOn(
       TestBed.inject(StationService),
       'updateAllowAllOrgWorkers'
