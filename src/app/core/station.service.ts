@@ -17,6 +17,7 @@ import {
   DocumentNameField,
   StandardStringJSON,
   ForwardPreviousStationsDocument,
+  StandardBooleanJSON,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -523,7 +524,7 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse = {
+    const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
     return of(expectedResponse.data).pipe(delay(1000));
