@@ -23,7 +23,7 @@ export class DashboardService {
   /** Loading dashboard when generate new dashboard. */
   isLoadingDashboard$ = new Subject<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Gets info needed for dashboard header.
@@ -107,11 +107,12 @@ export class DashboardService {
   /**
    * Gets widgets for dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @returns Returns the list of widgets.
    */
-  getDashboardWidgets(): Observable<DashboardItem[]> {
-    return this.http.get<DashboardItem[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+  getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    return this.http.get<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets/${dashboardRithmId}`
     );
   }
 

@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   drawerContext = 'menuDashboard';
 
   /** Dashboard type. */
-  dashboardRole!: RoleDashboardMenu;
+  dashboardRole: RoleDashboardMenu = RoleDashboardMenu.OrganizationDashboard;
 
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
@@ -55,8 +55,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Dashboard data, default dashboard general. */
   dashboardData!: DashboardData;
 
-  /** Error Loading loading widget. */
-  errorLoadingWidgets = false;
+  /** Error Loading dashboard. */
+  errorLoadingDashboard = false;
 
   /** Load indicator in dashboard. */
   isLoading = false;
@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((status) => {
         this.isLoading = status;
-        this.errorLoadingWidgets = false;
+        this.errorLoadingDashboard = false;
         this.isCreateNewDashboard = false;
       });
   }
@@ -143,7 +143,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Initialize split on page load.
    */
   ngOnInit(): void {
-    this.getParams();
+    this.split();
+    if (this.viewNewDashboard) {
+      this.getParams();
+    }
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
@@ -198,30 +201,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
    *
    * @param dashboardRithmId String of rithmId of dashboard.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private getDashboardByRithmId(dashboardRithmId: string): void {
-    this.errorLoadingWidgets = false;
+    this.errorLoadingDashboard = false;
     this.isLoading = true;
     this.dashboardService
-      .getDashboardWidgets()
+      .getDashboardWidgets(dashboardRithmId)
       .pipe(first())
       .subscribe({
-        next: (widgets) => {
-          this.dashboardData = {
-            rithmId: '',
-            name: 'General',
-            widgets,
-          };
+        next: (dashboardByRithmId) => {
+          this.dashboardData = dashboardByRithmId;
           this.isLoading = false;
         },
         error: (error: unknown) => {
-          this.errorLoadingWidgets = true;
+          this.errorLoadingDashboard = true;
           this.isLoading = false;
           this.errorService.displayError(
             "Something went wrong on our end and we're looking into it. Please try again in a little while.",
             error
           );
-          this.router.navigate(['/', 'dashboard']);
+          this.router.navigateByUrl('dashboard');
         },
       });
   }
@@ -289,16 +287,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (
             params.typeDashboard === this.roleDashboardMenu.PersonalDashboard ||
             params.typeDashboard ===
-            this.roleDashboardMenu.OrganizationDashboard
+              this.roleDashboardMenu.OrganizationDashboard
           ) {
-            this.split();
             this.dashboardRole = params.typeDashboard;
             this.getDashboardByRithmId(params.dashboardId);
           } else {
-            this.router.navigate(['/', 'dashboard']);
+            this.router.navigateByUrl('dashboard');
           }
         } else {
-          this.split();
           this.dashboardRole = this.roleDashboardMenu.OrganizationDashboard;
           this.getOrganizationDashboard();
         }
@@ -315,7 +311,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /** Get organization dashboard. */
   private getOrganizationDashboard(): void {
     this.isLoading = true;
-    this.errorLoadingWidgets = false;
+    this.errorLoadingDashboard = false;
     this.isCreateNewDashboard = false;
     this.dashboardService
       .getOrganizationDashboard()
@@ -328,10 +324,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.isCreateNewDashboard = true;
           }
           this.isLoading = false;
-          this.errorLoadingWidgets = false;
+          this.errorLoadingDashboard = false;
         },
         error: (error: unknown) => {
-          this.errorLoadingWidgets = true;
+          this.errorLoadingDashboard = true;
           this.isLoading = false;
           this.isCreateNewDashboard = false;
           this.errorService.displayError(

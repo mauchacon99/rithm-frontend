@@ -6,7 +6,6 @@ import {
 import {
   WorkerDashboardHeader,
   Document,
-  DashboardItem,
   WidgetType,
   DashboardData,
 } from 'src/models';
@@ -248,32 +247,39 @@ describe('DashboardService', () => {
   });
 
   it('should return a list of widgets for dashboard', () => {
-    const widgetsExpected: DashboardItem[] = [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ];
-    service.getDashboardWidgets().subscribe((response) => {
-      expect(response).toEqual(widgetsExpected);
-    });
+    const expectDashboardData: DashboardData = {
+      rithmId: '102030405060708090100',
+      name: 'Untitled Dashboard',
+      widgets: [
+        {
+          cols: 4,
+          rows: 1,
+          x: 0,
+          y: 0,
+          widgetType: WidgetType.Station,
+          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+          minItemCols: 4,
+          minItemRows: 4,
+          maxItemCols: 12,
+          maxItemRows: 12,
+        },
+      ],
+    };
+    service
+      .getDashboardWidgets(expectDashboardData.rithmId)
+      .subscribe((response) => {
+        expect(response).toEqual(expectDashboardData);
+      });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets/${expectDashboardData.rithmId}`
     );
     expect(req.request.method).toEqual('GET');
 
-    req.flush(widgetsExpected);
+    req.flush(expectDashboardData);
     httpTestingController.verify();
   });
+
   it('should return updated dashboard', () => {
     const updateDashboard: DashboardData = {
       rithmId: '',

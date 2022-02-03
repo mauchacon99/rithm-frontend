@@ -29,10 +29,31 @@ import { GridsterModule } from 'angular-gridster2';
 import { DashboardData, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+
+  const expectDashboardData: DashboardData = {
+    rithmId: '102030405060708090100',
+    name: 'Untitled Dashboard',
+    widgets: [
+      {
+        cols: 4,
+        rows: 1,
+        x: 0,
+        y: 0,
+        widgetType: WidgetType.Station,
+        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
+        minItemCols: 4,
+        minItemRows: 4,
+        maxItemCols: 12,
+        maxItemRows: 12,
+      },
+    ],
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -59,7 +80,16 @@ describe('DashboardComponent', () => {
         NoopAnimationsModule,
         GridsterModule,
         MatInputModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'dashboard/:dashboardId/:typeDashboard',
+            component: MockComponent(DashboardComponent),
+          },
+          {
+            path: 'dashboard',
+            component: MockComponent(DashboardComponent),
+          },
+        ]),
       ],
     }).compileComponents();
   });
@@ -81,7 +111,40 @@ describe('DashboardComponent', () => {
     const loader = fixture.debugElement.nativeElement.querySelector(
       '#loading-dashboard-widgets'
     );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
     expect(loader).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
+  });
+
+  it('should show error message when return error dashboard', function () {
+    component.viewNewDashboard = true;
+    component.errorLoadingDashboard = true;
+    fixture.detectChanges();
+    const errorLoadingDashboard =
+      fixture.debugElement.nativeElement.querySelector(
+        '#error-loading-dashboard'
+      );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
+    expect(errorLoadingDashboard).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
+  });
+
+  it('should show message when dashboard its empty', function () {
+    component.viewNewDashboard = true;
+    component.isCreateNewDashboard = true;
+    fixture.detectChanges();
+    const dashboardEmpty = fixture.debugElement.nativeElement.querySelector(
+      '#message-create-new-dashboard'
+    );
+    const dashboardWidgets =
+      fixture.debugElement.nativeElement.querySelector('#dashboard-widgets');
+
+    expect(dashboardEmpty).toBeTruthy();
+    expect(dashboardWidgets).toBeNull();
   });
 
   it('should call the `toggle` method on the `SidenavService`', () => {
