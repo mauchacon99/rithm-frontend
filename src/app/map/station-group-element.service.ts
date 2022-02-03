@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StationGroupMapElement } from 'src/helpers';
-import { StationGroupElementHoverItem, Point, MapMode } from 'src/models';
+import { StationGroupElementHoverItem, Point, MapMode, MapItemStatus } from 'src/models';
 import {
   CONNECTION_DEFAULT_COLOR,
   STATION_GROUP_PADDING,
@@ -149,18 +149,18 @@ export class StationGroupElementService {
     ctx.beginPath();
     ctx.strokeStyle =
       this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-      stationGroup.selected
+      stationGroup.selected && stationGroup.status !== MapItemStatus.Pending
         ? MAP_SELECTED
         : this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
-          stationGroup.disabled
+          stationGroup.disabled && stationGroup.status !== MapItemStatus.Pending
         ? MAP_DISABLED_STROKE
-        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary
+        : stationGroup.hoverItem === StationGroupElementHoverItem.Boundary && stationGroup.status !== MapItemStatus.Pending
         ? this.mapService.mapMode$.value === MapMode.StationGroupAdd
           ? MAP_SELECTED
           : NODE_HOVER_COLOR
         : CONNECTION_DEFAULT_COLOR;
     if (
-      this.mapService.mapMode$.value === MapMode.StationGroupAdd &&
+      this.mapService.mapMode$.value === MapMode.StationGroupAdd && stationGroup.status !== MapItemStatus.Pending &&
       (stationGroup.selected ||
         (stationGroup.hoverItem === StationGroupElementHoverItem.Boundary &&
           !stationGroup.disabled))

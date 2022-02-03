@@ -498,9 +498,9 @@ export class MapService {
       });
 
       this.stationGroupElements.push(newGroup);
+      //Note a change in map data.
+      this.mapDataReceived$.next(true);
     }
-
-    // console.log(this.stationGroupElements)
   }
 
   /**
@@ -564,16 +564,18 @@ export class MapService {
    * @param stationGroup The incoming station-group data.
    */
   setStationGroupStatus(stationGroup: StationGroupMapElement): void {
-    //Update parent station-group and respective stations status.
-    this.updateParentStationGroup(stationGroup.rithmId);
-    //Update descendent station-group and respective stations status.
-    this.updateChildStationGroup(stationGroup);
-    //Reset status of each station-group and station if nothing(station group or station) has been selected.
-    if (
-      !this.stationElements.some((st) => st.selected) &&
-      !this.stationGroupElements.some((stGroup) => stGroup.selected)
-    ) {
-      this.resetSelectedStationGroupStationStatus();
+    if (stationGroup.status !== MapItemStatus.Pending) {
+      //Update parent station-group and respective stations status.
+      this.updateParentStationGroup(stationGroup.rithmId);
+      //Update descendent station-group and respective stations status.
+      this.updateChildStationGroup(stationGroup);
+      //Reset status of each station-group and station if nothing(station group or station) has been selected.
+      if (
+        !this.stationElements.some((st) => st.selected) &&
+        !this.stationGroupElements.some((stGroup) => stGroup.selected)
+      ) {
+        this.resetSelectedStationGroupStationStatus();
+      }
     }
   }
 
@@ -632,15 +634,17 @@ export class MapService {
    */
   setStationGroupStationStatus(): void {
     this.stationGroupElements.map((stationGroup) => {
-      stationGroup.disabled = true;
-      stationGroup.stations.map((station) => {
-        const stationIndex = this.stationElements.findIndex(
-          (st) => st.rithmId === station
-        );
-        if (!this.stationElements[stationIndex].selected) {
-          this.stationElements[stationIndex].disabled = true;
-        }
-      });
+      if (stationGroup.status !== MapItemStatus.Pending) {
+        stationGroup.disabled = true;
+        stationGroup.stations.map((station) => {
+          const stationIndex = this.stationElements.findIndex(
+            (st) => st.rithmId === station
+          );
+          if (!this.stationElements[stationIndex].selected) {
+            this.stationElements[stationIndex].disabled = true;
+          }
+        });
+      }
     });
   }
 
@@ -649,15 +653,17 @@ export class MapService {
    */
   resetSelectedStationGroupStationStatus(): void {
     this.stationGroupElements.map((stationGroup) => {
-      stationGroup.selected = false;
-      stationGroup.disabled = false;
-      stationGroup.stations.map((station) => {
-        const stationIndex = this.stationElements.findIndex(
-          (st) => st.rithmId === station
-        );
-        this.stationElements[stationIndex].selected = false;
-        this.stationElements[stationIndex].disabled = false;
-      });
+      if (stationGroup.status !== MapItemStatus.Pending) {
+        stationGroup.selected = false;
+        stationGroup.disabled = false;
+        stationGroup.stations.map((station) => {
+          const stationIndex = this.stationElements.findIndex(
+            (st) => st.rithmId === station
+          );
+          this.stationElements[stationIndex].selected = false;
+          this.stationElements[stationIndex].disabled = false;
+        });
+      }
     });
   }
 
@@ -668,22 +674,22 @@ export class MapService {
    */
   setSelectedStation(station: StationMapElement): void {
     this.stationGroupElements.map((stationGroup) => {
-      if (stationGroup.stations.includes(station.rithmId)) {
-        stationGroup.stations.map((st) => {
-          const stationIndex = this.stationElements.findIndex(
-            (sta) => sta.rithmId === st
-          );
-          this.stationElements[stationIndex].disabled = false;
-        });
-        stationGroup.disabled = false;
-        stationGroup.subStationGroups.forEach((subStationGroupId) => {
-          const stationGroupIndex = this.stationGroupElements.findIndex(
-            (group) => group.rithmId === subStationGroupId
-          );
-          this.stationGroupElements[stationGroupIndex].disabled = false;
-        });
-        return;
-      }
+        if (stationGroup.stations.includes(station.rithmId)) {
+          stationGroup.stations.map((st) => {
+            const stationIndex = this.stationElements.findIndex(
+              (sta) => sta.rithmId === st
+            );
+            this.stationElements[stationIndex].disabled = false;
+          });
+          stationGroup.disabled = false;
+          stationGroup.subStationGroups.forEach((subStationGroupId) => {
+            const stationGroupIndex = this.stationGroupElements.findIndex(
+              (group) => group.rithmId === subStationGroupId
+            );
+            this.stationGroupElements[stationGroupIndex].disabled = false;
+          });
+          return;
+        }
     });
     if (
       !this.stationElements.some((st) => st.selected) &&

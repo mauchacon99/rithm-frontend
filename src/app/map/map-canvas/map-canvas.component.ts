@@ -1952,7 +1952,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           if (!station.disabled) {
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
             //and station group as per the criteria.
-            this.mapService.setStationGroupStationStatus();
+            // this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
@@ -2106,11 +2106,6 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
    * @param stationGroup The station group whose station status has to be updated.
    */
   private stationGroupSelectStatus(stationGroup: StationGroupMapElement): void {
-    //Get rithmId of pending group so we can exempt it from  checks.
-    // const pendingGroupId = this.stationGroups.filter(group => group.status === MapItemStatus.Pending);
-    // console.log(this.stationGroups)
-    // console.log(pendingGroupId)
-
     const isSelected = stationGroup.selected;
     // Set stationGroup's selection status to all stations which belongs to same stationGroup.
     stationGroup.stations.map((groupStation) => {
@@ -2124,13 +2119,10 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
       this.stationGroups.forEach((parentGroup) => {
         if (parentGroup.subStationGroups.includes(stationGroup.rithmId)) {
           parentGroup.subStationGroups.forEach((subGroup) => {
-            // console.log (pendingGroupId + " " + subGroup)
-            // if (subGroup !== pendingGroupId) {
             const index = this.stationGroups.findIndex(
               (group) => group.rithmId === subGroup
             );
             this.stationGroups[index].disabled = false;
-            // }
           });
           // Set stationGroup's selection status to all station which belongs to any sub stationGroup.
           parentGroup.stations.map((groupStation) => {
