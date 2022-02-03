@@ -17,6 +17,18 @@
 }
 
 /// Used as the User Avatar and on the Worker Roster Modal
+/// 36px circle in our secondary color.
+.circle-36-secondary {
+  @apply rounded-full h-9 w-9 text-center text-base font-semibold leading-9 text-white bg-secondary-500 border border-secondary-50 hover:bg-secondary-700;
+}
+
+/// Used as the User Avatar and on the Worker Roster Modal
+/// 36px circle in our accent color.
+.circle-36-accent {
+  @apply rounded-full h-9 w-9 text-center text-base font-semibold leading-9 text-white bg-accent-500 border border-accent-50 hover:bg-accent-700;
+}
+
+/// Used as the User Avatar and on the Worker Roster Modal
 /// 40px circle in our secondary color.
 .circle-40-secondary {
   @apply rounded-full h-10 w-10 text-center text-base font-semibold leading-10 text-white bg-secondary-500 border border-secondary-200 hover:bg-secondary-700;

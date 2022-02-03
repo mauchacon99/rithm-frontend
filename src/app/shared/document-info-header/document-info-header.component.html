@@ -48,25 +48,32 @@
     </button>
   </div>
 
-  <form [formGroup]="documentNameForm" class="col-span-12" *ngIf="!isStation">
-    <div class="w-full" *ngIf="isDocumentNameEditable; else nonEditableDocName">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Document Name: </mat-label>
-        <input
-          id="name"
-          type="text"
-          matInput
-          matNativeControl
-          placeholder="Untitled document"
-          formControlName="name"
-          (keyup)="updateDocumentNameBS()"
-        />
+  <section *ngIf="!isStation" class="col-span-12">
+    <div
+      class="w-full flex flex-col"
+      *ngIf="isDocumentNameEditable; else nonEditableDocName"
+    >
+      <form
+        [formGroup]="documentNameForm"
+        class="flex items-center document-header-form"
+      >
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Document Name: </mat-label>
+          <input
+            id="name"
+            type="text"
+            matInput
+            matNativeControl
+            placeholder="Untitled document"
+            formControlName="name"
+            (keyup)="updateDocumentNameBS()"
+          />
+        </mat-form-field>
         <button
           type="button"
           data-testid="document-info-drawer"
           mat-icon-button
-          matSuffix
-          class="icon icon-top"
+          class="icon icon-top pl-2"
           (click)="toggleDrawer('documentInfo')"
           id="info-drawer-button-document"
           [disabled]="isDrawerOpen"
@@ -76,15 +83,15 @@
             [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
           ></i>
         </button>
-      </mat-form-field>
-      <p *ngIf="appendedDocumentName !== ''" class="pb-2 pl-4 overline-font">
+      </form>
+      <p *ngIf="appendedDocumentName !== ''" class="text-xs text-secondary-500">
         Appended Name: {{ appendedDocumentName }}
       </p>
     </div>
     <ng-template #nonEditableDocName>
       <div
         *ngIf="!isWidget"
-        class="flex items-center justify-between w-full"
+        class="flex items-center justify-between col-span-12"
         [ngClass]="{ 'py-2': isWidget }"
       >
         <div class="w-full">
@@ -102,14 +109,18 @@
           data-testid="document-info-drawer"
           mat-icon-button
           matSuffix
-          class="icon icon-top"
+          class="icon icon-top pl-3"
           (click)="toggleDrawer('documentInfo')"
+          [disabled]="isDrawerOpen"
         >
-          <i class="fas fa-info-circle text-2xl text-primary-500"></i>
+          <i
+            class="fas fa-info-circle text-2xl"
+            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+          ></i>
         </button>
       </div>
     </ng-template>
-  </form>
+  </section>
 
   <div *ngIf="!isStation" class="col-span-2 md:col-start-3 flex">
     <div

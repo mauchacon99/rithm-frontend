@@ -7,3 +7,9 @@
     @apply mt-4 ml-2 w-7 h-7 leading-6;
   }
 }
+
+.station-header-form {
+  &::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
