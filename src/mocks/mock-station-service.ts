@@ -860,9 +860,9 @@ export class MockStationService {
   /**
    * Update AllowAllOrgWorkers information.
    *
-   * @returns The field AllowAllOrgWorkers updated.
    * @param stationRithmId The station id that will be update.
    * @param allowAllOrgWorkers The value that will be update.
+   * @returns The field AllowAllOrgWorkers updated.
    */
   updateAllowAllOrgWorkers(
     stationRithmId: string,
@@ -873,7 +873,7 @@ export class MockStationService {
         () =>
           new HttpErrorResponse({
             error: {
-              error: 'cannot update field related all org workers',
+              error: 'Cannot update field related all org workers',
             },
           })
       ).pipe(delay(1000));
