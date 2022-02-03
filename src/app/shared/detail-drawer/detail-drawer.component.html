@@ -1,3 +1,5 @@
-<ng-container *ngIf="itemType === 'comments'" #comments>
-  <app-comment-drawer></app-comment-drawer>
-</ng-container>
+<div class="flex flex-col h-full" *ngIf="itemType === 'comments'" #comments>
+  <div class="w-72 overflow-y-auto">
+    <app-comment-drawer></app-comment-drawer>
+  </div>
+</div>
