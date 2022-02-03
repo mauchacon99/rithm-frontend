@@ -102,6 +102,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
         )
       ) {
         this.mapService.resetSelectedStationGroupStationStatus();
+        this.mapService.updatePendingStationGroup();
       }
     }
     // TODO: Implement add station group.
