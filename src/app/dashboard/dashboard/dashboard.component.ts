@@ -289,7 +289,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (
             params.typeDashboard === this.roleDashboardMenu.PersonalDashboard ||
             params.typeDashboard ===
-              this.roleDashboardMenu.OrganizationDashboard
+            this.roleDashboardMenu.OrganizationDashboard
           ) {
             this.split();
             this.dashboardRole = params.typeDashboard;
