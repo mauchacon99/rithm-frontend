@@ -27,6 +27,8 @@ export class OptionsMenuComponent {
   /** Display or not mat menu when its generate new dashboard. */
   isGenerateNewDashboard = false;
 
+  contextDrawer: 'menuDashboard' = 'menuDashboard';
+
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
 
@@ -52,11 +54,20 @@ export class OptionsMenuComponent {
   }
 
   /**
+   * Close side nav on the dashboard when generate new dashboard.
+   *
+   * @param drawerItem The information that will be displayed in the side drawer.
+   */
+  toggleMenu(drawerItem: 'menuDashboard'): void {
+    this.sidenavDrawerService.toggleDrawer(drawerItem);
+  }
+
+  /**
    * Generate a new dashboard.
    */
   generateNewDashboard(): void {
     this.isGenerateNewDashboard = true;
-    this.sidenavDrawerService.toggleDrawer('menuDashboard');
+    this.toggleMenu('menuDashboard');
     this.dashboardService.toggleLoadingNewDashboard(true);
     const generateDashboard$ =
       this.dashboardRole === this.roleDashboardMenu.PersonalDashboard

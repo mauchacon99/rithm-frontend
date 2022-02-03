@@ -296,6 +296,14 @@ describe('DashboardService', () => {
     service.updatePersonalDashboard(updateDashboard).subscribe((response) => {
       expect(response).toEqual(updateDashboard);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(updateDashboard);
+    req.flush(updateDashboard);
+    httpTestingController.verify();
   });
   it('should returns organization dashboard', () => {
     const expectedResponse: DashboardData[] = [
@@ -462,10 +470,18 @@ describe('DashboardService', () => {
     service.updateOrganizationDashboard(dashboardData).subscribe((response) => {
       expect(response).toEqual(dashboardData);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual(dashboardData);
+    req.flush(dashboardData);
+    httpTestingController.verify();
   });
 
   it('should return a new organization dashboard', () => {
-    const newDashboard: DashboardData = {
+    const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
       widgets: [
@@ -483,8 +499,35 @@ describe('DashboardService', () => {
         },
       ],
     };
+
+    const expectBody = { name: expectedResponse.name };
     service.generateNewOrganizationDashboard().subscribe((response) => {
-      expect(response).toEqual(newDashboard);
+      expect(response).toEqual(expectedResponse);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`
+    );
+
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual(expectBody);
+    req.flush(expectedResponse);
+    httpTestingController.verify();
+  });
+
+  it('should be true the emit and subscribe to subject isLoadingDashboard$', () => {
+    service.isLoadingDashboard$.subscribe((status) => {
+      expect(status).toBeTrue();
+    });
+
+    service.toggleLoadingNewDashboard(true);
+  });
+
+  it('should be false the emit and subscribe to subject isLoadingDashboard$', () => {
+    service.isLoadingDashboard$.subscribe((status) => {
+      expect(status).toBeFalse();
+    });
+
+    service.toggleLoadingNewDashboard(false);
   });
 });
