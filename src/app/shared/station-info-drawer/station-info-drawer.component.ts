@@ -219,7 +219,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       (this.mapMode === 0 || this.mapMode === undefined) &&
       !this.locallyCreated &&
       (this.isUserAdminOrOwner || this.isWorker) &&
-      !this.openedFromMap
+      !this.editMode
     );
   }
 
