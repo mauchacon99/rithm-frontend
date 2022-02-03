@@ -1,6 +1,8 @@
 <mat-drawer-container [hasBackdrop]="drawerHasBackdrop" class="mt-0">
   <mat-drawer #drawer mode="over" class="w-[300px] md:w-[360px]">
-    <app-menu *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"></app-menu>
+    <app-menu
+      *ngIf="drawerContext === 'menuDashboard' && isDrawerOpen"
+    ></app-menu>
   </mat-drawer>
   <mat-drawer-content class="textured-bg h-calc">
     <ng-container *ngIf="!viewNewDashboard; else newDashboard">
@@ -58,7 +60,15 @@
         >
           You don't have any dashboards, create one to get started.
         </div>
-        <div class="mx-5" *ngIf="!isLoading && dashboardData && !errorLoadingWidgets && !isCreateNewDashboard">
+        <div
+          class="mx-5"
+          *ngIf="
+            !isLoading &&
+            dashboardData &&
+            !errorLoadingWidgets &&
+            !isCreateNewDashboard
+          "
+        >
           <div class="flex justify-between items-center" *ngIf="!editMode">
             <h2 class="my-2 font-semibold truncate">
               {{ dashboardData.name }}
@@ -121,10 +131,7 @@
               <i class="fas fa-plus"></i> Add Widget
             </button>
           </div>
-          <gridster
-            class="h-screen bg-transparent px-0"
-            [options]="options"
-          >
+          <gridster class="h-screen bg-transparent px-0" [options]="options">
             <gridster-item
               [item]="item"
               class="drop-shadow-md rounded min-h-[250px]"
