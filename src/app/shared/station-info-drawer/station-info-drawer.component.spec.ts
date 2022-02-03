@@ -366,12 +366,12 @@ describe('StationInfoDrawerComponent', () => {
   });
 
   it('should get the allow external workers for the station roster', () => {
-    const getDataFieldsDocument = spyOn(
+    const getAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
       'getAllowExternalWorkers'
     ).and.callThrough();
     component['getAllowExternalWorkers']();
-    expect(getDataFieldsDocument).toHaveBeenCalledOnceWith(stationId);
+    expect(getAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
   });
 
   it('should catch an error if getting the allow external workers fails', () => {
