@@ -856,4 +856,28 @@ export class MockStationService {
       return of(mockQuestions).pipe(delay(1000));
     }
   }
+
+  /**
+   * Get the field AllowAllOrgWorkers.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of AllowAllOrgWorkers.
+   */
+  getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update field related all org workers.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockData = {
+        data: true,
+      };
+      return of(mockData.data).pipe(delay(1000));
+    }
+  }
 }

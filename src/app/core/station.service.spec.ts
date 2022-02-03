@@ -966,4 +966,13 @@ describe('StationService', () => {
     req.flush(expectedResponse);
     httpTestingController.verify();
   });
+
+  it('should return the value of allow all org workers', () => {
+    const expectedResponse = {
+      data: true,
+    };
+    service.getAllowAllOrgWorkers(stationId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });

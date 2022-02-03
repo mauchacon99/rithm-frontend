@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
@@ -514,5 +514,29 @@ export class StationService {
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/questions`,
       { params }
     );
+  }
+
+  /**
+   * Get the field AllowAllOrgWorkers.
+   *
+   * @param stationRithmId  The station id.
+   * @returns An object with value of AllowAllOrgWorkers.
+   */
+  getAllowAllOrgWorkers(stationRithmId: string): Observable<boolean> {
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update field related all org workers.',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const mockData = {
+        data: true,
+      };
+      return of(mockData.data).pipe(delay(1000));
+    }
   }
 }

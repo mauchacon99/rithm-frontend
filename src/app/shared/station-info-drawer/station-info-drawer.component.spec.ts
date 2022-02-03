@@ -364,4 +364,15 @@ describe('StationInfoDrawerComponent', () => {
       },
     });
   });
+
+  it('should call the method that returns the value of all org workers', () => {
+    const getAllowAllOrgWorkersSpy = spyOn(
+      TestBed.inject(StationService),
+      'getAllowAllOrgWorkers'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(getAllowAllOrgWorkersSpy).toHaveBeenCalledWith(
+      component.stationRithmId
+    );
+  });
 });

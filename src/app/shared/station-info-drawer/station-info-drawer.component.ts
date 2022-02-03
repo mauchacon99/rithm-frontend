@@ -108,6 +108,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
+  /** The contains value for view permission all org workers. */
+  AllowAllOrgWorkers = false;
+
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
     private userService: UserService,
@@ -162,6 +165,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
     if (this.stationStatus !== MapItemStatus.Created) {
       this.getLastUpdated();
       this.getStationDocumentGenerationStatus();
+      this.getAllowAllOrgWorkers();
 
       this.stationService.stationName$
         .pipe(takeUntil(this.destroyed$))
@@ -584,6 +588,27 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           });
       }
     }
+  }
+
+  /**
+   * Retrieves the value of field AllowAllOrgWorkers.
+   */
+  private getAllowAllOrgWorkers(): void {
+    this.stationService
+      .getAllowAllOrgWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allOrgWorkers) => {
+          this.AllowAllOrgWorkers = allOrgWorkers;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            'Failed to get connected stations for this document.',
+            error,
+            false
+          );
+        },
+      });
   }
 
   /**
