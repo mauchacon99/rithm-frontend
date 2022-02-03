@@ -23,7 +23,11 @@
         ></i>
       </button>
     </div>
-    <form [formGroup]="stationNameForm" *ngIf="stationEditMode">
+    <form
+      [formGroup]="stationNameForm"
+      *ngIf="stationEditMode"
+      class="flex items-center station-header-form"
+    >
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Station Name</mat-label>
         <input
@@ -37,21 +41,20 @@
           autocomplete="off"
           (keyup)="updateStationInfoDrawerName()"
         />
-        <button
-          data-testid="station-info-drawer"
-          id="info-drawer-button-station"
-          mat-icon-button
-          matSuffix
-          class="icon icon-top"
-          (click)="toggleDrawer('stationInfo')"
-          [disabled]="isDrawerOpen"
-        >
-          <i
-            class="fas fa-info-circle text-2xl"
-            [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
-          ></i>
-        </button>
       </mat-form-field>
+      <button
+        data-testid="station-info-drawer"
+        id="info-drawer-button-station"
+        mat-icon-button
+        class="icon icon-top pl-2"
+        (click)="toggleDrawer('stationInfo')"
+        [disabled]="isDrawerOpen"
+      >
+        <i
+          class="fas fa-info-circle text-2xl"
+          [ngClass]="isDrawerOpen ? 'text-primary-100' : 'text-primary-500'"
+        ></i>
+      </button>
     </form>
   </div>
 </section>
