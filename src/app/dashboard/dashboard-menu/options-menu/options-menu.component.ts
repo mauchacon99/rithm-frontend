@@ -24,6 +24,9 @@ export class OptionsMenuComponent {
   /** Validate type of role. */
   roleDashboardMenu = RoleDashboardMenu;
 
+  /** Display or not mat menu when its generate new dashboard. */
+  isGenerateNewDashboard = false;
+
   /** Show option. */
   @Input() isDashboardListOptions!: boolean;
 
@@ -52,6 +55,7 @@ export class OptionsMenuComponent {
    * Generate a new dashboard.
    */
   generateNewDashboard(): void {
+    this.isGenerateNewDashboard = true;
     this.sidenavDrawerService.toggleDrawer('menuDashboard');
     this.dashboardService.toggleLoadingNewDashboard(true);
     const generateDashboard$ =
@@ -60,6 +64,7 @@ export class OptionsMenuComponent {
         : this.dashboardService.generateNewOrganizationDashboard();
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
+        this.isGenerateNewDashboard = false;
         this.dashboardService.toggleLoadingNewDashboard(false);
         this.router.navigate([
           '/',
@@ -69,6 +74,7 @@ export class OptionsMenuComponent {
         ]);
       },
       error: (error: unknown) => {
+        this.isGenerateNewDashboard = false;
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",
           error

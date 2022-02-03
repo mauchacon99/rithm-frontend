@@ -297,8 +297,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           } else {
             this.router.navigate(['/', 'dashboard']);
           }
-
-          // TODO: if no route params get the first company dashboard
         } else {
           this.split();
           this.dashboardRole = this.roleDashboardMenu.OrganizationDashboard;
