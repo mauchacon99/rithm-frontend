@@ -42,7 +42,7 @@ export class DocumentTemplateComponent
   /** The document fields in the template area for the document. */
   @Input() documentFields!: Question[];
 
-  /** The Document how widget. */
+  /** Whether the document is displayed inside the widged or not. */
   @Input() isWidget = false;
 
   constructor(private fb: FormBuilder) {
