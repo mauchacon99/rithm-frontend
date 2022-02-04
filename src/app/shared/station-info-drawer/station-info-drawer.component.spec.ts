@@ -381,4 +381,21 @@ describe('StationInfoDrawerComponent', () => {
       component.stationRithmId
     );
   });
+
+  it('should catch error and executed error service when the method of allow all org workers return error.', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowAllOrgWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component.ngOnInit();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
