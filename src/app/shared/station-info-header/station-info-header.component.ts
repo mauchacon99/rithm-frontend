@@ -16,7 +16,8 @@ import { Subject, takeUntil } from 'rxjs';
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header[stationInformation][stationEditMode]',
+  selector:
+    'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })
@@ -38,6 +39,9 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Field to change station name. */
   nameField!: Question;
+
+  /** Part of the new station ui. */
+  @Input() viewNewStation = false;
 
   constructor(
     private fb: FormBuilder,
