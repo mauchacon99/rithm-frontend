@@ -112,7 +112,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   selectedTabIndex = 0;
 
   /** The contains value for view permission all org workers. */
-  AllowAllOrgWorkers = false;
+  allowAllOrgWorkers = false;
 
   constructor(
     private sidenavDrawerService: SidenavDrawerService,
@@ -602,7 +602,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (allOrgWorkers) => {
-          this.AllowAllOrgWorkers = allOrgWorkers;
+          this.allowAllOrgWorkers = allOrgWorkers;
         },
         error: (error: unknown) => {
           this.errorService.displayError(
