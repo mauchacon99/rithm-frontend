@@ -102,6 +102,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
+  /** The drawer context for stationInfo. */
+  isChained = false;
+
   /** Display the ownerRoster length. */
   ownersRosterLength: number | null = 0;
 
@@ -592,5 +595,32 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  /**
+   * Get the allow external workers for the station roster.
+   */
+  private getAllowExternalWorkers(): void {
+    this.stationService
+      .getAllowExternalWorkers(this.stationRithmId)
+      .pipe(first())
+      .subscribe({
+        next: (allowExternal) => {
+          this.allowExternal = allowExternal;
+        },
+        error: (error: unknown) => {
+          this.errorService.displayError(
+            "Something went wrong on our end and we're looking into it. Please try again in a little while.",
+            error
+          );
+        },
+      });
+  }
+
+  /**
+   * Update StationInfoDrawer in the station name.
+   */
+  updateStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(this.stationName);
   }
 }
