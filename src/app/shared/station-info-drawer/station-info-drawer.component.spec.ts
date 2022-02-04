@@ -398,7 +398,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-
   it('should update the allow external workers for the station roster', () => {
     const updateAllowExternalSpy = spyOn(
       TestBed.inject(StationService),
@@ -425,5 +424,4 @@ describe('StationInfoDrawerComponent', () => {
     component['updateAllowExternalWorkers']();
     expect(spyError).toHaveBeenCalled();
   });
-
 });

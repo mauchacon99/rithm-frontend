@@ -979,16 +979,14 @@ describe('StationService', () => {
     });
   });
 
-   it('should update the allow external workers', () => {
-     const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
-     const expectedResponse = {
-       data: true,
-     };
+  it('should update the allow external workers', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
 
-     service
-       .updateAllowExternalWorkers(stationRithmId)
-       .subscribe((response) => {
-         expect(response).toEqual(expectedResponse.data);
-       });
-   });
+    service.updateAllowExternalWorkers(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
+  });
 });

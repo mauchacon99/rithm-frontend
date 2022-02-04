@@ -538,9 +538,20 @@ export class StationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
-    const expectedResponse: StandardBooleanJSON = {
-      data: true,
-    };
-    return of(expectedResponse.data).pipe(delay(1000));
+    if (!stationRithmId) {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            error: {
+              error: 'Cannot update the allow external workers',
+            },
+          })
+      ).pipe(delay(1000));
+    } else {
+      const expectedResponse: StandardBooleanJSON = {
+        data: true,
+      };
+      return of(expectedResponse.data).pipe(delay(1000));
+    }
   }
 }
