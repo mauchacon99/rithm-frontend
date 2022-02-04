@@ -329,8 +329,8 @@ export class MapOverlayComponent implements OnInit, OnDestroy {
             );
           },
         });
-        //Clears all stations and groups available and disabled statuses that may have been set if was in addGroup mode.
-        this.mapService.resetSelectedStationGroupStationStatus();
+      //Clears all stations and groups available and disabled statuses that may have been set if was in addGroup mode.
+      this.mapService.resetSelectedStationGroupStationStatus();
     }
   }
 

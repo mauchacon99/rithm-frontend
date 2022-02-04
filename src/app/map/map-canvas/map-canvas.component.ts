@@ -1952,7 +1952,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
           if (!station.disabled) {
             //If station is not disabled, should be able to select it and based on it's selection should disable other stations
             //and station group as per the criteria.
-            // this.mapService.setStationGroupStationStatus();
+            this.mapService.setStationGroupStationStatus();
             station.selected = !station.selected;
             this.mapService.setSelectedStation(station);
             //Draw the boundary for the pending stationGroup.
@@ -2059,7 +2059,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.setStationGroupStationStatus();
             }
             // To make sure it's not disabled and should allow user to undo previous action.
-            // stationGroup.disabled = false;
+            stationGroup.disabled = false;
             //Set current station group status and respective station's.
             this.stationGroupSelectStatus(stationGroup);
             //Set station group status of parent and child station group and respective stations.

@@ -450,6 +450,34 @@ export class MapService {
       return groupIndex === -1;
     });
 
+    //Set inner stations as disabled.
+    this.stationElements.map((station) => {
+      if (
+        selectedStations.some((selected) => selected === station) &&
+        !outsideStations.some((outside) => outside === station)
+      ) {
+        return (station.disabled = true);
+      } else if (outsideStations.some((outside) => outside === station)) {
+        return (station.disabled = false);
+      } else {
+        return;
+      }
+    });
+
+    //Set child groups as disabled.
+    this.stationGroupElements.map((stationGroup) => {
+      if (
+        selectedGroups.some((selected) => selected === stationGroup) &&
+        !parentGroups.some((parent) => parent === stationGroup)
+      ) {
+        return (stationGroup.disabled = true);
+      } else if (parentGroups.some((parent) => parent === stationGroup)) {
+        return (stationGroup.disabled = false);
+      } else {
+        return;
+      }
+    });
+
     //Get the rithmIds of the outsideStations.
     const outsideStationIds = outsideStations.map((station) => station.rithmId);
 
@@ -631,22 +659,14 @@ export class MapService {
    * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
    */
   setStationGroupStationStatus(): void {
-    //const to reference the current pending group.
-    const pendingGroup = this.stationGroupElements.find(pendingStationGroup => {
-      return pendingStationGroup.status === MapItemStatus.Pending;
-    });
     this.stationGroupElements.map((stationGroup) => {
-      //Set stationGroup to disabled if it's not part of the pending group.
-      stationGroup.disabled = !pendingGroup || !pendingGroup.subStationGroups.includes(stationGroup.rithmId);
-      console.log(stationGroup.disabled)
+      stationGroup.disabled = true;
       stationGroup.stations.map((station) => {
         const stationIndex = this.stationElements.findIndex(
           (st) => st.rithmId === station
         );
         if (!this.stationElements[stationIndex].selected) {
-          //Set station to disabled if it's not part of the pending group.
-          this.stationElements[stationIndex].disabled =
-            !pendingGroup || !pendingGroup.stations.includes(this.stationElements[stationIndex].rithmId);
+          this.stationElements[stationIndex].disabled = true;
         }
       });
     });
@@ -676,22 +696,22 @@ export class MapService {
    */
   setSelectedStation(station: StationMapElement): void {
     this.stationGroupElements.map((stationGroup) => {
-        if (stationGroup.stations.includes(station.rithmId)) {
-          stationGroup.stations.map((st) => {
-            const stationIndex = this.stationElements.findIndex(
-              (sta) => sta.rithmId === st
-            );
-            this.stationElements[stationIndex].disabled = false;
-          });
-          stationGroup.disabled = false;
-          stationGroup.subStationGroups.forEach((subStationGroupId) => {
-            const stationGroupIndex = this.stationGroupElements.findIndex(
-              (group) => group.rithmId === subStationGroupId
-            );
-            this.stationGroupElements[stationGroupIndex].disabled = false;
-          });
-          return;
-        }
+      if (stationGroup.stations.includes(station.rithmId)) {
+        stationGroup.stations.map((st) => {
+          const stationIndex = this.stationElements.findIndex(
+            (sta) => sta.rithmId === st
+          );
+          this.stationElements[stationIndex].disabled = false;
+        });
+        stationGroup.disabled = false;
+        stationGroup.subStationGroups.forEach((subStationGroupId) => {
+          const stationGroupIndex = this.stationGroupElements.findIndex(
+            (group) => group.rithmId === subStationGroupId
+          );
+          this.stationGroupElements[stationGroupIndex].disabled = false;
+        });
+        return;
+      }
     });
     if (
       !this.stationElements.some((st) => st.selected) &&
