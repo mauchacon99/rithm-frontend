@@ -102,6 +102,9 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The drawer context for stationInfo. */
   drawerContext = '';
 
+  /** The drawer context for stationInfo. */
+  isChained = false;
+
   /** Display the ownerRoster length. */
   ownersRosterLength: number | null = 0;
 
@@ -612,5 +615,12 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
           );
         },
       });
+  }
+
+  /**
+   * Update StationInfoDrawer in the station name.
+   */
+  updateStationInfoDrawerName(): void {
+    this.stationService.updatedStationNameText(this.stationName);
   }
 }
