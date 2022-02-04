@@ -1,14 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   WorkerDashboardHeader,
   DashboardStationData,
   StationRosterMember,
   Document,
-  DashboardItem,
-  WidgetType,
   DashboardData,
 } from 'src/models';
 
@@ -21,6 +19,9 @@ const MICROSERVICE_PATH = '/dashboardservice/api/dashboard';
   providedIn: 'root',
 })
 export class DashboardService {
+  /** Loading dashboard when generate new dashboard. */
+  isLoadingDashboard$ = new Subject<boolean>();
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -32,6 +33,15 @@ export class DashboardService {
     return this.http.get<WorkerDashboardHeader>(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/header`
     );
+  }
+
+  /**
+   * Toggle emit to loading dashboard.
+   *
+   * @param status Boolean true to loading and false not loading.
+   */
+  toggleLoadingDashboard(status: boolean): void {
+    this.isLoadingDashboard$.next(status);
   }
 
   /**
@@ -96,11 +106,14 @@ export class DashboardService {
   /**
    * Gets widgets for dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @returns Returns the list of widgets.
    */
-  getDashboardWidgets(): Observable<DashboardItem[]> {
-    return this.http.get<DashboardItem[]>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`
+  getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    const params = new HttpParams().set('dashboardRithmId', dashboardRithmId);
+    return this.http.get<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`,
+      { params }
     );
   }
 
@@ -113,7 +126,10 @@ export class DashboardService {
   updatePersonalDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    return of(dashboardData).pipe(delay(1000));
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/personal`,
+      dashboardData
+    );
   }
 
   /**
@@ -156,26 +172,10 @@ export class DashboardService {
    * @returns Returns a new default dashboard.
    */
   generateNewOrganizationDashboard(): Observable<DashboardData> {
-    const newDashboard: DashboardData = {
-      rithmId: '102030405060708090100',
-      name: 'Untitled Dashboard',
-      widgets: [
-        {
-          cols: 4,
-          rows: 1,
-          x: 0,
-          y: 0,
-          widgetType: WidgetType.Station,
-          data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-          minItemCols: 4,
-          minItemRows: 4,
-          maxItemCols: 12,
-          maxItemRows: 12,
-        },
-      ],
-    };
-
-    return of(newDashboard).pipe(delay(1000));
+    return this.http.post<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      { name: 'Untitled Dashboard' }
+    );
   }
 
   /**
@@ -187,6 +187,9 @@ export class DashboardService {
   updateOrganizationDashboard(
     dashboardData: DashboardData
   ): Observable<DashboardData> {
-    return of(dashboardData).pipe(delay(1000));
+    return this.http.put<DashboardData>(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/company`,
+      dashboardData
+    );
   }
 }
