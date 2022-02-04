@@ -384,7 +384,7 @@ export class DocumentComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: () => {
           this.documentLoading = false;
-          this.navigateBack();
+          this.navigateBack(true);
         },
         error: (error: unknown) => {
           this.documentLoading = false;
