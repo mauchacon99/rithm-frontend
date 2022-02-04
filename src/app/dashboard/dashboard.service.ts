@@ -40,7 +40,7 @@ export class DashboardService {
    *
    * @param status Boolean true to loading and false not loading.
    */
-  toggleLoadingNewDashboard(status: boolean): void {
+  toggleLoadingDashboard(status: boolean): void {
     this.isLoadingDashboard$.next(status);
   }
 

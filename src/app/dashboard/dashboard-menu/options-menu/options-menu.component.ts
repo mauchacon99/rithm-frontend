@@ -57,19 +57,19 @@ export class OptionsMenuComponent {
   generateNewDashboard(): void {
     this.isGenerateNewDashboard = true;
     this.sidenavDrawerService.toggleDrawer('menuDashboard');
-    this.dashboardService.toggleLoadingNewDashboard(true);
+    this.dashboardService.toggleLoadingDashboard(true);
     const generateDashboard$ =
-      this.dashboardRole === this.roleDashboardMenu.Dashboard
+      this.dashboardRole === this.roleDashboardMenu.Personal
         ? this.dashboardService.generateNewPersonalDashboard()
         : this.dashboardService.generateNewOrganizationDashboard();
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
         this.isGenerateNewDashboard = false;
-        this.dashboardService.toggleLoadingNewDashboard(false);
+        this.dashboardService.toggleLoadingDashboard(false);
         this.router.navigate(['/', 'dashboard', newDashboard.rithmId]);
       },
       error: (error: unknown) => {
-        this.dashboardService.toggleLoadingNewDashboard(false);
+        this.dashboardService.toggleLoadingDashboard(false);
         this.isGenerateNewDashboard = false;
         this.errorService.displayError(
           "Something went wrong on our end and we're looking into it. Please try again in a little while.",

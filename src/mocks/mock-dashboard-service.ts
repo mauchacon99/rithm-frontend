@@ -24,7 +24,7 @@ export class MockDashboardService {
    *
    * @param status Boolean true to loading and false not loading.
    */
-  toggleLoadingNewDashboard(status: boolean): void {
+  toggleLoadingDashboard(status: boolean): void {
     this.isLoadingDashboard$.next(status);
   }
 
@@ -316,7 +316,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
-        type: RoleDashboardMenu.Dashboard,
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -335,7 +335,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
-        type: RoleDashboardMenu.Dashboard,
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -364,7 +364,7 @@ export class MockDashboardService {
   generateNewPersonalDashboard(): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
-      type: RoleDashboardMenu.Dashboard,
+      type: RoleDashboardMenu.Personal,
       name: 'Untitled Dashboard',
       widgets: [
         {

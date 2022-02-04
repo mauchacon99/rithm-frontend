@@ -191,7 +191,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Gets widgets for dashboard.
+   * Gets dashboard by rithmId.
    *
    * @param dashboardRithmId String of rithmId of dashboard.
    */

@@ -80,7 +80,7 @@ describe('OptionsMenuComponent', () => {
     );
     const spyLoadingDashboard = spyOn(
       TestBed.inject(DashboardService),
-      'toggleLoadingNewDashboard'
+      'toggleLoadingDashboard'
     );
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -104,7 +104,7 @@ describe('OptionsMenuComponent', () => {
     );
     const spyLoadingDashboard = spyOn(
       TestBed.inject(DashboardService),
-      'toggleLoadingNewDashboard'
+      'toggleLoadingDashboard'
     );
     spyOn(
       TestBed.inject(DashboardService),
@@ -127,14 +127,14 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call service from generateNewPersonalDashboard', async () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
     );
     const spyLoadingDashboard = spyOn(
       TestBed.inject(DashboardService),
-      'toggleLoadingNewDashboard'
+      'toggleLoadingDashboard'
     );
     const spyService = spyOn(
       TestBed.inject(DashboardService),
@@ -151,7 +151,7 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should show an error message when calling generateNewPersonalDashboard', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -166,7 +166,7 @@ describe('OptionsMenuComponent', () => {
     );
     const spyLoadingDashboard = spyOn(
       TestBed.inject(DashboardService),
-      'toggleLoadingNewDashboard'
+      'toggleLoadingDashboard'
     );
 
     const spyError = spyOn(

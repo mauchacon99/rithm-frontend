@@ -288,7 +288,7 @@ describe('DashboardService', () => {
     const updateDashboard: DashboardData = {
       rithmId: '',
       name: 'Untitled Dashboard',
-      type: RoleDashboardMenu.Dashboard,
+      type: RoleDashboardMenu.Personal,
       widgets: [
         {
           cols: 0,
@@ -376,7 +376,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
-        type: RoleDashboardMenu.Dashboard,
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -395,7 +395,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
-        type: RoleDashboardMenu.Dashboard,
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -430,7 +430,7 @@ describe('DashboardService', () => {
     const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
-      type: RoleDashboardMenu.Dashboard,
+      type: RoleDashboardMenu.Personal,
       widgets: [
         {
           cols: 4,
@@ -538,7 +538,7 @@ describe('DashboardService', () => {
       expect(status).toBeTrue();
     });
 
-    service.toggleLoadingNewDashboard(true);
+    service.toggleLoadingDashboard(true);
   });
 
   it('should be false the emit and subscribe to subject isLoadingDashboard$', () => {
@@ -546,6 +546,6 @@ describe('DashboardService', () => {
       expect(status).toBeFalse();
     });
 
-    service.toggleLoadingNewDashboard(false);
+    service.toggleLoadingDashboard(false);
   });
 });

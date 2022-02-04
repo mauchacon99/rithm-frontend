@@ -112,7 +112,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should returns user`s customized dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     const spyService = spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -122,7 +122,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should catch an error if the request to get user`s customized dashboard fails', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -186,7 +186,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show an error if the request to get user`s customized personal dashboard fails', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -238,7 +238,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should only show message if nor return list to dashboard for user dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     spyOn(
       TestBed.inject(DashboardService),
       'getPersonalDashboard'
@@ -262,7 +262,7 @@ describe('ExpansionMenuComponent', () => {
   });
 
   it('should list to personal dashboards', () => {
-    component.dashboardRole = RoleDashboardMenu.Dashboard;
+    component.dashboardRole = RoleDashboardMenu.Personal;
     component.isLoading = false;
     component.showError = false;
     fixture.detectChanges();
