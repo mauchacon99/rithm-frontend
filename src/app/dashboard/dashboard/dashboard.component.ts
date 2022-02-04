@@ -191,7 +191,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Gets dashboard by rithmId.
+   * Get dashboard by rithmId.
    *
    * @param dashboardRithmId String of rithmId of dashboard.
    */
@@ -203,6 +203,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (dashboardByRithmId) => {
+          console.log('dashboard', dashboardByRithmId);
           this.dashboardData = dashboardByRithmId;
           this.isLoading = false;
         },
@@ -271,10 +272,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Attempts to retrieve the document info from the query params in the URL and make the requests.
    */
   private getParams(): void {
-    this.route.params.pipe(first()).subscribe({
+    this.route.paramMap.pipe(takeUntil(this.destroyed$)).subscribe({
       next: (params) => {
-        if (params.dashboardId) {
-          this.getDashboardByRithmId(params.dashboardId);
+        const dashboardId = params.get('dashboardId');
+        if (dashboardId) {
+          this.getDashboardByRithmId(dashboardId);
         } else {
           this.getOrganizationDashboard();
         }
