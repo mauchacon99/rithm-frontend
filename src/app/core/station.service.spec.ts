@@ -977,5 +977,13 @@ describe('StationService', () => {
     service.getAllowExternalWorkers(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
+
+    const req = httpTestingController.expectOne(
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
+    );
+    expect(req.request.params).toBeTruthy();
+    expect(req.request.method).toEqual('GET');
+    req.flush(expectedResponse);
+    httpTestingController.verify();
   });
 });

@@ -150,6 +150,8 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
             ) {
               this.getStationDocumentGenerationStatus();
             }
+            //Get the allow external workers for slide-toggle allowExternal
+            this.getAllowExternalWorkers();
           } else {
             throw new Error('There was no station info drawer data');
           }
