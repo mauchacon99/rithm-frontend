@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -110,8 +110,10 @@ export class DashboardService {
    * @returns Returns the list of widgets.
    */
   getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    const params = new HttpParams().set('dashboardRithmId', dashboardRithmId);
     return this.http.get<DashboardData>(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets/${dashboardRithmId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets`,
+      { params }
     );
   }
 

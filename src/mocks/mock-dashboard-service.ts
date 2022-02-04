@@ -218,23 +218,29 @@ export class MockDashboardService {
   /**
    * Gets widgets for dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @returns Returns the list of widgets.
    */
-  getDashboardWidgets(): Observable<DashboardItem[]> {
-    const widgets: DashboardItem[] = [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ];
+  getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    const widgets: DashboardData = {
+      rithmId: dashboardRithmId,
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
 
     return of(widgets).pipe(delay(1000));
   }

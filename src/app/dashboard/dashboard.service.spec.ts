@@ -274,10 +274,12 @@ describe('DashboardService', () => {
       });
 
     const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets/${expectDashboardData.rithmId}`
+      `${environment.baseApiUrl}${MICROSERVICE_PATH}/widgets?dashboardRithmId=${expectDashboardData.rithmId}`
     );
     expect(req.request.method).toEqual('GET');
-
+    expect(req.request.params.get('dashboardRithmId')).toEqual(
+      expectDashboardData.rithmId
+    );
     req.flush(expectDashboardData);
     httpTestingController.verify();
   });
