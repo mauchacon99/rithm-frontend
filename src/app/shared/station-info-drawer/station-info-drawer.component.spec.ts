@@ -186,7 +186,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should show loading-indicators while update data the status station document', () => {
     component.stationLoading = false;
     const newStatus = DocumentGenerationStatus.Manual;
@@ -303,7 +302,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
@@ -336,7 +334,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
