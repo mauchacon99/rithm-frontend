@@ -23,6 +23,7 @@ describe('OptionsMenuComponent', () => {
   const expectNewDashboard: DashboardData = {
     rithmId: '102030405060708090100',
     name: 'Untitled Dashboard',
+    type: RoleDashboardMenu.Company,
     widgets: [
       {
         cols: 4,
@@ -51,7 +52,7 @@ describe('OptionsMenuComponent', () => {
         MatMenuModule,
         RouterTestingModule.withRoutes([
           {
-            path: 'dashboard/:dashboardId/:typeDashboard',
+            path: 'dashboard/:dashboardId',
             component: MockComponent(DashboardComponent),
           },
         ]),
@@ -73,6 +74,7 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call service from generateNewOrganizationDashboard', async () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -96,6 +98,7 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should show an error message when calling generateNewOrganizationDashboard', () => {
+    component.dashboardRole = RoleDashboardMenu.Company;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -125,6 +128,7 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call service from generateNewPersonalDashboard', async () => {
+    component.dashboardRole = RoleDashboardMenu.Dashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -148,6 +152,7 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should show an error message when calling generateNewPersonalDashboard', () => {
+    component.dashboardRole = RoleDashboardMenu.Dashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'

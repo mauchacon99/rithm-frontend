@@ -136,8 +136,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   /**
    * Initialize split on page load.
    */
-  async ngOnInit(): Promise<void> {
-    await this.split();
+  ngOnInit(): void {
+    this.split();
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {

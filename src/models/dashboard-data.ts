@@ -1,4 +1,4 @@
-import { DashboardItem, RoleDashboardMenu } from "src/models";
+import { DashboardItem, RoleDashboardMenu } from 'src/models';
 
 /** Interface of data on a dashboard. */
 export interface DashboardData {

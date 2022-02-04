@@ -20,6 +20,7 @@ describe('ExpansionMenuComponent', () => {
     {
       rithmId: '123654-789654-7852',
       name: 'Dashboard 1',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
@@ -38,6 +39,7 @@ describe('ExpansionMenuComponent', () => {
     {
       rithmId: '123654-789654-7852',
       name: 'Dashboard 2',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,

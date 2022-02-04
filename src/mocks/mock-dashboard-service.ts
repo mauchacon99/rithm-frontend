@@ -6,6 +6,7 @@ import {
   DashboardItem,
   WidgetType,
   DashboardData,
+  RoleDashboardMenu,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -260,6 +261,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -278,6 +280,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 2',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -308,6 +311,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
+        type: RoleDashboardMenu.Dashboard,
         widgets: [
           {
             cols: 4,
@@ -326,6 +330,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
+        type: RoleDashboardMenu.Dashboard,
         widgets: [
           {
             cols: 4,
@@ -354,6 +359,7 @@ export class MockDashboardService {
   generateNewPersonalDashboard(): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
+      type: RoleDashboardMenu.Dashboard,
       name: 'Untitled Dashboard',
       widgets: [
         {
@@ -383,6 +389,7 @@ export class MockDashboardService {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,

@@ -25,7 +25,7 @@ import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { By } from '@angular/platform-browser';
 import { StationWidgetComponent } from '../widgets/station-widget/station-widget.component';
 import { GridsterModule } from 'angular-gridster2';
-import { DashboardData, WidgetType } from 'src/models';
+import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -60,7 +60,7 @@ describe('DashboardComponent', () => {
         MatInputModule,
         RouterTestingModule.withRoutes([
           {
-            path: 'dashboard/:dashboardId/:typeDashboard',
+            path: 'dashboard/:dashboardId',
             component: MockComponent(DashboardComponent),
           },
           {
@@ -155,6 +155,7 @@ describe('DashboardComponent', () => {
     const dashboardData: DashboardData = {
       rithmId: '',
       name: 'new name',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 1,
