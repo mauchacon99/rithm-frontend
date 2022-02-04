@@ -45,43 +45,43 @@ export class SignInComponent implements OnInit {
    * Checks for query params and makes necessary request if present.
    */
   ngOnInit(): void {
-    this.userService.isSignedIn().then((isSignedIn)=> {
-      if (isSignedIn){
+    this.userService.isSignedIn().then((isSignedIn) => {
+      if (isSignedIn) {
         this.router.navigate(['dashboard']);
       } else {
-      this.route.queryParamMap.pipe(first()).subscribe({
-        next: (params) => {
-          const emailLinkParams = new EmailLinkParams(params);
+        this.route.queryParamMap.pipe(first()).subscribe({
+          next: (params) => {
+            const emailLinkParams = new EmailLinkParams(params);
 
-          if (emailLinkParams.type && !emailLinkParams.valid) {
-            this.showInvalidLinkMessage(
-              new Error('Missing GUID or email address')
-            );
-          } else {
-            if (emailLinkParams.type === EmailLinkType.Register) {
-              this.validateEmail(
-                emailLinkParams.guid as string,
-                emailLinkParams.email as string
+            if (emailLinkParams.type && !emailLinkParams.valid) {
+              this.showInvalidLinkMessage(
+                new Error('Missing GUID or email address')
               );
-            } else if (emailLinkParams.type === EmailLinkType.ForgotPassword) {
-              this.router.navigate(['password-reset'], {
-                queryParams: {
-                  type: emailLinkParams.type,
-                  guid: emailLinkParams.guid,
-                  email: emailLinkParams.email,
-                },
-              });
+            } else {
+              if (emailLinkParams.type === EmailLinkType.Register) {
+                this.validateEmail(
+                  emailLinkParams.guid as string,
+                  emailLinkParams.email as string
+                );
+              } else if (
+                emailLinkParams.type === EmailLinkType.ForgotPassword
+              ) {
+                this.router.navigate(['password-reset'], {
+                  queryParams: {
+                    type: emailLinkParams.type,
+                    guid: emailLinkParams.guid,
+                    email: emailLinkParams.email,
+                  },
+                });
+              }
             }
-          }
-        },
-        error: (error: unknown) => {
-          this.showInvalidLinkMessage(error);
-        },
-      });
+          },
+          error: (error: unknown) => {
+            this.showInvalidLinkMessage(error);
+          },
+        });
       }
     });
-
-
   }
 
   /**
