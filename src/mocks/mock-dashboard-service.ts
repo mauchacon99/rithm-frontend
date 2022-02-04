@@ -3,7 +3,6 @@ import {
   WorkerDashboardHeader,
   DashboardStationData,
   StationRosterMember,
-  DashboardItem,
   WidgetType,
   DashboardData,
   RoleDashboardMenu,
