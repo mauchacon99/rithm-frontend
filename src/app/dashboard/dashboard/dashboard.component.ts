@@ -203,7 +203,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: (dashboardByRithmId) => {
-          console.log('dashboard', dashboardByRithmId);
           this.dashboardData = dashboardByRithmId;
           this.isLoading = false;
         },
