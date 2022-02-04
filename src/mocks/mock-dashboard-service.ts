@@ -1,11 +1,11 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {
   WorkerDashboardHeader,
   DashboardStationData,
   StationRosterMember,
-  DashboardItem,
   WidgetType,
   DashboardData,
+  RoleDashboardMenu,
 } from 'src/models';
 import { delay } from 'rxjs/operators';
 import { Document } from 'src/models';
@@ -16,6 +16,18 @@ import { Document } from 'src/models';
  * Mocks methods of the `DashboardService`.
  */
 export class MockDashboardService {
+  /** Loading dashboard when generate new dashboard. */
+  isLoadingDashboard$ = new Subject<boolean>();
+
+  /**
+   * Toggle emit to loading dashboard.
+   *
+   * @param status Boolean true to loading and false not loading.
+   */
+  toggleLoadingDashboard(status: boolean): void {
+    this.isLoadingDashboard$.next(status);
+  }
+
   /**
    * Gets info needed for dashboard header.
    *
@@ -205,23 +217,29 @@ export class MockDashboardService {
   /**
    * Gets widgets for dashboard.
    *
+   * @param dashboardRithmId String of the rithmId dashboard.
    * @returns Returns the list of widgets.
    */
-  getDashboardWidgets(): Observable<DashboardItem[]> {
-    const widgets: DashboardItem[] = [
-      {
-        cols: 4,
-        rows: 1,
-        x: 0,
-        y: 0,
-        widgetType: WidgetType.Station,
-        data: '{"stationRithmId":"247cf568-27a4-4968-9338-046ccfee24f3"}',
-        minItemCols: 4,
-        minItemRows: 4,
-        maxItemCols: 12,
-        maxItemRows: 12,
-      },
-    ];
+  getDashboardWidgets(dashboardRithmId: string): Observable<DashboardData> {
+    const widgets: DashboardData = {
+      rithmId: dashboardRithmId,
+      name: 'Organization 1',
+      type: RoleDashboardMenu.Company,
+      widgets: [
+        {
+          cols: 4,
+          data: '{"stationRithmId":"9897ba11-9f11-4fcf-ab3f-f74a75b9d5a1"}',
+          maxItemCols: 0,
+          maxItemRows: 0,
+          minItemCols: 0,
+          minItemRows: 0,
+          rows: 2,
+          widgetType: WidgetType.Station,
+          x: 0,
+          y: 0,
+        },
+      ],
+    };
 
     return of(widgets).pipe(delay(1000));
   }
@@ -248,6 +266,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -266,6 +285,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 2',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -296,6 +316,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -314,6 +335,7 @@ export class MockDashboardService {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
+        type: RoleDashboardMenu.Personal,
         widgets: [
           {
             cols: 4,
@@ -342,6 +364,7 @@ export class MockDashboardService {
   generateNewPersonalDashboard(): Observable<DashboardData> {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
+      type: RoleDashboardMenu.Personal,
       name: 'Untitled Dashboard',
       widgets: [
         {
@@ -371,6 +394,7 @@ export class MockDashboardService {
     const newDashboard: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
