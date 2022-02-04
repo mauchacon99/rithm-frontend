@@ -12,7 +12,7 @@ import { StationService } from 'src/app/core/station.service';
 import { UserService } from 'src/app/core/user.service';
 import { SidenavDrawerService } from 'src/app/core/sidenav-drawer.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DashboardData, RoleDashboardMenu, Station } from 'src/models';
+import { DashboardData, Station } from 'src/models';
 import { DashboardService } from 'src/app/dashboard/dashboard.service';
 import { GridsterConfig } from 'angular-gridster2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,12 +33,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Show the dashboard menu. */
   drawerContext = 'menuDashboard';
-
-  /** Dashboard type. */
-  dashboardRole: RoleDashboardMenu = RoleDashboardMenu.OrganizationDashboard;
-
-  /** Validate type of role. */
-  roleDashboardMenu = RoleDashboardMenu;
 
   // TODO: remove when admin users can access stations through map
   /** The list of all stations for an admin to view. */
@@ -279,23 +273,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getParams(): void {
     this.route.params.pipe(first()).subscribe({
       next: (params) => {
-        if (
-          Object.keys(params).length &&
-          params.dashboardId &&
-          params.typeDashboard
-        ) {
-          if (
-            params.typeDashboard === this.roleDashboardMenu.PersonalDashboard ||
-            params.typeDashboard ===
-              this.roleDashboardMenu.OrganizationDashboard
-          ) {
-            this.dashboardRole = params.typeDashboard;
-            this.getDashboardByRithmId(params.dashboardId);
-          } else {
-            this.router.navigateByUrl('dashboard');
-          }
+        if (params.dashboardId) {
+          this.getDashboardByRithmId(params.dashboardId);
         } else {
-          this.dashboardRole = this.roleDashboardMenu.OrganizationDashboard;
           this.getOrganizationDashboard();
         }
       },

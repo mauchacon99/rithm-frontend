@@ -8,6 +8,7 @@ import {
   Document,
   WidgetType,
   DashboardData,
+  RoleDashboardMenu,
 } from 'src/models';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from './dashboard.service';
@@ -250,6 +251,7 @@ describe('DashboardService', () => {
     const expectDashboardData: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,
@@ -284,13 +286,14 @@ describe('DashboardService', () => {
     const updateDashboard: DashboardData = {
       rithmId: '',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Dashboard,
       widgets: [
         {
           cols: 0,
           rows: 0,
           x: 0,
           y: 0,
-          widgetType: WidgetType.Document,
+          widgetType: WidgetType.Station,
           data: 'string',
           minItemRows: 0,
           maxItemRows: 0,
@@ -316,6 +319,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 1',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -334,6 +338,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852',
         name: 'Organization 2',
+        type: RoleDashboardMenu.Company,
         widgets: [
           {
             cols: 4,
@@ -369,6 +374,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-789',
         name: 'Personal 1',
+        type: RoleDashboardMenu.Dashboard,
         widgets: [
           {
             cols: 4,
@@ -387,6 +393,7 @@ describe('DashboardService', () => {
       {
         rithmId: '123654-789654-7852-963',
         name: 'Personal 2',
+        type: RoleDashboardMenu.Dashboard,
         widgets: [
           {
             cols: 4,
@@ -421,6 +428,7 @@ describe('DashboardService', () => {
     const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Dashboard,
       widgets: [
         {
           cols: 4,
@@ -457,6 +465,7 @@ describe('DashboardService', () => {
     const dashboardData: DashboardData = {
       rithmId: '247cf568-27a4-4968-9338-046ccfee24f3',
       name: 'name',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 1,
@@ -490,6 +499,7 @@ describe('DashboardService', () => {
     const expectedResponse: DashboardData = {
       rithmId: '102030405060708090100',
       name: 'Untitled Dashboard',
+      type: RoleDashboardMenu.Company,
       widgets: [
         {
           cols: 4,

@@ -41,7 +41,7 @@ export class OptionsMenuComponent {
     private errorService: ErrorService,
     private router: Router,
     private sidenavDrawerService: SidenavDrawerService
-  ) {}
+  ) { }
 
   /**
    * Opens the option menu on the dashboard menu.
@@ -70,19 +70,14 @@ export class OptionsMenuComponent {
     this.toggleMenu('menuDashboard');
     this.dashboardService.toggleLoadingNewDashboard(true);
     const generateDashboard$ =
-      this.dashboardRole === this.roleDashboardMenu.PersonalDashboard
+      this.dashboardRole === this.roleDashboardMenu.Dashboard
         ? this.dashboardService.generateNewPersonalDashboard()
         : this.dashboardService.generateNewOrganizationDashboard();
     generateDashboard$.pipe(first()).subscribe({
       next: (newDashboard) => {
         this.isGenerateNewDashboard = false;
         this.dashboardService.toggleLoadingNewDashboard(false);
-        this.router.navigate([
-          '/',
-          'dashboard',
-          newDashboard.rithmId,
-          this.dashboardRole,
-        ]);
+        this.router.navigate(['/', 'dashboard', newDashboard.rithmId]);
       },
       error: (error: unknown) => {
         this.dashboardService.toggleLoadingNewDashboard(false);

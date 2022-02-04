@@ -1,19 +1,10 @@
-<button
-  mat-button
-  [matMenuTriggerFor]="isDashboardListOptions ? menuList : menuDashboard"
-  [disabled]="isGenerateNewDashboard"
-  (click)="openOptionsMenu($event)"
-  mat-icon-button
-  [attr.data-testid]="'button-more-' + dashboardRole"
-  [id]="'button-more-' + dashboardRole"
->
+<button mat-button [matMenuTriggerFor]="isDashboardListOptions ? menuList : menuDashboard"
+  [disabled]="isGenerateNewDashboard" (click)="openOptionsMenu($event)" mat-icon-button
+  [attr.data-testid]="'button-more-' + dashboardRole" [id]="'button-more-' + dashboardRole">
   <i class="fas fa-ellipsis-h text-lg"></i>
 </button>
 <mat-menu #menuList="matMenu">
-  <button
-    mat-menu-item
-    *ngIf="dashboardRole === roleDashboardMenu.OrganizationDashboard"
-  >
+  <button mat-menu-item *ngIf="dashboardRole === roleDashboardMenu.Company">
     <i class="fas fa-users"></i>
     <span class="p-4">Manage Members</span>
   </button>

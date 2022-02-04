@@ -73,7 +73,6 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call service from generateNewOrganizationDashboard', async () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -92,12 +91,11 @@ describe('OptionsMenuComponent', () => {
     expect(spyService).toHaveBeenCalled();
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(TestBed.inject(Location).path()).toEqual(
-      `/dashboard/${expectNewDashboard.rithmId}/${RoleDashboardMenu.OrganizationDashboard}`
+      `/dashboard/${expectNewDashboard.rithmId}`
     );
   });
 
   it('should show an error message when calling generateNewOrganizationDashboard', () => {
-    component.dashboardRole = RoleDashboardMenu.OrganizationDashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -127,7 +125,6 @@ describe('OptionsMenuComponent', () => {
   });
 
   it('should call service from generateNewPersonalDashboard', async () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'
@@ -146,12 +143,11 @@ describe('OptionsMenuComponent', () => {
     expect(spyLoadingDashboard).toHaveBeenCalled();
     expect(spyToggleMenu).toHaveBeenCalledWith('menuDashboard');
     expect(TestBed.inject(Location).path()).toEqual(
-      `/dashboard/${expectNewDashboard.rithmId}/${RoleDashboardMenu.PersonalDashboard}`
+      `/dashboard/${expectNewDashboard.rithmId}`
     );
   });
 
   it('should show an error message when calling generateNewPersonalDashboard', () => {
-    component.dashboardRole = RoleDashboardMenu.PersonalDashboard;
     const spyToggleMenu = spyOn(
       TestBed.inject(SidenavDrawerService),
       'toggleDrawer'

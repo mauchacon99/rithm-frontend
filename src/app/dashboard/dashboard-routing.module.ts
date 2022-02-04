@@ -11,7 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         pathMatch: 'full',
       },
       {
-        path: ':dashboardId/:typeDashboard',
+        path: ':dashboardId',
         component: DashboardComponent,
         pathMatch: 'prefix',
       },

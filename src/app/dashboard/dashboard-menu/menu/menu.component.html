@@ -3,11 +3,7 @@
 </div>
 <div class="p-2">
   <mat-accordion>
-    <app-expansion-menu
-      [dashboardRole]="dashboardRole.OrganizationDashboard"
-    ></app-expansion-menu>
-    <app-expansion-menu
-      [dashboardRole]="dashboardRole.PersonalDashboard"
-    ></app-expansion-menu>
+    <app-expansion-menu [dashboardRole]="dashboardRole.Company"></app-expansion-menu>
+    <app-expansion-menu [dashboardRole]="dashboardRole.Dashboard"></app-expansion-menu>
   </mat-accordion>
 </div>
