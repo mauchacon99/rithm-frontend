@@ -15,6 +15,7 @@ import {
   ForwardPreviousStationsDocument,
   StandardStringJSON,
   DocumentNameField,
+  StandardBooleanJSON,
 } from 'src/models';
 import { StationService } from './station.service';
 
@@ -968,7 +969,7 @@ describe('StationService', () => {
   });
 
   it('should update the field allowAllOrgWorkers in station', () => {
-    const expectedResponse = {
+    const expectedResponse : StandardBooleanJSON = {
       data: true,
     };
     const allowAllOrgWorkers = true;
@@ -977,5 +978,16 @@ describe('StationService', () => {
       .subscribe((response) => {
         expect(response).toEqual(expectedResponse.data);
       });
+  });
+
+  it('should get the allow external workers', () => {
+    const stationRithmId = '247cf568-27a4-4968-9338-046ccfee24f3';
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+
+    service.getAllowExternalWorkers(stationRithmId).subscribe((response) => {
+      expect(response).toEqual(expectedResponse.data);
+    });
   });
 });

@@ -17,6 +17,7 @@ import {
   DocumentNameField,
   StandardStringJSON,
   ForwardPreviousStationsDocument,
+  StandardBooleanJSON,
 } from 'src/models';
 
 const MICROSERVICE_PATH = '/stationservice/api/station';
@@ -462,7 +463,6 @@ export class StationService {
    * @param stationId  The id of station.
    * @returns Array the appended fields in document name.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDocumentNameTemplate(stationId: string): Observable<DocumentNameField[]> {
     const params = new HttpParams().set('stationRithmId', stationId);
     return this.http.get<DocumentNameField[]>(
@@ -537,10 +537,24 @@ export class StationService {
           })
       ).pipe(delay(1000));
     } else {
-      const expectedResponse = {
+      const expectedResponse: StandardBooleanJSON = {
         data: allowAllOrgWorkers,
       };
       return of(expectedResponse.data).pipe(delay(1000));
     }
+  }
+
+  /**
+   * Get the allow external workers for the station roster.
+   *
+   * @param stationRithmId The Specific id of station.
+   * @returns Allow external workers to be assigned to station documents.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getAllowExternalWorkers(stationRithmId: string): Observable<boolean> {
+    const expectedResponse: StandardBooleanJSON = {
+      data: true,
+    };
+    return of(expectedResponse.data).pipe(delay(1000));
   }
 }
