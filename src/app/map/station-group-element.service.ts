@@ -39,6 +39,13 @@ export class StationGroupElementService {
   /** The default scale value for the station card. */
   private mapScale = DEFAULT_SCALE;
 
+  /** The Dimensions of the canvas. */
+  canvasDimensions: {
+    /** The width of the canvas.*/ width: number;
+    /** The height of the canvas.*/
+    height: number;
+  } = { width: 0, height: 0 };
+
   constructor(private mapService: MapService) {
     //set this.mapScale to match the behavior subject in mapService.
     this.mapService.mapScale$.subscribe((scale) => (this.mapScale = scale));
@@ -291,6 +298,15 @@ export class StationGroupElementService {
         : BUTTON_DEFAULT_COLOR;
     const fontSize = Math.ceil(FONT_SIZE_MODIFIER * this.mapScale);
     this.canvasContext.font = `bold ${fontSize}px Montserrat`;
+
+    // Get the canvas dimensions.
+    const canvasBoundingRect =
+      this.canvasContext?.canvas.getBoundingClientRect();
+    // Set the canvas dimensions.
+    this.canvasDimensions = {
+      width: canvasBoundingRect.width,
+      height: canvasBoundingRect.height,
+    };
 
     // Calculates the position of the first straightest line.
     const newPosition = this.positionStraightestLine(
@@ -641,8 +657,14 @@ export class StationGroupElementService {
       }
       // Calculation of the angle of rotation.
       const rotateAngleStationGroupName = Math.atan(m);
-      // If the angle of rotation is greater than the maximum angle of rotation.
-      if (rotateAngleStationGroupName > STATION_GROUP_NAME_MAX_ANGLE_ROTATE) {
+      // If the angle of rotation is greater than the maximum angle of rotation and is visible on the canvas.
+      if (
+        rotateAngleStationGroupName > STATION_GROUP_NAME_MAX_ANGLE_ROTATE &&
+        points[i].x >= 0 &&
+        points[i].x + titleWidth <= this.canvasDimensions.width &&
+        points[i].y >= 0 &&
+        points[i].y <= this.canvasDimensions.height
+      ) {
         memoryPosition.push({
           position: i,
           slope: m,
@@ -651,8 +673,10 @@ export class StationGroupElementService {
       }
     }
     // The first position is assigned.
-    newPosition = memoryPosition[0].position;
-    let slopeBetter = Math.abs(memoryPosition[0].slope);
+    newPosition =
+      memoryPosition.length > 0 ? memoryPosition[0].position : newPosition;
+    let slopeBetter =
+      memoryPosition.length > 0 ? Math.abs(memoryPosition[0].slope) : 0;
     for (let i = 0; i < memoryPosition.length; i++) {
       //If the slope is 0 and the distance is greater than the station group name.
       if (
