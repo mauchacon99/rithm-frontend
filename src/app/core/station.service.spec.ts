@@ -977,11 +977,10 @@ describe('StationService', () => {
     service.getAllowExternalWorkers(stationRithmId).subscribe((response) => {
       expect(response).toEqual(expectedResponse.data);
     });
-
-    const req = httpTestingController.expectOne(
-      `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
-    );
-    expect(req.request.params.get('rithmId')).toBeEqual(stationRithmId);
+    
+    const router = `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`;
+    const req = httpTestingController.expectOne(router);
+    expect(req.request.url).toBe(router);
     expect(req.request.method).toEqual('GET');
     req.flush(expectedResponse);
     httpTestingController.verify();
