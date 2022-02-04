@@ -186,7 +186,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(loadingComponent).toBeTruthy();
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should show loading-indicators while update data the status station document', () => {
     component.stationLoading = false;
     const newStatus = DocumentGenerationStatus.Manual;
@@ -303,7 +302,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(spyError).toHaveBeenCalled();
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should call the method createNewDocument when new-document button is clicked', fakeAsync(() => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
@@ -336,7 +334,6 @@ describe('StationInfoDrawerComponent', () => {
     expect(popupSpy).toHaveBeenCalledOnceWith(dialogExpectData);
   });
 
-  // awaiting for complete the component update for harness testing
   xit('should show loading-indicators while creating a new document is underway', async () => {
     component.stationLoading = false;
     component.stationDocumentGenerationStatus = DocumentGenerationStatus.Manual;
@@ -369,5 +366,32 @@ describe('StationInfoDrawerComponent', () => {
         stationId: component.stationRithmId,
       },
     });
+  });
+
+  it('should get the allow external workers for the station roster', () => {
+    const getAllowExternalSpy = spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.callThrough();
+    component['getAllowExternalWorkers']();
+    expect(getAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should catch an error if getting the allow external workers fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAllowExternalWorkers']();
+    expect(spyError).toHaveBeenCalled();
   });
 });
