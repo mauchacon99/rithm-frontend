@@ -367,4 +367,31 @@ describe('StationInfoDrawerComponent', () => {
       },
     });
   });
+
+  it('should get the allow external workers for the station roster', () => {
+    const getAllowExternalSpy = spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.callThrough();
+    component['getAllowExternalWorkers']();
+    expect(getAllowExternalSpy).toHaveBeenCalledOnceWith(stationId);
+  });
+
+  it('should catch an error if getting the allow external workers fails', () => {
+    spyOn(
+      TestBed.inject(StationService),
+      'getAllowExternalWorkers'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getAllowExternalWorkers']();
+    expect(spyError).toHaveBeenCalled();
+  });
 });
