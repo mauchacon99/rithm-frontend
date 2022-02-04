@@ -40,3 +40,9 @@
     @apply opacity-100 bg-accent-500;
   }
 }
+
+.mat-station-name {
+  ::ng-deep .mat-form-field-wrapper {
+    margin: 0 !important;
+  }
+}
