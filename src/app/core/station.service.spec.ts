@@ -981,7 +981,7 @@ describe('StationService', () => {
     const req = httpTestingController.expectOne(
       `${environment.baseApiUrl}${MICROSERVICE_PATH}/allow-external-workers?rithmId=${stationRithmId}`
     );
-    expect(req.request.params).toBeTruthy();
+    expect(req.request.params.get('rithmId')).toBeEqual(stationRithmId);
     expect(req.request.method).toEqual('GET');
     req.flush(expectedResponse);
     httpTestingController.verify();
