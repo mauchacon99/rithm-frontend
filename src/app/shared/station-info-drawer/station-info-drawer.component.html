@@ -174,12 +174,84 @@
       </div>
     </ng-template>
   </mat-tab>
+
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-file fa-lg"></i>
     </ng-template>
-    <ng-template matTabContent> </ng-template>
+    <ng-template matTabContent>
+      <div class="grid grid-cols-1 px-2">
+        <div class="w-full py-2">
+          <div class="col-span-12">
+            <h6 class="text-center">Document Generation</h6>
+          </div>
+        </div>
+      </div>
+      <section class="px-2">
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">None</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="none-status-loading"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateGenerationStatus('None', $event)"
+            [checked]="stationDocumentGenerationStatus === 'None'"
+            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+          >
+          </mat-slide-toggle>
+        </section>
+        <section class="flex justify-between items-center w-full py-3">
+          <p class="text-secondary-300 inline-block">Manual</p>
+          <div class="py-1" *ngIf="docGenLoading && !locallyCreated">
+            <app-loading-indicator
+              id="manual-status-loading"
+              [inlineText]="'Loading...'"
+            ></app-loading-indicator>
+          </div>
+          <mat-slide-toggle
+            class="pr-1"
+            *ngIf="!docGenLoading && !locallyCreated"
+            (change)="updateGenerationStatus('Manual', $event)"
+            [checked]="stationDocumentGenerationStatus === 'Manual'"
+            [disabled]="docCreationLoading || (openedFromMap && !editMode)"
+          >
+          </mat-slide-toggle>
+        </section>
+      </section>
+      <section class="flex justify-between items-center w-full py-3 px-2">
+        <p class="text-secondary-300 inline-block">Schedule</p>
+        <i class="fas fa-chevron-right"></i>
+      </section>
+      <section
+        class="text-center w-full py-3"
+        *ngIf="displayCreateDocumentButton"
+      >
+        <div class="py-1" *ngIf="docCreationLoading; else createDocument">
+          <app-loading-indicator
+            id="creating-document-loading"
+            [inlineText]="'Loading...'"
+          ></app-loading-indicator>
+        </div>
+        <ng-template #createDocument>
+          <button
+            data-testid="new-document"
+            id="new-document"
+            mat-stroked-button
+            color="accent"
+            (click)="createNewDocument()"
+          >
+            New Document
+          </button>
+        </ng-template>
+      </section>
+    </ng-template>
   </mat-tab>
+
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-users fa-lg"></i>
