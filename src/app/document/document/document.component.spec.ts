@@ -397,7 +397,15 @@ describe('DocumentComponent', () => {
     fixture.detectChanges();
     const btnFlow =
       fixture.debugElement.nativeElement.querySelector('#document-flow');
+    const btnSave =
+      fixture.debugElement.nativeElement.querySelector('#document-save');
+    expect(btnSave).toBeTruthy();
+    expect(btnFlow).toBeTruthy();
+    btnSave.click();
+    btnFlow.click();
+    expect(component.documentForm.touched).toBeTruthy();
     expect(btnFlow.disabled).toBeFalsy();
+    expect(btnSave.disabled).toBeFalsy();
   });
 
   it('should called saveAnswers service when saving document changes', () => {
