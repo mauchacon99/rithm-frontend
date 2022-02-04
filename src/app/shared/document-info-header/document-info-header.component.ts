@@ -18,7 +18,7 @@ import { UserService } from 'src/app/core/user.service';
  * Reusable component for the document information header.
  */
 @Component({
-  selector: 'app-document-info-header[documentInformation]',
+  selector: 'app-document-info-header[documentInformation][viewNewStation]',
   templateUrl: './document-info-header.component.html',
   styleUrls: ['./document-info-header.component.scss'],
   providers: [],
@@ -55,6 +55,9 @@ export class DocumentInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Fields appended to the document name. */
   appendedDocumentName = '';
+
+  /** View new ui for station/document screen. */
+  @Input() viewNewStation = false;
 
   constructor(
     private fb: FormBuilder,
