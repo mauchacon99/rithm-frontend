@@ -18,12 +18,14 @@ import {
   ConnectedStationInfo,
   DocumentNameField,
   Question,
+  PossibleAnswer,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
-import { PossibleAnswer } from '../../../models/possible-answer';
+import { SplitService } from 'src/app/core/split.service';
+import { UserService } from 'src/app/core/user.service';
 
 /**
  * Main component for viewing a station.
@@ -79,6 +81,9 @@ export class StationComponent
   /** Appended Fields array. */
   appendedFields: DocumentNameField[] = [];
 
+  /** View new station. */
+  viewNewStation = false;
+
   constructor(
     private stationService: StationService,
     private sidenavDrawerService: SidenavDrawerService,
@@ -87,6 +92,8 @@ export class StationComponent
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private popupService: PopupService,
+    private splitService: SplitService,
+    private userService: UserService,
     @Inject(ChangeDetectorRef) private ref: ChangeDetectorRef
   ) {
     this.stationForm = this.fb.group({
@@ -184,6 +191,7 @@ export class StationComponent
    * Gets info about the document as well as forward and previous stations for a specific document.
    */
   ngOnInit(): void {
+    this.getTreatment();
     this.sidenavDrawerService.setDrawer(this.drawer);
     this.getParams();
     this.getPreviousAndNextStations();
@@ -192,6 +200,23 @@ export class StationComponent
   /** Comment. */
   ngAfterContentChecked(): void {
     this.ref.detectChanges();
+  }
+
+  /**
+   * Get station document split.
+   */
+  private getTreatment(): void {
+    const orgRithmId = this.userService.user.organization;
+    this.splitService.initSdk(orgRithmId);
+    this.splitService.sdkReady$.pipe(first()).subscribe({
+      next: () => {
+        const treatment = this.splitService.getStationDocumentTreatment();
+        this.viewNewStation = treatment === 'on';
+      },
+      error: (error: unknown) => {
+        this.errorService.logError(error);
+      },
+    });
   }
 
   /**

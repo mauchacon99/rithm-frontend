@@ -141,7 +141,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sidenavDrawerService.setDrawer(this.drawer);
     const user = this.userService.user;
     if (user) {
-      this.splitService.initSdk(user.rithmId);
+      this.splitService.initSdk(user.organization);
     }
 
     //Sets height using a css variable. This allows us to avoid using vh. Mobile friendly.
