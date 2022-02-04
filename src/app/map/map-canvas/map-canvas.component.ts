@@ -2059,7 +2059,7 @@ export class MapCanvasComponent implements OnInit, OnDestroy {
               this.mapService.setStationGroupStationStatus();
             }
             // To make sure it's not disabled and should allow user to undo previous action.
-            stationGroup.disabled = false;
+            // stationGroup.disabled = false;
             //Set current station group status and respective station's.
             this.stationGroupSelectStatus(stationGroup);
             //Set station group status of parent and child station group and respective stations.

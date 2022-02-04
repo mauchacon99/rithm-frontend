@@ -631,14 +631,22 @@ export class MapService {
    * Set disable status to true before updating station-group and station status so that only current stationGroup is enabled to de-select.
    */
   setStationGroupStationStatus(): void {
+    //const to reference the current pending group.
+    const pendingGroup = this.stationGroupElements.find(pendingStationGroup => {
+      return pendingStationGroup.status === MapItemStatus.Pending;
+    });
     this.stationGroupElements.map((stationGroup) => {
-      stationGroup.disabled = true;
+      //Set stationGroup to disabled if it's not part of the pending group.
+      stationGroup.disabled = !pendingGroup || !pendingGroup.subStationGroups.includes(stationGroup.rithmId);
+      console.log(stationGroup.disabled)
       stationGroup.stations.map((station) => {
         const stationIndex = this.stationElements.findIndex(
           (st) => st.rithmId === station
         );
         if (!this.stationElements[stationIndex].selected) {
-          this.stationElements[stationIndex].disabled = true;
+          //Set station to disabled if it's not part of the pending group.
+          this.stationElements[stationIndex].disabled =
+            !pendingGroup || !pendingGroup.stations.includes(this.stationElements[stationIndex].rithmId);
         }
       });
     });
