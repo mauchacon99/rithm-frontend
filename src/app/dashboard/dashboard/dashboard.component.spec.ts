@@ -28,10 +28,12 @@ import { GridsterModule } from 'angular-gridster2';
 import { DashboardData, RoleDashboardMenu, WidgetType } from 'src/models';
 import { MatInputModule } from '@angular/material/input';
 import { RouterTestingModule } from '@angular/router/testing';
+import { throwError } from 'rxjs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  const dashboardRithmId = '123-951-753-789';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -147,7 +149,7 @@ describe('DashboardComponent', () => {
       'updatePersonalDashboard'
     ).and.callThrough();
 
-    component['updatePersonalDashboard']();
+    component.updatePersonalDashboard();
     expect(updatePersonalDashboardSpy).toHaveBeenCalled();
   });
 
@@ -179,5 +181,73 @@ describe('DashboardComponent', () => {
 
     component.updateOrganizationDashboard(dashboardData);
     expect(methodService).toHaveBeenCalledWith(dashboardData);
+  });
+
+  it('should returns the organization`s dashboard list', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getOrganizationDashboard'
+    ).and.callThrough();
+    component['getOrganizationDashboard']();
+    expect(spyService).toHaveBeenCalledOnceWith();
+  });
+
+  it('should catch an error if the request to obtain the organization`s list of dashboards fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getOrganizationDashboard'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getOrganizationDashboard']();
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  it('should call service dashboard for id', () => {
+    const spyService = spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.callThrough();
+
+    component['getDashboardByRithmId'](dashboardRithmId);
+
+    expect(spyService).toHaveBeenCalled();
+  });
+
+  it('should catch error if petition to return dashboard for id service fails', () => {
+    spyOn(
+      TestBed.inject(DashboardService),
+      'getDashboardWidgets'
+    ).and.returnValue(
+      throwError(() => {
+        throw new Error();
+      })
+    );
+    const spyError = spyOn(
+      TestBed.inject(ErrorService),
+      'displayError'
+    ).and.callThrough();
+    component['getDashboardByRithmId'](dashboardRithmId);
+    expect(spyError).toHaveBeenCalled();
+  });
+
+  describe('Test for SidenavDrawerService', () => {
+    let sidenavDrawer: SidenavDrawerService;
+
+    beforeEach(() => {
+      sidenavDrawer = TestBed.inject(SidenavDrawerService);
+    });
+
+    it('should call sidenav service for live init cycle component', () => {
+      const spySideNav = spyOn(sidenavDrawer, 'setDrawer').and.callThrough();
+      component.ngOnInit();
+      expect(spySideNav).toHaveBeenCalled();
+    });
   });
 });
