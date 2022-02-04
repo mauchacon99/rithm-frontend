@@ -10,6 +10,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         component: DashboardComponent,
         pathMatch: 'full',
       },
+      {
+        path: ':dashboardId',
+        component: DashboardComponent,
+        pathMatch: 'prefix',
+      },
     ]),
   ],
   exports: [RouterModule],
