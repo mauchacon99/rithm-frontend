@@ -34,7 +34,7 @@
 >
   <!-- Header widget -->
   <div class="w-full p-2 flex flex-col h-full">
-    <!--    Header Container-->
+    <!--  Header Container  -->
     <div class="m-2">
       <div class="flex justify-between">
         <h3 *ngIf="dataStationWidget" class="font-semibold truncate">
@@ -51,6 +51,14 @@
           >
             New Document <i class="fas fa-plus"></i>
           </button>
+          <div
+            *ngIf="displayDocumentError"
+            class="text-error-500 text-xs p-0.5"
+            data-testid="create-document-error"
+            id="create-document-error"
+          >
+            Document not created!
+          </div>
         </div>
       </div>
     </div>

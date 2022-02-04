@@ -59,11 +59,13 @@
             *ngIf="!isWidget"
             [stationInformation]="documentInformation"
             [stationEditMode]="false"
+            [viewNewStation]="false"
           >
           </app-station-info-header>
           <app-document-info-header
             [isWidget]="isWidget"
             [documentInformation]="documentInformation"
+            [viewNewStation]="false"
           ></app-document-info-header>
           <app-document-template
             class="flex flex-col"

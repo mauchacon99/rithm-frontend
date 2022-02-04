@@ -10,13 +10,14 @@ import {
   StationInfoDrawerData,
 } from 'src/models';
 import { StationService } from 'src/app/core/station.service';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 /**
  * Reusable component for the station information header.
  */
 @Component({
-  selector: 'app-station-info-header[stationInformation][stationEditMode]',
+  selector:
+    'app-station-info-header[stationInformation][stationEditMode][viewNewStation]',
   templateUrl: './station-info-header.component.html',
   styleUrls: ['./station-info-header.component.scss'],
 })
@@ -38,6 +39,9 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
 
   /** Field to change station name. */
   nameField!: Question;
+
+  /** Part of the new station ui. */
+  @Input() viewNewStation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +70,12 @@ export class StationInfoHeaderComponent implements OnInit, OnDestroy {
       isPrivate: false,
       children: [],
     };
+    this.stationService.stationName$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        const stationName = data.length > 0 ? data : 'Untitled Station';
+        this.stationNameForm.controls['name'].setValue(stationName);
+      });
     this.stationNameForm.controls['name'].setValue(this.stationName);
   }
 
