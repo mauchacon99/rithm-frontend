@@ -65,7 +65,6 @@ describe('OptionsMenuComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OptionsMenuComponent);
     component = fixture.componentInstance;
-    component.contextDrawer = 'menuDashboard';
     fixture.detectChanges();
   });
 
