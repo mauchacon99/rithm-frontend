@@ -969,7 +969,7 @@ describe('StationService', () => {
   });
 
   it('should update the field allowAllOrgWorkers in station', () => {
-    const expectedResponse : StandardBooleanJSON = {
+    const expectedResponse: StandardBooleanJSON = {
       data: true,
     };
     const allowAllOrgWorkers = true;
