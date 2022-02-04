@@ -18,12 +18,12 @@ import {
   ConnectedStationInfo,
   DocumentNameField,
   Question,
+  PossibleAnswer,
 } from 'src/models';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StationService } from 'src/app/core/station.service';
 import { forkJoin, Subject } from 'rxjs';
 import { PopupService } from 'src/app/core/popup.service';
-import { PossibleAnswer } from '../../../models/possible-answer';
 import { SplitService } from 'src/app/core/split.service';
 import { UserService } from 'src/app/core/user.service';
 
@@ -211,7 +211,7 @@ export class StationComponent
     this.splitService.sdkReady$.pipe(first()).subscribe({
       next: () => {
         const treatment = this.splitService.getStationDocumentTreatment();
-        this.viewNewStation = treatment === 'on'
+        this.viewNewStation = treatment === 'on';
       },
       error: (error: unknown) => {
         this.errorService.logError(error);
