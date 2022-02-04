@@ -111,7 +111,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   /** The selected tab index/init. */
   selectedTabIndex = 0;
 
-  /** The contains value for view permission all org workers. */
+  /** Whether the station is allowed for all the organization workers or not. */
   allowAllOrgWorkers = false;
 
   constructor(
@@ -619,7 +619,7 @@ export class StationInfoDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retrieves the value of field AllowAllOrgWorkers.
+   * Get the value of field AllowAllOrgWorkers for a specific station.
    */
   private getAllowAllOrgWorkers(): void {
     this.stationService
