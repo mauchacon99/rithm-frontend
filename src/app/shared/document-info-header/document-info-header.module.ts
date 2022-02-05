@@ -5,6 +5,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [DocumentInfoHeaderComponent],
@@ -14,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    UserAvatarModule,
+    RouterModule,
   ],
   exports: [DocumentInfoHeaderComponent],
 })
