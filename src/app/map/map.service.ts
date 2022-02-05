@@ -696,21 +696,51 @@ export class MapService {
    */
   setSelectedStation(station: StationMapElement): void {
     this.stationGroupElements.map((stationGroup) => {
-      if (stationGroup.stations.includes(station.rithmId)) {
-        stationGroup.stations.map((st) => {
-          const stationIndex = this.stationElements.findIndex(
-            (sta) => sta.rithmId === st
+      if (station.selected) {
+        if (stationGroup.stations.includes(station.rithmId)) {
+          stationGroup.stations.map((st) => {
+            const stationIndex = this.stationElements.findIndex(
+              (sta) => sta.rithmId === st
+            );
+            this.stationElements[stationIndex].disabled = false;
+          });
+          stationGroup.disabled = false;
+          stationGroup.subStationGroups.forEach((subStationGroupId) => {
+            const stationGroupIndex = this.stationGroupElements.findIndex(
+              (group) => group.rithmId === subStationGroupId
+            );
+            this.stationGroupElements[stationGroupIndex].disabled = false;
+          });
+          return;
+        }
+      } else {
+        //If removing a selected station need to find the group that pending group is inside.
+        if (stationGroup.status === MapItemStatus.Pending) {
+          //const to reference the parent of the pending group.
+          const parentGroup = this.stationGroupElements.find(
+            (parentStationGroup) => {
+              return parentStationGroup.subStationGroups.includes(
+                stationGroup.rithmId
+              );
+            }
           );
-          this.stationElements[stationIndex].disabled = false;
-        });
-        stationGroup.disabled = false;
-        stationGroup.subStationGroups.forEach((subStationGroupId) => {
-          const stationGroupIndex = this.stationGroupElements.findIndex(
-            (group) => group.rithmId === subStationGroupId
-          );
-          this.stationGroupElements[stationGroupIndex].disabled = false;
-        });
-        return;
+          if (parentGroup) {
+            parentGroup.stations.map((st) => {
+              const stationIndex = this.stationElements.findIndex(
+                (sta) => sta.rithmId === st
+              );
+              this.stationElements[stationIndex].disabled = false;
+            });
+            parentGroup.disabled = false;
+            parentGroup.subStationGroups.forEach((subStationGroupId) => {
+              const stationGroupIndex = this.stationGroupElements.findIndex(
+                (group) => group.rithmId === subStationGroupId
+              );
+              this.stationGroupElements[stationGroupIndex].disabled = false;
+            });
+            return;
+          }
+        }
       }
     });
     if (
